@@ -8,6 +8,10 @@ error.log
 .idea/
 .vscode/
 
+node_modules/
+package-lock.json
+dist/
+
 # Ключи и настройки
 
 # Виртуальное окружение
