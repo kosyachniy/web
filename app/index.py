@@ -1,5 +1,5 @@
 from flask import render_template, request
-from app import app, get_locale
+from app import app
 
 from requests import post
 from json import loads
@@ -11,7 +11,6 @@ from json import loads
 def index():
 	req = {
 		'method': 'system.test',
-		'language': get_locale(request),
 		'ip': request.remote_addr,
 	}
 	res = loads(post(request.url, json=req).text)

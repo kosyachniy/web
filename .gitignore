@@ -1,5 +1,7 @@
 # Кэш
 
+.DS_Store
+
 __pycache__/
 *.pyc
 
@@ -11,6 +13,7 @@ error.log
 node_modules/
 package-lock.json
 dist/
+build/
 
 # Ключи и настройки
 
