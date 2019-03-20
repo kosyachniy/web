@@ -1,0 +1,24 @@
+# Кэш
+
+__pycache__/
+*.pyc
+
+error.log
+
+.idea/
+.vscode/
+
+# Ключи и настройки
+
+# Виртуальное окружение
+
+flask/
+
+# Данные
+
+app/static/load/
+
+# Авторские права
+
+*.otf
+*.ttf
