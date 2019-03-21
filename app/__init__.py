@@ -1,4 +1,5 @@
 from flask import Flask
+from params import LINK
 
 # import logging
 
