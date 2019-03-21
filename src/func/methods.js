@@ -2,15 +2,11 @@ import api from './api'
 
 
 function getPost(that) {
-	const req = {
-		'method': 'post.get',
-	}
-
 	const handlerSuccess = (other, res) => {
-		other.setState({cont: res['cont']})
+		other.setState({cont: res['post']['cont']})
 	}
 
-	api(that, req, handlerSuccess)
+	api('post', 'get', that, handlerSuccess)
 }
 
 

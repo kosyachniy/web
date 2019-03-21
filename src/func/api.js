@@ -1,18 +1,14 @@
-function serverRequest(json) {
-	return new Promise(function(resolve, reject) {
-		const request = require("request");
-		request({
-			'url': 'http://0.0.0.0:5000/',
-			'method': 'POST',
-			'json': json,
-		}, function(error, response, body) {
-			if (!error && response.statusCode === 200) {
-				resolve(body)
-			} else {
-				console.log("error: " + error)
-			}
-		})
-	})
+import axios from 'axios'
+
+
+function serverRequest(adr, method, json) {
+	const link = 'http://0.0.0.0:5000/' + adr + '/'
+
+	if (method === 'get') {
+		return axios.get(link)
+	} else if (method === 'post') {
+		return axios.post(link)
+	}
 }
 
 function handlerResult(that, res, handlerSuccess) {
@@ -23,8 +19,8 @@ function handlerResult(that, res, handlerSuccess) {
 	}
 }
 
-export default function api(that, req, handlerSuccess) {
+export default function api(adr, method, that, handlerSuccess, req={}) {
 	req['language'] = 'ru'
 
-	serverRequest(req).then((res) => handlerResult(that, res, handlerSuccess))
+	serverRequest(adr, method, req).then((res) => handlerResult(that, res.data, handlerSuccess))
 }

@@ -1,4 +1,4 @@
-from flask import request, jsonify, make_response, current_app
+from flask import request, jsonify
 from app import app, LINK
 
 import os
@@ -10,10 +10,10 @@ import base64
 # import string
 # from hashlib import md5
 
-# # MongoDB
+# MongoDB
 
-# from pymongo import MongoClient
-# db = MongoClient()['web']
+from pymongo import MongoClient
+db = MongoClient()['web']
 
 # # Socket.IO
 
@@ -24,61 +24,6 @@ import base64
 
 # thread = None
 # thread_lock = Lock()
-
-# Междоменные запросы
-
-from datetime import timedelta
-from functools import update_wrapper
-
-def crossdomain(origin=None, methods=None, headers=None, max_age=21600,
-				attach_to_all=True, automatic_options=True):
-	if methods is not None:
-		methods = ', '.join(sorted(x.upper() for x in methods))
-
-	# use str instead of basestring if using Python 3.x
-	# if headers is not None and not isinstance(headers, basestring):
-	# 	headers = ', '.join(x.upper() for x in headers)
-
-	# # use str instead of basestring if using Python 3.x
-	# if not isinstance(origin, basestring):
-	# 	origin = ', '.join(origin)
-
-	if isinstance(max_age, timedelta):
-		max_age = max_age.total_seconds()
-
-	# Determines which methods are allowed
-	def get_methods():
-		if methods is not None:
-			return methods
-
-		options_resp = current_app.make_default_options_response()
-		return options_resp.headers['allow']
-
-	# The decorator function
-	def decorator(f):
-		# Caries out the actual cross domain code
-		def wrapped_function(*args, **kwargs):
-			if automatic_options and request.method == 'OPTIONS':
-				resp = current_app.make_default_options_response()
-			else:
-				resp = make_response(f(*args, **kwargs))
-			if not attach_to_all and request.method != 'OPTIONS':
-				return resp
-
-			h = resp.headers
-			h['Access-Control-Allow-Origin'] = origin
-			h['Access-Control-Allow-Methods'] = get_methods()
-			h['Access-Control-Max-Age'] = str(max_age)
-			h['Access-Control-Allow-Credentials'] = 'true'
-			h['Access-Control-Allow-Headers'] = \
-				"Origin, X-Requested-With, Content-Type, Accept, Authorization"
-			if headers is not None:
-				h['Access-Control-Allow-Headers'] = headers
-			return resp
-
-		f.provide_automatic_options = False
-		return update_wrapper(wrapped_function, f)
-	return decorator
 
 # Загрузка изображения
 
@@ -131,10 +76,10 @@ def reimg(s):
 
 					b64 = s[start:stop]
 					form = re.search(r'image/.*;', s[k+st[0]:start]).group(0)[6:-1]
-					adr = load_image(b64, 'app/static/load', form=form)
+					adr = load_image(b64, 'load', form=form)
 
 					# vs = '<img src="{}static/load/{}.{}">'.format(LINK, adr, form)
-					vs = '<img src="/static/load/{}.{}">'.format(adr, form)
+					vs = '<img src="/load/{}.{}">'.format(adr, form)
 
 				else:
 					start = k + re.search(r'src=".*', s[k:]).span()[0] + 5
@@ -151,7 +96,7 @@ def reimg(s):
 							form = 'png'
 
 						adr = load_image(b64, 'app/static/load', form=form)
-						vs = '<img src="/static/load/{}.{}">'.format(adr, form)
+						vs = '<img src="/load/{}.{}">'.format(adr, form)
 
 			if vs:
 				s = s[:k+st[0]] + vs + s[k+st[1]+1:]
@@ -166,32 +111,52 @@ def reimg(s):
 #
 
 
-@app.route('/', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*')
-def process():
+@app.route('/post', methods=['GET'])
+@app.route('/post/', methods=['GET'])
+def post_get():
 	x = request.json
-	# timestamp = time.time()
 
-	if x['method'] == 'system.test':
-		res = {
-			'error': 0,
-			'request': x,
-		}
+	db_condition = {}
+	db_filter = {'_id': False}
+	post = db['posts'].find_one(db_condition, db_filter)
 
-		return jsonify(res)
+	res = {
+		'error': 0,
+		'post': post,
+	}
+
+	return jsonify(res)
 	
-	elif x['method'] == 'post.get':
-		res = {
-			'error': 0,
-			'cont': 'Текст текст',
-		}
+# def process():
+# 	x = request.json
+# 	# timestamp = time.time()
 
-		return jsonify(res)
+# 	if x['method'] == 'system.test':
+# 		res = {
+# 			'error': 0,
+# 			'request': x,
+# 		}
+
+# 		return jsonify(res)
 	
-	elif x['method'] == 'image.load':
-		res = {
-			'error': 0,
-			'cont': reimg(x['cont']),
-		}
+# 	elif x['method'] == 'post.get':
+# 		db_condition = {}
+# 		db_filter = {'_id': False}
+# 		post = db['posts'].find_one(db_condition, db_filter)
 
-		return jsonify(res)
+# 		res = {
+# 			'error': 0,
+# 			'post': post,
+# 		}
+
+# 		print(res)
+
+# 		return jsonify(res)
+	
+# 	elif x['method'] == 'image.load':
+# 		res = {
+# 			'error': 0,
+# 			'cont': reimg(x['cont']),
+# 		}
+
+# 		return jsonify(res)

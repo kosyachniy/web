@@ -23,7 +23,7 @@ flask/
 
 # Данные
 
-app/static/load/
+/load/
 
 # Авторские права
 
