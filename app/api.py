@@ -180,6 +180,14 @@ def process():
 
 		return jsonify(res)
 	
+	elif x['method'] == 'post.get':
+		res = {
+			'error': 0,
+			'cont': 'Текст текст',
+		}
+
+		return jsonify(res)
+	
 	elif x['method'] == 'image.load':
 		res = {
 			'error': 0,

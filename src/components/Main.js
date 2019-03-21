@@ -1,6 +1,6 @@
 import React from 'react'
 
-import serverRequest from '../func/serverRequest'
+import getPost from '../func/methods'
 
 
 export default class Main extends React.Component {
@@ -9,12 +9,7 @@ export default class Main extends React.Component {
 	}
 
 	componentWillMount() {
-		const req = {
-			'method': 'system.test',
-			'language': 'ru',
-		}
-
-		serverRequest(req).then((res) => this.setState({cont: res['error']}))
+		getPost(this)
 	}
 
 	render() {
