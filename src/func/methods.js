@@ -6,8 +6,15 @@ function getPost(that) {
 		other.setState({cont: res['post']['cont']})
 	}
 
-	api('post', 'get', that, handlerSuccess)
+	api('post', 'get', that, {}, handlerSuccess)
 }
 
+function updatePost(that, data) {
+	const req = {
+		'cont': data,
+	}
 
-export default getPost
+	api('post', 'put', that, req)
+}
+
+export { getPost, updatePost }

@@ -126,6 +126,23 @@ def post_get():
 	}
 
 	return jsonify(res)
+
+@app.route('/post', methods=['PUT'])
+@app.route('/post/', methods=['PUT'])
+def post_update():
+	x = request.json
+
+	post = db['posts'].find_one({})
+	
+	post['cont'] = x['cont']
+
+	db['posts'].save(post)
+
+	res = {
+		'error': 0,
+	}
+
+	return jsonify(res)
 	
 # def process():
 # 	x = request.json
