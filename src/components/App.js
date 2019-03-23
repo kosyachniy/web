@@ -1,13 +1,18 @@
 import React from 'react'
+import 'bootstrap/dist/css/bootstrap.css'
 
-import Main from './Main'
+import Header from './Header'
+import Body from './Body'
+import Footer from './Footer'
 
 
 export default class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<Main />
+				<Header />
+				<Body />
+				<Footer />
 			</div>
 		)
 	}

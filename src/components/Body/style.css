@@ -1,0 +1,51 @@
+body {
+	background-color: var(--light);
+}
+
+#main {
+	min-height: 80vh;
+}
+
+#main h2 {
+	margin: 25px 0 15px 0;
+}
+
+.album div {
+	cursor: pointer;
+}
+
+@media (min-width: 576px) {
+	.jumbotron {
+		padding: 2rem;
+	}
+}
+
+#main li {
+	margin: 10px 0 10px 0;
+}
+
+.u-content img {
+	max-width: 100%; /*80%*/
+}
+
+.u-cursor {
+	cursor: pointer;
+}
+
+/* Notifications */
+/* 
+.u-notification {
+	cursor: pointer;
+	position: fixed;
+	margin-top: 10px;
+	z-index: 99;
+}
+
+.u-notification > div:first-child {
+	width: calc(100% - 3em);
+}
+
+.u-notification * {
+	display: inline-block;
+}
+*/

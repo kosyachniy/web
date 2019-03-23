@@ -1,0 +1,54 @@
+.navbar-brand img, .nav-link img {
+	height: 25px;
+	margin-top: -5px;
+}
+
+.navbar .badge {
+	margin: 0 10px 0 0;
+}
+
+@media all and (max-width: 991px) {
+	.navbar .badge {
+		margin: 0 0 0 10px;
+	}
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+	padding-right: .5rem;
+	padding-left: .5rem;
+}
+
+/*.navbar-nav a:not(.nav-link) img*/ .badge img {
+	height: 1em;
+}
+
+.nav-link {
+	display: inline-block;
+}
+
+.bg-light .active a {
+	color: #6c757d !important;
+}
+
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
