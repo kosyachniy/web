@@ -10,7 +10,7 @@ const handlerEditor = (event, editor) => {
 	const data = editor.getData()
 	// console.log( {event, editor, data} )
 
-	// updatePost(this, data)
+	updatePost(this, data)
 }
 
 

@@ -28,14 +28,35 @@ def get(this, **x):
 
 	count = x['count'] if 'count' in x else None
 
+	db_condition = {
+		# 'id': 1,
+	}
+
+	db_filter = {
+		'_id': False,
+		'name': True,
+		'cont': True,
+	}
+
+	posts = db['articles'].find(db_condition, db_filter)[:count]
+
 	###
 
 	res = {
 		'articles': [{
-			'name': 'Название',
-			'cont': 'Содержание',
+			'name': post['name'],
+			'cont': post['cont'],
 			'tags': ['Программирование', 'Маркетинг'],
-		}]
+		} for post in posts]
 	}
 
 	return res
+
+# Создание / редактирование
+
+def edit(this, **x):
+	post = db['articles'].find_one({'id': 1})
+
+	post['cont'] = x['cont']
+
+	db['articles'].save(post)

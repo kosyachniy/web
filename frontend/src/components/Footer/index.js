@@ -42,7 +42,7 @@ export default function Header() {
 						<span className="badge"><img src="/lang/ru.svg" /></span>
 						<br />
 						{ social.map((el, num) =>
-							<a href={ el.cont }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
+							<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
 						) }
 					</div>
 				</div>

@@ -18,7 +18,7 @@ export default class Main extends React.Component {
 		return (
 			<div>
 				{ this.state.posts.map((el, num) => 
-					<div key={ num }>{ el.name }</div>
+					<div key={ num }>{ el.cont }</div>
 				) }
 				<Editor />
 			</div>

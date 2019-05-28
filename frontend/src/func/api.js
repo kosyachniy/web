@@ -7,7 +7,7 @@ function serverRequest(json={}) {
 
 function handlerResult(that, res, handlerSuccess, handlerError) {
 	if (res['error']) {
-		// console.log(res)
+		console.log(res)
 		handlerError(that, res)
 	} else {
 		// console.log(res)

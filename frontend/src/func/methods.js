@@ -1,7 +1,7 @@
 import api from './api'
 
 
-// Articles
+// Posts
 
 export function getPost(that, data={}) {
 	const handlerSuccess = (other, res) => {
@@ -10,9 +10,11 @@ export function getPost(that, data={}) {
 		})
 	}
 
-	const handlerError = (other, res) => {
-		console.log(res)
-	}
+	api(that, 'articles.get', data, handlerSuccess)
+}
 
-	api(that, 'articles.get', data, handlerSuccess, handlerError)
+export function updatePost(that, data) {
+	data = {'cont': data}
+
+	api(that, 'articles.edit', data)
 }

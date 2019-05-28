@@ -1,12 +1,9 @@
-# Веб-приложение
+# Full stack application
 ## Описание
-API (Back-end) - Flask
-
-``` backend/ ```
-
-Сайт (Front-end) - React
-
-``` frontend/ ```
+Реализация | Сторона | Стек | Язык | Расположение
+---|---|---|---|---
+API | Back-end | Flask | Python | ``` backend/ ```
+Web app | Front-end | React | JavaScript | ``` frontend/ ```
 
 
 ## Источники
