@@ -2,7 +2,11 @@
 ## Описание
 API (Back-end) - Flask
 
+``` backend/ ```
+
 Сайт (Front-end) - React
+
+``` frontend/ ```
 
 
 ## Источники
