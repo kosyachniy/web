@@ -1,6 +1,7 @@
 import React from 'react'
 
 import './style.css'
+import { name, description, address, mail, phone, social } from '../../sets'
 
 
 export default function Header() {
@@ -10,24 +11,24 @@ export default function Header() {
 				<div className="row row-30">
 					<div className="col-md-4 col-xl-5">
 						<div className="pr-xl-4">
-							<p><a href="/" className="brand"><img src="/static/logo.svg" alt="Quateo" /></a></p>
-							<p>Описание</p>
-							<p className="rights"><span>©  </span><span className="copyright-year">2018-2019</span><span> </span><span>Название</span><span>. </span><span>Все права защищены</span></p>
+							<p><a href="/" className="brand"><img src="/brand/logo.svg" alt={ name } /></a></p>
+							<p>{ description }</p>
+							<p className="rights"><span>©  </span><span className="copyright-year">2018-2019</span><span> </span><span>{ name }</span><span>. </span><span>Все права защищены</span></p>
 						</div>
 					</div>
 					<div className="col-md-4">
 						<h5>Контакты</h5>
 						<dl className="contact-list">
 							<dt>Адрес</dt>
-							<dd>Россия, Санкт-Петербург</dd>
+							<dd>{ address }</dd>
 						</dl>
 						<dl className="contact-list">
 							<dt>Почта</dt>
-							<dd><a href="mailto:"></a> <span>&</span> <a href="mailto:"></a></dd>
+							<dd><a href={ 'mailto:' + mail }>{ mail }</a></dd>
 						</dl>
 						<dl className="contact-list">
 							<dt>Телефон</dt>
-							<dd><a href="tel:"> </a> <span>&</span> <a href="tel:"></a></dd>
+							<dd><a href={ 'tel:' + phone}>{ phone }</a></dd>
 						</dl>
 					</div>
 					<div className="col-md-4 col-xl-3">
@@ -37,10 +38,12 @@ export default function Header() {
 							<li><a href="/feedback/?url=">Предложения и ошибки</a></li>
 							<li><a href="/codex/">Правила сайта</a></li>
 						</ul>
-						<a href="/sys_lang/?i=en"><span className="badge"><img src="/static/lang/en.svg" /></span></a>
-						<a href="/sys_lang/?i=ru"><span className="badge"><img src="/static/lang/ru.svg" /></span></a>
+						<span className="badge"><img src="/lang/en.svg" /></span>
+						<span className="badge"><img src="/lang/ru.svg" /></span>
 						<br />
-						- соц сети -
+						{ social.map((el, num) =>
+							<a href={ el.cont }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
+						) }
 					</div>
 				</div>
 			</div>
