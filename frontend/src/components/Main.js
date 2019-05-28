@@ -7,7 +7,7 @@ import Editor from './Editor'
 
 export default class Main extends React.Component {
 	state = {
-		cont: 'Loading..',
+		posts: [],
 	}
 
 	componentWillMount() {
@@ -17,7 +17,9 @@ export default class Main extends React.Component {
 	render() {
 		return (
 			<div>
-				{ this.state.cont }
+				{ this.state.posts.map((el, num) => 
+					<div key={ num }>{ el.name }</div>
+				) }
 				<Editor />
 			</div>
 		)

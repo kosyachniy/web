@@ -14,13 +14,13 @@ from api._func import get_language
 
 
 class API():
-	def __init__(self, link_server, link_client, ip_server, ip_client, socketio, ip, token=None, language=0, ip_remote=None):
+	def __init__(self, link_server, link_client, ip_server, ip_client, ip, token=None, language=0, ip_remote=None, socketio=None):
 		self.timestamp = time.time()
 		self.link_server = link_server
 		self.link_client = link_client
 		self.ip_server = ip_server
 		self.ip_client = ip_client
-		self.socketio = socketio
+		# self.socketio = socketio
 		self.ip = ip
 		self.token = token
 		self.language = language

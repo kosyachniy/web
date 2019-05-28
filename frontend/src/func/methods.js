@@ -1,20 +1,18 @@
 import api from './api'
 
 
-function getPost(that) {
+// Articles
+
+export function getPost(that, data={}) {
 	const handlerSuccess = (other, res) => {
-		other.setState({cont: res['post']['cont']})
+		other.setState({
+			posts: res['result']['articles'],
+		})
 	}
 
-	api('post', 'get', that, {}, handlerSuccess)
-}
-
-function updatePost(that, data) {
-	const req = {
-		'cont': data,
+	const handlerError = (other, res) => {
+		console.log(res)
 	}
 
-	api('post', 'put', that, req)
+	api(that, 'articles.get', data, handlerSuccess, handlerError)
 }
-
-export { getPost, updatePost }

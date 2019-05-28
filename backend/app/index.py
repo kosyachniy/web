@@ -1,5 +1,5 @@
 from flask import render_template, request, jsonify
-from app import app, LINK, IP
+from app import app, LINK, IP, LINK_CLIENT, IP_CLIENT
 
 import os
 import time
@@ -58,14 +58,14 @@ def index():
 	#
 
 	api = API(
-		socketio=socketio,
+		# socketio=socketio,
 		ip=request.remote_addr,
 		token=x['token'] if 'token' in x else None,
 		language=x['language'] if 'language' in x else 'en',
 		ip_remote=x['ip'] if 'ip' in x else None,
 		link_server=LINK,
-		link_client=LINK_CLIENT,
 		ip_server=IP,
+		link_client=LINK_CLIENT,
 		ip_client=IP_CLIENT,
 	)
 

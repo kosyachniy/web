@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 
 # from keys import CAPTCHA
-from sets import LINK, IP
+from sets import LINK, IP, LINK_CLIENT, IP_CLIENT
 
 
 # Логирование

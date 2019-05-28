@@ -5,7 +5,7 @@ import Main from '../Main'
 
 export default function Body() {
 	return (
-		<div class="container" id="main">
+		<div className="container" id="main">
 			<Main />
 		</div>
 	)
