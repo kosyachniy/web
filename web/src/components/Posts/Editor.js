@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { updatePost } from '../func/methods'
+import { updatePost } from '../../func/methods'
 
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'

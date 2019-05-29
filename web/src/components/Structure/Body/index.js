@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Main from '../Main'
+import Main from '../../Posts/Main'
 
 
 export default function Body() {

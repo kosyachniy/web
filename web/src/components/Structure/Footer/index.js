@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './style.css'
-import { name, description, address, mail, phone, social } from '../../sets'
+import { name, description, address, mail, phone, social } from '../../../sets'
 
 
 export default function Header() {

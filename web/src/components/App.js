@@ -1,9 +1,9 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import Header from './Header'
-import Body from './Body'
-import Footer from './Footer'
+import Header from './Structure/Header'
+import Body from './Structure/Body'
+import Footer from './Structure/Footer'
 
 
 export default class App extends React.Component {
