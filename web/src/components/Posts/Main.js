@@ -1,8 +1,8 @@
 import React from 'react'
-import ReactHtmlParser from 'react-html-parser'
 
 import { getPost } from '../../func/methods'
 
+import Post from './Post'
 import Editor from './Editor'
 
 
@@ -17,11 +17,15 @@ export default class Main extends React.Component {
 
 	render() {
 		return (
-			<div>
-				{ this.state.posts.map((el, num) => 
-					<div key={ num }>{ ReactHtmlParser(el.cont) }</div>
-				) }
-				<Editor />
+			<div class="album py-5 bg-light">
+				<div class="container">
+					<div class="row">
+						{ this.state.posts.map((el, num) => 
+							<Post key={ num } el={ el } />
+						) }
+						{/* <Editor /> */}
+					</div>
+				</div>
 			</div>
 		)
 	}
