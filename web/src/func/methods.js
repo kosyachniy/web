@@ -5,9 +5,19 @@ import api from './api'
 
 export function getPost(that, data={}) {
 	const handlerSuccess = (other, res) => {
+		let posts = res['result']
+
+		// if (posts.length == 1) {
+		// 	other.setState({
+		// 		post: posts['articles'][0],
+		// 	})
+		// } else {
+
 		other.setState({
-			posts: res['result']['articles'],
+			posts: posts['articles'],
 		})
+
+		// }
 	}
 
 	api(that, 'articles.get', data, handlerSuccess)

@@ -7,7 +7,7 @@ export default class Post extends React.Component {
 		const el = this.props.el
 
 		return (
-			<div className="col-md-4" onClick>
+			<div className="col-md-4">
 				<div className="card mb-4 shadow-sm">
 					{ el.cover && <img className="card-img-top" src={ el.cover } alt={ el.name } /> }
 					<div className="card-body">

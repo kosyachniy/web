@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { getPost } from '../../func/methods'
 
@@ -17,13 +18,15 @@ export default class Main extends React.Component {
 
 	render() {
 		return (
-			<div class="album py-5 bg-light">
-				<div class="container">
-					<div class="row">
-						{ this.state.posts.map((el, num) => 
-							<Post key={ num } el={ el } />
+			<div className="album py-5 bg-light">
+				<div className="container">
+					<div className="row">
+						{ this.state.posts.map((el, num) =>
+							<Link to={ '/post/' } key={ num }>
+								<Post key={ num } el={ el } />
+							</Link>
 						) }
-						{/* <Editor /> */}
+						<Editor />
 					</div>
 				</div>
 			</div>

@@ -17,20 +17,27 @@ def get(this, **x):
 		('language', False, (int, str)),
 	))
 
-	# Язык
+	# Список постов
 
-	if 'language' in x:
-		x['language'] = get_language(x['language'])
-	else:
-		x['language'] = this.language
+	db_condition = {}
 
-	#
+	if 'id' in x:
+		if type(x['id']) == int:
+			db_condition['id'] = x['id']
+		
+		else:
+			db_condition['id'] = {'$in': x['id']}
+
+	# # Язык
+
+	# if 'language' in x:
+	# 	x['language'] = get_language(x['language'])
+	# else:
+	# 	x['language'] = this.language
+
+	# Получение постов
 
 	count = x['count'] if 'count' in x else None
-
-	db_condition = {
-		# 'id': 1,
-	}
 
 	db_filter = {
 		'_id': False,
