@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
 
 import Header from './Structure/Header'
@@ -11,7 +12,9 @@ export default class App extends React.Component {
 		return (
 			<React.Fragment>
 				<Header />
+
 				<Body />
+
 				<Footer />
 			</React.Fragment>
 		)

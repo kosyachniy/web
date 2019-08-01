@@ -4,6 +4,14 @@ Essence | Side | Stack | Language | Path
 ---|---|---|---|---
 API | Back-end | Flask | Python | ``` api/ ```
 Web app | Front-end | React | JavaScript | ``` web/ ```
+iOS | Front-end | React Native | JavaScript | planned
+Android | Front-end | React Native | JavaScript | planned
+
+### Stack
+![Flask](re/flask.svg)
+![React](re/react.svg)
+![Bootstrap](re/bootstrap.svg)
+![CKEditor](re/ckeditor.svg)
 
 
 ## Sources
