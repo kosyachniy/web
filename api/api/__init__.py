@@ -2,7 +2,7 @@ import api.account as account
 import api.users as users
 import api.feedback as feedback
 import api.search as search
-import api.articles as articles
+import api.posts as posts
 
 import api._error as Error
 

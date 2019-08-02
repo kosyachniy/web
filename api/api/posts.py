@@ -41,16 +41,18 @@ def get(this, **x):
 
 	db_filter = {
 		'_id': False,
+		'id': True,
 		'name': True,
 		'cont': True,
 	}
 
-	posts = db['articles'].find(db_condition, db_filter)[:count]
+	posts = db['posts'].find(db_condition, db_filter)[:count]
 
 	###
 
 	res = {
-		'articles': [{
+		'posts': [{
+			'id': post['id'],
 			'name': post['name'],
 			'cont': post['cont'],
 			'tags': ['Программирование', 'Маркетинг'],
@@ -62,8 +64,8 @@ def get(this, **x):
 # Создание / редактирование
 
 def edit(this, **x):
-	post = db['articles'].find_one({'id': 1})
+	post = db['posts'].find_one({'id': 1})
 
 	post['cont'] = x['cont']
 
-	db['articles'].save(post)
+	db['posts'].save(post)

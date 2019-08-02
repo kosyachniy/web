@@ -5,26 +5,26 @@ import api from './api'
 
 export function getPost(that, data={}) {
 	const handlerSuccess = (other, res) => {
-		let posts = res['result']
+		let posts = res['result']['posts']
 
 		// if (posts.length == 1) {
 		// 	other.setState({
-		// 		post: posts['articles'][0],
+		// 		post: posts[0],
 		// 	})
 		// } else {
 
 		other.setState({
-			posts: posts['articles'],
+			posts: posts,
 		})
 
 		// }
 	}
 
-	api(that, 'articles.get', data, handlerSuccess)
+	api(that, 'posts.get', data, handlerSuccess)
 }
 
 export function updatePost(that, data) {
 	data = {'cont': data}
 
-	api(that, 'articles.edit', data)
+	api(that, 'posts.edit', data)
 }

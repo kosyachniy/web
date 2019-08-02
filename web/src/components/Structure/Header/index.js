@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import './style.css'
 import { name } from '../../../sets'
@@ -8,23 +9,37 @@ export default function Header() {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
 			<div className="container">
-				<a href="/" className="navbar-brand"><img src="/brand/logo.svg" alt={ name } /></a>
+				<Link to="/" className="navbar-brand"><img src="/brand/logo.svg" alt={ name } /></Link>
 				<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
 
 				<div className="collapse navbar-collapse" id="navbarTogglerDemo02">
 					<ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+						<li className="nav-item">
+						<Link to="/" className="nav-link">Пространство</Link>
+						</li>
 						<li className="nav-item dropdown">
-							<a href="/learn/" className="nav-link">Посты</a>
-							{/* <a href="/admin/add/ladder/"><span className="badge badge-dark">+</span></a> */}
+							<Link to="/posts/" className="nav-link">Посты</Link>
+							{/* <Link to="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
 							<div className="dropdown-content">
-								<a href="/learn/ladders/" data-toggle="tooltip">Программирование</a>
-								<a data-toggle="tooltip">Бизнес</a>
+								<Link to="/posts/math/" data-toggle="tooltip">Математика</Link>
+								<Link to="/posts/prog/" data-toggle="tooltip">Программирование</Link>
+								<Link to="/posts/bis/" data-toggle="tooltip">Бизнес и экономика</Link>
+								<Link to="/posts/manag/" data-toggle="tooltip">Менеджмент</Link>
+								<Link to="/posts/lead/" data-toggle="tooltip">Харизма и лидерство</Link>
+								<Link to="/posts/xxx/" data-toggle="tooltip">Выживание</Link>
+								<Link to="/posts/yyy/" data-toggle="tooltip">Маркетинг</Link>
 							</div>
 						</li>
-						<li className="nav-item">
-							<a href="/members/" className="nav-link">Пространство</a>
+						<li className="nav-item dropdown">
+							<Link to="/events/" className="nav-link">Мероприятия</Link>
+							<div className="dropdown-content">
+								<Link to="/events/hacks/" data-toggle="tooltip">Соревнования</Link>
+								<Link to="/events/meet/" data-toggle="tooltip">Митапы</Link>
+								<Link to="/events/lect/" data-toggle="tooltip">Лекции</Link>
+								<Link to="/events/pres/" data-toggle="tooltip">Презентации</Link>
+							</div>
 						</li>
 					</ul>
 					<ul className="nav navbar-nav navbar-right">
@@ -34,8 +49,8 @@ export default function Header() {
 							</form>
 						</li>
 						<li className="nav-item">
-							<a href="/user/"className="nav-link">Логин</a><a href="/sys_sign_out/" className="nav-link">Выйти</a>
-							{/* <a href="/login/" className="nav-link">Гость &nbsp; Войти</a> */}
+							<Link to="/user/"className="nav-link">Логин</Link><Link to="/sys_sign_out/" className="nav-link">Выйти</Link>
+							{/* <Link to="/login/" className="nav-link">Гость &nbsp; Войти</Link> */}
 						</li>
 					</ul>
 				</div>

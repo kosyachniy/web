@@ -37,9 +37,10 @@ export default class Post extends React.Component {
 			<div className="col-md-4">
 				<div className="card mb-4 shadow-sm">
 					{ this.state.posts.map((post, num) =>
-						<React.Fragment>
+						<React.Fragment key={ num }>
 							<img src={ post.cover } alt={ post.name } />
 							<p>{ post.name }</p>
+							{ ReactHtmlParser(post.cont) }
 						</React.Fragment>
 					)}
 				</div>
