@@ -24,7 +24,5 @@ export function getPost(that, data={}) {
 }
 
 export function updatePost(that, data) {
-	data = {'cont': data}
-
 	api(that, 'posts.edit', data)
 }

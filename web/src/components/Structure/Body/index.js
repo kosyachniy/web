@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Posts from '../../Posts/Main'
-import Post from '../../Post/Main'
+import Posts from '../../Posts'
+import Post from '../../Post'
 
 
 export default function Body() {

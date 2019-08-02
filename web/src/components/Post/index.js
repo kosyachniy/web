@@ -3,6 +3,8 @@ import ReactHtmlParser from 'react-html-parser'
 
 import { getPost } from '../../func/methods'
 
+import Editor from './Editor'
+
 
 export default class Post extends React.Component {
 	constructor(props) {
@@ -34,16 +36,18 @@ export default class Post extends React.Component {
 
 	render() {
 		return (
-			<div className="col-md-4">
-				<div className="card mb-4 shadow-sm">
-					{ this.state.posts.map((post, num) =>
+			<div className="bg-light">
+				{ this.state.posts.map((post, num) =>
+					<React.Fragment>
 						<React.Fragment key={ num }>
+							<h1>{ post.name }</h1>
 							<img src={ post.cover } alt={ post.name } />
-							<p>{ post.name }</p>
 							{ ReactHtmlParser(post.cont) }
 						</React.Fragment>
-					)}
-				</div>
+					
+						<Editor id={ post.id } cont={ post.cont }/>
+					</React.Fragment>
+				)}
 			</div>
 		)
 	}

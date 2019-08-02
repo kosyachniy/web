@@ -64,7 +64,7 @@ def get(this, **x):
 # Создание / редактирование
 
 def edit(this, **x):
-	post = db['posts'].find_one({'id': 1})
+	post = db['posts'].find_one({'id': x['id']})
 
 	post['cont'] = x['cont']
 

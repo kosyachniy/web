@@ -10,15 +10,13 @@ import Footer from './Structure/Footer'
 export default class App extends React.Component {
 	render() {
 		return (
-			<React.Fragment>
-				<BrowserRouter>
-					<Header />
+			<BrowserRouter>
+				<Header />
 
-					<Body />
+				<Body />
 
-					<Footer />
-				</BrowserRouter>
-			</React.Fragment>
+				<Footer />
+			</BrowserRouter>
 		)
 	}
 }

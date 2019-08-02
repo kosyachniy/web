@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import './style.css'
 import { name, description, address, mail, phone, social } from '../../../sets'
@@ -11,7 +12,7 @@ export default function Header() {
 				<div className="row row-30">
 					<div className="col-md-4 col-xl-5">
 						<div className="pr-xl-4">
-							<p><a href="/" className="brand"><img src="/brand/logo.svg" alt={ name } /></a></p>
+							<p><Link to="/" className="brand"><img src="/brand/logo.svg" alt={ name } /></Link></p>
 							<p>{ description }</p>
 							<p className="rights"><span>©  </span><span className="copyright-year">2018-2019</span><span> </span><span>{ name }</span><span>. </span><span>Все права защищены</span></p>
 						</div>
@@ -34,16 +35,18 @@ export default function Header() {
 					<div className="col-md-4 col-xl-3">
 						<h5>Ссылки</h5>
 						<ul className="nav-list">
-							<li><a href="#">О нас</a></li>
-							<li><a href="/feedback/?url=">Предложения и ошибки</a></li>
-							<li><a href="/codex/">Правила сайта</a></li>
+							<li><Link to="/about/">О нас</Link></li>
+							<li><Link to="/feedback/">Предложения и ошибки</Link></li>
+							<li><Link to="/codex/">Правила сайта</Link></li>
 						</ul>
 						<span className="badge"><img src="/lang/en.svg" /></span>
 						<span className="badge"><img src="/lang/ru.svg" /></span>
 						<br />
-						{ social.map((el, num) =>
-							<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
-						) }
+						<div style={ {fontSize: '140%'} }>
+							{ social.map((el, num) =>
+								<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
+							) }
+						</div>
 					</div>
 				</div>
 			</div>

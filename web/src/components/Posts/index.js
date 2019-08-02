@@ -3,7 +3,6 @@ import React from 'react'
 import { getPost } from '../../func/methods'
 
 import Post from './Post'
-import Editor from './Editor'
 
 
 export default class Main extends React.Component {
@@ -24,8 +23,6 @@ export default class Main extends React.Component {
 							<Post el={ el } key={ num } />
 						) }
 					</div>
-					
-					<Editor />
 				</div>
 			</div>
 		)
