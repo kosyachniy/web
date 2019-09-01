@@ -5,7 +5,7 @@ import './style.css'
 import { name, description, address, mail, phone, social } from '../../../sets'
 
 
-export default function Header() {
+export default function Footer() {
 	return (
 		<footer className="section footer-classic context-light bg-light">
 			<div className="container">
@@ -42,7 +42,7 @@ export default function Header() {
 						<span className="badge"><img src="/lang/en.svg" /></span>
 						<span className="badge"><img src="/lang/ru.svg" /></span>
 						<br />
-						<div style={ {fontSize: '140%'} }>
+						<div className="social">
 							{ social.map((el, num) =>
 								<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
 							) }

@@ -22,7 +22,7 @@
 	visibility: visible;
 }
 
-footer ul, ol {
+footer ul, footer ol {
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -44,4 +44,8 @@ footer ul, ol {
 
 .brand img {
 	max-width: 100%;
+}
+
+.social span {
+	font-size: 110%;
 }

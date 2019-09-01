@@ -1,7 +1,8 @@
 import React from 'react'
-import {render} from 'react-dom'
+import ReactDOM from 'react-dom'
+import * as serviceWorker from './serviceWorker'
 
 import App from './components/App'
 
-const domContainer = document.querySelector('#root');
-render(<App />, domContainer)
+ReactDOM.render(<App />, document.getElementById('root'))
+serviceWorker.unregister()
