@@ -22,7 +22,7 @@ export default function api(that, method, params={}, handlerSuccess=()=>{}, hand
 	}
 
 	json['language'] = localStorage.getItem('lang')
-	json['token'] = JSON.parse(localStorage.getItem('user')).token
+	// json['token'] = JSON.parse(localStorage.getItem('user')).token
 
 	serverRequest(json).then((res) => handlerResult(that, res.data, handlerSuccess, handlerError))
 }

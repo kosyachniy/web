@@ -5,7 +5,7 @@ import './style.css'
 import { name, description, address, mail, phone, social } from '../../../sets'
 
 
-export default function Footer() {
+export default function Footer(props) {
 	return (
 		<footer className="section footer-classic context-light bg-light">
 			<div className="container">
@@ -39,8 +39,8 @@ export default function Footer() {
 							<li><Link to="/feedback/">Предложения и ошибки</Link></li>
 							<li><Link to="/codex/">Правила сайта</Link></li>
 						</ul>
-						<span className="badge"><img src="/lang/en.svg" /></span>
-						<span className="badge"><img src="/lang/ru.svg" /></span>
+						<span className="badge" onClick={ () => {props.handlerLang('en')} }><img src="/lang/en.svg" /></span>
+						<span className="badge" onClick={ () => {props.handlerLang('ru')} }><img src="/lang/ru.svg" /></span>
 						<br />
 						<div className="social">
 							{ social.map((el, num) =>

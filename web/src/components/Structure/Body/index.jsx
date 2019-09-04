@@ -9,20 +9,20 @@ import './style.css'
 
 export default function Body() {
 	return (
-			<div className="container" id="main">
-				<Switch>
-					<Route exact path="/">
-						<Posts />
-					</Route>
+		<div className="container" id="main">
+			<Switch>
+				<Route exact path="/">
+					<Posts />
+				</Route>
 
-					<Route path="/posts">
-						<Posts />
-					</Route>
+				<Route path="/posts">
+					<Posts />
+				</Route>
 
-					<Route path="/post">
-						<Post />
-					</Route>
-				</Switch>
-			</div>
+				<Route path="/post">
+					<Post />
+				</Route>
+			</Switch>
+		</div>
 	)
 }

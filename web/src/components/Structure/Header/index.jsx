@@ -1,11 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import './style.css'
 import { name } from '../../../sets'
 
 
 export default function Header() {
+	const { t } = useTranslation()
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
 			<div className="container">
@@ -17,10 +20,10 @@ export default function Header() {
 				<div className="collapse navbar-collapse" id="navbarTogglerDemo02">
 					<ul className="navbar-nav mr-auto mt-2 mt-lg-0">
 						<li className="nav-item">
-						<Link to="/" className="nav-link">Пространство</Link>
+							<Link to="/" className="nav-link">{ t('structure.space') }</Link>
 						</li>
 						<li className="nav-item dropdown">
-							<Link to="/posts/" className="nav-link">Посты</Link>
+							<Link to="/posts/" className="nav-link">{ t('structure.posts') }</Link>
 							{/* <Link to="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
 							<div className="dropdown-content">
 								<Link to="/posts/math/" data-toggle="tooltip">Математика</Link>
@@ -33,7 +36,7 @@ export default function Header() {
 							</div>
 						</li>
 						<li className="nav-item dropdown">
-							<Link to="/events/" className="nav-link">Мероприятия</Link>
+							<Link to="/events/" className="nav-link">{ t('structure.events') }</Link>
 							<div className="dropdown-content">
 								<Link to="/events/hacks/" data-toggle="tooltip">Соревнования</Link>
 								<Link to="/events/meet/" data-toggle="tooltip">Митапы</Link>
