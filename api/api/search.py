@@ -1,5 +1,5 @@
 from mongodb import db
-from api._error import ErrorEmpty
+from api._error import ErrorEmpty, ErrorAccess
 from api._func import check_params, get_preview
 
 
@@ -7,7 +7,6 @@ def search(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', False, str),
 		('cont', True, str),
 	))
 

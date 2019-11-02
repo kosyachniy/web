@@ -1,13 +1,12 @@
 from mongodb import db
 from api._error import ErrorWrong, ErrorAccess, ErrorBlock
-from api._func import check_params, get_preview
+from api._func import check_params, get_preview, get_user
 
 
 def get(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', False, str),
 		('id', False, (int, list, tuple), int),
 		('count', False, int),
 	))
@@ -21,7 +20,7 @@ def get(this, **x):
 			db_condition = {
 				'id': x['id'],
 			}
-		
+
 		else:
 			db_condition = {
 				'id': {'$in': x['id']},
@@ -31,18 +30,34 @@ def get(this, **x):
 		db_condition = {
 			'admin': {'$gte': 3},
 		}
+	
+	# Расширенные параметры
+
+	process_self = False
+
+	if 'id' in x and type(x['id']) == int:
+		if x['id'] == this.user['id']:
+			process_self = True
+
+	#
 
 	db_filter = {
 		'_id': False,
-		'password': False,
-		'mail': False,
-		'steps': False, # !
-		'templates': False, # !
-		'online': False, # !
-		'description': False, # !
-		'ladders': False, # !
-		'public': False, # !
+		'id': True,
+		'name': True,
+		'surname': True,
+		'login': True,
+		'rating': True,
+		'description': True,
+		'admin': True,
+		# 'online': False, # !
 	}
+
+	if process_self:
+		db_filter['mail'] = True
+		db_filter['templates'] = True
+		db_filter['social'] = True
+		# db_filter['transactions'] = True
 
 	users = list(db['users'].find(db_condition, db_filter))
 	users = sorted(users, key=lambda i: i['rating'])[::-1]
@@ -51,10 +66,23 @@ def get(this, **x):
 
 	users = users[:count]
 
-	# Аватарка
-
 	for i in range(len(users)):
+		# # Транзакции
+
+		# if 'transactions' in users[i]:
+		# 	users[i]['transactions'] = users[i]['transactions'][::-1]
+
+		# 	for j in range(len(users[i]['transactions'])):
+		# 		us = get_user(users[i]['transactions'][j]['user'])
+		# 		users[i]['transactions'][j]['user'] = us if us else {'id': 0}
+
+		# Аватарка
+		
 		users[i]['avatar'] = get_preview('users', users[i]['id'])
+	
+		# # Онлайн
+
+		# users[i]['online'] = db['online'].find_one({'user': users[i]['id']}, {'_id': True}) == True
 
 	# # Пользователь заблокирован
 
@@ -120,7 +148,7 @@ def get(this, **x):
 
 	# users['ladders'] = ladders
 
-	#
+	# Ответ
 
 	res = {
 		'users': users,
@@ -134,7 +162,6 @@ def block(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', True, str),
 		('id', True, int),
 	))
 
@@ -146,13 +173,11 @@ def block(this, **x):
 
 	if not users:
 		raise ErrorWrong('user')
-		# return dumps({'error': 6, 'message': ERROR[31]})
 
 	# Нет прав на блокировку
 
 	if this.user['admin'] < 6 or users['admin'] > this.user['admin']:
 		raise ErrorAccess('block')
-		# return dumps({'error': 7, 'message': ERROR[15]})
 
 	users['admin'] = 1
 	db['users'].save(users)

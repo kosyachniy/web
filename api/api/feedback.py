@@ -2,27 +2,23 @@ import time
 
 from mongodb import db
 from api._error import ErrorInvalid, ErrorAccess
-from api._func import reimg, get_user, check_params
+from api._func import reimg, get_user, check_params, next_id
 
+
+# Добавить
 
 def add(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', False, str),
 		('name', True, str),
 		('cont', True, str),
 	))
 
 	#
 
-	try:
-		id = db['feedback'].find({}, {'_id': False, 'id': True}).sort('id', -1)[0]['id'] + 1
-	except:
-		id = 1
-
 	query = {
-		'id': id,
+		'id': next_id('feedback'),
 		'name': x['name'],
 		'cont': reimg(x['cont']),
 		'user': this.user['id'],
@@ -32,26 +28,29 @@ def add(this, **x):
 
 	db['feedback'].insert(query)
 
+	# Ответ
+
 	res = {
-		'id': id,
+		'id': query['id'],
 	}
 
 	return res
 
-#
+# Получить
 
 def get(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', False, str),
 		('count', False, int),
 	))
 
-	# Нет прав на просмотр отзывов
+	# Нет доступа
+
 	if this.user['admin'] < 4:
-		raise ErrorAccess('get')
-		# return dumps({'error': 6, 'message': ERROR[15]})
+		raise ErrorAccess('token')
+
+	#
 
 	count = x['count'] if 'count' in x else None
 
@@ -60,21 +59,27 @@ def get(this, **x):
 	for i in range(len(news)):
 		news[i]['user'] = get_user(news[i]['user'])
 
+	# Ответ
+
 	res = {
 		'feedback': news,
 	}
 
 	return res
 
-#
+# Удалить
 
 def delete(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', True, str),
 		('id', True, int),
 	))
+
+	# Нет доступа
+
+	if this.user['admin'] < 5:
+		raise ErrorAccess('token')
 
 	#
 
@@ -83,11 +88,5 @@ def delete(this, **x):
 	# Неправильный отзыв
 	if not feedback:
 		raise ErrorInvalid('feedback')
-		# return dumps({'error': 6, 'message': ERROR[33]})
-
-	# Нет прав на удаление отзыва
-	if this.user['admin'] < 5:
-		raise ErrorAccess('delete')
-		# return dumps({'error': 7, 'message': ERROR[15]})
 
 	db['feedback'].remove(feedback['_id'])
