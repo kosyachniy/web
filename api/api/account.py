@@ -1,18 +1,182 @@
 import string
 import random
-from hashlib import md5
+import hashlib
 import time
 import re
 
 from mongodb import db
-from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload
-from api._func import check_params, get_preview
+from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
+					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount
+from api._func import check_params, get_preview, load_image, get_date, next_id
 
 
 # Генерация токена
 
 ALL_SYMBOLS = string.digits + string.ascii_letters
 generate = lambda length=32: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+
+# Проверить имя
+
+def check_name(cont):
+	# Недопустимое имя
+
+	if not cont.isalpha():
+		raise ErrorInvalid('name')
+
+# Проверить фамилию
+
+def check_surname(cont):
+	# Недопустимая фамилия
+
+	if not cont.isalpha():
+		raise ErrorInvalid('surname')
+
+# Проверить почту
+
+def check_mail(cont, user):
+	# Недопустимая почта
+
+	if re.match('.+@.+\..+', cont) == None:
+		raise ErrorInvalid('mail')
+
+	# Почта уже зарегистрирована
+
+	users = db['users'].find_one({'mail': cont}, {'_id': True, 'id': True})
+	if users and users['id'] != user['id']:
+		raise ErrorBusy('mail')
+
+# Проверить логин
+
+def check_login(cont, user):
+	# Логин уже зарегистрирован
+
+	users = db['users'].find_one({'login': cont}, {'_id': True, 'id': True})
+	if users and users['id'] != user['id']:
+		raise ErrorBusy('login')
+
+	# Недопустимый логин
+
+	cond_length = not 3 <= len(cont) <= 20
+	cond_symbols = len(re.findall('[^a-z0-9_]', cont))
+	cond_letters = not len(re.findall('[a-z]', cont))
+
+	if cond_length or cond_symbols or cond_letters:
+		raise ErrorInvalid('login')
+
+	# Системно зарезервировано
+
+	RESERVED = (
+		'admin', 'administrator', 'test', 'tester', 'author', 'bot', 'robot', 
+		'root'
+	)
+
+	cond_id = cont[:2] == 'id'
+	cond_reserv = cont in RESERVED
+
+	if cond_id or cond_reserv:
+		raise ErrorInvalid('login')
+
+# Пароль
+
+def check_password(cont):
+	# Недопустимый пароль
+
+	cond_length = not 6 <= len(cont) <= 40
+	pass_rule = '[^a-zA-z0-9!@#$%^&*()\-+=;:,./?\|`~\[\]\{\}]'
+	cond_symbols = len(re.findall(pass_rule, cont))
+	cond_letters = not len(re.findall('[a-zA-Z]', cont))
+	cond_digits = not len(re.findall('[0-9]', cont))
+
+	if cond_length or cond_symbols or cond_letters or cond_digits:
+		raise ErrorInvalid('password')
+
+def process_password(cont):
+	check_password(cont)
+
+	return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
+
+# Регистрация аккаунта
+
+def registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[]):
+	# ID
+
+	user_id = next_id('users')
+
+	# Логин
+
+	if login:
+		login = login.lower()
+		check_login(login, user)
+
+	else:
+		login = 'id{}'.format(user_id)
+
+	# Почта
+
+	if mail:
+		mail = mail.lower()
+		check_mail(mail, user)
+
+	# Пароль
+
+	if password:
+		password = process_password(password)
+
+	# Имя
+
+	if name:
+		check_name(name)
+		name = name.title()
+
+	# Фамилия
+
+	if surname:
+		check_surname(surname)
+		surname = surname.title()
+
+	# Аватарка
+
+	if avatar:
+		try:
+			file_type = file.split('.')[-1]
+
+		# Неправильное расширение
+		except:
+			raise ErrorInvalid('file')
+
+		try:
+			load_image('users', avatar, user_id, file_type)
+
+		# Ошибка загрузки фотографии
+		except:
+			raise ErrorUpload('avatar')
+
+	# Социальные сети
+	# ! Добавить проверку социальных сетей
+
+	#
+
+	db['users'].insert({
+		'id': user_id,
+		'login': login,
+		'password': password,
+		'mail': mail,
+		'name': name,
+		'surname': surname,
+		'description': description,
+		'rating': 0,
+		'admin': 3,
+		'ladders': [],
+		'steps': [],
+		'public': '',
+		'online': [],
+		'social': social,
+		'time': timestamp,
+	})
+
+	return user_id, login
+
+#
 
 
 # Регистрация
@@ -21,119 +185,143 @@ def reg(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('login', True, str),
-		('password', True, str),
-		('mail', True, str),
+		('login', False, str),
+		('password', False, str),
+		('mail', False, str),
 		('name', False, str),
 		('surname', False, str),
+		('social', False, (list, tuple), dict),
+		('avatar', False, str),
+		('file', False, str),
 	))
 
-	#
-
-	x['login'] = x['login'].lower()
-
-	# Логин уже зарегистрирован
-
-	if len(list(db['users'].find({'login': x['login']}, {'_id': True}))):
-		raise ErrorBusy('login')
-		# return dumps({'error': 6, 'message': ERROR[4]})
-
-	# Недопустимый логин
-
-	cond_length = not 3 <= len(x['login']) <= 20
-	cond_symbols = len(re.findall('[^a-z0-9]', x['login']))
-	cond_letters = not len(re.findall('[a-z]', x['login']))
-
-	if cond_length or cond_symbols or cond_letters:
-		raise ErrorInvalid('login')
-		# return dumps({'error': 7, 'message': ERROR[5]})
-
-	# Почта уже зарегистрирована
-
-	if len(list(db['users'].find({'mail': x['mail']}, {'_id': True}))):
-		raise ErrorBusy('mail')
-		# return dumps({'error': 8, 'message': ERROR[6]})
-
-	# Недопустимый пароль
-
-	cond_length = not 6 <= len(x['password']) <= 40
-	pass_rule = '[^a-zA-z0-9!@#$%^&*()-_+=;:,./?\|`~\[\]{}]'
-	cond_symbols = len(re.findall(pass_rule, x['password']))
-	cond_letters = not len(re.findall('[a-zA-Z]', x['password']))
-	cond_digits = not len(re.findall('[0-9]', x['password']))
-
-	if cond_length or cond_symbols or cond_letters or cond_digits:
-		raise ErrorInvalid('password')
-		# return dumps({'error': 9, 'message': ERROR[7]})
-
-	# Недопустимая почта
-
-	if re.match('.+@.+\..+', x['mail']) == None:
-		raise ErrorInvalid('mail')
-		# return dumps({'error': 10, 'message': ERROR[8]})
-
-	# Недопустимое имя
-
-	if 'name' in x and not x['name'].isalpha():
-		raise ErrorInvalid('name')
-		# return dumps({'error': 11, 'message': ERROR[9]})
-
-	# Недопустимая фамилия
-
-	if 'surname' in x and not x['surname'].isalpha():
-		raise ErrorInvalid('surname')
-		# return dumps({'error': 12, 'message': ERROR[10]})
+	user_id, login = registrate(
+		this.user,
+		this.timestamp,
+		login=x['login'] if 'login' in x else '',
+		password=x['password'] if 'password' in x else '',
+		mail=x['mail'] if 'mail' in x else '',
+		name=x['name'] if 'name' in x else '',
+		surname=x['surname'] if 'surname' in x else '',
+		avatar=x['avatar'] if 'avatar' in x else '',
+		file=x['file'] if 'file' in x else '',
+		social=x['social'] if 'social' in x else [],
+	)
 
 	#
-
-	try:
-		db_filter = {'id': True, '_id': False}
-		id = db['users'].find({}, db_filter).sort('id', -1)[0]['id'] + 1
-	except:
-		id = 1
-
-	db['users'].insert({
-		'id': id,
-		'login': x['login'],
-		'password': md5(bytes(x['password'], 'utf-8')).hexdigest(),
-		'mail': x['mail'].lower(),
-		'name': x['name'].title() if 'name' in x else None,
-		'surname': x['surname'].title() if 'surname' in x else None,
-		'description': '',
-		'rating': 0,
-		'admin': 3,
-		'ladders': [],
-		'steps': [],
-		'balance': 1000, #
-		'public': '', #
-		'templates': [{
-			'name': 'Задание по математике. Базовый шаблон',
-			'cont': '<h3>Здесь формулируется задание:</h3><p>&nbsp;</p><p><img alt="\\large Пример" src="http://latex.codecogs.com/gif.latex?%5Cdpi%7B200%7D%20%5Clarge%20%u041F%u0440%u0438%u043C%u0435%u0440" /><img alt="\\large \\frac{Formula}{\\sqrt{(xy)^3}} = \\ ?" src="http://latex.codecogs.com/gif.latex?%5Cdpi%7B200%7D%20%5Clarge%20%5Cfrac%7BFormula%7D%7B%5Csqrt%7B%28xy%29%5E3%7D%7D%20%3D%20%5C%20%3F" /></p><p>&nbsp;</p><hr /><h6>* Здесь находятся комментарии по поводу ввода ответа, например:</h6><h6>* Если ответов несколько, введите их через точку с запятой.</h6><h6>* В десятичных доробях целая и дробная части отделяются друг от друга запятой</h6><h6>* Запишите в ответ интервал с пробелами после точек с запятой,</h6><h6>* &infin; - знак бесконечности (можно скопировать, если нужен&nbsp;в ответе).</h6><h6>* ⋃ - знак объединения (в виде заглавной u).</h6><h6>* Пример ответа:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(-&infin;: 0]U[7; +&infin;)</h6>',
-		}, {
-			'name': 'Теория по математике. Базовый шаблон',
-			'cont': '<p>Допустим, задание по математике такое:</p><p><img src="http://tensy.org/static/load/steps/18-5-1.png" /></p><p>Тогда соответствующая теория может выглядеть следующим образом:</p><p>&nbsp;</p><p>1) Находим ограничения на область допустимых значений&nbsp;&nbsp;<img alt="x" src="http://latex.codecogs.com/gif.latex?%5Cdpi%7B120%7D%20x" />;</p><p>2) Представляем правую часть в виде логарифма с основанием таким же, как&nbsp; в выражении слева;</p><p>3) &quot;Избавляемся&quot; от логарифмов. При этом обращаем внимание на основание. Основание&nbsp;&nbsp;<img alt="&gt;1" src="http://latex.codecogs.com/gif.latex?%3E1" />, следовательно знак неравенсва не изменяется;</p><p>4) Решаем получившееся рациональное неравенство методом интервалов.</p>',
-		}],
-		'online': [],
-	})
 
 	token = generate()
 
 	req = {
 		'token': token,
-		'id': id,
+		'id': user_id,
 		'time': this.timestamp,
 	}
 	db['tokens'].insert(req)
 
 	res = {
-		'id': id,
+		'id': user_id,
 		'token': token,
-		'avatar': get_preview('users', id),
+		'avatar': get_preview('users', user_id),
+		'admin': 3,
+		'rating': 0,
+		'login': login,
 	}
 
 	return res
 
 # Авторизация
+
+def social(this, **x):
+	# Проверка параметров
+
+	check_params(x, (
+		('id', True, int), # ?
+		('user', True, int),
+		('hash', True, str),
+		('data', True, dict),
+	))
+
+	# Авторизация
+
+	db_condition = {
+		'social': {'$elemMatch': {'user': x['user'], 'hash': x['hash']}},
+	}
+
+	db_filter = {
+		'_id': False,
+		'id': True,
+		'admin': True,
+		'rating': True,
+		'login': True,
+	}
+
+	res = db['users'].find_one(db_condition, db_filter)
+
+	# Неправильный пароль
+	if not res:
+
+		# Регистрация
+
+		db_condition = {
+			'social': {'$elemMatch': {'user': x['user']}},
+		}
+
+		db_filter = {
+			'_id': True,
+		}
+
+		res = db['users'].find_one(db_condition, db_filter)
+
+		if res:
+			raise ErrorWrong('hash')
+
+		# Регистрация
+		else:
+			user_id, _ = registrate(
+				this.user,
+				this.timestamp,
+				social=[{
+					'id': x['id'],
+					'user': x['user'],
+					'hash': x['hash'],
+					'data': x['data'],
+				}],
+			)
+
+			#
+
+			db_filter = {
+				'_id': False,
+				'id': True,
+				'admin': True,
+				'rating': True,
+				'login': True,
+			}
+
+			res = db['users'].find_one({'id': user_id}, db_filter)
+
+		#
+
+	token = generate()
+
+	req = {
+		'token': token,
+		'id': res['id'],
+		'time': this.timestamp,
+	}
+	db['tokens'].insert(req)
+
+	res = {
+		'id': res['id'],
+		'token': token,
+		'admin': res['admin'],
+		'rating': res['rating'],
+		'login': res['login'],
+		'avatar': get_preview('users', res['id']),
+	}
+
+	return res
 
 def auth(this, **x):
 	# Проверка параметров
@@ -158,10 +346,10 @@ def auth(this, **x):
 	if not len(list(db['users'].find(db_condition, {'_id': True}))):
 		raise ErrorWrong('login')
 		# return dumps({'error': 6, 'message': ERROR[11]})
-	
+
 	# Пароль
 
-	password = md5(bytes(x['password'], 'utf-8')).hexdigest()
+	password = hashlib.md5(bytes(x['password'], 'utf-8')).hexdigest()
 
 	db_condition = {
 		'$or': [{
@@ -176,7 +364,6 @@ def auth(this, **x):
 		'_id': False,
 		'id': True,
 		'admin': True,
-		'balance': True,
 		'rating': True,
 		'login': True,
 	}
@@ -201,7 +388,6 @@ def auth(this, **x):
 		'id': res['id'],
 		'token': token,
 		'admin': res['admin'],
-		'balance': res['balance'],
 		'rating': res['rating'],
 		'login': res['login'],
 		'avatar': get_preview('users', res['id']),
@@ -212,15 +398,14 @@ def auth(this, **x):
 # Закрытие сессии
 
 def exit(this, **x):
-	# Проверка параметров
+	# Не авторизован
 
-	check_params(x, (
-		('token', True, str),
-	))
+	if not this.token:
+		raise ErrorAccess('token')
 
 	#
 
-	res = db['tokens'].find_one({'token': x['token']}, {'_id': True})
+	res = db['tokens'].find_one({'token': this.token}, {'_id': True})
 
 	# Неправильный токен
 
@@ -237,37 +422,54 @@ def edit(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('token', True, str),
 		('name', False, str),
 		('surname', False, str),
+		('login', False, str),
 		('description', False, str),
-		('photo', False, str),
+		('mail', False, str),
+		('avatar', False, str),
+		('file', False, str),
 		('templates', False, list, dict),
+		('social', False, (list, tuple), dict),
 	))
+
+	# Нет доступа
+
+	if this.user['admin'] < 3:
+		raise ErrorAccess('token')
 
 	# Имя
 
 	if 'name' in x:
-		# Недопустимое имя
-		if not x['name'].isalpha():
-			raise ErrorInvalid('name')
-			# return dumps({'error': 6, 'message': ERROR[9]})
-
+		check_name(x['name'])
 		this.user['name'] = x['name'].title()
 
 	# Фамилия
 
 	if 'surname' in x:
-		# Недопустимая фамилия
-		if not x['surname'].isalpha():
-			raise ErrorInvalid('surname')
-			# return dumps({'error': 7, 'message': ERROR[10]})
-
+		check_surname(x['surname'])
 		this.user['surname'] = x['surname'].title()
+
+	# Логин
+
+	if 'login' in x:
+		x['login'] = x['login'].lower()
+
+		if this.user['login'] != x['login']:
+			check_login(x['login'], this.user)
+			this.user['login'] = x['login']
 
 	# Описание, почта, пароль, шаблоны
 
-	for i in ('description', 'mail', 'password', 'templates'):
+	if 'mail' in x:
+		check_mail(x['mail'], this.user)
+
+	# Пароль
+
+	if 'password' in x:
+		x['password'] = process_password(x['password'])
+
+	for i in ('description', 'mail', 'password', 'templates', 'social'):
 		if i in x:
 			this.user[i] = x[i]
 
@@ -277,14 +479,20 @@ def edit(this, **x):
 
 	# Аватарка
 
-	if 'photo' in x:
+	if 'avatar' in x:
 		try:
-			load_image('app/static/load/users', x['photo'], this.user['id'])
+			file_type = x['file'].split('.')[-1]
+
+		# Неправильное расширение
+		except:
+			raise ErrorInvalid('file')
+
+		try:
+			load_image('users', x['avatar'], this.user['id'], file_type)
 
 		# Ошибка загрузки фотографии
 		except:
-			raise ErrorUpload('photo')
-			# return dumps({'error': 8, 'message': ERROR[13]})
+			raise ErrorUpload('avatar')
 
 	#
 
@@ -294,7 +502,6 @@ def edit(this, **x):
 # 	# Проверка параметров
 
 # 	check_params(x, (
-# 		('token', False, str),
 # 		('login', True, str),
 # 	))
 
@@ -306,7 +513,7 @@ def edit(this, **x):
 # 		raise ErrorWrong('login')
 
 # 	password = ''.join(random.sample(ALL_SYMBOLS, 15))
-# 	password_crypt = md5(bytes(password, 'utf-8')).hexdigest()
+# 	password_crypt = hashlib.md5(bytes(password, 'utf-8')).hexdigest()
 
 # 	# Отправить
 

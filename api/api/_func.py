@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import base64
 
 import requests
@@ -7,17 +8,30 @@ import requests
 from mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
-from sets import LINK # !
+from sets import CLIENT
 
+
+# Проверить наличие файла по имени
+
+def get_file(url, num):
+	url = '/static/' + url + '/'
+
+	for i in os.listdir('app' + url):
+		if re.search(r'^' + str(num) + '\.', i):
+			return i
+
+	return None
 
 # Ссылка на файл
 
 def get_preview(url, num=0):
-	url = '/static/' + url + '/'
-	for i in os.listdir('app' + url):
-		if re.search(r'^' + str(num) + '\.', i):
-			return url + i
-	return url + '0.png'
+	src =  CLIENT['link'] + 'load/' + url + '/'
+
+	file = get_file(url, num)
+	if file:
+		return src + file
+
+	return src + '0.png'
 
 # ID следующего изображения
 
@@ -33,22 +47,22 @@ def max_image(url):
 # Загрузить изображение
 
 def load_image(url, data, adr=None, format='jpg', type='base64'):
+	url = 'app/static/' + url
+
 	if type == 'base64':
 		data = base64.b64decode(data)
 
 	if adr:
-		id = adr
-
 		for i in os.listdir(url):
-			if re.search(r'^' + str(id) + '\.', i):
+			if re.search(r'^' + str(adr) + '\.', i):
 				os.remove(url + '/' + i)
 	else:
-		id = max_image(url)
+		adr = max_image(url)
 
-	with open('{}/{}.{}'.format(url, str(id), format), 'wb') as file:
+	with open('{}/{}.{}'.format(url, str(adr), format), 'wb') as file:
 		file.write(data)
 
-	return id
+	return adr
 
 # Заменить в тексте изображения
 
@@ -68,23 +82,24 @@ def reimg(s):
 
 					b64 = s[start:stop]
 					form = re.search(r'image/.*;', s[k+st[0]:start]).group(0)[6:-1]
-					adr = load_image('app/static/load', b64, format=form)
+					adr = load_image('', b64, format=form)
 
-					vs = '<img src="/static/load/{}.{}">'.format(adr, form)
+					vs = '<img src="/load/{}.{}">'.format(adr, form)
 				else:
 					start = k + re.search(r'src=".*', s[k:]).span()[0] + 5
 					stop = start + s[start:].index('"')
 					href = s[start:stop]
-					if href[:7] == '/static':
-						href = LINK + href[1:]
+
+					if href[:5] == '/load':
+						href = CLIENT['link'] + href[1:]
 					if href[:4] == 'http':
 						b64 = str(base64.b64encode(requests.get(href).content))[2:-1]
 						form = href.split('.')[-1]
 						if 'latex' in form:
 							form = 'png'
-						adr = load_image('app/static/load', b64, format=form)
+						adr = load_image('', b64, format=form)
 
-						vs = '<img src="/static/load/{}.{}">'.format(adr, form)
+						vs = '<img src="/load/{}.{}">'.format(adr, form)
 
 			if vs:
 				s = s[:k+st[0]] + vs + s[k+st[1]+1:]
@@ -143,7 +158,7 @@ def check_params(x, filters): # ! Удалять другие поля (кото
 				raise ErrorType(i[0])
 				# return dumps({'error': 4, 'message': ERROR[3].format(i[0], str(i[2]))})
 
-			cond_null = type(i[-1]) == bool and i[-1] and not len(x[i[0]])
+			cond_null = type(i[-1]) == bool and i[-1] and cond_iter and not len(x[i[0]])
 			
 			if cond_null:
 				raise ErrorInvalid(i[0])
@@ -190,10 +205,48 @@ def get_status(user):
 	return 3 # !
 
 def get_status_condition(user):
-	return {
-		'$or': [{
+	if user['id']:
+		return {
+			'$or': [{
+				'status': {'$gte': get_status(user)},
+			}, {
+				'user': user['id'],
+			}]
+		}
+
+	else:
+		return {
 			'status': {'$gte': get_status(user)},
-		}, {
-			'user': user['id'],
-		}]
+		}
+
+# Определить пользователя по sid
+
+def get_id(sid):
+	db_filter = {
+		'_id': False,
+		'user': True,
 	}
+
+	user = db['online'].find_one({'sid': sid}, db_filter)
+
+	if not user:
+		raise Exception('sid not found')
+	
+	return user['user']
+
+# Все sid этого пользователя
+
+def get_sids(user):
+	db_filter = {
+		'_id': False,
+		'sid': True,
+	}
+
+	user_sessions = db['online'].find({'user': user}, db_filter)
+	
+	return [i['sid'] for i in user_sessions]
+
+# Получить дату из timestamp
+
+def get_date(x, template='%Y%m%d'):
+	return time.strftime(template, time.localtime(x))

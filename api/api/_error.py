@@ -11,12 +11,14 @@ class ErrorBusy(Exception):
 		self.txt = par
 
 # Недопустимый
+# Не проходит по критерям
 
 class ErrorInvalid(Exception):
 	def __init__(self, par):
 		self.txt = par
 
 # Неправильный
+# Проходит по критериям, но неверный
 
 class ErrorWrong(Exception):
 	def __init__(self, par):
@@ -46,14 +48,20 @@ class ErrorEnough(Exception):
 	def __init__(self, par):
 		self.txt = par
 
-#  Заблокирован
+# Заблокирован
 
 class ErrorBlock(Exception):
 	def __init__(self, par):
 		self.txt = par
 
-#  Неправильный тип данных
+# Неправильный тип данных
 
 class ErrorType(Exception):
+	def __init__(self, par):
+		self.txt = par
+
+# Ограничение количества
+
+class ErrorCount(Exception):
 	def __init__(self, par):
 		self.txt = par

@@ -1,26 +1,22 @@
+import time
+
+from mongodb import db
+import api._error as Error
+from api._func import get_language
+
 import api.account as account
 import api.users as users
 import api.feedback as feedback
 import api.search as search
 import api.posts as posts
 
-import api._error as Error
-
-import time
-
-from mongodb import db
-from api._error import ErrorWrong
-from api._func import get_language
-
 
 class API():
-	def __init__(self, link_server, link_client, ip_server, ip_client, ip, token=None, language=0, ip_remote=None, socketio=None):
+	def __init__(self, server, client, ip, socketio=None, token=None, language=0, ip_remote=None):
 		self.timestamp = time.time()
-		self.link_server = link_server
-		self.link_client = link_client
-		self.ip_server = ip_server
-		self.ip_client = ip_client
-		# self.socketio = socketio
+		self.server = server
+		self.client = client
+		self.socketio = socketio
 		self.ip = ip
 		self.token = token
 		self.language = language
@@ -44,7 +40,7 @@ class API():
 		
 		# IP (случай, когда Веб-приложение делает запросы к IP с того же адреса)
 
-		if ip_remote and ip == self.ip_client:
+		if ip_remote and ip == self.client['ip']:
 			self.ip = ip_remote
 
 	def method(self, name, params={}):
@@ -72,11 +68,8 @@ class API():
 			module, method = name.split('.')
 			func = getattr(globals()[module], method)
 		except:
-			raise ErrorWrong('method')
+			raise Error.ErrorWrong('method')
 		
 		# Запрос
-
-		if self.token:
-			params['token'] = self.token
 
 		return func(self, **params)

@@ -1,4 +1,11 @@
-from sets import DB
-
 from pymongo import MongoClient
-db = MongoClient()[DB]
+
+from keys import DB
+
+
+db = MongoClient(
+	username=DB['login'],
+	password=DB['password'],
+	authSource='admin',
+	authMechanism='SCRAM-SHA-1'
+)['uple']
