@@ -29,7 +29,7 @@ export default function Footer(props) {
 						</dl>
 						<dl className="contact-list">
 							<dt>Телефон</dt>
-							<dd><a href={ 'tel:' + phone}>{ phone }</a></dd>
+							<dd><a href={ 'tel:' + phone }>{ phone }</a></dd>
 						</dl>
 					</div>
 					<div className="col-md-4 col-xl-3">

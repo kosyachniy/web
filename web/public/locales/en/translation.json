@@ -3,5 +3,26 @@
 		"space": "Space",
 		"posts": "Posts",
 		"events": "Events"
+	},
+	"system": {
+		"sign_out": "Log Out",
+		"sign_in": "Log In",
+		"sign_up": "Sign Up",
+		"search": "Search"
+	},
+	"science": {
+		"math": "Mathematics",
+		"prog": "Programming",
+		"bis": "Business and Economics",
+		"manag": "Management",
+		"lead": "Charisma and Leadership",
+		"life_safety": "Life safety",
+		"marketing": "Marketing"
+	},
+	"events": {
+		"hack": "Competitions",
+		"meet": "Meetups",
+		"lect": "Lectures",
+		"pres": "Presentations"
 	}
 }

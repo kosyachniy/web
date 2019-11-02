@@ -6,6 +6,15 @@ import './style.css'
 import { name } from '../../../sets'
 
 
+const sciences = [
+	'math', 'prog', 'bis', 'manag', 'lead', 'life_safety', 'marketing'
+]
+
+const events = [
+	'hack', 'meet', 'lect', 'pres'
+]
+
+
 export default function Header() {
 	const { t } = useTranslation()
 
@@ -26,34 +35,33 @@ export default function Header() {
 							<Link to="/posts/" className="nav-link">{ t('structure.posts') }</Link>
 							{/* <Link to="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
 							<div className="dropdown-content">
-								<Link to="/posts/math/" data-toggle="tooltip">Математика</Link>
-								<Link to="/posts/prog/" data-toggle="tooltip">Программирование</Link>
-								<Link to="/posts/bis/" data-toggle="tooltip">Бизнес и экономика</Link>
-								<Link to="/posts/manag/" data-toggle="tooltip">Менеджмент</Link>
-								<Link to="/posts/lead/" data-toggle="tooltip">Харизма и лидерство</Link>
-								<Link to="/posts/xxx/" data-toggle="tooltip">Выживание</Link>
-								<Link to="/posts/yyy/" data-toggle="tooltip">Маркетинг</Link>
+								{
+									sciences.map((science) => (
+										<Link to={ `/posts/${science}/` } data-toggle="tooltip">{ t(`science.${science}`) }</Link>
+									))
+								}
 							</div>
 						</li>
 						<li className="nav-item dropdown">
 							<Link to="/events/" className="nav-link">{ t('structure.events') }</Link>
 							<div className="dropdown-content">
-								<Link to="/events/hacks/" data-toggle="tooltip">Соревнования</Link>
-								<Link to="/events/meet/" data-toggle="tooltip">Митапы</Link>
-								<Link to="/events/lect/" data-toggle="tooltip">Лекции</Link>
-								<Link to="/events/pres/" data-toggle="tooltip">Презентации</Link>
+								{
+									events.map((event) => (
+										<Link to={ `/events/${event}/` } data-toggle="tooltip">{ t(`events.${event}`) }</Link>
+									))
+								}
 							</div>
 						</li>
 					</ul>
 					<ul className="nav navbar-nav navbar-right">
 						<li className="nav-item dropdown">	
 							<form action="/search/" method="post" className="form-inline my-2 my-lg-0">
-								<input name="search" className="form-control mr-sm-2" type="search" placeholder="Поиск" />
+								<input name="search" className="form-control mr-sm-2" type="search" placeholder={ t('system.search') } />
 							</form>
 						</li>
 						<li className="nav-item">
-							<Link to="/user/"className="nav-link">Логин</Link><Link to="/sys_sign_out/" className="nav-link">Выйти</Link>
-							{/* <Link to="/login/" className="nav-link">Гость &nbsp; Войти</Link> */}
+							<Link to="/user/"className="nav-link">@</Link><Link to="/sys_sign_out/" className="nav-link">{ t('system.sign_out') }</Link>
+							{/* <Link to="/login/" className="nav-link">Гость &nbsp; { t('system.sign_in') }</Link> */}
 						</li>
 					</ul>
 				</div>

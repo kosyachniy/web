@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import './i18n'
 import i18n from './i18n'
 
 import Header from './Structure/Header'
