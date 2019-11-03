@@ -1,7 +1,7 @@
 {
 	"name": "web",
+	"author": "kosyachniy",
 	"version": "0.1.0",
-	"private": true,
 	"dependencies": {
 		"@ckeditor/ckeditor5-react": "^1.1.1",
 		"@kosyachniy/ckeditor": "^1.0.1",
