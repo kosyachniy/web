@@ -95,7 +95,7 @@ def reimg(s):
 					if href[:4] == 'http':
 						b64 = str(base64.b64encode(requests.get(href).content))[2:-1]
 						form = href.split('.')[-1]
-						if 'latex' in form:
+						if 'latex' in form or '/' in form or len(form) > 5:
 							form = 'png'
 						adr = load_image('', b64, format=form)
 

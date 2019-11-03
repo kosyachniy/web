@@ -10,7 +10,7 @@ function handlerResult(that, res, handlerSuccess, handlerError) {
 		console.log(res)
 		handlerError(that, res)
 	} else {
-		// console.log(res)
+		console.log(res)
 		handlerSuccess(that, res)
 	}
 }

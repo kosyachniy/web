@@ -66,6 +66,6 @@ def get(this, **x):
 def edit(this, **x):
 	post = db['posts'].find_one({'id': x['id']})
 
-	post['cont'] = x['cont']
+	post['cont'] = reimg(x['cont'])
 
 	db['posts'].save(post)

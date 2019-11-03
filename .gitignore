@@ -4,41 +4,7 @@
 
 .DS_Store
 
-## Python
-
-__pycache__/
-*.pyc
-
 ## Редакторы
 
 .idea/
 .vscode/
-
-## JS
-
-node_modules/
-package-lock.json
-dist/
-build/
-
-# Ключи и настройки
-
-keys.py
-keys.json
-keys.js
-
-# Данные
-
-# Библиотеки
-
-# Виртуальное окружение
-
-env/
-flask/
-
-# Авторские права
-
-## Шрифты
-
-*.otf
-*.ttf

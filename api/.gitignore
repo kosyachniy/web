@@ -1,0 +1,23 @@
+# Кэш
+
+.DS_Store
+**/__pycache__/
+**/*.pyc
+
+error.log
+
+.idea/
+.vscode/
+
+# Ключи и настройки
+
+keys.py
+
+# Виртуальное окружение
+
+env/
+
+# Данные
+
+app/static/
+/db/

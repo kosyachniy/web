@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactHtmlParser from 'react-html-parser'
+import MathJax from 'react-mathjax-preview'
 
 import { getPost } from '../../func/methods'
 
@@ -38,15 +39,17 @@ export default class Post extends React.Component {
 		return (
 			<div className="bg-light">
 				{ this.state.posts.map((post, num) =>
-					<React.Fragment>
+					<>
 						<React.Fragment key={ num }>
 							<h1>{ post.name }</h1>
 							<img src={ post.cover } alt={ post.name } />
-							{ ReactHtmlParser(post.cont) }
+
+							{/* { ReactHtmlParser(post.cont) } */}
+							<MathJax math={ post.cont } />
 						</React.Fragment>
 					
 						<Editor id={ post.id } cont={ post.cont }/>
-					</React.Fragment>
+					</>
 				)}
 			</div>
 		)

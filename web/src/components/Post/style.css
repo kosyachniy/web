@@ -1,0 +1,4 @@
+.ck-sticky-panel__content_sticky {
+	display: fixed !important;
+	top: 56px !important;
+}

@@ -3,8 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@ckeditor/ckeditor5-build-classic": "^12.0.0",
 		"@ckeditor/ckeditor5-react": "^1.1.1",
+		"@kosyachniy/ckeditor": "^1.0.1",
 		"axios": "^0.18.0",
 		"bootstrap": "^4.3.1",
 		"i18next": "^17.2.0",
@@ -13,6 +13,7 @@
 		"react-dom": "^16.8.4",
 		"react-html-parser": "^2.0.2",
 		"react-i18next": "^10.13.1",
+		"react-mathjax-preview": "^0.1.16",
 		"react-router-dom": "^5.0.0",
 		"react-scripts": "2.1.8"
 	},
