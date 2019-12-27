@@ -14,5 +14,12 @@ app = Flask(__name__)
 app.config.from_object('config')
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+# Socket.IO
+
+from flask_socketio import SocketIO
+sio = SocketIO(app, async_mode=None)
+
+#
 
 from app import api
+from app import sockets
