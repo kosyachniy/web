@@ -37,7 +37,7 @@ class API():
 			user_id = db['tokens'].find_one({'token': token}, db_filter)
 			if user_id and user_id['id']:
 				self.user = db['users'].find_one({'id': user_id['id']})
-		
+
 		# IP (случай, когда Веб-приложение делает запросы к IP с того же адреса)
 
 		if ip_remote and ip == self.client['ip']:
@@ -60,7 +60,7 @@ class API():
 			'params': params,
 		}
 
-		db['actions'].insert(req)
+		db['actions'].insert_one(req)
 	
 		# Метод API
 

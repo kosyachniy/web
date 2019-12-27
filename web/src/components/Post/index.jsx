@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactHtmlParser from 'react-html-parser'
+// import ReactHtmlParser from 'react-html-parser'
 import MathJax from 'react-mathjax-preview'
 
 import { getPost } from '../../func/methods'
@@ -42,7 +42,7 @@ export default class Post extends React.Component {
 					<>
 						<React.Fragment key={ num }>
 							<h1>{ post.name }</h1>
-							<img src={ post.cover } alt={ post.name } />
+							{/* <img src={ post.cover } alt={ post.name } /> */}
 
 							{/* { ReactHtmlParser(post.cont) } */}
 							<MathJax math={ post.cont } />

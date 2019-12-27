@@ -39,12 +39,12 @@ export default function Footer(props) {
 							<li><Link to="/feedback/">Предложения и ошибки</Link></li>
 							<li><Link to="/codex/">Правила сайта</Link></li>
 						</ul>
-						<span className="badge" onClick={ () => {props.handlerLang('en')} }><img src="/lang/en.svg" /></span>
-						<span className="badge" onClick={ () => {props.handlerLang('ru')} }><img src="/lang/ru.svg" /></span>
+						<span className="badge" onClick={ () => {props.handlerLang('en')} }><img src="/lang/en.svg" alt="en" /></span>
+						<span className="badge" onClick={ () => {props.handlerLang('ru')} }><img src="/lang/ru.svg" alt="ru" /></span>
 						<br />
 						<div className="social">
 							{ social.map((el, num) =>
-								<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } /></span></a>
+								<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } alt={ el.name } /></span></a>
 							) }
 						</div>
 					</div>

@@ -6,9 +6,9 @@ import './style.css'
 import { name } from '../../../sets'
 
 
-const sciences = [
-	'math', 'prog', 'bis', 'manag', 'lead', 'life_safety', 'marketing'
-]
+// const sciences = [
+// 	'math', 'prog', 'bis', 'manag', 'lead', 'marketing', 'life_safety'
+// ]
 
 const events = [
 	'hack', 'meet', 'lect', 'pres'
@@ -34,13 +34,13 @@ export default function Header() {
 						<li className="nav-item dropdown">
 							<Link to="/posts/" className="nav-link">{ t('structure.posts') }</Link>
 							{/* <Link to="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
-							<div className="dropdown-content">
+							{/* <div className="dropdown-content">
 								{
 									sciences.map((science) => (
 										<Link to={ `/posts/${science}/` } data-toggle="tooltip">{ t(`science.${science}`) }</Link>
 									))
 								}
-							</div>
+							</div> */}
 						</li>
 						<li className="nav-item dropdown">
 							<Link to="/events/" className="nav-link">{ t('structure.events') }</Link>
