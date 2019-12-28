@@ -1,9 +1,88 @@
 import time
 
 from mongodb import db
-from api._error import ErrorInvalid, ErrorAccess
-from api._func import reimg, get_user, check_params, get_preview
+from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
+from api._func import reimg, get_user, check_params, get_preview, next_id, load_image
 
+
+# Создание / редактирование
+
+def edit(this, **x):
+	# Проверка параметров
+
+	# Редактирование
+	if 'id' in x:
+		check_params(x, (
+			('id', True, int),
+			('name', False, str),
+			('cont', False, str),
+			('cover', False, str),
+			('file', False, str),
+			('category', False, int),
+			('tags', False, list, str),
+		))
+
+	# Создание
+	else:
+		check_params(x, (
+			('name', True, str),
+			('cont', True, str),
+			('cover', False, str),
+			('file', False, str),
+			('category', False, int),
+			('tags', False, list, str),
+		))
+
+	# Формирование поста
+
+	if 'id' in x:
+		post = db['posts'].find_one({'id': x['id']})
+
+		# Неправильный id
+		if not post:
+			raise ErrorWrong('id')
+
+	else:
+		post = {
+			'id': next_id('posts'),
+			'time': this.timestamp,
+		}
+
+	# Изменений полей
+
+	for field in ('name', 'category', 'tags'):
+		if field in x:
+			post[field] = x[field]
+
+	if 'cont' in x:
+		post['cont'] = reimg(x['cont'])
+
+	if 'cover' in x:
+		try:
+			file_type = x['file'].split('.')[-1]
+
+		# Неправильное расширение
+		except:
+			raise ErrorInvalid('file')
+
+		try:
+			load_image('posts', x['cover'], post['id'], file_type)
+
+		# Ошибка загрузки обложки
+		except:
+			raise ErrorUpload('cover')
+
+	# Сохранение
+
+	db['posts'].save(post)
+
+	# Ответ
+
+	res = {
+		'id': post['id'],
+	}
+
+	return res
 
 # Получение
 
@@ -61,12 +140,3 @@ def get(this, **x):
 	}
 
 	return res
-
-# Создание / редактирование
-
-def edit(this, **x):
-	post = db['posts'].find_one({'id': x['id']})
-
-	post['cont'] = reimg(x['cont'])
-
-	db['posts'].save(post)

@@ -82,6 +82,14 @@ def index():
 		req['error'] = 14
 		req['result'] = str(e)
 
+	except Error.ErrorRepeat as e:
+		req['error'] = 15
+		req['result'] = str(e)
+
+	except Error.ErrorTime as e:
+		req['error'] = 16
+		req['result'] = str(e)
+
 	# except Exception as e:
 	# 	req['error'] = 1
 	# 	req['result'] = 'Server error'

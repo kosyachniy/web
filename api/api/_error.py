@@ -65,3 +65,15 @@ class ErrorType(Exception):
 class ErrorCount(Exception):
 	def __init__(self, par):
 		self.txt = par
+
+# Повторное действие
+
+class ErrorRepeat(Exception):
+	def __init__(self, par):
+		self.txt = par
+
+# Истекло время
+
+class ErrorTime(Exception):
+	def __init__(self, par):
+		self.txt = par
