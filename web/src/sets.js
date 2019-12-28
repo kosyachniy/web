@@ -4,7 +4,7 @@ export const server = {
 	port: 5000,
 }
 export const client = {
-	link: 'http://0.0.0.0:3000',
+	link: 'http://0.0.0.0:3000/',
 	ip: '0.0.0.0',
 	port: 3000,
 }

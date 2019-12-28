@@ -90,19 +90,23 @@ def get(this, **x):
 	# Проверка параметров
 
 	check_params(x, (
-		('id', False, (int, list, tuple), int),
+		('id', False, (int, list), int),
 		('count', False, int),
 		('category', False, int),
-		('language', False, (int, str)),
+		# ('language', False, (int, str)),
 	))
 
 	# Список постов
+
+	process_single = False
 
 	db_condition = {}
 
 	if 'id' in x:
 		if type(x['id']) == int:
 			db_condition['id'] = x['id']
+
+			process_single = True
 		
 		else:
 			db_condition['id'] = {'$in': x['id']}
@@ -122,21 +126,22 @@ def get(this, **x):
 		'_id': False,
 		'id': True,
 		'name': True,
-		'cont': True,
 	}
 
-	posts = db['posts'].find(db_condition, db_filter)[:count]
+	if process_single:
+		db_filter['cont'] = True
 
-	###
+	posts = list(db['posts'].find(db_condition, db_filter)[:count])
+
+	# Обработка
+
+	for i in range(len(posts)):
+		posts[i]['cover'] = get_preview(posts[i]['id'], 'posts')
+
+	# Ответ
 
 	res = {
-		'posts': [{
-			'id': post['id'],
-			'name': post['name'],
-			'cont': post['cont'],
-			'cover': get_preview(post['id'], 'posts'),
-			'tags': ['Программирование', 'Маркетинг'],
-		} for post in posts]
+		'posts': posts,
 	}
 
 	return res
