@@ -19,11 +19,7 @@ class API():
 		self.socketio = socketio
 		self.ip = ip
 		self.token = token
-		self.language = language
-
-		# Язык
-
-		self.language = get_language(self.language)
+		self.language = get_language(language)
 
 		# Определение пользователя
 
@@ -35,6 +31,7 @@ class API():
 		if token:
 			db_filter = {'id': True, '_id': False}
 			user_id = db['tokens'].find_one({'token': token}, db_filter)
+
 			if user_id and user_id['id']:
 				self.user = db['users'].find_one({'id': user_id['id']})
 

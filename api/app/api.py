@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from app import app, SERVER, CLIENT
+from app import app, sio, SERVER, CLIENT
 
 from api import API, Error
 
@@ -24,7 +24,7 @@ def index():
 	api = API(
 		server=SERVER,
 		client=CLIENT,
-		# socketio=sio,
+		socketio=sio,
 		ip=request.remote_addr,
 		token=x['token'] if 'token' in x else None,
 		language=x['language'] if 'language' in x else 'en',
