@@ -5,17 +5,17 @@ function serverRequest(json={}) {
 	return axios.post(server.link, json)
 }
 
-function handlerResult(that, res, handlerSuccess, handlerError) {
+function handlerResult(res, handlerSuccess, handlerError) {
 	if (res['error']) {
 		console.log(res)
-		handlerError(that, res)
+		handlerError(res)
 	} else {
 		console.log(res)
-		handlerSuccess(that, res)
+		handlerSuccess(res['result'])
 	}
 }
 
-export default function api(that, method, params={}, handlerSuccess=()=>{}, handlerError=()=>{}) {
+export default function api(method, params={}, handlerSuccess=()=>{}, handlerError=()=>{}) {
 	let json = {
 		'method': method,
 		'params': params,
@@ -24,5 +24,7 @@ export default function api(that, method, params={}, handlerSuccess=()=>{}, hand
 	json['language'] = localStorage.getItem('lang')
 	json['token'] = localStorage.getItem('token')
 
-	serverRequest(json).then((res) => handlerResult(that, res.data, handlerSuccess, handlerError))
+	console.log(json)
+
+	serverRequest(json).then((res) => handlerResult(res.data, handlerSuccess, handlerError))
 }

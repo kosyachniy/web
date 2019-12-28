@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { updatePost } from '../../func/methods'
+import api from '../../func/api'
 
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@kosyachniy/ckeditor'
@@ -9,13 +9,17 @@ import './style.css'
 
 
 export default class Editor extends React.Component {
+	updatePost = (data) => {
+		api('posts.edit', data)
+	}
+
 	handlerEditor = (event, editor) => {
 		const data = {
 			id: this.props.id,
 			cont: editor.getData(),
 		}
 
-		updatePost(this, data)
+		this.updatePost(data)
 	}
 
 	render() {

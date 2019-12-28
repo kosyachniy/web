@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getPost } from '../../func/methods'
+import api from '../../func/api'
 
 import Post from './Post'
 
@@ -10,8 +10,18 @@ export default class Main extends React.Component {
 		posts: [],
 	}
 
+	getPost = (data={}) => {
+		const handlerSuccess = (res) => {
+			this.setState({
+				posts: res['posts'],
+			})
+		}
+
+		api('posts.get', data, handlerSuccess)
+	}
+
 	componentWillMount() {
-		getPost(this)
+		this.getPost()
 	}
 
 	render() {

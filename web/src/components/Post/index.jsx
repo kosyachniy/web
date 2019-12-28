@@ -2,7 +2,7 @@ import React from 'react'
 // import ReactHtmlParser from 'react-html-parser'
 import MathJax from 'react-mathjax-preview'
 
-import { getPost } from '../../func/methods'
+import api from '../../func/api'
 
 import Editor from './Editor'
 
@@ -14,6 +14,16 @@ export default class Post extends React.Component {
 		this.state = {
 			posts: [],
 		}
+	}
+
+	getPost = (data={}) => {
+		const handlerSuccess = (res) => {
+			this.setState({
+				posts: res['posts'],
+			})
+		}
+
+		api('posts.get', data, handlerSuccess)
 	}
 
 	// post: {
@@ -32,7 +42,7 @@ export default class Post extends React.Component {
 		// }
 
 		let postID = Number(document.location.pathname.split('/').pop())
-		getPost(this, {id: postID})
+		this.getPost({id: postID})
 	}
 
 	render() {
@@ -42,7 +52,7 @@ export default class Post extends React.Component {
 					<>
 						<React.Fragment key={ num }>
 							<h1>{ post.name }</h1>
-							{/* <img src={ post.cover } alt={ post.name } /> */}
+							<img src={ post.cover } alt={ post.name } />
 
 							{/* { ReactHtmlParser(post.cont) } */}
 							<MathJax math={ post.cont } />
