@@ -24,8 +24,10 @@ def get_file(url, num):
 
 # Ссылка на файл
 
-def get_preview(url, num=0):
-	src =  CLIENT['link'] + 'load/' + url + '/'
+def get_preview(num=0, url=''):
+	src =  CLIENT['link'] + 'load/'
+	if url:
+		src += url + '/'
 
 	file = get_file(url, num)
 	if file:

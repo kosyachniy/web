@@ -1,17 +1,27 @@
 # Кэш
 
+##  MacOS
+
 .DS_Store
+
+## Python
+
 **/__pycache__/
 **/*.pyc
 
-error.log
+## Редакторы
 
 .idea/
 .vscode/
 
+##
+
+error.log
+
 # Ключи и настройки
 
 keys.py
+keys.json
 
 # Виртуальное окружение
 
@@ -19,5 +29,5 @@ env/
 
 # Данные
 
-app/static/
+# app/static/
 /db/

@@ -46,8 +46,12 @@ export default function Header() {
 							<Link to="/events/" className="nav-link">{ t('structure.events') }</Link>
 							<div className="dropdown-content">
 								{
-									events.map((event) => (
-										<Link to={ `/events/${event}/` } data-toggle="tooltip">{ t(`events.${event}`) }</Link>
+									events.map((event, ind) => (
+										<Link
+											to={ `/events/${event}/` }
+											data-toggle="tooltip"
+											key={ ind }
+										>{ t(`events.${event}`) }</Link>
 									))
 								}
 							</div>

@@ -12,14 +12,14 @@ export default class Post extends React.Component {
 		super(props)
 
 		this.state = {
-			posts: [],
+			post: null,
 		}
 	}
 
 	getPost = (data={}) => {
 		const handlerSuccess = (res) => {
 			this.setState({
-				posts: res['posts'],
+				post: res['posts'][0],
 			})
 		}
 
@@ -46,21 +46,20 @@ export default class Post extends React.Component {
 	}
 
 	render() {
+		const { post } = this.state;
+
 		return (
 			<div className="bg-light">
-				{ this.state.posts.map((post, num) =>
+				{ post && (
 					<>
-						<React.Fragment key={ num }>
-							<h1>{ post.name }</h1>
-							<img src={ post.cover } alt={ post.name } />
+						<h1>{ post.name }</h1>
+						<img src={ post.cover } alt={ post.name } />
 
-							{/* { ReactHtmlParser(post.cont) } */}
-							<MathJax math={ post.cont } />
-						</React.Fragment>
+						<MathJax math={ post.cont } />
 					
 						<Editor id={ post.id } cont={ post.cont }/>
 					</>
-				)}
+				) }
 			</div>
 		)
 	}

@@ -2,7 +2,7 @@ import time
 
 from mongodb import db
 from api._error import ErrorInvalid, ErrorAccess
-from api._func import reimg, get_user, check_params
+from api._func import reimg, get_user, check_params, get_preview
 
 
 # Получение
@@ -55,6 +55,7 @@ def get(this, **x):
 			'id': post['id'],
 			'name': post['name'],
 			'cont': post['cont'],
+			'cover': get_preview(post['id']),
 			'tags': ['Программирование', 'Маркетинг'],
 		} for post in posts]
 	}
