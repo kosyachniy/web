@@ -134,7 +134,7 @@ def get(this, **x):
 			'id': post['id'],
 			'name': post['name'],
 			'cont': post['cont'],
-			'cover': get_preview(post['id']),
+			'cover': get_preview(post['id'], 'posts'),
 			'tags': ['Программирование', 'Маркетинг'],
 		} for post in posts]
 	}

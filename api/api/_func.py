@@ -8,7 +8,7 @@ import requests
 from mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
-from sets import CLIENT
+from sets import IMAGE
 
 
 # Проверить наличие файла по имени
@@ -25,7 +25,7 @@ def get_file(url, num):
 # Ссылка на файл
 
 def get_preview(num=0, url=''):
-	src =  CLIENT['link'] + 'load/'
+	src = IMAGE['link']
 	if url:
 		src += url + '/'
 
