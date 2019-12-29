@@ -24,11 +24,11 @@ def online():
 	# 	if thread is None:
 	# 		thread = sio.start_background_task(target=background_thread)
 
-	print('IN', request.sid, rooms())
+	print('IN', request.sid)
 
 @sio.on('disconnect', namespace='/main')
 def online():
-	print('OUT', rooms())
+	print('OUT', request.sid)
 
 #
 
