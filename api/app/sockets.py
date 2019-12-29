@@ -1,5 +1,5 @@
 from app import app, sio
-from flask import request
+from flask import request # , session
 
 import os
 import time
@@ -17,14 +17,18 @@ thread_lock = Lock()
 
 # Онлайн пользователи
 
-@sio.on('trends', namespace='/main')
-def trends(x):
-	global thread
-	with thread_lock:
-		if thread is None:
-			thread = sio.start_background_task(target=background_thread)
+@sio.on('connect', namespace='/main')
+def online():
+	# global thread
+	# with thread_lock:
+	# 	if thread is None:
+	# 		thread = sio.start_background_task(target=background_thread)
 
-	pass
+	print('IN', request.sid, rooms())
+
+@sio.on('disconnect', namespace='/main')
+def online():
+	print('OUT', rooms())
 
 #
 
@@ -38,7 +42,8 @@ def background_thread():
 
         #
 
-		pass
+		print('!=!')
+		# pass
 
 		#
 
