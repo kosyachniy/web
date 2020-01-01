@@ -36,58 +36,8 @@ def index():
 	try:
 		res = api.method(x['method'], x['params'] if 'params' in x else {})
 
-	# HTTP Codes ?
-
-	except Error.ErrorSpecified as e:
-		req['error'] = 4
-		req['result'] = str(e)
-
-	except Error.ErrorBusy as e:
-		req['error'] = 5
-		req['result'] = str(e)
-
-	except Error.ErrorInvalid as e:
-		req['error'] = 6
-		req['result'] = str(e)
-
-	except Error.ErrorWrong as e:
-		req['error'] = 7
-		req['result'] = str(e)
-
-	except Error.ErrorUpload as e:
-		req['error'] = 8
-		req['result'] = str(e)
-
-	except Error.ErrorAccess as e:
-		req['error'] = 9
-		req['result'] = str(e)
-
-	except Error.ErrorEmpty as e:
-		req['error'] = 10
-		req['result'] = str(e)
-
-	except Error.ErrorEnough as e:
-		req['error'] = 11
-		req['result'] = str(e)
-
-	except Error.ErrorBlock as e:
-		req['error'] = 12
-		req['result'] = str(e)
-
-	except Error.ErrorType as e:
-		req['error'] = 13
-		req['result'] = str(e)
-
-	except Error.ErrorCount as e:
-		req['error'] = 14
-		req['result'] = str(e)
-
-	except Error.ErrorRepeat as e:
-		req['error'] = 15
-		req['result'] = str(e)
-
-	except Error.ErrorTime as e:
-		req['error'] = 16
+	except Error.BaseError as e:
+		req['error'] = e.code
 		req['result'] = str(e)
 
 	# except Exception as e:
