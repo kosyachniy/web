@@ -1,28 +1,23 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { connect } from 'react-redux';
+import {
+	onlineAdd, onlineDelete, onlineReset,
+} from '../../redus';
 
-import Posts from '../../Posts'
-import Post from '../../Post'
-
-import './style.css'
+import Body from './Body';
 
 
-export default function Body() {
-	return (
-		<div className="container" id="main">
-			<Switch>
-				<Route exact path="/">
-					<Posts />
-				</Route>
+// AppContainer.jsx
+const mapStateToProps = state => ({
+	online: state.online,
+});
 
-				<Route path="/posts">
-					<Posts />
-				</Route>
+const mapDispatchToProps = {
+	onlineAdd, onlineDelete, onlineReset,
+};
 
-				<Route path="/post">
-					<Post />
-				</Route>
-			</Switch>
-		</div>
-	)
-}
+const BodyContainer = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Body);
+
+export default BodyContainer;

@@ -9,6 +9,7 @@ import Posts from './Posts';
 // AppContainer.jsx
 const mapStateToProps = state => ({
 	posts: state.posts,
+	online: state.online,
 });
 
 const mapDispatchToProps = {

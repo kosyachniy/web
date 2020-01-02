@@ -3,10 +3,6 @@ import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
 import i18n from './i18n'
 
-// Socket.IO
-import openSocket from 'socket.io-client'
-import { socket } from '../sets'
-
 // Redux
 import { Provider } from 'react-redux';
 import { store } from './redus';
@@ -37,14 +33,6 @@ export default class App extends React.Component {
 			token = genereteToken()
 			localStorage.setItem('token', token)
 		}
-
-		// Online
-
-		const socketIO = openSocket(`${socket.link}main`)
-
-		socketIO.on('connect', () => {
-			socketIO.emit('online', {token})
-		})
 	}
 
 	render() {

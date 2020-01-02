@@ -17,7 +17,11 @@ thread = None
 thread_lock = Lock()
 
 
-# Онлайн пользователи
+# Reset online users
+db['online'].remove()
+
+
+# Online users
 
 @sio.on('connect', namespace='/main')
 def connect():
@@ -34,9 +38,21 @@ def online(x):
 
 	timestamp = time.time()
 
-	# Онлайн пользователи
+	# Online users
+	## Emit all users to this user
+
+	onlines = list(db['online'].find({}, {'_id': False, 'id': True}))
+
+	if len(onlines):
+		sio.emit('online_add', {
+			'count': len(onlines),
+			'users': onlines,
+		}, room=request.sid, namespace='/main')
+
+	## Add to DB
 
 	online = {
+		'id': request.sid, # !
 		'sid': request.sid,
 		'token': x['token'],
 		'start': timestamp,
@@ -45,18 +61,19 @@ def online(x):
 
 	db['online'].insert_one(online)
 
-	onlines = list(db['online'].find({}, {'_id': False, 'sid': True}))
+	## Emit this user to all users
 
 	sio.emit('online_add', {
-		'count': len(onlines),
-		'users': onlines,
+		'count': len(onlines)+1,
+		'users': [{'id': request.sid}], # !
 	}, namespace='/main')
 
 @sio.on('disconnect', namespace='/main')
 def disconnect():
 	print('OUT', request.sid)
 
-	# Онлайн пользователи
+	# Online users
+	## Remove from DB
 
 	online = db['online'].find_one({'sid': request.sid})
 	if not online:
@@ -64,7 +81,9 @@ def disconnect():
 
 	db['online'].remove(online['_id'])
 
-	onlines = list(db['online'].find({}, {'_id': False, 'sid': True}))
+	## Emit to clients
+
+	onlines = list(db['online'].find({}, {'_id': False, 'id': True}))
 
 	sio.emit('online_del', {
 		'count': len(onlines),

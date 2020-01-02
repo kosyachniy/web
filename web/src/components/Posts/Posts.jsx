@@ -10,10 +10,6 @@ import { socket } from '../../sets'
 
 
 export default class Main extends React.Component {
-	state = {
-		online: {count: null, users: []},
-	}
-
 	getPost = (data={}) => {
 		const handlerSuccess = (res) => {
 			this.props.postsGet(res['posts']);
@@ -25,23 +21,7 @@ export default class Main extends React.Component {
 	componentWillMount() {
 		// Online
 
-		const socketIO = openSocket(`${socket.link}main`)
-
-		socketIO.on('online_add', (x) => {
-			console.log('ADD', x)
-			this.setState({
-				count: x['count'],
-				online: x['users'],
-			})
-		})
-
-		socketIO.on('online_del', (x) => {
-			console.log('DEL', x)
-			this.setState({
-				count: x['count'],
-				online: x['users'],
-			})
-		})
+		// const socketIO = openSocket(`${socket.link}main`)
 
 		// Posts
 
@@ -49,18 +29,21 @@ export default class Main extends React.Component {
 	}
 
 	render() {
+		const { online } = this.props
+		console.log(online)
+
 		return (
 			<div className="album py-5 bg-light">
 				<div className="container">
-					{ this.state.count && (
+					{ online.count && (
 						<div className="row">
 								<div style={ {width: '100%'} }>
-									Онлайн: { this.state.count}
+									Онлайн: { online.count}
 								</div>
 								<div style={ {width: '100%'} }>
-									{ this.state.online.map((user) => (
-										<div className="badge badge-secondary" key={ user.sid }>
-											{ user.sid }
+									{ online.users.map((user) => (
+										<div className="badge badge-secondary" key={ user.id }>
+											{ user.id }
 										</div>
 									))}
 								</div>

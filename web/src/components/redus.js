@@ -16,6 +16,22 @@ export const postsDelete = id => ({
 	id,
 });
 
+export const onlineAdd = online => ({
+	type: 'ONLINE_ADD',
+	count: online.count,
+	users: online.users,
+});
+
+export const onlineDelete = online => ({
+	type: 'ONLINE_DELETE',
+	count: online.count,
+	ids: online.users.map(user => user.id),
+});
+
+export const onlineReset = () => ({
+	type: 'ONLINE_RESET',
+});
+
 // reducers.js
 export const posts = (state = [], action) => {
 	switch (action.type) {
@@ -36,8 +52,33 @@ export const posts = (state = [], action) => {
 	}
 };
 
+export const online = (state = {count: null, users: []}, action) => {
+	switch (action.type) {
+		case 'ONLINE_ADD':
+			return {
+				count: action.count,
+				users: [
+					...action.users,
+					...state.users
+				]
+			};
+
+		case 'ONLINE_DELETE':
+			return {
+				count: action.count,
+				users: state.users.filter(user => action.ids.indexOf(user.id) === -1),
+			};
+
+		case 'ONLINE_RESET':
+			return {count: null, users: []};
+
+		default:
+			return state;
+	}
+};
+
 export const reducers = combineReducers({
-	posts,
+	posts, online,
 });
 
 // store.js
