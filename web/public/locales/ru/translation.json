@@ -8,7 +8,8 @@
 		"sign_out": "Выйти",
 		"sign_in": "Войти",
 		"sign_up": "Зарегистрироваться",
-		"search": "Поиск"
+		"search": "Поиск",
+		"online": "Онлайн"
 	},
 	"science": {
 		"math": "Математика",
@@ -24,5 +25,25 @@
 		"meet": "Митапы",
 		"lect": "Лекции",
 		"pres": "Презентации"
+	},
+	"footer": {
+		"rights": "Все права защищены",
+		"contacts": "Контакты",
+		"address": "Адрес",
+		"mail": "Почта",
+		"phone": "Телефон",
+		"links": "Ссылки",
+		"about": "О нас",
+		"feedback": "Предложения и ошибки",
+		"rules": "Правила сайта",
+		"news": "Новости",
+		"codex": "Кодекс чести",
+		"white_paper": "White Paper",
+		"vk": "ВКонтакте",
+		"fb": "Facebook",
+		"ig": "Instagram",
+		"twi": "Twitter",
+		"yt": "YouTube",
+		"in": "LinkedIn"
 	}
 }

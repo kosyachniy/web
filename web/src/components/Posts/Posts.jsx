@@ -1,15 +1,13 @@
 import React from 'react'
-import openSocket from 'socket.io-client'
+import { withTranslation } from 'react-i18next'
 
 import api from '../../func/api'
 
 import './style.css'
 import Post from './Post'
 
-import { socket } from '../../sets'
 
-
-export default class Main extends React.Component {
+class Posts extends React.Component {
 	getPost = (data={}) => {
 		const handlerSuccess = (res) => {
 			this.props.postsGet(res['posts']);
@@ -19,17 +17,11 @@ export default class Main extends React.Component {
 	}
 
 	componentWillMount() {
-		// Online
-
-		// const socketIO = openSocket(`${socket.link}main`)
-
-		// Posts
-
 		this.getPost()
 	}
 
 	render() {
-		const { online } = this.props
+		const { online, t } = this.props
 
 		return (
 			<div className="album py-5 bg-light">
@@ -37,7 +29,7 @@ export default class Main extends React.Component {
 					{ online.count && (
 						<div className="row">
 								<div style={ {width: '100%'} }>
-									Онлайн: { online.count}
+									{t('system.online')}: { online.count}
 								</div>
 								<div style={ {width: '100%'} }>
 									{ online.users.map((user) => (
@@ -58,3 +50,5 @@ export default class Main extends React.Component {
 		)
 	}
 }
+
+export default withTranslation()(Posts);

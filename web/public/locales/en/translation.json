@@ -8,7 +8,8 @@
 		"sign_out": "Log Out",
 		"sign_in": "Log In",
 		"sign_up": "Sign Up",
-		"search": "Search"
+		"search": "Search",
+		"online": "Online"
 	},
 	"science": {
 		"math": "Mathematics",
@@ -24,5 +25,25 @@
 		"meet": "Meetups",
 		"lect": "Lectures",
 		"pres": "Presentations"
+	},
+	"footer": {
+		"rights": "All rights reserved",
+		"contacts": "Contacts",
+		"address": "Address",
+		"mail": "Email",
+		"phone": "Phone",
+		"links": "Links",
+		"about": "About",
+		"feedback": "Feedbacks & Troubles",
+		"rules": "Rules",
+		"news": "News",
+		"codex": "Honor code",
+		"white_paper": "White Paper",
+		"vk": "VKontakte",
+		"fb": "Facebook",
+		"ig": "Instagram",
+		"twi": "Twitter",
+		"yt": "YouTube",
+		"in": "LinkedIn"
 	}
 }

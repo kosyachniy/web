@@ -1,9 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-// Socket.IO
-import openSocket from 'socket.io-client'
-import { socket } from '../../../sets'
+import { socketIO } from '../../../func/sockets'
 
 import './style.css'
 
@@ -16,8 +14,6 @@ export default class App extends React.Component {
 		const token = localStorage.getItem('token')
 
 		// Online
-
-		const socketIO = openSocket(`${socket.link}main`)
 
 		socketIO.on('connect', () => {
 			socketIO.emit('online', {token})

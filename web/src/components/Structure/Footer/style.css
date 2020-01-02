@@ -1,6 +1,10 @@
-.footer-classic {
+footer {
 	padding-top: 22px;
 	margin-top: 40px;
+}
+
+footer .badge {
+	cursor: pointer;
 }
 
 .context-dark, .bg-gray-dark, .bg-primary, .bg-dark .social-inner, .footer-classic.bg-dark a, .footer-classic.bg-dark a:hover, .footer-classic.bg-dark a:focus, .footer-classic.bg-dark a:active  {
