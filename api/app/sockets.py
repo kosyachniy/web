@@ -6,6 +6,7 @@ import time
 import re
 
 from mongodb import db
+# from api._func import reduce_params
 
 
 # Socket.IO
@@ -25,10 +26,10 @@ db['online'].remove()
 
 @sio.on('connect', namespace='/main')
 def connect():
-	global thread
-	with thread_lock:
-		if thread is None:
-			thread = sio.start_background_task(target=background_thread)
+	# global thread
+	# with thread_lock:
+	# 	if thread is None:
+	# 		thread = sio.start_background_task(target=background_thread)
 
 	print('IN', request.sid)
 
@@ -41,18 +42,39 @@ def online(x):
 	# Online users
 	## Emit all users to this user
 
-	onlines = list(db['online'].find({}, {'_id': False, 'id': True}))
+	db_filter = {
+		'_id': False,
+		'id': True,
+		'token': True,
+	}
 
-	if len(onlines):
+	onlines = list(db['online'].find({}, db_filter))
+
+	users_uniq = dict()
+	for i in onlines:
+		if i['token'] not in users_uniq: # !
+			users_uniq[i['token']] = { # !
+				'id': i['token'], # !
+			}
+
+	if len(users_uniq):
 		sio.emit('online_add', {
-			'count': len(onlines),
-			'users': onlines,
+			'count': len(users_uniq),
+			'users': [users_uniq[i] for i in users_uniq], # reduce_params(onlines, ('id',)),
 		}, room=request.sid, namespace='/main')
+
+	## Already online
+
+	already = False
+
+	for online in onlines:
+		if online['token'] == x['token']:
+			already = True
 
 	## Add to DB
 
 	online = {
-		'id': request.sid, # !
+		'id': x['token'], # !
 		'sid': request.sid,
 		'token': x['token'],
 		'start': timestamp,
@@ -63,10 +85,11 @@ def online(x):
 
 	## Emit this user to all users
 
-	sio.emit('online_add', {
-		'count': len(onlines)+1,
-		'users': [{'id': request.sid}], # !
-	}, namespace='/main')
+	if not already:
+		sio.emit('online_add', {
+			'count': len(users_uniq)+1,
+			'users': [{'id': x['token']}], # !
+		}, namespace='/main')
 
 @sio.on('disconnect', namespace='/main')
 def disconnect():
@@ -79,16 +102,35 @@ def disconnect():
 	if not online:
 		return
 
+	token = online['token']
+
 	db['online'].remove(online['_id'])
+
+	## Other sessions of this user
+
+	db_filter = {
+		'_id': False,
+		'token': True,
+	}
+
+	onlines = list(db['online'].find({}, db_filter))
+	other = False
+
+	for online in onlines:
+		if online['token'] == token:
+			other = True
 
 	## Emit to clients
 
-	onlines = list(db['online'].find({}, {'_id': False, 'id': True}))
+	if not other:
+		users_uniq = set()
+		for online in onlines:
+			users_uniq.add(online['token']) # !
 
-	sio.emit('online_del', {
-		'count': len(onlines),
-		'users': onlines,
-	}, namespace='/main')
+		sio.emit('online_del', {
+			'count': len(users_uniq),
+			'users': [{'id': token}], # !
+		}, namespace='/main')
 
 #
 

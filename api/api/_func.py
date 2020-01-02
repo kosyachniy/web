@@ -252,3 +252,11 @@ def get_sids(user):
 
 def get_date(x, template='%Y%m%d'):
 	return time.strftime(template, time.localtime(x))
+
+# Оставить только нужные поля у объектов в списке
+
+def reduce_params(cont, params):
+	def only_params(el):
+		return {i: el[i] for i in params}
+
+	return list(map(only_params, cont))

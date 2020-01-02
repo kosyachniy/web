@@ -30,7 +30,6 @@ export default class Main extends React.Component {
 
 	render() {
 		const { online } = this.props
-		console.log(online)
 
 		return (
 			<div className="album py-5 bg-light">
