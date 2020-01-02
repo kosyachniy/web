@@ -17,7 +17,7 @@ export default function Footer(props) {
 						<div className="pr-xl-4">
 							<p><Link to="/" className="brand"><img src="/brand/logo.svg" alt={ name } /></Link></p>
 							<p>{ description }</p>
-							<p className="rights"><span>©  </span><span className="copyright-year">2018-2020</span><span> </span><span>{ name }</span><span>. </span><span>{ t('footer.rights') }</span></p>
+							<p className="rights"><span>{ name }</span><span> </span><span>©</span><span> </span><span className="copyright-year">2018-2020</span></p>
 						</div>
 					</div>
 					<div className="col-md-4">

@@ -12,14 +12,14 @@ if (lang === null || langs.indexOf(lang) === -1) {
 	|| window.navigator.systemLanguage
 	|| window.navigator.userLanguage) : 'en';
 	const langTemp = language.substr(0, 2).toLowerCase();
-	localStorage.setItem('lang', JSON.stringify(langTemp));
+	localStorage.setItem('lang', langTemp);
 }
 
 i18n
 	.use(Backend)
 	.use(initReactI18next)
 	.init({
-		lng: JSON.parse(localStorage.getItem('lang')).main || 'en',
+		lng: localStorage.getItem('lang') || 'en',
 		fallbackLng: 'en',
 		debug: false,
 
