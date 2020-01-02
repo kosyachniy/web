@@ -1,15 +1,19 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
-import openSocket from 'socket.io-client'
-
 import i18n from './i18n'
+
+// Socket.IO
+import openSocket from 'socket.io-client'
+import { socket } from '../sets'
+
+// Redux
+import { Provider } from 'react-redux';
+import { store } from './redus';
 
 import Header from './Structure/Header'
 import Body from './Structure/Body'
 import Footer from './Structure/Footer'
-
-import { socket } from '../sets'
 
 
 function genereteToken() {
@@ -45,13 +49,15 @@ export default class App extends React.Component {
 
 	render() {
 		return (
-			<BrowserRouter>
-				<Header />
+			<Provider store={store}>
+				<BrowserRouter>
+					<Header />
 
-				<Body />
+					<Body />
 
-				<Footer handlerLang={ this.handlerLang } />
-			</BrowserRouter>
+					<Footer handlerLang={ this.handlerLang } />
+				</BrowserRouter>
+			</Provider>
 		)
 	}
 }
