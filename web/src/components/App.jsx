@@ -25,11 +25,22 @@ export default class App extends React.Component {
 	}
 
 	componentWillMount() {
+		// Token
+
+		let token = localStorage.getItem('token')
+
+		if (token === null) {
+			token = genereteToken()
+			localStorage.setItem('token', token)
+		}
+
+		// Online
+
 		const socketIO = openSocket(`${socket.link}main`)
 
-		if (localStorage.getItem('token') === null) {
-			localStorage.setItem('token', genereteToken())
-		}
+		socketIO.on('connect', () => {
+			socketIO.emit('online', {token})
+		})
 	}
 
 	render() {
