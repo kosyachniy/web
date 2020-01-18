@@ -58,15 +58,15 @@ class API():
 		}
 
 		db['actions'].insert_one(req)
-	
+
 		# Метод API
 
-		try:
-			module, method = name.split('.')
-			func = getattr(globals()[module], method)
-		except:
-			raise Error.ErrorWrong('method')
-		
+		# try:
+		module, method = name.split('.')
+		func = getattr(globals()[module], method)
+		# except:
+		# 	raise Error.ErrorWrong('method')
+
 		# Запрос
 
 		return func(self, **params)

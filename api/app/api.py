@@ -7,17 +7,13 @@ from api import API, Error
 @app.route('/', methods=['POST'])
 def index():
 	x = request.json
-	# print(x) # !
+	# print(x)
 
-	#  Не указан метод API
+	# All required fields are not specified
 
-	if 'method' not in x:
-		return jsonify({'error': 2, 'result': 'Wrong method'})
-
-	# #  Не указаны параметры API
-
-	# if 'params' not in x:
-	# 	return jsonify({'error': 3, 'message': 'Wrong params'})
+	for field in ('method', 'token'): # 'params', 'language'
+		if field not in x:
+			return jsonify({'error': 2, 'result': 'All required fields are not specified!'})
 
 	#
 

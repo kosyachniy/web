@@ -1,10 +1,10 @@
-# env/bin/gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
-# env/bin/gunicorn app:app -c gun.py
+from sets import SERVER
 
-worker_class = "eventlet"
+
+worker_class = 'eventlet'
 workers = 1
 # threads = 3
-bind = "0.0.0.0:5000"
+bind = '{}:{}'.format(SERVER['ip'], SERVER['port'])
 # keepalive = 120
 # timeout = 120
 reload = True

@@ -13,7 +13,7 @@ else:
 		password=DB['password'],
 		authSource='admin',
 		authMechanism='SCRAM-SHA-1'
-	)['uple']
+	)[DB['name']]
 
 
 check = db['posts'].find_one({}, {'_id': True})

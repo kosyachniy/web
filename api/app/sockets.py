@@ -60,7 +60,7 @@ def online(x):
 	if len(users_uniq):
 		sio.emit('online_add', {
 			'count': len(users_uniq),
-			'users': [users_uniq[i] for i in users_uniq], # reduce_params(onlines, ('id',)),
+			'users': list(users_uniq.values()),
 		}, room=request.sid, namespace='/main')
 
 	## Already online
