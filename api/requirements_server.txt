@@ -1,7 +1,0 @@
-dnspython==1.16.0
-eventlet==0.25.1
-greenlet==0.4.15
-gunicorn==20.0.4
-monotonic==1.5
-pkg-resources==0.0.0
-six==1.14.0
