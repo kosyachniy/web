@@ -3,7 +3,7 @@
 ##############
 
 server {
-    listen 443 ssl; # managed by Certbot
+    listen 80;
     server_name kosyachniy.com www.kosyachniy.com;
     client_max_body_size 20M;
 
@@ -46,15 +46,4 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
     }
-}
-
-server {
-    listen 80;
-    server_name kosyachniy.com www.kosyachniy.com;
-
-    if ($host = kosyachniy.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-    return 404; # managed by Certbot
 }
