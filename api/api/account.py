@@ -4,7 +4,7 @@ import hashlib
 import time
 import re
 
-from mongodb import db
+from func.mongodb import db
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount
 from api._func import check_params, get_preview, load_image, get_date, next_id
@@ -66,7 +66,7 @@ def check_login(cont, user):
 	# Системно зарезервировано
 
 	RESERVED = (
-		'admin', 'administrator', 'test', 'tester', 'author', 'bot', 'robot', 
+		'admin', 'administrator', 'test', 'tester', 'author', 'bot', 'robot',
 		'root'
 	)
 

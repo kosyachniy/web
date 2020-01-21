@@ -1,4 +1,4 @@
-from mongodb import db
+from func.mongodb import db
 from api._error import ErrorWrong, ErrorAccess, ErrorBlock
 from api._func import check_params, get_preview, get_user
 
@@ -30,7 +30,7 @@ def get(this, **x):
 		db_condition = {
 			'admin': {'$gte': 3},
 		}
-	
+
 	# Расширенные параметры
 
 	process_self = False
@@ -77,9 +77,9 @@ def get(this, **x):
 		# 		users[i]['transactions'][j]['user'] = us if us else {'id': 0}
 
 		# Аватарка
-		
+
 		users[i]['avatar'] = get_preview('users', users[i]['id'])
-	
+
 		# # Онлайн
 
 		# users[i]['online'] = db['online'].find_one({'user': users[i]['id']}, {'_id': True}) == True

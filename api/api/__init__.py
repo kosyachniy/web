@@ -1,6 +1,6 @@
 import time
 
-from mongodb import db
+from func.mongodb import db
 import api._error as Error
 from api._func import get_language
 

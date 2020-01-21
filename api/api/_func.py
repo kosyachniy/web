@@ -5,7 +5,7 @@ import base64
 
 import requests
 
-from mongodb import db
+from func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
 from sets import IMAGE
@@ -128,7 +128,7 @@ def get_user(id):
 			'name': True,
 			'surname': True,
 		}
-	
+
 		user_req = db['users'].find_one(db_condition, db_filter)
 
 		user_req['avatar'] = get_preview('users', user_req['id'])
@@ -161,7 +161,7 @@ def check_params(x, filters): # ! Удалять другие поля (кото
 				# return dumps({'error': 4, 'message': ERROR[3].format(i[0], str(i[2]))})
 
 			cond_null = type(i[-1]) == bool and i[-1] and cond_iter and not len(x[i[0]])
-			
+
 			if cond_null:
 				raise ErrorInvalid(i[0])
 
@@ -178,7 +178,7 @@ def next_id(name):
 		id = db[name].find({}, db_filter).sort('id', -1)[0]['id'] + 1
 	except:
 		id = 1
-	
+
 	return id
 
 # Преобразовать язык в код
@@ -188,7 +188,7 @@ def get_language(name):
 
 	if name in languages:
 		name = languages.index(name)
-	
+
 	elif name not in range(len(languages)):
 		name = 0
 
@@ -203,7 +203,7 @@ def get_status(user):
 		return 1
 	elif user['admin'] >= 3:
 		return 3
-	
+
 	return 3 # !
 
 def get_status_condition(user):
@@ -233,7 +233,7 @@ def get_id(sid):
 
 	if not user:
 		raise Exception('sid not found')
-	
+
 	return user['user']
 
 # Все sid этого пользователя
@@ -245,7 +245,7 @@ def get_sids(user):
 	}
 
 	user_sessions = db['online'].find({'user': user}, db_filter)
-	
+
 	return [i['sid'] for i in user_sessions]
 
 # Получить дату из timestamp

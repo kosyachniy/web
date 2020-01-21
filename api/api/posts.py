@@ -1,6 +1,6 @@
 import time
 
-from mongodb import db
+from func.mongodb import db
 from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
 from api._func import reimg, get_user, check_params, get_preview, next_id, load_image
 
@@ -107,7 +107,7 @@ def get(this, **x):
 			db_condition['id'] = x['id']
 
 			process_single = True
-		
+
 		else:
 			db_condition['id'] = {'$in': x['id']}
 

@@ -5,7 +5,7 @@ import os
 import time
 import re
 
-from mongodb import db
+from func.mongodb import db
 # from api._func import reduce_params
 
 
