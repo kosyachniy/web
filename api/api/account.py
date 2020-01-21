@@ -10,10 +10,10 @@ from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 from api._func import check_params, get_preview, load_image, get_date, next_id
 
 
-# Генерация токена
+# # Генерация токена
 
-ALL_SYMBOLS = string.digits + string.ascii_letters
-generate = lambda length=32: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+# ALL_SYMBOLS = string.digits + string.ascii_letters
+# generate = lambda length=32: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
 
 # Проверить имя
 
@@ -156,7 +156,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 	#
 
-	db['users'].insert({
+	db['users'].insert_one({
 		'id': user_id,
 		'login': login,
 		'password': password,
@@ -164,11 +164,8 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 		'name': name,
 		'surname': surname,
 		'description': description,
-		'rating': 0,
+		# 'rating': 0,
 		'admin': 3,
-		'ladders': [],
-		'steps': [],
-		'public': '',
 		'online': [],
 		'social': social,
 		'time': timestamp,
@@ -190,7 +187,7 @@ def reg(this, **x):
 		('mail', False, str),
 		('name', False, str),
 		('surname', False, str),
-		('social', False, (list, tuple), dict),
+		('social', False, list, dict),
 		('avatar', False, str),
 		('file', False, str),
 	))
@@ -208,29 +205,32 @@ def reg(this, **x):
 		social=x['social'] if 'social' in x else [],
 	)
 
-	#
+	# Присвоение токена пользователю
 
-	token = generate()
+	if not this.token:
+		raise ErrorAccess('token')
 
 	req = {
-		'token': token,
+		'token': this.token,
 		'id': user_id,
 		'time': this.timestamp,
 	}
-	db['tokens'].insert(req)
+
+	db['tokens'].insert_one(req)
+
+	# Response
 
 	res = {
 		'id': user_id,
-		'token': token,
 		'avatar': get_preview('users', user_id),
 		'admin': 3,
-		'rating': 0,
+		# 'rating': 0,
 		'login': login,
 	}
 
 	return res
 
-# Авторизация
+# Социальная сеть
 
 def social(this, **x):
 	# Проверка параметров
@@ -252,7 +252,7 @@ def social(this, **x):
 		'_id': False,
 		'id': True,
 		'admin': True,
-		'rating': True,
+		# 'rating': True,
 		'login': True,
 	}
 
@@ -295,33 +295,38 @@ def social(this, **x):
 				'_id': False,
 				'id': True,
 				'admin': True,
-				'rating': True,
+				# 'rating': True,
 				'login': True,
 			}
 
 			res = db['users'].find_one({'id': user_id}, db_filter)
 
-		#
+	# Присвоение токена пользователю
 
-	token = generate()
+	if not this.token:
+		raise ErrorInvalid('token')
 
 	req = {
-		'token': token,
+		'token': this.token,
 		'id': res['id'],
 		'time': this.timestamp,
 	}
-	db['tokens'].insert(req)
+
+	db['tokens'].insert_one(req)
+
+	# Response
 
 	res = {
 		'id': res['id'],
-		'token': token,
 		'admin': res['admin'],
-		'rating': res['rating'],
+		# 'rating': res['rating'],
 		'login': res['login'],
 		'avatar': get_preview('users', res['id']),
 	}
 
 	return res
+
+# Авторизация
 
 def auth(this, **x):
 	# Проверка параметров
@@ -345,7 +350,6 @@ def auth(this, **x):
 
 	if not len(list(db['users'].find(db_condition, {'_id': True}))):
 		raise ErrorWrong('login')
-		# return dumps({'error': 6, 'message': ERROR[11]})
 
 	# Пароль
 
@@ -364,7 +368,7 @@ def auth(this, **x):
 		'_id': False,
 		'id': True,
 		'admin': True,
-		'rating': True,
+		# 'rating': True,
 		'login': True,
 	}
 
@@ -373,22 +377,26 @@ def auth(this, **x):
 	# Неправильный пароль
 	if not res:
 		raise ErrorWrong('password')
-		# return dumps({'error': 7, 'message': ERROR[12]})
 
-	token = generate()
+	# Присвоение токена пользователю
+
+	if not this.token:
+		raise ErrorInvalid('token')
 
 	req = {
-		'token': token,
+		'token': this.token,
 		'id': res['id'],
 		'time': this.timestamp,
 	}
-	db['tokens'].insert(req)
+
+	db['tokens'].insert_one(req)
+
+	# Response
 
 	res = {
 		'id': res['id'],
-		'token': token,
 		'admin': res['admin'],
-		'rating': res['rating'],
+		# 'rating': res['rating'],
 		'login': res['login'],
 		'avatar': get_preview('users', res['id']),
 	}
@@ -429,8 +437,7 @@ def edit(this, **x):
 		('mail', False, str),
 		('avatar', False, str),
 		('file', False, str),
-		('templates', False, list, dict),
-		('social', False, (list, tuple), dict),
+		('social', False, list, dict),
 	))
 
 	# Нет доступа
@@ -469,7 +476,7 @@ def edit(this, **x):
 	if 'password' in x:
 		x['password'] = process_password(x['password'])
 
-	for i in ('description', 'mail', 'password', 'templates', 'social'):
+	for i in ('description', 'mail', 'password', 'social'):
 		if i in x:
 			this.user[i] = x[i]
 
