@@ -1,6 +1,7 @@
 from flask import request, jsonify
-from app import app, sio, SERVER, CLIENT
 
+from sets import SERVER, CLIENT
+from app import app, sio
 from api import API, Error
 
 
