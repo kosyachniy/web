@@ -18,7 +18,6 @@ def search(this, **x):
 
 	if not x['cont']:
 		raise ErrorEmpty('cont')
-		# return dumps({'error': 6, 'message': ERROR[34]})
 
 	# Пользователи
 

@@ -158,7 +158,6 @@ def check_params(x, filters): # ! Удалять другие поля (кото
 
 			if cond_type or cond_iter_el:
 				raise ErrorType(i[0])
-				# return dumps({'error': 4, 'message': ERROR[3].format(i[0], str(i[2]))})
 
 			cond_null = type(i[-1]) == bool and i[-1] and cond_iter and not len(x[i[0]])
 
@@ -168,7 +167,6 @@ def check_params(x, filters): # ! Удалять другие поля (кото
 		# Не все поля заполнены
 		elif i[1]:
 			raise ErrorSpecified(i[0])
-			# return dumps({'error': 3, 'message': ERROR[2].format(i[0])})
 
 # Следующий ID БД
 

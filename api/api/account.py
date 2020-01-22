@@ -222,7 +222,7 @@ def reg(this, **x):
 
 	res = {
 		'id': user_id,
-		'avatar': get_preview('users', user_id),
+		'avatar': get_preview(user_id, 'users'),
 		'admin': 3,
 		# 'rating': 0,
 		'login': login,
@@ -321,7 +321,7 @@ def social(this, **x):
 		'admin': res['admin'],
 		# 'rating': res['rating'],
 		'login': res['login'],
-		'avatar': get_preview('users', res['id']),
+		'avatar': get_preview(res['id'], 'users'),
 	}
 
 	return res
@@ -398,7 +398,7 @@ def auth(this, **x):
 		'admin': res['admin'],
 		# 'rating': res['rating'],
 		'login': res['login'],
-		'avatar': get_preview('users', res['id']),
+		'avatar': get_preview(res['id'], 'users'),
 	}
 
 	return res

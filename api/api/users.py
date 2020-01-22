@@ -88,7 +88,6 @@ def get(this, **x):
 
 	# if users['admin'] < 3 and this.user['admin'] < 6:
 	# 	raise ErrorBlock('user')
-	# 	# return dumps({'error': 7, 'message': ERROR[32]})
 
 	# # Список леддеров # ! Только если отправлен запрос на необходимость
 

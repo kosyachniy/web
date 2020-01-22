@@ -61,11 +61,11 @@ class API():
 
 		# Метод API
 
-		# try:
-		module, method = name.split('.')
-		func = getattr(globals()[module], method)
-		# except:
-		# 	raise Error.ErrorWrong('method')
+		try:
+			module, method = name.split('.')
+			func = getattr(globals()[module], method)
+		except:
+			raise Error.ErrorWrong('method')
 
 		# Запрос
 
