@@ -1,8 +1,8 @@
 import time
 
 from func.mongodb import db
-import api._error as Error
 from api._func import get_language
+import api._error as Error
 
 import api.account as account
 import api.users as users
@@ -21,7 +21,7 @@ class API():
 		self.token = token
 		self.language = get_language(language)
 
-		# Определение пользователя
+		# User recognition
 
 		self.user = {
 			'id': 0,
@@ -35,19 +35,19 @@ class API():
 			if user_id and user_id['id']:
 				self.user = db['users'].find_one({'id': user_id['id']})
 
-		# IP (случай, когда Веб-приложение делает запросы к IP с того же адреса)
+		# IP (case when a web application makes requests from IP with the same address)
 
 		if ip_remote and ip == self.client['ip']:
 			self.ip = ip_remote
 
 	def method(self, name, params={}):
-		# Убираем лишние отступы
+		# Remove extra indentation
 
 		for i in params:
 			if type(params[i]) == str:
 				params[i] = params[i].strip()
 
-		# Отслеживание действий
+		# Action tracking
 
 		req = {
 			'time': self.timestamp,
@@ -59,7 +59,7 @@ class API():
 
 		db['actions'].insert_one(req)
 
-		# Метод API
+		# API method
 
 		try:
 			module, method = name.split('.')
@@ -67,6 +67,6 @@ class API():
 		except:
 			raise Error.ErrorWrong('method')
 
-		# Запрос
+		# Request
 
 		return func(self, **params)

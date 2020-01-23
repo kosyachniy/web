@@ -30,12 +30,14 @@ env/bin/gunicorn app:app -c run.py
 ```
 
 ### Front-end
-1. Virtual environment
+1. Customize files ``` src/sets.js ``` & ``` src/keys.js ```
+
+2. Virtual environment
 ```
 npm install
 ```
 
-2. Run
+3. Run
 ```
 npm start
 ```

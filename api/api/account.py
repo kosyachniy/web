@@ -10,12 +10,12 @@ from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 from api._func import check_params, get_preview, load_image, get_date, next_id
 
 
-# # Генерация токена
+# # Token generation
 
 # ALL_SYMBOLS = string.digits + string.ascii_letters
 # generate = lambda length=32: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
 
-# Проверить имя
+# Check name
 
 def check_name(cont):
 	# Недопустимое имя
@@ -23,7 +23,7 @@ def check_name(cont):
 	if not cont.isalpha():
 		raise ErrorInvalid('name')
 
-# Проверить фамилию
+# Check surname
 
 def check_surname(cont):
 	# Недопустимая фамилия
@@ -31,30 +31,30 @@ def check_surname(cont):
 	if not cont.isalpha():
 		raise ErrorInvalid('surname')
 
-# Проверить почту
+# Check mail
 
 def check_mail(cont, user):
-	# Недопустимая почта
+	# Invalid mail
 
 	if re.match('.+@.+\..+', cont) == None:
 		raise ErrorInvalid('mail')
 
-	# Почта уже зарегистрирована
+	# Mail is already registered
 
 	users = db['users'].find_one({'mail': cont}, {'_id': True, 'id': True})
 	if users and users['id'] != user['id']:
 		raise ErrorBusy('mail')
 
-# Проверить логин
+# Check login
 
 def check_login(cont, user):
-	# Логин уже зарегистрирован
+	# Login is already registered
 
 	users = db['users'].find_one({'login': cont}, {'_id': True, 'id': True})
 	if users and users['id'] != user['id']:
 		raise ErrorBusy('login')
 
-	# Недопустимый логин
+	# Invalid login
 
 	cond_length = not 3 <= len(cont) <= 20
 	cond_symbols = len(re.findall('[^a-z0-9_]', cont))
@@ -63,7 +63,7 @@ def check_login(cont, user):
 	if cond_length or cond_symbols or cond_letters:
 		raise ErrorInvalid('login')
 
-	# Системно зарезервировано
+	# System reserved
 
 	RESERVED = (
 		'admin', 'administrator', 'test', 'tester', 'author', 'bot', 'robot',
@@ -76,10 +76,10 @@ def check_login(cont, user):
 	if cond_id or cond_reserv:
 		raise ErrorInvalid('login')
 
-# Пароль
+# Password
 
 def check_password(cont):
-	# Недопустимый пароль
+	# Invalid password
 
 	cond_length = not 6 <= len(cont) <= 40
 	pass_rule = '[^a-zA-z0-9!@#$%^&*()\-+=;:,./?\|`~\[\]\{\}]'
@@ -95,14 +95,14 @@ def process_password(cont):
 
 	return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
-# Регистрация аккаунта
+# Account registration
 
 def registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[]):
 	# ID
 
 	user_id = next_id('users')
 
-	# Логин
+	# Login
 
 	if login:
 		login = login.lower()
@@ -111,47 +111,47 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 	else:
 		login = 'id{}'.format(user_id)
 
-	# Почта
+	# Mail
 
 	if mail:
 		mail = mail.lower()
 		check_mail(mail, user)
 
-	# Пароль
+	# Password
 
 	if password:
 		password = process_password(password)
 
-	# Имя
+	# Name
 
 	if name:
 		check_name(name)
 		name = name.title()
 
-	# Фамилия
+	# Surname
 
 	if surname:
 		check_surname(surname)
 		surname = surname.title()
 
-	# Аватарка
+	# Avatar
 
 	if avatar:
 		try:
 			file_type = file.split('.')[-1]
 
-		# Неправильное расширение
+		# Invalid file extension
 		except:
 			raise ErrorInvalid('file')
 
 		try:
 			load_image('users', avatar, user_id, file_type)
 
-		# Ошибка загрузки фотографии
+		# Error loading photo
 		except:
 			raise ErrorUpload('avatar')
 
-	# Социальные сети
+	# Social networks
 	# ! Добавить проверку социальных сетей
 
 	#
@@ -176,10 +176,10 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 #
 
 
-# Регистрация
+# Sign up
 
 def reg(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('login', False, str),
@@ -205,7 +205,7 @@ def reg(this, **x):
 		social=x['social'] if 'social' in x else [],
 	)
 
-	# Присвоение токена пользователю
+	# Assigning the token to the user
 
 	if not this.token:
 		raise ErrorAccess('token')
@@ -230,10 +230,10 @@ def reg(this, **x):
 
 	return res
 
-# Социальная сеть
+# Social network
 
 def social(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('id', True, int), # ?
@@ -242,7 +242,7 @@ def social(this, **x):
 		('data', True, dict),
 	))
 
-	# Авторизация
+	# Sign in
 
 	db_condition = {
 		'social': {'$elemMatch': {'user': x['user'], 'hash': x['hash']}},
@@ -258,10 +258,10 @@ def social(this, **x):
 
 	res = db['users'].find_one(db_condition, db_filter)
 
-	# Неправильный пароль
+	# Invalid password
 	if not res:
 
-		# Регистрация
+		# Wrong hash
 
 		db_condition = {
 			'social': {'$elemMatch': {'user': x['user']}},
@@ -276,7 +276,7 @@ def social(this, **x):
 		if res:
 			raise ErrorWrong('hash')
 
-		# Регистрация
+		# Sign up
 		else:
 			user_id, _ = registrate(
 				this.user,
@@ -301,7 +301,7 @@ def social(this, **x):
 
 			res = db['users'].find_one({'id': user_id}, db_filter)
 
-	# Присвоение токена пользователю
+	# Assigning the token to the user
 
 	if not this.token:
 		raise ErrorInvalid('token')
@@ -326,21 +326,19 @@ def social(this, **x):
 
 	return res
 
-# Авторизация
+# Log in
 
 def auth(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
-		('login', True, str), # Логин или почта
+		('login', True, str), # login / mail
 		('password', True, str),
 	))
 
-	#
+	# Login
 
 	x['login'] = x['login'].lower()
-
-	# Логин
 
 	db_condition = {'$or': [{
 		'login': x['login'],
@@ -351,7 +349,7 @@ def auth(this, **x):
 	if not len(list(db['users'].find(db_condition, {'_id': True}))):
 		raise ErrorWrong('login')
 
-	# Пароль
+	# Password
 
 	password = hashlib.md5(bytes(x['password'], 'utf-8')).hexdigest()
 
@@ -374,11 +372,11 @@ def auth(this, **x):
 
 	res = db['users'].find_one(db_condition, db_filter)
 
-	# Неправильный пароль
+	## Wrong password
 	if not res:
 		raise ErrorWrong('password')
 
-	# Присвоение токена пользователю
+	# Assigning the token to the user
 
 	if not this.token:
 		raise ErrorInvalid('token')
@@ -403,32 +401,27 @@ def auth(this, **x):
 
 	return res
 
-# Закрытие сессии
+# Log out
 
 def exit(this, **x):
-	# Не авторизован
-
+	# Not authorized
 	if not this.token:
 		raise ErrorAccess('token')
 
-	#
-
+	# Check token
 	res = db['tokens'].find_one({'token': this.token}, {'_id': True})
 
-	# Неправильный токен
-
+	# Wrong token
 	if not res:
 		raise ErrorWrong('token')
 
-	#
-
+	# Remove token
 	db['tokens'].remove(res['_id'])
 
-# Изменение личной информации
+# Edit personal information
 
 def edit(this, **x):
-	# Проверка параметров
-
+	# Verification of parameters
 	check_params(x, (
 		('name', False, str),
 		('surname', False, str),
@@ -440,25 +433,21 @@ def edit(this, **x):
 		('social', False, list, dict),
 	))
 
-	# Нет доступа
-
+	# No access
 	if this.user['admin'] < 3:
 		raise ErrorAccess('token')
 
-	# Имя
-
+	# Name
 	if 'name' in x:
 		check_name(x['name'])
 		this.user['name'] = x['name'].title()
 
-	# Фамилия
-
+	# Surname
 	if 'surname' in x:
 		check_surname(x['surname'])
 		this.user['surname'] = x['surname'].title()
 
-	# Логин
-
+	# Login
 	if 'login' in x:
 		x['login'] = x['login'].lower()
 
@@ -466,53 +455,48 @@ def edit(this, **x):
 			check_login(x['login'], this.user)
 			this.user['login'] = x['login']
 
-	# Описание, почта, пароль, шаблоны
-
+	# Mail
 	if 'mail' in x:
 		check_mail(x['mail'], this.user)
 
-	# Пароль
-
+	# Password
 	if 'password' in x:
 		x['password'] = process_password(x['password'])
 
+	# Change fields
 	for i in ('description', 'mail', 'password', 'social'):
 		if i in x:
 			this.user[i] = x[i]
 
-	#
-
+	# Save changes
 	db['users'].save(this.user)
 
-	# Аватарка
-
+	# Avatar
 	if 'avatar' in x:
 		try:
 			file_type = x['file'].split('.')[-1]
 
-		# Неправильное расширение
+		# Invalid file extension
 		except:
 			raise ErrorInvalid('file')
 
 		try:
 			load_image('users', x['avatar'], this.user['id'], file_type)
 
-		# Ошибка загрузки фотографии
+		# Error loading photo
 		except:
 			raise ErrorUpload('avatar')
 
-	#
-
-# # Восстановить пароль
+# # Recover password
 
 # def recover(this, **x):
-# 	# Проверка параметров
+# 	# Verification of parameters
 
 # 	check_params(x, (
 # 		('login', True, str),
 # 	))
 
-# 	#
+# 	# Get user
 
 # 	users = db['users'].find_one({'login': x['login']})
 
@@ -522,11 +506,9 @@ def edit(this, **x):
 # 	password = ''.join(random.sample(ALL_SYMBOLS, 15))
 # 	password_crypt = hashlib.md5(bytes(password, 'utf-8')).hexdigest()
 
-# 	# Отправить
+# 	# Send
 
-
-
-# 	# Обновить пароль
+# 	# Update password
 
 # 	users['password'] = password_crypt
 # 	db['users'].save(users)

@@ -5,12 +5,12 @@ from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
 from api._func import reimg, get_user, check_params, get_preview, next_id, load_image
 
 
-# Создание / редактирование
+# Add / edit
 
 def edit(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
-	# Редактирование
+	# Edit
 	if 'id' in x:
 		check_params(x, (
 			('id', True, int),
@@ -22,7 +22,7 @@ def edit(this, **x):
 			('tags', False, list, str),
 		))
 
-	# Создание
+	# Add
 	else:
 		check_params(x, (
 			('name', True, str),
@@ -33,12 +33,12 @@ def edit(this, **x):
 			('tags', False, list, str),
 		))
 
-	# Формирование поста
+	# Post formation
 
 	if 'id' in x:
 		post = db['posts'].find_one({'id': x['id']})
 
-		# Неправильный id
+		# Wrong ID
 		if not post:
 			raise ErrorWrong('id')
 
@@ -48,35 +48,36 @@ def edit(this, **x):
 			'time': this.timestamp,
 		}
 
-	# Изменений полей
+	# Change fields
 
 	for field in ('name', 'category', 'tags'):
 		if field in x:
 			post[field] = x[field]
 
+	## Content
 	if 'cont' in x:
 		post['cont'] = reimg(x['cont'])
 
+	## Cover
 	if 'cover' in x:
 		try:
 			file_type = x['file'].split('.')[-1]
 
-		# Неправильное расширение
+		# Invalid file extension
 		except:
 			raise ErrorInvalid('file')
 
 		try:
 			load_image('posts', x['cover'], post['id'], file_type)
 
-		# Ошибка загрузки обложки
+		# Error loading cover
 		except:
 			raise ErrorUpload('cover')
 
-	# Сохранение
-
+	# Save post
 	db['posts'].save(post)
 
-	# Ответ
+	# Response
 
 	res = {
 		'id': post['id'],
@@ -87,7 +88,7 @@ def edit(this, **x):
 # Получение
 
 def get(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('id', False, (int, list), int),
@@ -96,7 +97,7 @@ def get(this, **x):
 		# ('language', False, (int, str)),
 	))
 
-	# Список постов
+	# Condition formation
 
 	process_single = False
 
@@ -111,14 +112,14 @@ def get(this, **x):
 		else:
 			db_condition['id'] = {'$in': x['id']}
 
-	# # Язык
+	# # Language
 
 	# if 'language' in x:
 	# 	x['language'] = get_language(x['language'])
 	# else:
 	# 	x['language'] = this.language
 
-	# Получение постов
+	# Get posts
 
 	count = x['count'] if 'count' in x else None
 
@@ -133,12 +134,12 @@ def get(this, **x):
 
 	posts = list(db['posts'].find(db_condition, db_filter)[:count])
 
-	# Обработка
+	# Cover processing
 
 	for i in range(len(posts)):
 		posts[i]['cover'] = get_preview(posts[i]['id'], 'posts')
 
-	# Ответ
+	# Response
 
 	res = {
 		'posts': posts,

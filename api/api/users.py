@@ -4,16 +4,14 @@ from api._func import check_params, get_preview, get_user
 
 
 def get(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('id', False, (int, list, tuple), int),
 		('count', False, int),
 	))
 
-	#
-
-	count = x['count'] if 'count' in x else None
+	# Condition formation
 
 	if 'id' in x:
 		if type(x['id']) == int:
@@ -31,7 +29,7 @@ def get(this, **x):
 			'admin': {'$gte': 3},
 		}
 
-	# Расширенные параметры
+	# Advanced options
 
 	process_self = False
 
@@ -39,7 +37,7 @@ def get(this, **x):
 		if x['id'] == this.user['id']:
 			process_self = True
 
-	#
+	# Get users
 
 	db_filter = {
 		'_id': False,
@@ -62,92 +60,23 @@ def get(this, **x):
 	users = list(db['users'].find(db_condition, db_filter))
 	users = sorted(users, key=lambda i: i['rating'])[::-1]
 
-	# Количество
+	# Count
 
+	count = x['count'] if 'count' in x else None
 	users = users[:count]
 
+	# Processing
+
 	for i in range(len(users)):
-		# # Транзакции
-
-		# if 'transactions' in users[i]:
-		# 	users[i]['transactions'] = users[i]['transactions'][::-1]
-
-		# 	for j in range(len(users[i]['transactions'])):
-		# 		us = get_user(users[i]['transactions'][j]['user'])
-		# 		users[i]['transactions'][j]['user'] = us if us else {'id': 0}
-
-		# Аватарка
+		# Avatar
 
 		users[i]['avatar'] = get_preview('users', users[i]['id'])
 
-		# # Онлайн
+		# # Online
 
 		# users[i]['online'] = db['online'].find_one({'user': users[i]['id']}, {'_id': True}) == True
 
-	# # Пользователь заблокирован
-
-	# if users['admin'] < 3 and this.user['admin'] < 6:
-	# 	raise ErrorBlock('user')
-
-	# # Список леддеров # ! Только если отправлен запрос на необходимость
-
-	# ladders = {str(i): [] for i in users['ladders']}
-	# # for i in users['steps']:
-	# # 	s = str(i['ladder'])
-
-	# # 	if s in ladders:
-	# # 		ladders[s].append(i['step'])
-	# # 	else:
-	# # 		ladders[s] = [i['step'],]
-
-	# db_ladders_filter = {
-	# 	'_id': False,
-	# 	'steps': True,
-	# 	'name': True,
-	# }
-
-	# db_steps_filter = {
-	# 	'_id': False,
-	# 	'id': True,
-	# 	'status': True,
-	# }
-
-	# for i in ladders:
-	# 	ladder = db['ladders'].find_one({'id': int(i)}, db_ladders_filter)
-
-	# 	# Степы
-
-	# 	for j in range(len(ladder['steps'])):
-	# 		db_condition = {'id': ladder['steps'][j]}
-	# 		step = db['steps'].find_one(db_condition, db_steps_filter)
-	# 		ladder['steps'][j] = step
-
-	# 	#
-
-	# 	step_all_published = [j['id'] for j in ladder['steps'] if j['status'] >= 3]
-	# 	# print(step_all_published, users['steps'])
-
-	# 	for j in users['steps']:
-	# 		if j['step'] in step_all_published:
-	# 			ladders[i].append(j['step'])
-
-	# 	j = 0
-	# 	while j < len(ladders[i]):
-	# 		if ladders[i][j] not in step_all_published:
-	# 			del ladders[i][j]
-	# 		else:
-	# 			j += 1
-
-	# 	ladders[i] = {
-	# 		'name': ladder['name'],
-	# 		'steps': ladders[i],
-	# 		'complete': len(set(ladders[i]) & set(step_all_published)),
-	# 		'all': len(step_all_published)
-	# 	}
-
-	# users['ladders'] = ladders
-
-	# Ответ
+	# Response
 
 	res = {
 		'users': users,
@@ -155,28 +84,29 @@ def get(this, **x):
 
 	return res
 
-#
+# Block
 
 def block(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('id', True, int),
 	))
 
-	#
+	# Get user
 
 	users = db['users'].find_one({'id': x['id']})
 
-	# Неправильный пользователь
-
+	## Wrond ID
 	if not users:
-		raise ErrorWrong('user')
+		raise ErrorWrong('id')
 
-	# Нет прав на блокировку
-
+	# No access
 	if this.user['admin'] < 6 or users['admin'] > this.user['admin']:
 		raise ErrorAccess('block')
 
+	# Change status
 	users['admin'] = 1
+
+	# Save
 	db['users'].save(users)

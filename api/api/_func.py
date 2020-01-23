@@ -11,7 +11,7 @@ from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 from sets import IMAGE
 
 
-# Проверить наличие файла по имени
+# Check existence the file by name
 
 def get_file(url, num):
 	url = '/static/' + url + '/'
@@ -22,7 +22,7 @@ def get_file(url, num):
 
 	return None
 
-# Ссылка на файл
+# Image link
 
 def get_preview(num=0, url=''):
 	src = IMAGE['link']
@@ -35,7 +35,7 @@ def get_preview(num=0, url=''):
 
 	return src + '0.png'
 
-# ID следующего изображения
+# Next image ID
 
 def max_image(url):
 	x = os.listdir(url)
@@ -46,7 +46,7 @@ def max_image(url):
 			k = int(j[0])
 	return k+1
 
-# Загрузить изображение
+# Upload image
 
 def load_image(url, data, adr=None, format='jpg', type='base64'):
 	url = 'app/static/' + url
@@ -66,7 +66,7 @@ def load_image(url, data, adr=None, format='jpg', type='base64'):
 
 	return adr
 
-# Заменить в тексте изображения
+# Replace image in text
 
 def reimg(s):
 	k = 0
@@ -113,7 +113,7 @@ def reimg(s):
 
 	return s
 
-# Получить пользователя
+# Get user
 
 def get_user(id):
 	if id:
@@ -137,12 +137,12 @@ def get_user(id):
 
 	return user_req
 
-# Проверка параметров
+# Verification of parameters
 
 def check_params(x, filters): # ! Удалять другие поля (которых нет в списке)
 	for i in filters:
 		if i[0] in x:
-			# Неправильный тип данных
+			# Invalid data type
 			if type(i[2]) not in (list, tuple):
 				el_type = (i[2],)
 			else:
@@ -164,11 +164,11 @@ def check_params(x, filters): # ! Удалять другие поля (кото
 			if cond_null:
 				raise ErrorInvalid(i[0])
 
-		# Не все поля заполнены
+		# Not all fields are filled
 		elif i[1]:
 			raise ErrorSpecified(i[0])
 
-# Следующий ID БД
+# Next DB ID
 
 def next_id(name):
 	try:
@@ -179,7 +179,7 @@ def next_id(name):
 
 	return id
 
-# Преобразовать язык в код
+# Convert language to code
 
 def get_language(name):
 	languages = ('en', 'ru', 'fi', 'es')
@@ -192,7 +192,7 @@ def get_language(name):
 
 	return name
 
-# Получить доступный статус для пользователя
+# Get available status for user
 
 def get_status(user):
 	if user['admin'] >= 6:
@@ -219,7 +219,7 @@ def get_status_condition(user):
 			'status': {'$gte': get_status(user)},
 		}
 
-# Определить пользователя по sid
+# Define user by sid
 
 def get_id(sid):
 	db_filter = {
@@ -234,7 +234,7 @@ def get_id(sid):
 
 	return user['user']
 
-# Все sid этого пользователя
+# All sid of this user
 
 def get_sids(user):
 	db_filter = {
@@ -246,12 +246,12 @@ def get_sids(user):
 
 	return [i['sid'] for i in user_sessions]
 
-# Получить дату из timestamp
+# Get date from timestamp
 
 def get_date(x, template='%Y%m%d'):
 	return time.strftime(template, time.localtime(x))
 
-# Оставить только нужные поля у объектов в списке
+# Leave only the required fields for objects in the list
 
 def reduce_params(cont, params):
 	def only_params(el):

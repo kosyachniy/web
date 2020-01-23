@@ -5,10 +5,10 @@ from api._error import ErrorInvalid, ErrorAccess
 from api._func import reimg, get_user, check_params, next_id
 
 
-# Добавить
+# Add
 
 def add(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('name', True, str),
@@ -28,7 +28,7 @@ def add(this, **x):
 
 	db['feedback'].insert(query)
 
-	# Ответ
+	# Response
 
 	res = {
 		'id': query['id'],
@@ -36,21 +36,21 @@ def add(this, **x):
 
 	return res
 
-# Получить
+# Get
 
 def get(this, **x):
-	# Проверка параметров
+	# Verification of parameters
 
 	check_params(x, (
 		('count', False, int),
 	))
 
-	# Нет доступа
+	# No access
 
 	if this.user['admin'] < 4:
 		raise ErrorAccess('token')
 
-	#
+	# Get news
 
 	count = x['count'] if 'count' in x else None
 
@@ -59,7 +59,7 @@ def get(this, **x):
 	for i in range(len(news)):
 		news[i]['user'] = get_user(news[i]['user'])
 
-	# Ответ
+	# Response
 
 	res = {
 		'feedback': news,
@@ -67,26 +67,25 @@ def get(this, **x):
 
 	return res
 
-# Удалить
+# Delete
 
 def delete(this, **x):
-	# Проверка параметров
-
+	# Verification of parameters
 	check_params(x, (
 		('id', True, int),
 	))
 
-	# Нет доступа
-
+	# No access
 	if this.user['admin'] < 5:
 		raise ErrorAccess('token')
 
-	#
+	# Get feedback
 
 	feedback = db['feedback'].find_one({'id': x['id']}, {'_id': True})
 
-	# Неправильный отзыв
+	## Wrong ID
 	if not feedback:
-		raise ErrorInvalid('feedback')
+		raise ErrorWrong('id')
 
+	# Remove feedback
 	db['feedback'].remove(feedback['_id'])
