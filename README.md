@@ -14,30 +14,56 @@ Android | Front-end | React Native | JavaScript | planned
 <img src="re/img/bootstrap.png" height="100" />
 <img src="re/img/ckeditor.png" height="100" />
 
-## Start
+## Installation
 ### Back-end
-1. Customize files ``` sets.py ``` & ``` keys.py ```
+1. Change folder
+```
+cd api/
+```
 
-2. Virtual environment
+2. Customize files ``` sets.py ``` & ``` keys.py ```
+
+3. Virtual environment
 ```
 python3 -m venv env
 env/bin/pip install -r requirements.txt
 ```
 
-3. Run
-```
-env/bin/gunicorn app:app -c run.py
-```
-
 ### Front-end
-1. Customize files ``` src/sets.js ``` & ``` src/keys.js ```
+1. Change folder
+```
+cd web/
+```
 
-2. Virtual environment
+2. Customize files ``` src/sets.js ``` & ``` src/keys.js ```
+
+3. Virtual environment
 ```
 npm install
 ```
 
-3. Run
+OR
+
 ```
+npm run build
+```
+
+## Usage
+### Back-end
+```
+cd api/
+env/bin/gunicorn app:app -c run.py
+```
+
+### Front-end
+```
+cd web/
 npm start
+```
+
+OR
+
+```
+cd web/
+serve -s build -p 3000
 ```
