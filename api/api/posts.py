@@ -1,4 +1,5 @@
 import time
+# import shutil
 
 from func.mongodb import db
 from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
@@ -46,6 +47,11 @@ def edit(this, **x):
 		post = {
 			'id': next_id('posts'),
 			'time': this.timestamp,
+			'reactions': {
+				'likes': [],
+				'reposts': [],
+				'comments': [],
+			},
 		}
 
 	# Change fields
@@ -74,6 +80,13 @@ def edit(this, **x):
 		except:
 			raise ErrorUpload('cover')
 
+	### Cover from the first image
+	# try:
+	# 	img = re.search('<img src="[^"]*">', post['cont'])[0].split('"')[1].split('/')[2]
+	# 	shutil.copyfile('app/static/{}'.format(img), 'app/static/posts/{}.{}'.format(post['id'], img.split('.')[-1]))
+	# except:
+	# 	pass
+
 	# Save post
 	db['posts'].save(post)
 
@@ -88,7 +101,7 @@ def edit(this, **x):
 # Получение
 
 def get(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('id', False, (int, list), int),
@@ -127,6 +140,9 @@ def get(this, **x):
 		'_id': False,
 		'id': True,
 		'name': True,
+		# 'cont': True,
+		# 'reactions': True,
+		# 'time': True,
 	}
 
 	if process_single:
@@ -134,10 +150,15 @@ def get(this, **x):
 
 	posts = list(db['posts'].find(db_condition, db_filter)[:count])
 
-	# Cover processing
+	# Processing
 
 	for i in range(len(posts)):
+		## Cover
 		posts[i]['cover'] = get_preview(posts[i]['id'], 'posts')
+
+		## Content
+		# if not process_single:
+		# 	posts[i]['cont'] = re.sub('<[^>]*>', '', posts[i]['cont'])
 
 	# Response
 
