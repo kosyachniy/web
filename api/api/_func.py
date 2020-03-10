@@ -18,9 +18,9 @@ WIDTH_OPTIMIZED = 700
 # Check existence the file by name
 
 def get_file(url, num):
-	url = '/static/' + url + '/'
+	url = '/load/' + url + '/'
 
-	for i in os.listdir('app' + url):
+	for i in os.listdir('..' + url):
 		if re.search(r'^' + str(num) + '\.', i):
 			return i
 
@@ -53,8 +53,8 @@ def max_image(url):
 # Upload image
 
 def load_image(url, data, adr=None, format='jpg', type='base64'):
-	url_opt = 'app/static/opt/' + url
-	url = 'app/static/' + url
+	url_opt = '../load/opt/' + url
+	url = '../load/' + url
 
 	if type == 'base64':
 		data = base64.b64decode(data)
@@ -167,7 +167,7 @@ def get_user(user_id):
 
 		user_req = db['users'].find_one(db_condition, db_filter)
 
-		user_req['avatar'] = get_preview('users', user_req['id'])
+		user_req['avatar'] = get_preview(user_req['id'], 'users')
 	else:
 		user_req = 0
 
