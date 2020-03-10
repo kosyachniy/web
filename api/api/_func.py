@@ -260,7 +260,7 @@ def get_status_condition(user):
 def get_id(sid):
 	db_filter = {
 		'_id': False,
-		'user': True,
+		'id': True,
 	}
 
 	user = db['online'].find_one({'sid': sid}, db_filter)
@@ -268,7 +268,11 @@ def get_id(sid):
 	if not user:
 		raise Exception('sid not found')
 
-	return user['user']
+	# ?
+	if type(user['id']) != int or not user['id']:
+		return 0
+
+	return user['id']
 
 # All sid of this user
 
@@ -278,7 +282,7 @@ def get_sids(user):
 		'sid': True,
 	}
 
-	user_sessions = db['online'].find({'user': user}, db_filter)
+	user_sessions = db['online'].find({'id': user}, db_filter)
 
 	return [i['sid'] for i in user_sessions]
 
@@ -294,3 +298,28 @@ def reduce_params(cont, params):
 		return {i: el[i] for i in params}
 
 	return list(map(only_params, cont))
+
+# Checking how long has been online
+
+def online_back(user_id):
+	online = db['online'].find_one({'id': user_id}, {'_id': True})
+	if online:
+		return 0
+
+	db_filter = {'_id': False, 'online.stop': True}
+	user = db['users'].find_one({'id': user_id}, db_filter)['online']
+
+	last = max(i['stop'] for i in user)
+	return time.time() - last
+
+# Other sessions of this user
+
+def other_sessions(user_id):
+	db_filter = {
+		'_id': False,
+		'id': True,
+	}
+
+	already = db['online'].find_one({'id': user_id}, db_filter)
+
+	return bool(already)

@@ -7,17 +7,22 @@ def get(this, **x):
 	# Verification of parameters
 
 	check_params(x, (
-		('id', False, (int, list, tuple), int),
+		('id', False, (int, list), int),
 		('count', False, int),
+		('fields', False, list, str),
 	))
 
 	# Condition formation
+
+	process_one = False
 
 	if 'id' in x:
 		if type(x['id']) == int:
 			db_condition = {
 				'id': x['id'],
 			}
+
+			process_one = True
 
 		else:
 			db_condition = {
@@ -33,9 +38,12 @@ def get(this, **x):
 
 	process_self = False
 
-	if 'id' in x and type(x['id']) == int:
+	if process_one:
 		if x['id'] == this.user['id']:
 			process_self = True
+
+	process_moderator = this.user['admin'] >= 5
+	process_admin = this.user['admin'] >= 7
 
 	# Get users
 
@@ -53,9 +61,17 @@ def get(this, **x):
 
 	if process_self:
 		db_filter['mail'] = True
-		db_filter['templates'] = True
 		db_filter['social'] = True
 		# db_filter['transactions'] = True
+
+	# if process_moderator:
+	# 	db_filter['transactions'] = True
+
+	if process_admin:
+		db_filter['mail'] = True
+		db_filter['social'] = True
+
+	#
 
 	users = list(db['users'].find(db_condition, db_filter))
 	users = sorted(users, key=lambda i: i['rating'])[::-1]
@@ -74,7 +90,7 @@ def get(this, **x):
 
 		# # Online
 
-		# users[i]['online'] = db['online'].find_one({'user': users[i]['id']}, {'_id': True}) == True
+		# users[i]['online'] = db['online'].find_one({'id': users[i]['id']}, {'_id': True}) == True
 
 	# Response
 
