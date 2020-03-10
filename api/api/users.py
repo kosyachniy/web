@@ -60,6 +60,7 @@ def get(this, **x):
 	}
 
 	if process_self:
+		db_filter['phone'] = True
 		db_filter['mail'] = True
 		db_filter['social'] = True
 		# db_filter['transactions'] = True
@@ -68,6 +69,7 @@ def get(this, **x):
 	# 	db_filter['transactions'] = True
 
 	if process_admin:
+		db_filter['phone'] = True
 		db_filter['mail'] = True
 		db_filter['social'] = True
 

@@ -5,6 +5,7 @@ import time
 import re
 
 from func.mongodb import db
+from func.smsc import SMSC
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount
 from api._func import check_params, get_preview, load_image, get_date, next_id
@@ -95,9 +96,25 @@ def process_password(cont):
 
 	return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
+# Phone number
+
+def process_phone(cont):
+	if not len(cont):
+		raise ErrorInvalid('phone')
+
+	if cont[0] == '8':
+		cont = '7' + cont[1:]
+
+	cont = re.sub('[^0-9]', '', cont)
+
+	if len(cont) != 11:
+		raise ErrorInvalid('phone')
+
+	return int(cont)
+
 # Account registration
 
-def registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[]):
+def registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[], phone=None):
 	# ID
 
 	user_id = next_id('users')
@@ -156,7 +173,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 	#
 
-	db['users'].insert_one({
+	req = {
 		'id': user_id,
 		'login': login,
 		'password': password,
@@ -169,12 +186,164 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 		'online': [],
 		'social': social,
 		'time': timestamp,
-	})
+	}
+
+	if phone:
+		req['phone'] = phone
+
+	db['users'].insert_one(req)
+
+	#
 
 	return user_id, login
 
 #
 
+# Phone
+
+def phone_send(this, **x):
+	# Checking parameters
+
+	check_params(x, (
+		('phone', True, str),
+		('promo', False, str),
+	))
+
+	# Process a phone number
+
+	phone = process_phone(x['phone'])
+
+	# Already sent
+
+	code = db['codes'].find_one({'phone': phone}, {'_id': True})
+
+	if code:
+		raise ErrorRepeat('send')
+
+	# Code generation
+
+	ALL_SYMBOLS = string.digits
+	generate = lambda length=4: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+	code = generate()
+
+	#
+
+	req = {
+		'phone': phone,
+		'code': code,
+		'token': this.token,
+		'time': this.timestamp,
+	}
+
+	db['codes'].insert_one(req)
+
+	#
+
+	sms = SMSC()
+	res = sms.send_sms(str(phone), 'Hi!\n{} — This is your login code.'.format(code))
+	print(phone, res)
+
+	#
+
+	res = {
+		'phone': phone,
+		'status': int(float(res[-1])) > 0,
+	}
+
+	return res
+
+def phone_check(this, **x):
+	# Checking parameters
+
+	check_params(x, (
+		('phone', False, str),
+		('code', True, (int, str)),
+	))
+
+	#
+
+	if not this.token:
+		raise ErrorInvalid('token')
+
+	#
+
+	x['code'] = str(x['code'])
+
+	#
+
+	db_condition = {
+		'code': x['code'],
+	}
+
+	if 'phone' in x:
+		db_condition['phone'] = process_phone(x['phone'])
+	else:
+		db_condition['token'] = this.token
+
+	db_filter = {
+		'_id': False,
+		'phone': True,
+	}
+
+	#
+
+	code = db['codes'].find_one(db_condition, db_filter)
+
+	if code:
+		# ! Входить по старым кодам
+		pass
+		# db['codes'].remove(code)
+
+	else:
+		raise ErrorWrong('code')
+
+	#
+
+	user = db['users'].find_one({'phone': code['phone']})
+
+	#
+
+	new = False
+
+	if not user:
+		user_id, login = registrate(
+			this.user,
+			this.timestamp,
+			phone=code['phone'],
+		)
+
+		new = True
+
+		#
+
+		user = db['users'].find_one({'id': user_id})
+
+	# Присвоение токена пользователю
+
+	req = {
+		'token': this.token,
+		'id': user['id'],
+		'time': this.timestamp,
+	}
+	db['tokens'].insert_one(req)
+
+	# Update online users
+
+	# online_update(this.socketio, user, this.token)
+
+	#
+
+	res = {
+		'id': user['id'],
+		'admin': user['admin'],
+		# 'balance': user['balance'],
+		# 'rating': user['rating'],
+		'login': user['login'],
+		'avatar': get_preview(user['id'], 'users'),
+		'new': new,
+	}
+
+	return res
 
 # Sign up
 
