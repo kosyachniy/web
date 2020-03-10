@@ -4,11 +4,15 @@ import time
 import base64
 
 import requests
+from PIL import Image
 
 from func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
 from sets import IMAGE
+
+
+WIDTH_OPTIMIZED = 700
 
 
 # Check existence the file by name
@@ -25,7 +29,7 @@ def get_file(url, num):
 # Image link
 
 def get_preview(num=0, url=''):
-	src = IMAGE['link']
+	src = IMAGE['link_opt']
 	if url:
 		src += url + '/'
 
@@ -49,6 +53,7 @@ def max_image(url):
 # Upload image
 
 def load_image(url, data, adr=None, format='jpg', type='base64'):
+	url_opt = 'app/static/opt/' + url
 	url = 'app/static/' + url
 
 	if type == 'base64':
@@ -58,11 +63,33 @@ def load_image(url, data, adr=None, format='jpg', type='base64'):
 		for i in os.listdir(url):
 			if re.search(r'^' + str(adr) + '\.', i):
 				os.remove(url + '/' + i)
+
+		for i in os.listdir(url_opt):
+			if re.search(r'^' + str(adr) + '\.', i):
+				os.remove(url_opt + '/' + i)
 	else:
 		adr = max_image(url)
 
-	with open('{}/{}.{}'.format(url, str(adr), format), 'wb') as file:
+	link = '{}/{}.{}'.format(url, adr, format)
+	link_opt = '{}/{}.{}'.format(url_opt, adr, format)
+
+	with open(link, 'wb') as file:
 		file.write(data)
+
+	# Оптимизированная версия
+
+	try:
+		img = Image.open(link)
+
+		wpercent = (WIDTH_OPTIMIZED / float(img.size[0]))
+		hsize = int((float(img.size[1]) * float(wpercent)))
+		img = img.resize((WIDTH_OPTIMIZED, hsize), Image.ANTIALIAS)
+
+		img.save(link_opt)
+
+	except:
+		with open(link_opt, 'wb') as file:
+			file.write(data)
 
 	return adr
 
@@ -89,8 +116,8 @@ def reimg(s):
 					form = re.search(r'image/.*;', s[k+st[0]:start]).group(0)[6:-1]
 					adr = load_image('', b64, format=form)
 
-					vs = '<img src="/load/{}.{}">'.format(adr, form)
-					# vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
+					# vs = '<img src="/load/{}.{}">'.format(adr, form)
+					vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
 				else:
 					start = k + re.search(r'src=.*', s[k:]).span()[0] + 5
 					try:
@@ -109,8 +136,8 @@ def reimg(s):
 							form = 'png'
 						adr = load_image('', b64, format=form)
 
-						vs = '<img src="/load/{}.{}">'.format(adr, form)
-						# vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
+						# vs = '<img src="/load/{}.{}">'.format(adr, form)
+						vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
 
 			if vs:
 				s = s[:k+st[0]] + vs + s[k+st[1]+1:]
