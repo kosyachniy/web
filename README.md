@@ -14,7 +14,7 @@ Android | Front-end | React Native | JavaScript | planned
 <img src="re/img/bootstrap.png" height="100" />
 <img src="re/img/ckeditor.png" height="100" />
 
-## Installation
+## Install
 ### Back-end
 1. Change folder
 ```

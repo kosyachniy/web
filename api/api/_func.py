@@ -77,23 +77,31 @@ def reimg(s):
 			st = list(x.span())
 			st[1] = st[0] + s[k+st[0]:].index('>')
 			vs = ''
-			if 'src="' in s[k+st[0]:k+st[1]]:
+			if 'src=' in s[k+st[0]:k+st[1]]:
 				if re.search(r'image/.*;', s[k+st[0]:k+st[1]]) and 'base64,' in s[k+st[0]:k+st[1]]:
 					start = k + st[0] + s[k+st[0]:].index('base64,') + 7
-					stop = start + s[start:].index('"')
+					try:
+						stop = start + s[start:].index('"')
+					except:
+						stop = start + s[start:].index('\'')
 
 					b64 = s[start:stop]
 					form = re.search(r'image/.*;', s[k+st[0]:start]).group(0)[6:-1]
 					adr = load_image('', b64, format=form)
 
 					vs = '<img src="/load/{}.{}">'.format(adr, form)
+					# vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
 				else:
-					start = k + re.search(r'src=".*', s[k:]).span()[0] + 5
-					stop = start + s[start:].index('"')
+					start = k + re.search(r'src=.*', s[k:]).span()[0] + 5
+					try:
+						stop = start + s[start:].index('"')
+					except:
+						stop = start + s[start:].index('\'')
+
 					href = s[start:stop]
 
-					if href[:5] == '/load':
-						href = CLIENT['link'] + href[1:]
+					if href[:5] == '/load': # !
+						href = IMAGE['link'] + href[5:]
 					if href[:4] == 'http':
 						b64 = str(base64.b64encode(requests.get(href).content))[2:-1]
 						form = href.split('.')[-1]
@@ -102,6 +110,7 @@ def reimg(s):
 						adr = load_image('', b64, format=form)
 
 						vs = '<img src="/load/{}.{}">'.format(adr, form)
+						# vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
 
 			if vs:
 				s = s[:k+st[0]] + vs + s[k+st[1]+1:]
@@ -115,10 +124,10 @@ def reimg(s):
 
 # Get user
 
-def get_user(id):
-	if id:
+def get_user(user_id):
+	if user_id:
 		db_condition = {
-			'id': id,
+			'id': user_id,
 		}
 
 		db_filter = {

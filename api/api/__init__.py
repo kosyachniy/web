@@ -33,7 +33,10 @@ class API():
 			user_id = db['tokens'].find_one({'token': token}, db_filter)
 
 			if user_id and user_id['id']:
-				self.user = db['users'].find_one({'id': user_id['id']})
+				user = db['users'].find_one({'id': user_id['id']})
+
+				if user:
+					self.user = user
 
 		# IP (case when a web application makes requests from IP with the same address)
 
