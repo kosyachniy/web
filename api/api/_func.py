@@ -173,7 +173,7 @@ def get_user(user_id):
 
 	return user_req
 
-# Verification of parameters
+# Checking parameters
 
 def check_params(x, filters): # ! Удалять другие поля (которых нет в списке)
 	for i in filters:

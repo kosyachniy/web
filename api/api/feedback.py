@@ -8,7 +8,7 @@ from api._func import reimg, get_user, check_params, next_id
 # Add
 
 def add(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('name', True, str),
@@ -39,7 +39,7 @@ def add(this, **x):
 # Get
 
 def get(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('count', False, int),
@@ -70,7 +70,7 @@ def get(this, **x):
 # Delete
 
 def delete(this, **x):
-	# Verification of parameters
+	# Checking parameters
 	check_params(x, (
 		('id', True, int),
 	))

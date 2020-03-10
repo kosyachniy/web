@@ -4,7 +4,7 @@ from api._func import check_params, get_preview
 
 
 def search(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('cont', True, str),

@@ -9,7 +9,7 @@ from api._func import reimg, get_user, check_params, get_preview, next_id, load_
 # Add / edit
 
 def edit(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	# Edit
 	if 'id' in x:
@@ -51,6 +51,7 @@ def edit(this, **x):
 				'likes': [],
 				'reposts': [],
 				'comments': [],
+				'views': [],
 			},
 		}
 
@@ -148,7 +149,7 @@ def get(this, **x):
 	if process_single:
 		db_filter['cont'] = True
 
-	posts = list(db['posts'].find(db_condition, db_filter)[:count])
+	posts = list(db['posts'].find(db_condition, db_filter).sort('time', -1)[:count])
 
 	# Processing
 

@@ -4,7 +4,7 @@ from api._func import check_params, get_preview, get_user
 
 
 def get(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('id', False, (int, list), int),
@@ -105,7 +105,7 @@ def get(this, **x):
 # Block
 
 def block(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('id', True, int),

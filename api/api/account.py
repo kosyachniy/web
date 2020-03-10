@@ -348,7 +348,7 @@ def phone_check(this, **x):
 # Sign up
 
 def reg(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('login', False, str),
@@ -402,7 +402,7 @@ def reg(this, **x):
 # Social network
 
 def social(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('id', True, int), # ?
@@ -498,7 +498,7 @@ def social(this, **x):
 # Log in
 
 def auth(this, **x):
-	# Verification of parameters
+	# Checking parameters
 
 	check_params(x, (
 		('login', True, str), # login / mail
@@ -590,7 +590,7 @@ def exit(this, **x):
 # Edit personal information
 
 def edit(this, **x):
-	# Verification of parameters
+	# Checking parameters
 	check_params(x, (
 		('name', False, str),
 		('surname', False, str),
@@ -659,7 +659,7 @@ def edit(this, **x):
 # # Recover password
 
 # def recover(this, **x):
-# 	# Verification of parameters
+# 	# Checking parameters
 
 # 	check_params(x, (
 # 		('login', True, str),
