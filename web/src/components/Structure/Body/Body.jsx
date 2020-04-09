@@ -16,9 +16,7 @@ export default class App extends React.Component {
 		// Online
 
 		socketIO.on('connect', () => {
-			setTimeout(() => {
-				socketIO.emit('online', {token})
-			}, 1000)
+			socketIO.emit('online', {token})
 		})
 
 		socketIO.on('online_add', (x) => {
@@ -37,6 +35,16 @@ export default class App extends React.Component {
 	}
 
 	render() {
+		const { online } = this.props
+
+		if (!online.count) {
+			return (
+				<>
+					Loading..
+				</>
+			)
+		}
+
 		return (
 			<div className="container" id="main">
 				<Switch>
@@ -47,7 +55,6 @@ export default class App extends React.Component {
 					<Route path="/posts">
 						<Posts />
 					</Route>
-
 					<Route path="/post">
 						<Post />
 					</Route>

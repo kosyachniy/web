@@ -1,3 +1,7 @@
+.navbar {
+	padding: 0;
+}
+
 .navbar-brand img, .nav-link img {
 	height: 25px;
 	margin-top: -5px;
@@ -5,6 +9,15 @@
 
 .navbar .badge {
 	margin: 0 10px 0 0;
+	cursor: pointer;
+}
+
+.navbar li {
+	line-height: 2.5rem;
+}
+
+.navbar .nav-item > div {
+	padding: .5rem;
 }
 
 @media all and (max-width: 991px) {
@@ -52,3 +65,32 @@
 }
 
 .dropdown:hover .dropdown-content {display: block;}
+
+/* Online indicator */
+
+.online, .offline {
+	display: inline-block;
+	width: 0.7em;
+	height: 0.7em;
+	margin: 0 12px 0 8px;
+}
+
+.online {
+    background: #28b62c;
+    border-radius: 50%;
+    -webkit-animation: pulse-animation 2s infinite linear;
+}
+
+@-webkit-keyframes pulse-animation {
+    0% { -webkit-transform: scale(1); }
+    25% { -webkit-transform: scale(1); }
+    50% { -webkit-transform: scale(1.5) }
+    75% { -webkit-transform: scale(1); }
+    100% { -webkit-transform: scale(1); }
+}
+
+.offline {
+    background: #ff4136;
+}
+
+/*  */
