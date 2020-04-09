@@ -1,3 +1,7 @@
+* {
+	background-color: inherit;
+}
+
 body {
 	background-color: red;
 }
@@ -8,6 +12,10 @@ body .container {
 
 .bg-dark {
 	color: var(--light);
+}
+
+a {
+	color: inherit;
 }
 
 #main {
