@@ -16,7 +16,9 @@ export default class App extends React.Component {
 		// Online
 
 		socketIO.on('connect', () => {
-			socketIO.emit('online', {token})
+			setTimeout(() => {
+				socketIO.emit('online', {token})
+			}, 1000)
 		})
 
 		socketIO.on('online_add', (x) => {
@@ -41,11 +43,11 @@ export default class App extends React.Component {
 					<Route exact path="/">
 						<Posts />
 					</Route>
-	
+
 					<Route path="/posts">
 						<Posts />
 					</Route>
-	
+
 					<Route path="/post">
 						<Post />
 					</Route>
