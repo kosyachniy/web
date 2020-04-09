@@ -11,6 +11,10 @@
 		"search": "Search",
 		"online": "Online"
 	},
+	"brand": {
+		"description": "Template web app",
+		"address": "St. Petersburg, Russia"
+	},
 	"science": {
 		"math": "Mathematics",
 		"prog": "Programming",

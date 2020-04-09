@@ -2,6 +2,10 @@ body {
 	background-color: red;
 }
 
+body .container {
+	padding: 0;
+}
+
 .bg-dark {
 	color: var(--light);
 }

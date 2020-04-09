@@ -94,6 +94,17 @@ export default function Header(props) {
 							)}
 						</li>
 						<li className="nav-item">
+							{localStorage.getItem('lang') === 'ru' ? (
+								<div className="badge" onClick={ () => {props.handlerLang('en')} }>
+									<img src="/lang/en.svg" alt="en" />
+								</div>
+							) : (
+								<div className="badge" onClick={ () => {props.handlerLang('ru')} }>
+									<img src="/lang/ru.svg" alt="ru" />
+								</div>
+							)}
+						</li>
+						<li className="nav-item">
 							<Link to="/user/"className="nav-link">@</Link><Link to="/sys_sign_out/" className="nav-link">{ t('system.sign_out') }</Link>
 							{/* <Link to="/login/" className="nav-link">Гость &nbsp; { t('system.sign_in') }</Link> */}
 						</li>

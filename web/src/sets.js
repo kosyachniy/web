@@ -16,8 +16,6 @@ export const socket = {
 }
 
 export const name = 'Quateo'
-export const description = 'Описание'
-export const address = 'Россия, Санкт-Петербург'
 export const mail = 'polozhev@mail.ru'
 export const phone = '+7 (981) 163-55-78'
 export const social = [{

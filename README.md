@@ -51,19 +51,16 @@ npm run build
 ## Usage
 ### Back-end
 ```
-cd api/
 env/bin/gunicorn app:app -c run.py
 ```
 
 ### Front-end
 ```
-cd web/
 npm start
 ```
 
 OR
 
 ```
-cd web/
 serve -s build -p 3000
 ```

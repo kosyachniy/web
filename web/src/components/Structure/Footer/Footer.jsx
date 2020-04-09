@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import './style.css'
-import { name, description, address, mail, phone, social } from '../../../sets'
+import { name, mail, phone, social } from '../../../sets'
 
 
 export default function Footer(props) {
@@ -17,7 +17,7 @@ export default function Footer(props) {
 					<div className="col-md-4 col-xl-5">
 						<div className="pr-xl-4">
 							<p><Link to="/" className="brand"><img src={`/brand/logo_${system.color}.svg`} alt={ name } /></Link></p>
-							<p>{ description }</p>
+							<p>{ t('brand.description') }</p>
 							<p className="rights"><span>{ name }</span><span> </span><span>©</span><span> </span><span className="copyright-year">2018-2020</span></p>
 						</div>
 					</div>
@@ -25,7 +25,7 @@ export default function Footer(props) {
 						<h5>{ t('footer.contacts') }</h5>
 						<dl className="contact-list">
 							<dt>{ t('footer.address') }</dt>
-							<dd>{ address }</dd>
+							<dd>{ t('brand.address') }</dd>
 						</dl>
 						<dl className="contact-list">
 							<dt>{ t('footer.mail') }</dt>

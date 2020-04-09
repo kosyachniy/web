@@ -39,7 +39,7 @@ export default class App extends React.Component {
 		return (
 			<Provider store={store}>
 				<BrowserRouter>
-					<Header />
+					<Header handlerLang={ this.handlerLang } />
 
 					<Body />
 
