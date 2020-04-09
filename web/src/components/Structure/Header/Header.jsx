@@ -16,13 +16,13 @@ const events = [
 
 
 export default function Header(props) {
-	const { online } = props
+	const { system, online, changeTheme } = props
 	const { t } = useTranslation()
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+		<nav className={`navbar navbar-expand-lg navbar-${system.theme} bg-${system.theme} sticky-top`}>
 			<div className="container">
-				<Link to="/" className="navbar-brand"><img src="/brand/logo.svg" alt={ name } /></Link>
+				<Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ name } /></Link>
 				<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
@@ -81,6 +81,17 @@ export default function Header(props) {
 									</>
 								) }
 							</div>
+						</li>
+						<li className="nav-item">
+							{system.theme === 'dark' ? (
+								<div className="badge" onClick={() => {changeTheme('light')}}>
+									<i className="fas fa-sun" />
+								</div>
+							) : (
+								<div className="badge" onClick={() => {changeTheme('dark')}}>
+									<i className="fas fa-moon" />
+								</div>
+							)}
 						</li>
 						<li className="nav-item">
 							<Link to="/user/"className="nav-link">@</Link><Link to="/sys_sign_out/" className="nav-link">{ t('system.sign_out') }</Link>

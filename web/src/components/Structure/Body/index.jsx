@@ -8,6 +8,7 @@ import Body from './Body';
 
 // AppContainer.jsx
 const mapStateToProps = state => ({
+	system: state.system,
 	online: state.online,
 });
 

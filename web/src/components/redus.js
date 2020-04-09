@@ -32,6 +32,11 @@ export const onlineReset = () => ({
 	type: 'ONLINE_RESET',
 });
 
+export const changeTheme = theme => ({
+	type: 'CHANGE_THEME',
+	theme,
+});
+
 // reducers.js
 export const posts = (state = [], action) => {
 	switch (action.type) {
@@ -77,8 +82,21 @@ export const online = (state = {count: null, users: []}, action) => {
 	}
 };
 
+export const system = (state = {theme: 'light', color: 'dark'}, action) => {
+	switch (action.type) {
+		case 'CHANGE_THEME':
+			return {
+				theme: action.theme,
+				color: action.theme === 'dark' ? 'light' : 'dark',
+			};
+
+		default:
+			return state;
+	}
+};
+
 export const reducers = combineReducers({
-	posts, online,
+	system, posts, online,
 });
 
 // store.js

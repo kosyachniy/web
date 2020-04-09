@@ -17,6 +17,7 @@
 }
 
 .navbar .nav-item > div {
+	line-height: 2.5rem;
 	padding: .5rem;
 }
 

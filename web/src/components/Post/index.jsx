@@ -49,14 +49,14 @@ export default class Post extends React.Component {
 		const { post } = this.state;
 
 		return (
-			<div className="bg-light">
+			<div>
 				{ post && (
 					<>
 						<h1>{ post.name }</h1>
 						<img src={ post.cover } alt={ post.name } />
 
 						<MathJax math={ post.cont } />
-					
+
 						<Editor id={ post.id } cont={ post.cont }/>
 					</>
 				) }

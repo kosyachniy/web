@@ -35,9 +35,7 @@ export default class App extends React.Component {
 	}
 
 	render() {
-		const { online } = this.props
-
-		if (!online.count) {
+		if (!this.props.online.count) {
 			return (
 				<>
 					Loading..
@@ -46,19 +44,21 @@ export default class App extends React.Component {
 		}
 
 		return (
-			<div className="container" id="main">
-				<Switch>
-					<Route exact path="/">
-						<Posts />
-					</Route>
+			<div className={`bg-${this.props.system.theme}`}>
+				<div className="container" id="main">
+					<Switch>
+						<Route exact path="/">
+							<Posts />
+						</Route>
 
-					<Route path="/posts">
-						<Posts />
-					</Route>
-					<Route path="/post">
-						<Post />
-					</Route>
-				</Switch>
+						<Route path="/posts">
+							<Posts />
+						</Route>
+						<Route path="/post">
+							<Post />
+						</Route>
+					</Switch>
+				</div>
 			</div>
 		)
 	}

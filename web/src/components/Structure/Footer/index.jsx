@@ -1,58 +1,21 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import { connect } from 'react-redux';
+import {
+} from '../../redus';
 
-import './style.css'
-import { name, description, address, mail, phone, social } from '../../../sets'
+import Footer from './Footer';
 
 
-export default function Footer(props) {
-	const { t } = useTranslation()
+// AppContainer.jsx
+const mapStateToProps = state => ({
+	system: state.system,
+});
 
-	return (
-		<footer className="section footer-classic context-light bg-light">
-			<div className="container">
-				<div className="row row-30">
-					<div className="col-md-4 col-xl-5">
-						<div className="pr-xl-4">
-							<p><Link to="/" className="brand"><img src="/brand/logo.svg" alt={ name } /></Link></p>
-							<p>{ description }</p>
-							<p className="rights"><span>{ name }</span><span> </span><span>©</span><span> </span><span className="copyright-year">2018-2020</span></p>
-						</div>
-					</div>
-					<div className="col-md-4">
-						<h5>{ t('footer.contacts') }</h5>
-						<dl className="contact-list">
-							<dt>{ t('footer.address') }</dt>
-							<dd>{ address }</dd>
-						</dl>
-						<dl className="contact-list">
-							<dt>{ t('footer.mail') }</dt>
-							<dd><a href={ 'mailto:' + mail }>{ mail }</a></dd>
-						</dl>
-						<dl className="contact-list">
-							<dt>{ t('footer.phone') }</dt>
-							<dd><a href={ 'tel:' + phone }>{ phone }</a></dd>
-						</dl>
-					</div>
-					<div className="col-md-4 col-xl-3">
-						<h5>{ t('footer.links') }</h5>
-						<ul className="nav-list">
-							<li><Link to="/about/">{ t('footer.about') }</Link></li>
-							<li><Link to="/feedback/">{ t('footer.feedback') }</Link></li>
-							<li><Link to="/codex/">{ t('footer.rules') }</Link></li>
-						</ul>
-						<span className="badge" onClick={ () => {props.handlerLang('en')} }><img src="/lang/en.svg" alt="en" /></span>
-						<span className="badge" onClick={ () => {props.handlerLang('ru')} }><img src="/lang/ru.svg" alt="ru" /></span>
-						<br />
-						<div className="social">
-							{ social.map((el, num) =>
-								<a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } alt={ el.name } /></span></a>
-							) }
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-	)
-}
+const mapDispatchToProps = {
+};
+
+const FooterContainer = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Footer);
+
+export default FooterContainer;

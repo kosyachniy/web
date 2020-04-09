@@ -24,7 +24,7 @@ class Posts extends React.Component {
 		// const { t } = this.props
 
 		return (
-			<div className="album py-5 bg-light">
+			<div className="album py-5">
 				<div className="container">
 					<div className="row">
 						{ this.props.posts.map((el, num) =>

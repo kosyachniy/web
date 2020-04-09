@@ -1,5 +1,9 @@
 body {
-	background-color: var(--light);
+	background-color: red;
+}
+
+.bg-dark {
+	color: var(--light);
 }
 
 #main {
@@ -33,7 +37,7 @@ body {
 }
 
 /* Notifications */
-/* 
+/*
 .u-notification {
 	cursor: pointer;
 	position: fixed;
