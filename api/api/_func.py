@@ -4,7 +4,7 @@ import time
 import base64
 
 import requests
-from PIL import Image
+from PIL import Image, ExifTags
 
 from func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
@@ -18,9 +18,7 @@ WIDTH_OPTIMIZED = 700
 # Check existence the file by name
 
 def get_file(url, num):
-	url = '/load/' + url + '/'
-
-	for i in os.listdir('..' + url):
+	for i in os.listdir('../load/{}/'.format(url)):
 		if re.search(r'^' + str(num) + '\.', i):
 			return i
 
@@ -75,6 +73,28 @@ def load_image(url, data, adr=None, format='jpg', type='base64'):
 
 	with open(link, 'wb') as file:
 		file.write(data)
+
+	# EXIF data
+
+	try:
+		image=Image.open(link)
+		for orientation in ExifTags.TAGS.keys():
+			if ExifTags.TAGS[orientation]=='Orientation':
+				break
+		exif=dict(image._getexif().items())
+
+		if exif[orientation] == 3:
+			image=image.transpose(Image.ROTATE_180)
+		elif exif[orientation] == 6:
+			image=image.transpose(Image.ROTATE_270)
+		elif exif[orientation] == 8:
+			image=image.transpose(Image.ROTATE_90)
+		image.save(link)
+		image.close()
+
+	except (AttributeError, KeyError, IndexError):
+		# cases: image don't have getexif
+		pass
 
 	# Оптимизированная версия
 
