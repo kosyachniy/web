@@ -1,4 +1,7 @@
+import i18n from './i18n'
+
 import { combineReducers, createStore } from 'redux';
+
 
 // actions.js
 export const postsGet = posts => ({
@@ -32,10 +35,27 @@ export const onlineReset = () => ({
 	type: 'ONLINE_RESET',
 });
 
-export const changeTheme = theme => ({
-	type: 'CHANGE_THEME',
-	theme,
-});
+export const changeTheme = theme => {
+	localStorage.setItem('theme', theme)
+
+	const color = theme === 'dark' ? 'light' : 'dark'
+	localStorage.setItem('color', color)
+
+	return {
+		type: 'CHANGE_THEME',
+		theme, color,
+	}
+}
+
+export const changeLang = lang => {
+	localStorage.setItem('lang', lang)
+	i18n.changeLanguage(lang)
+
+	return {
+		type: 'CHANGE_LANG',
+		lang,
+	}
+}
 
 export const profileIn = profile => {
 	const { id, login, name, avatar, admin } = profile
@@ -109,16 +129,31 @@ export const online = (state = {count: null, users: []}, action) => {
 	}
 };
 
-export const system = (state = {theme: 'light', color: 'dark'}, action) => {
+export const system = (state = {
+	lang: localStorage.getItem('lang'),
+	theme: localStorage.getItem('theme'),
+	color: localStorage.getItem('color'),
+}, action) => {
 	switch (action.type) {
 		case 'CHANGE_THEME':
 			return {
+				...state,
 				theme: action.theme,
-				color: action.theme === 'dark' ? 'light' : 'dark',
+				color: action.color,
+			};
+
+		case 'CHANGE_LANG':
+			return {
+				...state,
+				lang: action.lang,
 			};
 
 		default:
-			return state;
+			return {
+				lang: state.lang || 'ru',
+				theme: state.theme || 'light',
+				color: state.color || 'dark',
+			};
 	}
 };
 

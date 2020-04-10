@@ -7,7 +7,7 @@ import { name, mail, phone, social } from '../../../sets'
 
 
 export default function Footer(props) {
-	const { system } = props
+	const { system, changeLang } = props
 	const { t } = useTranslation()
 
 	return (
@@ -43,8 +43,8 @@ export default function Footer(props) {
 							<li><Link to="/feedback/">{ t('footer.feedback') }</Link></li>
 							<li><Link to="/codex/">{ t('footer.rules') }</Link></li>
 						</ul>
-						<span className="badge" onClick={ () => {props.handlerLang('en')} }><img src="/lang/en.svg" alt="en" /></span>
-						<span className="badge" onClick={ () => {props.handlerLang('ru')} }><img src="/lang/ru.svg" alt="ru" /></span>
+						<span className="badge" onClick={ () => {changeLang('en')} }><img src="/lang/en.svg" alt="en" /></span>
+						<span className="badge" onClick={ () => {changeLang('ru')} }><img src="/lang/ru.svg" alt="ru" /></span>
 						<br />
 						<div className="social">
 							{ social.map((el, num) =>

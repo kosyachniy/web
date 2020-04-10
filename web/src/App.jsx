@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
-import i18n from './i18n'
 
 // Redux
 import { Provider } from 'react-redux';
@@ -25,11 +24,6 @@ export default class App extends React.Component {
 		showPopUp: false,
 	}
 
-	handlerLang = (lang) => {
-		localStorage.setItem('lang', lang)
-		i18n.changeLanguage(lang)
-	}
-
 	handlerPopUp = (page) => {
 		this.setState({ showPopUp: page })
 	}
@@ -51,10 +45,7 @@ export default class App extends React.Component {
 		return (
 			<Provider store={store}>
 				<BrowserRouter>
-					<Header
-						handlerLang={ this.handlerLang }
-						handlerPopUp={ this.handlerPopUp }
-					/>
+					<Header handlerPopUp={ this.handlerPopUp } />
 
 					<Body />
 
@@ -69,7 +60,7 @@ export default class App extends React.Component {
 						</>
 					) }
 
-					<Footer handlerLang={ this.handlerLang } />
+					<Footer />
 				</BrowserRouter>
 			</Provider>
 		)
