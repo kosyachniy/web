@@ -1,5 +1,6 @@
 .navbar {
 	padding: 0;
+	z-index: 500;
 }
 
 .navbar-brand img, .nav-link img {

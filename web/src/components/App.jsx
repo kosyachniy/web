@@ -10,6 +10,7 @@ import { store } from './redus';
 import Header from './Structure/Header'
 import Body from './Structure/Body'
 import Footer from './Structure/Footer'
+import Auth from './Auth'
 
 
 function genereteToken() {
@@ -19,9 +20,17 @@ function genereteToken() {
 
 
 export default class App extends React.Component {
+	state = {
+		showAuth: false,
+	}
+
 	handlerLang = (lang) => {
 		localStorage.setItem('lang', lang)
 		i18n.changeLanguage(lang)
+	}
+
+	handlerLogIn = (status) => {
+		this.setState({ showAuth: status })
 	}
 
 	componentWillMount() {
@@ -36,12 +45,21 @@ export default class App extends React.Component {
 	}
 
 	render() {
+		const { showAuth } = this.state;
+
 		return (
 			<Provider store={store}>
 				<BrowserRouter>
-					<Header handlerLang={ this.handlerLang } />
+					<Header
+						handlerLang={ this.handlerLang }
+						handlerLogIn={ this.handlerLogIn }
+					/>
 
 					<Body />
+
+					{ showAuth && (
+						<Auth handlerLogIn={ this.handlerLogIn } />
+					) }
 
 					<Footer handlerLang={ this.handlerLang } />
 				</BrowserRouter>
