@@ -2,9 +2,9 @@ import React from 'react'
 // import ReactHtmlParser from 'react-html-parser'
 import MathJax from 'react-mathjax-preview'
 
-import api from '../../func/api'
+import api from '../../../func/api'
 
-import Editor from './Editor'
+import Editor from '../../../components/Editor'
 
 
 export default class Post extends React.Component {

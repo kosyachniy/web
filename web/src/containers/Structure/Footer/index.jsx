@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-} from '../../redus';
+} from '../../../redus';
 
 import Footer from './Footer';
 

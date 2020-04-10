@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './style.css';
-import Popup from '../Popup';
+import Popup from '../../../components/Popup';
 
 
 const Auth = (props) => {

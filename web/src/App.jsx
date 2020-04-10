@@ -7,11 +7,11 @@ import i18n from './i18n'
 import { Provider } from 'react-redux';
 import { store } from './redus';
 
-import Header from './Structure/Header'
-import Body from './Structure/Body'
-import Footer from './Structure/Footer'
-import Auth from './Auth'
-import Mail from './Mail'
+import Header from './containers/Structure/Header'
+import Body from './containers/Structure/Body'
+import Footer from './containers/Structure/Footer'
+import Auth from './containers/Pages/Auth'
+import Mail from './containers/Pages/Mail'
 
 
 function genereteToken() {

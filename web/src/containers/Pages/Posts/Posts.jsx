@@ -1,7 +1,7 @@
 import React from 'react'
 import { withTranslation } from 'react-i18next'
 
-import api from '../../func/api'
+import api from '../../../func/api'
 
 import './style.css'
 import Post from './Post'

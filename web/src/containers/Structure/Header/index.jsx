@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
 	changeTheme,
-} from '../../redus';
+} from '../../../redus';
 
 import Header from './Header';
 

@@ -5,8 +5,8 @@ import { socketIO } from '../../../func/sockets'
 
 import './style.css'
 
-import Posts from '../../Posts'
-import Post from '../../Post'
+import Posts from '../../Pages/Posts'
+import Post from '../../Pages/Post'
 
 
 export default class App extends React.Component {

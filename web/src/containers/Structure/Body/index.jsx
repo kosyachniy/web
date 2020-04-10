@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
 	onlineAdd, onlineDelete, onlineReset,
-} from '../../redus';
+} from '../../../redus';
 
 import Body from './Body';
 

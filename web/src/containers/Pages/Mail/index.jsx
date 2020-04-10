@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './style.css';
-import Popup from '../Popup';
+import Popup from '../../../components/Popup';
 
 
 function checkPassword(password) {

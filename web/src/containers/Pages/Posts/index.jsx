@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
 	postsGet, postsAdd, postsDelete,
-} from '../redus';
+} from '../../../redus';
 
 import Posts from './Posts';
 
