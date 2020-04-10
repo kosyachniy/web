@@ -10,7 +10,8 @@
 		"sign_in": "Log In",
 		"sign_up": "Sign Up",
 		"search": "Search",
-		"online": "Online"
+		"online": "Online",
+		"offline": "Offline"
 	},
 	"brand": {
 		"description": "Template web app",
@@ -50,5 +51,11 @@
 		"twi": "Twitter",
 		"yt": "YouTube",
 		"in": "LinkedIn"
+	},
+	"profile": {
+		"mail": "E-mail",
+		"password": "Password",
+        "passwordTip1": "length should be 6 or more",
+        "passwordTip2": "include digits and letters"
 	}
 }

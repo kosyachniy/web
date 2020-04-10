@@ -11,6 +11,7 @@ import Header from './Structure/Header'
 import Body from './Structure/Body'
 import Footer from './Structure/Footer'
 import Auth from './Auth'
+import Mail from './Mail'
 
 
 function genereteToken() {
@@ -21,7 +22,7 @@ function genereteToken() {
 
 export default class App extends React.Component {
 	state = {
-		showAuth: false,
+		showPopUp: false,
 	}
 
 	handlerLang = (lang) => {
@@ -29,8 +30,8 @@ export default class App extends React.Component {
 		i18n.changeLanguage(lang)
 	}
 
-	handlerLogIn = (status) => {
-		this.setState({ showAuth: status })
+	handlerPopUp = (page) => {
+		this.setState({ showPopUp: page })
 	}
 
 	componentWillMount() {
@@ -45,20 +46,27 @@ export default class App extends React.Component {
 	}
 
 	render() {
-		const { showAuth } = this.state;
+		const { showPopUp } = this.state;
 
 		return (
 			<Provider store={store}>
 				<BrowserRouter>
 					<Header
 						handlerLang={ this.handlerLang }
-						handlerLogIn={ this.handlerLogIn }
+						handlerPopUp={ this.handlerPopUp }
 					/>
 
 					<Body />
 
-					{ showAuth && (
-						<Auth handlerLogIn={ this.handlerLogIn } />
+					{ showPopUp && (
+						<>
+							{ showPopUp === 'auth' && (
+								<Auth handlerPopUp={ this.handlerPopUp } />
+							) }
+							{ showPopUp === 'mail' && (
+								<Mail handlerPopUp={ this.handlerPopUp } />
+							) }
+						</>
 					) }
 
 					<Footer handlerLang={ this.handlerLang } />

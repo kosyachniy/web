@@ -1,17 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-// import 'style.css';
+import './style.css';
 import Popup from '../Popup';
 
 
 const Auth = (props) => {
-	const { handlerLogIn } = props;
+	const { handlerPopUp } = props;
 	const { t } = useTranslation();
 
 	return (
 		<div id="auth">
-			<Popup handlerLogIn={handlerLogIn} >
+			<Popup handlerPopUp={handlerPopUp} >
 				<a
 					href={``}
 					className="btn btn_vk"
@@ -27,7 +27,10 @@ const Auth = (props) => {
 				<div className="btn btn_green">
 					<i className="fas fa-phone" />
 				</div>
-				<div className="btn btn_green">
+				<div
+					className="btn btn_green"
+					onClick={ ()=>{handlerPopUp('mail')} }
+				>
 					<i className="fas fa-envelope" />
 				</div>
 			</Popup>

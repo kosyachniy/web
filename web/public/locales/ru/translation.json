@@ -10,7 +10,8 @@
 		"sign_in": "Войти",
 		"sign_up": "Зарегистрироваться",
 		"search": "Поиск",
-		"online": "Онлайн"
+		"online": "Онлайн",
+		"offline": "Офлайн"
 	},
 	"brand": {
 		"description": "Шаблонное веб приложение",
@@ -50,5 +51,11 @@
 		"twi": "Twitter",
 		"yt": "YouTube",
 		"in": "LinkedIn"
+	},
+	"profile": {
+		"mail": "E-mail",
+		"password": "Пароль",
+        "passwordTip1": "минимальная длина пароля - 6 символов",
+        "passwordTip2": "обязательно использование цифр и букв"
 	}
 }

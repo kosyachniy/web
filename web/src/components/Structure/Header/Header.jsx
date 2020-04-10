@@ -10,9 +10,9 @@ import { name } from '../../../sets'
 // 	'math', 'prog', 'bis', 'manag', 'lead', 'marketing', 'life_safety'
 // ]
 
-const events = [
-	'hack', 'meet', 'lect', 'pres'
-]
+// const events = [
+// 	'hack', 'meet', 'lect', 'pres'
+// ]
 
 const link = 'https://tensy.org/load/users/0.png';
 
@@ -21,7 +21,7 @@ export default function Header(props) {
 	const {
 		system, online, profile,
 		changeTheme,
-		handlerLogIn,
+		handlerPopUp,
 	} = props
 	const { t } = useTranslation()
 
@@ -130,8 +130,8 @@ export default function Header(props) {
 								<div>
 									<button
 										type="button"
-										class="btn btn-success"
-										onClick={ ()=>{handlerLogIn(true)} }
+										className="btn btn-success"
+										onClick={ ()=>{handlerPopUp('auth')} }
 									>{ t('system.sign_in') }</button>
 								</div>
 							)}

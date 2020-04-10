@@ -47,9 +47,8 @@
 
 .popup .btn {
     color: #fff;
-    background-color: #3498db;
     padding: 10px 20px;
-    margin: 10px;
+    margin: 10px 0;
     cursor: pointer;
 	font-size: 18px;
     outline: 0px;
@@ -60,6 +59,7 @@
 	position: relative;
 	height: 42px;
 	line-height: 22px;
+	width: 100%;
 }
 
 .popup .btn:hover {
