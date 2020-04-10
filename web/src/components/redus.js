@@ -37,6 +37,17 @@ export const changeTheme = theme => ({
 	theme,
 });
 
+export const profileIn = (id, login, name) => ({
+	type: 'PROFILE_IN',
+	id,
+	login,
+	name,
+});
+
+export const peofileOut = () => ({
+	type: 'PROFILE_OUT',
+});
+
 // reducers.js
 export const posts = (state = [], action) => {
 	switch (action.type) {
@@ -95,8 +106,29 @@ export const system = (state = {theme: 'light', color: 'dark'}, action) => {
 	}
 };
 
+export const profile = (state = {id: 0, login: '', name: ''}, action) => {
+	switch (action.type) {
+		case 'PROFILE_IN':
+			return {
+				id: action.id,
+				login: action.login,
+				name: action.name,
+			};
+
+		case 'PROFILE_OUT':
+			return {
+				id: 0,
+				login: '',
+				name: '',
+			};
+
+		default:
+			return state;
+	}
+};
+
 export const reducers = combineReducers({
-	system, posts, online,
+	system, online, profile, posts,
 });
 
 // store.js

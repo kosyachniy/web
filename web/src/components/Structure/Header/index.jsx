@@ -10,6 +10,7 @@ import Header from './Header';
 const mapStateToProps = state => ({
 	system: state.system,
 	online: state.online,
+	profile: state.profile,
 });
 
 const mapDispatchToProps = {

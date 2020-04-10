@@ -69,8 +69,9 @@
 
 .online, .offline {
 	display: inline-block;
-	width: 0.7em;
-	height: 0.7em;
+	width: .7em;
+	height: .7em;
+	font-size: .9em;
 	margin: 0 12px 0 8px;
 }
 
