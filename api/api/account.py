@@ -391,10 +391,12 @@ def reg(this, **x):
 
 	res = {
 		'id': user_id,
+		'login': login,
+		'name': x['name'] if 'name' in x else '',
 		'avatar': get_preview(user_id, 'users'),
 		'admin': 3,
 		# 'rating': 0,
-		'login': login,
+		# 'balance': 0,
 	}
 
 	return res

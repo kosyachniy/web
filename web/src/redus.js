@@ -37,16 +37,32 @@ export const changeTheme = theme => ({
 	theme,
 });
 
-export const profileIn = (id, login, name) => ({
-	type: 'PROFILE_IN',
-	id,
-	login,
-	name,
-});
+export const profileIn = profile => {
+	const { id, login, name, avatar, admin } = profile
 
-export const peofileOut = () => ({
-	type: 'PROFILE_OUT',
-});
+	localStorage.setItem('id', id)
+	localStorage.setItem('login', login)
+	localStorage.setItem('name', name)
+	localStorage.setItem('avatar', avatar)
+	localStorage.setItem('admin', admin)
+
+	return {
+		type: 'PROFILE_IN',
+		id, login, name, avatar, admin,
+	}
+};
+
+export const peofileOut = () => {
+	localStorage.removeItem('id')
+	localStorage.removeItem('login')
+	localStorage.removeItem('name')
+	localStorage.removeItem('avatar')
+	localStorage.removeItem('admin')
+
+	return {
+		type: 'PROFILE_OUT',
+	}
+};
 
 // reducers.js
 export const posts = (state = [], action) => {
@@ -106,24 +122,34 @@ export const system = (state = {theme: 'light', color: 'dark'}, action) => {
 	}
 };
 
-export const profile = (state = {id: 0, login: '', name: ''}, action) => {
+export const profile = (state = {id: 0, login: null, name: null, avatar: null, admin: 2}, action) => {
 	switch (action.type) {
 		case 'PROFILE_IN':
 			return {
 				id: action.id,
 				login: action.login,
 				name: action.name,
+				avatar: action.avatar,
+				admin: action.admin,
 			};
 
 		case 'PROFILE_OUT':
 			return {
 				id: 0,
-				login: '',
-				name: '',
+				login: null,
+				name: null,
+				avatar: null,
+				admin: 2,
 			};
 
 		default:
-			return state;
+			return {
+				id: state.id || localStorage.getItem('id'),
+				login: state.login || localStorage.getItem('login'),
+				name: state.name || localStorage.getItem('name'),
+				avatar: state.avatar || localStorage.getItem('avatar'),
+				admin: state.admin || localStorage.getItem('admin'),
+			};
 	}
 };
 
