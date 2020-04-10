@@ -69,9 +69,12 @@ export default function Header(props) {
 					</ul>
 					<ul className="navbar-nav mr-auto mt-2 mt-lg-0">
 						<li className="nav-item">
-							<form action="/search/" method="post" className="form-inline my-2 my-lg-0">
-								<input name="search" className="form-control mr-sm-2" type="search" placeholder={ t('system.search') } />
-							</form>
+							<input
+								id="search"
+								className="form-control"
+								type="search"
+								placeholder={ t('system.search') }
+							/>
 						</li>
 					</ul>
 					<ul className="nav navbar-nav navbar-right">
@@ -93,22 +96,22 @@ export default function Header(props) {
 						</li>
 						<li className="nav-item">
 							{system.theme === 'dark' ? (
-								<div className="badge" onClick={() => {changeTheme('light')}}>
+								<div id="theme" className="badge" onClick={() => {changeTheme('light')}}>
 									<i className="fas fa-sun" />
 								</div>
 							) : (
-								<div className="badge" onClick={() => {changeTheme('dark')}}>
+								<div id="theme" className="badge" onClick={() => {changeTheme('dark')}}>
 									<i className="fas fa-moon" />
 								</div>
 							)}
 						</li>
 						<li className="nav-item">
 							{localStorage.getItem('lang') === 'ru' ? (
-								<div className="badge" onClick={ () => {props.handlerLang('en')} }>
+								<div id="lang" className="badge" onClick={ () => {props.handlerLang('en')} }>
 									<img src="/lang/en.svg" alt="en" />
 								</div>
 							) : (
-								<div className="badge" onClick={ () => {props.handlerLang('ru')} }>
+								<div id="lang" className="badge" onClick={ () => {props.handlerLang('ru')} }>
 									<img src="/lang/ru.svg" alt="ru" />
 								</div>
 							)}

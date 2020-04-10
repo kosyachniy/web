@@ -6,7 +6,7 @@
 		"@ckeditor/ckeditor5-react": "^1.1.1",
 		"@kosyachniy/ckeditor": "^1.0.1",
 		"axios": "^0.18.0",
-		"bootstrap": "^4.3.1",
+		"bootstrap": "^4.4.1",
 		"i18next": "^17.2.0",
 		"i18next-xhr-backend": "^3.1.2",
 		"react": "^16.8.4",

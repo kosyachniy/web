@@ -66,6 +66,10 @@
 
 .dropdown:hover .dropdown-content {display: block;}
 
+#theme, #lang {
+	background-color: unset;
+}
+
 /* Online indicator */
 
 .online, .offline {
@@ -131,6 +135,12 @@
     right: 0;
     bottom: 0;
     z-index: 0;
+}
+
+/* Search */
+
+#search {
+	background-color: inherit;
 }
 
 /*  */

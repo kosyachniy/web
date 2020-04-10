@@ -3,7 +3,7 @@
     <style>
       .cls-1 {
         font-size: 250px;
-        fill: #fff;
+        fill: #f8f9fa;
         font-family: "Avenir Next";
         font-weight: 700;
       }

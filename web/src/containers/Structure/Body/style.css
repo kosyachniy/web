@@ -26,10 +26,6 @@ a {
 	margin: 25px 0 15px 0;
 }
 
-.album div {
-	cursor: pointer;
-}
-
 @media (min-width: 576px) {
 	.jumbotron {
 		padding: 2rem;

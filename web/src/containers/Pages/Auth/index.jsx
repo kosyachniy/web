@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
 import './style.css';
 import Popup from '../../../components/Popup';
@@ -7,19 +7,19 @@ import Popup from '../../../components/Popup';
 
 const Auth = (props) => {
 	const { handlerPopUp } = props;
-	const { t } = useTranslation();
+	// const { t } = useTranslation();
 
 	return (
 		<div id="auth">
 			<Popup handlerPopUp={handlerPopUp} >
 				<a
-					href={``}
+					href={`/#vk`}
 					className="btn btn_vk"
 				>
 					<img src="/social/vk.png" alt="VK" />
 				</a>
 				<a
-					href={``}
+					href={`/#google`}
 					className="btn btn_google"
 				>
 					<img src="/social/google.png" alt="Google" />
