@@ -30,10 +30,8 @@ const Auth = (props) => {
 			console.log(res)
 		}
 
-		const data = {mail: state.mail, password: state.password}
-		// const data = {login: state.mail, password: state.password}
-		api('account.reg', data, handlerSuccess, handlerError)
-		// api('account.auth', data, handlerSuccess, handlerError)
+		const data = {login: state.mail, password: state.password}
+		api('account.auth', data, handlerSuccess, handlerError)
 	}
 
 	return (
