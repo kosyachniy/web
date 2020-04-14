@@ -22,16 +22,15 @@ const Loader = (props) => {
 				fadeTarget.style.opacity -= 0.05;
 			} else {
 				clearInterval(fadeEffect);
+				fadeTarget.remove();
 			}
-		}, 0.06);
+		}, 20);
 	}
 
-	// componentDidMount() {
-		if (loaded && state.displayed) {
-			setState({ displayed: false })
-			fadeOut();
-		}
-	// }
+	if (loaded && state.displayed) {
+		setState({ displayed: false })
+		fadeOut();
+	}
 
 	return (
 		<div id="loader" className={`bg-${theme}`}>
