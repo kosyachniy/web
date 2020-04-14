@@ -7,6 +7,7 @@ import './style.css'
 
 import Posts from '../../Pages/Posts'
 import Post from '../../Pages/Post'
+import Loader from '../../../components/Loader'
 
 
 export default class App extends React.Component {
@@ -35,31 +36,34 @@ export default class App extends React.Component {
 	}
 
 	render() {
-		if (!this.props.online.count) {
-			return (
-				<>
-					Loading..
-				</>
-			)
+		if (this.props.online.count && !this.props.system.loaded) {
+			this.props.systemLoaded();
 		}
 
 		return (
-			<div className={`bg-${this.props.system.theme}`}>
-				<div className="container" id="main">
-					<Switch>
-						<Route exact path="/">
-							<Posts />
-						</Route>
+			<>
+				<Loader
+					loaded={this.props.system.loaded}
+					theme={this.props.system.theme}
+					color={this.props.system.color}
+				/>
+				<div className={`bg-${this.props.system.theme}`}>
+					<div className="container" id="main">
+						<Switch>
+							<Route exact path="/">
+								<Posts />
+							</Route>
 
-						<Route path="/posts">
-							<Posts />
-						</Route>
-						<Route path="/post">
-							<Post />
-						</Route>
-					</Switch>
+							<Route path="/posts">
+								<Posts />
+							</Route>
+							<Route path="/post">
+								<Post />
+							</Route>
+						</Switch>
+					</div>
 				</div>
-			</div>
+			</>
 		)
 	}
 }

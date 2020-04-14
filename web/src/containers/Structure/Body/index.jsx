@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import {
 	onlineAdd, onlineDelete, onlineReset,
+	systemLoaded,
 } from '../../../redus';
 
 import Body from './Body';
@@ -14,6 +15,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	onlineAdd, onlineDelete, onlineReset,
+	systemLoaded,
 };
 
 const BodyContainer = connect(

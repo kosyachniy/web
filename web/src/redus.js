@@ -84,6 +84,10 @@ export const peofileOut = () => {
 	}
 };
 
+export const systemLoaded = () => ({
+	type: 'SYSTEM_LOADED',
+});
+
 // reducers.js
 export const posts = (state = [], action) => {
 	switch (action.type) {
@@ -130,6 +134,7 @@ export const online = (state = {count: null, users: []}, action) => {
 };
 
 export const system = (state = {
+	loaded: false,
 	lang: localStorage.getItem('lang'),
 	theme: localStorage.getItem('theme'),
 	color: localStorage.getItem('color'),
@@ -148,8 +153,15 @@ export const system = (state = {
 				lang: action.lang,
 			};
 
+		case 'SYSTEM_LOADED':
+			return {
+				...state,
+				loaded: true,
+			};
+
 		default:
 			return {
+				loaded: state.loaded,
 				lang: state.lang || 'ru',
 				theme: state.theme || 'light',
 				color: state.color || 'dark',
