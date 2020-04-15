@@ -18,6 +18,7 @@ RUN pip install -r requirements.txt
 
 # # Set port
 # EXPOSE 5000
+# EXPOSE 27017 27018 27019
 
 # Copy project
 COPY /api .

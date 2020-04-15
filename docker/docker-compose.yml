@@ -1,0 +1,42 @@
+version: "3"
+services:
+  api:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    container_name: "api"
+    # restart: unless-stopped
+    # networks:
+    #   - queue_net
+    #   - front_net
+    ports:
+      - "3000:5000"
+
+  db:
+    image: "mongo:4.0.4"
+    container_name: "mongodb"
+    ports:
+      - "27020-27022:27017-27019"
+    # networks:
+    #   - queue_net
+
+  # front:
+  #   build:
+  #     dockerfile: ../docker/front/Dockerfile
+  #     context: ../frontend
+  #   depends_on:
+  #     - api
+  #   ports:
+  #     - "4200:4200"
+  #   networks:
+  #     - front_net
+  #   volumes:
+  #     - ../frontend:/app
+
+
+
+# networks:
+#   queue_net:
+#     driver: bridge
+#   front_net:
+#     driver: bridge
