@@ -2,7 +2,7 @@
 FROM python:3.8.1-slim-buster
 
 # Set work directory
-WORKDIR /api
+WORKDIR .
 
 # # Set environment variables
 # ENV PYTHONDONTWRITEBYTECODE 1
@@ -18,11 +18,10 @@ RUN pip install -r requirements.txt
 
 # # Set port
 # EXPOSE 5000
-# EXPOSE 27017 27018 27019
 
 # Copy project
-COPY /api .
+COPY . .
 
 # Run
-# ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
-ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
+ENTRYPOINT ["bash", "entrypoint.sh"]
+# ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
