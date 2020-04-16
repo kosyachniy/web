@@ -936,6 +936,16 @@ def edit(this, **x):
 		except:
 			raise ErrorUpload('avatar')
 
+	# Response
+
+	avatar = get_preview(this.user['id'], 'users')
+
+	res = {
+		'avatar': avatar,
+	}
+
+	return res
+
 # # Recover password
 
 # def recover(this, **x):

@@ -3,8 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import api from '../../../func/api'
-
-// import './style.css';
+import Avatar from '../../../components/Avatar'
 
 
 const checkPassword = password => {
@@ -21,6 +20,8 @@ const Profile = (props) => {
 		surname: profile.surname,
 		mail: profile.mail,
 		password: '',
+		avatar: profile.avatar,
+		file: null,
 	})
 
 	const accountEdit = () => {
@@ -31,7 +32,7 @@ const Profile = (props) => {
 				surname: state.surname,
 				mail: state.mail,
 				password: state.password,
-				// avatar: res.avatar,
+				avatar: res.avatar,
 			})
 		}
 
@@ -46,10 +47,17 @@ const Profile = (props) => {
 			data['password'] = state.password
 		}
 
+		if (state.avatar !== profile.avatar) {
+			data['avatar'] = state.avatar
+			data['file'] = state.file
+		}
+
 		api('account.edit', data, handlerSuccess)
 	}
 
-	console.log(profile)
+	const updateAvatar = (avatar, file) => {
+		setState({ ...state, avatar, file })
+	}
 
 	if (profile.id === 0) {
 		return (<Redirect to="/" />)
@@ -58,6 +66,7 @@ const Profile = (props) => {
 	return (
 		<div className="album py-5">
 			<div className="container">
+				<Avatar avatar={state.avatar} file={state.file} updateAvatar={updateAvatar} />
 				<form>
 					<div className="input-group mb-3">
 						<input
