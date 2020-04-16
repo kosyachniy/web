@@ -2,21 +2,21 @@ version: "3"
 services:
   db:
     image: "mongo:4.0.4"
-    container_name: "mongodb"
+    container_name: "db"
     ports:
       - "27017:27017"
 
   api:
     build:
-      dockerfile: ./Dockerfile
-      context: ./
+      dockerfile: ../docker/api/Dockerfile
+      context: ../api
     depends_on:
       - db
     container_name: "api"
     # restart: unless-stopped
     network_mode: host
     volumes:
-      - "/root/web/load:/load"
+      - "../load:/load"
     # ports:
     #   - "5000:5000"
 

@@ -13,7 +13,7 @@ WORKDIR .
 # RUN pip install --upgrade pip
 
 # Install dependencies
-COPY /api/requirements.txt .
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # # Set port
@@ -23,5 +23,5 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Run
-ENTRYPOINT ["bash", "entrypoint.sh"]
-# ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
+# ENTRYPOINT ["bash", "entrypoint.sh"]
+ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
