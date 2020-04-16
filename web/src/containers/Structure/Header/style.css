@@ -143,4 +143,15 @@
 	background-color: inherit;
 }
 
-/*  */
+/* Avatar */
+
+#avatar {
+	cursor: pointer;
+}
+
+/* Menu */
+
+#menu, #menu .dropdown-item {
+	background-color: inherit;
+	color: inherit;
+}
