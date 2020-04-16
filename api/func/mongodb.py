@@ -1,8 +1,11 @@
+import json
+
 from pymongo import MongoClient
 
 
 try:
-	from keys import DB
+	with open('keys.json', 'r') as file:
+		DB = json.loads(file.read())['mongodb']
 
 except:
 	db = MongoClient()['uple']

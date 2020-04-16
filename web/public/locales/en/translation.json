@@ -12,7 +12,12 @@
 		"search": "Search",
 		"online": "Online",
 		"offline": "Offline",
-		"save": "Save"
+		"save": "Save",
+		"upload": "Upload",
+		"profile": "Profile",
+		"settings": "Settings",
+		"admin": "Admin panel",
+		"analytics": "Analytics"
 	},
 	"brand": {
 		"description": "Template web app",

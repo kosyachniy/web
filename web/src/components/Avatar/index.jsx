@@ -1,9 +1,10 @@
 import React from 'react'
+import { withTranslation } from 'react-i18next'
 
 import './style.css'
 
 
-export default class Avatar extends React.Component {
+class Avatar extends React.Component {
 	state = {
 		img: null, // this.props.avatar,
 	}
@@ -24,13 +25,15 @@ export default class Avatar extends React.Component {
 	}
 
 	render() {
+		const { t } = this.props
+
 		return (
 			<div id="avatar-preview">
 				<label htmlFor="avatar-loader">
 					{ this.state.img ? (
 						<img src={ this.state.img } alt={ 'аватарка' } />
 					) : (
-						<div>Загрузите фото</div>
+						<div>{t('system.upload')}</div>
 					) }
 
 					<input
@@ -44,3 +47,5 @@ export default class Avatar extends React.Component {
 		)
 	}
 }
+
+export default withTranslation()(Avatar);

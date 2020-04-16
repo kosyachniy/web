@@ -70,7 +70,7 @@ export const profileIn = profile => {
 
 	return {
 		type: 'PROFILE_IN',
-		id, login, name, avatar, admin,
+		id, login, name, surname, mail, avatar, admin,
 	}
 };
 

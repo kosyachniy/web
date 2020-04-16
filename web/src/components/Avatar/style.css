@@ -20,8 +20,9 @@
 	height: 100%;
 	text-align: center;
 	font-size: 1.2rem;
+	line-height: 1.2rem;
 	vertical-align: middle;
-	padding-top: calc(50% - 20px);
+	padding-top: calc(50% - 0.6rem);
 	background: none !important;
 }
 

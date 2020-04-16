@@ -1,5 +1,4 @@
 import React from 'react';
-// import { useTranslation } from 'react-i18next';
 
 import './style.css';
 import Popup from '../../../components/Popup';
@@ -7,7 +6,6 @@ import Popup from '../../../components/Popup';
 
 const Auth = (props) => {
 	const { handlerPopUp } = props;
-	// const { t } = useTranslation();
 
 	return (
 		<div id="auth">

@@ -19,7 +19,7 @@ Android | Front-end | React Native | JavaScript | planned
 cd api/
 ```
 
-2. Customize files ``` sets.py ``` & ``` keys.py ```
+2. Customize files ``` sets.py ``` & ``` keys.json ```
 
 3. Virtual environment
 ```

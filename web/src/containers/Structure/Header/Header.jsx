@@ -129,9 +129,11 @@ export default function Header(props) {
 										</svg>
 									</div>
 									<div className="dropdown-menu dropdown-menu-right" id="menu">
-										<Link className="dropdown-item" to="/profile/">Профиль</Link>
-										<Link className="dropdown-item" to="/settings/">Настройки</Link>
-										<div className="dropdown-item" onClick={ profileOut }>Выйти</div>
+										<Link className="dropdown-item" to="/profile/">{t('system.profile')}</Link>
+										<Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link>
+										<Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link>
+										<Link className="dropdown-item" to="/admin/">{t('system.admin')}</Link>
+										<div className="dropdown-item" onClick={ profileOut }>{t('system.sign_out')}</div>
 									</div>
 								</>
 							) : (
