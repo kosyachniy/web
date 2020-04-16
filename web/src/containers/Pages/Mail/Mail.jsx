@@ -71,7 +71,7 @@ const Auth = (props) => {
 					</span>
 				</div>
 				<input
-					type="submit"
+					type="button"
 					className="btn btn-success"
 					value={t('system.sign_in')}
 					onClick={signIn}

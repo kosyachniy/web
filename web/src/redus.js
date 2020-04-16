@@ -74,7 +74,7 @@ export const profileIn = profile => {
 	}
 };
 
-export const peofileOut = () => {
+export const profileOut = () => {
 	localStorage.removeItem('id')
 	localStorage.removeItem('login')
 	localStorage.removeItem('name')
@@ -229,13 +229,13 @@ export const profile = (state = {
 
 		default:
 			return {
-				id: state.id || localStorage.getItem('id'),
+				id: state.id || localStorage.getItem('id') || 0,
 				login: state.login || localStorage.getItem('login'),
 				name: state.name || localStorage.getItem('name'),
 				surname: state.surname || localStorage.getItem('surname'),
 				mail: state.mail || localStorage.getItem('mail'),
 				avatar: state.avatar || localStorage.getItem('avatar'),
-				admin: state.admin || localStorage.getItem('admin'),
+				admin: state.admin || localStorage.getItem('admin') || 2,
 			};
 	}
 };

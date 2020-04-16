@@ -18,7 +18,7 @@ import { name } from '../../../sets'
 export default function Header(props) {
 	const {
 		system, online, profile,
-		changeTheme, changeLang,
+		changeTheme, changeLang, profileOut,
 		handlerPopUp,
 	} = props
 	const { t } = useTranslation()
@@ -131,7 +131,7 @@ export default function Header(props) {
 									<div className="dropdown-menu dropdown-menu-right" id="menu">
 										<Link className="dropdown-item" to="/profile/">Профиль</Link>
 										<Link className="dropdown-item" to="/settings/">Настройки</Link>
-										<Link className="dropdown-item">Выйти</Link>
+										<div className="dropdown-item" onClick={ profileOut }>Выйти</div>
 									</div>
 								</>
 							) : (

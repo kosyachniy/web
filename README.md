@@ -10,7 +10,7 @@ Android | Front-end | React Native | JavaScript | planned
 ### Stack
 <img src="re/img/flask.png" alt="Flask" height="100" /> &nbsp; <img src="re/img/mongodb.png" alt="MongoDB" height="100" />
 
-<img src="re/img/reactjs.png" alt="ReactJS" height="100" /> &nbsp; <img src="re/img/bootstrap.png" alt="Bootstrap 4" height="100" /> &nbsp; <img src="re/img/ckeditor.png" alt="CKEditor 5" height="100" />
+<img src="re/img/reactjs.png" alt="ReactJS" height="100" /> &nbsp; <img src="re/img/bootstrap.png" alt="Bootstrap 4" height="100" /> &nbsp; <img src="re/img/ckeditor.png" alt="CKEditor 5" height="100" /> &nbsp; <img src="re/img/docker.png" alt="Docker" height="100" />
 
 ## Install
 ### Back-end

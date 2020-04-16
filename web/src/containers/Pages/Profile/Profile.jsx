@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import api from '../../../func/api'
@@ -48,11 +49,17 @@ const Profile = (props) => {
 		api('account.edit', data, handlerSuccess)
 	}
 
+	console.log(profile)
+
+	if (profile.id === 0) {
+		return (<Redirect to="/" />)
+	}
+
 	return (
 		<div className="album py-5">
 			<div className="container">
 				<form>
-					<div class="input-group  mb-3">
+					<div className="input-group mb-3">
 						<input
 							value={state.name}
 							onChange={(event) => { setState({ ...state, name: event.target.value }) }}
@@ -91,22 +98,22 @@ const Profile = (props) => {
 							placeholder={t('profile.mail')}
 							type="email"
 							className="form-control"
-							autocomplete="false"
+							autoComplete="false"
 						/>
 					</div>
-					<div class="form-group">
+					<div className="form-group">
 						<input
 							value={state.password}
 							onChange={(event) => { setState({ ...state, password: event.target.value }) }}
 							placeholder={t('profile.password')}
 							type="password"
-							class="form-control"
-							autocomplete="false"
+							className="form-control"
+							autoComplete="false"
 						/>
 					</div>
 					<input
 						type="button"
-						class="btn btn-success"
+						className="btn btn-success"
 						value={t('system.save')}
 						onClick={accountEdit}
 					/>
