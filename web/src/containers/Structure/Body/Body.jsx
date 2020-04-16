@@ -8,6 +8,7 @@ import './style.css'
 import Posts from '../../Pages/Posts'
 import Post from '../../Pages/Post'
 import Loader from '../../../components/Loader'
+import Profile from '../../Pages/Profile'
 
 
 export default class App extends React.Component {
@@ -59,6 +60,10 @@ export default class App extends React.Component {
 							</Route>
 							<Route path="/post">
 								<Post />
+							</Route>
+
+							<Route path="/profile">
+								<Profile />
 							</Route>
 						</Switch>
 					</div>

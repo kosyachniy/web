@@ -255,6 +255,8 @@ def reg(this, **x):
 		'id': user_id,
 		'login': login,
 		'name': x['name'] if 'name' in x else '',
+		'surname': x['surname'] if 'surname' in x else '',
+		'mail': x['mail'] if 'mail' in x else '',
 		'avatar': get_preview(user_id, 'users'),
 		'admin': 3,
 		# 'rating': 0,
@@ -264,6 +266,16 @@ def reg(this, **x):
 	return res
 
 # Social network
+
+def social(this, **x):
+	# Checking parameters
+
+	check_params(x, (
+		('id', True, int), # 1-ВКонтакте, 2-Telegram, 3-Google, 4-FaceBook, 5-Apple, 6-Twitter, 7-GitHub
+		('code', True, str),
+	))
+
+	#
 
 	user_id = 0
 	new = False
@@ -325,8 +337,7 @@ def reg(this, **x):
 		'login': True,
 		'name': True,
 		'surname': True,
-		'teach': True,
-		'busy': True,
+		'mail': True,
 		'avatar': True,
 	}
 
@@ -455,6 +466,7 @@ def reg(this, **x):
 				'login': True,
 				'name': True,
 				'surname': True,
+				'mail': True,
 			}
 
 			res = db['users'].find_one({'id': res['id']}, db_filter)
@@ -478,12 +490,14 @@ def reg(this, **x):
 
 	res = {
 		'id': res['id'],
+		'login': res['login'],
+		'name': res['name'],
+		'surname': res['surname'],
+		'mail': res['mail'],
 		'admin': res['admin'],
 		'balance': res['balance'],
 		'rating': res['rating'],
-		'login': res['login'],
 		'avatar': get_preview(res['id'], 'users'),
-		'teach': res['teach'],
 		'new': new,
 	}
 
@@ -683,6 +697,8 @@ def phone_check(this, **x):
 		'id': user['id'],
 		'login': user['login'],
 		'name': user['name'],
+		'surname': user['surname'],
+		'mail': user['mail'],
 		'avatar': get_preview(user['id'], 'users'),
 		'admin': user['admin'],
 		# 'balance': user['balance'],
@@ -755,7 +771,8 @@ def auth(this, **x):
 		'rating': True,
 		'login': True,
 		'name': True,
-		# 'surname': True,
+		'surname': True,
+		'mail': True,
 		# 'avatar': True,
 	}
 
@@ -795,6 +812,8 @@ def auth(this, **x):
 		'id': res['id'],
 		'login': res['login'],
 		'name': res['name'],
+		'surname': res['surname'],
+		'mail': res['mail'],
 		'avatar': get_preview(res['id'], 'users'),
 		'admin': res['admin'],
 		# 'balance': res['balance'],
@@ -857,6 +876,7 @@ def edit(this, **x):
 		('login', False, str),
 		('description', False, str),
 		('mail', False, str),
+		('password', False, str),
 		('avatar', False, str),
 		('file', False, str),
 		('social', False, list, dict),
@@ -889,11 +909,11 @@ def edit(this, **x):
 		check_mail(x['mail'], this.user)
 
 	# Password
-	if 'password' in x:
-		x['password'] = process_password(x['password'])
+	if 'password' in x and len(x['password']):
+		this.user['password'] = process_password(x['password'])
 
 	# Change fields
-	for i in ('description', 'mail', 'password', 'social'):
+	for i in ('description', 'mail', 'social'):
 		if i in x:
 			this.user[i] = x[i]
 

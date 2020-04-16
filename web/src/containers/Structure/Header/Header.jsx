@@ -129,9 +129,9 @@ export default function Header(props) {
 										</svg>
 									</div>
 									<div className="dropdown-menu dropdown-menu-right" id="menu">
-										<Link className="dropdown-item" tp="#">Профиль</Link>
-										<Link className="dropdown-item" href="#">Настройки</Link>
-										<Link className="dropdown-item" href="#">Выйти</Link>
+										<Link className="dropdown-item" to="/profile/">Профиль</Link>
+										<Link className="dropdown-item" to="/settings/">Настройки</Link>
+										<Link className="dropdown-item">Выйти</Link>
 									</div>
 								</>
 							) : (

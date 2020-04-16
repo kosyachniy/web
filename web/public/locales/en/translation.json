@@ -11,7 +11,8 @@
 		"sign_up": "Sign Up",
 		"search": "Search",
 		"online": "Online",
-		"offline": "Offline"
+		"offline": "Offline",
+		"save": "Save"
 	},
 	"brand": {
 		"description": "Template web app",
@@ -53,6 +54,9 @@
 		"in": "LinkedIn"
 	},
 	"profile": {
+		"login": "Login",
+		"name": "Name",
+		"surname": "Surname",
 		"mail": "E-mail",
 		"password": "Password",
         "passwordTip1": "length should be 6 or more",
