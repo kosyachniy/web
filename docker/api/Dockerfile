@@ -23,5 +23,5 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Run
-# ENTRYPOINT ["bash", "entrypoint.sh"]
-ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
+ENTRYPOINT ["bash", "run.sh"]
+# ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]

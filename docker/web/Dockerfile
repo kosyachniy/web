@@ -22,4 +22,5 @@ RUN npm run build
 
 # Run
 RUN npm install -g serve
-CMD serve -s build -p 3000
+# CMD serve -s build -p 3000
+ENTRYPOINT ["bash", "run.sh"]
