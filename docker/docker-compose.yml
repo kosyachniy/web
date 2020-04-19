@@ -3,8 +3,6 @@ services:
   db:
     image: "mongo:4.0.4"
     container_name: "db"
-    depends_on:
-      - web
     ports:
       - "27017:27017"
 
@@ -27,9 +25,7 @@ services:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
     container_name: "web"
-    # depends_on:
-    #   - api
+    depends_on:
+      - api
     ports:
       - "3000:3000"
-    # volumes:
-    #   - ../frontend:/app
