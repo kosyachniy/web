@@ -84,7 +84,7 @@ def edit(this, **x):
 	### Cover from the first image
 	# try:
 	# 	img = re.search('<img src="[^"]*">', post['cont'])[0].split('"')[1].split('/')[2]
-	# 	shutil.copyfile('../load/{}'.format(img), '../load/posts/{}.{}'.format(post['id'], img.split('.')[-1]))
+	# 	shutil.copyfile('../data/load/{}'.format(img), '../data/load/posts/{}.{}'.format(post['id'], img.split('.')[-1]))
 	# except:
 	# 	pass
 

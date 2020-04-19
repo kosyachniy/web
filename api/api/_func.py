@@ -18,7 +18,7 @@ WIDTH_OPTIMIZED = 700
 # Check existence the file by name
 
 def get_file(url, num):
-	for i in os.listdir('../load/{}/'.format(url)):
+	for i in os.listdir('../data/load/{}/'.format(url)):
 		if re.search(r'^' + str(num) + '\.', i):
 			return i
 
@@ -51,8 +51,8 @@ def max_image(url):
 # Upload image
 
 def load_image(url, data, adr=None, format='jpg', type='base64'):
-	url_opt = '../load/opt/' + url
-	url = '../load/' + url
+	url_opt = '../data/load/opt/' + url
+	url = '../data/load/' + url
 
 	if type == 'base64':
 		data = base64.b64decode(data)

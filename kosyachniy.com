@@ -17,7 +17,7 @@ server {
     }
 
     location /load/ {
-        alias /root/web/load/;
+        alias /root/web/data/load/;
     }
 
     location /socket.io/ {

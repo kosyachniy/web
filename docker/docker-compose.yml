@@ -5,7 +5,8 @@ services:
     container_name: "db"
     ports:
       - "27017:27017"
-
+    volumes:
+      - "../data/db:/data/db"
   api:
     build:
       dockerfile: ../docker/api/Dockerfile
@@ -16,7 +17,7 @@ services:
     # restart: unless-stopped
     network_mode: host
     volumes:
-      - "../load:/load"
+      - "../data/load:/data/load"
     # ports:
     #   - "5000:5000"
 
