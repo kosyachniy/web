@@ -1,6 +1,6 @@
 # Full stack application
 ## Description
-Essence | Side | Stack | Language | Path
+Form | Side | Stack | Language | Path
 ---|---|---|---|---
 API | Back-end | Flask | Python | ``` api/ ```
 Web app | Front-end | React | JavaScript | ``` web/ ```
@@ -16,6 +16,15 @@ Android | Front-end | React Native | JavaScript | planned
 
 #### Front-end
 <img src="re/img/reactjs.png" alt="ReactJS" height="100" /> &nbsp; <img src="re/img/redux.png" alt="Redux" height="100" /> &nbsp; <img src="re/img/bootstrap.png" alt="Bootstrap 4" height="100" /> &nbsp; <img src="re/img/ckeditor.png" alt="CKEditor 5" height="100" />
+
+## Install & Use with Docker
+1. Customize files ``` sets.py ``` & ``` keys.json ``` & ``` src/sets.js ``` & ``` src/keys.js ```
+
+2. Run Docker Compose
+```
+cd docker/
+docker-compose up --build
+```
 
 ## Install
 ### Back-end
@@ -54,7 +63,7 @@ npm run build
 ## Usage
 ### Back-end
 ```
-env/bin/gunicorn app:app -c run.py
+env/bin/gunicorn app:app -k eventlet -w 1 -b :5000 --reload
 ```
 
 ### Front-end
