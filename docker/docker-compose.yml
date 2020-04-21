@@ -7,6 +7,7 @@ services:
       - "27017:27017"
     volumes:
       - "../data/db:/data/db"
+
   api:
     build:
       dockerfile: ../docker/api/Dockerfile
@@ -30,22 +31,11 @@ services:
       - server
     volumes:
       - "../web/build:/web/build"
-    ports:
-      - "3000:3000"
-
-  # server:
-  #   build:
-  #     dockerfile: ./docker/server/Dockerfile
-  #     context: ../
-  #   container_name: "server"
-  #   depends_on:
-  #     - api
-  #   network_mode: host
+    # ports:
+    #   - "3000:3000"
 
   server:
-    build:
-      dockerfile: ./docker/server/Dockerfile
-      context: ../
+    image: "nginx"
     container_name: "server"
     volumes:
       - "../nginx.conf:/etc/nginx/nginx.conf"
@@ -54,7 +44,5 @@ services:
     depends_on:
       - api
     ports:
-      - '80:8080'
-      - '443:8443'
-    # network_mode: host
-    # command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+      - '80:80'
+      - '443:443'
