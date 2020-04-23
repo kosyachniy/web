@@ -98,55 +98,10 @@
     background: #ff4136;
 }
 
-/* Avatar */
-
-.hexagon {
-    position: relative;
-    z-index: 1;
-    width: 3.5rem;
-	height: 3.5rem;
-	margin: 0;
-}
-
-.hexagon rect {
-    width: 2px;
-    height: 2px;
-    fill: #96afc8;
-}
-
-.hexagon .number {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    transform: translate(-50%, -50%);
-}
-
-.navbar .hexagon::before {
-    content: '';
-    width: 5px;
-    height: 100%;
-    margin: auto;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-}
-
 /* Search */
 
 #search {
 	background-color: inherit;
-}
-
-/* Avatar */
-
-#avatar {
-	cursor: pointer;
 }
 
 /* Menu */

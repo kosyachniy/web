@@ -1,0 +1,5 @@
+#online .user div:last-child {
+	margin: 0 20px 0 15px;
+	/* width: calc(100% - 71px); */
+	display: inline-block;
+}

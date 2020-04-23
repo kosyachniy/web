@@ -411,5 +411,6 @@ def online_emit_add(sio, user):
 			'login': user['login'],
 			'name': user['name'],
 			'surname': user['surname'],
-		}] if user else [], # ! Только админам полная инфа
+			'avatar': get_preview(user['id'], 'users'),
+		}] if user else [], # ! Full info for all / Full info only for admins
 	}, namespace='/main')

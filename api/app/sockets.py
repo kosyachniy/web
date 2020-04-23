@@ -83,16 +83,16 @@ def online(x):
 	count = len(set([i['id'] for i in users_all]))
 
 	users_uniq = dict()
-	if user_current and user_current['admin'] > 3:
-		for i in users_auth:
-			if i['id'] not in users_uniq:
-				users_uniq[i['id']] = {
-					'id': i['id'],
-					'login': i['login'],
-					'name': i['name'],
-					'surname': i['surname'],
-					'avatar': get_preview(i['id'], 'users'),
-				}
+	# if user_current and user_current['admin'] > 3: # Full info only for admins
+	for i in users_auth:
+		if i['id'] not in users_uniq:
+			users_uniq[i['id']] = {
+				'id': i['id'],
+				'login': i['login'],
+				'name': i['name'],
+				'surname': i['surname'],
+				'avatar': get_preview(i['id'], 'users'),
+			}
 
 	if count:
 		sio.emit('online_add', {

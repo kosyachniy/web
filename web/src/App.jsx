@@ -10,6 +10,7 @@ import Body from './containers/Structure/Body'
 import Footer from './containers/Structure/Footer'
 import Auth from './containers/Pages/Auth'
 import Mail from './containers/Pages/Mail'
+import Online from './containers/Pages/Online'
 
 
 function genereteToken() {
@@ -55,6 +56,9 @@ export default class App extends React.Component {
 							) }
 							{ showPopUp === 'mail' && (
 								<Mail handlerPopUp={ this.handlerPopUp } />
+							) }
+							{ showPopUp === 'online' && (
+								<Online handlerPopUp={ this.handlerPopUp } />
 							) }
 						</>
 					) }
