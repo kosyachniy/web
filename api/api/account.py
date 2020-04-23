@@ -1,14 +1,27 @@
 import string
 import random
 import hashlib
-import time
 import re
+import requests
+import urllib
+import json
+import base64
 
+from sets import CLIENT
 from func.mongodb import db
 from func.smsc import SMSC
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
-					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount
-from api._func import check_params, get_preview, load_image, get_date, next_id
+					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount, \
+					   ErrorRepeat
+from api._func import check_params, get_preview, load_image, get_date, \
+					  next_id, online_emit_add, other_sessions, \
+					  online_user_update, online_emit_del
+
+
+with open('keys.json', 'r') as file:
+	keys = json.loads(file.read())
+	VK = keys['vk']
+	GOOGLE = keys['google']
 
 
 # # Token generation
@@ -19,7 +32,7 @@ from api._func import check_params, get_preview, load_image, get_date, next_id
 # Check name
 
 def check_name(cont):
-	# Недопустимое имя
+	# Invalid name
 
 	if not cont.isalpha():
 		raise ErrorInvalid('name')
@@ -27,7 +40,7 @@ def check_name(cont):
 # Check surname
 
 def check_surname(cont):
-	# Недопустимая фамилия
+	# Invalid surname
 
 	if not cont.isalpha():
 		raise ErrorInvalid('surname')
@@ -67,8 +80,10 @@ def check_login(cont, user):
 	# System reserved
 
 	RESERVED = (
-		'admin', 'administrator', 'test', 'tester', 'author', 'bot', 'robot',
-		'root'
+		'admin', 'administrator', 'author', 'test', 'tester', 'bot', 'robot',
+		'root', 'info', 'support', 'manager', 'client', 'dev', 'account',
+		'user', 'users', 'profile', 'login', 'password', 'code', 'mail',
+		'phone', 'google', 'facebook', 'administration',
 	)
 
 	cond_id = cont[:2] == 'id'
@@ -188,6 +203,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 		'surname': surname,
 		'description': description,
 		# 'rating': 0,
+		# 'balance': 0,
 		'admin': 3,
 		'online': [],
 		'social': social,
@@ -201,13 +217,42 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 	db['users'].insert_one(req)
 
-	#
+	# Response
 
 	return req
+
+# Update online users
+
+def online_update(sio, user, token):
+	# Online users
+	## Already online
+
+	if other_sessions(user['id']):
+		return
+
+	## Update DB
+
+	for i in db['online'].find({'token': token}):
+		i['id'] = user['id']
+		i['login'] = user['login']
+		i['admin'] = user['admin']
+		i['name'] = user['name']
+		i['surname'] = user['surname']
+		i['avatar'] = get_preview(user['id'], 'users')
+
+		db['online'].save(i)
+
+	## Emit this user to all users
+
+	online_emit_add(sio, user)
+
+	# ! Сокет на обновление сессий в браузере
 
 #
 
 # Sign up
+# ! Сокет на авторизацию на всех вкладках токена
+# ! Перезапись информации этого токена уже в онлайне
 
 def reg(this, **x):
 	# Checking parameters
@@ -236,7 +281,7 @@ def reg(this, **x):
 		social=x['social'] if 'social' in x else [],
 	)
 
-	# Assigning the token to the user
+	# Assignment of the token to the user
 
 	if not this.token:
 		raise ErrorAccess('token')
@@ -248,6 +293,10 @@ def reg(this, **x):
 	}
 
 	db['tokens'].insert_one(req)
+
+	# Update online users
+
+	online_update(this.socketio, user, this.token)
 
 	# Response
 
@@ -265,7 +314,7 @@ def reg(this, **x):
 
 	return res
 
-# Social network
+# By social network
 
 def social(this, **x):
 	# Checking parameters
@@ -317,12 +366,12 @@ def social(this, **x):
 		else:
 			raise ErrorAccess('code')
 
-	# Не получил ID
+	# Wrong ID
 
 	if not user_id:
 		raise ErrorWrong('id')
 
-	# Авторизация
+	# Sign in
 
 	db_condition = {
 		'social': {'$elemMatch': {'id': x['id'], 'user': user_id}},
@@ -332,8 +381,8 @@ def social(this, **x):
 		'_id': False,
 		'id': True,
 		'admin': True,
-		'balance': True,
-		'rating': True,
+		# 'rating': True,
+		# 'balance': True,
 		'login': True,
 		'name': True,
 		'surname': True,
@@ -343,9 +392,9 @@ def social(this, **x):
 
 	res = db['users'].find_one(db_condition, db_filter)
 
-	# Неправильный пароль
+	# Wrong password
 	if not res:
-		# Проверка ключей
+		# Check keys
 
 		name = ''
 		surname = ''
@@ -423,7 +472,7 @@ def social(this, **x):
 			except:
 				pass
 
-		# Регистрация
+		# Sign up
 
 		db_condition = {
 			'social': {'$elemMatch': {'user': user_id}},
@@ -438,7 +487,7 @@ def social(this, **x):
 		if res:
 			raise ErrorWrong('hash')
 
-		# Регистрация
+		# Sign up
 		else:
 			new = True
 
@@ -461,8 +510,8 @@ def social(this, **x):
 				'_id': False,
 				'id': True,
 				'admin': True,
-				'balance': True,
-				'rating': True,
+				# 'balance': True,
+				# 'rating': True,
 				'login': True,
 				'name': True,
 				'surname': True,
@@ -471,7 +520,7 @@ def social(this, **x):
 
 			res = db['users'].find_one({'id': res['id']}, db_filter)
 
-	# Присвоение токена пользователю
+	# Assignment of the token to the user
 
 	if not this.token:
 		raise ErrorInvalid('token')
@@ -483,10 +532,11 @@ def social(this, **x):
 	}
 	db['tokens'].insert_one(req)
 
-	# # Update online users
-	# online_update(this.socketio, res, this.token)
+	# Update online users
 
-	#
+	online_update(this.socketio, res, this.token)
+
+	# Response
 
 	res = {
 		'id': res['id'],
@@ -495,15 +545,15 @@ def social(this, **x):
 		'surname': res['surname'],
 		'mail': res['mail'],
 		'admin': res['admin'],
-		'balance': res['balance'],
-		'rating': res['rating'],
+		# 'rating': res['rating'],
+		# 'balance': res['balance'],
 		'avatar': get_preview(res['id'], 'users'),
 		'new': new,
 	}
 
 	return res
 
-# Phone
+# By phone
 
 def phone_send(this, **x):
 	# Checking parameters
@@ -550,7 +600,7 @@ def phone_send(this, **x):
 	res = sms.send_sms(str(phone), 'Hi!\n{} — This is your login code.'.format(code))
 	print(phone, res)
 
-	#
+	# Response
 
 	res = {
 		'phone': phone,
@@ -565,7 +615,7 @@ def phone_check(this, **x):
 	check_params(x, (
 		('phone', False, str),
 		('code', False, (int, str)),
-		('code', True, (int, str)),
+		('promo', True, str),
 	))
 
 	#
@@ -687,11 +737,11 @@ def phone_check(this, **x):
 	}
 	db['tokens'].insert_one(req)
 
-	# # Update online users
+	# Update online users
 
-	# online_update(this.socketio, user, this.token)
+	online_update(this.socketio, user, this.token)
 
-	#
+	# Response
 
 	res = {
 		'id': user['id'],
@@ -767,8 +817,8 @@ def auth(this, **x):
 		'_id': False,
 		'id': True,
 		'admin': True,
-		'balance': True,
-		'rating': True,
+		# 'balance': True,
+		# 'rating': True,
 		'login': True,
 		'name': True,
 		'surname': True,
@@ -778,11 +828,11 @@ def auth(this, **x):
 
 	res = db['users'].find_one(db_condition, db_filter)
 
-	# Неправильный пароль
+	# Wrong password
 	if not res:
 		raise ErrorWrong('password')
 
-	# Присвоение токена пользователю
+	# Assignment of the token to the user
 
 	if not this.token:
 		raise ErrorAccess('token')
@@ -794,18 +844,11 @@ def auth(this, **x):
 	}
 	db['tokens'].insert_one(req)
 
-	# Присвоение заданий пользователю
+	# Update online users
 
-	for task in db['tasks'].find({'token': this.token}):
-		task['user'] = res['id']
-		del task['token']
-		db['tasks'].save(task)
+	online_update(this.socketio, res, this.token)
 
-	# # Update online users
-
-	# online_update(this.socketio, res, this.token)
-
-	# Ответ
+	# Response
 
 	res = {
 		# 'token': this.token,
@@ -824,6 +867,8 @@ def auth(this, **x):
 	return res
 
 # Log out
+# ! Сокет на авторизацию на всех вкладках токена
+# ! Перезапись информации этого токена уже в онлайне
 
 def exit(this, **x):
 	# Not authorized
@@ -840,31 +885,31 @@ def exit(this, **x):
 	# Remove token
 	db['tokens'].remove(res['_id'])
 
-	# # Close session
+	# Close session
 
-	# for online in db['online'].find({'token': this.token}):
-	# 	online_user_update(online)
+	for online in db['online'].find({'token': this.token}):
+		online_user_update(online)
 
-	# 	online['id'] = this.token
-	# 	online['admin'] = 2
+		online['id'] = this.token
+		online['admin'] = 2
 
-	# 	if 'name' in online:
-	# 		del online['name']
+		if 'name' in online:
+			del online['name']
 
-	# 	if 'surname' in online:
-	# 		del online['surname']
+		if 'surname' in online:
+			del online['surname']
 
-	# 	if 'login' in online:
-	# 		del online['login']
+		if 'login' in online:
+			del online['login']
 
-	# 	if 'avatar' in online:
-	# 		del online['avatar']
+		if 'avatar' in online:
+			del online['avatar']
 
-	# 	online['start'] = this.timestamp
+		online['start'] = this.timestamp
 
-	# 	db['online'].save(online)
+		db['online'].save(online)
 
-	# 	online_emit_del(this.socketio, this.user['id'])
+		online_emit_del(this.socketio, this.user['id'])
 
 # Edit personal information
 
@@ -884,7 +929,7 @@ def edit(this, **x):
 
 	# No access
 	if this.user['admin'] < 3:
-		raise ErrorAccess('token')
+		raise ErrorAccess('edit')
 
 	# Name
 	if 'name' in x:

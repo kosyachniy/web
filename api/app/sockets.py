@@ -6,7 +6,8 @@ import time
 import re
 
 from func.mongodb import db
-# from api._func import reduce_params
+from api._func import other_sessions, get_preview, online_emit_add, \
+					  online_user_update, online_session_close, online_emit_del
 
 
 # Socket.IO
@@ -39,99 +40,166 @@ def online(x):
 
 	timestamp = time.time()
 
-	# Online users
-	## Emit all users to this user
+	# Define user
 
 	db_filter = {
 		'_id': False,
 		'id': True,
-		'token': True,
 	}
 
-	onlines = list(db['online'].find({}, db_filter))
+	user_current = db['tokens'].find_one({'token': x['token']}, db_filter)
+
+	if user_current:
+		db_filter = {
+			'_id': False,
+			'id': True,
+			'admin': True,
+			'login': True,
+			'name': True,
+			'surname': True,
+			'avatar': True,
+		}
+
+		user_current = db['users'].find_one({'id': user_current['id']}, db_filter)
+
+	# Online users
+	## Emit all users to this user
+
+	# ? Отправлять неавторизованным пользователям информацию об онлайн?
+
+	db_filter = {
+		'_id': False,
+		'sid': True,
+		'id': True,
+		'admin': True,
+		'login': True,
+		'name': True,
+		'surname': True,
+		'avatar': True,
+	}
+
+	users_auth = list(db['online'].find({'login': {'$exists': True}}, db_filter))
+	users_all = list(db['online'].find({}, db_filter))
+	count = len(set([i['id'] for i in users_all]))
 
 	users_uniq = dict()
-	for i in onlines:
-		if i['token'] not in users_uniq: # !
-			users_uniq[i['token']] = { # !
-				'id': i['token'], # !
-			}
+	if user_current and user_current['admin'] > 3:
+		for i in users_auth:
+			if i['id'] not in users_uniq:
+				users_uniq[i['id']] = {
+					'id': i['id'],
+					'login': i['login'],
+					'name': i['name'],
+					'surname': i['surname'],
+					'avatar': get_preview(i['id'], 'users'),
+				}
 
-	if len(users_uniq):
+	if count:
 		sio.emit('online_add', {
-			'count': len(users_uniq),
+			'count': count,
 			'users': list(users_uniq.values()),
 		}, room=request.sid, namespace='/main')
 
 	## Already online
 
-	already = False
-
-	for online in onlines:
-		if online['token'] == x['token']:
-			already = True
+	already = other_sessions(user_current['id'] if user_current else x['token'])
 
 	## Add to DB
 
 	online = {
-		'id': x['token'], # !
 		'sid': request.sid,
 		'token': x['token'],
 		'start': timestamp,
-		'time': timestamp,
 	}
+
+	if user_current:
+		online['id'] = user_current['id']
+		online['admin'] = user_current['admin']
+		online['login'] = user_current['login']
+		online['name'] = user_current['name']
+		online['surname'] = user_current['surname']
+		online['avatar'] = get_preview(user_current['id'], 'users')
+	else:
+		online['id'] = x['token']
+		online['admin'] = 2
 
 	db['online'].insert_one(online)
 
 	## Emit this user to all users
 
 	if not already:
-		sio.emit('online_add', {
-			'count': len(users_uniq)+1,
-			'users': [{'id': x['token']}], # !
-		}, namespace='/main')
+		online_emit_add(sio, user_current)
+
+	# # Visits
+
+	# user_id = user_current['id'] if user_current else 0
+
+	# db_condition = {
+	# 	'token': x['token'],
+	# 	'user': user_id,
+	# }
+
+	# utm = db['utms'].find_one(db_condition)
+
+	# if not utm:
+	# 	utm = {
+	# 		'token': x['token'],
+	# 		'user': user_id,
+	# 		# 'utm': utm_mark,
+	# 		'time': timestamp,
+	# 		'steps': [],
+	# 	}
+
+	# 	db['utms'].insert_one(utm)
+
+	# | Sessions (sid) |
+	# | Tokens (token) |
+	# | Users (id) |
+
+	# Определить вкладку (tab - sid)
+	# ? Проверка, что токен не скомпрометирован - по ip?
+
+	# # UTM-метки
+
+	# utm_mark = {}
+	# params = x['url'].split('?')
+	# if len(params) >= 2:
+	# 	params = dict(re.findall(r'([^=\&]*)=([^\&]*)', params[1]))
+	# 	if 'utm_source' in params and 'utm_medium' in params:
+	# 		utm_mark = {
+	# 			'source': params['utm_source'],
+	# 			'agent': params['utm_medium'],
+	# 		}
+
+	# if utm:
+	# 	if utm_mark and not utm['utm']:
+	# 		utm['utm'] = utm_mark
+	# 		db['utms'].save(utm)
+
+	# else:
+	# 	utm = {
+	# 		'token': x['token'],
+	# 		'user': user_id,
+	# 		'utm': utm_mark,
+	# 		'time': timestamp,
+	# 		'steps': [],
+	# 	}
+
+	# 	db['utms'].insert_one(utm)
 
 @sio.on('disconnect', namespace='/main')
 def disconnect():
 	print('OUT', request.sid)
 
-	# Online users
-	## Remove from DB
-
 	online = db['online'].find_one({'sid': request.sid})
 	if not online:
 		return
 
-	token = online['token']
+	# Close session
 
-	db['online'].remove(online['_id'])
-
-	## Other sessions of this user
-
-	db_filter = {
-		'_id': False,
-		'token': True,
-	}
-
-	onlines = list(db['online'].find({}, db_filter))
-	other = False
-
-	for online in onlines:
-		if online['token'] == token:
-			other = True
-
-	## Emit to clients
-
-	if not other:
-		users_uniq = set()
-		for online in onlines:
-			users_uniq.add(online['token']) # !
-
-		sio.emit('online_del', {
-			'count': len(users_uniq),
-			'users': [{'id': token}], # !
-		}, namespace='/main')
-
+	online_user_update(online)
+	online_session_close(online)
+	online_emit_del(sio, online['id'])
 #
 
 if __name__ == '__main__':

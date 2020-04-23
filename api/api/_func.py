@@ -343,3 +343,73 @@ def other_sessions(user_id):
 	already = db['online'].find_one({'id': user_id}, db_filter)
 
 	return bool(already)
+
+# Close session
+
+def online_user_update(online):
+	# User data update
+	# ! Объединять сессии в онлайн по пользователю
+	# ! Если сервер был остановлен, отслеживать сессию
+
+	user = db['users'].find_one({'id': online['id']})
+	if not user:
+		return
+
+	user['online'].append({'start': online['start'], 'stop': time.time()})
+	db['users'].save(user)
+
+def online_session_close(online):
+	# Remove from online users
+
+	db['online'].remove(online['_id'])
+
+def online_emit_del(sio, user_id):
+	user = db['users'].find_one({'id': user_id})
+	if not user:
+		return
+
+	# Online users
+	## Other sessions of this user
+
+	other = other_sessions(user_id)
+
+	## Emit to clients
+
+	if not other:
+		db_filter = {
+			'_id': False,
+			'id': True,
+		}
+
+		users_all = list(db['online'].find({}, db_filter))
+		count = len(set([i['id'] for i in users_all]))
+
+		sio.emit('online_del', {
+			'count': count,
+			'users': [{'id': user_id}], # ! Админам
+		}, namespace='/main')
+
+
+# Open session
+
+def online_emit_add(sio, user):
+	db_filter = {
+		'_id': False,
+		'id': True,
+	}
+
+	users_all = list(db['online'].find({}, db_filter))
+	count = len(set([i['id'] for i in users_all]))
+
+	# Online users
+	## Emit this user to all users
+
+	sio.emit('online_add', {
+		'count': count,
+		'users': [{
+			'id': user['id'],
+			'login': user['login'],
+			'name': user['name'],
+			'surname': user['surname'],
+		}] if user else [], # ! Только админам полная инфа
+	}, namespace='/main')
