@@ -13,8 +13,8 @@ CLIENT = {
 }
 
 IMAGE = {
-	'link': 'file:///Users/kosyachniy/Re/projects/web/load/',
-	'link_opt': 'file:///Users/kosyachniy/Re/projects/web/load/opt/',
+	'link': 'file:///Users/kosyachniy/Re/projects/web/data/load/',
+	'link_opt': 'file:///Users/kosyachniy/Re/projects/web/data/load/opt/',
 	# 'link': 'https://kosyachniy.com/load/',
 	# 'link_opt': 'https://kosyachniy.com/load/opt/',
 }

@@ -1,6 +1,6 @@
 from func.mongodb import db
 from api._error import ErrorEmpty, ErrorAccess
-from api._func import check_params, get_preview
+from api._func import check_params
 
 
 def search(this, **x):
@@ -24,17 +24,18 @@ def search(this, **x):
 
 	db_filter = {
 		'_id': False,
-		'name': True,
-		'surname': True,
-		'mail': True,
-		'description': True,
 		'id': True,
 		'login': True,
+		'name': True,
+		'surname': True,
+		'avatar': True,
+		'mail': True,
+		'description': True,
 	}
 
 	for i in db['users'].find({}, db_filter):
 		if any(x['cont'] in j.lower() for j in (i['name'], i['surname'], i['mail'], i['description'], i['login'])):
-			i['avatar'] = get_preview('users', i['id'])
+			i['avatar'] = IMAGE['link_opt'] + i['avatar']
 			users.append(i)
 
 	# Response

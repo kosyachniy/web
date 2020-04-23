@@ -1,9 +1,10 @@
 import time
 # import shutil
 
+from sets import IMAGE
 from func.mongodb import db
 from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
-from api._func import reimg, get_user, check_params, get_preview, next_id, load_image
+from api._func import reimg, get_user, check_params, next_id, load_image
 
 
 # Add / edit
@@ -66,6 +67,9 @@ def edit(this, **x):
 		post['cont'] = reimg(x['cont'])
 
 	## Cover
+
+	post['cover'] = 'posts/0.png'
+
 	if 'cover' in x:
 		try:
 			file_type = x['file'].split('.')[-1]
@@ -75,7 +79,8 @@ def edit(this, **x):
 			raise ErrorInvalid('file')
 
 		try:
-			load_image('posts', x['cover'], post['id'], file_type)
+			link = load_image(x['cover'], file_type)
+			post['cover'] = link
 
 		# Error loading cover
 		except:
@@ -154,8 +159,9 @@ def get(this, **x):
 	# Processing
 
 	for i in range(len(posts)):
-		## Cover
-		posts[i]['cover'] = get_preview(posts[i]['id'], 'posts')
+		if 'cover' in posts[i]:
+			## Cover
+			posts[i]['cover'] = IMAGE['link_opt'] + posts[i]['cover']
 
 		## Content
 		# if not process_single:

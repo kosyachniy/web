@@ -7,15 +7,15 @@ import urllib
 import json
 import base64
 
-from sets import CLIENT
+from sets import CLIENT, IMAGE
 from func.mongodb import db
 from func.smsc import SMSC
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount, \
 					   ErrorRepeat
-from api._func import check_params, get_preview, load_image, get_date, \
-					  next_id, online_emit_add, other_sessions, \
-					  online_user_update, online_emit_del
+from api._func import check_params, load_image, get_date, next_id, \
+					  online_emit_add, other_sessions, online_user_update, \
+					  online_emit_del
 
 
 with open('keys.json', 'r') as file:
@@ -168,6 +168,8 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 	# Avatar
 
+	link = 'users/0.png'
+
 	if avatar:
 		try:
 			file_type = file.split('.')[-1]
@@ -177,7 +179,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 			raise ErrorInvalid('file')
 
 		try:
-			load_image('users', avatar, user_id, file_type)
+			link = load_image(avatar, file_type)
 
 		# Error loading photo
 		except:
@@ -198,16 +200,17 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 		'id': user_id,
 		'login': login,
 		'password': password,
-		'mail': mail,
 		'name': name,
 		'surname': surname,
-		'description': description,
-		# 'rating': 0,
-		# 'balance': 0,
+		'avatar': link,
 		'admin': 3,
+		'mail': mail,
+		# 'balance': 0,
+		# 'rating': 0,
+		'description': description,
+		'time': timestamp,
 		'online': [],
 		'social': social,
-		'time': timestamp,
 		# 'referal_code': referal_code,
 		'referal_parent': 0,
 	}
@@ -235,10 +238,10 @@ def online_update(sio, user, token):
 	for i in db['online'].find({'token': token}):
 		i['id'] = user['id']
 		i['login'] = user['login']
-		i['admin'] = user['admin']
 		i['name'] = user['name']
 		i['surname'] = user['surname']
-		i['avatar'] = get_preview(user['id'], 'users')
+		i['avatar'] = IMAGE['link_opt'] + user['avatar']
+		i['admin'] = user['admin']
 
 		db['online'].save(i)
 
@@ -260,12 +263,12 @@ def reg(this, **x):
 	check_params(x, (
 		('login', False, str),
 		('password', False, str),
-		('mail', False, str),
 		('name', False, str),
 		('surname', False, str),
-		('social', False, list, dict),
 		('avatar', False, str),
 		('file', False, str),
+		('mail', False, str),
+		('social', False, list, dict),
 	))
 
 	user = registrate(
@@ -273,11 +276,11 @@ def reg(this, **x):
 		this.timestamp,
 		login=x['login'] if 'login' in x else '',
 		password=x['password'] if 'password' in x else '',
-		mail=x['mail'] if 'mail' in x else '',
 		name=x['name'] if 'name' in x else '',
 		surname=x['surname'] if 'surname' in x else '',
 		avatar=x['avatar'] if 'avatar' in x else '',
 		file=x['file'] if 'file' in x else '',
+		mail=x['mail'] if 'mail' in x else '',
 		social=x['social'] if 'social' in x else [],
 	)
 
@@ -301,15 +304,15 @@ def reg(this, **x):
 	# Response
 
 	res = {
-		'id': user_id,
-		'login': login,
-		'name': x['name'] if 'name' in x else '',
-		'surname': x['surname'] if 'surname' in x else '',
-		'mail': x['mail'] if 'mail' in x else '',
-		'avatar': get_preview(user_id, 'users'),
+		'id': user['id'],
+		'login': user['login'],
+		'name': user['name'],
+		'surname': user['surname'],
+		'avatar': IMAGE['link_opt'] + user['avatar'],
 		'admin': 3,
-		# 'rating': 0,
+		'mail': user['mail'],
 		# 'balance': 0,
+		# 'rating': 0,
 	}
 
 	return res
@@ -380,14 +383,14 @@ def social(this, **x):
 	db_filter = {
 		'_id': False,
 		'id': True,
-		'admin': True,
-		# 'rating': True,
-		# 'balance': True,
 		'login': True,
 		'name': True,
 		'surname': True,
-		'mail': True,
 		'avatar': True,
+		'admin': True,
+		'mail': True,
+		# 'rating': True,
+		# 'balance': True,
 	}
 
 	res = db['users'].find_one(db_condition, db_filter)
@@ -500,8 +503,8 @@ def social(this, **x):
 				}],
 				name = name,
 				surname = surname,
-				mail = mail,
 				avatar = avatar,
+				mail = mail,
 			)
 
 			#
@@ -543,11 +546,11 @@ def social(this, **x):
 		'login': res['login'],
 		'name': res['name'],
 		'surname': res['surname'],
-		'mail': res['mail'],
+		'avatar': IMAGE['link_opt'] + res['avatar'],
 		'admin': res['admin'],
-		# 'rating': res['rating'],
+		'mail': res['mail'],
 		# 'balance': res['balance'],
-		'avatar': get_preview(res['id'], 'users'),
+		# 'rating': res['rating'],
 		'new': new,
 	}
 
@@ -748,9 +751,9 @@ def phone_check(this, **x):
 		'login': user['login'],
 		'name': user['name'],
 		'surname': user['surname'],
-		'mail': user['mail'],
-		'avatar': get_preview(user['id'], 'users'),
+		'avatar': IMAGE['link_opt'] + user['avatar'],
 		'admin': user['admin'],
+		'mail': user['mail'],
 		# 'balance': user['balance'],
 		# 'rating': user['rating'],
 		'new': new,
@@ -759,6 +762,8 @@ def phone_check(this, **x):
 	return res
 
 # Log in
+# ! Сокет на авторизацию на всех вкладках токена
+# ! Перезапись информации этого токена уже в онлайне
 
 def auth(this, **x):
 	# Checking parameters
@@ -851,14 +856,13 @@ def auth(this, **x):
 	# Response
 
 	res = {
-		# 'token': this.token,
 		'id': res['id'],
 		'login': res['login'],
 		'name': res['name'],
 		'surname': res['surname'],
-		'mail': res['mail'],
-		'avatar': get_preview(res['id'], 'users'),
+		'avatar': IMAGE['link_opt'] + res['avatar'],
 		'admin': res['admin'],
+		'mail': res['mail'],
 		# 'balance': res['balance'],
 		# 'rating': res['rating'],
 		'new': new,
@@ -883,7 +887,7 @@ def exit(this, **x):
 		raise ErrorWrong('token')
 
 	# Remove token
-	db['tokens'].remove(res['_id'])
+	db['tokens'].remove(token['_id'])
 
 	# Close session
 
@@ -910,6 +914,8 @@ def exit(this, **x):
 		db['online'].save(online)
 
 		online_emit_del(this.socketio, this.user['id'])
+
+	# ! Отправлять сокет всем сессиям этого браузера на выход
 
 # Edit personal information
 
@@ -962,9 +968,6 @@ def edit(this, **x):
 		if i in x:
 			this.user[i] = x[i]
 
-	# Save changes
-	db['users'].save(this.user)
-
 	# Avatar
 	if 'avatar' in x:
 		try:
@@ -975,15 +978,19 @@ def edit(this, **x):
 			raise ErrorInvalid('file')
 
 		try:
-			load_image('users', x['avatar'], this.user['id'], file_type)
+			link = load_image(x['avatar'], file_type)
+			this.user['avatar'] = link
 
 		# Error loading photo
 		except:
 			raise ErrorUpload('avatar')
 
+	# Save changes
+	db['users'].save(this.user)
+
 	# Response
 
-	avatar = get_preview(this.user['id'], 'users')
+	avatar = IMAGE['link_opt'] + this.user['avatar']
 
 	res = {
 		'avatar': avatar,

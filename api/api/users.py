@@ -1,6 +1,7 @@
+from sets import IMAGE
 from func.mongodb import db
 from api._error import ErrorWrong, ErrorAccess, ErrorBlock
-from api._func import check_params, get_preview, get_user
+from api._func import check_params, get_user
 
 
 def get(this, **x):
@@ -50,18 +51,20 @@ def get(this, **x):
 	db_filter = {
 		'_id': False,
 		'id': True,
+		'login': True,
 		'name': True,
 		'surname': True,
-		'login': True,
-		'rating': True,
-		'description': True,
+		'avatar': True,
 		'admin': True,
-		# 'online': False, # !
+		# 'balance': True,
+		# 'rating': True,
+		# 'description': True,
+		# 'online': False,
 	}
 
 	if process_self:
-		db_filter['phone'] = True
 		db_filter['mail'] = True
+		db_filter['phone'] = True
 		db_filter['social'] = True
 		# db_filter['transactions'] = True
 
@@ -88,7 +91,7 @@ def get(this, **x):
 	for i in range(len(users)):
 		# Avatar
 
-		users[i]['avatar'] = get_preview('users', users[i]['id'])
+		users[i]['avatar'] = IMAGE['link_opt'] + users[i]['avatar']
 
 		# # Online
 

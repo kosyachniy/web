@@ -24,19 +24,6 @@ def get_file(url, num):
 
 	return None
 
-# Image link
-
-def get_preview(num=0, url=''):
-	src = IMAGE['link_opt']
-	if url:
-		src += url + '/'
-
-	file = get_file(url, num)
-	if file:
-		return src + file
-
-	return src + '0.png'
-
 # Next image ID
 
 def max_image(url):
@@ -50,68 +37,62 @@ def max_image(url):
 
 # Upload image
 
-def load_image(url, data, adr=None, format='jpg', type='base64'):
-	url_opt = '../data/load/opt/' + url
-	url = '../data/load/' + url
+def load_image(data, file_type='jpg', type='base64'):
+	url = '../data/load/'
+	url_opt = url + 'opt/'
 
 	if type == 'base64':
 		data = base64.b64decode(data)
 
-	if adr:
-		for i in os.listdir(url):
-			if re.search(r'^' + str(adr) + '\.', i):
-				os.remove(url + '/' + i)
+	if file_type == '' or file_type == None:
+		file_type = 'jpg'
 
-		for i in os.listdir(url_opt):
-			if re.search(r'^' + str(adr) + '\.', i):
-				os.remove(url_opt + '/' + i)
-	else:
-		adr = max_image(url)
+	file_id = max_image(url)
+	file_name = '{}.{}'.format(file_id, file_type)
 
-	link = '{}/{}.{}'.format(url, adr, format)
-	link_opt = '{}/{}.{}'.format(url_opt, adr, format)
+	url += file_name
+	url_opt += file_name
 
-	with open(link, 'wb') as file:
+	with open(url, 'wb') as file:
 		file.write(data)
 
 	# EXIF data
 
 	try:
-		image=Image.open(link)
+		img = Image.open(url)
+
 		for orientation in ExifTags.TAGS.keys():
 			if ExifTags.TAGS[orientation]=='Orientation':
 				break
-		exif=dict(image._getexif().items())
+
+		exif = dict(img._getexif().items())
 
 		if exif[orientation] == 3:
-			image=image.transpose(Image.ROTATE_180)
+			img = img.transpose(Image.ROTATE_180)
 		elif exif[orientation] == 6:
-			image=image.transpose(Image.ROTATE_270)
+			img = img.transpose(Image.ROTATE_270)
 		elif exif[orientation] == 8:
-			image=image.transpose(Image.ROTATE_90)
-		image.save(link)
-		image.close()
+			img = img.transpose(Image.ROTATE_90)
+
+		img.save(url)
+		img.close()
 
 	except (AttributeError, KeyError, IndexError):
-		# cases: image don't have getexif
 		pass
 
-	# Оптимизированная версия
+	# Optimized version
 
-	try:
-		img = Image.open(link)
+	img = Image.open(url)
 
-		wpercent = (WIDTH_OPTIMIZED / float(img.size[0]))
-		hsize = int((float(img.size[1]) * float(wpercent)))
-		img = img.resize((WIDTH_OPTIMIZED, hsize), Image.ANTIALIAS)
+	wpercent = (WIDTH_OPTIMIZED / float(img.size[0]))
+	hsize = int((float(img.size[1]) * float(wpercent)))
+	img = img.resize((WIDTH_OPTIMIZED, hsize), Image.ANTIALIAS)
 
-		img.save(link_opt)
+	img.save(url_opt)
 
-	except:
-		with open(link_opt, 'wb') as file:
-			file.write(data)
+	# Response
 
-	return adr
+	return file_name
 
 # Replace image in text
 
@@ -134,10 +115,10 @@ def reimg(s):
 
 					b64 = s[start:stop]
 					form = re.search(r'image/.*;', s[k+st[0]:start]).group(0)[6:-1]
-					adr = load_image('', b64, format=form)
+					adr = load_image(b64, form)
 
-					# vs = '<img src="/load/{}.{}">'.format(adr, form)
-					vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
+					# vs = '<img src="/load/{}">'.format(adr)
+					vs = '<img src="/load/opt/{}">'.format(adr)
 				else:
 					start = k + re.search(r'src=.*', s[k:]).span()[0] + 5
 					try:
@@ -154,10 +135,10 @@ def reimg(s):
 						form = href.split('.')[-1]
 						if 'latex' in form or '/' in form or len(form) > 5:
 							form = 'png'
-						adr = load_image('', b64, format=form)
+						adr = load_image(b64, form)
 
-						# vs = '<img src="/load/{}.{}">'.format(adr, form)
-						vs = '<img src="/load/opt/{}.{}">'.format(adr, form)
+						# vs = '<img src="/load/{}">'.format(adr)
+						vs = '<img src="/load/opt/{}">'.format(adr)
 
 			if vs:
 				s = s[:k+st[0]] + vs + s[k+st[1]+1:]
@@ -183,11 +164,12 @@ def get_user(user_id):
 			'login': True,
 			'name': True,
 			'surname': True,
+			'avatar': True,
 		}
 
 		user_req = db['users'].find_one(db_condition, db_filter)
 
-		user_req['avatar'] = get_preview(user_req['id'], 'users')
+		user_req['avatar'] = IMAGE['link_opt'] + user_req['avatar']
 	else:
 		user_req = 0
 
@@ -411,6 +393,6 @@ def online_emit_add(sio, user):
 			'login': user['login'],
 			'name': user['name'],
 			'surname': user['surname'],
-			'avatar': get_preview(user['id'], 'users'),
+			'avatar': IMAGE['link_opt'] + user['avatar'],
 		}] if user else [], # ! Full info for all / Full info only for admins
 	}, namespace='/main')

@@ -5,9 +5,10 @@ import os
 import time
 import re
 
+from sets import IMAGE
 from func.mongodb import db
-from api._func import other_sessions, get_preview, online_emit_add, \
-					  online_user_update, online_session_close, online_emit_del
+from api._func import other_sessions, online_emit_add, online_user_update, \
+					  online_session_close, online_emit_del
 
 
 # Socket.IO
@@ -53,11 +54,11 @@ def online(x):
 		db_filter = {
 			'_id': False,
 			'id': True,
-			'admin': True,
 			'login': True,
 			'name': True,
 			'surname': True,
 			'avatar': True,
+			'admin': True,
 		}
 
 		user_current = db['users'].find_one({'id': user_current['id']}, db_filter)
@@ -71,11 +72,11 @@ def online(x):
 		'_id': False,
 		'sid': True,
 		'id': True,
-		'admin': True,
 		'login': True,
 		'name': True,
 		'surname': True,
 		'avatar': True,
+		'admin': True,
 	}
 
 	users_auth = list(db['online'].find({'login': {'$exists': True}}, db_filter))
@@ -91,7 +92,7 @@ def online(x):
 				'login': i['login'],
 				'name': i['name'],
 				'surname': i['surname'],
-				'avatar': get_preview(i['id'], 'users'),
+				'avatar': IMAGE['link_opt'] + i['avatar'],
 			}
 
 	if count:
@@ -118,7 +119,7 @@ def online(x):
 		online['login'] = user_current['login']
 		online['name'] = user_current['name']
 		online['surname'] = user_current['surname']
-		online['avatar'] = get_preview(user_current['id'], 'users')
+		online['avatar'] = IMAGE['link_opt'] + user_current['avatar']
 	else:
 		online['id'] = x['token']
 		online['admin'] = 2
