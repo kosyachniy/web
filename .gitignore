@@ -9,6 +9,10 @@
 .idea/
 .vscode/
 
+# Ключи
+
+.env
+
 # Данные
 
 /data/
