@@ -618,7 +618,7 @@ def phone_check(this, **x):
 	check_params(x, (
 		('phone', False, str),
 		('code', False, (int, str)),
-		('promo', True, str),
+		('promo', False, str),
 	))
 
 	#
@@ -828,7 +828,7 @@ def auth(this, **x):
 		'name': True,
 		'surname': True,
 		'mail': True,
-		# 'avatar': True,
+		'avatar': True,
 	}
 
 	res = db['users'].find_one(db_condition, db_filter)

@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import { useTranslation } from 'react-i18next';
+import React, {useState} from 'react'
+import { useTranslation } from 'react-i18next'
 
 import api from '../../../func/api'
 
-import './style.css';
-import Popup from '../../../components/Popup';
+import './style.css'
+import Popup from '../../../components/Popup'
 
 
 const checkPassword = password => {
-	return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1);
+	return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
 }
 
 const Auth = (props) => {

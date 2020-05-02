@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
+import api from '../../../func/api'
+
 import './style.css'
 import { name } from '../../../sets'
 
@@ -24,6 +26,14 @@ export default function Header(props) {
 		handlerPopUp,
 	} = props
 	const { t } = useTranslation()
+
+	const signOut = () => {
+		const handlerSuccess = res => {
+			profileOut(res)
+		}
+
+		api('account.exit', {}, handlerSuccess)
+	}
 
 	return (
 		<nav className={`navbar navbar-expand-lg navbar-${system.theme} bg-${system.theme} sticky-top`}>
@@ -136,7 +146,7 @@ export default function Header(props) {
 										<Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link>
 										<Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link>
 										<Link className="dropdown-item" to="/admin/">{t('system.admin')}</Link>
-										<div className="dropdown-item" onClick={ profileOut }>{t('system.sign_out')}</div>
+										<div className="dropdown-item" onClick={ signOut }>{t('system.sign_out')}</div>
 									</div>
 								</>
 							) : (
