@@ -22,12 +22,12 @@ export default class App extends React.Component {
 		})
 
 		socketIO.on('online_add', (x) => {
-			console.log('ADD', x)
+			// console.log('ADD', x)
 			this.props.onlineAdd(x)
 		})
 
 		socketIO.on('online_del', (x) => {
-			console.log('DEL', x)
+			// console.log('DEL', x)
 			this.props.onlineDelete(x)
 		})
 

@@ -30,9 +30,9 @@ class Avatar extends React.Component {
 		return (
 			<div id="avatar-preview">
 				<label htmlFor="avatar-loader">
-					{ this.state.img ? (
+					{ this.state.img && (
 						<img src={ this.state.img } alt={ 'аватарка' } />
-					) : (
+					) || (
 						<div>{t('system.upload')}</div>
 					) }
 
