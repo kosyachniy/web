@@ -17,6 +17,10 @@ RUN npm install
 # Copy project
 COPY . .
 
+# Settings
+ARG SERVER
+RUN if [ "x$SERVER" = "x" ] ; then rm src/sets.js; cp src/sets.prod.js src/sets.js ; fi
+
 # Create build
 RUN npm run build
 RUN ls /build

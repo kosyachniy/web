@@ -24,7 +24,8 @@ COPY . .
 
 # Settings
 ARG SERVER
-RUN echo "\n\nHOST=\"$SERVER\"" >> sets.py
+RUN if [ "x$SERVER" != "x" ] ; then echo "\n\nHOST=\"$SERVER\"" >> sets.py ; fi
+RUN if [ "x$SERVER" = "x" ] ; then rm sets.py; cp sets.prod.py sets.py ; fi
 
 # Run
 ENTRYPOINT ["bash", "run.sh"]

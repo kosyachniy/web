@@ -13,24 +13,20 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - "../data/db:/data/db"
-      - "../data/logs:/data/logs"
-    command: --logpath /data/logs/mongodb.log
+    #   - "../data/logs:/data/logs"
+    # command: --logpath /data/logs/mongodb.log
 
   api:
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
-      args:
-        - SERVER=${SERVER}
     depends_on:
       - db
     container_name: "api"
     restart: unless-stopped
-    env_file: .env
+    network_mode: host
     volumes:
       - "../data/load:/data/load"
-    ports:
-      - "5000:5000"
 
   # web:
   #   build:
@@ -49,12 +45,9 @@ services:
     build:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
-      args:
-        - SERVER=${SERVER}
     container_name: "server"
-    env_file: .env
     volumes:
-      - "../nginx.conf:/etc/nginx/nginx.conf"
+      - "../nginx.prod.conf:/etc/nginx/nginx.conf"
       # - "../web/build:/web/build"
       - "../data/load:/load"
       - "../data/logs:/data/logs"
