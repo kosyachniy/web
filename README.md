@@ -18,13 +18,16 @@ Android | Front-end | React Native | JavaScript | planned
 <img src="re/img/reactjs.png" alt="ReactJS" height="100" /> &nbsp; <img src="re/img/redux.png" alt="Redux" height="100" /> &nbsp; <img src="re/img/bootstrap.png" alt="Bootstrap 4" height="100" /> &nbsp; <img src="re/img/ckeditor.png" alt="CKEditor 5" height="100" />
 
 ## Install & Use with Docker
-1. Customize files ``` api/sets.py ``` & ``` api/keys.json ``` & ``` web/src/sets.js ``` & ``` web/src/keys.js ``` & ``` docker/.env ```
+1. Customize files ``` api/keys.json ``` & ``` docker/.env ```
 
 2. Run Docker Compose
 ```
 cd docker/
 docker-compose up --build
 ```
+
+3. Open
+Go to ``` http://localhost/ ```
 
 ## Install
 ### Back-end

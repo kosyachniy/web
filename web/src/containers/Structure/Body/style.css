@@ -6,10 +6,6 @@ body {
 	background-color: red; /* #ffc772 */
 }
 
-body .container {
-	padding: 0;
-}
-
 .bg-dark {
 	color: var(--light);
 }

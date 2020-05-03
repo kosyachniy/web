@@ -4,6 +4,7 @@ import MathJax from 'react-mathjax-preview'
 
 import api from '../../../func/api'
 
+import './style.css'
 import Editor from '../../../components/Editor'
 
 

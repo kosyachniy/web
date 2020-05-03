@@ -1,6 +1,12 @@
 .navbar {
-	padding: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 	z-index: 500;
+}
+
+.navbar-brand {
+	line-height: 2.5rem;
+    padding: 0.5rem 0;
 }
 
 .navbar-brand img, .nav-link img {
