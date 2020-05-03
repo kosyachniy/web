@@ -22,6 +22,10 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . .
 
+# Settings
+ARG SERVER
+RUN echo "\n\nHOST=\"$SERVER\"" >> sets.py
+
 # Run
 ENTRYPOINT ["bash", "run.sh"]
 # ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
