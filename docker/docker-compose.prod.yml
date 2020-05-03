@@ -18,7 +18,7 @@ services:
 
   api:
     build:
-      dockerfile: ../docker/api/Dockerfile
+      dockerfile: ../docker/api/Dockerfile.prod
       context: ../api
     depends_on:
       - db
@@ -28,27 +28,13 @@ services:
     volumes:
       - "../data/load:/data/load"
 
-  # web:
-  #   build:
-  #     dockerfile: ../docker/web/Dockerfile
-  #     context: ../web
-  #   container_name: "web"
-  #   depends_on:
-  #     - server
-  #   volumes:
-  #     - "../web/build:/build"
-  #   # ports:
-  #   #   - "3000:3000"
-
   server:
-    # image: "nginx"
     build:
-      dockerfile: ../docker/web/Dockerfile
+      dockerfile: ../docker/web/Dockerfile.prod
       context: ../web
     container_name: "server"
     volumes:
-      - "../nginx.prod.conf:/etc/nginx/nginx.conf"
-      # - "../web/build:/web/build"
+      - "../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf"
       - "../data/load:/load"
       - "../data/logs:/data/logs"
     depends_on:

@@ -1,0 +1,23 @@
+# Pull base image
+FROM node:13.13.0 as web
+
+# Set work directory
+WORKDIR .
+
+# Install dependencies
+COPY ./package.json .
+RUN npm install
+
+# Copy project
+COPY . .
+
+# Settings
+RUN rm src/sets.js
+RUN cp src/sets.prod.js src/sets.js
+
+# Create build
+RUN npm run build
+
+# NGINX
+FROM nginx
+COPY --from=web /build /web/build
