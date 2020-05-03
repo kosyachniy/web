@@ -16,17 +16,12 @@ WORKDIR .
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# # Set port
-# EXPOSE 5000
-
 # Copy project
 COPY . .
 
 # Settings
 ARG SERVER
-RUN if [ "x$SERVER" != "x" ] ; then echo "\n\nHOST=\"$SERVER\"" >> sets.py ; fi
-RUN if [ "x$SERVER" = "x" ] ; then rm sets.py; cp sets.prod.py sets.py ; fi
+RUN echo "\n\nHOST=\"$SERVER\"" >> sets.py
 
 # Run
-ENTRYPOINT ["bash", "run.sh"]
-# ENTRYPOINT ["gunicorn", "app:app", "-c", "run.py"]
+CMD bash run.sh

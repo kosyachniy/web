@@ -29,37 +29,31 @@ services:
     env_file: .env
     volumes:
       - "../data/load:/data/load"
+      - "../api/app:/app"
+      - "../api/api:/api"
     ports:
       - "5000:5000"
 
-  # web:
-  #   build:
-  #     dockerfile: ../docker/web/Dockerfile
-  #     context: ../web
-  #   container_name: "web"
-  #   depends_on:
-  #     - server
-  #   volumes:
-  #     - "../web/build:/build"
-  #   # ports:
-  #   #   - "3000:3000"
-
-  server:
-    # image: "nginx"
+  web:
     build:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
-      args:
-        - SERVER=${SERVER}
-    container_name: "server"
-    env_file: .env
+    container_name: "web"
+    depends_on:
+      - server
     volumes:
-      - "../nginx.conf:/etc/nginx/nginx.conf"
-      # - "../web/build:/web/build"
+      - "../web/src:/src"
+    ports:
+      - "3000:3000"
+
+  server:
+    image: "nginx"
+    container_name: "server"
+    volumes:
+      - "../docker/server/nginx.conf:/etc/nginx/nginx.conf"
       - "../data/load:/load"
       - "../data/logs:/data/logs"
     depends_on:
       - api
     ports:
       - '80:80'
-      - '443:443'
