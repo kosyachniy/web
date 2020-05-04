@@ -128,8 +128,6 @@ def reimg(s):
 
 					href = s[start:stop]
 
-					if href[:5] == '/load': # !
-						href = IMAGE['link'] + href[5:]
 					if href[:4] == 'http':
 						b64 = str(base64.b64encode(requests.get(href).content))[2:-1]
 						form = href.split('.')[-1]

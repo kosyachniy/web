@@ -35,6 +35,10 @@ def edit(this, **x):
 			('tags', False, list, str),
 		))
 
+	# Process of post
+
+	processed = False
+
 	# Post formation
 
 	if 'id' in x:
@@ -64,7 +68,12 @@ def edit(this, **x):
 
 	## Content
 	if 'cont' in x:
-		post['cont'] = reimg(x['cont'])
+		post_updated = reimg(x['cont'])
+
+		if x['cont'] != post_updated:
+			processed = True
+
+		post['cont'] = post_updated
 
 	## Cover
 
@@ -101,6 +110,9 @@ def edit(this, **x):
 	res = {
 		'id': post['id'],
 	}
+
+	if processed:
+		res['cont'] = post['cont']
 
 	return res
 
