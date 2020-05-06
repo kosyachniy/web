@@ -4,11 +4,10 @@ import { withTranslation } from 'react-i18next'
 
 import api from '../../../func/api'
 
-import './style.css'
-import Post from './Post'
+import Card from '../../../components/Card'
 
 
-class Posts extends React.Component {
+class Grid extends React.Component {
 	getPost = (data={}) => {
 		const handlerSuccess = (res) => {
 			this.props.postsGet(res['posts']);
@@ -41,7 +40,7 @@ class Posts extends React.Component {
 				<div className="album py-2">
 					<div className="row">
 						{ this.props.posts.map((el, num) =>
-							<Post el={ el } key={ num } />
+							<Card post={ el } key={ num } />
 						) }
 					</div>
 				</div>
@@ -50,4 +49,4 @@ class Posts extends React.Component {
 	}
 }
 
-export default withTranslation()(Posts);
+export default withTranslation()(Grid);

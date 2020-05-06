@@ -3,7 +3,7 @@ import {
 	postsGet, postsAdd, postsDelete,
 } from '../../../redus';
 
-import Posts from './Posts';
+import Grid from './Grid';
 
 
 // AppContainer.jsx
@@ -16,9 +16,9 @@ const mapDispatchToProps = {
 	postsGet, postsAdd, postsDelete,
 };
 
-const PostsContainer = connect(
+const GridContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Posts);
+)(Grid);
 
-export default PostsContainer;
+export default GridContainer;

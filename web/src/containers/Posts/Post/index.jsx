@@ -5,7 +5,7 @@ import MathJax from 'react-mathjax-preview'
 import api from '../../../func/api'
 
 import './style.css'
-import Edit from '../PostEdit'
+import Edit from '../Edit'
 
 
 class Post extends React.Component {

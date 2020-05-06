@@ -12,9 +12,9 @@ import Loader from '../../../components/Loader'
 import Profile from '../../Pages/Profile'
 
 // Posts
-import Posts from '../../Pages/Posts'
-import Post from '../../Pages/Post'
-import PostEdit from '../../Pages/PostEdit'
+import Posts from '../../Posts/Grid'
+import Post from '../../Posts/Post'
+import PostEdit from '../../Posts/Edit'
 
 
 export default class App extends React.Component {
