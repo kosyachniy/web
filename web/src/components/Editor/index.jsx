@@ -1,7 +1,5 @@
 import React from 'react'
 
-import api from '../../func/api'
-
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@kosyachniy/ckeditor'
 

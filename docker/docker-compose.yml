@@ -42,6 +42,7 @@ services:
     depends_on:
       - server
     volumes:
+      - "../web/public:/public"
       - "../web/src:/src"
     ports:
       - "3000:3000"

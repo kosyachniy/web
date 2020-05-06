@@ -5,10 +5,16 @@ import { socketIO } from '../../../func/sockets'
 
 import './style.css'
 
+// System
+import Loader from '../../../components/Loader'
+
+// Users
+import Profile from '../../Pages/Profile'
+
+// Posts
 import Posts from '../../Pages/Posts'
 import Post from '../../Pages/Post'
-import Loader from '../../../components/Loader'
-import Profile from '../../Pages/Profile'
+import PostEdit from '../../Pages/PostEdit'
 
 
 export default class App extends React.Component {
@@ -57,6 +63,9 @@ export default class App extends React.Component {
 
 							<Route path="/posts">
 								<Posts />
+							</Route>
+							<Route path="/post/add">
+								<PostEdit />
 							</Route>
 							<Route path="/post">
 								<Post />

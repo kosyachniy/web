@@ -5,9 +5,12 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import { store } from './redus';
 
+// Structure
 import Header from './containers/Structure/Header'
 import Body from './containers/Structure/Body'
 import Footer from './containers/Structure/Footer'
+
+// Users
 import Auth from './containers/Pages/Auth'
 import Mail from './containers/Pages/Mail'
 import Online from './containers/Pages/Online'

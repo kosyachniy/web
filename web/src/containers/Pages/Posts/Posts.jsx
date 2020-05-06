@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 
 import api from '../../../func/api'
@@ -24,15 +25,29 @@ class Posts extends React.Component {
 		// const { t } = this.props
 
 		return (
-			<div className="album py-5">
-				<div className="container">
-					<div className="row">
-						{ this.props.posts.map((el, num) =>
-							<Post el={ el } key={ num } />
-						) }
+			<>
+				<div className="album py-4">
+					<Link to="/post/add">
+						<button
+							type="button"
+							className="btn btn-success"
+							style={ {width: '100%'} }
+						>
+							<i className="fas fa-plus" />
+						</button>
+					</Link>
+				</div>
+
+				<div className="album py-2">
+					<div className="container">
+						<div className="row">
+							{ this.props.posts.map((el, num) =>
+								<Post el={ el } key={ num } />
+							) }
+						</div>
 					</div>
 				</div>
-			</div>
+			</>
 		)
 	}
 }

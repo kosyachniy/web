@@ -2,3 +2,7 @@
 	display: fixed !important;
 	top: 56px !important;
 }
+
+.ck-content {
+	min-height: 400px;
+}

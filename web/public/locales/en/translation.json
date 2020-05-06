@@ -64,7 +64,10 @@
 		"surname": "Surname",
 		"mail": "E-mail",
 		"password": "Password",
-        "passwordTip1": "length should be 6 or more",
-        "passwordTip2": "include digits and letters"
+		"passwordTip1": "length should be 6 or more",
+		"passwordTip2": "include digits and letters"
+	},
+	"posts": {
+		"name": "Title"
 	}
 }

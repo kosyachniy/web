@@ -6,7 +6,6 @@ import { withTranslation } from 'react-i18next'
 import api from '../../../func/api'
 
 import './style.css'
-import Editor from '../../../components/Editor'
 
 
 class Post extends React.Component {
@@ -28,20 +27,6 @@ class Post extends React.Component {
 		api('posts.get', data, handlerSuccess)
 	}
 
-	updatePost = (cont) => {
-		this.setState({ post: {...this.state.post, cont} })
-	}
-
-	savePost = () => {
-		const handlerSuccess = (res) => {
-			if (res.cont) {
-				this.setState({ post: {...this.state.post, cont: res.cont} })
-			}
-		}
-
-		api('posts.edit', this.state.post, handlerSuccess)
-	}
-
 	componentWillMount() {
 		let postID = Number(document.location.pathname.split('/').pop())
 		this.getPost({id: postID})
@@ -59,21 +44,6 @@ class Post extends React.Component {
 						<img src={ post.cover } alt={ post.name } />
 
 						<MathJax math={ post.cont } />
-
-						<Editor
-							id={ post.id }
-							cont={ post.cont }
-							updatePost={ this.updatePost }
-						/>
-
-						<br />
-						<input
-							type="button"
-							className="btn btn-success"
-							style={ {width: '100%'} }
-							value={ t('system.save') }
-							onClick={ this.savePost }
-						/>
 					</>
 				) }
 			</div>
