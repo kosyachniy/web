@@ -1,4 +1,5 @@
 import time
+import re
 # import shutil
 
 from sets import IMAGE
@@ -158,9 +159,9 @@ def get(this, **x):
 		'_id': False,
 		'id': True,
 		'name': True,
-		# 'cont': True,
-		# 'reactions': True,
-		# 'time': True,
+		'cont': True,
+		'reactions': True,
+		'time': True,
 	}
 
 	if process_single:
@@ -171,13 +172,22 @@ def get(this, **x):
 	# Processing
 
 	for i in range(len(posts)):
+		## Cover
+
 		if 'cover' in posts[i]:
-			## Cover
 			posts[i]['cover'] = IMAGE['link_opt'] + posts[i]['cover']
 
+		else:
+			### Cover from the first image
+			try:
+				img = re.search('<img src="[^"]*">', posts[i]['cont'])[0].split('"')[1].split('/')[-1]
+				posts[i]['cover'] = IMAGE['link_opt'] + img
+			except:
+				pass
+
 		## Content
-		# if not process_single:
-		# 	posts[i]['cont'] = re.sub('<[^>]*>', '', posts[i]['cont'])
+		if not process_single:
+			posts[i]['cont'] = re.sub('<[^>]*>', '', posts[i]['cont'])
 
 	# Response
 

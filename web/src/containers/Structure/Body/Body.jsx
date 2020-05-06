@@ -12,9 +12,10 @@ import Loader from '../../../components/Loader'
 import Profile from '../../Pages/Profile'
 
 // Posts
-import Posts from '../../Posts/Grid'
-import Post from '../../Posts/Post'
-import PostEdit from '../../Posts/Edit'
+import PostsGrid from '../../Posts/Grid'
+import PostsFeed from '../../Posts/Feed'
+import PostsPost from '../../Posts/Post'
+import PostsEdit from '../../Posts/Edit'
 
 
 export default class App extends React.Component {
@@ -58,17 +59,20 @@ export default class App extends React.Component {
 					<div className="container" id="main">
 						<Switch>
 							<Route exact path="/">
-								<Posts />
+								<PostsGrid />
 							</Route>
 
 							<Route path="/posts">
-								<Posts />
+								<PostsGrid />
 							</Route>
 							<Route path="/post/add">
-								<PostEdit />
+								<PostsEdit />
 							</Route>
 							<Route path="/post">
-								<Post />
+								<PostsPost />
+							</Route>
+							<Route path="/feed">
+								<PostsFeed />
 							</Route>
 
 							<Route path="/profile">

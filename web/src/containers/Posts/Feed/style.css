@@ -1,0 +1,79 @@
+#feed {
+	padding: 15px 0 30px 0;
+}
+
+#feed a, #feed a:hover, #feed a:active, #feed a:focus {
+	text-decoration: none;
+}
+
+#feed p:not(#feed .cards p) {
+	font-weight: 500;
+	font-size: 1.2rem;
+	margin-left: 50px;
+}
+
+#feed .cards {
+	margin-bottom: 15px;
+	padding: 0 10px;
+	border-bottom: 1px solid #c0c0c0;
+}
+
+#feed .cards img {
+	width: 100%;
+	margin: 0 0 10px 0;
+}
+
+#feed .time {
+	color: #cfc2c2;
+	margin-bottom: 15px;
+	width: calc(100% - 40px);
+	display: inline-block;
+}
+
+#feed .additional {
+	color: #cfc2c2;
+	width: 40px;
+	display: inline-block;
+}
+
+#feed .title {
+	color: #0f0b0b;
+}
+
+#feed .content {
+	color: #747474;
+	font-weight: 400;
+}
+
+#feed .short {
+	overflow: hidden;
+	display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+#feed .reactions {
+	margin: 15px 0 25px 0;
+	font-size: 1.1rem;
+}
+
+#feed .reactions i {
+	cursor: pointer;
+}
+
+.reactions div {
+	display: inline-block;
+	width: 33%;
+}
+
+.reactions div:first-child {
+	text-align: left;
+}
+
+.reactions div:nth-child(2) {
+	text-align: center;
+}
+
+.reactions div:last-child {
+	text-align: right;
+}

@@ -68,6 +68,7 @@
 		"passwordTip2": "include digits and letters"
 	},
 	"posts": {
-		"name": "Title"
+		"name": "Title",
+		"empty": "Empty"
 	}
 }
