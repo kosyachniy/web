@@ -116,7 +116,7 @@ def edit(this, **x):
 
 	return res
 
-# Получение
+# Get
 
 def get(this, **x):
 	# Checking parameters
@@ -186,3 +186,24 @@ def get(this, **x):
 	}
 
 	return res
+
+# Delete
+
+def delete(this, **x):
+	# Checking parameters
+
+	check_params(x, (
+		('id', True, int),
+	))
+
+	# Get
+
+	post = db['posts'].find_one({'id': x['id']})
+
+	## Wrong ID
+	if not post:
+		raise ErrorWrong('id')
+
+	# Delete
+
+	db['posts'].remove(post)

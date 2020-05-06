@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.delete", "params": {"id": 1}, "token": "test"}' http://127.0.0.1:5000/
