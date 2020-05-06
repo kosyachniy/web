@@ -1,11 +1,11 @@
 import React from 'react'
 // import ReactHtmlParser from 'react-html-parser'
 import MathJax from 'react-mathjax-preview'
-import { withTranslation } from 'react-i18next'
 
 import api from '../../../func/api'
 
 import './style.css'
+import Edit from '../PostEdit'
 
 
 class Post extends React.Component {
@@ -14,6 +14,7 @@ class Post extends React.Component {
 
 		this.state = {
 			post: null,
+			edit: false,
 		}
 	}
 
@@ -27,28 +28,52 @@ class Post extends React.Component {
 		api('posts.get', data, handlerSuccess)
 	}
 
+	savePost = () => {
+		this.getPost({ id: this.state.post.id })
+		this.setState({ edit: false })
+	}
+
 	componentWillMount() {
 		let postID = Number(document.location.pathname.split('/').pop())
 		this.getPost({id: postID})
 	}
 
 	render() {
-		const { post } = this.state;
-		const { t } = this.props
+		const { post } = this.state
 
-		return (
-			<div>
-				{ post && (
+		if (post) {
+			if (this.state.edit) {
+				return (
+					<Edit
+						post={ post }
+						handlerSave={ this.savePost }
+					/>
+				)
+			} else {
+				return (
 					<>
-						<h1>{ post.name }</h1>
-						<img src={ post.cover } alt={ post.name } />
+						<div className="album py-2">
+							<h1>{ post.name }</h1>
 
-						<MathJax math={ post.cont } />
+							<button
+								className="btn btn-outline-secondary"
+								onClick={ () => {this.setState({ edit: true })} }
+							>
+								<i className="far fa-edit" />
+							</button>
+
+							{/* <img src={ post.cover } alt={ post.name } /> */}
+
+							<br /><br />
+							<MathJax math={ post.cont } />
+						</div>
 					</>
-				) }
-			</div>
-		)
+				)
+			}
+		} else {
+			return (<>123</>)
+		}
 	}
 }
 
-export default withTranslation()(Post);
+export default Post;

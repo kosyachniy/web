@@ -27,7 +27,11 @@ const Edit = (props) => {
 		}
 
 		const handlerSuccess = res => {
-			setState({ ...state, redirect: res.id })
+			if (props.post) {
+				props.handlerSave()
+			} else {
+				setState({ ...state, redirect: res.id })
+			}
 		}
 
 		api('posts.edit', data, handlerSuccess)

@@ -39,12 +39,10 @@ class Posts extends React.Component {
 				</div>
 
 				<div className="album py-2">
-					<div className="container">
-						<div className="row">
-							{ this.props.posts.map((el, num) =>
-								<Post el={ el } key={ num } />
-							) }
-						</div>
+					<div className="row">
+						{ this.props.posts.map((el, num) =>
+							<Post el={ el } key={ num } />
+						) }
 					</div>
 				</div>
 			</>
