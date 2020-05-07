@@ -8,14 +8,52 @@ iOS | Front-end | React Native | JavaScript | planned
 Android | Front-end | React Native | JavaScript | planned
 
 ### Stack
-#### DevOps
-<img src="re/img/docker.png" alt="Docker" height="100" /> &nbsp; <img src="re/img/nginx.png" alt="NGINX" height="100" />
-
-#### Back-end
-<img src="re/img/flask.png" alt="Flask" height="100" /> &nbsp; <img src="re/img/mongodb.png" alt="MongoDB" height="100" />
-
-#### Front-end
-<img src="re/img/reactjs.png" alt="ReactJS" height="100" /> &nbsp; <img src="re/img/redux.png" alt="Redux" height="100" /> &nbsp; <img src="re/img/bootstrap.png" alt="Bootstrap 4" height="100" /> &nbsp; <img src="re/img/ckeditor.png" alt="CKEditor 5" height="100" />
+<table>
+	<thead>
+		<tr>
+			<th>Side</th>
+			<th>Logo</th>
+			<th>Technology</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td rowspan="2">DevOps</td>
+			<td><img src="re/img/docker_logo.png" alt="Docker" height="100" /></td>
+			<td><img src="re/img/docker_name.png" alt="Docker" height="100" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/nginx_logo.png" alt="NGINX" height="100" /></td>
+			<td><img src="re/img/nginx_name.png" alt="NGINX" height="100" /></td>
+		</tr>
+		<tr>
+			<td rowspan="2">Back-end</td>
+			<td><img src="re/img/flask_logo.png" alt="Flask" height="100" /></td>
+			<td><img src="re/img/flask_name.png" alt="Flask" height="100" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/mongodb_logo.png" alt="MongoDB" height="100" /></td>
+			<td><img src="re/img/mongodb_name.png" alt="MongoDB" height="100" /></td>
+		</tr>
+		<tr>
+			<td rowspan="4">Front-end</td>
+			<td><img src="re/img/reactjs_logo.png" alt="ReactJS" height="100" /></td>
+			<td><img src="re/img/reactjs_name.png" alt="ReactJS" height="100" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/redux_logo.png" alt="Redux" height="100" /></td>
+			<td><img src="re/img/redux_name.png" alt="Redux" height="100" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/bootstrap_logo.png" alt="Bootstrap 4" height="100" /></td>
+			<td><img src="re/img/bootstrap_name.png" alt="Bootstrap 4" height="100" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/ckeditor_logo.png" alt="CKEditor 5" height="100" /></td>
+			<td><img src="re/img/ckeditor_name.png" alt="CKEditor 5" height="100" /></td>
+		</tr>
+	</tbody>
+</table>
 
 ## Install & Use with Docker
 1. Customize files ``` api/keys.json ``` & ``` docker/.env ```
