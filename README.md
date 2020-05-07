@@ -18,39 +18,43 @@ Android | Front-end | React Native | JavaScript | planned
 	</thead>
 	<tbody>
 		<tr>
-			<td rowspan="2">DevOps</td>
-			<td><img src="re/img/docker_logo.png" alt="Docker" height="100" /></td>
-			<td><img src="re/img/docker_name.png" alt="Docker" height="100" /></td>
+			<td rowspan="3">DevOps</td>
+			<td><img src="re/img/docker_logo.png" alt="Docker" height="70" /></td>
+			<td><img src="re/img/docker_name.png" alt="Docker" height="70" /></td>
 		</tr>
 		<tr>
-			<td><img src="re/img/nginx_logo.png" alt="NGINX" height="100" /></td>
-			<td><img src="re/img/nginx_name.png" alt="NGINX" height="100" /></td>
+			<td><img src="re/img/nginx_logo.png" alt="NGINX" height="70" /></td>
+			<td><img src="re/img/nginx_name.png" alt="NGINX" height="70" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/letsencrypt_logo.png" alt="Let's Encrypt" height="70" /></td>
+			<td><img src="re/img/letsencrypt_name.png" alt="Let's Encrypt" height="70" /></td>
 		</tr>
 		<tr>
 			<td rowspan="2">Back-end</td>
-			<td><img src="re/img/flask_logo.png" alt="Flask" height="100" /></td>
-			<td><img src="re/img/flask_name.png" alt="Flask" height="100" /></td>
+			<td><img src="re/img/flask_logo.png" alt="Flask" height="70" /></td>
+			<td><img src="re/img/flask_name.png" alt="Flask" height="70" /></td>
 		</tr>
 		<tr>
-			<td><img src="re/img/mongodb_logo.png" alt="MongoDB" height="100" /></td>
-			<td><img src="re/img/mongodb_name.png" alt="MongoDB" height="100" /></td>
+			<td><img src="re/img/mongodb_logo.png" alt="MongoDB" height="70" /></td>
+			<td><img src="re/img/mongodb_name.png" alt="MongoDB" height="70" /></td>
 		</tr>
 		<tr>
 			<td rowspan="4">Front-end</td>
-			<td><img src="re/img/reactjs_logo.png" alt="ReactJS" height="100" /></td>
-			<td><img src="re/img/reactjs_name.png" alt="ReactJS" height="100" /></td>
+			<td><img src="re/img/reactjs_logo.png" alt="ReactJS" height="70" /></td>
+			<td><img src="re/img/reactjs_name.png" alt="ReactJS" height="70" /></td>
 		</tr>
 		<tr>
-			<td><img src="re/img/redux_logo.png" alt="Redux" height="100" /></td>
-			<td><img src="re/img/redux_name.png" alt="Redux" height="100" /></td>
+			<td><img src="re/img/redux_logo.png" alt="Redux" height="70" /></td>
+			<td><img src="re/img/redux_name.png" alt="Redux" height="70" /></td>
 		</tr>
 		<tr>
-			<td><img src="re/img/bootstrap_logo.png" alt="Bootstrap 4" height="100" /></td>
-			<td><img src="re/img/bootstrap_name.png" alt="Bootstrap 4" height="100" /></td>
+			<td><img src="re/img/bootstrap_logo.png" alt="Bootstrap 4" height="70" /></td>
+			<td><img src="re/img/bootstrap_name.png" alt="Bootstrap 4" height="70" /></td>
 		</tr>
 		<tr>
-			<td><img src="re/img/ckeditor_logo.png" alt="CKEditor 5" height="100" /></td>
-			<td><img src="re/img/ckeditor_name.png" alt="CKEditor 5" height="100" /></td>
+			<td><img src="re/img/ckeditor_logo.png" alt="CKEditor 5" height="70" /></td>
+			<td><img src="re/img/ckeditor_name.png" alt="CKEditor 5" height="70" /></td>
 		</tr>
 	</tbody>
 </table>
