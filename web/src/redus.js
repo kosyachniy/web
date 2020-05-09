@@ -9,9 +9,14 @@ export const postsGet = posts => ({
 	posts,
 });
 
-export const postsAdd = note => ({
+export const postsAdd = post => ({
 	type: 'POSTS_ADD',
-	note,
+	post,
+});
+
+export const postsEdit = post => ({
+	type: 'POSTS_EDIT',
+	post,
 });
 
 export const postsDelete = id => ({
@@ -113,9 +118,22 @@ export const posts = (state = [], action) => {
 
 		case 'POSTS_ADD':
 			return [
-				action.note,
+				action.post,
 				...state
 			];
+
+		case 'POSTS_EDIT':
+			return state.map(post => {
+				if (post.id === action.post.id) {
+					['name', 'cont'].map(el => {
+						if (el in action.post) {
+							post[el] = action.post[el]
+						}
+					})
+				}
+
+				return post;
+			})
 
 		case 'POSTS_DELETE':
 			return state.filter(note => note.id !== action.id);
