@@ -5,7 +5,8 @@ import { compose, withProps } from 'recompose';
 import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps';
 // import { Link } from 'react-router-dom';
 
-import { maps } from '../../../keys'
+import { maps as sets } from '../../sets'
+import { maps as keys } from '../../keys'
 
 import marker from './marker.svg';
 
@@ -15,9 +16,9 @@ class Maps extends React.Component {
         super(props);
 
 		this.state = {
-            zoom: props.zoom,
-            center: props.center,
-            current: props.center,
+            zoom: sets.zoom,
+            center: sets.center,
+            current: sets.center,
             markers: [],
         }
     }
@@ -28,7 +29,7 @@ class Maps extends React.Component {
 				(pos) => {
 					const coords = pos.coords;
 					// console.log('My', coords);
-					this.setState({ currentLocation: { lat: coords.latitude, lng: coords.longitude }});
+					this.setState({ current: { lat: coords.latitude, lng: coords.longitude }});
 				},
 				// (error) => {console.log(error)},
 				// { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -85,7 +86,7 @@ class Maps extends React.Component {
                 <Marker
                     icon={{
                         url: marker,
-                        scaledSize: new window.google.maps.Size(55, 55)
+                        scaledSize: new window.google.maps.Size(40, 40)
                     }}
                     position={ this.state.current }
                     key="i"
@@ -165,10 +166,9 @@ const mapStyles = [
 
 const Map = compose(
     withProps({
-        googleMapURL:
-        "https://maps.googleapis.com/maps/api/js?key=" + maps.key + "&v=3.exp&libraries=geometry,drawing,places",
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${keys.key}&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `100vh` }} />,
+        containerElement: <div style={{ height: `100%` }} />,
         mapElement: <div style={{ height: `100%` }} />
     }),
     withScriptjs,
