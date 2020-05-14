@@ -76,6 +76,9 @@ export default function Header(props) {
 								}
 							</div>
 						</li> */}
+						<li className="nav-item">
+							<Link to="/map/" className="nav-link">{ t('structure.map') }</Link>
+						</li>
 					</ul>
 					<ul className="navbar-nav mr-auto mt-2 mt-lg-0">
 						<li className="nav-item">

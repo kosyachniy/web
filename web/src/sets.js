@@ -28,3 +28,11 @@ export const social = [{
 	'name': 'ig',
 	'cont': 'https://instagram.com/mr.poloz/',
 }]
+
+export const maps = {
+	center: {
+		lat: 59.9392,
+		lng: 30.3165,
+	},
+	zoom: 12,
+}

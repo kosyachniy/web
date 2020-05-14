@@ -3,7 +3,8 @@
 		"space": "Space",
 		"feed": "Feed",
 		"posts": "Posts",
-		"events": "Events"
+		"events": "Events",
+		"map": "Map"
 	},
 	"system": {
 		"sign_out": "Log Out",

@@ -60,7 +60,7 @@ Android | Front-end | React Native | JavaScript | planned
 </table>
 
 ## Install & Use with Docker
-1. Customize files ``` api/keys.json ``` & ``` docker/.env ```
+1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ```
 
 2. Run Docker Compose
 ```
