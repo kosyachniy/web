@@ -7,6 +7,7 @@ import api from '../../../func/api'
 
 import './style.css'
 import Edit from '../Edit'
+import Map from '../../../components/Map'
 
 
 class Post extends React.Component {
@@ -96,9 +97,18 @@ class Post extends React.Component {
 							/>
 						) || (
 							<>
-							{/* <img src={ post.cover } alt={ post.name } /> */}
-							<br /><br />
-							<MathJax math={ post.cont } />
+								{/* <img src={ post.cover } alt={ post.name } /> */}
+								<br /><br />
+								<MathJax math={ post.cont } />
+
+								<div style={{ marginTop: '50px', height: '250px' }}>
+									{ post.geo && (
+										<Map center={ post.geo} zoom={ 14 } />
+									) || (
+										<Map />
+									)}
+
+								</div>
 							</>
 						) }
 					</div>

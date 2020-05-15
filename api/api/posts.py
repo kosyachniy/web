@@ -162,6 +162,7 @@ def get(this, **x):
 		'cont': True,
 		'reactions': True,
 		'time': True,
+		'geo': True, # !
 	}
 
 	if process_single:
