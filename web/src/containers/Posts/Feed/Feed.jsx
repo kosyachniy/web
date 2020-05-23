@@ -67,20 +67,24 @@ class Feed extends React.Component {
 
 					{ this.props.posts.map(post => (
 						<div className="cards" key={ post.id }>
-							<div className="time">{ this.getTime(post.time) }</div>
-							<div className="additional"><i className="fas fa-ellipsis-v" /></div>
 							<Link to={ `/post/${post.id}` } >
-								<h3 className="title">{ post.name }</h3>
+								<div className="cards-content">
+									<h3 className="title">{ post.name }</h3>
+									<div className="additional"><i className="fas fa-ellipsis-v" /></div>
+									<div className="time">{ this.getTime(post.time) }</div>
+								</div>
 								{ post.cover && (
 									<img src={ post.cover } alt={ post.name } />
 								) }
-								<div className="content short">{ post.cont }</div>
+								<div className="cards-content">
+									<div className="content short">{ post.cont }</div>
+								</div>
 							</Link>
-							<div className="reactions">
-								<div><i className="fas fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
+							<div className="cards-content reactions">
 								<div><i className="far fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
 								{/* <i className="fas fa-heart" /> */}
 								<div><i className="far fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
+								<div><i className="fas fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
 							</div>
 						</div>
 					)) }

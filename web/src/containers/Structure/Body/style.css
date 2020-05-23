@@ -24,13 +24,9 @@ body {
 	color: var(--light);
 }
 
-a {
+a, a:hover, a:active, a:focus {
 	color: inherit;
-}
-
-a:hover, a:active {
 	text-decoration: none;
-	color: inherit;
 }
 
 #main {

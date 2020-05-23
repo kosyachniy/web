@@ -146,9 +146,9 @@ export default function Header(props) {
 									</div>
 									<div className={`dropdown-menu dropdown-menu-right ${system.theme}`} id="menu">
 										<Link className="dropdown-item" to="/profile/">{t('system.profile')}</Link>
-										<Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link>
-										<Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link>
-										<Link className="dropdown-item" to="/admin/">{t('system.admin')}</Link>
+										{/* <Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link> */}
+										{/* <Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link> */}
+										{/* <Link className="dropdown-item" to="/admin/">{t('system.admin')}</Link> */}
 										<div className="dropdown-item" onClick={ signOut }>{t('system.sign_out')}</div>
 									</div>
 								</>

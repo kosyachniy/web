@@ -188,7 +188,7 @@ def get(this, **x):
 
 		## Content
 		if not process_single:
-			posts[i]['cont'] = re.sub('<[^>]*>', '', posts[i]['cont'])
+			posts[i]['cont'] = re.sub('<[^>]*>', '', posts[i]['cont']).replace('&nbsp;', ' ')
 
 	# Response
 
