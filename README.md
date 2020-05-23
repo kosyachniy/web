@@ -77,6 +77,7 @@ Go to ``` http://localhost/ ```
 
 2. Creating encryption keys
 ```
+cd docker/
 chmod 777 cert.sh
 ./cert.sh
 ```
