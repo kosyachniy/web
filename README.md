@@ -60,6 +60,7 @@ Android | Front-end | React Native | JavaScript | planned
 </table>
 
 ## Install & Use with Docker
+### Development
 1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ```
 
 2. Run Docker Compose
@@ -70,6 +71,23 @@ docker-compose up --build
 
 3. Open
 Go to ``` http://localhost/ ```
+
+## Production
+1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ``` & ``` api/sets.prod.json ``` & ``` web/src/sets.prof.js ``` & ``` docker/server/nginx.prod.conf ``` & ``` docker/server/nginx.cert.conf ```
+
+2. Creating encryption keys
+```
+chmod 777 cert.sh
+./cert.sh
+```
+
+3. Run Docker Compose
+```
+docker-compose -f docker-compose.prod.yml up --build
+```
+
+4. Open
+Go to ``` https://kosyachniy.com/ ``` (your link)
 
 ## Install
 ### Back-end
