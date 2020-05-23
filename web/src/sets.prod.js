@@ -1,6 +1,5 @@
 export const server = {
-	link: 'http://kosyachniy.com:5000/',
-	// link: 'https://web.kosyachniy.com/api/',
+	link: 'https://web.kosyachniy.com/api/',
 	ip: '0.0.0.0',
 	port: 5000,
 }
@@ -10,8 +9,7 @@ export const client = {
 	port: 3000,
 }
 export const socket = {
-	link: 'http://kosyachniy.com:5000/',
-	// link: 'https://web.kosyachniy.com/',
+	link: 'https://web.kosyachniy.com/',
 }
 
 export const name = 'Quateo'

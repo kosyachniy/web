@@ -1,8 +1,7 @@
 HOST = '127.0.0.1'
 
 SERVER = {
-	'link': 'http://kosyachniy.com:5000/',
-	# 'link': 'https://web.kosyachniy.com/api/',
+	'link': 'https://web.kosyachniy.com/api/',
 	'ip': '0.0.0.0',
 	'port': 5000,
 }
