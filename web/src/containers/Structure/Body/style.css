@@ -10,7 +10,26 @@ body {
 	color: var(--light);
 }
 
+.dark {
+	background-color: var(--dark);
+	color: var(--light);
+}
+
+.dark div, .dark a {
+	color: var(--light) !important;
+}
+
+.dark *:hover {
+	background-color: var(--dark);
+	color: var(--light);
+}
+
 a {
+	color: inherit;
+}
+
+a:hover, a:active {
+	text-decoration: none;
 	color: inherit;
 }
 

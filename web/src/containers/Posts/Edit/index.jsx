@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import api from '../../../func/api'
 
+import './style.css'
 import Editor from '../../../components/Editor'
 
 
@@ -49,7 +50,7 @@ const Edit = (props) => {
 				<div className="form-group">
 					<input
 						type="text"
-						className="form-control"
+						className="form-control name"
 						placeholder={ t('posts.name') }
 						value={ state.name }
 						onChange={ (event) => {setState({ ...state, name: event.target.value })} }

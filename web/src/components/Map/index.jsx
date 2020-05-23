@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from 'react';
 import { compose, withProps } from 'recompose';
 
-import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps';
+import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps'; // , InfoWindow
 // import { Link } from 'react-router-dom';
 
 import { maps as sets } from '../../sets'

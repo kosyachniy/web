@@ -6,9 +6,9 @@ import api from '../../../func/api'
 import Avatar from '../../../components/Avatar'
 
 
-const checkPassword = password => {
-	return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1);
-}
+// const checkPassword = password => {
+// 	return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1);
+// }
 
 const Profile = (props) => {
 	const { profile, profileUpdate } = props

@@ -113,7 +113,5 @@
 /* Menu */
 
 #menu, #menu .dropdown-item {
-	background-color: inherit;
-	color: inherit;
 	cursor: pointer;
 }

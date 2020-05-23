@@ -98,6 +98,8 @@ export const profileUpdate = profile => {
 		if (el in profile) {
 			localStorage.setItem(el, profile[el])
 		}
+
+		return null;
 	})
 
 	return {
@@ -129,6 +131,8 @@ export const posts = (state = [], action) => {
 						if (el in action.post) {
 							post[el] = action.post[el]
 						}
+
+						return null;
 					})
 				}
 
@@ -241,6 +245,8 @@ export const profile = (state = {
 				if (el in action.profile) {
 					state[el] = action.profile[el]
 				}
+
+				return null;
 			})
 
 			return state

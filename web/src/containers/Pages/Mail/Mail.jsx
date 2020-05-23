@@ -20,7 +20,7 @@ const Auth = (props) => {
 	const { profileIn, handlerPopUp } = props
 	const { t } = useTranslation()
 
-	const signIn = () => {
+	const signIn = (event) => {
 		const handlerSuccess = res => {
 			profileIn(res)
 			handlerPopUp(false)
@@ -32,50 +32,53 @@ const Auth = (props) => {
 
 		const data = {login: state.mail, password: state.password}
 		api('account.auth', data, handlerSuccess, handlerError)
+
+		event.preventDefault();
 	}
 
 	return (
 		<div id="mail">
 			<Popup handlerPopUp={handlerPopUp} >
-				<div className="form-group">
+				<form onSubmit={signIn}>
+					<div className="form-group">
+						<input
+							className="form-control"
+							type="text"
+							placeholder={t('profile.mail')}
+							value={state.mail}
+							onChange={(event) => { setState({ ...state, mail: event.target.value }) }}
+							autoComplete="off"
+							required
+						/>
+					</div>
+					<div className="form-group">
+						<input
+							className="form-control"
+							// className={(responce !== null && responce.result === 'password') ? 'error' : ''}
+							type="password"
+							placeholder={t('profile.password')}
+							value={state.password}
+							onChange={(event) => { setState({ ...state, password: event.target.value }) }}
+							autoComplete="off"
+							required
+						/>
+					</div>
+					<div className="pass_info">
+						<span style={state.password.length >= 6 ? {} : { color: '#e74c3c' }}>
+							<i className="fas fa-genderless" />
+							{ t('profile.passwordTip1') }
+						</span>
+						<span style={checkPassword(state.password) ? {} : { color: '#e74c3c' }}>
+							<i className="fas fa-genderless" />
+							{ t('profile.passwordTip2') }
+						</span>
+					</div>
 					<input
-						className="form-control"
-						type="text"
-						placeholder={t('profile.mail')}
-						value={state.mail}
-						onChange={(event) => { setState({ ...state, mail: event.target.value }) }}
-						autoComplete="off"
-						required
+						type="submit"
+						className="btn btn-success"
+						value={t('system.sign_in')}
 					/>
-				</div>
-				<div className="form-group">
-					<input
-						className="form-control"
-						// className={(responce !== null && responce.result === 'password') ? 'error' : ''}
-						type="password"
-						placeholder={t('profile.password')}
-						value={state.password}
-						onChange={(event) => { setState({ ...state, password: event.target.value }) }}
-						autoComplete="off"
-						required
-					/>
-				</div>
-				<div className="pass_info">
-					<span style={state.password.length >= 6 ? {} : { color: '#e74c3c' }}>
-						<i className="fas fa-genderless" />
-						{ t('profile.passwordTip1') }
-					</span>
-					<span style={checkPassword(state.password) ? {} : { color: '#e74c3c' }}>
-						<i className="fas fa-genderless" />
-						{ t('profile.passwordTip2') }
-					</span>
-				</div>
-				<input
-					type="button"
-					className="btn btn-success"
-					value={t('system.sign_in')}
-					onClick={signIn}
-				/>
+				</form>
 			</Popup>
 		</div>
 	);

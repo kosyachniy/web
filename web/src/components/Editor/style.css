@@ -4,5 +4,7 @@
 }
 
 .ck-content {
+	background-color: inherit !important;
+	color: inherit !important;
 	min-height: 400px;
 }

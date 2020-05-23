@@ -68,14 +68,14 @@ class Post extends React.Component {
 					<div className="album py-2">
 						<h1>{ post.name }</h1>
 
-						{ this.state.edit && (
+						{ this.state.edit ? (
 							<button
 								className="btn btn-outline-secondary"
 								onClick={ () => {this.setState({ edit: false })} }
 							>
 								<i className="far fa-eye" />
 							</button>
-						) || (
+						) : (
 							<button
 								className="btn btn-outline-secondary"
 								onClick={ () => {this.setState({ edit: true })} }
@@ -90,24 +90,23 @@ class Post extends React.Component {
 							<i className="far fa-trash-alt" />
 						</button>
 
-						{ this.state.edit && (
+						{ this.state.edit ? (
 							<Edit
 								post={ post }
 								handlerSave={ this.savePost }
 							/>
-						) || (
+						) : (
 							<>
 								{/* <img src={ post.cover } alt={ post.name } /> */}
 								<br /><br />
 								<MathJax math={ post.cont } />
 
 								<div style={{ marginTop: '50px', height: '250px' }}>
-									{ post.geo && (
+									{ post.geo ? (
 										<Map center={ post.geo} zoom={ 14 } />
-									) || (
+									) : (
 										<Map />
 									)}
-
 								</div>
 							</>
 						) }

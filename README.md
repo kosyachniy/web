@@ -31,13 +31,17 @@ Android | Front-end | React Native | JavaScript | planned
 			<td><img src="re/img/letsencrypt_name.png" alt="Let's Encrypt" height="70" /></td>
 		</tr>
 		<tr>
-			<td rowspan="2">Back-end</td>
+			<td rowspan="3">Back-end</td>
 			<td><img src="re/img/flask_logo.png" alt="Flask" height="70" /></td>
 			<td><img src="re/img/flask_name.png" alt="Flask" height="70" /></td>
 		</tr>
 		<tr>
 			<td><img src="re/img/mongodb_logo.png" alt="MongoDB" height="70" /></td>
 			<td><img src="re/img/mongodb_name.png" alt="MongoDB" height="70" /></td>
+		</tr>
+		<tr>
+			<td><img src="re/img/socketio_logo.png" alt="Socket.IO" height="70" /></td>
+			<td><img src="re/img/socketio_name.png" alt="Socket.IO" height="70" /></td>
 		</tr>
 		<tr>
 			<td rowspan="4">Front-end</td>

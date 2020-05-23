@@ -35,7 +35,7 @@ const Loader = (props) => {
 	return (
 		<div id="loader" className={`bg-${theme}`}>
 			<div>
-				<img src={`/brand/logo_${color}.svg`} />
+				<img src={`/brand/logo_${color}.svg`} alt="loader" />
 			</div>
 		</div>
 	);

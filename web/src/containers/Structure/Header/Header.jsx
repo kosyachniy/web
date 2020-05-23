@@ -93,7 +93,7 @@ export default function Header(props) {
 					<ul className="nav navbar-nav navbar-right">
 						<li className="nav-item">
 							<div>
-								{ online.count && (
+								{ online.count ? (
 									<>
 										{t('system.online')}
 										<div className="online"></div>
@@ -102,7 +102,7 @@ export default function Header(props) {
 											onClick={ ()=>{handlerPopUp('online'); console.log('online')} }
 										>{ online.count } </div>
 									</>
-								) || (
+								) : (
 									<>
 										{t('system.offline')}
 										<div className="offline"></div>
@@ -111,29 +111,29 @@ export default function Header(props) {
 							</div>
 						</li>
 						<li className="nav-item">
-							{system.theme === 'dark' && (
+							{system.theme === 'dark' ? (
 								<div id="theme" className="badge" onClick={() => {changeTheme('light')}}>
 									<i className="fas fa-sun" />
 								</div>
-							) || (
+							) : (
 								<div id="theme" className="badge" onClick={() => {changeTheme('dark')}}>
 									<i className="fas fa-moon" />
 								</div>
 							)}
 						</li>
 						<li className="nav-item">
-							{system.lang === 'ru' && (
+							{system.lang === 'ru' ? (
 								<div id="lang" className="badge" onClick={ () => {changeLang('en')} }>
 									<img src="/lang/en.svg" alt="en" />
 								</div>
-							) || (
+							) : (
 								<div id="lang" className="badge" onClick={ () => {changeLang('ru')} }>
 									<img src="/lang/ru.svg" alt="ru" />
 								</div>
 							)}
 						</li>
 						<li className="nav-item dropdown">
-							{profile.id && (
+							{profile.id ? (
 								<>
 									<div
 										className="nav-link"
@@ -144,7 +144,7 @@ export default function Header(props) {
 									>
 										<Hexagon url={ profile.avatar } />
 									</div>
-									<div className="dropdown-menu dropdown-menu-right" id="menu">
+									<div className={`dropdown-menu dropdown-menu-right ${system.theme}`} id="menu">
 										<Link className="dropdown-item" to="/profile/">{t('system.profile')}</Link>
 										<Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link>
 										<Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link>
@@ -152,7 +152,8 @@ export default function Header(props) {
 										<div className="dropdown-item" onClick={ signOut }>{t('system.sign_out')}</div>
 									</div>
 								</>
-							) || (
+							) : (<></>)}
+							{!profile.id ? (
 								<div>
 									<button
 										type="button"
@@ -160,7 +161,7 @@ export default function Header(props) {
 										onClick={ ()=>{handlerPopUp('auth')} }
 									>{ t('system.sign_in') }</button>
 								</div>
-							)}
+							) : (<></>)}
 						</li>
 					</ul>
 				</div>
