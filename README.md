@@ -88,7 +88,7 @@ docker-compose -f docker-compose.prod.yml up --build
 ```
 
 4. Open
-Go to ``` https://kosyachniy.com/ ``` (your link)
+Go to ``` https://web.kosyachniy.com/ ``` (your link)
 
 ## Install
 ### Back-end

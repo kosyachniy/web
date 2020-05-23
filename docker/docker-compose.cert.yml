@@ -3,6 +3,7 @@ version: '3'
 services:
   nginx:
     image: nginx:1.15-alpine
+    container_name: "nginx"
     restart: unless-stopped
     volumes:
       - ../docker/server/nginx.cert.conf:/etc/nginx/conf.d/app.conf
@@ -15,6 +16,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    container_name: "certbot"
     restart: unless-stopped
     volumes:
       - ../data/certbot/conf:/etc/letsencrypt
