@@ -17,8 +17,8 @@ import PostsFeed from '../../Posts/Feed'
 import PostsPost from '../../Posts/Post'
 import PostsEdit from '../../Posts/Edit'
 
-// Map
-import Map from '../../Pages/Map'
+// // Map
+// import Map from '../../Pages/Map'
 
 
 export default class App extends React.Component {
@@ -82,9 +82,9 @@ export default class App extends React.Component {
 								<Profile />
 							</Route>
 
-							<Route path="/map">
+							{/* <Route path="/map">
 								<Map />
-							</Route>
+							</Route> */}
 						</Switch>
 					</div>
 				</div>
