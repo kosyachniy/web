@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Settings
-RUN rm src/sets.js
+RUN rm -f src/sets.js # Если такой уже есть - заменить
 RUN cp src/sets.prod.js src/sets.js
 
 # Create build

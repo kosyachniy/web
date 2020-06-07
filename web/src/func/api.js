@@ -2,6 +2,7 @@ import axios from 'axios'
 import { server } from '../sets'
 
 function serverRequest(json={}) {
+	console.log(server.link, json)
 	return axios.post(server.link, json)
 }
 
@@ -23,8 +24,6 @@ export default function api(method, params={}, handlerSuccess=()=>{}, handlerErr
 
 	json['language'] = localStorage.getItem('lang')
 	json['token'] = localStorage.getItem('token')
-
-	console.log(json)
 
 	serverRequest(json).then((res) => handlerResult(res.data, handlerSuccess, handlerError))
 }

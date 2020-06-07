@@ -315,13 +315,10 @@ def online_back(user_id):
 # Other sessions of this user
 
 def other_sessions(user_id):
-	db_filter = {
-		'_id': False,
-		'id': True,
-	}
+	if not user_id:
+		return False
 
-	already = db['online'].find_one({'id': user_id}, db_filter)
-
+	already = db['online'].find_one({'id': user_id}, {'_id': True})
 	return bool(already)
 
 # Close session
