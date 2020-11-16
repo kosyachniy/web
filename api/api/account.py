@@ -33,7 +33,6 @@ with open('keys.json', 'r') as file:
 
 def check_name(cont):
 	# Invalid name
-
 	if not cont.isalpha():
 		raise ErrorInvalid('name')
 
@@ -41,8 +40,7 @@ def check_name(cont):
 
 def check_surname(cont):
 	# Invalid surname
-
-	if not cont.isalpha():
+	if not cont.replace('-', '').isalpha():
 		raise ErrorInvalid('surname')
 
 # Check mail
