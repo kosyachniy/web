@@ -48,3 +48,12 @@ def index():
 			req['result'] = res
 
 	return jsonify(req)
+
+@app.route('/fb', methods=['POST'])
+@app.route('/fb/', methods=['POST'])
+def fb():
+	x = request.json
+
+	print(x)
+
+	return jsonify({'qwe': 'asd'})
