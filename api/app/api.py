@@ -5,7 +5,18 @@ from app import app, sio
 from api import API, Error
 
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(
+	app,
+	key_func=get_remote_address,
+	default_limits=["200 per day", "50 per hour"]
+)
+
+
 @app.route('/', methods=['POST'])
+@limiter.limit("20 per minute")
 def index():
 	x = request.json
 	# print(x)
