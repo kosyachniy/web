@@ -36,33 +36,33 @@ def get_ip():
 limiter = Limiter(
 	app,
 	key_func=get_ip,
-	default_limits=['1000/day', '100/hour', '20/minute']
+	default_limits=['1000/day', '500/hour', '20/minute']
 )
 
 # API
-
+## Libraries
 from api import API, Error
 
 ## Params
 from sets import SERVER, CLIENT
 
-
+## Variables
 api = API(
 	server=SERVER,
 	client=CLIENT,
 	sio=sio,
 )
 
-
 ## Endpoints
+### Main
 @app.route('/', methods=['POST'])
 def index():
-	x = request.json
-	# print(x)
+	data = request.json
+	# print(data)
 
 	# All required fields are not specified
 	for field in ('method', 'token'):
-		if field not in x:
+		if field not in data:
 			return jsonify({'error': 2, 'result': 'All required fields are not specified!'})
 
 	# Call API
@@ -71,11 +71,11 @@ def index():
 
 	try:
 		res = api.method(
-			x['method'],
-			x['params'] if 'params' in x else {},
-			ip=x['ip'] if 'ip' in x else request.remote_addr, # Case when a web application makes requests from IP with the same address
-			token=x['token'] if 'token' in x else None,
-			language=x['language'] if 'language' in x else 'en',
+			data['method'],
+			data['params'] if 'params' in data else {},
+			ip=data['ip'] if 'ip' in data else request.remote_addr, # Case when a web application makes requests from IP with the same address
+			token=data['token'] if 'token' in data else None,
+			language=data['language'] if 'language' in data else 'en',
 		)
 
 	except Error.BaseError as e:
@@ -96,6 +96,7 @@ def index():
 
 	return jsonify(req)
 
+### Facebook bot
 @app.route('/fb', methods=['POST'])
 @app.route('/fb/', methods=['POST'])
 def fb():
@@ -105,37 +106,31 @@ def fb():
 
 	return jsonify({'qwe': 'asd'})
 
-# Sockets
-
-from flask import request
-
-from api import SOCKET
-
-
-socket = SOCKET(sio)
-
-
-# Online users
+## Sockets
+### Online users
 
 @sio.on('connect', namespace='/main')
 def connect():
-	socket.method(
+	api.method(
 		'account.connect',
+		ip=request.remote_addr,
 		sid=request.sid,
 	)
 
 @sio.on('online', namespace='/main')
 def online(data):
-	socket.method(
+	api.method(
 		'account.online',
 		data,
+		ip=request.remote_addr,
 		sid=request.sid,
 	)
 
 @sio.on('disconnect', namespace='/main')
 def disconnect():
-	socket.method(
+	api.method(
 		'account.disconnect',
+		ip=request.remote_addr,
 		sid=request.sid,
 	)
 

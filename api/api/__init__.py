@@ -15,11 +15,15 @@ class API():
 	def __init__(self, server, client, sio=None):
 		self.server = server
 		self.client = client
-		self.socketio = sio
+		self.sio = sio
 
-	def method(self, name, params={}, ip=None, token=None, language=0):
+		# Reset online users
+		db['online'].remove()
+
+	def method(self, name, params={}, ip=None, sid=None, token=None, language=0):
 		self.timestamp = time.time()
 		self.ip = ip
+		self.sid = sid
 		self.token = token
 		self.language = get_language(language)
 
@@ -57,29 +61,6 @@ class API():
 		# }
 
 		# db['actions'].insert_one(req)
-
-		# API method
-
-		try:
-			module, method = name.split('.')
-			func = getattr(globals()[module], method)
-		except:
-			raise Error.ErrorWrong('method')
-
-		# Request
-
-		return func(self, **params)
-
-class SOCKET():
-	def __init__(self, sio):
-		self.sio = sio
-
-		# Reset online users
-		db['online'].remove()
-
-	def method(self, name, params={}, sid=None):
-		self.timestamp = time.time()
-		self.sid = sid
 
 		# API method
 

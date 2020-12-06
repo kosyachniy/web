@@ -297,7 +297,7 @@ def reg(this, **x):
 
 	# Update online users
 
-	online_update(this.socketio, user, this.token)
+	online_update(this.sio, user, this.token)
 
 	# Response
 
@@ -535,7 +535,7 @@ def social(this, **x):
 
 	# Update online users
 
-	online_update(this.socketio, res, this.token)
+	online_update(this.sio, res, this.token)
 
 	# Response
 
@@ -740,7 +740,7 @@ def phone_check(this, **x):
 
 	# Update online users
 
-	online_update(this.socketio, user, this.token)
+	online_update(this.sio, user, this.token)
 
 	# Response
 
@@ -849,7 +849,7 @@ def auth(this, **x):
 
 	# Update online users
 
-	online_update(this.socketio, res, this.token)
+	online_update(this.sio, res, this.token)
 
 	# Response
 
@@ -911,7 +911,7 @@ def exit(this, **x):
 
 		db['online'].save(online)
 
-		online_emit_del(this.socketio, this.user['id'])
+		online_emit_del(this.sio, this.user['id'])
 
 	# ! Отправлять сокет всем сессиям этого браузера на выход
 
