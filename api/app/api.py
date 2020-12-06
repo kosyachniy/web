@@ -6,17 +6,17 @@ from api import API, Error
 
 
 from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+
+get_ip = lambda: request.json['ip'] if 'ip' in request.json else request.remote_addr
 
 limiter = Limiter(
 	app,
-	key_func=get_remote_address,
-	default_limits=["200 per day", "50 per hour"]
+	key_func=get_ip,
+	default_limits=['1000/day', '100/hour', '20/minute']
 )
 
 
 @app.route('/', methods=['POST'])
-@limiter.limit("20 per minute")
 def index():
 	x = request.json
 	# print(x)
