@@ -50,17 +50,40 @@ class API():
 			if type(params[i]) == str:
 				params[i] = params[i].strip()
 
-		# Action tracking
+		# # Action tracking
 
-		req = {
-			'time': self.timestamp,
-			'user': self.user['id'],
-			'ip': self.ip,
-			'method': name,
-			'params': params,
-		}
+		# req = {
+		# 	'time': self.timestamp,
+		# 	'user': self.user['id'],
+		# 	'ip': self.ip,
+		# 	'method': name,
+		# 	'params': params,
+		# }
 
-		db['actions'].insert_one(req)
+		# db['actions'].insert_one(req)
+
+		# API method
+
+		try:
+			module, method = name.split('.')
+			func = getattr(globals()[module], method)
+		except:
+			raise Error.ErrorWrong('method')
+
+		# Request
+
+		return func(self, **params)
+
+class SOCKET():
+	def __init__(self, sio):
+		self.sio = sio
+
+		# Reset online users
+		db['online'].remove()
+
+	def method(self, name, sid, params={}):
+		self.timestamp = time.time()
+		self.sid = sid
 
 		# API method
 

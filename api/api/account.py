@@ -15,7 +15,7 @@ from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 					   ErrorRepeat
 from api._func import check_params, load_image, get_date, next_id, \
 					  online_emit_add, other_sessions, online_user_update, \
-					  online_emit_del
+					  online_emit_del, online_session_close
 
 
 with open('keys.json', 'r') as file:
@@ -96,7 +96,7 @@ def check_password(cont):
 	# Invalid password
 
 	cond_length = not 6 <= len(cont) <= 40
-	pass_rule = '[^a-zA-Z0-9!@#$%&*--+=,./?|~]' # ! --
+	pass_rule = '[^a-zA-Z0-9!@#$%&*-+=,./?|~]'
 	cond_symbols = len(re.findall(pass_rule, cont))
 	cond_letters = not len(re.findall('[a-zA-Z]', cont))
 	cond_digits = not len(re.findall('[0-9]', cont))
@@ -1021,3 +1021,175 @@ def edit(this, **x):
 
 # 	users['password'] = password_crypt
 # 	db['users'].save(users)
+
+# Connect
+
+def connect(this, **x):
+	print('IN', this.sid)
+
+# Online
+
+def online(this, **x):
+	print('ON', this.sid)
+
+	# Define user
+
+	db_filter = {
+		'_id': False,
+		'id': True,
+	}
+
+	user_current = db['tokens'].find_one({'token': x['token']}, db_filter)
+
+	if user_current:
+		db_filter = {
+			'_id': False,
+			'id': True,
+			'login': True,
+			'name': True,
+			'surname': True,
+			'avatar': True,
+			'admin': True,
+		}
+
+		user_current = db['users'].find_one({'id': user_current['id']}, db_filter)
+
+	# Online users
+	## Emit all users to this user
+
+	# ? Отправлять неавторизованным пользователям информацию об онлайн?
+
+	db_filter = {
+		'_id': False,
+		'sid': True,
+		'id': True,
+		'login': True,
+		'name': True,
+		'surname': True,
+		'avatar': True,
+		'admin': True,
+	}
+
+	users_auth = list(db['online'].find({'login': {'$exists': True}}, db_filter))
+	users_all = list(db['online'].find({}, db_filter))
+	count = len(set([i['id'] for i in users_all]))
+
+	users_uniq = dict()
+	# if user_current and user_current['admin'] > 3: # Full info only for admins
+	for i in users_auth:
+		if i['id'] not in users_uniq:
+			users_uniq[i['id']] = {
+				'id': i['id'],
+				'login': i['login'],
+				'name': i['name'],
+				'surname': i['surname'],
+				'avatar': IMAGE['link_opt'] + i['avatar'],
+			}
+
+	if count:
+		this.sio.emit('online_add', {
+			'count': count,
+			'users': list(users_uniq.values()),
+		}, room=this.sid, namespace='/main')
+
+	## Already online
+
+	already = other_sessions(user_current['id'] if user_current else x['token'])
+
+	## Add to DB
+
+	online = {
+		'sid': this.sid,
+		'token': x['token'],
+		'start': this.timestamp,
+	}
+
+	if user_current:
+		online['id'] = user_current['id']
+		online['admin'] = user_current['admin']
+		online['login'] = user_current['login']
+		online['name'] = user_current['name']
+		online['surname'] = user_current['surname']
+		online['avatar'] = IMAGE['link_opt'] + user_current['avatar']
+	else:
+		online['id'] = x['token']
+		online['admin'] = 2
+
+	db['online'].insert_one(online)
+
+	## Emit this user to all users
+
+	if not already:
+		online_emit_add(this.sio, user_current)
+
+	# # Visits
+
+	# user_id = user_current['id'] if user_current else 0
+
+	# db_condition = {
+	# 	'token': x['token'],
+	# 	'user': user_id,
+	# }
+
+	# utm = db['utms'].find_one(db_condition)
+
+	# if not utm:
+	# 	utm = {
+	# 		'token': x['token'],
+	# 		'user': user_id,
+	# 		# 'utm': utm_mark,
+	# 		'time': this.timestamp,
+	# 		'steps': [],
+	# 	}
+
+	# 	db['utms'].insert_one(utm)
+
+	# | Sessions (sid) |
+	# | Tokens (token) |
+	# | Users (id) |
+
+	# Определить вкладку (tab - sid)
+	# ? Проверка, что токен не скомпрометирован - по ip?
+
+	# # UTM-метки
+
+	# utm_mark = {}
+	# params = x['url'].split('?')
+	# if len(params) >= 2:
+	# 	params = dict(re.findall(r'([^=\&]*)=([^\&]*)', params[1]))
+	# 	if 'utm_source' in params and 'utm_medium' in params:
+	# 		utm_mark = {
+	# 			'source': params['utm_source'],
+	# 			'agent': params['utm_medium'],
+	# 		}
+
+	# if utm:
+	# 	if utm_mark and not utm['utm']:
+	# 		utm['utm'] = utm_mark
+	# 		db['utms'].save(utm)
+
+	# else:
+	# 	utm = {
+	# 		'token': x['token'],
+	# 		'user': user_id,
+	# 		'utm': utm_mark,
+	# 		'time': this.timestamp,
+	# 		'steps': [],
+	# 	}
+
+	# 	db['utms'].insert_one(utm)
+
+# Disconnect
+
+def disconnect(this, **x):
+	print('OUT', this.sid)
+
+	online = db['online'].find_one({'sid': this.sid})
+	if not online:
+		return
+
+	# Close session
+
+	online_user_update(online)
+	online_session_close(online)
+	online_emit_del(this.sio, online['id'])
