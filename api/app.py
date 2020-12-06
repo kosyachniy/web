@@ -46,6 +46,14 @@ from api import API, Error
 ## Params
 from sets import SERVER, CLIENT
 
+
+api = API(
+	server=SERVER,
+	client=CLIENT,
+	sio=sio,
+)
+
+
 ## Endpoints
 @app.route('/', methods=['POST'])
 def index():
@@ -58,22 +66,17 @@ def index():
 			return jsonify({'error': 2, 'result': 'All required fields are not specified!'})
 
 	# Call API
-	api = API(
-		server=SERVER,
-		client=CLIENT,
-		socketio=sio,
-		ip=request.remote_addr,
-		token=x['token'] if 'token' in x else None,
-		language=x['language'] if 'language' in x else 'en',
-		ip_remote=x['ip'] if 'ip' in x else None,
-	)
-
-	# Response
 
 	req = {}
 
 	try:
-		res = api.method(x['method'], x['params'] if 'params' in x else {})
+		res = api.method(
+			x['method'],
+			x['params'] if 'params' in x else {},
+			ip=x['ip'] if 'ip' in x else request.remote_addr, # Case when a web application makes requests from IP with the same address
+			token=x['token'] if 'token' in x else None,
+			language=x['language'] if 'language' in x else 'en',
+		)
 
 	except Error.BaseError as e:
 		req['error'] = e.code
@@ -88,6 +91,8 @@ def index():
 
 		if res:
 			req['result'] = res
+
+	# Response
 
 	return jsonify(req)
 
@@ -114,15 +119,25 @@ socket = SOCKET(sio)
 
 @sio.on('connect', namespace='/main')
 def connect():
-	socket.method('account.connect', request.sid)
+	socket.method(
+		'account.connect',
+		sid=request.sid,
+	)
 
 @sio.on('online', namespace='/main')
-def online(x):
-	socket.method('account.online', request.sid, x)
+def online(data):
+	socket.method(
+		'account.online',
+		data,
+		sid=request.sid,
+	)
 
 @sio.on('disconnect', namespace='/main')
 def disconnect():
-	socket.method('account.disconnect', request.sid)
+	socket.method(
+		'account.disconnect',
+		sid=request.sid,
+	)
 
 
 if __name__ == '__main__':

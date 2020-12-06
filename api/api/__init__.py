@@ -12,11 +12,13 @@ import api.posts as posts
 
 
 class API():
-	def __init__(self, server, client, ip, socketio=None, token=None, language=0, ip_remote=None):
-		self.timestamp = time.time()
+	def __init__(self, server, client, sio=None):
 		self.server = server
 		self.client = client
-		self.socketio = socketio
+		self.socketio = sio
+
+	def method(self, name, params={}, ip=None, token=None, language=0):
+		self.timestamp = time.time()
 		self.ip = ip
 		self.token = token
 		self.language = get_language(language)
@@ -38,12 +40,6 @@ class API():
 				if user:
 					self.user = user
 
-		# IP (case when a web application makes requests from IP with the same address)
-
-		if ip_remote and ip == self.client['ip']:
-			self.ip = ip_remote
-
-	def method(self, name, params={}):
 		# Remove extra indentation
 
 		for i in params:
@@ -81,7 +77,7 @@ class SOCKET():
 		# Reset online users
 		db['online'].remove()
 
-	def method(self, name, sid, params={}):
+	def method(self, name, params={}, sid=None):
 		self.timestamp = time.time()
 		self.sid = sid
 
