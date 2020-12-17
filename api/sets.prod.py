@@ -16,3 +16,5 @@ IMAGE = {
 	'link': 'https://web.kosyachniy.com/load/',
 	'link_opt': 'https://web.kosyachniy.com/load/opt/',
 }
+
+SIDE_OPTIMIZED = 250

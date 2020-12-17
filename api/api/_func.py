@@ -2,6 +2,8 @@ import os
 import re
 import time
 import base64
+import string
+import random
 
 import requests
 from PIL import Image, ExifTags
@@ -9,10 +11,8 @@ from PIL import Image, ExifTags
 from func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
-from sets import IMAGE
 
-
-WIDTH_OPTIMIZED = 700
+from sets import IMAGE, SIDE_OPTIMIZED
 
 
 # Check existence the file by name
@@ -37,19 +37,36 @@ def max_image(url):
 
 # Upload image
 
-def load_image(data, file_type='jpg', type='base64'):
-	url = '../data/load/'
+def load_image(data, file_type=None, file_coding='base64', file_url='', file_id=None):
+	url = '../data/load/' + file_url
 	url_opt = url + 'opt/'
 
-	if type == 'base64':
+	if file_coding == 'base64':
 		data = base64.b64decode(data)
 
 	if file_type == '' or file_type == None:
 		file_type = 'jpg'
 
-	file_id = max_image(url)
-	file_name = '{}.{}'.format(file_id, file_type)
+	file_type = file_type.lower()
 
+	if file_id:
+		for i in os.listdir(url):
+			if re.search(r'^{}\.'.format(ind), i):
+				os.remove('{}/{}'.format(url, i))
+
+		for i in os.listdir(url_opt):
+			if re.search(r'^{}\.'.format(ind), i):
+				os.remove('{}/{}'.format(url_opt, i))
+
+	else:
+		file_id = max_image(url)
+		file_id = '{}{}{}'.format(
+			'0' * max(0, 10-len(str(file_id))),
+			file_id,
+			''.join(random.choice(string.ascii_lowercase) for _ in range(10)),
+		)
+
+	file_name = '{}.{}'.format(file_id, file_type)
 	url += file_name
 	url_opt += file_name
 
@@ -84,13 +101,21 @@ def load_image(data, file_type='jpg', type='base64'):
 
 	img = Image.open(url)
 
-	wpercent = (WIDTH_OPTIMIZED / float(img.size[0]))
-	hsize = int((float(img.size[1]) * float(wpercent)))
-	img = img.resize((WIDTH_OPTIMIZED, hsize), Image.ANTIALIAS)
+	if img.size[0] > img.size[1]:
+		hpercent = (SIDE_OPTIMIZED / float(img.size[1]))
+		wsize = int(float(img.size[0]) * float(hpercent))
+		img = img.resize((wsize, SIDE_OPTIMIZED), Image.ANTIALIAS)
+	else:
+		wpercent = (SIDE_OPTIMIZED / float(img.size[0]))
+		hsize = int(float(img.size[1]) * float(wpercent))
+		img = img.resize((SIDE_OPTIMIZED, hsize), Image.ANTIALIAS)
 
 	img.save(url_opt)
 
 	# Response
+
+	if file_url:
+		return '{}/{}'.format(file_url, file_name)
 
 	return file_name
 

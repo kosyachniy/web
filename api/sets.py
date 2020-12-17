@@ -16,3 +16,5 @@ IMAGE = {
 	'link': 'http://localhost/load/',
 	'link_opt': 'http://localhost/load/opt/',
 }
+
+SIDE_OPTIMIZED = 250
