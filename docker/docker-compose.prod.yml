@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: "mongo:4.0.8"
+    image: "mongo:4.4.2"
     container_name: "db"
     ports:
       - "27017:27017"
@@ -27,8 +27,9 @@ services:
     network_mode: host
     volumes:
       - "../data/load:/data/load"
-      - "../api/app:/app" # Для горячей перезагрузки
+      - "../api/func:/func" # Для горячей перезагрузки
       - "../api/api:/api" # Для горячей перезагрузки
+      - "../api/app.py:/app.py" # Для горячей перезагрузки
 
   server:
     build:

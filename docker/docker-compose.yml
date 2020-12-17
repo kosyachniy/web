@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: "mongo:4.0.8"
+    image: "mongo:4.4.2"
     container_name: "db"
     ports:
       - "27017:27017"
@@ -31,8 +31,9 @@ services:
     env_file: .env
     volumes:
       - "../data/load:/data/load"
-      - "../api/app:/app"
-      - "../api/api:/api"
+      - "../api/func:/func" # Для горячей перезагрузки
+      - "../api/api:/api" # Для горячей перезагрузки
+      - "../api/app.py:/app.py" # Для горячей перезагрузки
     ports:
       - "5000:5000"
 
@@ -50,7 +51,7 @@ services:
       - "3000:3000"
 
   server:
-    image: "nginx"
+    image: "nginx:1.19.6"
     container_name: "server"
     volumes:
       - "../docker/server/nginx.conf:/etc/nginx/nginx.conf"

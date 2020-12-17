@@ -14,6 +14,7 @@ Flask-Cors==3.0.8
 Flask-Limiter==1.4
 Flask-SocketIO==3.3.2
 greenlet==0.4.15
+# greenlet==1.0a1
 gunicorn==20.0.4
 idna==2.9
 importlib-metadata==1.6.0
