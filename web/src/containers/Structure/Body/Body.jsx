@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom'
 
 import { socketIO } from '../../../func/sockets'
@@ -21,8 +21,8 @@ import PostsEdit from '../../Posts/Edit'
 // import Map from '../../Pages/Map'
 
 
-export default class App extends React.Component {
-	componentWillMount() {
+const App = (props) => {
+	useEffect(() => { // WillMount
 		const token = localStorage.getItem('token')
 
 		// Online
@@ -33,62 +33,62 @@ export default class App extends React.Component {
 
 		socketIO.on('online_add', (x) => {
 			// console.log('ADD', x)
-			this.props.onlineAdd(x)
+			props.onlineAdd(x)
 		})
 
 		socketIO.on('online_del', (x) => {
 			// console.log('DEL', x)
-			this.props.onlineDelete(x)
+			props.onlineDelete(x)
 		})
 
 		socketIO.on('disconnect', () => {
-			this.props.onlineReset();
+			props.onlineReset()
 		})
+	}, [])
+
+	if (props.online.count && !props.system.loaded) {
+		props.systemLoaded()
 	}
 
-	render() {
-		if (this.props.online.count && !this.props.system.loaded) {
-			this.props.systemLoaded();
-		}
+	return (
+		<>
+			<Loader
+				loaded={props.system.loaded}
+				theme={props.system.theme}
+				color={props.system.color}
+			/>
+			<div className={`bg-${props.system.theme}`}>
+				<div className="container" id="main">
+					<Switch>
+						<Route exact path="/">
+							<PostsGrid />
+						</Route>
 
-		return (
-			<>
-				<Loader
-					loaded={this.props.system.loaded}
-					theme={this.props.system.theme}
-					color={this.props.system.color}
-				/>
-				<div className={`bg-${this.props.system.theme}`}>
-					<div className="container" id="main">
-						<Switch>
-							<Route exact path="/">
-								<PostsGrid />
-							</Route>
+						<Route path="/posts">
+							<PostsGrid />
+						</Route>
+						<Route path="/post/add">
+							<PostsEdit />
+						</Route>
+						<Route path="/post">
+							<PostsPost />
+						</Route>
+						<Route path="/feed">
+							<PostsFeed />
+						</Route>
 
-							<Route path="/posts">
-								<PostsGrid />
-							</Route>
-							<Route path="/post/add">
-								<PostsEdit />
-							</Route>
-							<Route path="/post">
-								<PostsPost />
-							</Route>
-							<Route path="/feed">
-								<PostsFeed />
-							</Route>
+						<Route path="/profile">
+							<Profile />
+						</Route>
 
-							<Route path="/profile">
-								<Profile />
-							</Route>
-
-							{/* <Route path="/map">
-								<Map />
-							</Route> */}
-						</Switch>
-					</div>
+						{/* <Route path="/map">
+							<Map />
+						</Route> */}
+					</Switch>
 				</div>
-			</>
-		)
-	}
+			</div>
+		</>
+	)
 }
+
+export default App;

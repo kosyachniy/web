@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -6,7 +5,7 @@ import './style.css'
 import { name, mail, phone, social } from '../../../sets'
 
 
-export default function Footer(props) {
+const Footer = (props) => {
 	const { system, changeLang } = props
 	const { t } = useTranslation()
 
@@ -57,3 +56,5 @@ export default function Footer(props) {
 		</footer>
 	)
 }
+
+export default Footer;

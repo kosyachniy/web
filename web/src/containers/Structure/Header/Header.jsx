@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -19,7 +18,7 @@ import Hexagon from '../../../components/Hexagon'
 // ]
 
 
-export default function Header(props) {
+const Header = (props) => {
 	const {
 		system, online, profile,
 		changeTheme, changeLang, profileOut,
@@ -169,3 +168,5 @@ export default function Header(props) {
 		</nav>
 	)
 }
+
+export default Header;

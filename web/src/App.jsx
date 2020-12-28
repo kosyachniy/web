@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom'
 
 // Redux
@@ -22,16 +22,10 @@ function genereteToken() {
 }
 
 
-export default class App extends React.Component {
-	state = {
-		showPopUp: false,
-	}
+const App = () => {
+	const [showPopUp, setShowPopUp] = useState(false)
 
-	handlerPopUp = (page) => {
-		this.setState({ showPopUp: page })
-	}
-
-	componentWillMount() {
+	useEffect(() => { // WillMount
 		// Token
 
 		let token = localStorage.getItem('token')
@@ -40,35 +34,33 @@ export default class App extends React.Component {
 			token = genereteToken()
 			localStorage.setItem('token', token)
 		}
-	}
+	}, [])
 
-	render() {
-		const { showPopUp } = this.state;
+	return (
+		<Provider store={store}>
+			<BrowserRouter>
+				<Header handlerPopUp={ setShowPopUp } />
 
-		return (
-			<Provider store={store}>
-				<BrowserRouter>
-					<Header handlerPopUp={ this.handlerPopUp } />
+				<Body />
 
-					<Body />
+				{ showPopUp && (
+					<>
+						{ showPopUp === 'auth' && (
+							<Auth handlerPopUp={ setShowPopUp } />
+						) }
+						{ showPopUp === 'mail' && (
+							<Mail handlerPopUp={ setShowPopUp } />
+						) }
+						{ showPopUp === 'online' && (
+							<Online handlerPopUp={ setShowPopUp } />
+						) }
+					</>
+				) }
 
-					{ showPopUp && (
-						<>
-							{ showPopUp === 'auth' && (
-								<Auth handlerPopUp={ this.handlerPopUp } />
-							) }
-							{ showPopUp === 'mail' && (
-								<Mail handlerPopUp={ this.handlerPopUp } />
-							) }
-							{ showPopUp === 'online' && (
-								<Online handlerPopUp={ this.handlerPopUp } />
-							) }
-						</>
-					) }
-
-					<Footer />
-				</BrowserRouter>
-			</Provider>
-		)
-	}
+				<Footer />
+			</BrowserRouter>
+		</Provider>
+	)
 }
+
+export default App;
