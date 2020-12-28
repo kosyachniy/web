@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import api from '../../../func/api'
@@ -12,13 +12,10 @@ const checkPassword = password => {
 }
 
 const Auth = (props) => {
-	const [state, setState] = useState({
-		mail: '',
-		password: '',
-	})
-
 	const { profileIn, handlerPopUp } = props
 	const { t } = useTranslation()
+	const [mail, setMail] = useState('')
+	const [password, setPassword] = useState('')
 
 	const signIn = (event) => {
 		const handlerSuccess = res => {
@@ -30,7 +27,7 @@ const Auth = (props) => {
 			console.log(res)
 		}
 
-		const data = {login: state.mail, password: state.password}
+		const data = {login: mail, password: password}
 		api('account.auth', data, handlerSuccess, handlerError)
 
 		event.preventDefault();
@@ -45,8 +42,8 @@ const Auth = (props) => {
 							className="form-control"
 							type="text"
 							placeholder={t('profile.mail')}
-							value={state.mail}
-							onChange={(event) => { setState({ ...state, mail: event.target.value }) }}
+							value={mail}
+							onChange={(event) => { setMail(event.target.value) }}
 							autoComplete="off"
 							required
 						/>
@@ -57,18 +54,18 @@ const Auth = (props) => {
 							// className={(responce !== null && responce.result === 'password') ? 'error' : ''}
 							type="password"
 							placeholder={t('profile.password')}
-							value={state.password}
-							onChange={(event) => { setState({ ...state, password: event.target.value }) }}
+							value={password}
+							onChange={(event) => { setPassword(event.target.value) }}
 							autoComplete="off"
 							required
 						/>
 					</div>
 					<div className="pass_info">
-						<span style={state.password.length >= 6 ? {} : { color: '#e74c3c' }}>
+						<span style={password.length >= 6 ? {} : { color: '#e74c3c' }}>
 							<i className="fas fa-genderless" />
 							{ t('profile.passwordTip1') }
 						</span>
-						<span style={checkPassword(state.password) ? {} : { color: '#e74c3c' }}>
+						<span style={checkPassword(password) ? {} : { color: '#e74c3c' }}>
 							<i className="fas fa-genderless" />
 							{ t('profile.passwordTip2') }
 						</span>

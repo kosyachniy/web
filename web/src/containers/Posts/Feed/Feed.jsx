@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 
@@ -7,20 +7,22 @@ import api from '../../../func/api'
 import './style.css'
 
 
-class Feed extends React.Component {
-	getPost = (data={}) => {
+const Feed = (props) => {
+	const { t } = props
+
+	const getPost = (data={}) => {
 		const handlerSuccess = (res) => {
-			this.props.postsGet(res['posts']);
+			props.postsGet(res['posts']);
 		}
 
 		api('posts.get', data, handlerSuccess)
 	}
 
-	componentWillMount() {
-		this.getPost()
-	}
+	useEffect(() => {
+		getPost()
+	}, [])
 
-	getTime = (time) => {
+	const getTime = (time) => {
 		const newTime = new Date(time * 1000);
 
 		const year = newTime.getFullYear();
@@ -28,7 +30,10 @@ class Feed extends React.Component {
 		let hours = `${newTime.getHours()}`;
 		let minutes = `${newTime.getUTCMinutes()}`;
 
-		let month = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'][newTime.getMonth()];
+		let month = [
+			'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+			'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
+		][newTime.getMonth()];
 
 		if (day.length < 2) {
 			day = `0${day}`
@@ -45,53 +50,49 @@ class Feed extends React.Component {
 		return `${day} ${month} ${year} в ${hours}:${minutes}`;
 	}
 
-	render() {
-		const { t } = this.props
+	return (
+		<>
+			<div className="container" id="feed">
+				<Link to="/post/add">
+					<button
+						type="button"
+						className="btn btn-success"
+						style={ {width: '100%'} }
+					>
+						<i className="fas fa-plus" />
+					</button>
+				</Link>
 
-		return (
-			<>
-				<div className="container" id="feed">
-					<Link to="/post/add">
-						<button
-							type="button"
-							className="btn btn-success"
-							style={ {width: '100%'} }
-						>
-							<i className="fas fa-plus" />
-						</button>
-					</Link>
+				{ !props.posts.length && (
+					<p>{ t('posts.empty') }!</p>
+				) }
 
-					{ !this.props.posts.length && (
-						<p>{ t('posts.empty') }!</p>
-					) }
-
-					{ this.props.posts.map(post => (
-						<div className="cards" key={ post.id }>
-							<Link to={ `/post/${post.id}` } >
-								<div className="cards-content">
-									<h3 className="title">{ post.name }</h3>
-									<div className="additional"><i className="fas fa-ellipsis-v" /></div>
-									<div className="time">{ this.getTime(post.time) }</div>
-								</div>
-								{ post.cover && (
-									<img src={ post.cover } alt={ post.name } />
-								) }
-								<div className="cards-content">
-									<div className="content short">{ post.cont }</div>
-								</div>
-							</Link>
-							<div className="cards-content reactions">
-								<div><i className="far fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
-								{/* <i className="fas fa-heart" /> */}
-								<div><i className="far fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
-								<div><i className="fas fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
+				{ props.posts.map(post => (
+					<div className="cards" key={ post.id }>
+						<Link to={ `/post/${post.id}` } >
+							<div className="cards-content">
+								<h3 className="title">{ post.name }</h3>
+								<div className="additional"><i className="fas fa-ellipsis-v" /></div>
+								<div className="time">{ getTime(post.time) }</div>
 							</div>
+							{ post.cover && (
+								<img src={ post.cover } alt={ post.name } />
+							) }
+							<div className="cards-content">
+								<div className="content short">{ post.cont }</div>
+							</div>
+						</Link>
+						<div className="cards-content reactions">
+							<div><i className="far fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
+							{/* <i className="fas fa-heart" /> */}
+							<div><i className="far fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
+							<div><i className="fas fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
 						</div>
-					)) }
-				</div>
-			</>
-		)
-	}
+					</div>
+				)) }
+			</div>
+		</>
+	)
 }
 
 export default withTranslation()(Feed);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -9,19 +9,13 @@ import Editor from '../../../components/Editor'
 
 
 const Edit = (props) => {
-	const [state, setState] = useState({
-		name: props.post ? props.post.name : '',
-		cont: props.post ? props.post.cont : '',
-		redirect: null,
-	})
-
+	const [name, setName] = useState(props.post ? props.post.name : '')
+	const [cont, setCont] = useState(props.post ? props.post.cont : '')
+	const [redirect, setRedirect] = useState(null)
 	const { t } = useTranslation()
 
 	const editPost = () => {
-		let data = {
-			name: state.name,
-			cont: state.cont,
-		}
+		let data = { name, cont }
 
 		if (props.post) {
 			data['id'] = props.post.id
@@ -31,16 +25,16 @@ const Edit = (props) => {
 			if (props.post) {
 				props.handlerSave()
 			} else {
-				setState({ ...state, redirect: res.id })
+				setRedirect(res.id)
 			}
 		}
 
 		api('posts.edit', data, handlerSuccess)
 	}
 
-	if (state.redirect) {
+	if (redirect) {
 		return (
-			<Redirect to={`/post/${state.redirect}`} />
+			<Redirect to={`/post/${redirect}`} />
 		)
 	}
 
@@ -52,14 +46,14 @@ const Edit = (props) => {
 						type="text"
 						className="form-control name"
 						placeholder={ t('posts.name') }
-						value={ state.name }
-						onChange={ (event) => {setState({ ...state, name: event.target.value })} }
+						value={ name }
+						onChange={ (event) => {setName(event.target.value)} }
 					/>
 				</div>
 
 				<Editor
-					cont={ state.cont }
-					updatePost={ (cont) => {setState({ ...state, cont })} }
+					cont={ cont }
+					updatePost={ (text) => {setCont(text)} }
 				/>
 
 				<br />
