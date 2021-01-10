@@ -1,7 +1,13 @@
+# Params
+from sets import SERVER, CLIENT
+
 # # Logging
 
 # import logging
 # logging.basicConfig(filename='error.log', level=logging.DEBUG)
+# logging.getLogger('socketio').setLevel(logging.ERROR)
+# logging.getLogger('engineio').setLevel(logging.ERROR)
+# logging.getLogger('geventwebsocket.handler').setLevel(logging.ERROR)
 
 # Main app
 
@@ -16,7 +22,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 # Socket.IO
 
 from flask_socketio import SocketIO
-sio = SocketIO(app, async_mode=None)
+sio = SocketIO(app, cors_allowed_origins=['http://localhost', CLIENT['link'][:-1]])
 
 # Limiter
 
@@ -42,9 +48,6 @@ limiter = Limiter(
 # API
 ## Libraries
 from api import API, Error
-
-## Params
-from sets import SERVER, CLIENT
 
 ## Variables
 api = API(
