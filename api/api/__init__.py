@@ -1,6 +1,6 @@
 import time
 
-from func.mongodb import db
+from api._func.mongodb import db
 from api._func import get_language
 import api._error as Error
 
@@ -9,6 +9,7 @@ import api.users as users
 import api.feedback as feedback
 import api.search as search
 import api.posts as posts
+# TODO: from api import *
 
 
 class API():
@@ -20,7 +21,7 @@ class API():
 		# Reset online users
 		db['online'].remove()
 
-	def method(self, name, params={}, ip=None, sid=None, token=None, language=0):
+	def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
 		self.timestamp = time.time()
 		self.ip = ip
 		self.sid = sid

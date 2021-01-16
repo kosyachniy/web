@@ -8,7 +8,7 @@ import random
 import requests
 from PIL import Image, ExifTags
 
-from func.mongodb import db
+from api._func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
 

@@ -3,7 +3,7 @@ import re
 # import shutil
 
 from sets import IMAGE
-from func.mongodb import db
+from api._func.mongodb import db
 from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
 from api._func import reimg, get_user, check_params, next_id, load_image
 

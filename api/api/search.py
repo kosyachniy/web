@@ -1,4 +1,4 @@
-from func.mongodb import db
+from api._func.mongodb import db
 from api._error import ErrorEmpty, ErrorAccess
 from api._func import check_params
 

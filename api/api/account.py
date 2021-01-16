@@ -8,8 +8,8 @@ import json
 import base64
 
 from sets import CLIENT, IMAGE
-from func.mongodb import db
-from func.smsc import SMSC
+from api._func.mongodb import db
+from api._func.smsc import SMSC
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount, \
 					   ErrorRepeat

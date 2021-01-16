@@ -1,5 +1,5 @@
 from sets import IMAGE
-from func.mongodb import db
+from api._func.mongodb import db
 from api._error import ErrorWrong, ErrorAccess, ErrorBlock
 from api._func import check_params, get_user
 

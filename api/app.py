@@ -49,7 +49,7 @@ limiter = Limiter(
 ## Libraries
 from api import API, Error
 
-## Variables
+## Global variables
 api = API(
 	server=SERVER,
 	client=CLIENT,
