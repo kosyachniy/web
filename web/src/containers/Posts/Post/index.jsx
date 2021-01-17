@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 // import ReactHtmlParser from 'react-html-parser'
 import MathJax from 'react-mathjax-preview'

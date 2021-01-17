@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import { socketIO } from '../../../func/sockets'
@@ -46,9 +46,11 @@ const App = (props) => {
 		})
 	}, [])
 
-	if (props.online.count && !props.system.loaded) {
-		props.systemLoaded()
-	}
+	useEffect(() => { // Fix for "Cannot update a component (`ConnectFunction`) while rendering a different component (`App`). To locate the bad setState() call inside `App`, follow the stack trace as described in https://fb.me/setstate-in-render"
+		if (props.online.count && !props.system.loaded) {
+			props.systemLoaded()
+		}
+	})
 
 	return (
 		<>

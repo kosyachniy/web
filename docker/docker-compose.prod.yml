@@ -27,7 +27,6 @@ services:
     network_mode: host
     volumes:
       - "../data/load:/data/load"
-      - "../api/func:/func" # Для горячей перезагрузки
       - "../api/api:/api" # Для горячей перезагрузки
       - "../api/app.py:/app.py" # Для горячей перезагрузки
 

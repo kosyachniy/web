@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 

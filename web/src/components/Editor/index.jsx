@@ -12,7 +12,19 @@ export default class Editor extends React.Component {
 			<CKEditor
 				editor={ ClassicEditor }
 				data={ this.props.cont }
-				onChange={ (event, editor) => {this.props.updatePost(editor.getData())} }
+				// onReady={ editor => {
+				//     // You can store the "editor" and use when it is needed.
+				//     console.log( 'Editor is ready to use!', editor );
+				// } }
+				onChange={ (event, editor) => {
+					this.props.updatePost(editor.getData())
+				} }
+				// onBlur={ ( event, editor ) => {
+				//     console.log( 'Blur.', editor );
+				// } }
+				// onFocus={ ( event, editor ) => {
+				//     console.log( 'Focus.', editor );
+				// } }
 			/>
 		)
 	}
