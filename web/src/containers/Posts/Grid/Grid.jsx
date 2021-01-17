@@ -24,16 +24,27 @@ const Grid = (props) => {
 
 	return (
 		<>
-			<div className="album py-4">
-				<Link to="/post/add">
-					<button
-						type="button"
-						className="btn btn-success"
-						style={ {width: '100%'} }
-					>
-						<i className="fas fa-plus" />
-					</button>
-				</Link>
+			<div className="row">
+				<div className="col-xs-10 col-sm-10 col-md-10">
+					<div className="btn-group">
+						<button type="button" className="btn btn-default"><i className="fas fa-th-large"></i></button>
+						<button type="button" className="btn btn-default"><i className="fas fa-th-list"></i></button>
+						<button type="button" className="btn btn-default"><i className="fas fa-image"></i></button>
+					</div>
+				</div>
+				<div className="col-xs-2 col-sm-2 col-md-2" style={ {textAlign: 'right'} }>
+					<div className="btn-group">
+						<Link to="/post/add">
+							<button
+								type="button"
+								className="btn btn-success"
+								style={ {width: '100%'} }
+							>
+								<i className="fas fa-plus" />
+							</button>
+						</Link>
+					</div>
+				</div>
 			</div>
 
 			<div className="album py-2">

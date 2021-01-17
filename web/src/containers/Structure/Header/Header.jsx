@@ -46,11 +46,8 @@ const Header = (props) => {
 				<div className="collapse navbar-collapse" id="navbarTogglerDemo02">
 					<ul className="navbar-nav mr-auto mt-2 mt-lg-0">
 						{/* <li className="nav-item">
-							<Link to="/" className="nav-link">{ t('structure.space') }</Link>
-						</li> */}
-						<li className="nav-item">
 							<Link to="/feed/" className="nav-link">{ t('structure.feed') }</Link>
-						</li>
+						</li> */}
 						<li className="nav-item dropdown">
 							<Link to="/posts/" className="nav-link">{ t('structure.posts') }</Link>
 							{/* <Link to="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
@@ -61,6 +58,12 @@ const Header = (props) => {
 									))
 								}
 							</div> */}
+						</li>
+						{/* <li className="nav-item">
+							<Link to="/" className="nav-link">{ t('structure.space') }</Link>
+						</li> */}
+						<li className="nav-item">
+							<Link to="/room/" className="nav-link">{ t('structure.room') }</Link>
 						</li>
 						{/* <li className="nav-item dropdown">
 							<Link to="/events/" className="nav-link">{ t('structure.events') }</Link>
@@ -154,7 +157,7 @@ const Header = (props) => {
 								</>
 							) : (<></>)}
 							{!profile.id ? (
-								<div>
+								<div style={ {paddingRight: 0} }>
 									<button
 										type="button"
 										className="btn btn-success"
