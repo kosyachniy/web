@@ -7,7 +7,6 @@ import api._error as Error
 import api.account as account
 import api.users as users
 import api.feedback as feedback
-import api.search as search
 import api.posts as posts
 # TODO: from api import *
 

@@ -124,8 +124,10 @@ def get(this, **x):
 
 	check_params(x, (
 		('id', False, (int, list), int),
-		('count', False, int),
 		('category', False, int),
+		('count', False, int),
+		('offset', False, int),
+		('search', False, str),
 		# ('language', False, (int, str)),
 	))
 
@@ -151,7 +153,7 @@ def get(this, **x):
 	# else:
 	# 	x['language'] = this.language
 
-	# Get posts
+	# Get
 
 	count = x['count'] if 'count' in x else None
 
@@ -159,7 +161,7 @@ def get(this, **x):
 		'_id': False,
 		'id': True,
 		'name': True,
-		'cont': True,
+		'cont': True, # !
 		'reactions': True,
 		'time': True,
 		'geo': True, # !
@@ -168,7 +170,40 @@ def get(this, **x):
 	if process_single:
 		db_filter['cont'] = True
 
-	posts = list(db['posts'].find(db_condition, db_filter).sort('time', -1)[:count])
+	if 'search' in x:
+		db_filter['name'] = True
+		db_filter['cont'] = True
+		db_filter['tags'] = True
+
+	posts = list(db['posts'].find(db_condition, db_filter).sort('time', -1))
+
+	# Filter
+
+	if 'search' in x and x['search']:
+		x['search'] = x['search'].lower()
+		i = 0
+
+		while i < len(posts):
+			cond_name = x['search'] not in posts[i]['name'].lower()
+			cond_cont = x['search'] not in posts[i]['cont'].lower() # TODO: HTML tags
+			cond_tags = all(x['search'] not in tag.lower() for tag in posts[i]['tags']) if 'tags' in posts[i] else True
+
+			if cond_name and cond_cont and cond_tags:
+				del posts[i]
+				continue
+
+			i += 1
+
+		for i in range(len(posts)):
+			# del posts[i]['cont'] # !
+
+			if 'tags' in posts[i]:
+				del posts[i]['tags']
+
+	offset = x['offset'] if 'offset' in x else 0
+	last = offset+x['count'] if 'count' in x else None
+
+	posts = posts[offset:last]
 
 	# Processing
 
