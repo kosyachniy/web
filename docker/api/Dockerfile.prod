@@ -1,5 +1,5 @@
 # Pull base image
-FROM python:3.8.6
+FROM python:3.9.1
 
 # Set work directory
 WORKDIR .
