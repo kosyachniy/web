@@ -1,9 +1,12 @@
 # Template full stack application
 ## Description
+Web-app on JS with JSON-RPC API
+
 Form | Side | Stack | Language | Path
 ---|---|---|---|---
 API | Back-end | Flask | Python | ``` api/ ```
 Web app | Front-end | React | JavaScript | ``` web/ ```
+Telegram bot | Back-end | AIOGram | Python | planned
 iOS | Front-end | React Native | JavaScript | planned
 Android | Front-end | React Native | JavaScript | planned
 

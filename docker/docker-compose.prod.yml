@@ -37,4 +37,4 @@ services:
     container_name: "web"
     network_mode: host
     volumes:
-      - "../web/build:/build"
+      - "../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf"

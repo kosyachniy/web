@@ -120,7 +120,7 @@ def process_phone(cont):
 
 	cont = re.sub('[^0-9]', '', cont)
 
-	if len(cont) != 11:
+	if not 10 < len(cont) < 19:
 		raise ErrorInvalid('phone')
 
 	return int(cont)
@@ -885,7 +885,7 @@ def exit(this, **x):
 		raise ErrorWrong('token')
 
 	# Remove token
-	db['tokens'].remove(token['_id'])
+	db['tokens'].remove(token['_id']) # TODO: не удалять токены (выданные ботам)
 
 	# Close session
 

@@ -24,4 +24,5 @@ RUN rm sets.py
 RUN cp sets.prod.py sets.py
 
 # Run
-CMD bash run.sh
+# Обязательно в [""], иначе будет ошибка "exited with code 0"
+CMD ["bash", "run.sh"]

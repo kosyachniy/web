@@ -1,5 +1,5 @@
 # Pull base image
-FROM node:15.5.1 as web
+FROM node:15.5.1 as webbb
 
 # Set work directory
 WORKDIR .
@@ -21,4 +21,4 @@ RUN npm run build
 
 # NGINX
 FROM nginx:1.19.6
-COPY --from=web /build /web/build
+COPY --from=webbb . /web
