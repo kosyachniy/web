@@ -80,75 +80,7 @@ docker-compose up --build
 Go to ``` http://localhost/ ```
 
 ### Production
-1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ``` & ``` api/sets.prod.py ``` & ``` web/src/sets.prod.js ``` & ``` docker/server/nginx.prod.conf ```
-
-2. Run Docker Compose
-```
-docker-compose -f docker-compose.prod.yml up --build
-```
-
-3. Install NGINX
-```
-sudo apt-get update
-sudo apt install nginx
-y
-```
-
-4. Configure NGINX (optional)
-```
-sudo nano /etc/nginx/nginx.conf
-```
-
-If there is no access to static:
-```
-	user root;
-```
-
-If there is a download of large files:
-```
-	types_hash_max_size 20480;
-	client_max_body_size 30m;
-```
-
-5. Configure NGINX project
-```
-sudo cp /docker/server/nginx.prod.conf /etc/nginx/sites-available/<name of the project>
-
-sudo ln -s /etc/nginx/sites-available/<name of the project> /etc/nginx/sites-enabled
-
-sudo systemctl restart nginx
-```
-
-6. Install Let's Encrypt
-```
-sudo apt-get install software-properties-common
-sudo add-apt-repository universe
-sudo add-apt-repository ppa:certbot/certbot
-<enter>
-```
-
-```
-sudo apt-get update
-sudo apt-get install certbot python-certbot-nginx
-y
-```
-
-7. Set up Let's Encrypt's sertificates
-```
-sudo certbot --nginx
-<your mail>
-A
-Y
-1
-2
-```
-
-8. Open
-
-Go to ``` https://web.kosyachniy.com/ ``` (your link)
-
-### Production (alone)
-1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ``` & ``` api/sets.prod.py ``` & ``` web/src/sets.prod.js ``` & ``` docker/server/nginx.alone.conf ``` & ``` docker/server/nginx.cert.conf ``` & ``` docker/cert.sh ```
+1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ``` & ``` api/sets.prod.py ``` & ``` web/src/sets.prod.js ``` & ``` docker/server/nginx.prod.conf ``` & ``` docker/server/nginx.cert.conf ``` & ``` docker/cert.sh ```
 
 2. Create encryption keys
 ```
@@ -159,7 +91,7 @@ chmod 777 cert.sh
 
 3. Run Docker Compose
 ```
-docker-compose -f docker-compose.alone.yml up --build
+docker-compose -f docker-compose.prod.yml up --build
 ```
 
 4. Open

@@ -20,5 +20,6 @@ RUN cp src/sets.prod.js src/sets.js
 RUN npm run build
 
 # NGINX
-FROM nginx:1.19.6
+# Не указывать версию nginx, иначе ошибка "ERROR: dockerfile parse error line 25: COPY requires at least two arguments, but only one was provided. Destination could not be determined."
+FROM nginx
 COPY --from=web /build /web/build
