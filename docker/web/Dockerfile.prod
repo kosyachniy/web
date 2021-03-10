@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Settings
-# Если такой уже есть - заменить
+# If there is already one, replace it
 RUN rm -f src/sets.js
 RUN cp src/sets.prod.js src/sets.js
 
@@ -20,6 +20,5 @@ RUN cp src/sets.prod.js src/sets.js
 RUN npm run build
 
 # NGINX
-# Не указывать версию nginx, иначе ошибка "ERROR: dockerfile parse error line 25: COPY requires at least two arguments, but only one was provided. Destination could not be determined."
-FROM nginx
+FROM nginx:1.19.6
 COPY --from=web /build /web/build
