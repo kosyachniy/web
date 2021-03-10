@@ -1,18 +1,13 @@
-# Кэш
-
+# Cache
 ##  MacOS
-
 .DS_Store
 
-## Редакторы
-
+## Editors
 .idea/
 .vscode/
 
-# Ключи
-
+# Keys & sets
 *.env
 
-# Данные
-
+# Data
 /data/
