@@ -1,1 +1,1 @@
-gunicorn app:app -k eventlet -w 1 -b :5000 --reload
+uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload

@@ -11,39 +11,46 @@ from sets import SERVER, CLIENT
 
 # Main app
 
-from flask import Flask
-app = Flask(__name__)
+from fastapi import FastAPI, Request, WebSocket
+app = FastAPI(title='Web app API')
 
 # CORS
 
-from flask_cors import CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Socket.IO
 
-from flask_socketio import SocketIO
-sio = SocketIO(app, cors_allowed_origins=['http://localhost', CLIENT['link'][:-1]])
+import socketio
+sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+asgi = socketio.ASGIApp(sio)
 
-# Limiter
+# # Limiter
 
-from flask import request, jsonify
-from flask_limiter import Limiter
+# from flask import request, jsonify
+# from flask_limiter import Limiter
 
-def get_ip():
-	try:
-		if 'ip' in request.json:
-			return request.json['ip']
+# def get_ip():
+# 	try:
+# 		if 'ip' in request.json:
+# 			return request.json['ip']
 
-	except:
-		pass
+# 	except:
+# 		pass
 
-	return request.remote_addr
+# 	return request.remote_addr
 
-limiter = Limiter(
-	app,
-	key_func=get_ip,
-	default_limits=['1000/day', '500/hour', '20/minute']
-)
+# limiter = Limiter(
+# 	app,
+# 	key_func=get_ip,
+# 	default_limits=['1000/day', '500/hour', '20/minute']
+# )
 
 # API
 ## Libraries
@@ -57,16 +64,18 @@ api = API(
 )
 
 ## Endpoints
-### Main
-@app.route('/', methods=['POST'])
-def index():
-	data = request.json
-	# print(data)
+from pydantic import BaseModel
 
-	# All required fields are not specified
-	for field in ('method', 'token'):
-		if field not in data:
-			return jsonify({'error': 2, 'result': 'All required fields are not specified!'})
+### Main
+class Input(BaseModel):
+	method: str
+	params: dict = {}
+	locale: str = 'en'
+	token: str = None
+
+@app.post('/')
+async def index(data: Input, request: Request):
+	print(data, request.client.host, request.client.port)
 
 	# Call API
 
@@ -74,11 +83,11 @@ def index():
 
 	try:
 		res = api.method(
-			data['method'],
-			data['params'] if 'params' in data else {},
-			ip=data['ip'] if 'ip' in data else request.remote_addr, # Case when a web application makes requests from IP with the same address
-			token=data['token'] if 'token' in data else None,
-			language=data['language'] if 'language' in data else 'en',
+			data.method,
+			data.params,
+			ip=request.client.host,
+			token=data.token,
+			language=data.locale,
 		)
 
 	except Error.BaseError as e:
@@ -97,46 +106,41 @@ def index():
 
 	# Response
 
-	return jsonify(req)
+	return req
 
-### Facebook bot
-@app.route('/fb', methods=['POST'])
-@app.route('/fb/', methods=['POST'])
-def fb():
-	x = request.json
-
-	print(x)
-
-	return jsonify({'qwe': 'asd'})
+# ### Facebook bot
+# @app.route('/fb', methods=['POST'])
+# @app.route('/fb/', methods=['POST'])
+# def fb():
+# 	x = request.json
+# 	print(x)
+# 	return jsonify({'qwe': 'asd'})
 
 ## Sockets
 ### Online users
 
-@sio.on('connect', namespace='/main')
-def connect():
+@sio.on('connect')
+async def connect(sid, request, data):
 	api.method(
 		'account.connect',
-		ip=request.remote_addr,
-		sid=request.sid,
+		ip=request['asgi.scope']['client'][0],
+		sid=sid,
 	)
 
-@sio.on('online', namespace='/main')
-def online(data):
-	api.method(
+@sio.on('online')
+async def online(sid, data):
+	await api.method(
 		'account.online',
 		data,
-		ip=request.remote_addr,
-		sid=request.sid,
+		sid=sid,
 	)
 
-@sio.on('disconnect', namespace='/main')
-def disconnect():
-	api.method(
+@sio.on('disconnect')
+async def disconnect(sid):
+	await api.method(
 		'account.disconnect',
-		ip=request.remote_addr,
-		sid=request.sid,
+		sid=sid,
 	)
 
 
-if __name__ == '__main__':
-	sio.run(app, debug=False, log_output=False)
+app.mount('/', asgi) # ?

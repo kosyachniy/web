@@ -1,11 +1,9 @@
 # env/bin/python -m pip install -U --force-reinstall pip
 
-gunicorn==20.0.4
-eventlet==0.30.0
-Flask==1.1.2
-Flask-Cors==3.0.9
-Flask-SocketIO==5.0.0
-Flask-Limiter==1.4
+fastapi==0.63.0
+uvicorn==0.13.4
+python-socketio==5.1.0
+websockets==8.1
 pymongo==3.11.2
 requests==2.25.1
-Pillow==8.0.1
+Pillow==8.1.2

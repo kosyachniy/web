@@ -365,7 +365,7 @@ def online_session_close(online):
 
 	db['online'].remove(online['_id'])
 
-def online_emit_del(sio, user_id):
+async def online_emit_del(sio, user_id):
 	user = db['users'].find_one({'id': user_id})
 	if not user:
 		return
@@ -386,15 +386,15 @@ def online_emit_del(sio, user_id):
 		users_all = list(db['online'].find({}, db_filter))
 		count = len(set([i['id'] for i in users_all]))
 
-		sio.emit('online_del', {
+		await sio.emit('online_del', {
 			'count': count,
 			'users': [{'id': user_id}], # ! Админам
-		}, namespace='/main')
+		})
 
 
 # Open session
 
-def online_emit_add(sio, user):
+async def online_emit_add(sio, user):
 	db_filter = {
 		'_id': False,
 		'id': True,
@@ -406,7 +406,7 @@ def online_emit_add(sio, user):
 	# Online users
 	## Emit this user to all users
 
-	sio.emit('online_add', {
+	await sio.emit('online_add', {
 		'count': count,
 		'users': [{
 			'id': user['id'],
@@ -415,4 +415,4 @@ def online_emit_add(sio, user):
 			'surname': user['surname'],
 			'avatar': IMAGE['link_opt'] + user['avatar'],
 		}] if user else [], # ! Full info for all / Full info only for admins
-	}, namespace='/main')
+	})

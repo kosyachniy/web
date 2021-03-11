@@ -224,7 +224,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 # Update online users
 
-def online_update(sio, user, token):
+async def online_update(sio, user, token):
 	# Online users
 	## Already online
 
@@ -245,7 +245,7 @@ def online_update(sio, user, token):
 
 	## Emit this user to all users
 
-	online_emit_add(sio, user)
+	await online_emit_add(sio, user)
 
 	# ! Сокет на обновление сессий в браузере
 
@@ -255,7 +255,7 @@ def online_update(sio, user, token):
 # ! Сокет на авторизацию на всех вкладках токена
 # ! Перезапись информации этого токена уже в онлайне
 
-def reg(this, **x):
+async def reg(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -297,7 +297,7 @@ def reg(this, **x):
 
 	# Update online users
 
-	online_update(this.sio, user, this.token)
+	await online_update(this.sio, user, this.token)
 
 	# Response
 
@@ -317,7 +317,7 @@ def reg(this, **x):
 
 # By social network
 
-def social(this, **x):
+async def social(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -535,7 +535,7 @@ def social(this, **x):
 
 	# Update online users
 
-	online_update(this.sio, res, this.token)
+	await online_update(this.sio, res, this.token)
 
 	# Response
 
@@ -610,7 +610,7 @@ def phone_send(this, **x):
 
 	return res
 
-def phone_check(this, **x):
+async def phone_check(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -740,7 +740,7 @@ def phone_check(this, **x):
 
 	# Update online users
 
-	online_update(this.sio, user, this.token)
+	await online_update(this.sio, user, this.token)
 
 	# Response
 
@@ -763,7 +763,7 @@ def phone_check(this, **x):
 # ! Сокет на авторизацию на всех вкладках токена
 # ! Перезапись информации этого токена уже в онлайне
 
-def auth(this, **x):
+async def auth(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -849,7 +849,7 @@ def auth(this, **x):
 
 	# Update online users
 
-	online_update(this.sio, res, this.token)
+	await online_update(this.sio, res, this.token)
 
 	# Response
 
@@ -872,7 +872,7 @@ def auth(this, **x):
 # ! Сокет на авторизацию на всех вкладках токена
 # ! Перезапись информации этого токена уже в онлайне
 
-def exit(this, **x):
+async def exit(this, **x):
 	# Not authorized
 	if not this.token:
 		raise ErrorAccess('token')
@@ -911,7 +911,7 @@ def exit(this, **x):
 
 		db['online'].save(online)
 
-		online_emit_del(this.sio, this.user['id'])
+		await online_emit_del(this.sio, this.user['id'])
 
 	# ! Отправлять сокет всем сессиям этого браузера на выход
 
@@ -1029,7 +1029,7 @@ def connect(this, **x):
 
 # Online
 
-def online(this, **x):
+async def online(this, **x):
 	print('ON', this.sid)
 
 	# Define user
@@ -1087,10 +1087,10 @@ def online(this, **x):
 			}
 
 	if count:
-		this.sio.emit('online_add', {
+		await this.sio.emit('online_add', {
 			'count': count,
 			'users': list(users_uniq.values()),
-		}, room=this.sid, namespace='/main')
+		}, room=this.sid)
 
 	## Already online
 
@@ -1120,7 +1120,7 @@ def online(this, **x):
 	## Emit this user to all users
 
 	if not already:
-		online_emit_add(this.sio, user_current)
+		await online_emit_add(this.sio, user_current)
 
 	# # Visits
 
@@ -1181,7 +1181,7 @@ def online(this, **x):
 
 # Disconnect
 
-def disconnect(this, **x):
+async def disconnect(this, **x):
 	print('OUT', this.sid)
 
 	online = db['online'].find_one({'sid': this.sid})
@@ -1192,4 +1192,4 @@ def disconnect(this, **x):
 
 	online_user_update(online)
 	online_session_close(online)
-	online_emit_del(this.sio, online['id'])
+	await online_emit_del(this.sio, online['id'])
