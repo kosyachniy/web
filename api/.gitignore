@@ -1,32 +1,21 @@
-# Кэш
-
+# Cache
 ##  MacOS
-
 .DS_Store
 
 ## Python
-
 **/__pycache__/
 **/*.pyc
 
-## Редакторы
-
+## Editors
 .idea/
 .vscode/
 
-##
-
-error.log
-
-# Ключи и настройки
-
+# Keys & sets
 keys.py
 keys.json
 
-# Виртуальное окружение
-
+# Environments
 env/
 
-# Данные
-
-/db/
+# Logs
+error.log

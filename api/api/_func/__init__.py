@@ -51,11 +51,11 @@ def load_image(data, file_type=None, file_coding='base64', file_url='', file_id=
 
 	if file_id:
 		for i in os.listdir(url):
-			if re.search(r'^{}\.'.format(ind), i):
+			if re.search(r'^{}\.'.format(file_id), i):
 				os.remove('{}/{}'.format(url, i))
 
 		for i in os.listdir(url_opt):
-			if re.search(r'^{}\.'.format(ind), i):
+			if re.search(r'^{}\.'.format(file_id), i):
 				os.remove('{}/{}'.format(url_opt, i))
 
 	else:

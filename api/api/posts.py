@@ -36,11 +36,11 @@ def edit(this, **x):
 			('tags', False, list, str),
 		))
 
-	# Process of post
+	# Processed
 
 	processed = False
 
-	# Post formation
+	# Formation
 
 	if 'id' in x:
 		post = db['posts'].find_one({'id': x['id']})
@@ -62,7 +62,6 @@ def edit(this, **x):
 		}
 
 	# Change fields
-
 	for field in ('name', 'category', 'tags'):
 		if field in x:
 			post[field] = x[field]
@@ -103,7 +102,7 @@ def edit(this, **x):
 	# except:
 	# 	pass
 
-	# Save post
+	# Save
 	db['posts'].save(post)
 
 	# Response
