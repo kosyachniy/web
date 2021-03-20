@@ -4,7 +4,7 @@ Web-app on JS with JSON-RPC API
 
 Form | Side | Stack | Language | Path
 ---|---|---|---|---
-API | Back-end | Flask | Python | ``` api/ ```
+API | Back-end | FastAPI | Python | ``` api/ ```
 Web app | Front-end | React | JavaScript | ``` web/ ```
 Telegram bot | Back-end | AIOGram | Python | planned
 iOS | Front-end | React Native | JavaScript | planned
@@ -35,8 +35,8 @@ Android | Front-end | React Native | JavaScript | planned
 		</tr>
 		<tr>
 			<td rowspan="3">Back-end</td>
-			<td><img src="re/img/flask_logo.png" alt="Flask" height="70" /></td>
-			<td><img src="re/img/flask_name.png" alt="Flask" height="70" /></td>
+			<td><img src="re/img/fastapi_logo.png" alt="FastAPI" height="70" /></td>
+			<td><img src="re/img/fastapi_name.png" alt="FastAPI" height="70" /></td>
 		</tr>
 		<tr>
 			<td><img src="re/img/mongodb_logo.png" alt="MongoDB" height="70" /></td>
