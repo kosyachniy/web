@@ -2,8 +2,8 @@ import axios from 'axios'
 import { server } from '../sets'
 
 function serverRequest(json={}) {
-	console.log(server.link, json)
-	return axios.post(server.link, json)
+	console.log(server, json)
+	return axios.post(server, json)
 }
 
 function handlerResult(res, handlerSuccess, handlerError) {

@@ -12,9 +12,8 @@ import api.posts as posts
 
 
 class API():
-	def __init__(self, client, files, sio=None):
+	def __init__(self, client, sio=None):
 		self.client = client
-		self.files = files
 		self.sio = sio
 
 		# Reset online users

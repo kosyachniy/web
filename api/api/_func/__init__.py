@@ -4,6 +4,7 @@ import time
 import base64
 import string
 import random
+import json
 
 import requests
 from PIL import Image, ExifTags
@@ -12,7 +13,8 @@ from api._func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
 
-from sets import SIDE_OPTIMIZED
+with open('sets.json', 'r') as file:
+	SIDE_OPTIMIZED = json.loads(file.read())['side_optimized']
 
 
 # Check existence the file by name

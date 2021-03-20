@@ -1,6 +1,3 @@
-# Params
-from sets import CLIENT, FILES
-
 # # Logging
 
 # import logging
@@ -54,12 +51,19 @@ asgi = socketio.ASGIApp(sio)
 
 # API
 ## Libraries
+### System
+import json
+
+### Local
 from api import API, Error
+
+## Params
+with open('sets.json', 'r') as file:
+	CLIENT = json.loads(file.read())['client']
 
 ## Global variables
 api = API(
 	client=CLIENT,
-	files=FILES,
 	sio=sio,
 )
 

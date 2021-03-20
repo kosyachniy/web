@@ -1,9 +1,5 @@
-export const server = {
-	link: 'https://web.kosyachniy.com/api/',
-}
-export const socket = {
-	link: 'https://web.kosyachniy.com/',
-}
+export const server = 'https://web.kosyachniy.com/api/'
+export const sockets = 'https://web.kosyachniy.com/'
 
 export const name = 'Quateo'
 export const mail = 'polozhev@mail.ru'

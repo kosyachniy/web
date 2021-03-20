@@ -1,0 +1,8 @@
+{
+	"mongo": {
+		"host": "db",
+		"db": "uple"
+	},
+	"client": "http://localhost/",
+	"side_optimized": 250
+}

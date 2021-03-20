@@ -333,7 +333,7 @@ async def social(this, **x):
 	# ВКонтакте
 	if x['id'] == 1:
 		link = 'https://oauth.vk.com/access_token?client_id={}&client_secret={}&redirect_uri={}callback&code={}'
-		response = json.loads(requests.get(link.format(VK['client_id'], VK['client_secret'], this.client['link'], x['code'])).text)
+		response = json.loads(requests.get(link.format(VK['client_id'], VK['client_secret'], this.client, x['code'])).text)
 
 		if 'user_id' in response:
 			user_id = response['user_id']
@@ -349,7 +349,7 @@ async def social(this, **x):
 		cont = {
 			'client_id': GOOGLE['client_id'],
 			'client_secret': GOOGLE['client_secret'],
-			'redirect_uri': '{}callback'.format(this.client['link']),
+			'redirect_uri': '{}callback'.format(this.client),
 			'grant_type': 'authorization_code',
 			'code': urllib.parse.unquote(x['code']),
 		}

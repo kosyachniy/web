@@ -20,8 +20,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-RUN rm sets.py
-RUN cp sets.prod.py sets.py
+RUN rm sets.json
+RUN cp sets.prod.json sets.json
 
 # Run
 # Не использовать [""], иначе "exited with code 2"

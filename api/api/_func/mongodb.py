@@ -1,18 +1,25 @@
+# Libraries
+## System
 import json
 
+## External
 from pymongo import MongoClient
 
 
-from sets import DB
+# Params
+with open('sets.json', 'r') as file:
+	sets = json.loads(file.read())['mongo']
 
 with open('keys.json', 'r') as file:
-	MONGO = json.loads(file.read())['mongo']
+	keys = json.loads(file.read())['mongo']
 
+
+# Global variables
 db = MongoClient(
-	host=DB['hostname'],
+	host=sets['host'],
 	port=27017,
-	username=MONGO['login'],
-	password=MONGO['password'],
+	username=keys['login'],
+	password=keys['password'],
 	authSource='admin',
 	authMechanism='SCRAM-SHA-1'
-)[DB['name']]
+)[sets['db']]

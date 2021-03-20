@@ -80,7 +80,7 @@ docker-compose up --build
 Go to ``` http://localhost/ ```
 
 ### Production
-1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ``` & ``` api/sets.prod.py ``` & ``` web/src/sets.prod.js ``` & ``` docker/server/nginx.prod.conf ``` & ``` docker/server/nginx.cert.conf ``` & ``` docker/cert.sh ```
+1. Customize files ``` api/keys.json ``` & ``` web/src/keys.js ``` & ``` docker/.env ``` & ``` api/sets.prod.json ``` & ``` web/src/sets.prod.js ``` & ``` docker/server/nginx.prod.conf ``` & ``` docker/server/nginx.cert.conf ``` & ``` docker/cert.sh ```
 
 2. Create encryption keys
 ```
@@ -105,7 +105,7 @@ Go to ``` https://web.kosyachniy.com/ ``` (your link)
 cd api/
 ```
 
-2. Customize files ``` sets.py ``` & ``` keys.json ```
+2. Customize files ``` sets.json ``` & ``` keys.json ```
 
 3. Virtual environment
 ```

@@ -1,9 +1,5 @@
-export const server = {
-	link: 'http://localhost/api/',
-}
-export const socket = {
-	link: 'http://localhost/',
-}
+export const server = 'http://localhost/api/'
+export const sockets = 'http://localhost/'
 
 export const name = 'Quateo'
 export const mail = 'polozhev@mail.ru'
