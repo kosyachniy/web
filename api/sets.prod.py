@@ -1,4 +1,4 @@
-HOST = '127.0.0.1'
+HOST = 'db'
 
 SERVER = {
 	'link': 'https://web.kosyachniy.com/api/',

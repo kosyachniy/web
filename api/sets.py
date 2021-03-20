@@ -1,7 +1,7 @@
 HOST = 'db'
 
 SERVER = {
-	'link': 'http://0.0.0.0:5000/',
+	'link': 'http://localhost/api/',
 	'ip': '0.0.0.0',
 	'port': 5000,
 }
