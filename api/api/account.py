@@ -7,7 +7,6 @@ import urllib
 import json
 import base64
 
-from sets import CLIENT, IMAGE
 from api._func.mongodb import db
 from api._func.smsc import SMSC
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
@@ -238,7 +237,7 @@ async def online_update(sio, user, token):
 		i['login'] = user['login']
 		i['name'] = user['name']
 		i['surname'] = user['surname']
-		i['avatar'] = IMAGE['link_opt'] + user['avatar']
+		i['avatar'] = '/load/opt/' + user['avatar']
 		i['admin'] = user['admin']
 
 		db['online'].save(i)
@@ -306,7 +305,7 @@ async def reg(this, **x):
 		'login': user['login'],
 		'name': user['name'],
 		'surname': user['surname'],
-		'avatar': IMAGE['link_opt'] + user['avatar'],
+		'avatar': '/load/opt/' + user['avatar'],
 		'admin': 3,
 		'mail': user['mail'],
 		# 'balance': 0,
@@ -334,7 +333,7 @@ async def social(this, **x):
 	# ВКонтакте
 	if x['id'] == 1:
 		link = 'https://oauth.vk.com/access_token?client_id={}&client_secret={}&redirect_uri={}callback&code={}'
-		response = json.loads(requests.get(link.format(VK['client_id'], VK['client_secret'], CLIENT['link'], x['code'])).text)
+		response = json.loads(requests.get(link.format(VK['client_id'], VK['client_secret'], this.client['link'], x['code'])).text)
 
 		if 'user_id' in response:
 			user_id = response['user_id']
@@ -350,7 +349,7 @@ async def social(this, **x):
 		cont = {
 			'client_id': GOOGLE['client_id'],
 			'client_secret': GOOGLE['client_secret'],
-			'redirect_uri': '{}callback'.format(CLIENT['link']),
+			'redirect_uri': '{}callback'.format(this.client['link']),
 			'grant_type': 'authorization_code',
 			'code': urllib.parse.unquote(x['code']),
 		}
@@ -544,7 +543,7 @@ async def social(this, **x):
 		'login': res['login'],
 		'name': res['name'],
 		'surname': res['surname'],
-		'avatar': IMAGE['link_opt'] + res['avatar'],
+		'avatar': '/load/opt/' + res['avatar'],
 		'admin': res['admin'],
 		'mail': res['mail'],
 		# 'balance': res['balance'],
@@ -749,7 +748,7 @@ async def phone_check(this, **x):
 		'login': user['login'],
 		'name': user['name'],
 		'surname': user['surname'],
-		'avatar': IMAGE['link_opt'] + user['avatar'],
+		'avatar': '/load/opt/' + user['avatar'],
 		'admin': user['admin'],
 		'mail': user['mail'],
 		# 'balance': user['balance'],
@@ -858,7 +857,7 @@ async def auth(this, **x):
 		'login': res['login'],
 		'name': res['name'],
 		'surname': res['surname'],
-		'avatar': IMAGE['link_opt'] + res['avatar'],
+		'avatar': '/load/opt/' + res['avatar'],
 		'admin': res['admin'],
 		'mail': res['mail'],
 		# 'balance': res['balance'],
@@ -988,7 +987,7 @@ def edit(this, **x):
 
 	# Response
 
-	avatar = IMAGE['link_opt'] + this.user['avatar']
+	avatar = '/load/opt/' + this.user['avatar']
 
 	res = {
 		'avatar': avatar,
@@ -1083,7 +1082,7 @@ async def online(this, **x):
 				'login': i['login'],
 				'name': i['name'],
 				'surname': i['surname'],
-				'avatar': IMAGE['link_opt'] + i['avatar'],
+				'avatar': '/load/opt/' + i['avatar'],
 			}
 
 	if count:
@@ -1110,7 +1109,7 @@ async def online(this, **x):
 		online['login'] = user_current['login']
 		online['name'] = user_current['name']
 		online['surname'] = user_current['surname']
-		online['avatar'] = IMAGE['link_opt'] + user_current['avatar']
+		online['avatar'] = '/load/opt/' + user_current['avatar']
 	else:
 		online['id'] = x['token']
 		online['admin'] = 2

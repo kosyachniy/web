@@ -1,4 +1,3 @@
-from sets import IMAGE
 from api._func.mongodb import db
 from api._error import ErrorWrong, ErrorAccess, ErrorBlock
 from api._func import check_params, get_user
@@ -91,7 +90,7 @@ def get(this, **x):
 	for i in range(len(users)):
 		# Avatar
 
-		users[i]['avatar'] = IMAGE['link_opt'] + users[i]['avatar']
+		users[i]['avatar'] = '/load/opt/' + users[i]['avatar']
 
 		# # Online
 

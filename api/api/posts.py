@@ -2,7 +2,6 @@ import time
 import re
 # import shutil
 
-from sets import IMAGE
 from api._func.mongodb import db
 from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
 from api._func import reimg, get_user, check_params, next_id, load_image
@@ -210,13 +209,13 @@ def get(this, **x):
 		## Cover
 
 		if 'cover' in posts[i]:
-			posts[i]['cover'] = IMAGE['link_opt'] + posts[i]['cover']
+			posts[i]['cover'] = '/load/opt/' + posts[i]['cover']
 
 		else:
 			### Cover from the first image
 			try:
 				img = re.search('<img src="[^"]*">', posts[i]['cont'])[0].split('"')[1].split('/')[-1]
-				posts[i]['cover'] = IMAGE['link_opt'] + img
+				posts[i]['cover'] = '/load/opt/' + img
 			except:
 				pass
 

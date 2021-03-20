@@ -1,12 +1,5 @@
 export const server = {
 	link: 'https://web.kosyachniy.com/api/',
-	ip: '0.0.0.0',
-	port: 5000,
-}
-export const client = {
-	link: 'https://web.kosyachniy.com/',
-	ip: '0.0.0.0',
-	port: 3000,
 }
 export const socket = {
 	link: 'https://web.kosyachniy.com/',

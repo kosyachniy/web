@@ -12,7 +12,7 @@ from api._func.mongodb import db
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
 
-from sets import IMAGE, SIDE_OPTIMIZED
+from sets import SIDE_OPTIMIZED
 
 
 # Check existence the file by name
@@ -192,7 +192,7 @@ def get_user(user_id):
 
 		user_req = db['users'].find_one(db_condition, db_filter)
 
-		user_req['avatar'] = IMAGE['link_opt'] + user_req['avatar']
+		user_req['avatar'] = '/load/opt/' + user_req['avatar']
 	else:
 		user_req = 0
 
@@ -413,6 +413,6 @@ async def online_emit_add(sio, user):
 			'login': user['login'],
 			'name': user['name'],
 			'surname': user['surname'],
-			'avatar': IMAGE['link_opt'] + user['avatar'],
+			'avatar': '/load/opt/' + user['avatar'],
 		}] if user else [], # ! Full info for all / Full info only for admins
 	})

@@ -1,5 +1,5 @@
 # Params
-from sets import SERVER, CLIENT
+from sets import CLIENT, FILES
 
 # # Logging
 
@@ -58,8 +58,8 @@ from api import API, Error
 
 ## Global variables
 api = API(
-	server=SERVER,
 	client=CLIENT,
+	files=FILES,
 	sio=sio,
 )
 
