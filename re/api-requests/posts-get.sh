@@ -1,27 +1,27 @@
-# Все посты
+# All posts
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Несколько постов
+# Multiple posts
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"id": [1, 2]}, "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"id": [1, 2]}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Один пост
+# One post
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"id": 1}, "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"id": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Поиск
+# Search
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"search": "new"}, "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"search": "new"}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Ограниченное количество постов
+# Limited number of posts
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"count": 1}, "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"count": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Ограниченное количество постов со сдвигом
+# Limited number of posts with a shift
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"count": 1, "offset": 1}, "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"count": 1, "offset": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Ограниченное количество результатов поиска со сдвигом
+# Limited number of search results with a shift
 
-curl -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"search": "new", "count": 1, "offset": 1}, "token": "test"}' http://127.0.0.1:5000/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"search": "new", "count": 1, "offset": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
