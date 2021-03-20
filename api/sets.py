@@ -1,4 +1,4 @@
-HOST = '127.0.0.1'
+HOST = 'db'
 
 SERVER = {
 	'link': 'http://0.0.0.0:5000/',
@@ -7,9 +7,9 @@ SERVER = {
 }
 
 CLIENT = {
-	'link': 'http://0.0.0.0:3000/',
+	'link': 'http://localhost/',
 	'ip': '0.0.0.0',
-	'port': 3000,
+	'port': 80,
 }
 
 IMAGE = {

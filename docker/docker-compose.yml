@@ -3,8 +3,8 @@ services:
   db:
     image: "mongo:4.4.2"
     container_name: "db"
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     restart: unless-stopped
     env_file: .env
     environment:
@@ -22,32 +22,23 @@ services:
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
-      args:
-        - SERVER=${SERVER}
     depends_on:
       - db
     container_name: "api"
     restart: unless-stopped
-    env_file: .env
     volumes:
       - "../data/load:/data/load"
       - "../api/api:/api" # Для горячей перезагрузки
       - "../api/app.py:/app.py" # Для горячей перезагрузки
-    ports:
-      - "5000:5000"
 
   web:
     build:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
     container_name: "web"
-    depends_on:
-      - server
     volumes:
       - "../web/public:/public"
       - "../web/src:/src"
-    ports:
-      - "3000:3000"
 
   server:
     image: "nginx:1.19.6"
@@ -58,5 +49,6 @@ services:
       - "../data/logs:/data/logs"
     depends_on:
       - api
+      - web
     ports:
       - '80:80'

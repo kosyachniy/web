@@ -1,15 +1,15 @@
 export const server = {
-	link: 'http://0.0.0.0:5000/',
+	link: 'http://localhost/api/',
 	ip: '0.0.0.0',
 	port: 5000,
 }
 export const client = {
-	link: 'http://0.0.0.0:3000/',
+	link: 'http://localhost/',
 	ip: '0.0.0.0',
 	port: 3000,
 }
 export const socket = {
-	link: 'http://0.0.0.0:5000/',
+	link: 'http://localhost/',
 }
 
 export const name = 'Quateo'

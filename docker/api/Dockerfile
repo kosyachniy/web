@@ -19,9 +19,5 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . .
 
-# Settings
-ARG SERVER
-RUN echo "\n\nHOST=\"$SERVER\"" >> sets.py
-
 # Run
 CMD bash run.sh
