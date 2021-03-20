@@ -3,7 +3,7 @@ from api._error import ErrorWrong, ErrorAccess, ErrorBlock
 from api._func import check_params, get_user
 
 
-def get(this, **x):
+async def get(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -106,7 +106,7 @@ def get(this, **x):
 
 # Block
 
-def block(this, **x):
+async def block(this, **x):
 	# Checking parameters
 
 	check_params(x, (

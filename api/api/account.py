@@ -30,21 +30,21 @@ with open('keys.json', 'r') as file:
 
 # Check name
 
-def check_name(cont):
+def _check_name(cont):
 	# Invalid name
 	if not cont.isalpha():
 		raise ErrorInvalid('name')
 
 # Check surname
 
-def check_surname(cont):
+def _check_surname(cont):
 	# Invalid surname
 	if not cont.replace('-', '').isalpha():
 		raise ErrorInvalid('surname')
 
 # Check mail
 
-def check_mail(cont, user):
+def _check_mail(cont, user):
 	# Invalid mail
 
 	if re.match('.+@.+\..+', cont) == None:
@@ -58,7 +58,7 @@ def check_mail(cont, user):
 
 # Check login
 
-def check_login(cont, user):
+def _check_login(cont, user):
 	# Login is already registered
 
 	users = db['users'].find_one({'login': cont}, {'_id': True, 'id': True})
@@ -91,7 +91,7 @@ def check_login(cont, user):
 
 # Password
 
-def check_password(cont):
+def _check_password(cont):
 	# Invalid password
 
 	cond_length = not 6 <= len(cont) <= 40
@@ -103,14 +103,14 @@ def check_password(cont):
 	if cond_length or cond_symbols or cond_letters or cond_digits:
 		raise ErrorInvalid('password')
 
-def process_password(cont):
-	check_password(cont)
+def _process_password(cont):
+	_check_password(cont)
 
 	return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
 # Phone number
 
-def process_phone(cont):
+def _process_phone(cont):
 	if not len(cont):
 		raise ErrorInvalid('phone')
 
@@ -126,7 +126,7 @@ def process_phone(cont):
 
 # Account registration
 
-def registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[], phone=None):
+def _registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[], phone=None):
 	# ID
 
 	user_id = next_id('users')
@@ -135,7 +135,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 	if login:
 		login = login.lower()
-		check_login(login, user)
+		_check_login(login, user)
 
 	else:
 		login = 'id{}'.format(user_id)
@@ -144,23 +144,23 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 	if mail:
 		mail = mail.lower()
-		check_mail(mail, user)
+		_check_mail(mail, user)
 
 	# Password
 
 	if password:
-		password = process_password(password)
+		password = _process_password(password)
 
 	# Name
 
 	if name:
-		check_name(name)
+		_check_name(name)
 		name = name.title()
 
 	# Surname
 
 	if surname:
-		check_surname(surname)
+		_check_surname(surname)
 		surname = surname.title()
 
 	# Avatar
@@ -170,15 +170,11 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 	if avatar:
 		try:
 			file_type = file.split('.')[-1]
-
-		# Invalid file extension
 		except:
 			raise ErrorInvalid('file')
 
 		try:
 			link = load_image(avatar, file_type)
-
-		# Error loading photo
 		except:
 			raise ErrorUpload('avatar')
 
@@ -223,7 +219,7 @@ def registrate(user, timestamp, login='', password='', mail='', name='', surname
 
 # Update online users
 
-async def online_update(sio, user, token):
+async def _online_update(sio, user, token):
 	# Online users
 	## Already online
 
@@ -268,7 +264,7 @@ async def reg(this, **x):
 		('social', False, list, dict),
 	))
 
-	user = registrate(
+	user = _registrate(
 		this.user,
 		this.timestamp,
 		login=x['login'] if 'login' in x else '',
@@ -296,7 +292,7 @@ async def reg(this, **x):
 
 	# Update online users
 
-	await online_update(this.sio, user, this.token)
+	await _online_update(this.sio, user, this.token)
 
 	# Response
 
@@ -417,19 +413,19 @@ async def social(this, **x):
 
 			try:
 				name = response['first_name']
-				check_name(name)
+				_check_name(name)
 			except:
 				name = ''
 
 			try:
 				surname = response['last_name']
-				check_surname(surname)
+				_check_surname(surname)
 			except:
 				surname = ''
 
 			try:
 				login = response['nickname']
-				check_login(login, this.user)
+				_check_login(login, this.user)
 			except:
 				login = ''
 
@@ -440,7 +436,7 @@ async def social(this, **x):
 
 			try:
 				if mail:
-					check_mail(mail, this.user)
+					_check_mail(mail, this.user)
 			except:
 				mail = ''
 
@@ -450,19 +446,19 @@ async def social(this, **x):
 
 			try:
 				name = response['given_name']
-				check_name(name)
+				_check_name(name)
 			except:
 				name = ''
 
 			try:
 				surname = response['family_name']
-				check_surname(surname)
+				_check_surname(surname)
 			except:
 				surname = ''
 
 			try:
 				mail = response['email']
-				check_mail(mail, this.user)
+				_check_mail(mail, this.user)
 			except:
 				mail = ''
 
@@ -491,7 +487,7 @@ async def social(this, **x):
 		else:
 			new = True
 
-			res = registrate(
+			res = _registrate(
 				this.user,
 				this.timestamp,
 				social=[{
@@ -534,7 +530,7 @@ async def social(this, **x):
 
 	# Update online users
 
-	await online_update(this.sio, res, this.token)
+	await _online_update(this.sio, res, this.token)
 
 	# Response
 
@@ -555,7 +551,7 @@ async def social(this, **x):
 
 # By phone
 
-def phone_send(this, **x):
+async def phone_send(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -565,7 +561,7 @@ def phone_send(this, **x):
 
 	# Process a phone number
 
-	phone = process_phone(x['phone'])
+	phone = _process_phone(x['phone'])
 
 	# Already sent
 
@@ -629,7 +625,7 @@ async def phone_check(this, **x):
 		del x['code']
 
 	if 'phone' in x:
-		x['phone'] = process_phone(x['phone'])
+		x['phone'] = _process_phone(x['phone'])
 
 	#
 
@@ -681,7 +677,7 @@ async def phone_check(this, **x):
 	new = False
 
 	if not user:
-		res = registrate(
+		res = _registrate(
 			this.user,
 			this.timestamp,
 			phone=code['phone'],
@@ -739,7 +735,7 @@ async def phone_check(this, **x):
 
 	# Update online users
 
-	await online_update(this.sio, user, this.token)
+	await _online_update(this.sio, user, this.token)
 
 	# Response
 
@@ -792,7 +788,7 @@ async def auth(this, **x):
 	if not db['users'].find_one(db_condition, {'_id': True}):
 		# raise ErrorWrong('login')
 
-		registrate(
+		_registrate(
 			this.user,
 			this.timestamp,
 			mail=x['login'],
@@ -848,7 +844,7 @@ async def auth(this, **x):
 
 	# Update online users
 
-	await online_update(this.sio, res, this.token)
+	await _online_update(this.sio, res, this.token)
 
 	# Response
 
@@ -916,7 +912,7 @@ async def exit(this, **x):
 
 # Edit personal information
 
-def edit(this, **x):
+async def edit(this, **x):
 	# Checking parameters
 	check_params(x, (
 		('name', False, str),
@@ -936,12 +932,12 @@ def edit(this, **x):
 
 	# Name
 	if 'name' in x:
-		check_name(x['name'])
+		_check_name(x['name'])
 		this.user['name'] = x['name'].title()
 
 	# Surname
 	if 'surname' in x:
-		check_surname(x['surname'])
+		_check_surname(x['surname'])
 		this.user['surname'] = x['surname'].title()
 
 	# Login
@@ -949,16 +945,16 @@ def edit(this, **x):
 		x['login'] = x['login'].lower()
 
 		if this.user['login'] != x['login']:
-			check_login(x['login'], this.user)
+			_check_login(x['login'], this.user)
 			this.user['login'] = x['login']
 
 	# Mail
 	if 'mail' in x:
-		check_mail(x['mail'], this.user)
+		_check_mail(x['mail'], this.user)
 
 	# Password
 	if 'password' in x and len(x['password']):
-		this.user['password'] = process_password(x['password'])
+		this.user['password'] = _process_password(x['password'])
 
 	# Change fields
 	for i in ('description', 'mail', 'social'):
@@ -997,7 +993,7 @@ def edit(this, **x):
 
 # # Recover password
 
-# def recover(this, **x):
+# async def recover(this, **x):
 # 	# Checking parameters
 
 # 	check_params(x, (
@@ -1023,7 +1019,7 @@ def edit(this, **x):
 
 # Connect
 
-def connect(this, **x):
+async def connect(this, **x):
 	print('IN', this.sid)
 
 # Online

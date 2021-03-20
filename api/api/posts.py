@@ -9,7 +9,7 @@ from api._func import reimg, get_user, check_params, next_id, load_image
 
 # Add / edit
 
-def edit(this, **x):
+async def edit(this, **x):
 	# Checking parameters
 
 	# Edit
@@ -117,7 +117,7 @@ def edit(this, **x):
 
 # Get
 
-def get(this, **x):
+async def get(this, **x):
 	# Checking parameters
 
 	check_params(x, (
@@ -233,7 +233,7 @@ def get(this, **x):
 
 # Delete
 
-def delete(this, **x):
+async def delete(this, **x):
 	# Checking parameters
 
 	check_params(x, (

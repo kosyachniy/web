@@ -79,14 +79,14 @@ class Input(BaseModel):
 
 @app.post('/')
 async def index(data: Input, request: Request):
-	print(data, request.client.host, request.client.port)
+	# print(data, request.client.host, request.client.port)
 
 	# Call API
 
 	req = {}
 
 	try:
-		res = api.method(
+		res = await api.method(
 			data.method,
 			data.params,
 			ip=request.client.host,

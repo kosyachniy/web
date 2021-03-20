@@ -19,7 +19,7 @@ class API():
 		# Reset online users
 		db['online'].remove()
 
-	def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
+	async def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
 		self.timestamp = time.time()
 		self.ip = ip
 		self.sid = sid
@@ -64,11 +64,11 @@ class API():
 		# API method
 
 		try:
-			module, method = name.split('.')
-			func = getattr(globals()[module], method)
+			module, method_name = name.split('.')
+			func = getattr(globals()[module], method_name)
 		except:
 			raise Error.ErrorWrong('method')
 
 		# Request
 
-		return func(self, **params)
+		return await func(self, **params)
