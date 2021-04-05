@@ -8,7 +8,7 @@ import json
 import base64
 
 from api._func.mongodb import db
-from api._func.smsc import SMSC
+# from api._func.smsc import SMSC
 from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
 					   ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount, \
 					   ErrorRepeat
@@ -110,19 +110,19 @@ def _process_password(cont):
 
 # Phone number
 
-def _process_phone(cont):
-	if not len(cont):
+def _process_phone(number):
+	if not len(number):
 		raise ErrorInvalid('phone')
 
-	if cont[0] == '8':
-		cont = '7' + cont[1:]
+	if number[0] == '8':
+		number = '7' + number[1:]
 
-	cont = re.sub('[^0-9]', '', cont)
+	number = int(re.sub('[^0-9]', '', number))
 
-	if not 10 < len(cont) < 19:
+	if not 10 < len(str(number)) < 19:
 		raise ErrorInvalid('phone')
 
-	return int(cont)
+	return number
 
 # Account registration
 
@@ -551,208 +551,334 @@ async def social(this, **x):
 
 # By phone
 
-async def phone_send(this, **x):
+# async def phone_send(this, **x):
+# 	# Checking parameters
+
+# 	check_params(x, (
+# 		('phone', True, str),
+# 		('promo', False, str),
+# 	))
+
+# 	# Process a phone number
+
+# 	phone = _process_phone(x['phone'])
+
+# 	# Already sent
+
+# 	code = db['codes'].find_one({'phone': phone}, {'_id': True})
+
+# 	if code:
+# 		raise ErrorRepeat('send')
+
+# 	# Code generation
+
+# 	ALL_SYMBOLS = string.digits
+# 	generate = lambda length=4: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+# 	code = generate()
+
+# 	#
+
+# 	req = {
+# 		'phone': phone,
+# 		'code': code,
+# 		'token': this.token,
+# 		'time': this.timestamp,
+# 	}
+
+# 	if 'promo' in x:
+# 		req['promo'] = x['promo']
+
+# 	db['codes'].insert_one(req)
+
+# 	#
+
+# 	sms = SMSC()
+# 	res = sms.send_sms(str(phone), 'Hi!\n{} — This is your login code.'.format(code))
+# 	print(phone, res)
+
+# 	# Response
+
+# 	res = {
+# 		'phone': phone,
+# 		'status': int(float(res[-1])) > 0,
+# 	}
+
+# 	return res
+
+# async def phone_check(this, **x):
+# 	# Checking parameters
+
+# 	check_params(x, (
+# 		('phone', False, str),
+# 		('code', False, (int, str)),
+# 		('promo', False, str),
+# 	))
+
+# 	#
+
+# 	if not this.token:
+# 		raise ErrorInvalid('token')
+
+# 	#
+
+# 	if 'code' in x and not x['code']:
+# 		del x['code']
+
+# 	if 'phone' in x:
+# 		x['phone'] = _process_phone(x['phone'])
+
+# 	#
+
+# 	if 'code' in x:
+# 		# Code preparation
+
+# 		x['code'] = str(x['code'])
+
+# 		# Verification of code
+
+# 		db_condition = {
+# 			'code': x['code'],
+# 		}
+
+# 		if 'phone' in x:
+# 			db_condition['phone'] = x['phone']
+# 		else:
+# 			db_condition['token'] = this.token
+
+# 		db_filter = {
+# 			'_id': False,
+# 			'phone': True,
+# 		}
+
+# 		code = db['codes'].find_one(db_condition, db_filter)
+
+# 		if code:
+# 			# ! Входить по старым кодам
+# 			pass
+# 			# db['codes'].remove(code)
+
+# 		else:
+# 			raise ErrorWrong('code')
+
+# 	else:
+# 		code = {
+# 			'phone': x['phone'],
+# 		}
+
+# 		if 'promo' in x:
+# 			code['promo'] = x['promo']
+
+# 	#
+
+# 	user = db['users'].find_one({'phone': code['phone']})
+
+# 	#
+
+# 	new = False
+
+# 	if not user:
+# 		res = _registrate(
+# 			this.user,
+# 			this.timestamp,
+# 			phone=code['phone'],
+# 		)
+
+# 		new = True
+
+# 		#
+
+# 		user = db['users'].find_one({'id': res['id']})
+
+# 	if 'promo' in code:
+# 		# Referal code
+
+# 		if code['promo'].lower()[:5] == 'tensy':
+# 			referal_parent = int(re.sub('\D', '', code['promo']))
+
+# 			if user['id'] != referal_parent:
+# 				user['referal_parent'] = referal_parent
+# 				db['users'].save(user)
+
+# 		else:
+# 			# Bonus code
+
+# 			promo = db['promos'].find_one({'promo': code['promo'].upper()})
+
+# 			if not promo:
+# 				promo = db['promos'].find_one({'promo': code['promo'].lower()})
+
+# 				if promo:
+# 					# Нет доступа
+
+# 					if user['admin'] >= promo['admin']:
+# 						# Повтор
+
+# 						if promo['repeat'] or user['id'] not in promo['users']:
+# 							# Выполнение скрипта
+
+# 							user['balance'] += promo['balance']
+# 							db['users'].save(user)
+
+# 							# Сохранение результатов в промокоде
+
+# 							promo['users'].append(user['id'])
+# 							db['promos'].save(promo)
+
+# 	# Присвоение токена пользователю
+
+# 	req = {
+# 		'token': this.token,
+# 		'id': user['id'],
+# 		'time': this.timestamp,
+# 	}
+# 	db['tokens'].insert_one(req)
+
+# 	# Update online users
+
+# 	await _online_update(this.sio, user, this.token)
+
+# 	# Response
+
+# 	res = {
+# 		'id': user['id'],
+# 		'login': user['login'],
+# 		'name': user['name'],
+# 		'surname': user['surname'],
+# 		'avatar': '/load/opt/' + user['avatar'],
+# 		'admin': user['admin'],
+# 		'mail': user['mail'],
+# 		# 'balance': user['balance'],
+# 		# 'rating': user['rating'],
+# 		'new': new,
+# 	}
+
+# 	return res
+
+# By phone
+
+async def phone(this, **x):
 	# Checking parameters
 
 	check_params(x, (
 		('phone', True, str),
-		('promo', False, str),
-	))
-
-	# Process a phone number
-
-	phone = _process_phone(x['phone'])
-
-	# Already sent
-
-	code = db['codes'].find_one({'phone': phone}, {'_id': True})
-
-	if code:
-		raise ErrorRepeat('send')
-
-	# Code generation
-
-	ALL_SYMBOLS = string.digits
-	generate = lambda length=4: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
-	code = generate()
-
-	#
-
-	req = {
-		'phone': phone,
-		'code': code,
-		'token': this.token,
-		'time': this.timestamp,
-	}
-
-	if 'promo' in x:
-		req['promo'] = x['promo']
-
-	db['codes'].insert_one(req)
-
-	#
-
-	sms = SMSC()
-	res = sms.send_sms(str(phone), 'Hi!\n{} — This is your login code.'.format(code))
-	print(phone, res)
-
-	# Response
-
-	res = {
-		'phone': phone,
-		'status': int(float(res[-1])) > 0,
-	}
-
-	return res
-
-async def phone_check(this, **x):
-	# Checking parameters
-
-	check_params(x, (
-		('phone', False, str),
-		('code', False, (int, str)),
-		('promo', False, str),
 	))
 
 	#
 
-	if not this.token:
-		raise ErrorInvalid('token')
+	x['phone'] = _process_phone(x['phone'])
 
-	#
-
-	if 'code' in x and not x['code']:
-		del x['code']
-
-	if 'phone' in x:
-		x['phone'] = _process_phone(x['phone'])
-
-	#
-
-	if 'code' in x:
-		# Code preparation
-
-		x['code'] = str(x['code'])
-
-		# Verification of code
-
-		db_condition = {
-			'code': x['code'],
-		}
-
-		if 'phone' in x:
-			db_condition['phone'] = x['phone']
-		else:
-			db_condition['token'] = this.token
-
-		db_filter = {
-			'_id': False,
-			'phone': True,
-		}
-
-		code = db['codes'].find_one(db_condition, db_filter)
-
-		if code:
-			# ! Входить по старым кодам
-			pass
-			# db['codes'].remove(code)
-
-		else:
-			raise ErrorWrong('code')
-
-	else:
-		code = {
-			'phone': x['phone'],
-		}
-
-		if 'promo' in x:
-			code['promo'] = x['promo']
-
-	#
-
-	user = db['users'].find_one({'phone': code['phone']})
-
-	#
+	# Login
 
 	new = False
 
-	if not user:
-		res = _registrate(
+	if not len(list(db['users'].find({'phone': x['phone']}, {'_id': True}))):
+		# raise ErrorWrong('login')
+
+		_registrate(
 			this.user,
 			this.timestamp,
-			phone=code['phone'],
+			3 if this.language == 1 else 4,
+			phone=x['phone'],
 		)
 
 		new = True
 
-		#
+	#
 
-		user = db['users'].find_one({'id': res['id']})
+	db_condition = {'phone': x['phone']}
 
-	if 'promo' in code:
-		# Referal code
+	db_filter = {
+		'_id': False,
+		'id': True,
+		'admin': True,
+		'balance': True,
+		# 'rating': True,
+		'login': True,
+		'name': True,
+		'surname': True,
+		'busy': True,
+		'avatar': True,
+		'subscription': True,
+		'channels': True,
+		'description': True,
+		'phone': True,
+		'discount': True,
+	}
 
-		if code['promo'].lower()[:5] == 'tensy':
-			referal_parent = int(re.sub('\D', '', code['promo']))
+	res = db['users'].find_one(db_condition, db_filter)
 
-			if user['id'] != referal_parent:
-				user['referal_parent'] = referal_parent
-				db['users'].save(user)
+	# Assignment of the token to the user
 
-		else:
-			# Bonus code
-
-			promo = db['promos'].find_one({'promo': code['promo'].upper()})
-
-			if not promo:
-				promo = db['promos'].find_one({'promo': code['promo'].lower()})
-
-				if promo:
-					# Нет доступа
-
-					if user['admin'] >= promo['admin']:
-						# Повтор
-
-						if promo['repeat'] or user['id'] not in promo['users']:
-							# Выполнение скрипта
-
-							user['balance'] += promo['balance']
-							db['users'].save(user)
-
-							# Сохранение результатов в промокоде
-
-							promo['users'].append(user['id'])
-							db['promos'].save(promo)
-
-	# Присвоение токена пользователю
+	if not this.token:
+		raise ErrorAccess('token')
 
 	req = {
 		'token': this.token,
-		'id': user['id'],
+		'id': res['id'],
 		'time': this.timestamp,
 	}
 	db['tokens'].insert_one(req)
 
+	# Assignment of the tasks to the user
+
+	for task in db['tasks'].find({'token': this.token}):
+		task['user'] = res['id']
+		del task['token']
+		db['tasks'].save(task)
+
 	# Update online users
 
-	await _online_update(this.sio, user, this.token)
+	await _online_update(this.sio, res, this.token)
+
+	# There is an active space
+
+	db_condition = {
+		'$or': [
+			{'teacher': res['id']},
+			{'student': res['id']}
+		],
+		'status': {'$in': (0, 1)}
+	}
+
+	db_filter = {
+		'_id': False,
+		'id': True,
+		'student': True,
+		'task': True,
+	}
+	study = db['study'].find_one(db_condition, {'_id': False})
+
+	if study:
+		# Redirect to space
+
+		space = '/space/{}/?task={}&type={}'.format(study['id'], study['task'], ('student', 'teacher')[study['student'] != res['id']])
+
+		sids = get_sids(res['id'])
+
+		for sid in sids:
+			this.sio.emit('space_return', {
+				'url': space,
+			}, room=sid, namespace='/main')
 
 	# Response
 
-	res = {
-		'id': user['id'],
-		'login': user['login'],
-		'name': user['name'],
-		'surname': user['surname'],
-		'avatar': '/load/opt/' + user['avatar'],
-		'admin': user['admin'],
-		'mail': user['mail'],
-		# 'balance': user['balance'],
-		# 'rating': user['rating'],
+	req = {
+		'id': res['id'],
+		'admin': res['admin'],
+		'balance': res['balance'],
+		'login': res['login'],
+		'avatar': '/load/opt/' + res['avatar'],
 		'new': new,
+		'description': res['description'],
+		'subscription': res['subscription'],
+		'private': bool(len(res['channels'])),
+		'phone': res['phone'] if 'phone' in res else '',
 	}
 
-	return res
+	if 'discount' in res:
+		req['discount'] = res['discount']
+
+	return req
 
 # Log in
 # ! Сокет на авторизацию на всех вкладках токена
