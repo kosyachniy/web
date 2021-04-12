@@ -1,17 +1,9 @@
 # Cache
-##  MacOS
-.DS_Store
-
 ## Python
 **/__pycache__/
 **/*.pyc
 
-## Editors
-.idea/
-.vscode/
-
 # Keys & sets
-keys.py
 keys.json
 
 # Environments

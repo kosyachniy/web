@@ -77,6 +77,7 @@ docker-compose up --build
 ```
 
 3. Open
+
 Go to ``` http://localhost/ ```
 
 ### Production
@@ -98,7 +99,7 @@ docker-compose -f docker-compose.prod.yml up --build
 
 Go to ``` https://web.kosyachniy.com/ ``` (your link)
 
-## Install
+## Install & Use without Docker
 ### Back-end
 1. Change folder
 ```
@@ -111,6 +112,11 @@ cd api/
 ```
 python3 -m venv env
 env/bin/pip install -r requirements.txt
+```
+
+4. Run
+```
+env/bin/uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 ```
 
 ### Front-end
@@ -126,25 +132,14 @@ cd web/
 npm install
 ```
 
-OR
-
-```
-npm run build
-```
-
-## Usage
-### Back-end
-```
-env/bin/gunicorn app:app -k eventlet -w 1 -b :5000 --reload
-```
-
-### Front-end
+4. Run
+#### Development
 ```
 npm start
 ```
 
-OR
-
+#### Production
 ```
+npm run build
 serve -s build -p 3000
 ```
