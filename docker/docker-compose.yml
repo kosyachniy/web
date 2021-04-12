@@ -48,7 +48,19 @@ services:
     build:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
+      args:
+        - SERVER=${SERVER}
+        - SOCKETS=${SOCKETS}
+        - NAME=${NAME}
+        - MAIL=${MAIL}
+        - PHONE=${PHONE}
+        - SOCIAL=${SOCIAL}
+        - GOOGLE_MAP_KEY=${GOOGLE_MAP_KEY}
+        - GOOGLE_MAP_LAT=${GOOGLE_MAP_LAT}
+        - GOOGLE_MAP_LNG=${GOOGLE_MAP_LNG}
+        - GOOGLE_MAP_ZOOM=${GOOGLE_MAP_ZOOM}
     container_name: "web"
+    env_file: .env
     volumes:
       - "../web/public:/public"
       - "../web/src:/src"

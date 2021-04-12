@@ -11,5 +11,11 @@ RUN npm install
 # Copy project
 COPY . .
 
+# Settings
+ARG SERVER SOCKETS NAME MAIL PHONE SOCIAL GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM
+RUN rm -f sets.json keys.json
+RUN echo "{\"server\": \"$SERVER\", \"sockets\": \"$SOCKETS\", \"name\": \"$NAME\", \"mail\": \"$MAIL\", \"phone\": \"$PHONE\", \"social\": $SOCIAL, \"maps\": {\"center\": {\"lat\": $GOOGLE_MAP_LAT, \"lng\": $GOOGLE_MAP_LNG}, \"zoom\": $GOOGLE_MAP_ZOOM}}" >> sets.json
+RUN echo "{\"maps\": {\"key\": \"$GOOGLE_MAP_KEY\"}}" >> keys.json
+
 # Run
 CMD npm start
