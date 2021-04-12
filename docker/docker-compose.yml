@@ -22,10 +22,23 @@ services:
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
+      args:
+        - CLIENT=${CLIENT}
+        - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
+        - MONGO_LOGIN=${MONGO_LOGIN}
+        - MONGO_PASSWORD=${MONGO_PASSWORD}
+        - GOOGLE_ID=${GOOGLE_ID}
+        - GOOGLE_SECRET=${GOOGLE_SECRET}
+        - TG_TOKEN=${TG_TOKEN}
+        - SMSC_LOGIN=${SMSC_LOGIN}
+        - SMSC_PASSWORD=${SMSC_PASSWORD}
+        - VK_ID=${VK_ID}
+        - VK_SECRET=${VK_SECRET}
     depends_on:
       - db
     container_name: "api"
     restart: unless-stopped
+    env_file: .env
     volumes:
       - "../data/load:/data/load"
       - "../api/api:/api" # Для горячей перезагрузки
