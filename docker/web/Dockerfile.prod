@@ -12,9 +12,10 @@ RUN npm install
 COPY . .
 
 # Settings
-# If there is already one, replace it
-RUN rm -f src/sets.js
-RUN cp src/sets.prod.js src/sets.js
+ARG SERVER SOCKETS NAME MAIL PHONE SOCIAL GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM
+RUN rm -f src/sets.json src/keys.json
+RUN echo "{\"server\": \"$SERVER\", \"sockets\": \"$SOCKETS\", \"name\": \"$NAME\", \"mail\": \"$MAIL\", \"phone\": \"$PHONE\", \"social\": $SOCIAL, \"maps\": {\"center\": {\"lat\": $GOOGLE_MAP_LAT, \"lng\": $GOOGLE_MAP_LNG}, \"zoom\": $GOOGLE_MAP_ZOOM}}" >> src/sets.json
+RUN echo "{\"maps\": {\"key\": \"$GOOGLE_MAP_KEY\"}}" >> src/keys.json
 
 # Create build
 RUN npm run build

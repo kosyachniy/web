@@ -1,8 +1,0 @@
-{
-	"mongo": {
-		"host": "db",
-		"db": "uple"
-	},
-	"client": "https://web.kosyachniy.com/",
-	"side_optimized": 250
-}

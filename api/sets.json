@@ -1,6 +1,6 @@
 {
 	"mongo": {
-		"host": "db",
+		"host": "localhost:27017",
 		"db": "uple"
 	},
 	"client": "http://localhost/",
