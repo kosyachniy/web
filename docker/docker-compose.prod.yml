@@ -20,7 +20,8 @@ services:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
       args:
-        - CLIENT=${CLIENT}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=${CRYPTO_PORT}
         - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
         - MONGO_LOGIN=${MONGO_LOGIN}
         - MONGO_PASSWORD=${MONGO_PASSWORD}
@@ -45,8 +46,8 @@ services:
       dockerfile: ../docker/web/Dockerfile.prod
       context: ../web
       args:
-        - SERVER=${SERVER}
-        - SOCKETS=${SOCKETS}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=${CRYPTO_PORT}
         - NAME=${NAME}
         - MAIL=${MAIL}
         - PHONE=${PHONE}
@@ -66,8 +67,8 @@ services:
     depends_on:
       - api
     ports:
-      - '80:80'
-      - '443:443'
+      - '${EXTERNAL_PORT}:80'
+      - '${CRYPTO_PORT}:443'
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   certbot:
