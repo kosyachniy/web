@@ -22,7 +22,8 @@ services:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
       args:
-        - CLIENT=${CLIENT}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=${EXTERNAL_PORT}
         - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
         - MONGO_LOGIN=${MONGO_LOGIN}
         - MONGO_PASSWORD=${MONGO_PASSWORD}
@@ -47,8 +48,8 @@ services:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
       args:
-        - SERVER=${SERVER}
-        - SOCKETS=${SOCKETS}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=${EXTERNAL_PORT}
         - NAME=${NAME}
         - MAIL=${MAIL}
         - PHONE=${PHONE}
@@ -68,6 +69,7 @@ services:
 
   server:
     image: "nginx:1.19.6"
+    env_file: .env
     volumes:
       - "../docker/server/nginx.conf:/etc/nginx/nginx.conf"
       - "../data/load:/load"
@@ -76,4 +78,4 @@ services:
       - api
       - web
     ports:
-      - '80:80'
+      - '${EXTERNAL_PORT}:80'

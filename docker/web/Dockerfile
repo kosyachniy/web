@@ -12,9 +12,9 @@ RUN npm install
 COPY . .
 
 # Settings
-ARG SERVER SOCKETS NAME MAIL PHONE SOCIAL GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM
+ARG HOST PORT NAME MAIL PHONE SOCIAL GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM
 RUN rm -f src/sets.json src/keys.json
-RUN echo "{\"server\": \"$SERVER\", \"sockets\": \"$SOCKETS\", \"name\": \"$NAME\", \"mail\": \"$MAIL\", \"phone\": \"$PHONE\", \"social\": $SOCIAL, \"maps\": {\"center\": {\"lat\": $GOOGLE_MAP_LAT, \"lng\": $GOOGLE_MAP_LNG}, \"zoom\": $GOOGLE_MAP_ZOOM}}" >> src/sets.json
+RUN echo "{\"server\": \"$HOST:$PORT/api/\", \"sockets\": \"$HOST:$PORT/\", \"name\": \"$NAME\", \"mail\": \"$MAIL\", \"phone\": \"$PHONE\", \"social\": $SOCIAL, \"maps\": {\"center\": {\"lat\": $GOOGLE_MAP_LAT, \"lng\": $GOOGLE_MAP_LNG}, \"zoom\": $GOOGLE_MAP_ZOOM}}" >> src/sets.json
 RUN echo "{\"maps\": {\"key\": \"$GOOGLE_MAP_KEY\"}}" >> src/keys.json
 
 # Run
