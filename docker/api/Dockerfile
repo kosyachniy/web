@@ -6,7 +6,8 @@ WORKDIR .
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
-# Выводить print в консоль Docker
+# Using Russian text may lead to errors 0, 137
+# Output print to the Docker console
 ENV PYTHONUNBUFFERED 1
 
 # Install dependencies
