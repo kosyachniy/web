@@ -40,8 +40,9 @@ services:
     env_file: .env
     volumes:
       - "../data/load:/data/load"
-      - "../api/api:/api" # Для горячей перезагрузки
-      - "../api/app.py:/app.py" # Для горячей перезагрузки
+      # Для горячей перезагрузки
+      - "../api/api:/api"
+      - "../api/app.py:/app.py"
 
   web:
     build:

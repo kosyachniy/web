@@ -125,7 +125,7 @@ env/bin/uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 cd web/
 ```
 
-2. Customize files ``` src/sets.js ``` & ``` src/keys.js ```
+2. Customize files ``` src/sets.json ``` & ``` src/keys.json ```
 
 3. Virtual environment
 ```
