@@ -22,6 +22,7 @@ services:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
       args:
+        - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
         - PORT=${EXTERNAL_PORT}
         - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
@@ -49,6 +50,7 @@ services:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
       args:
+        - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
         - PORT=${EXTERNAL_PORT}
         - NAME=${NAME}

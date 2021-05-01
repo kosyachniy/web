@@ -20,6 +20,7 @@ services:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
       args:
+        - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
         - PORT=${CRYPTO_PORT}
         - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
@@ -38,14 +39,16 @@ services:
     env_file: .env
     volumes:
       - "../data/load:/data/load"
-      - "../api/api:/api" # Для горячей перезагрузки
-      - "../api/app.py:/app.py" # Для горячей перезагрузки
+      # Для горячей перезагрузки
+      - "../api/api:/api"
+      - "../api/app.py:/app.py"
 
   server:
     build:
       dockerfile: ../docker/web/Dockerfile.prod
       context: ../web
       args:
+        - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
         - PORT=${CRYPTO_PORT}
         - NAME=${NAME}
@@ -59,7 +62,7 @@ services:
     restart: unless-stopped
     env_file: .env
     volumes:
-      - "../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf"
+      - "../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template"
       - "../data/load:/load"
       - "../data/logs:/data/logs"
       - "../data/certbot/conf:/etc/letsencrypt"
@@ -69,7 +72,13 @@ services:
     ports:
       - '${EXTERNAL_PORT}:80'
       - '${CRYPTO_PORT}:443'
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    command: >
+        /bin/sh -c
+        "envsubst '
+        $${EXTERNAL_HOST}
+        '< /etc/nginx/nginx.conf.template
+        > /etc/nginx/nginx.conf
+        && while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\""
 
   certbot:
     image: certbot/certbot
