@@ -2,7 +2,6 @@ version: "3"
 services:
   db:
     image: "mongo:4.4.2"
-    container_name: "db"
     # ports:
     #   - "27017:27017"
     restart: unless-stopped
@@ -34,7 +33,6 @@ services:
         - VK_SECRET=${VK_SECRET}
     depends_on:
       - db
-    container_name: "api"
     restart: unless-stopped
     env_file: .env
     volumes:
@@ -57,7 +55,6 @@ services:
         - GOOGLE_MAP_LAT=${GOOGLE_MAP_LAT}
         - GOOGLE_MAP_LNG=${GOOGLE_MAP_LNG}
         - GOOGLE_MAP_ZOOM=${GOOGLE_MAP_ZOOM}
-    container_name: "server"
     restart: unless-stopped
     env_file: .env
     volumes:
@@ -75,7 +72,6 @@ services:
 
   certbot:
     image: certbot/certbot
-    container_name: "cert"
     restart: unless-stopped
     volumes:
       - "../data/certbot/conf:/etc/letsencrypt"

@@ -68,12 +68,12 @@ Android | Front-end | React Native | JavaScript | planned
 
 ## Install & Use with Docker
 ### Development
-1. Customize file ` docker/.env `
+1. Customize file ` docker/.env ` & ` docker/docker-compose.yml `
 
 2. Run Docker Compose
 ```
 cd docker/
-docker-compose up --build
+docker-compose -p <your project name> up --build
 ```
 
 3. Open
@@ -81,7 +81,7 @@ docker-compose up --build
 Go to ` http://localhost/ `
 
 ### Production
-1. Customize files ` docker/.env ` & ` docker/server/nginx.prod.conf ` & ` docker/server/nginx.cert.conf ` & ` docker/cert.sh `
+1. Customize files ` docker/.env ` & ` docker/docker-compose.prod.yml ` & ` docker/server/nginx.prod.conf ` & ` docker/server/nginx.cert.conf ` & ` docker/cert.sh `
 
 2. Create encryption keys
 ```
@@ -92,7 +92,7 @@ chmod 777 cert.sh
 
 3. Run Docker Compose
 ```
-docker-compose -f docker-compose.prod.yml up --build
+docker-compose -f docker-compose.prod.yml -p <your project name> up --build
 ```
 
 4. Open
