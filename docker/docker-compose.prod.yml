@@ -1,89 +1,85 @@
 version: "3"
 services:
-  db:
-    image: "mongo:4.4.2"
-    # ports:
-    #   - "27017:27017"
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      MONGO_INITDB_DATABASE: admin
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_LOGIN}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    volumes:
-      - "../data/db:/data/db"
-    #   - "../data/logs:/data/logs"
-    # command: --logpath /data/logs/mongodb.log
+    db:
+        image: "mongo:4.4.2"
+        # ports:
+        #     - "27017:27017"
+        restart: unless-stopped
+        env_file: .env
+        environment:
+            MONGO_INITDB_DATABASE: admin
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_LOGIN}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+        volumes:
+            - ../data/db:/data/db
+        #     - ../data/logs:/data/logs
+        # command: --logpath /data/logs/mongodb.log
 
-  api:
-    build:
-      dockerfile: ../docker/api/Dockerfile
-      context: ../api
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
-        - PORT=${CRYPTO_PORT}
-        - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
-        - MONGO_LOGIN=${MONGO_LOGIN}
-        - MONGO_PASSWORD=${MONGO_PASSWORD}
-        - GOOGLE_ID=${GOOGLE_ID}
-        - GOOGLE_SECRET=${GOOGLE_SECRET}
-        - TG_TOKEN=${TG_TOKEN}
-        - SMSC_LOGIN=${SMSC_LOGIN}
-        - SMSC_PASSWORD=${SMSC_PASSWORD}
-        - VK_ID=${VK_ID}
-        - VK_SECRET=${VK_SECRET}
-    depends_on:
-      - db
-    restart: unless-stopped
-    env_file: .env
-    volumes:
-      - "../data/load:/data/load"
-      # Для горячей перезагрузки
-      - "../api/api:/api"
-      - "../api/app.py:/app.py"
+    api:
+        build:
+            dockerfile: ../docker/api/Dockerfile
+            context: ../api
+            args:
+                - PROTOCOL=${PROTOCOL}
+                - HOST=${EXTERNAL_HOST}
+                - PORT=${CRYPTO_PORT}
+                - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
+                - MONGO_LOGIN=${MONGO_LOGIN}
+                - MONGO_PASSWORD=${MONGO_PASSWORD}
+                - GOOGLE_ID=${GOOGLE_ID}
+                - GOOGLE_SECRET=${GOOGLE_SECRET}
+                - TG_TOKEN=${TG_TOKEN}
+                - SMSC_LOGIN=${SMSC_LOGIN}
+                - SMSC_PASSWORD=${SMSC_PASSWORD}
+                - VK_ID=${VK_ID}
+                - VK_SECRET=${VK_SECRET}
+        depends_on:
+            - db
+        restart: unless-stopped
+        env_file: .env
+        volumes:
+            - ../data/load:/data/load
+            # Для горячей перезагрузки
+            - ../api/api:/api
+            - ../api/app.py:/app.py
 
-  server:
-    build:
-      dockerfile: ../docker/web/Dockerfile.prod
-      context: ../web
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
-        - PORT=${CRYPTO_PORT}
-        - NAME=${NAME}
-        - MAIL=${MAIL}
-        - PHONE=${PHONE}
-        - SOCIAL=${SOCIAL}
-        - GOOGLE_MAP_KEY=${GOOGLE_MAP_KEY}
-        - GOOGLE_MAP_LAT=${GOOGLE_MAP_LAT}
-        - GOOGLE_MAP_LNG=${GOOGLE_MAP_LNG}
-        - GOOGLE_MAP_ZOOM=${GOOGLE_MAP_ZOOM}
-    restart: unless-stopped
-    env_file: .env
-    volumes:
-      - "../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template"
-      - "../data/load:/load"
-      - "../data/logs:/data/logs"
-      - "../data/certbot/conf:/etc/letsencrypt"
-      - "../data/certbot/www:/var/www/certbot"
-    depends_on:
-      - api
-    ports:
-      - '${EXTERNAL_PORT}:80'
-      - '${CRYPTO_PORT}:443'
-    command: >
-        /bin/sh -c
-        "envsubst '
-        $${EXTERNAL_HOST}
-        '< /etc/nginx/nginx.conf.template
-        > /etc/nginx/nginx.conf
-        && while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\""
+    server:
+        build:
+            dockerfile: ../docker/web/Dockerfile.prod
+            context: ../web
+            args:
+                - PROTOCOL=${PROTOCOL}
+                - HOST=${EXTERNAL_HOST}
+                - PORT=${CRYPTO_PORT}
+                - NAME=${NAME}
+                - MAIL=${MAIL}
+                - PHONE=${PHONE}
+                - SOCIAL=${SOCIAL}
+                - GOOGLE_MAP_KEY=${GOOGLE_MAP_KEY}
+                - GOOGLE_MAP_LAT=${GOOGLE_MAP_LAT}
+                - GOOGLE_MAP_LNG=${GOOGLE_MAP_LNG}
+                - GOOGLE_MAP_ZOOM=${GOOGLE_MAP_ZOOM}
+        restart: unless-stopped
+        env_file: .env
+        volumes:
+            - ../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template
+            - ../data/load:/load
+            - ../data/logs:/data/logs
+            - ../data/certbot/conf:/etc/letsencrypt
+            - ../data/certbot/www:/var/www/certbot
+        depends_on:
+            - api
+        ports:
+            - '${EXTERNAL_PORT}:80'
+            - '${CRYPTO_PORT}:443'
+        command: /bin/sh -c "
+            envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf &&
+            while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\""
 
-  certbot:
-    image: certbot/certbot
-    restart: unless-stopped
-    volumes:
-      - "../data/certbot/conf:/etc/letsencrypt"
-      - "../data/certbot/www:/var/www/certbot"
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    certbot:
+        image: certbot/certbot
+        restart: unless-stopped
+        volumes:
+            - ../data/certbot/conf:/etc/letsencrypt
+            - ../data/certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

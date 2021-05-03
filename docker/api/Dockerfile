@@ -18,10 +18,40 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST PORT SIDE_OPTIMIZED MONGO_LOGIN MONGO_PASSWORD GOOGLE_ID GOOGLE_SECRET TG_TOKEN SMSC_LOGIN SMSC_PASSWORD VK_ID VK_SECRET
+ARG PROTOCOL HOST PORT SIDE_OPTIMIZED MONGO_LOGIN MONGO_PASSWORD GOOGLE_ID \
+	GOOGLE_SECRET TG_TOKEN SMSC_LOGIN SMSC_PASSWORD VK_ID VK_SECRET
 RUN rm -f sets.json keys.json
-RUN echo "{\"mongo\": {\"host\": \"db\", \"db\": \"uple\"}, \"client\": \"$PROTOCOL://$HOST:$PORT/\", \"side_optimized\": $SIDE_OPTIMIZED}" >> sets.json
-RUN echo "{\"mongo\": {\"login\": \"$MONGO_LOGIN\", \"password\": \"$MONGO_PASSWORD\"}, \"google\": {\"client_id\": \"$GOOGLE_ID\", \"client_secret\": \"$GOOGLE_SECRET\"}, \"tg\": {\"token\": \"$TG_TOKEN\"}, \"smsc\": {\"login\": \"$SMSC_LOGIN\", \"password\": \"$SMSC_PASSWORD\"}, \"vk\": {\"client_id\": $VK_ID, \"client_secret\": \"$VK_SECRET\"}}" >> keys.json
+RUN echo '{ \n\
+	"mongo": { \n\
+		"host": "db", \n\
+		"db": "uple" \n\
+	}, \n\
+	"client": "'$PROTOCOL'://'$HOST':'$PORT'/", \n\
+	"side_optimized": '$SIDE_OPTIMIZED' \n\
+} \n\
+' >> sets.json
+RUN echo '{ \n\
+	"mongo": { \n\
+		"login": "'$MONGO_LOGIN'", \n\
+		"password": "'$MONGO_PASSWORD'" \n\
+	}, \n\
+	"google": { \n\
+		"client_id": "'$GOOGLE_ID'", \n\
+		"client_secret": "'$GOOGLE_SECRET'" \n\
+	}, \n\
+	"tg": { \n\
+		"token": "'$TG_TOKEN'" \n\
+	}, \n\
+	"smsc": { \n\
+		"login": "'$SMSC_LOGIN'", \n\
+		"password": "'$SMSC_PASSWORD'" \n\
+	}, \n\
+	"vk": { \n\
+		"client_id": '$VK_ID', \n\
+		"client_secret": "'$VK_SECRET'" \n\
+	} \n\
+} \n\
+' >> keys.json
 
 # Run
 CMD bash run.sh

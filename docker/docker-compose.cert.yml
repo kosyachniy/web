@@ -1,31 +1,27 @@
 version: '3'
 
 services:
-  nginx:
-    image: nginx:1.15-alpine
-    container_name: "nginx"
-    restart: unless-stopped
-    env_file: .env
-    volumes:
-      - "../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template"
-      - ../data/certbot/conf:/etc/letsencrypt
-      - ../data/certbot/www:/var/www/certbot
-    ports:
-      - "80:80"
-      - "443:443"
-    command: >
-        /bin/sh -c
-        "envsubst '
-        $${EXTERNAL_HOST}
-        '< /etc/nginx/nginx.conf.template
-        > /etc/nginx/nginx.conf
-        && /bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\""
+    nginx:
+        image: nginx:1.15-alpine
+        container_name: "nginx"
+        restart: unless-stopped
+        env_file: .env
+        volumes:
+            - ../docker/server/nginx.cert.conf:/etc/nginx/nginx.conf.template
+            - ../data/certbot/conf:/etc/letsencrypt
+            - ../data/certbot/www:/var/www/certbot
+        ports:
+            - "80:80"
+            - "443:443"
+        command: /bin/sh -c "
+            envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf &&
+            while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\""
 
-  certbot:
-    image: certbot/certbot
-    container_name: "certbot"
-    restart: unless-stopped
-    volumes:
-      - ../data/certbot/conf:/etc/letsencrypt
-      - ../data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    certbot:
+        image: certbot/certbot
+        container_name: "certbot"
+        restart: unless-stopped
+        volumes:
+            - ../data/certbot/conf:/etc/letsencrypt
+            - ../data/certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
