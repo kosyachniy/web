@@ -81,7 +81,7 @@ docker-compose -p <your project name> up --build
 Go to ` http://localhost/ `
 
 ### Production
-1. Customize files ` docker/.env ` & ` docker/server/nginx.prod.conf ` & ` docker/server/nginx.cert.conf ` & ` docker/cert.sh `
+1. Customize files ` docker/.env ` & ` docker/server/nginx.cert.conf ` & ` docker/cert.sh `
 
 2. Create encryption keys
 ```
@@ -98,6 +98,30 @@ docker-compose -f docker-compose.prod.yml -p <your project name> up --build
 4. Open
 
 Go to ``` https://web.kosyachniy.com/ ``` (your link)
+
+### For common using
+1. Customize file ` docker/server/nginx.server.conf `
+
+2. Set up NGINX
+```
+sudo apt-get update
+sudo apt install nginx
+y
+```
+
+```
+sudo cp <path to repo>/docker/server/nginx.server.conf /etc/nginx/sites-enabled/<your project name>.conf
+sudo systemctl restart nginx
+```
+
+3. Set up encryption
+```
+sudo snap install core; sudo snap refresh core
+sudo apt-get remove certbot
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo certbot --nginx
+```
 
 ## Install & Use without Docker
 ### Back-end
