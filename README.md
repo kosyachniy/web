@@ -81,7 +81,7 @@ docker-compose -p <your project name> up --build
 Go to ` http://localhost/ `
 
 ### Production
-1. Customize files ` docker/.env ` & ` docker/server/nginx.cert.conf ` & ` docker/cert.sh `
+1. Customize file ` docker/.env `
 
 2. Create encryption keys
 ```

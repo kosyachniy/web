@@ -1,14 +1,25 @@
 #!/bin/bash
 
+# Environment variables
+
+set -a
+source <(cat .env | \
+    sed -e '/^#/d;/^\s*$/d' -e "s/'/'\\\''/g" -e "s/=\(.*\)/='\1'/g")
+set +a
+
+echo $EXTERNAL_HOST
+echo $MAIL
+
+#
+
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
   exit 1
 fi
 
-domains=(web.kosyachniy.com)
+domains=($EXTERNAL_HOST)
 rsa_key_size=4096
 data_path="../data/certbot"
-email="polozhev@mail.ru" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
@@ -58,9 +69,9 @@ for domain in "${domains[@]}"; do
 done
 
 # Select appropriate email arg
-case "$email" in
+case "$MAIL" in
   "") email_arg="--register-unsafely-without-email" ;;
-  *) email_arg="--email $email" ;;
+  *) email_arg="--email $MAIL" ;;
 esac
 
 # Enable staging mode if needed
