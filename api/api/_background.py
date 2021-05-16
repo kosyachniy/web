@@ -6,6 +6,7 @@
 ## Local
 from api._func import report
 
+
 def background(sio):
 	report("Restart server")
 

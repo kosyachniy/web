@@ -10,11 +10,11 @@ import telebot
 # Params
 ## Token
 with open('keys.json', 'r') as file:
-	token = json.loads(file.read())['tg']['token']
+	TG_TOKEN = json.loads(file.read())['tg']['token']
 
 
 # Global variables
-bot = telebot.TeleBot(token)
+bot = telebot.TeleBot(TG_TOKEN)
 
 
 # Funcs
