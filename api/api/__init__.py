@@ -1,7 +1,11 @@
+# Libraries
+## System
 import time
 
+## Local
 from api._func import get_language
 from api._func.mongodb import db
+from api._background import background
 import api._error as Error
 
 import api.account as account
@@ -16,7 +20,10 @@ class API():
 		self.client = client
 		self.sio = sio
 
-		# Reset online users
+		# Background processes
+		background(self.sio)
+
+		# Reset online users # TODO: to background process
 		db['online'].remove()
 
 	async def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
