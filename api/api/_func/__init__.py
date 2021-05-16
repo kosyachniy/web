@@ -10,11 +10,15 @@ import requests
 from PIL import Image, ExifTags
 
 from api._func.mongodb import db
+from api._func.tg_bot import send as send_tg
 from api._error import ErrorSpecified, ErrorInvalid, ErrorType
 
 
 with open('sets.json', 'r') as file:
-	SIDE_OPTIMIZED = json.loads(file.read())['side_optimized']
+	sets = json.loads(file.read())
+	SIDE_OPTIMIZED = sets['side_optimized']
+	MODE = sets['mode']
+	BUG_CHAT = sets['bug_chat']
 
 
 # Check existence the file by name
@@ -418,3 +422,36 @@ async def online_emit_add(sio, user):
 			'avatar': '/load/opt/' + user['avatar'],
 		}] if user else [], # ! Full info for all / Full info only for admins
 	})
+
+# Report
+
+def report(text, type_=0, additional=''):
+	SYMBOLS = ['🟢', '🟡', '🔴', '❗️', '✅']
+	TYPES = ['INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT']
+
+	if MODE != "PROD" and type_ == 0:
+		return
+
+	preview = f"{SYMBOLS[type_]} {MODE} {TYPES[type_]}\n---------------\n"
+	text = preview + text
+	if additional:
+		text_with_additional = text + '\n\n' + str(additional)
+	else:
+		text_with_additional = text
+
+	try:
+		send_tg(BUG_CHAT, text_with_additional, markup=None)
+	except Exception as e:
+		if additional:
+			print("❗️❗️❗️", e)
+			print(additional)
+
+			try:
+				send_tg(BUG_CHAT, text, markup=None)
+			except Exception as e:
+				print("❗️❗️❗️", e)
+				print(type_, text)
+
+		else:
+			print("❗️❗️❗️", e)
+			print(type_, text)
