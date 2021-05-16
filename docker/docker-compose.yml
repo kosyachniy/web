@@ -84,3 +84,17 @@ services:
             - web
         ports:
             - '${EXTERNAL_PORT}:80'
+
+    tg:
+        build:
+            dockerfile: ../docker/tg/Dockerfile
+            context: ../tg
+            args:
+                - PROTOCOL=${PROTOCOL}
+                - HOST=${EXTERNAL_HOST}
+                - PORT=${EXTERNAL_PORT}
+                - TG_TOKEN=${TG_TOKEN}
+        env_file: .env
+        depends_on:
+            - api
+        restart: unless-stopped

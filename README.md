@@ -6,7 +6,7 @@ Form | Side | Stack | Language | Path
 ---|---|---|---|---
 API | Back-end | FastAPI | Python | ``` api/ ```
 Web app | Front-end | React | JavaScript | ``` web/ ```
-Telegram bot | Back-end | AIOGram | Python | planned
+Telegram bot | Back-end | AIOGram | Python | ``` tg/ ```
 iOS | Front-end | React Native | JavaScript | planned
 Android | Front-end | React Native | JavaScript | planned
 
