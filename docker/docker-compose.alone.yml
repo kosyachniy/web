@@ -45,6 +45,20 @@ services:
             - ../api/api:/api
             - ../api/app.py:/app.py
 
+    tg:
+        build:
+            dockerfile: ../docker/tg/Dockerfile
+            context: ../tg
+            args:
+                - PROTOCOL=${PROTOCOL}
+                - HOST=${EXTERNAL_HOST}
+                - PORT=${CRYPTO_PORT}
+                - TG_TOKEN=${TG_TOKEN}
+        env_file: .env
+        depends_on:
+            - api
+        restart: unless-stopped
+
     server:
         build:
             dockerfile: ../docker/web/Dockerfile.prod
