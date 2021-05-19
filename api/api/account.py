@@ -26,7 +26,9 @@ with open('keys.json', 'r') as file:
 # # Token generation
 
 # ALL_SYMBOLS = string.digits + string.ascii_letters
-# generate = lambda length=32: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+# generate = lambda length=32: ''.join(
+#     random.choice(ALL_SYMBOLS) for _ in range(length)
+# )
 
 # Check name
 
@@ -126,7 +128,10 @@ def _process_phone(number):
 
 # Account registration
 
-def _registrate(user, timestamp, login='', password='', mail='', name='', surname='', description='', avatar='', file='', social=[], phone=None):
+def _registrate(
+    user, timestamp, login='', password='', mail='', name='', surname='',
+    description='', avatar='', file='', social=[], phone=None,
+):
     # ID
 
     user_id = next_id('users')
@@ -184,7 +189,9 @@ def _registrate(user, timestamp, login='', password='', mail='', name='', surnam
     # # Referal link
 
     # ALL_SYMBOLS = string.ascii_lowercase + string.digits
-    # generate = lambda length=8: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+    # generate = lambda length=8: ''.join(
+    #     random.choice(ALL_SYMBOLS) for _ in range(length)
+    # )
     # referal_code = generate()
 
     #
@@ -316,7 +323,9 @@ async def social(this, **x):
     # Checking parameters
 
     check_params(x, (
-        ('id', True, int), # 1-ВКонтакте, 2-Telegram, 3-Google, 4-FaceBook, 5-Apple, 6-Twitter, 7-GitHub
+        # 1-ВКонтакте, 2-Telegram, 3-Google, 4-FaceBook,
+        # 5-Apple, 6-Twitter, 7-GitHub
+        ('id', True, int),
         ('code', True, str),
     ))
 
@@ -328,8 +337,18 @@ async def social(this, **x):
 
     # ВКонтакте
     if x['id'] == 1:
-        link = 'https://oauth.vk.com/access_token?client_id={}&client_secret={}&redirect_uri={}callback&code={}'
-        response = json.loads(requests.get(link.format(VK['client_id'], VK['client_secret'], this.client, x['code'])).text)
+        link = 'https://oauth.vk.com/access_token?client_id={}&client_secret=' \
+               '{}&redirect_uri={}callback&code={}'
+        response = json.loads(
+            requests.get(
+                link.format(
+                    VK['client_id'],
+                    VK['client_secret'],
+                    this.client,
+                    x['code'],
+                )
+            ).text
+        )
 
         if 'user_id' in response:
             user_id = response['user_id']
@@ -355,7 +374,11 @@ async def social(this, **x):
             raise ErrorAccess('code')
 
         link = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token={}'
-        response = json.loads(requests.get(link.format(response['access_token'])).text)
+        response = json.loads(
+            requests.get(
+                link.format(response['access_token'])
+            ).text
+        )
 
         if 'id' in response:
             user_id = response['id']
@@ -403,11 +426,17 @@ async def social(this, **x):
             else:
                 raise ErrorAccess('code')
 
-            # link = 'https://api.vk.com/method/account.getProfileInfo?access_token={}&v=5.103'
-            link = 'https://api.vk.com/method/users.get?user_ids={}&fields=photo_max_orig,nickname&access_token={}&v=5.103'
+            # link = 'https://api.vk.com/method/account.getProfileInfo' \
+            #        '?access_token={}&v=5.103'
+            link = 'https://api.vk.com/method/users.get?user_ids={}&fields=' \
+                   'photo_max_orig,nickname&access_token={}&v=5.103'
 
             try:
-                response = json.loads(requests.get(link.format(user_id, token)).text)['response'][0]
+                response = json.loads(
+                    requests.get(
+                        link.format(user_id, token)
+                    ).text
+                )['response'][0]
             except:
                 raise ErrorAccess('vk')
 
@@ -430,7 +459,9 @@ async def social(this, **x):
                 login = ''
 
             try:
-                avatar = str(base64.b64encode(requests.get(response['photo_max_orig']).content))[2:-1]
+                avatar = str(base64.b64encode(
+                    requests.get(response['photo_max_orig']).content
+                ))[2:-1]
             except:
                 avatar = ''
 
@@ -441,7 +472,8 @@ async def social(this, **x):
                 mail = ''
 
         elif x['id'] == 3:
-            # link = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token={}'.format(x['data']['access_token'])
+            # link = 'https://www.googleapis.com/oauth2/v1/userinfo' \
+            #        '?access_token={}'.format(x['data']['access_token'])
             # res_google = json.loads(requests.get(link).text)
 
             try:
@@ -464,7 +496,9 @@ async def social(this, **x):
 
             try:
                 if response['picture']:
-                    avatar = str(base64.b64encode(requests.get(response['picture']).content))[2:-1]
+                    avatar = str(base64.b64encode(
+                        requests.get(response['picture']).content
+                    ))[2:-1]
             except:
                 pass
 
@@ -573,7 +607,9 @@ async def social(this, **x):
 #     # Code generation
 
 #     ALL_SYMBOLS = string.digits
-#     generate = lambda length=4: ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
+#     generate = lambda length=4: ''.join(
+#         random.choice(ALL_SYMBOLS) for _ in range(length)
+#     )
 #     code = generate()
 
 #     #
@@ -593,7 +629,10 @@ async def social(this, **x):
 #     #
 
 #     sms = SMSC()
-#     res = sms.send_sms(str(phone), 'Hi!\n{} — This is your login code.'.format(code))
+#     res = sms.send_sms(
+#         str(phone),
+#         'Hi!\n{} — This is your login code.'.format(code)
+#     )
 #     print(phone, res)
 
 #     # Response
@@ -705,7 +744,9 @@ async def social(this, **x):
 #             promo = db['promos'].find_one({'promo': code['promo'].upper()})
 
 #             if not promo:
-#                 promo = db['promos'].find_one({'promo': code['promo'].lower()})
+#                 promo = db['promos'].find_one({
+#                     'promo': code['promo'].lower(),
+#                 })
 
 #                 if promo:
 #                     # Нет доступа
@@ -713,7 +754,8 @@ async def social(this, **x):
 #                     if user['admin'] >= promo['admin']:
 #                         # Повтор
 
-#                         if promo['repeat'] or user['id'] not in promo['users']:
+#                         if promo['repeat'] \
+#                             or user['id'] not in promo['users']:
 #                             # Выполнение скрипта
 
 #                             user['balance'] += promo['balance']
@@ -851,7 +893,10 @@ async def phone(this, **x):
     if study:
         # Redirect to space
 
-        space = '/space/{}/?task={}&type={}'.format(study['id'], study['task'], ('student', 'teacher')[study['student'] != res['id']])
+        space = '/space/{}/?task={}&type={}'.format(
+            study['id'], study['task'],
+            ('student', 'teacher')[study['student'] != res['id']],
+        )
 
         sids = get_sids(res['id'])
 
@@ -935,7 +980,9 @@ async def auth(this, **x):
 
     # Пароль
     # if 'password' in x:
-    db_condition['password'] = hashlib.md5(bytes(x['password'], 'utf-8')).hexdigest()
+    db_condition['password'] = hashlib.md5(
+        bytes(x['password'], 'utf-8')
+    ).hexdigest()
 
     db_filter = {
         '_id': False,
@@ -1173,7 +1220,9 @@ async def online(this, **x):
             'admin': True,
         }
 
-        user_current = db['users'].find_one({'id': user_current['id']}, db_filter)
+        user_current = db['users'].find_one({
+            'id': user_current['id'],
+        }, db_filter)
 
     # Online users
     ## Emit all users to this user
@@ -1191,7 +1240,9 @@ async def online(this, **x):
         'admin': True,
     }
 
-    users_auth = list(db['online'].find({'login': {'$exists': True}}, db_filter))
+    users_auth = list(db['online'].find({
+        'login': {'$exists': True},
+    }, db_filter))
     users_all = list(db['online'].find({}, db_filter))
     count = len(set([i['id'] for i in users_all]))
 

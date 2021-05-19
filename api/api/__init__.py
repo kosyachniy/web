@@ -26,7 +26,9 @@ class API():
         # Reset online users # TODO: to background process
         db['online'].remove()
 
-    async def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
+    async def method(
+        self, name, params={}, ip=None, sid=None, token=None, language=0,
+    ): # TODO: network
         self.timestamp = time.time()
         self.ip = ip
         self.sid = sid

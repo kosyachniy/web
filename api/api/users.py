@@ -94,7 +94,10 @@ async def get(this, **x):
 
         # # Online
 
-        # users[i]['online'] = db['online'].find_one({'id': users[i]['id']}, {'_id': True}) == True
+        # users[i]['online'] = db['online'].find_one(
+        #     {'id': users[i]['id']},
+        #     {'_id': True}
+        # ) == True
 
     # Response
 

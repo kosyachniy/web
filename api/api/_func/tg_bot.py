@@ -39,15 +39,29 @@ def keyboard(rows, inline=False):
 
     for cols in rows:
         if inline:
-            buttons.add(*[telebot.types.InlineKeyboardButton(col['name'], **({'url': col['data']} if col['type'] == 'link' else {'callback_data': col['data']})) for col in cols])
-            # buttons.add(*[telebot.types.InlineKeyboardButton(col['name'], callback_data=col['data']) for col in cols])
+            buttons.add(
+                *[
+                    telebot.types.InlineKeyboardButton(
+                        col['name'],
+                        **(
+                            {'url': col['data']}
+                            if col['type'] == 'link'
+                            else {'callback_data': col['data']}
+                        ),
+                    ) for col in cols
+                ]
+            )
+            # buttons.add(*[telebot.types.InlineKeyboardButton(col['name'], \
+            # callback_data=col['data']) for col in cols])
         else:
             buttons.add(*[telebot.types.KeyboardButton(col) for col in cols])
 
     return buttons
 
 ## Send message
-def send(user, text='', buttons=None, inline=False, image=None, markup='Markdown'):
+def send(
+    user, text='', buttons=None, inline=False, image=None, markup='Markdown',
+):
     if not image:
         return bot.send_message(
             user,

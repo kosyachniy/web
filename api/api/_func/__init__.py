@@ -43,7 +43,9 @@ def max_image(url):
 
 # Upload image
 
-def load_image(data, file_type=None, file_coding='base64', file_url='', file_id=None):
+def load_image(
+    data, file_type=None, file_coding='base64', file_url='', file_id=None,
+):
     url = '../data/load/' + file_url
     url_opt = url + 'opt/'
 
@@ -137,7 +139,10 @@ def reimg(s):
             st[1] = st[0] + s[k+st[0]:].index('>')
             vs = ''
             if 'src=' in s[k+st[0]:k+st[1]]:
-                if re.search(r'image/.*;', s[k+st[0]:k+st[1]]) and 'base64,' in s[k+st[0]:k+st[1]]:
+                if re.search(
+                    r'image/.*;',
+                    s[k+st[0]:k+st[1]]
+                ) and 'base64,' in s[k+st[0]:k+st[1]]:
                     start = k + st[0] + s[k+st[0]:].index('base64,') + 7
                     try:
                         stop = start + s[start:].index('"')
@@ -145,7 +150,10 @@ def reimg(s):
                         stop = start + s[start:].index('\'')
 
                     b64 = s[start:stop]
-                    form = re.search(r'image/.*;', s[k+st[0]:start]).group(0)[6:-1]
+                    form = re.search(
+                        r'image/.*;',
+                        s[k+st[0]:start]
+                    ).group(0)[6:-1]
                     adr = load_image(b64, form)
 
                     # vs = '<img src="/load/{}">'.format(adr)
@@ -160,7 +168,9 @@ def reimg(s):
                     href = s[start:stop]
 
                     if href[:4] == 'http':
-                        b64 = str(base64.b64encode(requests.get(href).content))[2:-1]
+                        b64 = str(base64.b64encode(
+                            requests.get(href).content
+                        ))[2:-1]
                         form = href.split('.')[-1]
                         if 'latex' in form or '/' in form or len(form) > 5:
                             form = 'png'
@@ -219,14 +229,16 @@ def check_params(x, filters): # ! Удалять другие поля (кото
             cond_iter = type(x[i[0]]) in (tuple, list)
 
             try:
-                cond_iter_el = cond_iter and any(type(j) != i[3] for j in x[i[0]])
+                cond_iter_el = cond_iter \
+                    and any(type(j) != i[3] for j in x[i[0]])
             except:
                 raise ErrorType(i[0])
 
             if cond_type or cond_iter_el:
                 raise ErrorType(i[0])
 
-            cond_null = type(i[-1]) == bool and i[-1] and cond_iter and not len(x[i[0]])
+            cond_null = type(i[-1]) == bool and i[-1] and cond_iter \
+                and not len(x[i[0]])
 
             if cond_null:
                 raise ErrorInvalid(i[0])

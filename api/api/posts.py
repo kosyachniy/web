@@ -96,8 +96,14 @@ async def edit(this, **x):
 
     ### Cover from the first image
     # try:
-    #     img = re.search('<img src="[^"]*">', post['cont'])[0].split('"')[1].split('/')[2]
-    #     shutil.copyfile('../data/load/{}'.format(img), '../data/load/posts/{}.{}'.format(post['id'], img.split('.')[-1]))
+    #     img = re.search(
+    #         '<img src="[^"]*">',
+    #         post['cont']
+    #     )[0].split('"')[1].split('/')[2]
+    #     shutil.copyfile(
+    #         '../data/load/{}'.format(img),
+    #         '../data/load/posts/{}.{}'.format(post['id'], img.split('.')[-1])
+    #     )
     # except:
     #     pass
 
@@ -183,8 +189,12 @@ async def get(this, **x):
 
         while i < len(posts):
             cond_name = x['search'] not in posts[i]['name'].lower()
-            cond_cont = x['search'] not in posts[i]['cont'].lower() # TODO: HTML tags
-            cond_tags = all(x['search'] not in tag.lower() for tag in posts[i]['tags']) if 'tags' in posts[i] else True
+            # TODO: HTML tags
+            cond_cont = x['search'] not in posts[i]['cont'].lower()
+            cond_tags = all(
+                x['search'] not in tag.lower()
+                for tag in posts[i]['tags']
+            ) if 'tags' in posts[i] else True
 
             if cond_name and cond_cont and cond_tags:
                 del posts[i]
@@ -214,14 +224,22 @@ async def get(this, **x):
         else:
             ### Cover from the first image
             try:
-                img = re.search('<img src="[^"]*">', posts[i]['cont'])[0].split('"')[1].split('/')[-1]
+                img = re.search(
+                    '<img src="[^"]*">',
+                    posts[i]['cont']
+                )[0].split('"')[1].split('/')[-1]
+
                 posts[i]['cover'] = '/load/opt/' + img
             except:
                 pass
 
         ## Content
         if not process_single:
-            posts[i]['cont'] = re.sub('<[^>]*>', '', posts[i]['cont']).replace('&nbsp;', ' ')
+            posts[i]['cont'] = re.sub(
+                '<[^>]*>',
+                '',
+                posts[i]['cont']
+            ).replace('&nbsp;', ' ')
 
     # Response
 

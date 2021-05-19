@@ -54,7 +54,10 @@ async def get(this, **x):
 
     count = x['count'] if 'count' in x else None
 
-    news = list(db['feedback'].find({}, {'_id': False}).sort('time', -1)[0:count])
+    news = list(db['feedback'].find(
+        {},
+        {'_id': False}
+    ).sort('time', -1)[0:count])
 
     for i in range(len(news)):
         news[i]['user'] = get_user(news[i]['user'])
