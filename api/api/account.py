@@ -49,7 +49,7 @@ def _check_surname(cont):
 def _check_mail(cont, user):
     # Invalid mail
 
-    if re.match('.+@.+\..+', cont) == None:
+    if re.match('.+@.+\..+', cont) is None:
         raise ErrorInvalid('mail')
 
     # Mail is already registered

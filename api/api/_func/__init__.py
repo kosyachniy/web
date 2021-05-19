@@ -52,7 +52,7 @@ def load_image(
     if file_coding == 'base64':
         data = base64.b64decode(data)
 
-    if file_type == '' or file_type == None:
+    if file_type == '' or file_type is None:
         file_type = 'jpg'
 
     file_type = file_type.lower()

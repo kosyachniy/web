@@ -76,7 +76,7 @@ class SMSC(object):
         m = self._smsc_send_cmd("send", "cost=3&phones=" + quote(phones) \
             + "&mes=" + quote(message) + "&translit=" + str(translit) + "&id=" \
             + str(id) + ifs(format > 0, "&" + formats[format-1], "") \
-            + ifs(sender == False, "", "&sender=" + quote(str(sender)))
+            + ifs(sender is False, "", "&sender=" + quote(str(sender)))
             + ifs(time, "&time=" + quote(time), "") \
             + ifs(query, "&" + query, ""))
 
@@ -149,7 +149,7 @@ class SMSC(object):
 
         m = self._smsc_send_cmd(
             "send", "cost=1&phones=" + quote(phones) + "&mes=" \
-            + quote(message) + ifs(sender == False, "", "&sender=" \
+            + quote(message) + ifs(sender is False, "", "&sender=" \
             + quote(str(sender))) + "&translit=" + str(translit) \
             + ifs(format > 0, "&" + formats[format-1], "") \
             + ifs(query, "&" + query, ""),

@@ -105,7 +105,7 @@ async def index(data: Input, request: Request):
     else:
         req['error'] = 0
 
-        if res != None:
+        if res is not None:
             req['result'] = res
 
     # Response
