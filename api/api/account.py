@@ -22,6 +22,13 @@ with open('keys.json', 'r') as file:
     VK = keys['vk']
     GOOGLE = keys['google']
 
+RESERVED = (
+    'admin', 'administrator', 'author', 'test', 'tester', 'bot', 'robot',
+    'root', 'info', 'support', 'manager', 'client', 'dev', 'account',
+    'user', 'users', 'profile', 'login', 'password', 'code', 'mail',
+    'phone', 'google', 'facebook', 'administration',
+)
+
 
 # # Token generation
 
@@ -77,13 +84,6 @@ def _check_login(cont, user):
         raise ErrorInvalid('login')
 
     # System reserved
-
-    RESERVED = (
-        'admin', 'administrator', 'author', 'test', 'tester', 'bot', 'robot',
-        'root', 'info', 'support', 'manager', 'client', 'dev', 'account',
-        'user', 'users', 'profile', 'login', 'password', 'code', 'mail',
-        'phone', 'google', 'facebook', 'administration',
-    )
 
     cond_id = cont[:2] == 'id'
     cond_reserv = cont in RESERVED

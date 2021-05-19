@@ -33,9 +33,9 @@ def get_file(url, num):
 # Next image ID
 
 def max_image(url):
-    x = os.listdir(url)
+    files = os.listdir(url)
     k = 0
-    for i in x:
+    for i in files:
         j = re.findall(r'\d+', i)
         if len(j) and int(j[0]) > k:
             k = int(j[0])
@@ -129,43 +129,43 @@ def load_image(
 
 # Replace image in text
 
-def reimg(s):
+def reimg(text):
     k = 0
 
     while True:
-        x = re.search(r'<img ', s[k:])
-        if x:
-            st = list(x.span())
-            st[1] = st[0] + s[k+st[0]:].index('>')
-            vs = ''
-            if 'src=' in s[k+st[0]:k+st[1]]:
+        img = re.search(r'<img ', text[k:])
+        if img:
+            first, last = list(img.span())
+            last = first + text[k+first:].index('>')
+            result = ''
+            if 'src=' in text[k+first:k+last]:
                 if re.search(
                     r'image/.*;',
-                    s[k+st[0]:k+st[1]]
-                ) and 'base64,' in s[k+st[0]:k+st[1]]:
-                    start = k + st[0] + s[k+st[0]:].index('base64,') + 7
+                    text[k+first:k+last]
+                ) and 'base64,' in text[k+first:k+last]:
+                    start = k + first + text[k+first:].index('base64,') + 7
                     try:
-                        stop = start + s[start:].index('"')
+                        stop = start + text[start:].index('"')
                     except:
-                        stop = start + s[start:].index('\'')
+                        stop = start + text[start:].index('\'')
 
-                    b64 = s[start:stop]
+                    b64 = text[start:stop]
                     form = re.search(
                         r'image/.*;',
-                        s[k+st[0]:start]
+                        text[k+first:start]
                     ).group(0)[6:-1]
                     adr = load_image(b64, form)
 
-                    # vs = '<img src="/load/{}">'.format(adr)
-                    vs = '<img src="/load/opt/{}">'.format(adr)
+                    # result = '<img src="/load/{}">'.format(adr)
+                    result = '<img src="/load/opt/{}">'.format(adr)
                 else:
-                    start = k + re.search(r'src=.*', s[k:]).span()[0] + 5
+                    start = k + re.search(r'src=.*', text[k:]).span()[0] + 5
                     try:
-                        stop = start + s[start:].index('"')
+                        stop = start + text[start:].index('"')
                     except:
-                        stop = start + s[start:].index('\'')
+                        stop = start + text[start:].index('\'')
 
-                    href = s[start:stop]
+                    href = text[start:stop]
 
                     if href[:4] == 'http':
                         b64 = str(base64.b64encode(
@@ -176,18 +176,18 @@ def reimg(s):
                             form = 'png'
                         adr = load_image(b64, form)
 
-                        # vs = '<img src="/load/{}">'.format(adr)
-                        vs = '<img src="/load/opt/{}">'.format(adr)
+                        # result = '<img src="/load/{}">'.format(adr)
+                        result = '<img src="/load/opt/{}">'.format(adr)
 
-            if vs:
-                s = s[:k+st[0]] + vs + s[k+st[1]+1:]
-                k += st[0] + len(vs)
+            if result:
+                text = text[:k+first] + result + text[k+last+1:]
+                k += first + len(result)
             else:
-                k += st[1]
+                k += last
         else:
             break
 
-    return s
+    return text
 
 # Get user
 
@@ -216,21 +216,21 @@ def get_user(user_id):
 
 # Checking parameters
 
-def check_params(x, filters): # ! Удалять другие поля (которых нет в списке)
+def check_params(data, filters): # ! Удалять другие поля (которых нет в списке)
     for i in filters:
-        if i[0] in x:
+        if i[0] in data:
             # Invalid data type
             if type(i[2]) not in (list, tuple):
                 el_type = (i[2],)
             else:
                 el_type = i[2]
 
-            cond_type = type(x[i[0]]) not in el_type
-            cond_iter = type(x[i[0]]) in (tuple, list)
+            cond_type = type(data[i[0]]) not in el_type
+            cond_iter = type(data[i[0]]) in (tuple, list)
 
             try:
                 cond_iter_el = cond_iter \
-                    and any(type(j) != i[3] for j in x[i[0]])
+                    and any(type(j) != i[3] for j in data[i[0]])
             except:
                 raise ErrorType(i[0])
 
@@ -238,7 +238,7 @@ def check_params(x, filters): # ! Удалять другие поля (кото
                 raise ErrorType(i[0])
 
             cond_null = type(i[-1]) == bool and i[-1] and cond_iter \
-                and not len(x[i[0]])
+                and not len(data[i[0]])
 
             if cond_null:
                 raise ErrorInvalid(i[0])
@@ -252,11 +252,11 @@ def check_params(x, filters): # ! Удалять другие поля (кото
 def next_id(name):
     try:
         db_filter = {'id': True, '_id': False}
-        id = db[name].find({}, db_filter).sort('id', -1)[0]['id'] + 1
+        id_ = db[name].find({}, db_filter).sort('id', -1)[0]['id'] + 1
     except:
-        id = 1
+        id_ = 1
 
-    return id
+    return id_
 
 # Convert language to code
 
@@ -331,14 +331,14 @@ def get_sids(user):
 
 # Get date from timestamp
 
-def get_date(x, template='%Y%m%d'):
-    return time.strftime(template, time.localtime(x))
+def get_date(text, template='%Y%m%d'):
+    return time.strftime(template, time.localtime(text))
 
 # Leave only the required fields for objects in the list
 
 def reduce_params(cont, params):
-    def only_params(el):
-        return {i: el[i] for i in params}
+    def only_params(element):
+        return {i: element[i] for i in params}
 
     return list(map(only_params, cont))
 
@@ -437,10 +437,10 @@ async def online_emit_add(sio, user):
 
 # Report
 
-def report(text, type_=0, additional=''):
-    SYMBOLS = ['🟢', '🟡', '🔴', '❗️', '✅']
-    TYPES = ['INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT']
+SYMBOLS = ['🟢', '🟡', '🔴', '❗️', '✅']
+TYPES = ['INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT']
 
+def report(text, type_=0, additional=''):
     if MODE != "PROD" and type_ == 0:
         return
 
@@ -453,17 +453,17 @@ def report(text, type_=0, additional=''):
 
     try:
         send_tg(BUG_CHAT, text_with_additional, markup=None)
-    except Exception as e:
+    except Exception as error:
         if additional:
-            print("❗️❗️❗️", e)
+            print("❗️❗️❗️", error)
             print(additional)
 
             try:
                 send_tg(BUG_CHAT, text, markup=None)
-            except Exception as e:
-                print("❗️❗️❗️", e)
+            except Exception as error:
+                print("❗️❗️❗️", error)
                 print(type_, text)
 
         else:
-            print("❗️❗️❗️", e)
+            print("❗️❗️❗️", error)
             print(type_, text)

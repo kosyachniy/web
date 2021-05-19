@@ -32,7 +32,7 @@ async def echo(message: types.Message):
     await bot.send_message(message.chat.id, message.text)
 
 
-async def on_start(dp):
+async def on_start():
     await bot.set_webhook(WEBHOOK_URL)
 
     # # Actions after start

@@ -26,6 +26,7 @@ class API():
         # Reset online users # TODO: to background process
         db['online'].remove()
 
+    # pylint: disable=C0103
     async def method(
         self, name, params={}, ip=None, sid=None, token=None, language=0,
     ): # TODO: network

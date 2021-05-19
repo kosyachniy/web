@@ -94,11 +94,11 @@ async def index(data: Input, request: Request):
             language=data.locale,
         )
 
-    except Error.BaseError as e:
-        req['error'] = e.code
-        req['result'] = str(e)
+    except Error.BaseError as error:
+        req['error'] = error.code
+        req['result'] = str(error)
 
-    # except Exception as e:
+    # except Exception as error:
     #     req['error'] = 1
     #     req['result'] = 'Server error'
 

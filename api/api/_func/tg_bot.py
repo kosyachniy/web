@@ -80,10 +80,12 @@ def send(
             parse_mode=markup,
         )
 
+# pylint: disable=C0103
 def send_file(to, name):
     with open(name, 'rb') as file:
         return bot.send_document(to, file)
 
+# pylint: disable=C0103
 def delete(to, message, attempt=1):
     try:
         bot.delete_message(to, message)

@@ -66,16 +66,16 @@ class SMSC(object):
 
     def send_sms(
         self, phones, message, translit=0, time="",
-        id=0, format=0, sender=False, query="",
+        id_=0, format=0, sender=False, query="",
     ):
         formats = [
             "flash=1", "push=1", "hlr=1", "bin=1", "bin=2",
             "ping=1", "mms=1", "mail=1", "call=1",
         ]
 
-        m = self._smsc_send_cmd("send", "cost=3&phones=" + quote(phones) \
+        res = self._smsc_send_cmd("send", "cost=3&phones=" + quote(phones) \
             + "&mes=" + quote(message) + "&translit=" + str(translit) + "&id=" \
-            + str(id) + ifs(format > 0, "&" + formats[format-1], "") \
+            + str(id_) + ifs(format > 0, "&" + formats[format-1], "") \
             + ifs(sender is False, "", "&sender=" + quote(str(sender)))
             + ifs(time, "&time=" + quote(time), "") \
             + ifs(query, "&" + query, ""))
@@ -83,24 +83,25 @@ class SMSC(object):
         # (id, cnt, cost, balance) или (id, -error)
 
         if SMSC_DEBUG:
-            if m[1] > "0":
+            if res[1] > "0":
                 print(
-                    "Сообщение отправлено успешно. ID: " + m[0] \
-                    + ", всего SMS: " + m[1] + ", стоимость: " + m[2] \
-                    + ", баланс: " + m[3]
+                    "Сообщение отправлено успешно. ID: " + res[0] \
+                    + ", всего SMS: " + res[1] + ", стоимость: " + res[2] \
+                    + ", баланс: " + res[3]
                 )
             else:
                 print(
-                    "Ошибка №" + m[1][1:] + ifs(m[0] > "0", ", ID: " + m[0], "")
+                    "Ошибка №" + res[1][1:] \
+                    + ifs(res[0] > "0", ", ID: " + res[0], "")
                 )
 
-        return m
+        return res
 
 
     # SMTP версия метода отправки SMS
 
     def send_sms_mail(
-        self, phones, message, translit=0, time="", id=0, format=0, sender="",
+        self, phones, message, translit=0, time="", id_=0, format=0, sender="",
     ):
         server = smtplib.SMTP(SMTP_SERVER)
 
@@ -113,7 +114,7 @@ class SMSC(object):
         server.sendmail(
             SMTP_FROM, "send@send.smsc.ru", \
             "Content-Type: text/plain; charset=" + SMSC_CHARSET + "\n\n" \
-            + SMSC_LOGIN + ":" + SMSC_PASSWORD + ":" + str(id) + ":" + time \
+            + SMSC_LOGIN + ":" + SMSC_PASSWORD + ":" + str(id_) + ":" + time \
             + ":" + str(translit) + "," + str(format) + "," + sender + ":" \
             + phones + ":" + message,
         )
@@ -147,7 +148,7 @@ class SMSC(object):
             "ping=1", "mms=1", "mail=1", "call=1",
         ]
 
-        m = self._smsc_send_cmd(
+        res = self._smsc_send_cmd(
             "send", "cost=1&phones=" + quote(phones) + "&mes=" \
             + quote(message) + ifs(sender is False, "", "&sender=" \
             + quote(str(sender))) + "&translit=" + str(translit) \
@@ -158,16 +159,18 @@ class SMSC(object):
         # (cost, cnt) или (0, -error)
 
         if SMSC_DEBUG:
-            if m[1] > "0":
-                print("Стоимость рассылки: " + m[0] + ". Всего SMS: " + m[1])
+            if res[1] > "0":
+                print(
+                    "Стоимость рассылки: " + res[0] + ". Всего SMS: " + res[1]
+                )
             else:
-                print("Ошибка №" + m[1][1:])
+                print("Ошибка №" + res[1][1:])
 
-        return m
+        return res
 
     # Метод проверки статуса отправленного SMS или HLR-запроса
     #
-    # id - ID cообщения
+    # id_ - ID cообщения
     # phone - номер телефона
     #
     # возвращает массив:
@@ -184,33 +187,33 @@ class SMSC(object):
     #
     # либо массив (0, -<код ошибки>) в случае ошибки
 
-    def get_status(self, id, phone, all = 0):
-        m = self._smsc_send_cmd(
+    def get_status(self, id_, phone, all = 0):
+        res = self._smsc_send_cmd(
             "status",
-            "phone=" + quote(phone) + "&id=" + str(id) + "&all=" + str(all),
+            "phone=" + quote(phone) + "&id=" + str(id_) + "&all=" + str(all),
         )
 
         # (status, time, err, ...) или (0, -error)
 
         if SMSC_DEBUG:
-            if m[1] >= "0":
-                tm = ""
-                if m[1] > "0":
-                    tm = str(datetime.fromtimestamp(int(m[1])))
+            if res[1] >= "0":
+                text = ""
+                if res[1] > "0":
+                    text = str(datetime.fromtimestamp(int(res[1])))
                 print(
-                    "Статус SMS = " + m[0] + ifs(
-                        m[1] > "0",
-                        ", время изменения статуса - " + tm,
+                    "Статус SMS = " + res[0] + ifs(
+                        res[1] > "0",
+                        ", время изменения статуса - " + text,
                         "",
                     ),
                 )
             else:
-                print("Ошибка №" + m[1][1:])
+                print("Ошибка №" + res[1][1:])
 
-        if all and len(m) > 9 and (len(m) < 14 or m[14] != "HLR"):
-            m = (",".join(m)).split(",", 8)
+        if all and len(res) > 9 and (len(res) < 14 or res[14] != "HLR"):
+            res = (",".join(res)).split(",", 8)
 
-        return m
+        return res
 
     # Метод получения баланса
     #
@@ -219,15 +222,15 @@ class SMSC(object):
     # возвращает баланс в виде строки или False в случае ошибки
 
     def get_balance(self):
-        m = self._smsc_send_cmd("balance") # (balance) или (0, -error)
+        res = self._smsc_send_cmd("balance") # (balance) или (0, -error)
 
         if SMSC_DEBUG:
-            if len(m) < 2:
-                print("Сумма на счете: " + m[0])
+            if len(res) < 2:
+                print("Сумма на счете: " + res[0])
             else:
-                print("Ошибка №" + m[1][1:])
+                print("Ошибка №" + res[1][1:])
 
-        return ifs(len(m) > 1, False, m[0])
+        return ifs(len(res) > 1, False, res[0])
 
 
     # ВНУТРЕННИЕ МЕТОДЫ
