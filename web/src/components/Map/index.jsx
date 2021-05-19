@@ -12,10 +12,10 @@ import marker from './marker.svg';
 
 
 class Maps extends React.Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
 
-		this.state = {
+        this.state = {
             zoom: props.zoom ? props.zoom : sets.zoom,
             center: props.center ? props.center : sets.center,
             current: props.center ? props.center : sets.center,
@@ -24,33 +24,33 @@ class Maps extends React.Component {
     }
 
     componentWillMount() {
-		if (!this.props.center) {
-			if (window.navigator && window.navigator.geolocation) {
-				window.navigator.geolocation.getCurrentPosition(
-					(pos) => {
-						const coords = pos.coords;
-						// console.log('My', coords);
-						this.setState({ current: { lat: coords.latitude, lng: coords.longitude }});
-					},
-					// (error) => {console.log(error)},
-					// { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-				);
-			}
-		}
+        if (!this.props.center) {
+            if (window.navigator && window.navigator.geolocation) {
+                window.navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const coords = pos.coords;
+                        // console.log('My', coords);
+                        this.setState({ current: { lat: coords.latitude, lng: coords.longitude }});
+                    },
+                    // (error) => {console.log(error)},
+                    // { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                );
+            }
+        }
 
-		// getGeo(this);
+        // getGeo(this);
     }
 
-	// handleOpen = (id) => {
-	// 	let markers = this.state.markers
-	// 	markers[id].toggle = true
-	// 	this.setState({ markers })
-	// }
+    // handleOpen = (id) => {
+    //     let markers = this.state.markers
+    //     markers[id].toggle = true
+    //     this.setState({ markers })
+    // }
 
-	// handleClose = (id) => {
-	// 	let markers = this.state.markers
-	// 	markers[id].toggle = false
-	// 	this.setState({ markers })
+    // handleClose = (id) => {
+    //     let markers = this.state.markers
+    //     markers[id].toggle = false
+    //     this.setState({ markers })
     // }
 
     // handleFavorite = (id) => {

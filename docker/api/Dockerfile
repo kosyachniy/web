@@ -19,40 +19,40 @@ COPY . .
 
 # Settings
 ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED MONGO_LOGIN MONGO_PASSWORD \
-	GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT SMSC_LOGIN SMSC_PASSWORD VK_ID \
-	VK_SECRET
+    GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT SMSC_LOGIN SMSC_PASSWORD VK_ID \
+    VK_SECRET
 RUN rm -f sets.json keys.json
 RUN echo '{ \n\
-	"mongo": { \n\
-		"host": "db", \n\
-		"db": "uple" \n\
-	}, \n\
-	"client": "'$PROTOCOL'://'$HOST':'$PORT'/", \n\
-	"mode": "'$MODE'", \n\
-	"side_optimized": '$SIDE_OPTIMIZED', \n\
-	"bug_chat": '$BUG_CHAT' \n\
+    "mongo": { \n\
+        "host": "db", \n\
+        "db": "uple" \n\
+    }, \n\
+    "client": "'$PROTOCOL'://'$HOST':'$PORT'/", \n\
+    "mode": "'$MODE'", \n\
+    "side_optimized": '$SIDE_OPTIMIZED', \n\
+    "bug_chat": '$BUG_CHAT' \n\
 } \n\
 ' >> sets.json
 RUN echo '{ \n\
-	"mongo": { \n\
-		"login": "'$MONGO_LOGIN'", \n\
-		"password": "'$MONGO_PASSWORD'" \n\
-	}, \n\
-	"google": { \n\
-		"client_id": "'$GOOGLE_ID'", \n\
-		"client_secret": "'$GOOGLE_SECRET'" \n\
-	}, \n\
-	"tg": { \n\
-		"token": "'$TG_TOKEN'" \n\
-	}, \n\
-	"smsc": { \n\
-		"login": "'$SMSC_LOGIN'", \n\
-		"password": "'$SMSC_PASSWORD'" \n\
-	}, \n\
-	"vk": { \n\
-		"client_id": '$VK_ID', \n\
-		"client_secret": "'$VK_SECRET'" \n\
-	} \n\
+    "mongo": { \n\
+        "login": "'$MONGO_LOGIN'", \n\
+        "password": "'$MONGO_PASSWORD'" \n\
+    }, \n\
+    "google": { \n\
+        "client_id": "'$GOOGLE_ID'", \n\
+        "client_secret": "'$GOOGLE_SECRET'" \n\
+    }, \n\
+    "tg": { \n\
+        "token": "'$TG_TOKEN'" \n\
+    }, \n\
+    "smsc": { \n\
+        "login": "'$SMSC_LOGIN'", \n\
+        "password": "'$SMSC_PASSWORD'" \n\
+    }, \n\
+    "vk": { \n\
+        "client_id": '$VK_ID', \n\
+        "client_secret": "'$VK_SECRET'" \n\
+    } \n\
 } \n\
 ' >> keys.json
 

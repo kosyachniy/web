@@ -1,89 +1,89 @@
 .navbar {
-	padding-top: 0;
-	padding-bottom: 0;
-	z-index: 500;
+    padding-top: 0;
+    padding-bottom: 0;
+    z-index: 500;
 }
 
 .navbar-brand {
-	line-height: 2.5rem;
+    line-height: 2.5rem;
     padding: 0.5rem 0;
 }
 
 .navbar-brand img, .nav-link img {
-	height: 25px;
-	margin-top: -5px;
+    height: 25px;
+    margin-top: -5px;
 }
 
 .navbar .badge {
-	margin: 0 10px 0 0;
-	cursor: pointer;
+    margin: 0 10px 0 0;
+    cursor: pointer;
 }
 
 .navbar li {
-	line-height: 2.5rem;
+    line-height: 2.5rem;
 }
 
 .navbar .nav-item > div {
-	line-height: 2.5rem;
-	padding: .5rem;
+    line-height: 2.5rem;
+    padding: .5rem;
 }
 
 @media all and (max-width: 991px) {
-	.navbar .badge {
-		margin: 0 0 0 10px;
-	}
+    .navbar .badge {
+        margin: 0 0 0 10px;
+    }
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
-	padding-right: .5rem;
-	padding-left: .5rem;
+    padding-right: .5rem;
+    padding-left: .5rem;
 }
 
 /*.navbar-nav a:not(.nav-link) img*/ .badge img {
-	height: 1em;
+    height: 1em;
 }
 
 .nav-link {
-	display: inline-block;
+    display: inline-block;
 }
 
 .bg-light .active a {
-	color: #6c757d !important;
+    color: #6c757d !important;
 }
 
 .dropdown {
-	position: relative;
-	display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-content {
-	display: none;
-	position: absolute;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
 }
 
 .dropdown-content a {
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
 }
 
 .dropdown:hover .dropdown-content {display: block;}
 
 #theme, #lang {
-	background-color: unset;
+    background-color: unset;
 }
 
 /* Online indicator */
 
 .online, .offline {
-	display: inline-block;
-	width: .7em;
-	height: .7em;
-	font-size: .9em;
-	margin: 0 12px 0 8px;
+    display: inline-block;
+    width: .7em;
+    height: .7em;
+    font-size: .9em;
+    margin: 0 12px 0 8px;
 }
 
 .online {
@@ -107,12 +107,12 @@
 /* Search */
 
 #search {
-	background-color: inherit;
-	color: inherit;
+    background-color: inherit;
+    color: inherit;
 }
 
 /* Menu */
 
 #menu, #menu .dropdown-item {
-	cursor: pointer;
+    cursor: pointer;
 }

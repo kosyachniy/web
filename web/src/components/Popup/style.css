@@ -13,7 +13,7 @@
     z-index: 1000;
     bottom: 0;
     margin: auto;
-	background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .popup_back {
@@ -28,8 +28,8 @@
     right: 0;
     z-index: 100;
     bottom: 0;
-	margin: auto;
-	cursor: pointer;
+    margin: auto;
+    cursor: pointer;
 }
 
 .popup_cont {
@@ -40,7 +40,7 @@
     padding: 20px;
     min-width: 280px;
     max-width: 500px;
-	text-align: center;
+    text-align: center;
 }
 
 /* Buttons */
@@ -50,16 +50,16 @@
     padding: 10px 20px;
     margin: 10px 0;
     cursor: pointer;
-	font-size: 18px;
+    font-size: 18px;
     outline: 0px;
     text-align: center;
     border: 0px;
     font-weight: bold;
     border-radius: 4px;
-	position: relative;
-	height: 42px;
-	line-height: 22px;
-	width: 100%;
+    position: relative;
+    height: 42px;
+    line-height: 22px;
+    width: 100%;
 }
 
 .popup .btn:hover {

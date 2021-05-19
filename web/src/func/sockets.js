@@ -4,6 +4,6 @@ import { sockets } from '../sets'
 
 
 export const socketIO = openSocket(sockets, {
-	transports: ['websocket'],
-	upgrade: false,
+    transports: ['websocket'],
+    upgrade: false,
 })

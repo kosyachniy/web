@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-	profileIn,
+    profileIn,
 } from '../../../redus';
 
 import Mail from './Mail';
@@ -11,12 +11,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	profileIn,
+    profileIn,
 };
 
 const MailContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Mail);
 
 export default MailContainer;

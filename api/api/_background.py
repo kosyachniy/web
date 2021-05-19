@@ -8,16 +8,16 @@ from api._func import report
 
 
 def background(sio):
-	report("Restart server")
+    report("Restart server")
 
-	# Primary
-	# ## Reset online users
-	# for online in db['online'].find():
-	# 	online_user_update(online)
-	# 	online_session_close(online)
-	# 	db['online'].remove(online['_id'])
+    # Primary
+    # ## Reset online users
+    # for online in db['online'].find():
+    #     online_user_update(online)
+    #     online_session_close(online)
+    #     db['online'].remove(online['_id'])
 
-	# Regular
+    # Regular
 
-	# process_reports = Process(target=reports_process)
-	# process_reports.start()
+    # process_reports = Process(target=reports_process)
+    # process_reports.start()

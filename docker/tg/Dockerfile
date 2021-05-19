@@ -21,16 +21,16 @@ COPY . .
 ARG PROTOCOL HOST PORT TG_TOKEN
 RUN rm -f sets.json keys.json
 RUN echo '{ \n\
-	"server": "'$PROTOCOL'://'$HOST':'$PORT'/api/", \n\
-	"tg": { \n\
-		"server": "'$PROTOCOL'://'$HOST':'$PORT'/tg/" \n\
-	} \n\
+    "server": "'$PROTOCOL'://'$HOST':'$PORT'/api/", \n\
+    "tg": { \n\
+        "server": "'$PROTOCOL'://'$HOST':'$PORT'/tg/" \n\
+    } \n\
 } \n\
 ' >> sets.json
 RUN echo '{ \n\
-	"tg": { \n\
-		"token": "'$TG_TOKEN'" \n\
-	} \n\
+    "tg": { \n\
+        "token": "'$TG_TOKEN'" \n\
+    } \n\
 } \n\
 ' >> keys.json
 

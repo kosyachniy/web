@@ -1,76 +1,76 @@
 {
-	"structure": {
-		"space": "Space",
-		"feed": "Feed",
-		"posts": "Posts",
-		"room": "Room",
-		"events": "Events",
-		"map": "Map"
-	},
-	"system": {
-		"sign_out": "Log Out",
-		"sign_in": "Log In",
-		"sign_up": "Sign Up",
-		"search": "Search",
-		"online": "Online",
-		"offline": "Offline",
-		"save": "Save",
-		"upload": "Upload",
-		"profile": "Profile",
-		"settings": "Settings",
-		"admin": "Admin panel",
-		"analytics": "Analytics"
-	},
-	"brand": {
-		"description": "Template web app",
-		"address": "St. Petersburg, Russia"
-	},
-	"science": {
-		"math": "Mathematics",
-		"prog": "Programming",
-		"bis": "Business and Economics",
-		"manag": "Management",
-		"lead": "Charisma and Leadership",
-		"marketing": "Marketing",
-		"life_safety": "Life safety"
-	},
-	"events": {
-		"hack": "Competitions",
-		"meet": "Meetups",
-		"lect": "Lectures",
-		"pres": "Presentations"
-	},
-	"footer": {
-		"rights": "All rights reserved",
-		"contacts": "Contacts",
-		"address": "Address",
-		"mail": "Email",
-		"phone": "Phone",
-		"links": "Links",
-		"about": "About",
-		"feedback": "Feedbacks & Troubles",
-		"rules": "Rules",
-		"news": "News",
-		"codex": "Honor code",
-		"white_paper": "White Paper",
-		"vk": "VKontakte",
-		"fb": "Facebook",
-		"ig": "Instagram",
-		"twi": "Twitter",
-		"yt": "YouTube",
-		"in": "LinkedIn"
-	},
-	"profile": {
-		"login": "Login",
-		"name": "Name",
-		"surname": "Surname",
-		"mail": "E-mail",
-		"password": "Password",
-		"passwordTip1": "length should be 6 or more",
-		"passwordTip2": "include digits and letters"
-	},
-	"posts": {
-		"name": "Title",
-		"empty": "Empty"
-	}
+    "structure": {
+        "space": "Space",
+        "feed": "Feed",
+        "posts": "Posts",
+        "room": "Room",
+        "events": "Events",
+        "map": "Map"
+    },
+    "system": {
+        "sign_out": "Log Out",
+        "sign_in": "Log In",
+        "sign_up": "Sign Up",
+        "search": "Search",
+        "online": "Online",
+        "offline": "Offline",
+        "save": "Save",
+        "upload": "Upload",
+        "profile": "Profile",
+        "settings": "Settings",
+        "admin": "Admin panel",
+        "analytics": "Analytics"
+    },
+    "brand": {
+        "description": "Template web app",
+        "address": "St. Petersburg, Russia"
+    },
+    "science": {
+        "math": "Mathematics",
+        "prog": "Programming",
+        "bis": "Business and Economics",
+        "manag": "Management",
+        "lead": "Charisma and Leadership",
+        "marketing": "Marketing",
+        "life_safety": "Life safety"
+    },
+    "events": {
+        "hack": "Competitions",
+        "meet": "Meetups",
+        "lect": "Lectures",
+        "pres": "Presentations"
+    },
+    "footer": {
+        "rights": "All rights reserved",
+        "contacts": "Contacts",
+        "address": "Address",
+        "mail": "Email",
+        "phone": "Phone",
+        "links": "Links",
+        "about": "About",
+        "feedback": "Feedbacks & Troubles",
+        "rules": "Rules",
+        "news": "News",
+        "codex": "Honor code",
+        "white_paper": "White Paper",
+        "vk": "VKontakte",
+        "fb": "Facebook",
+        "ig": "Instagram",
+        "twi": "Twitter",
+        "yt": "YouTube",
+        "in": "LinkedIn"
+    },
+    "profile": {
+        "login": "Login",
+        "name": "Name",
+        "surname": "Surname",
+        "mail": "E-mail",
+        "password": "Password",
+        "passwordTip1": "length should be 6 or more",
+        "passwordTip2": "include digits and letters"
+    },
+    "posts": {
+        "name": "Title",
+        "empty": "Empty"
+    }
 }

@@ -1,12 +1,12 @@
 .bg-light .card {
-	background-color: #fff;
+    background-color: #fff;
 }
 
 .bg-dark .card {
-	background-color: #3a4951;
+    background-color: #3a4951;
 }
 
 .card .badge {
-	font-size: 1rem;
-	margin: 0 10px 5px 0;
+    font-size: 1rem;
+    margin: 0 10px 5px 0;
 }

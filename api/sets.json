@@ -1,8 +1,8 @@
 {
-	"mongo": {
-		"host": "localhost:27017",
-		"db": "uple"
-	},
-	"client": "http://localhost/",
-	"side_optimized": 250
+    "mongo": {
+        "host": "localhost:27017",
+        "db": "uple"
+    },
+    "client": "http://localhost/",
+    "side_optimized": 250
 }

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-	profileUpdate,
+    profileUpdate,
 } from '../../../redus';
 
 import Profile from './Profile';
@@ -8,16 +8,16 @@ import Profile from './Profile';
 
 // AppContainer.jsx
 const mapStateToProps = state => ({
-	profile: state.profile,
+    profile: state.profile,
 });
 
 const mapDispatchToProps = {
-	profileUpdate,
+    profileUpdate,
 };
 
 const ProfileContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Profile);
 
 export default ProfileContainer;

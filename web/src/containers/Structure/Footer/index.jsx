@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-	changeLang,
+    changeLang,
 } from '../../../redus';
 
 import Footer from './Footer';
@@ -8,16 +8,16 @@ import Footer from './Footer';
 
 // AppContainer.jsx
 const mapStateToProps = state => ({
-	system: state.system,
+    system: state.system,
 });
 
 const mapDispatchToProps = {
-	changeLang,
+    changeLang,
 };
 
 const FooterContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Footer);
 
 export default FooterContainer;

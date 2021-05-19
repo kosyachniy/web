@@ -1,17 +1,17 @@
 /* Avatar */
 
 #avatar {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .hexagon {
-	display: inline-block;
+    display: inline-block;
     position: relative;
     z-index: 1;
     width: 3.5rem;
-	height: 3.5rem;
-	margin: 0;
-	padding: .5rem;
+    height: 3.5rem;
+    margin: 0;
+    padding: .5rem;
 }
 
 .hexagon rect {

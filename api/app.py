@@ -34,19 +34,19 @@ asgi = socketio.ASGIApp(sio)
 # from flask_limiter import Limiter
 
 # def get_ip():
-# 	try:
-# 		if 'ip' in request.json:
-# 			return request.json['ip']
+#     try:
+#         if 'ip' in request.json:
+#             return request.json['ip']
 
-# 	except:
-# 		pass
+#     except:
+#         pass
 
-# 	return request.remote_addr
+#     return request.remote_addr
 
 # limiter = Limiter(
-# 	app,
-# 	key_func=get_ip,
-# 	default_limits=['1000/day', '500/hour', '20/minute']
+#     app,
+#     key_func=get_ip,
+#     default_limits=['1000/day', '500/hour', '20/minute']
 # )
 
 # API
@@ -59,12 +59,12 @@ from api import API, Error
 
 ## Params
 with open('sets.json', 'r') as file:
-	CLIENT = json.loads(file.read())['client']
+    CLIENT = json.loads(file.read())['client']
 
 ## Global variables
 api = API(
-	client=CLIENT,
-	sio=sio,
+    client=CLIENT,
+    sio=sio,
 )
 
 ## Endpoints
@@ -72,79 +72,79 @@ from pydantic import BaseModel
 
 ### Main
 class Input(BaseModel):
-	method: str
-	params: dict = {}
-	locale: str = 'en'
-	token: str = None
+    method: str
+    params: dict = {}
+    locale: str = 'en'
+    token: str = None
 
 @app.post('/')
 async def index(data: Input, request: Request):
-	# print(data, request.client.host, request.client.port)
+    # print(data, request.client.host, request.client.port)
 
-	# Call API
+    # Call API
 
-	req = {}
+    req = {}
 
-	try:
-		res = await api.method(
-			data.method,
-			data.params,
-			ip=request.client.host,
-			token=data.token,
-			language=data.locale,
-		)
+    try:
+        res = await api.method(
+            data.method,
+            data.params,
+            ip=request.client.host,
+            token=data.token,
+            language=data.locale,
+        )
 
-	except Error.BaseError as e:
-		req['error'] = e.code
-		req['result'] = str(e)
+    except Error.BaseError as e:
+        req['error'] = e.code
+        req['result'] = str(e)
 
-	# except Exception as e:
-	# 	req['error'] = 1
-	# 	req['result'] = 'Server error'
+    # except Exception as e:
+    #     req['error'] = 1
+    #     req['result'] = 'Server error'
 
-	else:
-		req['error'] = 0
+    else:
+        req['error'] = 0
 
-		if res != None:
-			req['result'] = res
+        if res != None:
+            req['result'] = res
 
-	# Response
+    # Response
 
-	return req
+    return req
 
 # ### Facebook bot
 # @app.route('/fb', methods=['POST'])
 # @app.route('/fb/', methods=['POST'])
 # def fb():
-# 	x = request.json
-# 	print(x)
-# 	return jsonify({'qwe': 'asd'})
+#     x = request.json
+#     print(x)
+#     return jsonify({'qwe': 'asd'})
 
 ## Sockets
 ### Online users
 
 @sio.on('connect')
 async def connect(sid, request, data):
-	api.method(
-		'account.connect',
-		ip=request['asgi.scope']['client'][0],
-		sid=sid,
-	)
+    api.method(
+        'account.connect',
+        ip=request['asgi.scope']['client'][0],
+        sid=sid,
+    )
 
 @sio.on('online')
 async def online(sid, data):
-	await api.method(
-		'account.online',
-		data,
-		sid=sid,
-	)
+    await api.method(
+        'account.online',
+        data,
+        sid=sid,
+    )
 
 @sio.on('disconnect')
 async def disconnect(sid):
-	await api.method(
-		'account.disconnect',
-		sid=sid,
-	)
+    await api.method(
+        'account.disconnect',
+        sid=sid,
+    )
 
 
 app.mount('/', asgi) # ?

@@ -4,129 +4,129 @@ from api._func import check_params, get_user
 
 
 async def get(this, **x):
-	# Checking parameters
+    # Checking parameters
 
-	check_params(x, (
-		('id', False, (int, list), int),
-		('count', False, int),
-		('fields', False, list, str),
-	))
+    check_params(x, (
+        ('id', False, (int, list), int),
+        ('count', False, int),
+        ('fields', False, list, str),
+    ))
 
-	# Condition formation
+    # Condition formation
 
-	process_one = False
+    process_one = False
 
-	if 'id' in x:
-		if type(x['id']) == int:
-			db_condition = {
-				'id': x['id'],
-			}
+    if 'id' in x:
+        if type(x['id']) == int:
+            db_condition = {
+                'id': x['id'],
+            }
 
-			process_one = True
+            process_one = True
 
-		else:
-			db_condition = {
-				'id': {'$in': x['id']},
-			}
+        else:
+            db_condition = {
+                'id': {'$in': x['id']},
+            }
 
-	else:
-		db_condition = {
-			'admin': {'$gte': 3},
-		}
+    else:
+        db_condition = {
+            'admin': {'$gte': 3},
+        }
 
-	# Advanced options
+    # Advanced options
 
-	process_self = False
+    process_self = False
 
-	if process_one:
-		if x['id'] == this.user['id']:
-			process_self = True
+    if process_one:
+        if x['id'] == this.user['id']:
+            process_self = True
 
-	process_moderator = this.user['admin'] >= 5
-	process_admin = this.user['admin'] >= 7
+    process_moderator = this.user['admin'] >= 5
+    process_admin = this.user['admin'] >= 7
 
-	# Get users
+    # Get users
 
-	db_filter = {
-		'_id': False,
-		'id': True,
-		'login': True,
-		'name': True,
-		'surname': True,
-		'avatar': True,
-		'admin': True,
-		# 'balance': True,
-		# 'rating': True,
-		# 'description': True,
-		# 'online': False,
-	}
+    db_filter = {
+        '_id': False,
+        'id': True,
+        'login': True,
+        'name': True,
+        'surname': True,
+        'avatar': True,
+        'admin': True,
+        # 'balance': True,
+        # 'rating': True,
+        # 'description': True,
+        # 'online': False,
+    }
 
-	if process_self:
-		db_filter['mail'] = True
-		db_filter['phone'] = True
-		db_filter['social'] = True
-		# db_filter['transactions'] = True
+    if process_self:
+        db_filter['mail'] = True
+        db_filter['phone'] = True
+        db_filter['social'] = True
+        # db_filter['transactions'] = True
 
-	# if process_moderator:
-	# 	db_filter['transactions'] = True
+    # if process_moderator:
+    #     db_filter['transactions'] = True
 
-	if process_admin:
-		db_filter['phone'] = True
-		db_filter['mail'] = True
-		db_filter['social'] = True
+    if process_admin:
+        db_filter['phone'] = True
+        db_filter['mail'] = True
+        db_filter['social'] = True
 
-	#
+    #
 
-	users = list(db['users'].find(db_condition, db_filter))
-	users = sorted(users, key=lambda i: i['rating'])[::-1]
+    users = list(db['users'].find(db_condition, db_filter))
+    users = sorted(users, key=lambda i: i['rating'])[::-1]
 
-	# Count
+    # Count
 
-	count = x['count'] if 'count' in x else None
-	users = users[:count]
+    count = x['count'] if 'count' in x else None
+    users = users[:count]
 
-	# Processing
+    # Processing
 
-	for i in range(len(users)):
-		# Avatar
+    for i in range(len(users)):
+        # Avatar
 
-		users[i]['avatar'] = '/load/opt/' + users[i]['avatar']
+        users[i]['avatar'] = '/load/opt/' + users[i]['avatar']
 
-		# # Online
+        # # Online
 
-		# users[i]['online'] = db['online'].find_one({'id': users[i]['id']}, {'_id': True}) == True
+        # users[i]['online'] = db['online'].find_one({'id': users[i]['id']}, {'_id': True}) == True
 
-	# Response
+    # Response
 
-	res = {
-		'users': users,
-	}
+    res = {
+        'users': users,
+    }
 
-	return res
+    return res
 
 # Block
 
 async def block(this, **x):
-	# Checking parameters
+    # Checking parameters
 
-	check_params(x, (
-		('id', True, int),
-	))
+    check_params(x, (
+        ('id', True, int),
+    ))
 
-	# Get user
+    # Get user
 
-	users = db['users'].find_one({'id': x['id']})
+    users = db['users'].find_one({'id': x['id']})
 
-	## Wrond ID
-	if not users:
-		raise ErrorWrong('id')
+    ## Wrond ID
+    if not users:
+        raise ErrorWrong('id')
 
-	# No access
-	if this.user['admin'] < 6 or users['admin'] > this.user['admin']:
-		raise ErrorAccess('block')
+    # No access
+    if this.user['admin'] < 6 or users['admin'] > this.user['admin']:
+        raise ErrorAccess('block')
 
-	# Change status
-	users['admin'] = 1
+    # Change status
+    users['admin'] = 1
 
-	# Save
-	db['users'].save(users)
+    # Save
+    db['users'].save(users)

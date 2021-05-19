@@ -5,16 +5,16 @@ import Online from './Online';
 
 // AppContainer.jsx
 const mapStateToProps = state => ({
-	online: state.online,
+    online: state.online,
 });
 
 const mapDispatchToProps = {
-	// profileIn,
+    // profileIn,
 };
 
 const OnlineContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Online);
 
 export default OnlineContainer;

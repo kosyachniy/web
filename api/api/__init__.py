@@ -16,66 +16,66 @@ import api.posts as posts
 
 
 class API():
-	def __init__(self, client, sio=None):
-		self.client = client
-		self.sio = sio
+    def __init__(self, client, sio=None):
+        self.client = client
+        self.sio = sio
 
-		# Background processes
-		background(self.sio)
+        # Background processes
+        background(self.sio)
 
-		# Reset online users # TODO: to background process
-		db['online'].remove()
+        # Reset online users # TODO: to background process
+        db['online'].remove()
 
-	async def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
-		self.timestamp = time.time()
-		self.ip = ip
-		self.sid = sid
-		self.token = token
-		self.language = get_language(language)
+    async def method(self, name, params={}, ip=None, sid=None, token=None, language=0): # TODO: network
+        self.timestamp = time.time()
+        self.ip = ip
+        self.sid = sid
+        self.token = token
+        self.language = get_language(language)
 
-		# User recognition
+        # User recognition
 
-		self.user = {
-			'id': 0,
-			'admin': 2,
-		}
+        self.user = {
+            'id': 0,
+            'admin': 2,
+        }
 
-		if token:
-			db_filter = {'id': True, '_id': False}
-			user_id = db['tokens'].find_one({'token': token}, db_filter)
+        if token:
+            db_filter = {'id': True, '_id': False}
+            user_id = db['tokens'].find_one({'token': token}, db_filter)
 
-			if user_id and user_id['id']:
-				user = db['users'].find_one({'id': user_id['id']})
+            if user_id and user_id['id']:
+                user = db['users'].find_one({'id': user_id['id']})
 
-				if user:
-					self.user = user
+                if user:
+                    self.user = user
 
-		# Remove extra indentation
+        # Remove extra indentation
 
-		for i in params:
-			if type(params[i]) == str:
-				params[i] = params[i].strip()
+        for i in params:
+            if type(params[i]) == str:
+                params[i] = params[i].strip()
 
-		# # Action tracking
+        # # Action tracking
 
-		# req = {
-		# 	'time': self.timestamp,
-		# 	'user': self.user['id'],
-		# 	'ip': self.ip,
-		# 	'method': name,
-		# 	'params': params,
-		# }
+        # req = {
+        #     'time': self.timestamp,
+        #     'user': self.user['id'],
+        #     'ip': self.ip,
+        #     'method': name,
+        #     'params': params,
+        # }
 
-		# db['actions'].insert_one(req)
+        # db['actions'].insert_one(req)
 
-		# API method
+        # API method
 
-		try:
-			module, method_name = name.split('.')
-			func = getattr(globals()[module], method_name)
-		except:
-			raise Error.ErrorWrong('method')
+        try:
+            module, method_name = name.split('.')
+            func = getattr(globals()[module], method_name)
+        except:
+            raise Error.ErrorWrong('method')
 
-		# Request
+        # Request
 
-		return await func(self, **params)
+        return await func(self, **params)

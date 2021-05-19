@@ -23,44 +23,44 @@ function genereteToken() {
 
 
 const App = () => {
-	const [showPopUp, setShowPopUp] = useState(false)
+    const [showPopUp, setShowPopUp] = useState(false)
 
-	useEffect(() => { // WillMount
-		// Token
+    useEffect(() => { // WillMount
+        // Token
 
-		let token = localStorage.getItem('token')
+        let token = localStorage.getItem('token')
 
-		if (token === null) {
-			token = genereteToken()
-			localStorage.setItem('token', token)
-		}
-	}, [])
+        if (token === null) {
+            token = genereteToken()
+            localStorage.setItem('token', token)
+        }
+    }, [])
 
-	return (
-		<Provider store={store}>
-			<BrowserRouter>
-				<Header handlerPopUp={ setShowPopUp } />
+    return (
+        <Provider store={store}>
+            <BrowserRouter>
+                <Header handlerPopUp={ setShowPopUp } />
 
-				<Body />
+                <Body />
 
-				{ showPopUp && (
-					<>
-						{ showPopUp === 'auth' && (
-							<Auth handlerPopUp={ setShowPopUp } />
-						) }
-						{ showPopUp === 'mail' && (
-							<Mail handlerPopUp={ setShowPopUp } />
-						) }
-						{ showPopUp === 'online' && (
-							<Online handlerPopUp={ setShowPopUp } />
-						) }
-					</>
-				) }
+                { showPopUp && (
+                    <>
+                        { showPopUp === 'auth' && (
+                            <Auth handlerPopUp={ setShowPopUp } />
+                        ) }
+                        { showPopUp === 'mail' && (
+                            <Mail handlerPopUp={ setShowPopUp } />
+                        ) }
+                        { showPopUp === 'online' && (
+                            <Online handlerPopUp={ setShowPopUp } />
+                        ) }
+                    </>
+                ) }
 
-				<Footer />
-			</BrowserRouter>
-		</Provider>
-	)
+                <Footer />
+            </BrowserRouter>
+        </Provider>
+    )
 }
 
 export default App;
