@@ -60,7 +60,7 @@ def _check_surname(cont):
 def _check_mail(cont, user):
     # Invalid mail
 
-    if re.match('.+@.+\..+', cont) is None:
+    if re.match(r'.+@.+\..+', cont) is None:
         raise ErrorInvalid('mail')
 
     # Mail is already registered

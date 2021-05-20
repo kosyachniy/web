@@ -29,7 +29,7 @@ with open('sets.json', 'r') as file:
 
 def get_file(url, num):
     for i in os.listdir('../data/load/{}/'.format(url)):
-        if re.search(r'^' + str(num) + '\.', i):
+        if re.search(rf"^{str(num)}.", i):
             return i
 
     return None
