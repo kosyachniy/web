@@ -8,7 +8,6 @@ Sending SMS messages
 # pylint: disable=W0702
 
 from datetime import datetime
-from time import sleep
 import smtplib
 
 try:

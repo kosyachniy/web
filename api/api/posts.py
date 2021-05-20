@@ -2,13 +2,12 @@
 Posts object of the API
 """
 
-import time
 import re
 # import shutil
 
 from api._func.mongodb import db
-from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
-from api._func import reimg, get_user, check_params, next_id, load_image
+from api._error import ErrorWrong, ErrorUpload
+from api._func import reimg, check_params, next_id, load_image
 
 
 async def edit(this, **x):

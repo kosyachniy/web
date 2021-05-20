@@ -2,10 +2,8 @@
 Feedback object of the API
 """
 
-import time
-
 from api._func.mongodb import db
-from api._error import ErrorInvalid, ErrorAccess
+from api._error import ErrorAccess
 from api._func import reimg, get_user, check_params, next_id
 
 

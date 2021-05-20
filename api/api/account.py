@@ -2,8 +2,6 @@
 Account object of the API
 """
 
-import string
-import random
 import hashlib
 import re
 import requests
@@ -13,12 +11,11 @@ import base64
 
 from api._func.mongodb import db
 # from api._func.smsc import SMSC
-from api._error import ErrorSpecified, ErrorBusy, ErrorInvalid, \
-                       ErrorWrong, ErrorUpload, ErrorAccess, ErrorCount, \
-                       ErrorRepeat
-from api._func import check_params, load_image, get_date, next_id, \
-                      online_emit_add, other_sessions, online_user_update, \
-                      online_emit_del, online_session_close
+from api._error import ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload, \
+                       ErrorAccess
+from api._func import check_params, load_image, next_id, online_emit_add, \
+                      other_sessions, online_user_update, online_emit_del, \
+                      online_session_close
 
 
 with open('keys.json', 'r') as file:

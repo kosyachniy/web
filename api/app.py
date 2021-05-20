@@ -12,7 +12,7 @@ Endpoints (Transport level)
 
 # Main app
 
-from fastapi import FastAPI, Request, WebSocket
+from fastapi import FastAPI, Request
 app = FastAPI(title='Web app API')
 
 # CORS
