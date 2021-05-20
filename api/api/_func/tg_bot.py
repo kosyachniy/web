@@ -28,8 +28,8 @@ def keyboard(rows, inline=False):
     if rows == []:
         if inline:
             return telebot.types.InlineKeyboardMarkup()
-        else:
-            return telebot.types.ReplyKeyboardRemove()
+
+        return telebot.types.ReplyKeyboardRemove()
 
     if rows in (None, [], [[]]):
         return rows
@@ -77,14 +77,13 @@ def send(
             disable_web_page_preview=True,
         )
 
-    else:
-        return bot.send_photo(
-            user,
-            image,
-            text,
-            reply_markup=keyboard(buttons, inline),
-            parse_mode=markup,
-        )
+    return bot.send_photo(
+        user,
+        image,
+        text,
+        reply_markup=keyboard(buttons, inline),
+        parse_mode=markup,
+    )
 
 # pylint: disable=C0103
 def send_file(to, name):

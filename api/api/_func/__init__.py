@@ -284,9 +284,11 @@ def get_status(user):
 
     if user['admin'] >= 6:
         return 0
-    elif user['admin'] >= 5:
+
+    if user['admin'] >= 5:
         return 1
-    elif user['admin'] >= 3:
+
+    if user['admin'] >= 3:
         return 3
 
     return 3 # !
@@ -303,10 +305,9 @@ def get_status_condition(user):
             }]
         }
 
-    else:
-        return {
-            'status': {'$gte': get_status(user)},
-        }
+    return {
+        'status': {'$gte': get_status(user)},
+    }
 
 def get_id(sid):
     """ Get user ID by sid """
