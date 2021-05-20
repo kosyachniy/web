@@ -249,7 +249,7 @@ def check_params(data, filters):
                 raise ErrorType(i[0])
 
             cond_null = type(i[-1]) == bool and i[-1] and cond_iter \
-                and not len(data[i[0]])
+                and not data[i[0]]
 
             if cond_null:
                 raise ErrorInvalid(i[0])
@@ -263,7 +263,7 @@ def next_id(name):
 
     id_last = list(db[name].find({}, {'id': True, '_id': False}).sort('id', -1))
 
-    if len(id_last):
+    if id_last:
         return id_last[0]['id'] + 1
 
     return 1

@@ -78,8 +78,8 @@ def _check_login(cont, user):
     # Invalid login
 
     cond_length = not 3 <= len(cont) <= 20
-    cond_symbols = len(re.findall('[^a-z0-9_]', cont))
-    cond_letters = not len(re.findall('[a-z]', cont))
+    cond_symbols = re.findall('[^a-z0-9_]', cont)
+    cond_letters = not re.findall('[a-z]', cont)
 
     if cond_length or cond_symbols or cond_letters:
         raise ErrorInvalid('login')
@@ -98,10 +98,9 @@ def _check_password(cont):
     # Invalid password
 
     cond_length = not 6 <= len(cont) <= 40
-    pass_rule = '[^a-zA-Z0-9!@#$%&*-+=,./?|~]'
-    cond_symbols = len(re.findall(pass_rule, cont))
-    cond_letters = not len(re.findall('[a-zA-Z]', cont))
-    cond_digits = not len(re.findall('[0-9]', cont))
+    cond_symbols = re.findall(r'[^a-zA-Z0-9!@#$%&*-+=,./?|~]', cont)
+    cond_letters = not re.findall('[a-zA-Z]', cont)
+    cond_digits = not re.findall('[0-9]', cont)
 
     if cond_length or cond_symbols or cond_letters or cond_digits:
         raise ErrorInvalid('password')
@@ -116,7 +115,7 @@ def _process_password(cont):
 def _process_phone(number):
     """ Phone number processing """
 
-    if not len(number):
+    if not number:
         raise ErrorInvalid('phone')
 
     if number[0] == '8':
@@ -821,7 +820,7 @@ async def phone(this, **x):
 
     new = False
 
-    if not len(list(db['users'].find({'phone': x['phone']}, {'_id': True}))):
+    if not list(db['users'].find({'phone': x['phone']}, {'_id': True})):
         # raise ErrorWrong('login')
 
         _registrate(
