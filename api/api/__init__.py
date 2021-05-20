@@ -20,6 +20,8 @@ import api.posts as posts
 
 
 class API():
+    """ API """
+
     def __init__(self, client, sio=None):
         self.client = client
         self.sio = sio

@@ -76,6 +76,8 @@ from pydantic import BaseModel
 
 ### Main
 class Input(BaseModel):
+    """ Main endpoint model """
+
     method: str
     params: dict = {}
     locale: str = 'en'

@@ -43,9 +43,9 @@ def ifs(cond, val1, val2):
     return val2
 
 
-# Класс для взаимодействия с сервером smsc.ru
-
 class SMSC(object):
+    """ Класс для взаимодействия с сервером smsc.ru """
+
     def send_sms(
         self, phones, message, translit=0, time="",
         id_=0, format=0, sender=False, query="",

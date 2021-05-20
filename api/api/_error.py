@@ -5,6 +5,8 @@ Errors of the API
 # pylint: disable=C0116
 
 class BaseError(Exception):
+    """ Base error """
+
     def __init__(self, par):
         self.txt = par
         self._code = -1
@@ -13,9 +15,9 @@ class BaseError(Exception):
     def code(self):
         raise AttributeError('Base class hasn\'t its own code!')
 
-# Не все параметры
-
 class ErrorSpecified(BaseError):
+    """ Not all parameters """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -27,9 +29,9 @@ class ErrorSpecified(BaseError):
     def code(self):
         return 4
 
-# Занято
-
 class ErrorBusy(BaseError):
+    """ Busy """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -41,10 +43,9 @@ class ErrorBusy(BaseError):
     def code(self):
         return 5
 
-# Недопустимый
-# Не проходит по критерям
-
 class ErrorInvalid(BaseError):
+    """ Invalid (Does not pass the criteria) """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -56,10 +57,9 @@ class ErrorInvalid(BaseError):
     def code(self):
         return 6
 
-# Неправильный
-# Проходит по критериям, но неверный
-
 class ErrorWrong(BaseError):
+    """ Wrong (Passes the criteria, but is incorrect) """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -71,9 +71,9 @@ class ErrorWrong(BaseError):
     def code(self):
         return 7
 
-# Загрузка на сервер
-
 class ErrorUpload(BaseError):
+    """ Uploading to the server """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -85,9 +85,9 @@ class ErrorUpload(BaseError):
     def code(self):
         return 8
 
-# Нет прав
-
 class ErrorAccess(BaseError):
+    """ No rights """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -99,9 +99,9 @@ class ErrorAccess(BaseError):
     def code(self):
         return 9
 
-# Нечего отображать
-
 class ErrorEmpty(BaseError):
+    """ Nothing to display """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -113,9 +113,9 @@ class ErrorEmpty(BaseError):
     def code(self):
         return 10
 
-# Недостаточно
-
 class ErrorEnough(BaseError):
+    """ Not enough """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -127,9 +127,9 @@ class ErrorEnough(BaseError):
     def code(self):
         return 11
 
-# Заблокирован
-
 class ErrorBlock(BaseError):
+    """ Blocked """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -141,9 +141,9 @@ class ErrorBlock(BaseError):
     def code(self):
         return 12
 
-# Неправильный тип данных
-
 class ErrorType(BaseError):
+    """ Incorrect data type """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -155,9 +155,9 @@ class ErrorType(BaseError):
     def code(self):
         return 13
 
-# Ограничение количества
-
 class ErrorCount(BaseError):
+    """ Quantity limit """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -169,9 +169,9 @@ class ErrorCount(BaseError):
     def code(self):
         return 14
 
-# Повторное действие
-
 class ErrorRepeat(BaseError):
+    """ Repeat action """
+
     def __init__(self, par):
         super().__init__(par)
 
@@ -183,9 +183,9 @@ class ErrorRepeat(BaseError):
     def code(self):
         return 15
 
-# Истекло время
-
 class ErrorTime(BaseError):
+    """ Time expired """
+
     def __init__(self, par):
         super().__init__(par)
 
