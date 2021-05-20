@@ -229,12 +229,12 @@ async def get(this, **x):
             ### Cover from the first image
             try:
                 img = re.search(
-                    '<img src="[^"]*">',
+                    r'<img src="[^"]*">',
                     posts[i]['cont']
                 )[0].split('"')[1].split('/')[-1]
 
                 posts[i]['cover'] = '/load/opt/' + img
-            except:
+            except Exception:
                 pass
 
         ## Content

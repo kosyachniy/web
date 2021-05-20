@@ -5,6 +5,8 @@
 Sending SMS messages
 """
 
+# pylint: disable=W0702
+
 from datetime import datetime
 from time import sleep
 import smtplib
@@ -241,9 +243,12 @@ class SMSC(object):
 
     # ВНУТРЕННИЕ МЕТОДЫ
 
-    # Метод вызова запроса. Формирует URL и делает 3 попытки чтения
-
     def _smsc_send_cmd(self, cmd, arg=""):
+        """ Метод вызова запроса """
+        """
+        Формирует URL и делает 3 попытки чтения
+        """
+
         url = ifs(SMSC_HTTPS, "https", "http") + "://smsc.ru/sys/" + cmd \
             + ".php"
         _url = url

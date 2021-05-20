@@ -133,8 +133,11 @@ def load_image(
 
     return file_name
 
+# pylint: disable=W0702
 def reimg(text):
     """ Replace image in text """
+
+    # TODO: Переписать
 
     k = 0
 
@@ -258,13 +261,12 @@ def check_params(data, filters):
 def next_id(name):
     """ Next DB ID """
 
-    try:
-        db_filter = {'id': True, '_id': False}
-        id_ = db[name].find({}, db_filter).sort('id', -1)[0]['id'] + 1
-    except:
-        id_ = 1
+    id_last = list(db[name].find({}, {'id': True, '_id': False}).sort('id', -1))
 
-    return id_
+    if len(id_last):
+        return id_last[0]['id'] + 1
+
+    return 1
 
 def get_language(name):
     """ Convert language to code """

@@ -450,32 +450,32 @@ async def social(this, **x):
             try:
                 name = response['first_name']
                 _check_name(name)
-            except:
+            except Exception:
                 name = ''
 
             try:
                 surname = response['last_name']
                 _check_surname(surname)
-            except:
+            except Exception:
                 surname = ''
 
             try:
                 login = response['nickname']
                 _check_login(login, this.user)
-            except:
+            except Exception:
                 login = ''
 
             try:
                 avatar = str(base64.b64encode(
                     requests.get(response['photo_max_orig']).content
                 ))[2:-1]
-            except:
+            except Exception:
                 avatar = ''
 
             try:
                 if mail:
                     _check_mail(mail, this.user)
-            except:
+            except Exception:
                 mail = ''
 
         elif x['id'] == 3:
@@ -486,19 +486,19 @@ async def social(this, **x):
             try:
                 name = response['given_name']
                 _check_name(name)
-            except:
+            except Exception:
                 name = ''
 
             try:
                 surname = response['family_name']
                 _check_surname(surname)
-            except:
+            except Exception:
                 surname = ''
 
             try:
                 mail = response['email']
                 _check_mail(mail, this.user)
-            except:
+            except Exception:
                 mail = ''
 
             try:
@@ -506,7 +506,7 @@ async def social(this, **x):
                     avatar = str(base64.b64encode(
                         requests.get(response['picture']).content
                     ))[2:-1]
-            except:
+            except Exception:
                 pass
 
         # Sign up
