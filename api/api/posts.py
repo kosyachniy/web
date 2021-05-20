@@ -79,8 +79,6 @@ async def edit(this, **x):
 
     ## Cover
 
-    post['cover'] = 'posts/0.png'
-
     if 'cover' in x:
         try:
             file_type = x['file'].split('.')[-1]
@@ -91,11 +89,12 @@ async def edit(this, **x):
 
         try:
             link = load_image(x['cover'], file_type)
-            post['cover'] = link
 
         # Error loading cover
         except:
             raise ErrorUpload('cover')
+
+        post['cover'] = link
 
     ### Cover from the first image
     # try:

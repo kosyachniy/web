@@ -130,7 +130,7 @@ def _process_phone(number):
 
 def _registrate(
     user, timestamp, login='', password='', mail='', name='', surname='',
-    description='', avatar='', file='', social=[], phone=None,
+    description='', avatar=None, file='', social=[], phone=None,
 ):
     """ Account registration """
 
@@ -170,21 +170,6 @@ def _registrate(
         _check_surname(surname)
         surname = surname.title()
 
-    # Avatar
-
-    link = 'users/0.png'
-
-    if avatar:
-        try:
-            file_type = file.split('.')[-1]
-        except:
-            raise ErrorInvalid('file')
-
-        try:
-            link = load_image(avatar, file_type)
-        except:
-            raise ErrorUpload('avatar')
-
     # Social networks
     # ! Добавить проверку социальных сетей
 
@@ -204,7 +189,6 @@ def _registrate(
         'password': password,
         'name': name,
         'surname': surname,
-        'avatar': link,
         'admin': 3,
         'mail': mail,
         # 'balance': 0,
@@ -217,8 +201,27 @@ def _registrate(
         'referal_parent': 0,
     }
 
+    # Avatar
+
+    if avatar:
+        try:
+            file_type = file.split('.')[-1]
+        except:
+            raise ErrorInvalid('file')
+
+        try:
+            link = load_image(avatar, file_type)
+        except:
+            raise ErrorUpload('avatar')
+
+        req['avatar'] = link
+
+    # Phone
+
     if phone:
         req['phone'] = phone
+
+    # Save
 
     db['users'].insert_one(req)
 
@@ -242,7 +245,8 @@ async def _online_update(sio, user, token):
         i['login'] = user['login']
         i['name'] = user['name']
         i['surname'] = user['surname']
-        i['avatar'] = '/load/opt/' + user['avatar']
+        if 'avatar' in user:
+            i['avatar'] = '/load/opt/' + user['avatar']
         i['admin'] = user['admin']
 
         db['online'].save(i)
@@ -281,7 +285,7 @@ async def reg(this, **x):
         password=x['password'] if 'password' in x else '',
         name=x['name'] if 'name' in x else '',
         surname=x['surname'] if 'surname' in x else '',
-        avatar=x['avatar'] if 'avatar' in x else '',
+        avatar=x['avatar'] if 'avatar' in x else None,
         file=x['file'] if 'file' in x else '',
         mail=x['mail'] if 'mail' in x else '',
         social=x['social'] if 'social' in x else [],
@@ -311,12 +315,16 @@ async def reg(this, **x):
         'login': user['login'],
         'name': user['name'],
         'surname': user['surname'],
-        'avatar': '/load/opt/' + user['avatar'],
         'admin': 3,
         'mail': user['mail'],
         # 'balance': 0,
         # 'rating': 0,
     }
+
+    if 'avatar' in user:
+        res['avatar'] = '/load/opt/' + user['avatar']
+    else:
+        res['avatar'] = 'user.png'
 
     return res
 
@@ -421,7 +429,7 @@ async def social(this, **x):
         name = ''
         surname = ''
         login = ''
-        avatar = ''
+        avatar = None
 
         if x['id'] == 1:
             if 'access_token' in response:
@@ -466,7 +474,7 @@ async def social(this, **x):
                     requests.get(response['photo_max_orig']).content
                 ))[2:-1]
             except Exception:
-                avatar = ''
+                avatar = None
 
             try:
                 if mail:
@@ -515,26 +523,26 @@ async def social(this, **x):
             '_id': True,
         }
 
-        res = db['users'].find_one(db_condition, db_filter)
+        user = db['users'].find_one(db_condition, db_filter)
 
-        if res:
+        if user:
             raise ErrorWrong('hash')
 
         # Sign up
         else:
             new = True
 
-            res = _registrate(
+            user = _registrate(
                 this.user,
                 this.timestamp,
                 social=[{
                     'id': x['id'],
                     'user': user_id,
                 }],
-                name = name,
-                surname = surname,
-                avatar = avatar,
-                mail = mail,
+                name=name,
+                surname=surname,
+                avatar=avatar,
+                mail=mail,
             )
 
             #
@@ -551,7 +559,7 @@ async def social(this, **x):
                 'mail': True,
             }
 
-            res = db['users'].find_one({'id': res['id']}, db_filter)
+            user = db['users'].find_one({'id': user['id']}, db_filter)
 
     # Assignment of the token to the user
 
@@ -560,29 +568,33 @@ async def social(this, **x):
 
     req = {
         'token': this.token,
-        'id': res['id'],
+        'id': user['id'],
         'time': this.timestamp,
     }
     db['tokens'].insert_one(req)
 
     # Update online users
 
-    await _online_update(this.sio, res, this.token)
+    await _online_update(this.sio, user, this.token)
 
     # Response
 
     res = {
-        'id': res['id'],
-        'login': res['login'],
-        'name': res['name'],
-        'surname': res['surname'],
-        'avatar': '/load/opt/' + res['avatar'],
-        'admin': res['admin'],
-        'mail': res['mail'],
-        # 'balance': res['balance'],
-        # 'rating': res['rating'],
+        'id': user['id'],
+        'login': user['login'],
+        'name': user['name'],
+        'surname': user['surname'],
+        'admin': user['admin'],
+        'mail': user['mail'],
+        # 'balance': user['balance'],
+        # 'rating': user['rating'],
         'new': new,
     }
+
+    if 'avatar' in user:
+        res['avatar'] = '/load/opt/' + user['avatar']
+    else:
+        res['avatar'] = 'user.png'
 
     return res
 
@@ -919,13 +931,17 @@ async def phone(this, **x):
         'admin': res['admin'],
         'balance': res['balance'],
         'login': res['login'],
-        'avatar': '/load/opt/' + res['avatar'],
         'new': new,
         'description': res['description'],
         'subscription': res['subscription'],
         'private': bool(len(res['channels'])),
         'phone': res['phone'] if 'phone' in res else '',
     }
+
+    if 'avatar' in res:
+        req['avatar'] = '/load/opt/' + res['avatar']
+    else:
+        req['avatar'] = 'user.png'
 
     if 'discount' in res:
         req['discount'] = res['discount']
@@ -1005,10 +1021,10 @@ async def auth(this, **x):
         'avatar': True,
     }
 
-    res = db['users'].find_one(db_condition, db_filter)
+    user = db['users'].find_one(db_condition, db_filter)
 
     # Wrong password
-    if not res:
+    if not user:
         raise ErrorWrong('password')
 
     # Assignment of the token to the user
@@ -1018,29 +1034,33 @@ async def auth(this, **x):
 
     req = {
         'token': this.token,
-        'id': res['id'],
+        'id': user['id'],
         'time': this.timestamp,
     }
     db['tokens'].insert_one(req)
 
     # Update online users
 
-    await _online_update(this.sio, res, this.token)
+    await _online_update(this.sio, user, this.token)
 
     # Response
 
     res = {
-        'id': res['id'],
-        'login': res['login'],
-        'name': res['name'],
-        'surname': res['surname'],
-        'avatar': '/load/opt/' + res['avatar'],
-        'admin': res['admin'],
-        'mail': res['mail'],
-        # 'balance': res['balance'],
-        # 'rating': res['rating'],
+        'id': user['id'],
+        'login': user['login'],
+        'name': user['name'],
+        'surname': user['surname'],
+        'admin': user['admin'],
+        'mail': user['mail'],
+        # 'balance': user['balance'],
+        # 'rating': user['rating'],
         'new': new,
     }
+
+    if 'avatar' in user:
+        res['avatar'] = '/load/opt/' + user['avatar']
+    else:
+        res['avatar'] = 'user.png'
 
     return res
 
@@ -1165,11 +1185,12 @@ async def edit(this, **x):
 
     # Response
 
-    avatar = '/load/opt/' + this.user['avatar']
+    res = dict()
 
-    res = {
-        'avatar': avatar,
-    }
+    if 'avatar' in this.user:
+        res['avatar'] = '/load/opt/' + this.user['avatar']
+    else:
+        res['avatar'] = 'user.png'
 
     return res
 
@@ -1264,8 +1285,12 @@ async def online(this, **x):
                 'login': i['login'],
                 'name': i['name'],
                 'surname': i['surname'],
-                'avatar': '/load/opt/' + i['avatar'],
             }
+
+            if 'avatar' in i:
+                users_uniq[i['id']['avatar']] = '/load/opt/' + i['avatar']
+            else:
+                users_uniq[i['id']['avatar']] = 'user.png'
 
     if count:
         await this.sio.emit('online_add', {
@@ -1291,7 +1316,10 @@ async def online(this, **x):
         online['login'] = user_current['login']
         online['name'] = user_current['name']
         online['surname'] = user_current['surname']
-        online['avatar'] = '/load/opt/' + user_current['avatar']
+        if 'avatar' in user_current:
+            online['avatar'] = '/load/opt/' + user_current['avatar']
+        else:
+            online['avatar'] = 'user.png'
     else:
         online['id'] = x['token']
         online['admin'] = 2

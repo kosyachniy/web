@@ -96,7 +96,10 @@ async def get(this, **x):
     for i in range(len(users)):
         # Avatar
 
-        users[i]['avatar'] = '/load/opt/' + users[i]['avatar']
+        if 'avatar' in users[i]:
+            users[i]['avatar'] = '/load/opt/' + users[i]['avatar']
+        else:
+            users[i]['avatar'] = 'user.png'
 
         # # Online
 

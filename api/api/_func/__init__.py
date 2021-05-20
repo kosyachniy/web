@@ -217,7 +217,11 @@ def get_user(user_id):
 
         user_req = db['users'].find_one(db_condition, db_filter)
 
-        user_req['avatar'] = '/load/opt/' + user_req['avatar']
+        if 'avatar' in user_req:
+            user_req['avatar'] = '/load/opt/' + user_req['avatar']
+        else:
+            user_req['avatar'] = 'user.png'
+
     else:
         user_req = 0
 
@@ -444,16 +448,32 @@ async def online_emit_add(sio, user):
     # Online users
     ## Emit this user to all users
 
-    await sio.emit('online_add', {
-        'count': count,
-        'users': [{
+    if user:
+        # TODO: Full info for all / Full info only for admins
+
+        user_data = {
             'id': user['id'],
             'login': user['login'],
             'name': user['name'],
             'surname': user['surname'],
-            'avatar': '/load/opt/' + user['avatar'],
-        }] if user else [], # ! Full info for all / Full info only for admins
-    })
+        }
+
+        if 'avatar' in user:
+            user_data['avatar'] =  '/load/opt/' + user['avatar']
+        else:
+            user_data['avatar'] = 'user.png'
+
+    else:
+        user_data = []
+
+    # Response
+
+    res = {
+        'count': count,
+        'users': [user_data],
+    }
+
+    await sio.emit('online_add', res)
 
 # Report
 
