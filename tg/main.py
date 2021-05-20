@@ -46,6 +46,8 @@ async def on_start():
     # # Actions after start
 
 # async def on_stop(dp):
+#     """ Handler on the bot stop """
+
 #     # # Actions before shutdown
 
 #     # Remove webhook (not acceptable in some cases)

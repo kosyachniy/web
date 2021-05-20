@@ -42,7 +42,7 @@ def ifs(cond, val1, val2):
     return val2
 
 
-class SMSC(object):
+class SMSC():
     """ Класс для взаимодействия с сервером smsc.ru """
 
     def send_sms(
