@@ -1,3 +1,7 @@
+"""
+Posts object of the API
+"""
+
 import time
 import re
 # import shutil

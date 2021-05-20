@@ -1,3 +1,7 @@
+"""
+Telegram bot
+"""
+
 # Libraries
 ## System
 import json

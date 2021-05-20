@@ -1,3 +1,7 @@
+"""
+The main functionality for the API
+"""
+
 import os
 import re
 import time

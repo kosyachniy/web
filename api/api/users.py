@@ -1,3 +1,7 @@
+"""
+Users object of the API
+"""
+
 from api._func.mongodb import db
 from api._error import ErrorWrong, ErrorAccess, ErrorBlock
 from api._func import check_params, get_user

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 # SMSC.RU API (smsc.ru) версия 1.9 (01.02.2017)
 
+"""
+Sending SMS messages
+"""
+
 from datetime import datetime
 from time import sleep
 import smtplib

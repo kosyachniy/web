@@ -1,3 +1,7 @@
+"""
+Errors of the API
+"""
+
 class BaseError(Exception):
     def __init__(self, par):
         self.txt = par

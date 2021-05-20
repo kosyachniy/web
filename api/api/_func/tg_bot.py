@@ -1,3 +1,7 @@
+"""
+Functionality for working with Telegram
+"""
+
 # Libraries
 ## System
 import json
@@ -96,6 +100,7 @@ def delete(to, message, attempt=1):
 
         raise Exception('Telegram del message')
 
+# pylint: disable=C0103
 def edit(to, message, text, buttons=None, inline=False, markup='Markdown'):
     if '<img' in text:
         # img = re.search('<img src=".+">', text)[0].split('"')[1]

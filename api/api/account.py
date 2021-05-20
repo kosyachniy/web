@@ -1,3 +1,7 @@
+"""
+Account object of the API
+"""
+
 import string
 import random
 import hashlib

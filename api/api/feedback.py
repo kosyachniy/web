@@ -1,3 +1,7 @@
+"""
+Feedback object of the API
+"""
+
 import time
 
 from api._func.mongodb import db
