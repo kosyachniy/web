@@ -83,6 +83,8 @@ class Input(BaseModel):
 
 @app.post('/')
 async def index(data: Input, request: Request):
+    """ Main API endpoint """
+
     # print(data, request.client.host, request.client.port)
 
     # Call API
@@ -129,6 +131,8 @@ async def index(data: Input, request: Request):
 
 @sio.on('connect')
 async def connect(sid, request, data):
+    """ Connect socket """
+
     api.method(
         'account.connect',
         ip=request['asgi.scope']['client'][0],
@@ -137,6 +141,8 @@ async def connect(sid, request, data):
 
 @sio.on('online')
 async def online(sid, data):
+    """ Socket about online user """
+
     await api.method(
         'account.online',
         data,
@@ -145,6 +151,8 @@ async def online(sid, data):
 
 @sio.on('disconnect')
 async def disconnect(sid):
+    """ Disconnect socket """
+
     await api.method(
         'account.disconnect',
         sid=sid,

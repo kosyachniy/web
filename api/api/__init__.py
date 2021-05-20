@@ -33,7 +33,11 @@ class API():
     # pylint: disable=C0103
     async def method(
         self, name, params={}, ip=None, sid=None, token=None, language=0,
-    ): # TODO: network
+    ):
+        """ Called API method """
+
+        # TODO: network
+
         self.timestamp = time.time()
         self.ip = ip
         self.sid = sid

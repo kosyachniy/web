@@ -9,9 +9,9 @@ from api._error import ErrorInvalid, ErrorAccess
 from api._func import reimg, get_user, check_params, next_id
 
 
-# Add
-
 async def add(this, **x):
+    """ Add """
+
     # Checking parameters
 
     check_params(x, (
@@ -40,9 +40,9 @@ async def add(this, **x):
 
     return res
 
-# Get
-
 async def get(this, **x):
+    """ Get """
+
     # Checking parameters
 
     check_params(x, (
@@ -74,9 +74,9 @@ async def get(this, **x):
 
     return res
 
-# Delete
-
 async def delete(this, **x):
+    """ Delete """
+
     # Checking parameters
     check_params(x, (
         ('id', True, int),

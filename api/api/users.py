@@ -8,6 +8,8 @@ from api._func import check_params, get_user
 
 
 async def get(this, **x):
+    """ Get """
+
     # Checking parameters
 
     check_params(x, (
@@ -111,9 +113,9 @@ async def get(this, **x):
 
     return res
 
-# Block
-
 async def block(this, **x):
+    """ Block """
+
     # Checking parameters
 
     check_params(x, (

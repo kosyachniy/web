@@ -11,9 +11,9 @@ from api._error import ErrorInvalid, ErrorAccess, ErrorWrong, ErrorUpload
 from api._func import reimg, get_user, check_params, next_id, load_image
 
 
-# Add / edit
-
 async def edit(this, **x):
+    """ Add / edit """
+
     # Checking parameters
 
     # Edit
@@ -125,9 +125,9 @@ async def edit(this, **x):
 
     return res
 
-# Get
-
 async def get(this, **x):
+    """ Get """
+
     # Checking parameters
 
     check_params(x, (
@@ -253,9 +253,9 @@ async def get(this, **x):
 
     return res
 
-# Delete
-
 async def delete(this, **x):
+    """ Delete """
+
     # Checking parameters
 
     check_params(x, (

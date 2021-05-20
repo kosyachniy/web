@@ -33,10 +33,14 @@ dp = Dispatcher(bot)
 # Funcs
 @dp.message_handler()
 async def echo(message: types.Message):
+    """ Main handler """
+
     await bot.send_message(message.chat.id, message.text)
 
 
 async def on_start():
+    """ Handler on the bot start """
+
     await bot.set_webhook(WEBHOOK_URL)
 
     # # Actions after start

@@ -22,8 +22,9 @@ bot = telebot.TeleBot(TG_TOKEN)
 
 
 # Funcs
-## Make keyboard
 def keyboard(rows, inline=False):
+    """ Make keyboard """
+
     if rows == []:
         if inline:
             return telebot.types.InlineKeyboardMarkup()
@@ -62,10 +63,11 @@ def keyboard(rows, inline=False):
 
     return buttons
 
-## Send message
 def send(
     user, text='', buttons=None, inline=False, image=None, markup='Markdown',
 ):
+    """ Send message """
+
     if not image:
         return bot.send_message(
             user,
@@ -86,11 +88,15 @@ def send(
 
 # pylint: disable=C0103
 def send_file(to, name):
+    """ Send file """
+
     with open(name, 'rb') as file:
         return bot.send_document(to, file)
 
 # pylint: disable=C0103
 def delete(to, message, attempt=1):
+    """ Delete message """
+
     try:
         bot.delete_message(to, message)
 
@@ -102,6 +108,8 @@ def delete(to, message, attempt=1):
 
 # pylint: disable=C0103
 def edit(to, message, text, buttons=None, inline=False, markup='Markdown'):
+    """ Edit message """
+
     if '<img' in text:
         # img = re.search('<img src=".+">', text)[0].split('"')[1]
         # img = img.replace('/load', '../../data/load')[1:]

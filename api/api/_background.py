@@ -12,6 +12,8 @@ from api._func import report
 
 
 def background(sio):
+    """ Background infinite process """
+
     report("Restart server")
 
     # Primary

@@ -2,6 +2,8 @@
 Errors of the API
 """
 
+# pylint: disable=C0116
+
 class BaseError(Exception):
     def __init__(self, par):
         self.txt = par

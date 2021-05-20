@@ -41,23 +41,23 @@ RESERVED = (
 #     random.choice(ALL_SYMBOLS) for _ in range(length)
 # )
 
-# Check name
-
 def _check_name(cont):
+    """ Name checking """
+
     # Invalid name
     if not cont.isalpha():
         raise ErrorInvalid('name')
 
-# Check surname
-
 def _check_surname(cont):
+    """ Surname checking """
+
     # Invalid surname
     if not cont.replace('-', '').isalpha():
         raise ErrorInvalid('surname')
 
-# Check mail
-
 def _check_mail(cont, user):
+    """ Mail checking """
+
     # Invalid mail
 
     if re.match(r'.+@.+\..+', cont) is None:
@@ -69,9 +69,9 @@ def _check_mail(cont, user):
     if users and users['id'] != user['id']:
         raise ErrorBusy('mail')
 
-# Check login
-
 def _check_login(cont, user):
+    """ Login checking """
+
     # Login is already registered
 
     users = db['users'].find_one({'login': cont}, {'_id': True, 'id': True})
@@ -95,9 +95,9 @@ def _check_login(cont, user):
     if cond_id or cond_reserv:
         raise ErrorInvalid('login')
 
-# Password
-
 def _check_password(cont):
+    """ Password checking """
+
     # Invalid password
 
     cond_length = not 6 <= len(cont) <= 40
@@ -110,13 +110,15 @@ def _check_password(cont):
         raise ErrorInvalid('password')
 
 def _process_password(cont):
+    """ Password processing """
+
     _check_password(cont)
 
     return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
-# Phone number
-
 def _process_phone(number):
+    """ Phone number processing """
+
     if not len(number):
         raise ErrorInvalid('phone')
 
@@ -130,12 +132,12 @@ def _process_phone(number):
 
     return number
 
-# Account registration
-
 def _registrate(
     user, timestamp, login='', password='', mail='', name='', surname='',
     description='', avatar='', file='', social=[], phone=None,
 ):
+    """ Account registration """
+
     # ID
 
     user_id = next_id('users')
@@ -228,9 +230,9 @@ def _registrate(
 
     return req
 
-# Update online users
-
 async def _online_update(sio, user, token):
+    """ Update online users """
+
     # Online users
     ## Already online
 
@@ -257,11 +259,12 @@ async def _online_update(sio, user, token):
 
 #
 
-# Sign up
-# ! Сокет на авторизацию на всех вкладках токена
-# ! Перезапись информации этого токена уже в онлайне
-
 async def reg(this, **x):
+    """ Sign up """
+
+    # TODO: Сокет на авторизацию на всех вкладках токена
+    # TODO: Перезапись информации этого токена уже в онлайне
+
     # Checking parameters
 
     check_params(x, (
@@ -321,9 +324,9 @@ async def reg(this, **x):
 
     return res
 
-# By social network
-
 async def social(this, **x):
+    """ By social network """
+
     # Checking parameters
 
     check_params(x, (
@@ -590,6 +593,8 @@ async def social(this, **x):
 # By phone
 
 # async def phone_send(this, **x):
+#     """ Send a code to the phone """
+
 #     # Checking parameters
 
 #     check_params(x, (
@@ -649,6 +654,8 @@ async def social(this, **x):
 #     return res
 
 # async def phone_check(this, **x):
+#     """ Phone checking """
+
 #     # Checking parameters
 
 #     check_params(x, (
@@ -800,9 +807,9 @@ async def social(this, **x):
 
 #     return res
 
-# By phone
-
 async def phone(this, **x):
+    """ By phone """
+
     # Checking parameters
 
     check_params(x, (
@@ -929,11 +936,12 @@ async def phone(this, **x):
 
     return req
 
-# Log in
-# ! Сокет на авторизацию на всех вкладках токена
-# ! Перезапись информации этого токена уже в онлайне
-
 async def auth(this, **x):
+    """ Log in """
+
+    # TODO: Сокет на авторизацию на всех вкладках токена
+    # TODO: Перезапись информации этого токена уже в онлайне
+
     # Checking parameters
 
     check_params(x, (
@@ -1040,11 +1048,12 @@ async def auth(this, **x):
 
     return res
 
-# Log out
-# ! Сокет на авторизацию на всех вкладках токена
-# ! Перезапись информации этого токена уже в онлайне
-
 async def exit(this, **x):
+    """ Log out """
+
+    # TODO: Сокет на авторизацию на всех вкладках токена
+    # TODO: Перезапись информации этого токена уже в онлайне
+
     # Not authorized
     if not this.token:
         raise ErrorAccess('token')
@@ -1087,9 +1096,9 @@ async def exit(this, **x):
 
     # ! Отправлять сокет всем сессиям этого браузера на выход
 
-# Edit personal information
-
 async def edit(this, **x):
+    """ Edit personal information """
+
     # Checking parameters
     check_params(x, (
         ('name', False, str),
@@ -1194,14 +1203,14 @@ async def edit(this, **x):
 #     users['password'] = password_crypt
 #     db['users'].save(users)
 
-# Connect
-
 async def connect(this, **x):
+    """ Connect """
+
     print('IN', this.sid)
 
-# Online
-
 async def online(this, **x):
+    """ Online """
+
     print('ON', this.sid)
 
     # Define user
@@ -1355,9 +1364,9 @@ async def online(this, **x):
 
     #     db['utms'].insert_one(utm)
 
-# Disconnect
-
 async def disconnect(this, **x):
+    """ Disconnect """
+
     print('OUT', this.sid)
 
     online = db['online'].find_one({'sid': this.sid})

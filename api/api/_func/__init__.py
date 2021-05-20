@@ -25,18 +25,20 @@ with open('sets.json', 'r') as file:
     BUG_CHAT = sets['bug_chat']
 
 
-# Check existence the file by name
+# Funcs
 
 def get_file(url, num):
+    """ Check existence the file by name """
+
     for i in os.listdir('../data/load/{}/'.format(url)):
         if re.search(rf"^{str(num)}.", i):
             return i
 
     return None
 
-# Next image ID
-
 def max_image(url):
+    """ Next image ID """
+
     files = os.listdir(url)
     k = 0
     for i in files:
@@ -45,11 +47,11 @@ def max_image(url):
             k = int(j[0])
     return k+1
 
-# Upload image
-
 def load_image(
     data, file_type=None, file_coding='base64', file_url='', file_id=None,
 ):
+    """ Upload image """
+
     url = '../data/load/' + file_url
     url_opt = url + 'opt/'
 
@@ -131,9 +133,9 @@ def load_image(
 
     return file_name
 
-# Replace image in text
-
 def reimg(text):
+    """ Replace image in text """
+
     k = 0
 
     while True:
@@ -193,9 +195,9 @@ def reimg(text):
 
     return text
 
-# Get user
-
 def get_user(user_id):
+    """ Get user by ID """
+
     if user_id:
         db_condition = {
             'id': user_id,
@@ -218,9 +220,11 @@ def get_user(user_id):
 
     return user_req
 
-# Checking parameters
+def check_params(data, filters):
+    """ Checking parameters """
 
-def check_params(data, filters): # ! Удалять другие поля (которых нет в списке)
+    # TODO: Удалять другие поля (которых нет в списке)
+
     for i in filters:
         if i[0] in data:
             # Invalid data type
@@ -251,9 +255,9 @@ def check_params(data, filters): # ! Удалять другие поля (ко�
         elif i[1]:
             raise ErrorSpecified(i[0])
 
-# Next DB ID
-
 def next_id(name):
+    """ Next DB ID """
+
     try:
         db_filter = {'id': True, '_id': False}
         id_ = db[name].find({}, db_filter).sort('id', -1)[0]['id'] + 1
@@ -262,9 +266,9 @@ def next_id(name):
 
     return id_
 
-# Convert language to code
-
 def get_language(name):
+    """ Convert language to code """
+
     languages = ('en', 'ru', 'fi', 'es')
 
     if name in languages:
@@ -275,9 +279,9 @@ def get_language(name):
 
     return name
 
-# Get available status for user
-
 def get_status(user):
+    """ Get available status for the user """
+
     if user['admin'] >= 6:
         return 0
     elif user['admin'] >= 5:
@@ -288,6 +292,8 @@ def get_status(user):
     return 3 # !
 
 def get_status_condition(user):
+    """ Get conditions for database by user """
+
     if user['id']:
         return {
             '$or': [{
@@ -302,9 +308,9 @@ def get_status_condition(user):
             'status': {'$gte': get_status(user)},
         }
 
-# Define user by sid
-
 def get_id(sid):
+    """ Get user ID by sid """
+
     db_filter = {
         '_id': False,
         'id': True,
@@ -321,9 +327,9 @@ def get_id(sid):
 
     return user['id']
 
-# All sid of this user
-
 def get_sids(user):
+    """ Get all sids of user by ID """
+
     db_filter = {
         '_id': False,
         'sid': True,
@@ -333,22 +339,22 @@ def get_sids(user):
 
     return [i['sid'] for i in user_sessions]
 
-# Get date from timestamp
-
 def get_date(text, template='%Y%m%d'):
+    """ Get date from timestamp """
+
     return time.strftime(template, time.localtime(text))
 
-# Leave only the required fields for objects in the list
-
 def reduce_params(cont, params):
+    """ Leave only the required fields for objects in the list """
+
     def only_params(element):
         return {i: element[i] for i in params}
 
     return list(map(only_params, cont))
 
-# Checking how long has been online
-
 def online_back(user_id):
+    """ Checking how long has been online """
+
     online = db['online'].find_one({'id': user_id}, {'_id': True})
     if online:
         return 0
@@ -359,9 +365,9 @@ def online_back(user_id):
     last = max(i['stop'] for i in user)
     return time.time() - last
 
-# Other sessions of this user
-
 def other_sessions(user_id):
+    """ Other sessions of this user """
+
     if not user_id:
         return False
 
@@ -371,9 +377,10 @@ def other_sessions(user_id):
 # Close session
 
 def online_user_update(online):
-    # User data update
-    # ! Объединять сессии в онлайн по пользователю
-    # ! Если сервер был остановлен, отслеживать сессию
+    """ User data about online update """
+
+    # TODO: Объединять сессии в онлайн по пользователю
+    # TODO: Если сервер был остановлен, отслеживать сессию
 
     user = db['users'].find_one({'id': online['id']})
     if not user:
@@ -383,11 +390,15 @@ def online_user_update(online):
     db['users'].save(user)
 
 def online_session_close(online):
+    """ Close online session """
+
     # Remove from online users
 
     db['online'].remove(online['_id'])
 
 async def online_emit_del(sio, user_id):
+    """ Send sockets about deleting online users """
+
     user = db['users'].find_one({'id': user_id})
     if not user:
         return
@@ -417,6 +428,8 @@ async def online_emit_del(sio, user_id):
 # Open session
 
 async def online_emit_add(sio, user):
+    """ Send sockets about adding online users """
+
     db_filter = {
         '_id': False,
         'id': True,
@@ -445,6 +458,8 @@ SYMBOLS = ['🟢', '🟡', '🔴', '❗️', '✅']
 TYPES = ['INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT']
 
 def report(text, type_=0, additional=''):
+    """ Report logs and notifications on Telegram chat or in log files """
+
     if MODE != "PROD" and type_ == 0:
         return
 
