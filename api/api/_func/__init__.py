@@ -420,7 +420,7 @@ async def online_emit_del(sio, user_id):
         }
 
         users_all = list(db['online'].find({}, db_filter))
-        count = len(set([i['id'] for i in users_all]))
+        count = len({i['id'] for i in users_all})
 
         await sio.emit('online_del', {
             'count': count,
@@ -439,7 +439,7 @@ async def online_emit_add(sio, user):
     }
 
     users_all = list(db['online'].find({}, db_filter))
-    count = len(set([i['id'] for i in users_all]))
+    count = len({i['id'] for i in users_all})
 
     # Online users
     ## Emit this user to all users

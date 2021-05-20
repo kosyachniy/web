@@ -1253,7 +1253,7 @@ async def online(this, **x):
         'login': {'$exists': True},
     }, db_filter))
     users_all = list(db['online'].find({}, db_filter))
-    count = len(set([i['id'] for i in users_all]))
+    count = len({i['id'] for i in users_all})
 
     users_uniq = dict()
     # if user_current and user_current['admin'] > 3: # Full info only for admins
