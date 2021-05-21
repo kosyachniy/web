@@ -15,3 +15,15 @@ class Base:
 
         for key, value in data.items():
             setattr(self, key, value)
+
+    @classmethod
+    def get(
+        cls,
+        ids: typing.Union[typing.List[int], int, None] = None,
+        *,
+        fields: typing.Optional[typing.List[str]] = None,
+        count: typing.Optional[int] = None,
+        offset: int = 0,
+        **kw,
+    ) -> typing.List[dict]:
+        return list(db[cls.db].find({'id': ids}))
