@@ -8,9 +8,9 @@ Background processes
 # from multiprocessing import Process
 
 ## Local
-from api._func import report
-from api._func.mongodb import db
-from api._func import online_user_update, online_session_close
+from .funcs import report
+from .funcs.mongodb import db
+from .funcs import online_user_update, online_session_close
 
 
 def reset_online_users():

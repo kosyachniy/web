@@ -9,13 +9,13 @@ import urllib
 import json
 import base64
 
-from api._func.mongodb import db
-# from api._func.smsc import SMSC
-from api._error import ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload, \
-                       ErrorAccess
-from api._func import check_params, load_image, next_id, online_emit_add, \
-                      other_sessions, online_user_update, online_emit_del, \
-                      online_session_close
+from ..funcs import check_params, load_image, next_id, online_emit_add, \
+                    other_sessions, online_user_update, online_emit_del, \
+                    online_session_close
+from ..funcs.mongodb import db
+# from ..funcs.smsc import SMSC
+from ..errors import ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload, \
+                     ErrorAccess
 
 
 with open('keys.json', 'r') as file:

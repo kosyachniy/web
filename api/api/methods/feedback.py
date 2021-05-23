@@ -2,9 +2,9 @@
 Feedback object of the API
 """
 
-from api._func.mongodb import db
-from api._error import ErrorAccess
-from api._func import reimg, get_user, check_params, next_id
+from ..funcs import reimg, get_user, check_params, next_id
+from ..funcs.mongodb import db
+from ..errors import ErrorAccess
 
 
 async def add(this, **x):

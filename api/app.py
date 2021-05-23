@@ -59,7 +59,8 @@ asgi = socketio.ASGIApp(sio)
 import json
 
 ### Local
-from api import API, Error
+from api import API
+from api.errors import BaseError
 
 ## Params
 with open('sets.json', 'r') as file:
@@ -102,7 +103,7 @@ async def index(data: Input, request: Request):
             language=data.locale,
         )
 
-    except Error.BaseError as error:
+    except BaseError as error:
         req['error'] = error.code
         req['result'] = str(error)
 

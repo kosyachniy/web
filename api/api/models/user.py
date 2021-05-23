@@ -1,4 +1,4 @@
-from api._model import Base
+from . import Base
 
 
 class User(Base):

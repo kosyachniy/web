@@ -7,16 +7,15 @@ The API
 import time
 
 ## Local
-from api._func import get_language
-from api._func.mongodb import db
-from api._background import background
-import api._error as Error
+from .funcs import get_language
+from .funcs.mongodb import db
+from .background import background
+from .errors import ErrorWrong
 
-import api.account as account
-import api.users as users
-import api.feedback as feedback
-import api.posts as posts
-# TODO: from api import *
+import api.methods.account as account
+import api.methods.users as users
+import api.methods.feedback as feedback
+import api.methods.posts as posts
 
 
 class API():
@@ -84,7 +83,7 @@ class API():
             module, method_name = name.split('.')
             func = getattr(globals()[module], method_name)
         except:
-            raise Error.ErrorWrong('method')
+            raise ErrorWrong('method')
 
         # Request
 

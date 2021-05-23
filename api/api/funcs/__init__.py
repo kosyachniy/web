@@ -13,9 +13,9 @@ import json
 import requests
 from PIL import Image, ExifTags
 
-from api._func.mongodb import db
-from api._func.tg_bot import send as send_tg
-from api._error import ErrorSpecified, ErrorInvalid, ErrorType
+from .mongodb import db
+from .tg_bot import send as send_tg
+from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
 
 
 with open('sets.json', 'r') as file:

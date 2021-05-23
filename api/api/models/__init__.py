@@ -4,8 +4,8 @@ Base model of DB object
 
 import typing
 
-from api._func import next_id
-from api._func.mongodb import db
+from ..funcs import next_id
+from ..funcs.mongodb import db
 
 
 class Base:

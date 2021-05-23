@@ -2,9 +2,9 @@
 Users object of the API
 """
 
-from api._func.mongodb import db
-from api._error import ErrorWrong, ErrorAccess
-from api._func import check_params
+from ..funcs import check_params
+from ..funcs.mongodb import db
+from ..errors import ErrorWrong, ErrorAccess
 
 
 async def get(this, **x):

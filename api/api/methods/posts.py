@@ -5,9 +5,9 @@ Posts object of the API
 import re
 # import shutil
 
-from api._func.mongodb import db
-from api._error import ErrorWrong, ErrorUpload
-from api._func import reimg, check_params, next_id, load_image
+from ..funcs import reimg, check_params, next_id, load_image
+from ..funcs.mongodb import db
+from ..errors import ErrorWrong, ErrorUpload
 
 
 async def edit(this, **x):
