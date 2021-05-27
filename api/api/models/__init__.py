@@ -8,17 +8,37 @@ from ..funcs import next_id
 from ..funcs.mongodb import db
 
 
+class Attribute:
+    """ Descriptor """
+
+    name: str = None
+    types: typing.Any = None
+    default: typing.Any = None
+
+    def __init__(self, types, default=None):
+        self.types = types
+        self.default = default
+
+    def __set_name__(self, instance, name):
+        self.name = name
+
+    def __get__(self, instance, owner):
+        return instance.__dict__.get(self.name, self.default)
+
+    def __set__(self, instance, value) -> None:
+        instance.__dict__[self.name] = value
+
 class Base:
     """ Base model """
 
-    id: int = 0
+    id = Attribute(int, 0)
 
     def __init__(self, data: dict = {}, **kwargs) -> None:
         if not data:
             data = kwargs
 
-        for key, value in data.items():
-            setattr(self, key, value)
+        for name, value in data.items():
+            setattr(self, name, value)
 
     @classmethod
     def get(
@@ -60,3 +80,11 @@ class Base:
         els = els[offset:last]
 
         return els
+
+    def save(
+            self,
+            **kw,
+        ) -> typing.List[int]:
+            """ Save """
+
+            return
