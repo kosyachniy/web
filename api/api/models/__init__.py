@@ -26,12 +26,18 @@ class Attribute:
         return instance.__dict__.get(self.name, self.default)
 
     def __set__(self, instance, value) -> None:
+        if not isinstance(value, self.types):
+            raise ValueError('type')
+
         instance.__dict__[self.name] = value
 
 class Base:
     """ Base model """
 
     id = Attribute(int, 0)
+    name = Attribute(str)
+    created = Attribute(int)
+    status = Attribute(int)
 
     def __init__(self, data: dict = {}, **kwargs) -> None:
         if not data:
