@@ -57,6 +57,12 @@ class Base:
         for name, value in data.items():
             setattr(self, name, value)
 
+    def __setattr__(self, name, value):
+        if not hasattr(self, name):
+            raise AttributeError('key')
+
+        super().__setattr__(name, value)
+
     @classmethod
     def get(
         cls,
