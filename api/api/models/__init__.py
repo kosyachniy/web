@@ -31,6 +31,10 @@ class Attribute:
 
         instance.__dict__[self.name] = value
 
+    def __delete__(self, instance):
+        if self.name in instance.__dict__:
+            del instance.__dict__[self.name]
+
 class Base:
     """ Base model """
 
@@ -92,5 +96,19 @@ class Base:
             **kw,
         ) -> typing.List[int]:
             """ Save """
+
+            # Edit
+            if self.id:
+                db[self.db].update_one(
+                    {'id': self.id},
+                    {'$set': self.__dict__},
+                )
+
+                return
+
+            # Create
+            self.id = next_id(self.db)
+            db[self.db].insert_one(self.__dict__)
+            del self.__dict__['_id']
 
             return
