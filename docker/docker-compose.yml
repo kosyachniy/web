@@ -2,8 +2,8 @@ version: "3"
 services:
     db:
         image: "mongo:4.4.2"
-        # ports:
-        #     - "27017:27017"
+        ports:
+            - "27017:27017"
         restart: unless-stopped
         env_file: .env
         environment:
@@ -71,6 +71,7 @@ services:
             - ../web/src/containers:/src/containers
             - ../web/src/func:/src/func
             - ../web/src/App.jsx:/src/App.jsx
+            - ../web/src/redus.js:/src/redus.js
 
     server:
         image: "nginx:1.19.6"

@@ -2,6 +2,7 @@
 Base model of DB object
 """
 
+from abc import abstractmethod
 import typing
 
 from ..funcs import next_id
@@ -35,6 +36,7 @@ class Attribute:
         if self.name in instance.__dict__:
             del instance.__dict__[self.name]
 
+# pylint: disable=C0103,R0913
 class Base:
     """ Base model """
 
@@ -43,7 +45,12 @@ class Base:
     created = Attribute(int)
     status = Attribute(int)
 
-    def __init__(self, data: dict = {}, **kwargs) -> None:
+    @property
+    @abstractmethod
+    def db(self) -> str:
+        """ Database name """
+
+    def __init__(self, data: dict = None, **kwargs) -> None:
         if not data:
             data = kwargs
 
@@ -54,12 +61,10 @@ class Base:
     def get(
         cls,
         ids: typing.Union[typing.List[int], int, None] = None,
-        *,
         fields: typing.Optional[typing.List[str]] = None,
         search: typing.Optional[str] = None,
         count: typing.Optional[int] = None,
         offset: int = 0,
-        **kw,
     ) -> typing.List[dict]:
         """ Get """
 
@@ -92,23 +97,22 @@ class Base:
         return els
 
     def save(
-            self,
-            **kw,
-        ) -> typing.List[int]:
-            """ Save """
+        self,
+    ) -> typing.List[int]:
+        """ Save """
 
-            # Edit
-            if self.id:
-                db[self.db].update_one(
-                    {'id': self.id},
-                    {'$set': self.__dict__},
-                )
-
-                return
-
-            # Create
-            self.id = next_id(self.db)
-            db[self.db].insert_one(self.__dict__)
-            del self.__dict__['_id']
+        # Edit
+        if self.id:
+            db[self.db].update_one(
+                {'id': self.id},
+                {'$set': self.__dict__},
+            )
 
             return
+
+        # Create
+        self.id = next_id(self.db)
+        db[self.db].insert_one(self.__dict__)
+        del self.__dict__['_id']
+
+        return
