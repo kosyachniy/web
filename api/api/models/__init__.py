@@ -3,7 +3,7 @@ Base model of DB object
 """
 
 from abc import abstractmethod
-import typing
+from typing import Union, Optional, Any
 
 from ..funcs import next_id
 from ..funcs.mongodb import db
@@ -13,8 +13,8 @@ class Attribute:
     """ Descriptor """
 
     name: str = None
-    types: typing.Any = None
-    default: typing.Any = None
+    types: Any = None
+    default: Any = None
 
     def __init__(self, types, default=None):
         self.types = types
@@ -60,12 +60,12 @@ class Base:
     @classmethod
     def get(
         cls,
-        ids: typing.Union[typing.List[int], int, None] = None,
-        fields: typing.Optional[typing.List[str]] = None,
-        search: typing.Optional[str] = None,
-        count: typing.Optional[int] = None,
+        ids: Union[list[int], int, None] = None,
+        fields: Optional[list[str]] = None,
+        search: Optional[str] = None, # TODO
+        count: Optional[int] = None,
         offset: int = 0,
-    ) -> typing.List[dict]:
+    ) -> list[dict]:
         """ Get """
 
         if ids:
@@ -98,7 +98,7 @@ class Base:
 
     def save(
         self,
-    ) -> typing.List[int]:
+    ) -> list[int]:
         """ Save """
 
         # Edit
