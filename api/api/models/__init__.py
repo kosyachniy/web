@@ -4,6 +4,7 @@ Base model of DB object
 
 from abc import abstractmethod
 from typing import Union, Optional, Any
+from copy import deepcopy
 
 from ..funcs import next_id
 from ..funcs.mongodb import db
@@ -24,7 +25,14 @@ class Attribute:
         self.name = name
 
     def __get__(self, instance, owner):
-        return instance.__dict__.get(self.name, self.default)
+        if self.name in instance.__dict__:
+            return instance.__dict__[self.name]
+
+        if self.default:
+            instance.__dict__[self.name] = deepcopy(self.default)
+            return instance.__dict__[self.name]
+
+        return None
 
     def __set__(self, instance, value) -> None:
         if not isinstance(value, self.types):
