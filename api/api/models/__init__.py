@@ -67,7 +67,7 @@ class Base:
     def get(
         cls,
         ids: Union[list[int], int, None] = None,
-        fields: Optional[list[str]] = None,
+        fields: Union[list[str], tuple[str], set[str], None] = None,
         search: Optional[str] = None, # TODO
         count: Optional[int] = None,
         offset: int = 0,

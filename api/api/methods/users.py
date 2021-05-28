@@ -4,6 +4,7 @@ Users object of the API
 
 from ..funcs import check_params
 from ..funcs.mongodb import db
+from ..models.user import User
 from ..errors import ErrorWrong, ErrorAccess
 
 
@@ -15,98 +16,65 @@ async def get(this, **x):
     check_params(x, (
         ('id', False, (int, list), int),
         ('count', False, int),
+        ('offset', False, int),
         ('fields', False, list, str),
     ))
 
-    # Condition formation
+    # Fields
 
-    process_one = False
-
-    if 'id' in x:
-        if type(x['id']) == int:
-            db_condition = {
-                'id': x['id'],
-            }
-
-            process_one = True
-
-        else:
-            db_condition = {
-                'id': {'$in': x['id']},
-            }
-
-    else:
-        db_condition = {
-            'admin': {'$gte': 3},
-        }
-
-    # Advanced options
-
-    process_self = False
-
-    if process_one:
-        if x['id'] == this.user['id']:
-            process_self = True
-
-    process_moderator = this.user['admin'] >= 5
-    process_admin = this.user['admin'] >= 7
-
-    # Get users
-
-    db_filter = {
-        '_id': False,
-        'id': True,
-        'login': True,
-        'name': True,
-        'surname': True,
-        'avatar': True,
-        'admin': True,
-        # 'balance': True,
-        # 'rating': True,
-        # 'description': True,
-        # 'online': False,
+    fields = {
+        'id',
+        'login',
+        'name',
+        'surname',
+        'avatar',
+        'admin',
+        # 'balance',
+        # 'rating',
+        # 'description',
+        # 'online',
     }
 
+    process_self = 'id' in x and x['id'] == this.user['id']
+    # process_moderator = this.user['admin'] >= 5
+    process_admin = this.user['admin'] >= 7
+
     if process_self:
-        db_filter['mail'] = True
-        db_filter['phone'] = True
-        db_filter['social'] = True
-        # db_filter['transactions'] = True
+        fields |= {
+            'mail',
+            'social',
+            # 'phone',
+        }
 
     # if process_moderator:
-    #     db_filter['transactions'] = True
+    #     fields |= {
+    #         'transactions',
+    #     }
 
     if process_admin:
-        db_filter['phone'] = True
-        db_filter['mail'] = True
-        db_filter['social'] = True
+        fields |= {
+            'mail',
+            'social',
+            # 'phone',
+        }
 
-    #
+    # Get
 
-    users = list(db['users'].find(db_condition, db_filter))
-    users = sorted(users, key=lambda i: i['rating'])[::-1]
+    users = User.get(
+        ids=x.get('id', None),
+        count=x.get('count', None),
+        offset=x.get('offset', None),
+        fields=fields,
+    )
 
-    # Count
+    # # Processing
 
-    count = x['count'] if 'count' in x else None
-    users = users[:count]
-
-    # Processing
-
-    for i in range(len(users)):
-        # Avatar
-
-        if 'avatar' in users[i]:
-            users[i]['avatar'] = '/load/opt/' + users[i]['avatar']
-        else:
-            users[i]['avatar'] = 'user.png'
-
-        # # Online
-
-        # users[i]['online'] = db['online'].find_one(
-        #     {'id': users[i]['id']},
-        #     {'_id': True}
-        # ) == True
+    # for i in range(len(users)):
+    #     # Online
+    #     users[i]['online'] = db['online'].find_one(
+    #         {'id': users[i]['id']},
+    #         {'_id': True}
+    #     ) == True
 
     # Response
 
