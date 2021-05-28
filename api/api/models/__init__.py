@@ -28,7 +28,7 @@ class Attribute:
 
     def __set__(self, instance, value) -> None:
         if not isinstance(value, self.types):
-            raise ValueError('type')
+            raise TypeError('type')
 
         instance.__dict__[self.name] = value
 
@@ -74,8 +74,11 @@ class Base:
     ) -> list[dict]:
         """ Get """
 
+        process_one = False
+
         if ids:
             if isinstance(ids, int):
+                process_one = True
                 db_condition = {
                     'id': ids,
                 }
@@ -99,6 +102,9 @@ class Base:
 
         last = count + offset if count else None
         els = els[offset:last]
+
+        if process_one:
+            return els[0]
 
         return els
 
