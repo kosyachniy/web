@@ -40,7 +40,7 @@ def keyboard(rows, inline=False):
     else:
         buttons = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 
-    if type(rows[0]) not in (list, tuple):
+    if not isinstance(rows[0], (list, tuple)):
         rows = [[button] for button in rows]
 
     for cols in rows:

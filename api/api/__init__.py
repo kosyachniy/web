@@ -32,7 +32,7 @@ import api.methods.posts as posts
 # import_submodules(api.methods)
 
 
-# pylint: disable=R0902,R0903
+# pylint: disable=R0902,R0903,W0201
 class API():
     """ API """
 
@@ -83,7 +83,7 @@ class API():
         # Remove extra indentation
 
         for i in params:
-            if type(params[i]) == str:
+            if isinstance(params[i], str):
                 params[i] = params[i].strip()
 
         # # Action tracking

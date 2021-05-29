@@ -144,7 +144,7 @@ async def get(this, **x):
     db_condition = {}
 
     if 'id' in x:
-        if type(x['id']) == int:
+        if isinstance(x['id'], int):
             db_condition['id'] = x['id']
 
             process_single = True
