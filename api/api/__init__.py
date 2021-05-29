@@ -7,8 +7,7 @@ The API
 import time
 
 ## Local
-from .funcs import get_network, get_language
-from .funcs.mongodb import db
+from .funcs import get_network, get_language, get_user_by_token
 from .background import background
 from .errors import ErrorWrong
 
@@ -62,23 +61,7 @@ class API():
         self.token = token
         self.network = get_network(network)
         self.language = get_language(language)
-
-        # User recognition
-
-        self.user = {
-            'id': 0,
-            'admin': 2,
-        }
-
-        if token:
-            db_filter = {'id': True, '_id': False}
-            user_id = db['tokens'].find_one({'token': token}, db_filter)
-
-            if user_id and user_id['id']:
-                user = db['users'].find_one({'id': user_id['id']})
-
-                if user:
-                    self.user = user
+        self.user = get_user_by_token(token)
 
         # Remove extra indentation
 

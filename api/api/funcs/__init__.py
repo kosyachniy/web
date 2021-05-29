@@ -298,6 +298,30 @@ def get_language(code):
 
     return 0
 
+def get_user_by_token(token):
+    """ Get user object by token """
+
+    user = {
+        'id': 0,
+        'admin': 2,
+    }
+
+    if not token:
+        return user
+
+    db_filter = {'user': True, '_id': False}
+    token_data = db['tokens'].find_one({'token': token}, db_filter)
+
+    if not token_data or not token_data['user']:
+        return user
+
+    user_data = db['users'].find_one({'id': token_data['user']})
+
+    if not user_data:
+        return user
+
+    return user_data
+
 def get_status(user):
     """ Get available status for the user """
 

@@ -298,7 +298,7 @@ async def reg(this, **x):
 
     req = {
         'token': this.token,
-        'id': user['id'],
+        'user': user['id'],
         'time': this.timestamp,
     }
 
@@ -566,7 +566,7 @@ async def social(this, **x):
 
     # req = {
     #     'token': this.token,
-    #     'id': user['id'],
+    #     'user': user['id'],
     #     'time': this.timestamp,
     # }
     # db['tokens'].insert_one(req)
@@ -787,7 +787,7 @@ async def social(this, **x):
 
 #     req = {
 #         'token': this.token,
-#         'id': user['id'],
+#         'user': user['id'],
 #         'time': this.timestamp,
 #     }
 #     db['tokens'].insert_one(req)
@@ -873,7 +873,7 @@ async def phone(this, **x):
 
     req = {
         'token': this.token,
-        'id': res['id'],
+        'user': res['id'],
         'time': this.timestamp,
     }
     db['tokens'].insert_one(req)
@@ -1032,7 +1032,7 @@ async def auth(this, **x):
 
     req = {
         'token': this.token,
-        'id': user['id'],
+        'user': user['id'],
         'time': this.timestamp,
     }
     db['tokens'].insert_one(req)
