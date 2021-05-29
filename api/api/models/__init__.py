@@ -48,9 +48,9 @@ class Attribute:
 class Base:
     """ Base model """
 
-    id = Attribute(int, 0)
-    name = Attribute(str)
-    created = Attribute(int)
+    id = Attribute(int, 0) # TODO: unique
+    name = Attribute(str) # TODO: required
+    created = Attribute(int) # TODO: auto
     status = Attribute(int)
 
     @property
@@ -106,10 +106,12 @@ class Base:
                 db_filter[value] = True
 
         els = db[cls.db].find(db_condition, db_filter)
-        els = list(els.sort('id', -1))
+        els = els.sort('id', -1)
 
         last = count + offset if count else None
         els = els[offset:last]
+
+        els = [cls(**el) for el in els]
 
         if process_one:
             return els[0]
