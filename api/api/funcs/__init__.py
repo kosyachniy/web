@@ -16,6 +16,7 @@ from PIL import Image, ExifTags
 from ._codes import NETWORKS, LANGUAGES
 from .mongodb import db
 from .tg_bot import send as send_tg
+from ..models.user import User
 from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
 
 
@@ -301,10 +302,7 @@ def get_language(code):
 def get_user_by_token(token):
     """ Get user object by token """
 
-    user = {
-        'id': 0,
-        'admin': 2,
-    }
+    user = User()
 
     if not token:
         return user
@@ -315,23 +313,23 @@ def get_user_by_token(token):
     if not token_data or not token_data['user']:
         return user
 
-    user_data = db['users'].find_one({'id': token_data['user']})
+    try:
+        user = User.get(ids=token_data['user'])
+    except:
+        pass
 
-    if not user_data:
-        return user
-
-    return user_data
+    return user
 
 def get_status(user):
     """ Get available status for the user """
 
-    if user['admin'] >= 6:
+    if user['status'] >= 6:
         return 0
 
-    if user['admin'] >= 5:
+    if user['status'] >= 5:
         return 1
 
-    if user['admin'] >= 3:
+    if user['status'] >= 3:
         return 3
 
     return 3 # !

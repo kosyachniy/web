@@ -49,7 +49,7 @@ async def get(this, **x):
 
     # No access
 
-    if this.user['admin'] < 4:
+    if this.user['status'] < 4:
         raise ErrorAccess('token')
 
     # Get news
@@ -81,7 +81,7 @@ async def delete(this, **x):
     ))
 
     # No access
-    if this.user['admin'] < 5:
+    if this.user['status'] < 5:
         raise ErrorAccess('token')
 
     # Get feedback

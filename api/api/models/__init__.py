@@ -6,9 +6,18 @@ from abc import abstractmethod
 from typing import Union, Optional, Any
 from copy import deepcopy
 
-from ..funcs import next_id
 from ..funcs.mongodb import db
 
+
+def next_id(name):
+    """ Next DB ID """
+
+    id_last = list(db[name].find({}, {'id': True, '_id': False}).sort('id', -1))
+
+    if id_last:
+        return id_last[0]['id'] + 1
+
+    return 1
 
 class Attribute:
     """ Descriptor """
@@ -71,6 +80,12 @@ class Base:
 
         super().__setattr__(name, value)
 
+    def __getitem__(self, name):
+        return getattr(self, name)
+
+    def __setitem__(self, name, value):
+        setattr(self, name, value)
+
     @classmethod
     def get(
         cls,
@@ -111,7 +126,7 @@ class Base:
         last = count + offset if count else None
         els = els[offset:last]
 
-        els = [cls(**el) for el in els]
+        els = [cls(el) for el in els]
 
         if process_one:
             return els[0]

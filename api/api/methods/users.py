@@ -28,7 +28,7 @@ async def get(this, **x):
         'name',
         'surname',
         'avatar',
-        'admin',
+        'status',
         # 'balance',
         # 'rating',
         # 'description',
@@ -36,8 +36,8 @@ async def get(this, **x):
     }
 
     process_self = 'id' in x and x['id'] == this.user['id']
-    # process_moderator = this.user['admin'] >= 5
-    process_admin = this.user['admin'] >= 7
+    # process_moderator = this.user['status'] >= 5
+    process_admin = this.user['status'] >= 7
 
     if process_self:
         fields |= {
@@ -102,11 +102,11 @@ async def block(this, **x):
         raise ErrorWrong('id')
 
     # No access
-    if this.user['admin'] < 6 or users['admin'] > this.user['admin']:
+    if this.user['status'] < 6 or users['status'] > this.user['status']:
         raise ErrorAccess('block')
 
     # Change status
-    users['admin'] = 1
+    users['status'] = 1
 
     # Save
     db['users'].save(users)

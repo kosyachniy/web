@@ -16,3 +16,14 @@ NETWORKS = (
     'g',
     'fb',
 )
+
+USER_STATUSES = (
+    'deleted',
+    'blocked', # 'archive',
+    'normal',
+    'registered', # 'confirmed',
+    'editor', # 'curator',
+    'moderator',
+    'admin',
+    'owner',
+)

@@ -189,7 +189,7 @@ def _registrate(
         'password': password,
         'name': name,
         'surname': surname,
-        'admin': 3,
+        'status': 3,
         'mail': mail,
         # 'balance': 0,
         # 'rating': 0,
@@ -247,7 +247,7 @@ async def _online_update(sio, user, token):
         i['surname'] = user['surname']
         if 'avatar' in user:
             i['avatar'] = '/load/opt/' + user['avatar']
-        i['admin'] = user['admin']
+        i['status'] = user['status']
 
         db['online'].save(i)
 
@@ -315,7 +315,7 @@ async def reg(this, **x):
         'login': user['login'],
         'name': user['name'],
         'surname': user['surname'],
-        'admin': 3,
+        'status': 3,
         'mail': user['mail'],
         # 'balance': 0,
         # 'rating': 0,
@@ -412,7 +412,7 @@ async def social(this, **x):
     #     'name': True,
     #     'surname': True,
     #     'avatar': True,
-    #     'admin': True,
+    #     'status': True,
     #     'mail': True,
     #     # 'rating': True,
     #     # 'balance': True,
@@ -548,7 +548,7 @@ async def social(this, **x):
     #         db_filter = {
     #             '_id': False,
     #             'id': True,
-    #             'admin': True,
+    #             'status': True,
     #             # 'balance': True,
     #             # 'rating': True,
     #             'login': True,
@@ -582,7 +582,7 @@ async def social(this, **x):
     #     'login': user['login'],
     #     'name': user['name'],
     #     'surname': user['surname'],
-    #     'admin': user['admin'],
+    #     'status': user['status'],
     #     'mail': user['mail'],
     #     # 'balance': user['balance'],
     #     # 'rating': user['rating'],
@@ -768,7 +768,7 @@ async def social(this, **x):
 #                 if promo:
 #                     # Нет доступа
 
-#                     if user['admin'] >= promo['admin']:
+#                     if user['status'] >= promo['admin']:
 #                         # Повтор
 
 #                         if promo['repeat'] \
@@ -804,7 +804,7 @@ async def social(this, **x):
 #         'name': user['name'],
 #         'surname': user['surname'],
 #         'avatar': '/load/opt/' + user['avatar'],
-#         'admin': user['admin'],
+#         'status': user['status'],
 #         'mail': user['mail'],
 #         # 'balance': user['balance'],
 #         # 'rating': user['rating'],
@@ -849,7 +849,7 @@ async def phone(this, **x):
     db_filter = {
         '_id': False,
         'id': True,
-        'admin': True,
+        'status': True,
         'balance': True,
         # 'rating': True,
         'login': True,
@@ -926,7 +926,7 @@ async def phone(this, **x):
 
     req = {
         'id': res['id'],
-        'admin': res['admin'],
+        'status': res['status'],
         'balance': res['balance'],
         'login': res['login'],
         'new': new,
@@ -1009,7 +1009,7 @@ async def auth(this, **x):
     db_filter = {
         '_id': False,
         'id': True,
-        'admin': True,
+        'status': True,
         # 'balance': True,
         # 'rating': True,
         'login': True,
@@ -1048,7 +1048,7 @@ async def auth(this, **x):
         'login': user['login'],
         'name': user['name'],
         'surname': user['surname'],
-        'admin': user['admin'],
+        'status': user['status'],
         'mail': user['mail'],
         # 'balance': user['balance'],
         # 'rating': user['rating'],
@@ -1088,7 +1088,7 @@ async def exit(this, **x):
         online_user_update(online)
 
         online['id'] = this.token
-        online['admin'] = 2
+        online['status'] = 2
 
         if 'name' in online:
             del online['name']
@@ -1127,7 +1127,7 @@ async def edit(this, **x):
     ))
 
     # No access
-    if this.user['admin'] < 3:
+    if this.user['status'] < 3:
         raise ErrorAccess('edit')
 
     # Name
@@ -1245,7 +1245,7 @@ async def online(this, **x):
             'name': True,
             'surname': True,
             'avatar': True,
-            'admin': True,
+            'status': True,
         }
 
         user_current = db['users'].find_one({
@@ -1265,7 +1265,7 @@ async def online(this, **x):
         'name': True,
         'surname': True,
         'avatar': True,
-        'admin': True,
+        'status': True,
     }
 
     users_auth = list(db['online'].find({
@@ -1275,7 +1275,7 @@ async def online(this, **x):
     count = len({i['id'] for i in users_all})
 
     users_uniq = dict()
-    # if user_current and user_current['admin'] > 3: # Full info only for admins
+    # if user_current and user_current['status'] > 3: # Full info only for admins
     for i in users_auth:
         if i['id'] not in users_uniq:
             users_uniq[i['id']] = {
@@ -1310,7 +1310,7 @@ async def online(this, **x):
 
     if user_current:
         online['id'] = user_current['id']
-        online['admin'] = user_current['admin']
+        online['status'] = user_current['status']
         online['login'] = user_current['login']
         online['name'] = user_current['name']
         online['surname'] = user_current['surname']
@@ -1320,7 +1320,7 @@ async def online(this, **x):
             online['avatar'] = 'user.png'
     else:
         online['id'] = x['token']
-        online['admin'] = 2
+        online['status'] = 2
 
     db['online'].insert_one(online)
 
