@@ -5,7 +5,7 @@
 Sending SMS messages
 """
 
-# pylint: disable=W0702
+# pylint: disable=all
 
 from datetime import datetime
 import smtplib

@@ -19,6 +19,7 @@ from .tg_bot import send as send_tg
 from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
 
 
+# pylint: disable=W0621
 with open('sets.json', 'r') as file:
     sets = json.loads(file.read())
     SIDE_OPTIMIZED = sets['side_optimized']

@@ -32,6 +32,7 @@ import api.methods.posts as posts
 # import_submodules(api.methods)
 
 
+# pylint: disable=R0902,R0903
 class API():
     """ API """
 
@@ -42,7 +43,7 @@ class API():
         # Background processes
         background(self.sio)
 
-    # pylint: disable=C0103
+    # pylint: disable=C0103,R0913
     async def method(
         self,
         name,
@@ -53,9 +54,7 @@ class API():
         network=0,
         language=0,
     ):
-        """ Called API method """
-
-        # TODO: network
+        """ Call API method """
 
         self.timestamp = time.time()
         self.ip = ip

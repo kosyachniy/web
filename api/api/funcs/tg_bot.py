@@ -13,6 +13,7 @@ import telebot
 
 # Params
 ## Token
+# pylint: disable=W0621
 with open('keys.json', 'r') as file:
     TG_TOKEN = json.loads(file.read())['tg']['token']
 
@@ -63,6 +64,7 @@ def keyboard(rows, inline=False):
 
     return buttons
 
+# pylint: disable=R0913
 def send(
     user, text='', buttons=None, inline=False, image=None, markup='Markdown',
 ):
@@ -105,7 +107,7 @@ def delete(to, message, attempt=1):
 
         raise Exception('Telegram del message')
 
-# pylint: disable=C0103
+# pylint: disable=C0103,R0913
 def edit(to, message, text, buttons=None, inline=False, markup='Markdown'):
     """ Edit message """
 

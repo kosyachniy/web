@@ -14,11 +14,11 @@ class User(Base):
     avatar = Attribute(str)
     surname = Attribute(str)
     mail = Attribute(str)
-    social = Attribute(list) # TODO: list[dict]
+    social = Attribute(list, []) # TODO: list[dict]
     description = Attribute(str)
     language = Attribute(int, 0)
-    funnel = Attribute(list) # TODO: list[dict]
-    online = Attribute(list) # TODO: list[tuple]
+    funnel = Attribute(list, []) # TODO: list[dict]
+    online = Attribute(list, []) # TODO: list[tuple]
     # TODO: phone
     # TODO: balance
     # TODO: rating
