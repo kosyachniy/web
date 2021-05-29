@@ -13,6 +13,7 @@ import json
 import requests
 from PIL import Image, ExifTags
 
+from ._codes import NETWORKS, LANGUAGES
 from .mongodb import db
 from .tg_bot import send as send_tg
 from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
@@ -272,18 +273,29 @@ def next_id(name):
 
     return 1
 
-def get_language(name):
-    """ Convert language to code """
+# Codes
 
-    languages = ('en', 'ru', 'fi', 'es')
+def get_network(code):
+    """ Get network code by cipher """
 
-    if name in languages:
-        name = languages.index(name)
+    if code in NETWORKS:
+        return NETWORKS.index(code)
 
-    elif name not in range(len(languages)):
-        name = 0
+    if code in range(len(NETWORKS)):
+        return code
 
-    return name
+    return 0
+
+def get_language(code):
+    """ Get language code by cipher """
+
+    if code in LANGUAGES:
+        return LANGUAGES.index(code)
+
+    if code in range(len(LANGUAGES)):
+        return code
+
+    return 0
 
 def get_status(user):
     """ Get available status for the user """

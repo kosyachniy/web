@@ -7,7 +7,7 @@ The API
 import time
 
 ## Local
-from .funcs import get_language
+from .funcs import get_network, get_language
 from .funcs.mongodb import db
 from .background import background
 from .errors import ErrorWrong
@@ -44,7 +44,14 @@ class API():
 
     # pylint: disable=C0103
     async def method(
-        self, name, params={}, ip=None, sid=None, token=None, language=0,
+        self,
+        name,
+        params={},
+        ip=None,
+        sid=None,
+        token=None,
+        network=0,
+        language=0,
     ):
         """ Called API method """
 
@@ -54,6 +61,7 @@ class API():
         self.ip = ip
         self.sid = sid
         self.token = token
+        self.network = get_network(network)
         self.language = get_language(language)
 
         # User recognition

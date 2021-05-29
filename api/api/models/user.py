@@ -16,6 +16,7 @@ class User(Base):
     mail = Attribute(str)
     social = Attribute(list) # TODO: list[dict]
     description = Attribute(str)
+    language = Attribute(int, 0)
     funnel = Attribute(list) # TODO: list[dict]
     online = Attribute(list) # TODO: list[tuple]
     # TODO: phone

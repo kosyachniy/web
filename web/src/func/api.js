@@ -22,6 +22,7 @@ export default function api(method, params={}, handlerSuccess=()=>{}, handlerErr
         'params': params,
     }
 
+    json['network'] = 'web'
     json['language'] = localStorage.getItem('lang')
     json['token'] = localStorage.getItem('token')
 

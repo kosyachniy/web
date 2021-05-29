@@ -81,6 +81,7 @@ class Input(BaseModel):
 
     method: str
     params: dict = {}
+    network: str = ''
     locale: str = 'en'
     token: str = None
 
@@ -100,6 +101,7 @@ async def index(data: Input, request: Request):
             data.params,
             ip=request.client.host,
             token=data.token,
+            network=data.network,
             language=data.locale,
         )
 

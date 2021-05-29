@@ -17,6 +17,7 @@ class Post(Base):
     }) # TODO: attributes
     cont = Attribute(str, '')
     cover = Attribute(str)
+    # TODO: language
     # TODO: category
     # TODO: tags
     # TODO: author
