@@ -7,28 +7,10 @@ The API
 import time
 
 ## Local
+import api.methods as methods
 from .funcs import get_network, get_language, get_user_by_token
 from .background import background
 from .errors import ErrorWrong
-
-import api.methods.account as account
-import api.methods.users as users
-import api.methods.feedback as feedback
-import api.methods.posts as posts
-
-# import importlib
-# import pkgutil
-
-# def import_submodules(module):
-#     """ Import all submodules of a module """
-
-#     for loader, module_name, is_pkg in pkgutil.walk_packages(
-#         module.__path__, module.__name__ + '.'
-#     ):
-#         importlib.import_module(module_name)
-
-# importlib.import_module('.methods', 'methods')
-# import_submodules(api.methods)
 
 
 # pylint: disable=R0902,R0903,W0201
@@ -85,7 +67,7 @@ class API():
 
         try:
             module, method_name = name.split('.')
-            func = getattr(globals()[module], method_name)
+            func = getattr(getattr(methods, module), method_name)
         except:
             raise ErrorWrong('method')
 
