@@ -16,7 +16,6 @@ from PIL import Image, ExifTags
 from ._codes import NETWORKS, LANGUAGES
 from .mongodb import db
 from .tg_bot import send as send_tg
-from ..models.user import User
 from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
 
 
@@ -50,40 +49,25 @@ def max_image(url):
             k = int(j[0])
     return k+1
 
-def load_image(
-    data, file_type=None, file_coding='base64', file_url='', file_id=None,
-):
+def load_image(data, encoding='base64', file_format=None):
     """ Upload image """
 
-    url = '../data/load/' + file_url
+    url = '../data/load/'
     url_opt = url + 'opt/'
 
-    if file_coding == 'base64':
-        data = base64.b64decode(data)
+    if encoding == 'base64':
+        file_format = re.search(r'data:image/.+;base64,', data).group()[11:-8]
+        b64 = data.split(',')[1]
+        data = base64.b64decode(b64)
 
-    if file_type == '' or file_type is None:
-        file_type = 'jpg'
-
-    file_type = file_type.lower()
-
-    if file_id:
-        for i in os.listdir(url):
-            if re.search(r'^{}\.'.format(file_id), i):
-                os.remove('{}/{}'.format(url, i))
-
-        for i in os.listdir(url_opt):
-            if re.search(r'^{}\.'.format(file_id), i):
-                os.remove('{}/{}'.format(url_opt, i))
-
-    else:
-        file_id = max_image(url)
-        file_id = '{}{}{}'.format(
-            '0' * max(0, 10-len(str(file_id))),
-            file_id,
-            ''.join(random.choice(string.ascii_lowercase) for _ in range(10)),
-        )
-
-    file_name = '{}.{}'.format(file_id, file_type)
+    file_id = max_image(url)
+    file_id = '{}{}{}'.format(
+        '0' * max(0, 10-len(str(file_id))),
+        file_id,
+        ''.join(random.choice(string.ascii_lowercase) for _ in range(6)),
+    )
+    file_format = file_format.lower()
+    file_name = '{}.{}'.format(file_id, file_format)
     url += file_name
     url_opt += file_name
 
@@ -96,7 +80,7 @@ def load_image(
         img = Image.open(url)
 
         for orientation in ExifTags.TAGS.keys():
-            if ExifTags.TAGS[orientation]=='Orientation':
+            if ExifTags.TAGS[orientation] == 'Orientation':
                 break
 
         exif = dict(img._getexif().items())
@@ -130,9 +114,6 @@ def load_image(
     img.save(url_opt)
 
     # Response
-
-    if file_url:
-        return '{}/{}'.format(file_url, file_name)
 
     return file_name
 
@@ -301,6 +282,8 @@ def get_language(code):
 
 def get_user_by_token(token):
     """ Get user object by token """
+
+    from ..models.user import User
 
     user = User()
 

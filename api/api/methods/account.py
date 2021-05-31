@@ -30,27 +30,6 @@ with open('keys.json', 'r') as file:
 #     random.choice(ALL_SYMBOLS) for _ in range(length)
 # )
 
-def _registrate(
-    user, timestamp, login='', password='', mail='', name='', surname='',
-    description='', avatar=None, file='', social=[], phone=None,
-):
-    """ Account registration """
-
-    # Avatar
-
-    if avatar:
-        try:
-            file_type = file.split('.')[-1]
-        except:
-            raise ErrorInvalid('file')
-
-        try:
-            link = load_image(avatar, file_type)
-        except:
-            raise ErrorUpload('avatar')
-
-        req['avatar'] = link
-
 async def _online_update(sio, user, token):
     """ Update online users """
 

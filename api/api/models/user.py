@@ -6,6 +6,7 @@ import re
 import hashlib
 
 from . import Base, Attribute
+from ..funcs import load_image
 from ..funcs.mongodb import db
 
 
@@ -145,7 +146,7 @@ class User(Base):
         checking=check_password,
         processing=process_password,
     )
-    avatar = Attribute(str)
+    avatar = Attribute(str, processing=load_image)
     name = Attribute(
         str,
         checking=check_name,
