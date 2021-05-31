@@ -26,12 +26,21 @@ class Attribute:
     types: Any = None
     default: Any = None
     checking: Callable = None
+    pre_processing: Callable = None
     processing: Callable = None
 
-    def __init__(self, types, default=None, checking=None, processing=None):
+    def __init__(
+        self,
+        types,
+        default=None,
+        checking=None,
+        pre_processing=None,
+        processing=None,
+    ):
         self.types = types
         self.default = default
         self.checking = checking
+        self.pre_processing = pre_processing
         self.processing = processing
 
     def __set_name__(self, instance, name):
@@ -48,6 +57,9 @@ class Attribute:
         return None
 
     def __set__(self, instance, value) -> None:
+        if self.pre_processing:
+            value = self.pre_processing(value)
+
         if not isinstance(value, self.types):
             raise TypeError(self.name)
 

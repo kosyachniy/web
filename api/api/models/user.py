@@ -89,18 +89,23 @@ def process_password(cont):
 
     return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
-# def pre_process_phone(cont):
-#     """ Phone number pre-processing """
+def check_phone(id_, cont):
+    """ Phone checking """
 
-#     cont = str(cont)
+    return 11 <= len(str(cont)) <= 18
 
-#     if not len(cont):
-#         return ''
+def pre_process_phone(cont):
+    """ Phone number pre-processing """
 
-#     if cont[0] == '8':
-#         cont = '7' + cont[1:]
+    cont = str(cont)
 
-#     return int(re.sub(r'[^0-9]', '', cont))
+    if not len(cont):
+        return ''
+
+    if cont[0] == '8':
+        cont = '7' + cont[1:]
+
+    return int(re.sub(r'[^0-9]', '', cont))
 
 
 class User(Base):
@@ -123,7 +128,11 @@ class User(Base):
     status = Attribute(int, 2)
     funnel = Attribute(list, []) # TODO: list[dict]
     online = Attribute(list, []) # TODO: list[tuple]
-    # TODO: phone # TODO: length 11 <= cont <= 18
+    phone = Attribute(
+        int,
+        checking=check_phone,
+        pre_processing=pre_process_phone,
+    )
     # TODO: balance
     # TODO: rating
     # TODO: referal_parent
