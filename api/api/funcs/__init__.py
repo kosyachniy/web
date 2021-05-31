@@ -26,8 +26,15 @@ with open('sets.json', 'r') as file:
     MODE = sets['mode']
     BUG_CHAT = sets['bug_chat']
 
+ALL_SYMBOLS = string.digits + string.ascii_letters
+
 
 # Funcs
+
+def generate(length: int = 32) -> str:
+    """ Token / code generation """
+
+    return ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
 
 def get_file(url, num):
     """ Check existence the file by name """
@@ -245,6 +252,12 @@ def check_params(data, filters):
         # Not all fields are filled
         elif i[1]:
             raise ErrorSpecified(i[0])
+
+        # Default
+        else:
+            data[i[0]] = None
+
+    return data
 
 def next_id(name):
     """ Next DB ID """

@@ -7,12 +7,15 @@ import requests
 import urllib
 import json
 import base64
+import hashlib
 
 from ..funcs import check_params, load_image, next_id, online_emit_add, \
                     other_sessions, online_user_update, online_emit_del, \
                     online_session_close
 from ..funcs.mongodb import db
 # from ..funcs.smsc import SMSC
+from ..models.user import User
+from ..models.token import Token
 from ..errors import ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload, \
                      ErrorAccess
 
@@ -22,13 +25,6 @@ with open('keys.json', 'r') as file:
     VK = keys['vk']
     GOOGLE = keys['google']
 
-
-# # Token generation
-
-# ALL_SYMBOLS = string.digits + string.ascii_letters
-# generate = lambda length=32: ''.join(
-#     random.choice(ALL_SYMBOLS) for _ in range(length)
-# )
 
 async def _online_update(sio, user, token):
     """ Update online users """
@@ -68,7 +64,7 @@ async def reg(this, **x):
 
     # Checking parameters
 
-    check_params(x, (
+    x = check_params(x, (
         ('login', False, str),
         ('password', False, str),
         ('name', False, str),
@@ -79,17 +75,16 @@ async def reg(this, **x):
         ('social', False, list, dict),
     ))
 
-    user = _registrate(
-        this.user,
-        this.timestamp,
-        login=x['login'] if 'login' in x else '',
-        password=x['password'] if 'password' in x else '',
-        name=x['name'] if 'name' in x else '',
-        surname=x['surname'] if 'surname' in x else '',
-        avatar=x['avatar'] if 'avatar' in x else None,
-        file=x['file'] if 'file' in x else '',
-        mail=x['mail'] if 'mail' in x else '',
-        social=x['social'] if 'social' in x else [],
+    #
+
+    user = User(
+        login=x['login'],
+        password=x['password'],
+        avatar=x['avatar'],
+        name=x['name'],
+        surname=x['surname'],
+        mail=x['mail'],
+        social=x['social'],
     )
 
     # Assignment of the token to the user
@@ -97,13 +92,12 @@ async def reg(this, **x):
     if not this.token:
         raise ErrorAccess('token')
 
-    req = {
-        'token': this.token,
-        'user': user['id'],
-        'time': this.timestamp,
-    }
+    token = Token(
+        id=this.token,
+        user=user.id,
+    )
 
-    db['tokens'].insert_one(req)
+    token.save()
 
     # Update online users
 
@@ -112,20 +106,14 @@ async def reg(this, **x):
     # Response
 
     res = {
-        'id': user['id'],
-        'login': user['login'],
-        'name': user['name'],
-        'surname': user['surname'],
-        'status': 3,
-        'mail': user['mail'],
-        # 'balance': 0,
-        # 'rating': 0,
+        'id': user.id,
+        'login': user.login,
+        'name': user.name,
+        'surname': user.surname,
+        'status': user.status,
+        'mail': user.mail,
+        'avatar': user.avatar,
     }
-
-    if 'avatar' in user:
-        res['avatar'] = '/load/opt/' + user['avatar']
-    else:
-        res['avatar'] = 'user.png'
 
     return res
 
