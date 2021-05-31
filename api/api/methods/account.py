@@ -23,13 +23,6 @@ with open('keys.json', 'r') as file:
     VK = keys['vk']
     GOOGLE = keys['google']
 
-RESERVED = (
-    'admin', 'administrator', 'author', 'test', 'tester', 'bot', 'robot',
-    'root', 'info', 'support', 'manager', 'client', 'dev', 'account',
-    'user', 'users', 'profile', 'login', 'password', 'code', 'mail',
-    'phone', 'google', 'facebook', 'administration',
-)
-
 
 # # Token generation
 
@@ -37,73 +30,6 @@ RESERVED = (
 # generate = lambda length=32: ''.join(
 #     random.choice(ALL_SYMBOLS) for _ in range(length)
 # )
-
-def _check_name(cont):
-    """ Name checking """
-
-    # Invalid name
-    if not cont.isalpha():
-        raise ErrorInvalid('name')
-
-def _check_surname(cont):
-    """ Surname checking """
-
-    # Invalid surname
-    if not cont.replace('-', '').isalpha():
-        raise ErrorInvalid('surname')
-
-def _check_mail(cont, user):
-    """ Mail checking """
-
-    # Invalid mail
-
-    if re.match(r'.+@.+\..+', cont) is None:
-        raise ErrorInvalid('mail')
-
-    # Mail is already registered
-
-    users = db['users'].find_one({'mail': cont}, {'_id': True, 'id': True})
-    if users and users['id'] != user['id']:
-        raise ErrorBusy('mail')
-
-def _check_login(cont, user):
-    """ Login checking """
-
-    # Login is already registered
-
-    users = db['users'].find_one({'login': cont}, {'_id': True, 'id': True})
-    if users and users['id'] != user['id']:
-        raise ErrorBusy('login')
-
-    # Invalid login
-
-    cond_length = not 3 <= len(cont) <= 20
-    cond_symbols = re.findall('[^a-z0-9_]', cont)
-    cond_letters = not re.findall('[a-z]', cont)
-
-    if cond_length or cond_symbols or cond_letters:
-        raise ErrorInvalid('login')
-
-    # System reserved
-
-    cond_id = cont[:2] == 'id'
-    cond_reserv = cont in RESERVED
-
-    if cond_id or cond_reserv:
-        raise ErrorInvalid('login')
-
-def _check_password(cont):
-    """ Password checking """
-
-    # Invalid password
-
-    cond_length = not 6 <= len(cont) <= 40
-    cond_symbols = re.findall(r'[^a-zA-Z0-9!@#$%&*-+=,./?|~]', cont)
-    cond_letters = not re.findall('[a-zA-Z]', cont)
-    cond_digits = not re.findall('[0-9]', cont)
-
-    if cond_length or cond_symbols or cond_letters or cond_digits:
-        raise ErrorInvalid('password')
 
 def _process_password(cont):
     """ Password processing """

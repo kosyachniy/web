@@ -3,7 +3,7 @@ Base model of DB object
 """
 
 from abc import abstractmethod
-from typing import Union, Optional, Any
+from typing import Union, Optional, Any, Callable
 from copy import deepcopy
 
 from ..funcs.mongodb import db
@@ -25,10 +25,12 @@ class Attribute:
     name: str = None
     types: Any = None
     default: Any = None
+    checking: Callable = None
 
-    def __init__(self, types, default=None):
+    def __init__(self, types, default=None, checking=None):
         self.types = types
         self.default = default
+        self.checking = checking
 
     def __set_name__(self, instance, name):
         self.name = name
@@ -45,7 +47,10 @@ class Attribute:
 
     def __set__(self, instance, value) -> None:
         if not isinstance(value, self.types):
-            raise TypeError('type')
+            raise TypeError(self.name)
+
+        if self.checking and not self.checking(instance.id, value):
+            raise ValueError(self.name)
 
         instance.__dict__[self.name] = value
 
