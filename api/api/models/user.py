@@ -121,6 +121,11 @@ class User(Base):
     avatar = Attribute(str)
     name = Attribute(str, checking=check_name)
     surname = Attribute(str, checking=check_surname)
+    phone = Attribute(
+        int,
+        checking=check_phone,
+        pre_processing=pre_process_phone,
+    )
     mail = Attribute(str, checking=check_mail)
     social = Attribute(list, []) # TODO: list[dict]
     description = Attribute(str)
@@ -128,11 +133,6 @@ class User(Base):
     status = Attribute(int, 2)
     funnel = Attribute(list, []) # TODO: list[dict]
     online = Attribute(list, []) # TODO: list[tuple]
-    phone = Attribute(
-        int,
-        checking=check_phone,
-        pre_processing=pre_process_phone,
-    )
     # TODO: balance
     # TODO: rating
     # TODO: referal_parent

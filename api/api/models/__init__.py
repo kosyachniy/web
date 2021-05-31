@@ -2,6 +2,7 @@
 Base model of DB object
 """
 
+import time
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable
 from copy import deepcopy
@@ -9,7 +10,7 @@ from copy import deepcopy
 from ..funcs.mongodb import db
 
 
-def next_id(name):
+def _next_id(name):
     """ Next DB ID """
 
     id_last = list(db[name].find({}, {'id': True, '_id': False}).sort('id', -1))
@@ -18,6 +19,12 @@ def next_id(name):
         return id_last[0]['id'] + 1
 
     return 1
+
+def pre_process_created(cont):
+    if isinstance(cont, int):
+        return float(cont)
+
+    return cont
 
 class Attribute:
     """ Descriptor """
@@ -81,7 +88,7 @@ class Base:
 
     id = Attribute(int, 0) # TODO: unique
     name = Attribute(str) # TODO: required
-    created = Attribute(int) # TODO: auto
+    created = Attribute(float, pre_processing=pre_process_created)
     status = Attribute(int)
 
     @property
@@ -90,6 +97,9 @@ class Base:
         """ Database name """
 
     def __init__(self, data: dict = None, **kwargs) -> None:
+        # Auto complete (instead of Attribute(auto=...))
+        self.created = time.time()
+
         if not data:
             data = kwargs
 
@@ -170,7 +180,7 @@ class Base:
             return
 
         # Create
-        self.id = next_id(self.db)
+        self.id = _next_id(self.db)
         db[self.db].insert_one(self.__dict__)
         del self.__dict__['_id']
 
