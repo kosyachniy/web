@@ -36,73 +36,6 @@ def _registrate(
 ):
     """ Account registration """
 
-    # ID
-
-    user_id = next_id('users')
-
-    # Login
-
-    if login:
-        login = login.lower()
-        _check_login(login, user)
-
-    else:
-        login = 'id{}'.format(user_id)
-
-    # Mail
-
-    if mail:
-        mail = mail.lower()
-        _check_mail(mail, user)
-
-    # Password
-
-    if password:
-        password = _process_password(password)
-
-    # Name
-
-    if name:
-        _check_name(name)
-        name = name.title()
-
-    # Surname
-
-    if surname:
-        _check_surname(surname)
-        surname = surname.title()
-
-    # Social networks
-    # ! Добавить проверку социальных сетей
-
-    # # Referal link
-
-    # ALL_SYMBOLS = string.ascii_lowercase + string.digits
-    # generate = lambda length=8: ''.join(
-    #     random.choice(ALL_SYMBOLS) for _ in range(length)
-    # )
-    # referal_code = generate()
-
-    #
-
-    req = {
-        'id': user_id,
-        'login': login,
-        'password': password,
-        'name': name,
-        'surname': surname,
-        'status': 3,
-        'mail': mail,
-        # 'balance': 0,
-        # 'rating': 0,
-        'description': description,
-        'time': timestamp,
-        'online': [],
-        'social': social,
-        # 'referal_code': referal_code,
-        'referal_parent': 0,
-    }
-
     # Avatar
 
     if avatar:
@@ -117,19 +50,6 @@ def _registrate(
             raise ErrorUpload('avatar')
 
         req['avatar'] = link
-
-    # Phone
-
-    if phone:
-        req['phone'] = phone
-
-    # Save
-
-    db['users'].insert_one(req)
-
-    # Response
-
-    return req
 
 async def _online_update(sio, user, token):
     """ Update online users """

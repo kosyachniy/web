@@ -80,10 +80,20 @@ def check_name(id_, cont):
 
     return cont.isalpha()
 
+def process_name(cont):
+    """ Name processing """
+
+    return cont.title()
+
 def check_surname(id_, cont):
     """ Surname checking """
 
     return cont.replace('-', '').isalpha()
+
+def process_surname(cont):
+    """ Surname processing """
+
+    return cont.title()
 
 def check_phone(id_, cont):
     """ Phone checking """
@@ -117,6 +127,13 @@ def check_mail(id_, cont):
 
     return True
 
+# def default_referal_code():
+#     ALL_SYMBOLS = string.ascii_lowercase + string.digits
+#     generate = lambda length=8: ''.join(
+#         random.choice(ALL_SYMBOLS) for _ in range(length)
+#     )
+#     return generate()
+
 
 class User(Base):
     """ User """
@@ -129,18 +146,26 @@ class User(Base):
         processing=process_password,
     )
     avatar = Attribute(str)
-    name = Attribute(str, checking=check_name)
-    surname = Attribute(str, checking=check_surname)
+    name = Attribute(
+        str,
+        checking=check_name,
+        processing=process_name,
+    )
+    surname = Attribute(
+        str,
+        checking=check_surname,
+        processing=process_surname,
+    )
     phone = Attribute(
         int,
         checking=check_phone,
         pre_processing=pre_process_phone,
     )
     mail = Attribute(str, checking=check_mail)
-    social = Attribute(list, []) # TODO: list[dict]
+    social = Attribute(list, []) # TODO: list[dict] # TODO: checking
     description = Attribute(str)
     language = Attribute(int, 0)
-    status = Attribute(int, 2)
+    status = Attribute(int, 2) # TODO: or 3
     funnel = Attribute(list, []) # TODO: list[dict]
     online = Attribute(list, []) # TODO: list[tuple]
     # TODO: balance
