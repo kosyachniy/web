@@ -26,11 +26,13 @@ class Attribute:
     types: Any = None
     default: Any = None
     checking: Callable = None
+    processing: Callable = None
 
-    def __init__(self, types, default=None, checking=None):
+    def __init__(self, types, default=None, checking=None, processing=None):
         self.types = types
         self.default = default
         self.checking = checking
+        self.processing = processing
 
     def __set_name__(self, instance, name):
         self.name = name
@@ -51,6 +53,9 @@ class Attribute:
 
         if self.checking and not self.checking(instance.id, value):
             raise ValueError(self.name)
+
+        if self.processing:
+            value = self.processing(value)
 
         instance.__dict__[self.name] = value
 

@@ -2,7 +2,6 @@
 Account object of the API
 """
 
-import hashlib
 import re
 import requests
 import urllib
@@ -30,29 +29,6 @@ with open('keys.json', 'r') as file:
 # generate = lambda length=32: ''.join(
 #     random.choice(ALL_SYMBOLS) for _ in range(length)
 # )
-
-def _process_password(cont):
-    """ Password processing """
-
-    _check_password(cont)
-
-    return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
-
-def _process_phone(number):
-    """ Phone number processing """
-
-    if not number:
-        raise ErrorInvalid('phone')
-
-    if number[0] == '8':
-        number = '7' + number[1:]
-
-    number = int(re.sub('[^0-9]', '', number))
-
-    if not 10 < len(str(number)) < 19:
-        raise ErrorInvalid('phone')
-
-    return number
 
 def _registrate(
     user, timestamp, login='', password='', mail='', name='', surname='',

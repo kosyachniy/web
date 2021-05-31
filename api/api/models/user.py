@@ -3,6 +3,7 @@ User model of DB object
 """
 
 import re
+import hashlib
 
 from . import Base, Attribute
 from ..funcs.mongodb import db
@@ -83,13 +84,35 @@ def check_password(id_, cont):
 
     return True
 
+def process_password(cont):
+    """ Password processing """
+
+    return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
+
+# def pre_process_phone(cont):
+#     """ Phone number pre-processing """
+
+#     cont = str(cont)
+
+#     if not len(cont):
+#         return ''
+
+#     if cont[0] == '8':
+#         cont = '7' + cont[1:]
+
+#     return int(re.sub(r'[^0-9]', '', cont))
+
 
 class User(Base):
     """ User """
 
     db = 'users'
     login = Attribute(str, checking=check_login)
-    password = Attribute(str, checking=check_password)
+    password = Attribute(
+        str,
+        checking=check_password,
+        processing=process_password,
+    )
     avatar = Attribute(str)
     name = Attribute(str, checking=check_name)
     surname = Attribute(str, checking=check_surname)
@@ -100,7 +123,7 @@ class User(Base):
     status = Attribute(int, 2)
     funnel = Attribute(list, []) # TODO: list[dict]
     online = Attribute(list, []) # TODO: list[tuple]
-    # TODO: phone
+    # TODO: phone # TODO: length 11 <= cont <= 18
     # TODO: balance
     # TODO: rating
     # TODO: referal_parent
