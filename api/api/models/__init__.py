@@ -26,6 +26,7 @@ def pre_process_created(cont):
 
     return cont
 
+
 class Attribute:
     """ Descriptor """
 
@@ -57,8 +58,12 @@ class Attribute:
         if self.name in instance.__dict__:
             return instance.__dict__[self.name]
 
-        if self.default:
-            instance.__dict__[self.name] = deepcopy(self.default)
+        if self.default is not None:
+            if isinstance(self.default, Callable):
+                instance.__dict__[self.name] = self.default(instance)
+            else:
+                instance.__dict__[self.name] = deepcopy(self.default)
+
             return instance.__dict__[self.name]
 
         return None
@@ -169,6 +174,10 @@ class Base:
         self,
     ) -> list[int]:
         """ Save """
+
+        # TODO: default values
+        # TODO: auto values
+        # TODO: deleted values
 
         # Edit
         if self.id:

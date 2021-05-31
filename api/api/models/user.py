@@ -10,36 +10,22 @@ from ..funcs.mongodb import db
 
 
 RESERVED = (
-    'admin', 'administrator', 'author', 'test', 'tester', 'bot', 'robot',
-    'root', 'info', 'support', 'manager', 'client', 'dev', 'account',
-    'user', 'users', 'profile', 'login', 'password', 'code', 'mail',
-    'phone', 'google', 'facebook', 'administration',
+    'admin', 'admins', 'administrator', 'administrators', 'administration',
+    'author', 'support', 'manager', 'client',
+    'account', 'profile', 'login', 'password',
+    'root', 'server', 'info',  'no-reply',
+    'dev', 'test', 'tests', 'tester', 'testers',
+    'user', 'users', 'bot', 'bots', 'robot', 'robots',
+    'phone', 'code', 'codes', 'mail',
+    'google', 'facebook', 'telegram', 'instagram', 'twitter',
+    'anon', 'anonym', 'anonymous', 'undefined', 'ufo',
 )
 
 
-def check_name(id_, cont):
-    """ Name checking """
+def default_login(instance):
+    """ Default login value """
 
-    return cont.isalpha()
-
-def check_surname(id_, cont):
-    """ Surname checking """
-
-    return cont.replace('-', '').isalpha()
-
-def check_mail(id_, cont):
-    """ Mail checking """
-
-    # Invalid
-    if re.match(r'.+@.+\..+', cont) is None:
-        return False
-
-    # Already registered
-    users = db['users'].find_one({'mail': cont}, {'_id': False, 'id': True})
-    if users and users['id'] != id_:
-        return False
-
-    return True
+    return f"id{instance.id}"
 
 def check_login(id_, cont):
     """ Login checking """
@@ -89,6 +75,16 @@ def process_password(cont):
 
     return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
+def check_name(id_, cont):
+    """ Name checking """
+
+    return cont.isalpha()
+
+def check_surname(id_, cont):
+    """ Surname checking """
+
+    return cont.replace('-', '').isalpha()
+
 def check_phone(id_, cont):
     """ Phone checking """
 
@@ -107,12 +103,26 @@ def pre_process_phone(cont):
 
     return int(re.sub(r'[^0-9]', '', cont))
 
+def check_mail(id_, cont):
+    """ Mail checking """
+
+    # Invalid
+    if re.match(r'.+@.+\..+', cont) is None:
+        return False
+
+    # Already registered
+    users = db['users'].find_one({'mail': cont}, {'_id': False, 'id': True})
+    if users and users['id'] != id_:
+        return False
+
+    return True
+
 
 class User(Base):
     """ User """
 
     db = 'users'
-    login = Attribute(str, checking=check_login)
+    login = Attribute(str, default_login, checking=check_login)
     password = Attribute(
         str,
         checking=check_password,
