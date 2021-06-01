@@ -13,7 +13,7 @@ from ..funcs.mongodb import db
 RESERVED = (
     'admin', 'admins', 'administrator', 'administrators', 'administration',
     'author', 'support', 'manager', 'client',
-    'account', 'profile', 'login', 'password',
+    'account', 'profile', 'login', 'sign', 'signin', 'signup', 'password',
     'root', 'server', 'info',  'no-reply',
     'dev', 'test', 'tests', 'tester', 'testers',
     'user', 'users', 'bot', 'bots', 'robot', 'robots',
@@ -40,21 +40,26 @@ def check_login(id_, cont):
     # Invalid login
 
     cond_length = not 3 <= len(cont) <= 20
-    cond_symbols = re.findall(r'[^a-z0-9_]', cont)
-    cond_letters = not re.findall(r'[a-z]', cont)
+    cond_symbols = re.findall(r'[^a-zA-Z0-9_]', cont)
+    cond_letters = not re.findall(r'[a-zA-Z]', cont)
 
     if cond_length or cond_symbols or cond_letters:
         return False
 
     # System reserved
 
-    cond_id = cont[:2] == 'id'
+    cond_id = cont[:2] == 'id' and cont[2:].isalpha() and int(cont[2:]) != id_
     cond_reserved = cont in RESERVED
 
     if cond_id or cond_reserved:
         return False
 
     return True
+
+def process_login(cont):
+    """ Login pre-processing """
+
+    return cont.lower()
 
 def check_password(id_, cont):
     """ Password checking """
@@ -140,7 +145,12 @@ class User(Base):
     """ User """
 
     db = 'users'
-    login = Attribute(str, default_login, checking=check_login)
+    login = Attribute(
+        str,
+        default_login,
+        checking=check_login,
+        processing=process_login,
+    )
     password = Attribute(
         str,
         checking=check_password,

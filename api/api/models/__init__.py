@@ -75,7 +75,9 @@ class Attribute:
         if not isinstance(value, self.types):
             raise TypeError(self.name)
 
+        print('!0', instance.id, value, type(value))
         if self.checking and not self.checking(instance.id, value):
+            print('!1')
             raise ValueError(self.name)
 
         if self.processing:
@@ -131,6 +133,7 @@ class Base:
         search: Optional[str] = None, # TODO
         count: Optional[int] = None,
         offset: int = 0,
+        **kwargs,
     ) -> list[dict]:
         """ Get """
 
@@ -148,6 +151,10 @@ class Base:
                 }
         else:
             db_condition = {}
+
+        if kwargs:
+            for arg in kwargs:
+                db_condition[arg] = kwargs[arg]
 
         db_filter = {
             '_id': False,
