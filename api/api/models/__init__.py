@@ -75,9 +75,7 @@ class Attribute:
         if not isinstance(value, self.types):
             raise TypeError(self.name)
 
-        print('!0', instance.id, value, type(value))
         if self.checking and not self.checking(instance.id, value):
-            print('!1')
             raise ValueError(self.name)
 
         if self.processing:
@@ -93,10 +91,10 @@ class Attribute:
 class Base:
     """ Base model """
 
-    id = Attribute(int, 0) # TODO: unique
-    name = Attribute(str) # TODO: required
-    created = Attribute(float, pre_processing=pre_process_created)
-    status = Attribute(int)
+    id = Attribute(types=int, default=0) # TODO: unique
+    name = Attribute(types=str) # TODO: required
+    created = Attribute(types=float, pre_processing=pre_process_created)
+    status = Attribute(types=int)
 
     @property
     @abstractmethod

@@ -14,7 +14,8 @@ from ..funcs import check_params, load_image, next_id, online_emit_add, \
                     online_session_close
 from ..funcs.mongodb import db
 # from ..funcs.smsc import SMSC
-from ..models.user import User
+from ..models.user import User, process_login, process_lower, \
+                          pre_process_phone, process_password
 from ..models.token import Token
 from ..errors import ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload, \
                      ErrorAccess
@@ -56,48 +57,94 @@ async def _online_update(sio, user, token):
 
 #
 
-async def reg(this, **x):
-    """ Sign up """
+async def auth(this, **x):
+    """ Sign in / Sign up """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
 
     # Checking parameters
 
-    x = check_params(x, (
-        ('login', False, str),
-        ('password', False, str),
-        ('name', False, str),
-        ('surname', False, str),
-        ('avatar', False, str),
-        ('file', False, str),
-        ('mail', False, str),
-        ('social', False, list, dict),
+    check_params(x, (
+        ('login', True, str), # login / mail / phone
+        ('password', True, str),
     ))
 
-    #
+    # Data preparation
 
-    user = User(
-        login=x['login'],
-        password=x['password'],
-        avatar=x['avatar'],
-        name=x['name'],
-        surname=x['surname'],
-        mail=x['mail'],
-        social=x['social'],
-    )
+    # TODO: None / not ''
+    # if 'password' in x and not x['password']:
+    #     del x['password']
+
+    fields = {
+        'id',
+        'login',
+        'avatar',
+        'name',
+        'surname',
+        'mail',
+        'status',
+    }
+
+    # Login
+
+    new = False
+
+    try:
+        login = process_login(x['login'])
+        user = User.get(login=login, fields=fields)
+    except:
+        new = True
+
+    if new:
+        try:
+            mail = process_lower(x['mail'])
+            user = User.get(mail=mail,fields=fields)
+        except:
+            pass
+        else:
+            new = False
+
+    if new:
+        try:
+            phone = pre_process_phone(x['phone'])
+            user = User.get(phone=phone, fields=fields)
+        except:
+            pass
+        else:
+            new = False
+
+    if not new:
+        password = process_password(x['password'])
+
+        try:
+            User.get(id=user.id, password=password)
+        except:
+            raise ErrorWrong('password')
+
+    # Register
+
+    if new:
+        user_data = User(
+            mail=x['login'], # TODO: login / phone
+            password=x['password'],
+        )
+        user_data.save()
+        user_id = user_data.id
+
+        user = User.get(id=user_id, fields=fields)
 
     # Assignment of the token to the user
 
     if not this.token:
         raise ErrorAccess('token')
 
-    token = Token(
-        id=this.token,
-        user=user.id,
-    )
-
-    token.save()
+    req = {
+        'token': this.token,
+        'user': user.id,
+        'time': this.timestamp,
+    }
+    db['tokens'].insert_one(req)
 
     # Update online users
 
@@ -106,16 +153,82 @@ async def reg(this, **x):
     # Response
 
     res = {
-        'id': user.id,
-        'login': user.login,
-        'name': user.name,
-        'surname': user.surname,
-        'status': user.status,
-        'mail': user.mail,
-        'avatar': user.avatar,
+        'id': user['id'],
+        'login': user['login'],
+        'name': user['name'],
+        'surname': user['surname'],
+        'status': user['status'],
+        'mail': user['mail'],
+        'new': new,
     }
 
+    if 'avatar' in user:
+        res['avatar'] = '/load/opt/' + user['avatar']
+    else:
+        res['avatar'] = 'user.png'
+
     return res
+
+# async def reg(this, **x):
+#     """ Sign up """
+
+#     # TODO: Сокет на авторизацию на всех вкладках токена
+#     # TODO: Перезапись информации этого токена уже в онлайне
+
+#     # Checking parameters
+
+#     x = check_params(x, (
+#         ('login', False, str),
+#         ('password', False, str),
+#         ('name', False, str),
+#         ('surname', False, str),
+#         ('avatar', False, str),
+#         ('file', False, str),
+#         ('mail', False, str),
+#         ('social', False, list, dict),
+#     ))
+
+#     #
+
+#     user = User(
+#         login=x['login'],
+#         password=x['password'],
+#         avatar=x['avatar'],
+#         name=x['name'],
+#         surname=x['surname'],
+#         mail=x['mail'],
+#         social=x['social'],
+#     )
+
+#     # Assignment of the token to the user
+
+#     if not this.token:
+#         raise ErrorAccess('token')
+
+#     token = Token(
+#         id=this.token,
+#         user=user.id,
+#     )
+
+#     token.save()
+
+#     # Update online users
+
+#     await _online_update(this.sio, user, this.token)
+
+#     # Response
+
+#     res = {
+#         'id': user.id,
+#         'login': user.login,
+#         'name': user.name,
+#         'surname': user.surname,
+#         'status': user.status,
+#         'mail': user.mail,
+#         'avatar': user.avatar,
+#     }
+
+#     return res
 
 async def social(this, **x):
     """ By social network """
@@ -734,122 +847,6 @@ async def phone(this, **x):
         req['discount'] = res['discount']
 
     return req
-
-async def auth(this, **x):
-    """ Log in """
-
-    # TODO: Сокет на авторизацию на всех вкладках токена
-    # TODO: Перезапись информации этого токена уже в онлайне
-
-    # Checking parameters
-
-    check_params(x, (
-        ('login', True, str), # login / mail
-        ('password', True, str),
-    ))
-
-    #
-
-    x['login'] = x['login'].lower()
-
-    # if 'password' in x and not x['password']:
-    #     del x['password']
-
-    # Login
-
-    x['login'] = x['login'].lower()
-
-    db_condition = {'$or': [{
-        'login': x['login'],
-    }, {
-        'mail': x['login'],
-    }]}
-
-    new = False
-
-    if not db['users'].find_one(db_condition, {'_id': True}):
-        # raise ErrorWrong('login')
-
-        _registrate(
-            this.user,
-            this.timestamp,
-            mail=x['login'],
-            password=x['password'],
-        )
-
-        new = True
-
-    #
-
-    db_condition = {
-        '$or': [{
-            'login': x['login'],
-        }, {
-            'mail': x['login'],
-        }],
-    }
-
-    # Пароль
-    # if 'password' in x:
-    db_condition['password'] = hashlib.md5(
-        bytes(x['password'], 'utf-8')
-    ).hexdigest()
-
-    db_filter = {
-        '_id': False,
-        'id': True,
-        'status': True,
-        # 'balance': True,
-        # 'rating': True,
-        'login': True,
-        'name': True,
-        'surname': True,
-        'mail': True,
-        'avatar': True,
-    }
-
-    user = db['users'].find_one(db_condition, db_filter)
-
-    # Wrong password
-    if not user:
-        raise ErrorWrong('password')
-
-    # Assignment of the token to the user
-
-    if not this.token:
-        raise ErrorAccess('token')
-
-    req = {
-        'token': this.token,
-        'user': user['id'],
-        'time': this.timestamp,
-    }
-    db['tokens'].insert_one(req)
-
-    # Update online users
-
-    await _online_update(this.sio, user, this.token)
-
-    # Response
-
-    res = {
-        'id': user['id'],
-        'login': user['login'],
-        'name': user['name'],
-        'surname': user['surname'],
-        'status': user['status'],
-        'mail': user['mail'],
-        # 'balance': user['balance'],
-        # 'rating': user['rating'],
-        'new': new,
-    }
-
-    if 'avatar' in user:
-        res['avatar'] = '/load/opt/' + user['avatar']
-    else:
-        res['avatar'] = 'user.png'
-
-    return res
 
 async def exit(this, **x):
     """ Log out """

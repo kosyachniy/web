@@ -14,7 +14,7 @@ RESERVED = (
     'admin', 'admins', 'administrator', 'administrators', 'administration',
     'author', 'support', 'manager', 'client',
     'account', 'profile', 'login', 'sign', 'signin', 'signup', 'password',
-    'root', 'server', 'info',  'no-reply',
+    'root', 'server', 'info', 'no-reply',
     'dev', 'test', 'tests', 'tester', 'testers',
     'user', 'users', 'bot', 'bots', 'robot', 'robots',
     'phone', 'code', 'codes', 'mail',
@@ -86,20 +86,10 @@ def check_name(id_, cont):
 
     return cont.isalpha()
 
-def process_name(cont):
-    """ Name processing """
-
-    return cont.title()
-
 def check_surname(id_, cont):
     """ Surname checking """
 
     return cont.replace('-', '').isalpha()
-
-def process_surname(cont):
-    """ Surname processing """
-
-    return cont.title()
 
 def check_phone(id_, cont):
     """ Phone checking """
@@ -133,6 +123,16 @@ def check_mail(id_, cont):
 
     return True
 
+def process_title(cont):
+    """ Make a value with a capital letter """
+
+    return cont.title()
+
+def process_lower(cont):
+    """ Make the value in lowercase """
+
+    return cont.lower()
+
 # def default_referal_code():
 #     ALL_SYMBOLS = string.ascii_lowercase + string.digits
 #     generate = lambda length=8: ''.join(
@@ -146,39 +146,43 @@ class User(Base):
 
     db = 'users'
     login = Attribute(
-        str,
-        default_login,
+        types=str,
+        default=default_login,
         checking=check_login,
         processing=process_login,
     )
     password = Attribute(
-        str,
+        types=str,
         checking=check_password,
         processing=process_password,
     )
-    avatar = Attribute(str, processing=load_image)
+    avatar = Attribute(types=str, processing=load_image)
     name = Attribute(
-        str,
+        types=str,
         checking=check_name,
-        processing=process_name,
+        processing=process_title,
     )
     surname = Attribute(
-        str,
+        types=str,
         checking=check_surname,
-        processing=process_surname,
+        processing=process_title,
     )
     phone = Attribute(
-        int,
+        types=int,
         checking=check_phone,
         pre_processing=pre_process_phone,
     )
-    mail = Attribute(str, checking=check_mail)
-    social = Attribute(list, []) # TODO: list[dict] # TODO: checking
-    description = Attribute(str)
-    language = Attribute(int, 0)
-    status = Attribute(int, 2) # TODO: or 3
-    funnel = Attribute(list, []) # TODO: list[dict]
-    online = Attribute(list, []) # TODO: list[tuple]
+    mail = Attribute(
+        types=str,
+        checking=check_mail,
+        processing=process_lower,
+    )
+    social = Attribute(types=list, default=[]) # TODO: list[{}] # TODO: checking
+    description = Attribute(types=str)
+    language = Attribute(types=int, default=0)
+    status = Attribute(types=int, default=2) # TODO: or 3
+    funnel = Attribute(types=list, default=[]) # TODO: list[dict]
+    online = Attribute(types=list, default=[]) # TODO: list[tuple]
     # TODO: balance
     # TODO: rating
     # TODO: referal_parent
