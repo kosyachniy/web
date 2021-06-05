@@ -138,7 +138,7 @@ class Base:
         count: Optional[int] = None,
         offset: int = 0,
         **kwargs,
-    ) -> list[dict]:
+    ):
         """ Get instances of the object """
 
         process_one = False
@@ -183,28 +183,24 @@ class Base:
 
     def save(
         self,
-    ) -> list[int]:
+    ):
         """ Save the instance """
 
-        # TODO: default values
         # TODO: auto values
-        # TODO: deleted values
+        # TODO: deleting values
 
         # Edit
         if self.id:
             db[self.db].update_one(
                 {'id': self.id},
-                {'$set': self.__dict__},
+                {'$set': self.json(default=False)},
             )
 
             return
 
         # Create
         self.id = _next_id(self.db)
-        db[self.db].insert_one(self.__dict__)
-        del self.__dict__['_id']
-
-        return
+        db[self.db].insert_one(self.json(default=False))
 
     def json(
         self,
