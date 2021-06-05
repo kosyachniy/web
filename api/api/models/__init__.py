@@ -55,6 +55,12 @@ class Attribute:
         self.name = name
 
     def __get__(self, instance, owner):
+        if not instance:
+            if isinstance(self.default, Callable):
+                return self.default(owner)
+            else:
+                return deepcopy(self.default)
+
         if self.name in instance.__dict__:
             return instance.__dict__[self.name]
 
@@ -133,7 +139,7 @@ class Base:
         offset: int = 0,
         **kwargs,
     ) -> list[dict]:
-        """ Get """
+        """ Get instances of the object """
 
         process_one = False
 
@@ -178,7 +184,7 @@ class Base:
     def save(
         self,
     ) -> list[int]:
-        """ Save """
+        """ Save the instance """
 
         # TODO: default values
         # TODO: auto values
@@ -199,3 +205,33 @@ class Base:
         del self.__dict__['_id']
 
         return
+
+    def json(
+        self,
+        default=True, # Return default values
+        fields=None,
+    ):
+        """ Get dictionary of the object """
+        """
+        If default is True and there are fields, it will return only fields with
+        non-default values
+        """
+
+        data = {}
+
+        for attr in dir(self):
+            if fields and attr not in fields:
+                continue
+
+            if attr[0] == '_' or callable(getattr(self, attr)):
+                continue
+
+            if (
+                not default
+                and getattr(self, attr) == getattr(self.__class__, attr)
+            ):
+                continue
+
+            data[attr] = getattr(self, attr)
+
+        return data
