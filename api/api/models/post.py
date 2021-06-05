@@ -8,7 +8,7 @@ from . import Base, Attribute
 class Post(Base):
     """ Post """
 
-    db = 'posts'
+    _db = 'posts'
     reactions = Attribute(dict, {
         'views': [], # TODO: + UTM
         'likes': [],

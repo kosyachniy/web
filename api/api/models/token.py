@@ -8,6 +8,6 @@ from . import Base, Attribute
 class Token(Base):
     """ Token """
 
-    db = 'tokens'
+    _db = 'tokens'
     id = Attribute(str)
     user = Attribute(int)

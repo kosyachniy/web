@@ -144,7 +144,7 @@ def process_lower(cont):
 class User(Base):
     """ User """
 
-    db = 'users'
+    _db = 'users'
     login = Attribute(
         types=str,
         default=default_login,

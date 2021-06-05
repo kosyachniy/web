@@ -8,7 +8,7 @@ from . import Base, Attribute
 class Review(Base):
     """ Review """
 
-    db = 'reviews'
+    _db = 'reviews'
     cont = Attribute(str, '')
     author = Attribute(int)
     network = Attribute(int, 0)

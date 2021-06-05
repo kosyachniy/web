@@ -104,7 +104,7 @@ class Base:
 
     @property
     @abstractmethod
-    def db(self) -> str:
+    def _db(self) -> str:
         """ Database name """
 
     def __init__(self, data: dict = None, **kwargs) -> None:
@@ -128,6 +128,14 @@ class Base:
 
     def __setitem__(self, name, value):
         setattr(self, name, value)
+
+    def _is_default(self, name):
+        """ Check the value for the default value """
+
+        data = deepcopy(self)
+        delattr(data, name)
+
+        return getattr(self, name) == getattr(data, name)
 
     @classmethod
     def get(
@@ -168,7 +176,7 @@ class Base:
             for value in fields:
                 db_filter[value] = True
 
-        els = db[cls.db].find(db_condition, db_filter)
+        els = db[cls._db].find(db_condition, db_filter)
         els = els.sort('id', -1)
 
         last = count + offset if count else None
@@ -191,7 +199,7 @@ class Base:
 
         # Edit
         if self.id:
-            db[self.db].update_one(
+            db[self._db].update_one(
                 {'id': self.id},
                 {'$set': self.json(default=False)},
             )
@@ -199,8 +207,8 @@ class Base:
             return
 
         # Create
-        self.id = _next_id(self.db)
-        db[self.db].insert_one(self.json(default=False))
+        self.id = _next_id(self._db)
+        db[self._db].insert_one(self.json(default=False))
 
     def json(
         self,
@@ -222,10 +230,7 @@ class Base:
             if attr[0] == '_' or callable(getattr(self, attr)):
                 continue
 
-            if (
-                not default
-                and getattr(self, attr) == getattr(self.__class__, attr)
-            ):
+            if not default and self._is_default(attr):
                 continue
 
             data[attr] = getattr(self, attr)
