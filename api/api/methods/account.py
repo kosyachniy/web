@@ -92,14 +92,14 @@ async def auth(this, **x):
 
     try:
         login = process_login(x['login'])
-        user = User.get(login=login, fields=fields)
+        user = User.get(login=login, fields=fields)[0]
     except:
         new = True
 
     if new:
         try:
             mail = process_lower(x['mail'])
-            user = User.get(mail=mail,fields=fields)
+            user = User.get(mail=mail,fields=fields)[0]
         except:
             pass
         else:
@@ -108,7 +108,7 @@ async def auth(this, **x):
     if new:
         try:
             phone = pre_process_phone(x['phone'])
-            user = User.get(phone=phone, fields=fields)
+            user = User.get(phone=phone, fields=fields)[0]
         except:
             pass
         else:
@@ -126,25 +126,26 @@ async def auth(this, **x):
 
     if new:
         user_data = User(
-            mail=x['login'], # TODO: login / phone
             password=x['password'],
+            mail=x['login'], # TODO: login / phone
+            mail_verified=False,
         )
         user_data.save()
         user_id = user_data.id
 
-        user = User.get(id=user_id, fields=fields)
+        user = User.get(id=user_id, fields=fields)[0]
 
     # Assignment of the token to the user
 
     if not this.token:
         raise ErrorAccess('token')
 
-    req = {
-        'token': this.token,
-        'user': user.id,
-        'time': this.timestamp,
-    }
-    db['tokens'].insert_one(req)
+    token = Token(
+        id=this.token,
+        user=user.id,
+    )
+
+    token.save()
 
     # Update online users
 
@@ -153,21 +154,17 @@ async def auth(this, **x):
     # Response
 
     res = {
-        'id': user['id'],
-        'login': user['login'],
-        'name': user['name'],
-        'surname': user['surname'],
-        'status': user['status'],
-        'mail': user['mail'],
+        'id': user.id,
+        'login': user.login,
+        'avatar': user.avatar,
+        'name': user.name,
+        'surname': user.surname,
+        'mail': user.mail,
+        'status': user.status,
         'new': new,
     }
 
-    if 'avatar' in user:
-        res['avatar'] = '/load/opt/' + user['avatar']
-    else:
-        res['avatar'] = 'user.png'
-
-    return res
+    return res # TODO: del None
 
 # async def reg(this, **x):
 #     """ Sign up """
@@ -197,6 +194,7 @@ async def auth(this, **x):
 #         name=x['name'],
 #         surname=x['surname'],
 #         mail=x['mail'],
+#         mail_verified=False,
 #         social=x['social'],
 #     )
 
@@ -221,11 +219,12 @@ async def auth(this, **x):
 #     res = {
 #         'id': user.id,
 #         'login': user.login,
+#         'avatar': user.avatar,
 #         'name': user.name,
 #         'surname': user.surname,
-#         'status': user.status,
 #         'mail': user.mail,
-#         'avatar': user.avatar,
+#         'status': user.status,
+#         'new': True,
 #     }
 
 #     return res

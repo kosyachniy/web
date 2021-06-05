@@ -10,7 +10,7 @@ class Post(Base):
 
     db = 'posts'
     reactions = Attribute(dict, {
-        'views': [],
+        'views': [], # TODO: + UTM
         'likes': [],
         'reposts': [],
         'comments': [],

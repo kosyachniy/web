@@ -172,17 +172,20 @@ class User(Base):
         checking=check_phone,
         pre_processing=pre_process_phone,
     )
+    phone_verified = Attribute(types=bool, default=True)
     mail = Attribute(
         types=str,
         checking=check_mail,
         processing=process_lower,
     )
+    mail_verified = Attribute(types=bool, default=True)
     social = Attribute(types=list, default=[]) # TODO: list[{}] # TODO: checking
     description = Attribute(types=str)
     language = Attribute(types=int, default=0)
     status = Attribute(types=int, default=2) # TODO: or 3
     funnel = Attribute(types=list, default=[]) # TODO: list[dict]
     online = Attribute(types=list, default=[]) # TODO: list[tuple]
+    # TODO: UTM / promo
     # TODO: balance
     # TODO: rating
     # TODO: referal_parent
