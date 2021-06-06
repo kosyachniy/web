@@ -119,7 +119,7 @@ async def auth(this, **x):
 
     # Update online users
 
-    await online_start(this.sio, user, this.token)
+    await online_start(this.sio, this.timestamp, user, this.token)
 
     # Response
 
@@ -176,7 +176,7 @@ async def auth(this, **x):
 
 #     # Update online users
 
-#     await online_start(this.sio, user, this.token)
+#     await online_start(this.sio, this.timestamp, user, this.token)
 
 #     # Response
 
@@ -438,7 +438,7 @@ async def social(this, **x):
 
     # # Update online users
 
-    # await online_start(this.sio, user, this.token)
+    # await online_start(this.sio, this.timestamp, user, this.token)
 
     # # Response
 
@@ -659,7 +659,7 @@ async def social(this, **x):
 
 #     # Update online users
 
-#     await online_start(this.sio, user, this.token)
+#     await online_start(this.sio, this.timestamp, user, this.token)
 
 #     # Response
 
@@ -752,7 +752,7 @@ async def phone(this, **x):
 
     # Update online users
 
-    await online_start(this.sio, res, this.token)
+    await online_start(this.sio, this.timestamp, res, this.token)
 
     # There is an active space
 
@@ -1047,36 +1047,8 @@ async def online(this, **x):
 
     ## Already online
 
-    already = other_sessions(user_current['id'] if user_current else x['token'])
-
-    ## Add to DB
-
-    online = {
-        'sid': this.sid,
-        'token': x['token'],
-        'start': this.timestamp,
-    }
-
-    if user_current:
-        online['id'] = user_current['id']
-        online['status'] = user_current['status']
-        online['login'] = user_current['login']
-        online['name'] = user_current['name']
-        online['surname'] = user_current['surname']
-        if 'avatar' in user_current:
-            online['avatar'] = '/load/opt/' + user_current['avatar']
-        else:
-            online['avatar'] = 'user.png'
-    else:
-        online['id'] = x['token']
-        online['status'] = 2
-
-    db['online'].insert_one(online)
-
-    ## Emit this user to all users
-
-    if not already:
-        await online_emit_add(this.sio, user_current)
+    user = User.get(ids=user_current['id']) if user_current else User()
+    await online_start(this.sio, this.timestamp, user, x['token'], this.sid)
 
     # # Visits
 

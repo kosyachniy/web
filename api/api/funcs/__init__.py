@@ -403,38 +403,53 @@ def online_back(user_id):
     last = max(i['stop'] for i in user)
     return time.time() - last
 
-def other_sessions(user_id):
-    """ Other sessions of the user """
+def other_sessions(user_id, token=None):
+    """ Checking for open online sessions of the user """
 
     if not user_id:
-        return False
+        if not token:
+            return False
 
-    already = db['online'].find_one({'id': user_id}, {'_id': True})
-    return bool(already)
+        db_condition = {'token': token}
+
+    else:
+        db_condition = {'user': user_id}
+
+    online = db.online.find_one(db_condition, {'_id': True})
+    return bool(online)
 
 # Online update
 
-async def online_start(sio, user, token):
+async def online_start(sio, timestamp, user, token, sid=None):
     """ Start / update online session of the user """
 
+    # TODO: save user data cache in db.online
+
     # Already online
-    if other_sessions(user.id):
-        return
+    already = other_sessions(user.id, token)
 
     # Update DB
 
-    fields = {'id', 'login', 'avatar', 'name', 'surname', 'status'}
-    data = user.json(fields=fields)
-    none_fields = fields - data.keys()
+    exists = bool(db.online.find_one({'token': token}))
 
-    for online in db['online'].find({'token': token}, {'_id': True}):
-        db['online'].update_one({'_id': online}, {
-            '$set': data,
-            '$unset': {field: '' for field in none_fields},
-        })
+    if exists:
+        db.online.update_many({'token': token}, {'$set': {'user': user.id}})
+
+    else:
+        online = {
+            'user': user.id,
+            'token': token,
+            'start': timestamp,
+        }
+
+        if sid:
+            online['sid'] = sid
+
+        db.online.insert_one(online)
 
     # Send sockets
-    online_emit_add(sio, user)
+    if not already:
+        await online_emit_add(sio, user)
 
     # TODO: Сокет на обновление сессий в браузере
 
