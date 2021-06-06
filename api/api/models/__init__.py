@@ -194,7 +194,6 @@ class Base:
     ):
         """ Save the instance """
 
-        # TODO: auto values
         # TODO: deleting values
 
         # Edit
@@ -213,6 +212,7 @@ class Base:
     def json(
         self,
         default=True, # Return default values
+        none=False, # Return None values
         fields=None,
     ):
         """ Get dictionary of the object """
@@ -227,12 +227,17 @@ class Base:
             if fields and attr not in fields:
                 continue
 
-            if attr[0] == '_' or callable(getattr(self, attr)):
+            value = getattr(self, attr)
+
+            if attr[0] == '_' or callable(value):
                 continue
 
             if not default and self._is_default(attr):
                 continue
 
-            data[attr] = getattr(self, attr)
+            if not none and value is None:
+                continue
+
+            data[attr] = value
 
         return data

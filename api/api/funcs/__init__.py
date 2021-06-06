@@ -404,7 +404,7 @@ def online_back(user_id):
     return time.time() - last
 
 def other_sessions(user_id):
-    """ Other sessions of this user """
+    """ Other sessions of the user """
 
     if not user_id:
         return False
@@ -412,7 +412,58 @@ def other_sessions(user_id):
     already = db['online'].find_one({'id': user_id}, {'_id': True})
     return bool(already)
 
-# Close session
+# Online update
+
+async def online_start(sio, user, token):
+    """ Start / update online session of the user """
+
+    # Already online
+    if other_sessions(user.id):
+        return
+
+    # Update DB
+
+    fields = {'id', 'login', 'avatar', 'name', 'surname', 'status'}
+    data = user.json(fields=fields)
+    none_fields = fields - data.keys()
+
+    for online in db['online'].find({'token': token}, {'_id': True}):
+        db['online'].update_one({'_id': online}, {
+            '$set': data,
+            '$unset': {field: '' for field in none_fields},
+        })
+
+    # Send sockets
+    online_emit_add(sio, user)
+
+    # TODO: Сокет на обновление сессий в браузере
+
+async def online_emit_add(sio, user):
+    """ Send sockets about adding / updating online users """
+
+    # Counting the total number of online users
+
+    db_filter = {
+        '_id': False,
+        'id': True,
+        'token': True,
+    }
+
+    users_all = list(db['online'].find({}, db_filter))
+    count = len({i['id'] if i['id'] else i['token'] for i in users_all})
+
+    # Send a socket about the user to all online users
+
+    fields = {'id', 'login', 'avatar', 'name', 'surname'}
+    data = user.json(fields=fields) if user else {} # TODO: delete if-else
+    # TODO: Full info for all / Full info only for admins
+
+    res = {
+        'count': count,
+        'users': [data],
+    }
+
+    await sio.emit('online_add', res)
 
 def online_user_update(online):
     """ User data about online update """
@@ -461,50 +512,6 @@ async def online_emit_del(sio, user_id):
             'count': count,
             'users': [{'id': user_id}], # ! Админам
         })
-
-
-# Open session
-
-async def online_emit_add(sio, user):
-    """ Send sockets about adding online users """
-
-    db_filter = {
-        '_id': False,
-        'id': True,
-    }
-
-    users_all = list(db['online'].find({}, db_filter))
-    count = len({i['id'] for i in users_all})
-
-    # Online users
-    ## Emit this user to all users
-
-    if user:
-        # TODO: Full info for all / Full info only for admins
-
-        user_data = {
-            'id': user['id'],
-            'login': user['login'],
-            'name': user['name'],
-            'surname': user['surname'],
-        }
-
-        if 'avatar' in user:
-            user_data['avatar'] =  '/load/opt/' + user['avatar']
-        else:
-            user_data['avatar'] = 'user.png'
-
-    else:
-        user_data = []
-
-    # Response
-
-    res = {
-        'count': count,
-        'users': [user_data],
-    }
-
-    await sio.emit('online_add', res)
 
 # Report
 

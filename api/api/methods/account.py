@@ -11,7 +11,7 @@ import hashlib
 
 from ..funcs import check_params, load_image, next_id, online_emit_add, \
                     other_sessions, online_user_update, online_emit_del, \
-                    online_session_close
+                    online_session_close, online_start
 from ..funcs.mongodb import db
 # from ..funcs.smsc import SMSC
 from ..models.user import User, process_login, process_lower, \
@@ -26,36 +26,6 @@ with open('keys.json', 'r') as file:
     VK = keys['vk']
     GOOGLE = keys['google']
 
-
-async def _online_update(sio, user, token):
-    """ Update online users """
-
-    # Online users
-    ## Already online
-
-    if other_sessions(user['id']):
-        return
-
-    ## Update DB
-
-    for i in db['online'].find({'token': token}):
-        i['id'] = user['id']
-        i['login'] = user['login']
-        i['name'] = user['name']
-        i['surname'] = user['surname']
-        if 'avatar' in user:
-            i['avatar'] = '/load/opt/' + user['avatar']
-        i['status'] = user['status']
-
-        db['online'].save(i)
-
-    ## Emit this user to all users
-
-    await online_emit_add(sio, user)
-
-    # ! Сокет на обновление сессий в браузере
-
-#
 
 async def auth(this, **x):
     """ Sign in / Sign up """
@@ -84,7 +54,7 @@ async def auth(this, **x):
         'surname',
         'mail',
         'status',
-    }
+    } # TODO: optimize
 
     # Login
 
@@ -149,20 +119,14 @@ async def auth(this, **x):
 
     # Update online users
 
-    await _online_update(this.sio, user, this.token)
+    await online_start(this.sio, user, this.token)
 
     # Response
 
-    res = {
-        'id': user.id,
-        'login': user.login,
-        'avatar': user.avatar,
-        'name': user.name,
-        'surname': user.surname,
-        'mail': user.mail,
-        'status': user.status,
-        'new': new,
-    }
+    res = user.json(fields={
+        'id', 'login', 'avatar', 'name', 'surname', 'mail', 'status',
+    })
+    res['new'] = new
 
     return res # TODO: del None
 
@@ -212,7 +176,7 @@ async def auth(this, **x):
 
 #     # Update online users
 
-#     await _online_update(this.sio, user, this.token)
+#     await online_start(this.sio, user, this.token)
 
 #     # Response
 
@@ -474,7 +438,7 @@ async def social(this, **x):
 
     # # Update online users
 
-    # await _online_update(this.sio, user, this.token)
+    # await online_start(this.sio, user, this.token)
 
     # # Response
 
@@ -695,7 +659,7 @@ async def social(this, **x):
 
 #     # Update online users
 
-#     await _online_update(this.sio, user, this.token)
+#     await online_start(this.sio, user, this.token)
 
 #     # Response
 
@@ -788,7 +752,7 @@ async def phone(this, **x):
 
     # Update online users
 
-    await _online_update(this.sio, res, this.token)
+    await online_start(this.sio, res, this.token)
 
     # There is an active space
 
