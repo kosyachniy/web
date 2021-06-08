@@ -2,7 +2,7 @@
 Database ciphers
 """
 
-# ISO 639-1
+# NOTE: ISO 639-1
 LANGUAGES = (
     'en',
     'ru',

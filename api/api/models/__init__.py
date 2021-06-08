@@ -102,6 +102,7 @@ class Base:
     user = Attribute(types=int, default=0)
     created = Attribute(types=float, pre_processing=pre_process_created)
     status = Attribute(types=int)
+    # TODO: modified / updated
 
     @property
     @abstractmethod
@@ -141,11 +142,11 @@ class Base:
     @classmethod
     def get(
         cls,
-        ids: Union[list[int], int, None] = None,
-        fields: Union[list[str], tuple[str], set[str], None] = None,
-        search: Optional[str] = None, # TODO
+        ids: Union[list, tuple, set, int, str, None] = None,
         count: Optional[int] = None,
         offset: int = 0,
+        search: Optional[str] = None, # TODO: name, cont, tags
+        fields: Union[list[str], tuple[str], set[str], None] = None,
         **kwargs,
     ):
         """ Get instances of the object """
@@ -153,14 +154,14 @@ class Base:
         process_one = False
 
         if ids:
-            if isinstance(ids, (int, str)):
+            if isinstance(ids, (list, tuple, set)):
+                db_condition = {
+                    'id': {'$in': ids},
+                }
+            else:
                 process_one = True
                 db_condition = {
                     'id': ids,
-                }
-            else:
-                db_condition = {
-                    'id': {'$in': ids},
                 }
         else:
             db_condition = {}
@@ -179,12 +180,36 @@ class Base:
                 db_filter[value] = True
 
         els = db[cls._db].find(db_condition, db_filter)
-        els = els.sort('id', -1)
 
+        # if 'search' in x and x['search']:
+        #     x['search'] = x['search'].lower()
+        #     i = 0
+
+        #     while i < len(posts):
+        #         cond_name = x['search'] not in posts[i]['name'].lower()
+        #         # TODO: HTML tags
+        #         cond_cont = x['search'] not in posts[i]['cont'].lower()
+        #         cond_tags = all(
+        #             x['search'] not in tag.lower()
+        #             for tag in posts[i]['tags']
+        #         ) if 'tags' in posts[i] else True
+
+        #         if cond_name and cond_cont and cond_tags:
+        #             del posts[i]
+        #             continue
+
+        #         i += 1
+
+        #     for i in range(len(posts)):
+        #         # del posts[i]['cont'] # !
+
+        #         if 'tags' in posts[i]:
+        #             del posts[i]['tags']
+
+        els = els.sort('id', -1)
         last = count + offset if count else None
         els = els[offset:last]
-
-        els = [cls(el) for el in els]
+        els = list(map(cls, els))
 
         if process_one:
             return els[0]

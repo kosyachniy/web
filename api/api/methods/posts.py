@@ -7,6 +7,7 @@ import re
 
 from ..funcs import reimg, check_params, next_id, load_image
 from ..funcs.mongodb import db
+from ..models.post import Post
 from ..errors import ErrorWrong, ErrorUpload
 
 
@@ -130,117 +131,71 @@ async def get(this, **x):
 
     check_params(x, (
         ('id', False, (int, list), int),
-        ('category', False, int),
         ('count', False, int),
         ('offset', False, int),
         ('search', False, str),
+        # ('category', False, int),
         # ('language', False, (int, str)),
     ))
 
-    # Condition formation
-
-    process_single = False
-
-    db_condition = {}
-
-    if 'id' in x:
-        if isinstance(x['id'], int):
-            db_condition['id'] = x['id']
-
-            process_single = True
-
-        else:
-            db_condition['id'] = {'$in': x['id']}
-
     # # Language
+    # # TODO: pre-processing params (None, strip(), value -> code)
 
     # if 'language' in x:
     #     x['language'] = get_language(x['language'])
     # else:
     #     x['language'] = this.language
 
-    # Get
+    # Single / multiple
 
-    count = x['count'] if 'count' in x else None
+    process_single = False
 
-    db_filter = {
-        '_id': False,
-        'id': True,
-        'name': True,
-        'cont': True, # !
-        'reactions': True,
-        'time': True,
-        'geo': True, # !
+    if 'id' in x and not isinstance(x['id'], (list, tuple, set)):
+        process_single = True
+
+    # Fields
+
+    fields = {
+        'name',
+        'reactions',
+        'created',
+        # 'geo',
     }
 
     if process_single:
-        db_filter['cont'] = True
+        fields.add('cont')
 
-    if 'search' in x:
-        db_filter['name'] = True
-        db_filter['cont'] = True
-        db_filter['tags'] = True
+    # Get
 
-    posts = list(db['posts'].find(db_condition, db_filter).sort('time', -1))
-
-    # Filter
-
-    if 'search' in x and x['search']:
-        x['search'] = x['search'].lower()
-        i = 0
-
-        while i < len(posts):
-            cond_name = x['search'] not in posts[i]['name'].lower()
-            # TODO: HTML tags
-            cond_cont = x['search'] not in posts[i]['cont'].lower()
-            cond_tags = all(
-                x['search'] not in tag.lower()
-                for tag in posts[i]['tags']
-            ) if 'tags' in posts[i] else True
-
-            if cond_name and cond_cont and cond_tags:
-                del posts[i]
-                continue
-
-            i += 1
-
-        for i in range(len(posts)):
-            # del posts[i]['cont'] # !
-
-            if 'tags' in posts[i]:
-                del posts[i]['tags']
-
-    offset = x['offset'] if 'offset' in x else 0
-    last = offset+x['count'] if 'count' in x else None
-
-    posts = posts[offset:last]
+    posts = Post.get(
+        ids=x.get('id', None),
+        count=x.get('count', None),
+        offset=x.get('offset', None),
+        search=x.get('search', None),
+        fields=fields,
+        # category=x.get('category', None),
+        # language=x.get('language', None),
+    )
 
     # Processing
 
     for i in range(len(posts)):
-        ## Cover
-
-        if 'cover' in posts[i]:
-            posts[i]['cover'] = '/load/opt/' + posts[i]['cover']
-
-        else:
-            ### Cover from the first image
+        ## Cover from the first image
+        if not posts[i].cover:
             try:
-                img = re.search(
+                posts[i].cover = re.search(
                     r'<img src="[^"]*">',
-                    posts[i]['cont']
+                    posts[i].cont
                 )[0].split('"')[1].split('/')[-1]
-
-                posts[i]['cover'] = '/load/opt/' + img
-            except Exception:
+            except Exception as e:
                 pass
 
         ## Content
         if not process_single:
-            posts[i]['cont'] = re.sub(
+            posts[i].cont = re.sub(
                 '<[^>]*>',
                 '',
-                posts[i]['cont']
+                posts[i].cont
             ).replace('&nbsp;', ' ')
 
     # Response
