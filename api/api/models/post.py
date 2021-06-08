@@ -20,6 +20,5 @@ class Post(Base):
     # TODO: language
     # TODO: category
     # TODO: tags
-    # TODO: author
     # TODO: source
     # TODO: language

@@ -190,3 +190,5 @@ class User(Base):
     # TODO: rating
     # TODO: referal_parent
     # TODO: referal_code
+
+    # TODO: del Base.user

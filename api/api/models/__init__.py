@@ -99,6 +99,7 @@ class Base:
 
     id = Attribute(types=int, default=0) # TODO: unique
     name = Attribute(types=str) # TODO: required
+    user = Attribute(types=int, default=0)
     created = Attribute(types=float, pre_processing=pre_process_created)
     status = Attribute(types=int)
 

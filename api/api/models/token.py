@@ -10,4 +10,3 @@ class Token(Base):
 
     _db = 'tokens'
     id = Attribute(str)
-    user = Attribute(int)
