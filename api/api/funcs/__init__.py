@@ -16,6 +16,7 @@ from PIL import Image, ExifTags
 from ._codes import NETWORKS, LANGUAGES
 from .mongodb import db
 from .tg_bot import send as send_tg
+from ..models.socket import Socket
 from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
 
 
@@ -354,7 +355,7 @@ def get_id(sid):
         'id': True,
     }
 
-    user = db['online'].find_one({'sid': sid}, db_filter)
+    user = db['sockets'].find_one({'sid': sid}, db_filter)
 
     if not user:
         raise Exception('sid not found')
@@ -373,7 +374,7 @@ def get_sids(user):
         'sid': True,
     }
 
-    user_sessions = db['online'].find({'id': user}, db_filter)
+    user_sessions = db['sockets'].find({'id': user}, db_filter)
 
     return [i['sid'] for i in user_sessions]
 
@@ -393,7 +394,7 @@ def reduce_params(cont, params):
 def online_back(user_id):
     """ Checking how long has been online """
 
-    online = db['online'].find_one({'id': user_id}, {'_id': True})
+    online = db['sockets'].find_one({'id': user_id}, {'_id': True})
     if online:
         return 0
 
@@ -410,13 +411,12 @@ def other_sessions(user_id, token=None):
         if not token:
             return False
 
-        db_condition = {'token': token}
+        sockets = Socket.get(token=token)
 
     else:
-        db_condition = {'user': user_id}
+        sockets = Socket.get(user=user_id)
 
-    online = db.online.find_one(db_condition, {'_id': True})
-    return bool(online)
+    return bool(sockets)
 
 # Online update
 
@@ -430,22 +430,20 @@ async def online_start(sio, timestamp, user, token, sid=None):
 
     # Update DB
 
-    exists = bool(db.online.find_one({'token': token}))
+    sockets = Socket.get(token=token, fields={'user'})
 
-    if exists:
-        db.online.update_many({'token': token}, {'$set': {'user': user.id}})
+    for socket in sockets:
+        socket.user = user.id
+        socket.save()
 
-    else:
-        online = {
-            'user': user.id,
-            'token': token,
-            'start': timestamp,
-        }
+    if not sockets:
+        socket = Socket(
+            id=sid, # TODO: если нет sid нужно добавить уникальный, т.к. иначе будет создавать при сохранении новый экземпляр
+            user=user.id,
+            token=token,
+        )
 
-        if sid:
-            online['sid'] = sid
-
-        db.online.insert_one(online)
+        socket.save()
 
     # Send sockets
     if not already:
@@ -458,14 +456,8 @@ async def online_emit_add(sio, user):
 
     # Counting the total number of online users
 
-    db_filter = {
-        '_id': False,
-        'id': True,
-        'token': True,
-    }
-
-    users_all = list(db['online'].find({}, db_filter))
-    count = len({i['id'] if i['id'] else i['token'] for i in users_all})
+    sockets = Socket.get(fields={'user', 'token'})
+    count = len({el.user if el.user else el.token for el in sockets})
 
     # Send a socket about the user to all online users
 
@@ -480,31 +472,31 @@ async def online_emit_add(sio, user):
 
     await sio.emit('online_add', res)
 
-def online_user_update(online):
+def online_user_update(user_id):
     """ User data about online update """
 
     # TODO: Объединять сессии в онлайн по пользователю
     # TODO: Если сервер был остановлен, отслеживать сессию
 
-    user = db['users'].find_one({'id': online['id']})
-    if not user:
+    if not user_id:
         return
 
-    user['online'].append({'start': online['start'], 'stop': time.time()})
-    db['users'].save(user)
+    user = User.get(ids=user_id) # TODO: error handler
+    user.online.append({'start': online['start'], 'stop': time.time()})
+    user.save()
 
-def online_session_close(online):
+def online_session_close(socket):
     """ Close online session """
 
     # Remove from online users
 
-    db['online'].remove(online['_id'])
+    socket = db['sockets'].find_one({'id': socket.id})
+    db['sockets'].remove(socket)
 
 async def online_emit_del(sio, user_id):
     """ Send sockets about deleting online users """
 
-    user = db['users'].find_one({'id': user_id})
-    if not user:
+    if not user_id:
         return
 
     # Online users
@@ -512,21 +504,23 @@ async def online_emit_del(sio, user_id):
 
     other = other_sessions(user_id)
 
+    if other:
+        return
+
     ## Emit to clients
 
-    if not other:
-        db_filter = {
-            '_id': False,
-            'id': True,
-        }
+    db_filter = {
+        '_id': False,
+        'id': True,
+    }
 
-        users_all = list(db['online'].find({}, db_filter))
-        count = len({i['id'] for i in users_all})
+    sockets = Socket.get(fields={'user', 'token'})
+    count = len({el.user if el.user else el.token for el in sockets})
 
-        await sio.emit('online_del', {
-            'count': count,
-            'users': [{'id': user_id}], # ! Админам
-        })
+    await sio.emit('online_del', {
+        'count': count,
+        'users': [{'id': user_id}], # ! Админам
+    })
 
 # Report
 

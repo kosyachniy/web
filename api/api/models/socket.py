@@ -10,3 +10,4 @@ class Socket(Base):
 
     _db = 'sockets'
     id = Attribute(str)
+    token = Attribute(str)

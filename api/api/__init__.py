@@ -37,6 +37,8 @@ class API():
     ):
         """ Call API method """
 
+        # print(name, params)
+
         self.timestamp = time.time()
         self.ip = ip
         self.sid = sid

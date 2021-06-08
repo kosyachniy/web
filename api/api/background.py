@@ -11,14 +11,17 @@ Background processes
 from .funcs import report
 from .funcs.mongodb import db
 from .funcs import online_user_update, online_session_close
+from .models.socket import Socket
 
 
 def reset_online_users():
     """ Reset online users """
 
-    for online in db['online'].find():
-        online_user_update(online)
-        online_session_close(online)
+    sockets = Socket.get(fields={'user'})
+
+    for socket in sockets:
+        online_user_update(socket.user)
+        online_session_close(socket)
 
 
 def background(sio):

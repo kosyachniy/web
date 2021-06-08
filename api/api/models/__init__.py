@@ -153,7 +153,7 @@ class Base:
         process_one = False
 
         if ids:
-            if isinstance(ids, int):
+            if isinstance(ids, (int, str)):
                 process_one = True
                 db_condition = {
                     'id': ids,
@@ -171,6 +171,7 @@ class Base:
 
         db_filter = {
             '_id': False,
+            'id': True,
         }
 
         if fields:
@@ -197,8 +198,10 @@ class Base:
 
         # TODO: deleting values
 
+        exists = db[self._db].count_documents({'id': self.id})
+
         # Edit
-        if self.id:
+        if exists:
             db[self._db].update_one(
                 {'id': self.id},
                 {'$set': self.json(default=False)},
@@ -207,7 +210,8 @@ class Base:
             return
 
         # Create
-        self.id = _next_id(self._db)
+        if self.id == 0: # NOTE: `id` may not be int
+            self.id = _next_id(self._db)
         db[self._db].insert_one(self.json(default=False))
 
     def json(

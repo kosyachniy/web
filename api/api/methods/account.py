@@ -17,6 +17,7 @@ from ..funcs.mongodb import db
 from ..models.user import User, process_login, process_lower, \
                           pre_process_phone, process_password
 from ..models.token import Token
+from ..models.socket import Socket
 from ..errors import ErrorBusy, ErrorInvalid, ErrorWrong, ErrorUpload, \
                      ErrorAccess
 
@@ -47,7 +48,6 @@ async def auth(this, **x):
     #     del x['password']
 
     fields = {
-        'id',
         'login',
         'avatar',
         'name',
@@ -833,27 +833,14 @@ async def exit(this, **x):
 
     # Close session
 
-    for online in db['online'].find({'token': this.token}):
-        online_user_update(online)
+    sockets = Socket.get(token=this.token)
 
-        online['id'] = this.token
-        online['status'] = 2
+    for socket in sockets:
+        online_user_update(socket.user)
 
-        if 'name' in online:
-            del online['name']
-
-        if 'surname' in online:
-            del online['surname']
-
-        if 'login' in online:
-            del online['login']
-
-        if 'avatar' in online:
-            del online['avatar']
-
-        online['start'] = this.timestamp
-
-        db['online'].save(online)
+        socket.user = 0
+        socket.created = this.timestamp
+        socket.save()
 
         await online_emit_del(this.sio, this.user['id'])
 
@@ -1006,44 +993,34 @@ async def online(this, **x):
 
     # ? Отправлять неавторизованным пользователям информацию об онлайн?
 
-    db_filter = {
-        '_id': False,
-        'sid': True,
-        'id': True,
-        'login': True,
-        'name': True,
-        'surname': True,
-        'avatar': True,
-        'status': True,
-    }
+    # db_filter = {
+    #     '_id': False,
+    #     'id': True,
+    #     'user': True,
+    # }
 
-    users_auth = list(db['online'].find({
-        'login': {'$exists': True},
-    }, db_filter))
-    users_all = list(db['online'].find({}, db_filter))
-    count = len({i['id'] for i in users_all})
+    # users_auth = list(db['sockets'].find({
+    #     'user': {'$ne': 0},
+    # }, db_filter))
+    # users_all = list(db['sockets'].find({}, db_filter))
+    # count = len({i['user'] for i in users_all})
 
-    users_uniq = dict()
-    # if user_current and user_current['status'] > 3: # Full info only for admins
-    for i in users_auth:
-        if i['id'] not in users_uniq:
-            users_uniq[i['id']] = {
-                'id': i['id'],
-                'login': i['login'],
-                'name': i['name'],
-                'surname': i['surname'],
-            }
+    # sockets = Socket.get(fields={'user', 'token'})
+    # count = len({el.user if el.user else el.token for el in sockets})
 
-            if 'avatar' in i:
-                users_uniq[i['id']['avatar']] = '/load/opt/' + i['avatar']
-            else:
-                users_uniq[i['id']['avatar']] = 'user.png'
+    # users_uniq = dict()
+    # # if user_current and user_current['status'] > 3: # Full info only for admins
+    # for i in users_auth:
+    #     if i['user'] not in users_uniq:
+    #         users_uniq[i['user']] = {
+    #             'user': i['user'],
+    #         }
 
-    if count:
-        await this.sio.emit('online_add', {
-            'count': count,
-            'users': list(users_uniq.values()),
-        }, room=this.sid)
+    # if count:
+    #     await this.sio.emit('online_add', {
+    #         'count': count,
+    #         'users': list(users_uniq.values()),
+    #     }, room=this.sid)
 
     ## Already online
 
@@ -1112,12 +1089,12 @@ async def disconnect(this, **x):
 
     print('OUT', this.sid)
 
-    online = db['online'].find_one({'sid': this.sid})
-    if not online:
+    socket = Socket.get(ids=this.sid, fields={'user'}) # TODO: error handler
+    if not socket:
         return
 
     # Close session
 
-    online_user_update(online)
-    online_session_close(online)
-    await online_emit_del(this.sio, online['id'])
+    online_user_update(socket.user)
+    online_session_close(socket)
+    await online_emit_del(this.sio, socket.user)
