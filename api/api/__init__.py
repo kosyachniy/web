@@ -7,8 +7,8 @@ The API
 import time
 
 ## Local
-import api.methods as methods
 from .funcs import get_network, get_language, get_user_by_token
+from .methods import call
 from .background import background
 from .errors import ErrorWrong
 
@@ -67,12 +67,4 @@ class API():
 
         # API method
 
-        try:
-            module, method_name = name.split('.')
-            func = getattr(getattr(methods, module), method_name)
-        except:
-            raise ErrorWrong('method')
-
-        # Request
-
-        return await func(self, **params)
+        return await call(name, self, params)
