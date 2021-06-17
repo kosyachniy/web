@@ -13,15 +13,14 @@ current_module = current_path.replace('/', '.')
 async def call(method, this, params):
     """ Call the API method """
 
-    module_name, method_name = method.split('.')
-    module_name = current_module + module_name
+    module_name = current_module + method
     module_spec = importlib.util.find_spec(module_name)
 
     if module_spec is None:
         raise ErrorWrong('method')
 
-    module = importlib.import_module(module_name) # method
-    handle = getattr(module, method_name) # 'handle'
+    module = importlib.import_module(module_name)
+    handle = getattr(module, 'handle')
     return await handle(this, **params)
 
 
