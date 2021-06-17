@@ -1,17 +1,16 @@
 """
-Posts object of the API
+The creating and editing method of the post object of the API
 """
 
-import re
+# import re
 # import shutil
 
-from ..funcs import reimg, check_params, next_id, load_image
-from ..funcs.mongodb import db
-from ..models.post import Post
-from ..errors import ErrorWrong, ErrorUpload
+from ...funcs import reimg, check_params, next_id, load_image
+from ...funcs.mongodb import db
+from ...errors import ErrorWrong, ErrorUpload
 
 
-async def edit(this, **x):
+async def handle(this, **x):
     """ Add / edit """
 
     # Checking parameters
@@ -123,106 +122,3 @@ async def edit(this, **x):
         res['cont'] = post['cont']
 
     return res
-
-async def get(this, **x):
-    """ Get """
-
-    # Checking parameters
-
-    check_params(x, (
-        ('id', False, (int, list), int),
-        ('count', False, int),
-        ('offset', False, int),
-        ('search', False, str),
-        # ('category', False, int),
-        # ('language', False, (int, str)),
-    ))
-
-    # # Language
-    # # TODO: pre-processing params (None, strip(), value -> code)
-
-    # if 'language' in x:
-    #     x['language'] = get_language(x['language'])
-    # else:
-    #     x['language'] = this.language
-
-    # Single / multiple
-
-    process_single = False
-
-    if 'id' in x and not isinstance(x['id'], (list, tuple, set)):
-        process_single = True
-
-    # Fields
-
-    fields = {
-        'name',
-        'reactions',
-        'created',
-        # 'geo',
-    }
-
-    if process_single:
-        fields.add('cont')
-
-    # Get
-
-    posts = Post.get(
-        ids=x.get('id', None),
-        count=x.get('count', None),
-        offset=x.get('offset', None),
-        search=x.get('search', None),
-        fields=fields,
-        # category=x.get('category', None),
-        # language=x.get('language', None),
-    )
-
-    # Processing
-
-    for i in range(len(posts)):
-        ## Cover from the first image
-        if not posts[i].cover:
-            try:
-                posts[i].cover = re.search(
-                    r'<img src="[^"]*">',
-                    posts[i].cont
-                )[0].split('"')[1].split('/')[-1]
-            except Exception as e:
-                pass
-
-        ## Content
-        if not process_single:
-            posts[i].cont = re.sub(
-                '<[^>]*>',
-                '',
-                posts[i].cont
-            ).replace('&nbsp;', ' ')
-
-    # Response
-
-    res = {
-        'posts': posts,
-    }
-
-    return res
-
-async def delete(this, **x):
-    """ Delete """
-
-    # Checking parameters
-
-    check_params(x, (
-        ('id', True, int),
-    ))
-
-    # Get
-
-    post = db['posts'].find_one({'id': x['id']})
-
-    ## Wrong ID
-    if not post:
-        raise ErrorWrong('id')
-
-    # Delete
-
-    db['posts'].remove(post)
