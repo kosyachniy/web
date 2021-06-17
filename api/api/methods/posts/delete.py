@@ -7,7 +7,7 @@ from ...funcs.mongodb import db
 from ...errors import ErrorWrong
 
 
-async def delete(this, **x):
+async def handle(this, **x):
     """ Delete """
 
     # Checking parameters
