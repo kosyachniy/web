@@ -1,14 +1,13 @@
 """
-Users object of the API
+The getting method of the user object of the API
 """
 
-from ..funcs import check_params
-from ..funcs.mongodb import db
-from ..models.user import User
-from ..errors import ErrorWrong, ErrorAccess
+from ...funcs import check_params
+# from ...funcs.mongodb import db
+from ...models.user import User
 
 
-async def get(this, **x):
+async def handle(this, **x):
     """ Get """
 
     # Checking parameters
@@ -83,30 +82,3 @@ async def get(this, **x):
     }
 
     return res
-
-async def block(this, **x):
-    """ Block """
-
-    # Checking parameters
-
-    check_params(x, (
-        ('id', True, int),
-    ))
-
-    # Get user
-
-    users = db['users'].find_one({'id': x['id']})
-
-    ## Wrond ID
-    if not users:
-        raise ErrorWrong('id')
-
-    # No access
-    if this.user['status'] < 6 or users['status'] > this.user['status']:
-        raise ErrorAccess('block')
-
-    # Change status
-    users['status'] = 1
-
-    # Save
-    db['users'].save(users)

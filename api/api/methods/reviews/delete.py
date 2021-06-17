@@ -2,9 +2,9 @@
 The removal method of the review object of the API
 """
 
-from ..funcs import check_params
-from ..funcs.mongodb import db
-from ..errors import ErrorAccess
+from ...funcs import check_params
+from ...funcs.mongodb import db
+from ...errors import ErrorAccess
 
 
 async def handle(this, **x):

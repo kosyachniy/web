@@ -2,8 +2,8 @@
 The creating and editing method of the review object of the API
 """
 
-from ..funcs import reimg, check_params, next_id
-from ..funcs.mongodb import db
+from ...funcs import reimg, check_params, next_id
+from ...funcs.mongodb import db
 
 
 async def handle(this, **x):
