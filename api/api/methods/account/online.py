@@ -76,7 +76,7 @@ async def handle(this, **x):
     ## Already online
 
     user = User.get(ids=user_current['id']) if user_current else User()
-    await online_start(this.sio, this.timestamp, user, x['token'], this.sid)
+    await online_start(this.sio, user, x['token'], this.sid)
 
     # # Visits
 

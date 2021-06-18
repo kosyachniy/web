@@ -83,9 +83,11 @@ def load_image(data, encoding='base64', file_format=None):
         file.write(data)
 
     # EXIF data
+    # pylint: disable=W0212
 
     try:
         img = Image.open(url)
+        orientation = None
 
         for orientation in ExifTags.TAGS.keys():
             if ExifTags.TAGS[orientation] == 'Orientation':
@@ -420,7 +422,7 @@ def other_sessions(user_id, token=None):
 
 # Online update
 
-async def online_start(sio, timestamp, user, token, sid=None):
+async def online_start(sio, user, token, sid=None):
     """ Start / update online session of the user """
 
     # TODO: save user data cache in db.online
@@ -437,8 +439,10 @@ async def online_start(sio, timestamp, user, token, sid=None):
         socket.save()
 
     if not sockets:
+        # TODO: если нет sid нужно добавить уникальный, т.к. иначе будет
+        # создавать при сохранении новый экземпляр
         socket = Socket(
-            id=sid, # TODO: если нет sid нужно добавить уникальный, т.к. иначе будет создавать при сохранении новый экземпляр
+            id=sid,
             user=user.id,
             token=token,
         )
@@ -478,6 +482,8 @@ def online_user_update(user_id):
     # TODO: Объединять сессии в онлайн по пользователю
     # TODO: Если сервер был остановлен, отслеживать сессию
 
+    from ..models.user import User
+
     if not user_id:
         return
 
@@ -508,11 +514,6 @@ async def online_emit_del(sio, user_id):
         return
 
     ## Emit to clients
-
-    db_filter = {
-        '_id': False,
-        'id': True,
-    }
 
     sockets = Socket.get(fields={'user', 'token'})
     count = len({el.user if el.user else el.token for el in sockets})

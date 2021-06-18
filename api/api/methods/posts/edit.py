@@ -7,7 +7,7 @@ The creating and editing method of the post object of the API
 
 from ...funcs import reimg, check_params, next_id, load_image
 from ...funcs.mongodb import db
-from ...errors import ErrorWrong, ErrorUpload
+from ...errors import ErrorInvalid, ErrorWrong, ErrorUpload
 
 
 async def handle(this, **x):

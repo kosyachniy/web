@@ -28,7 +28,7 @@ class API():
     async def method(
         self,
         name,
-        params={},
+        params=None,
         ip=None,
         sid=None,
         token=None,
@@ -36,6 +36,9 @@ class API():
         language=0,
     ):
         """ Call API method """
+
+        if not params:
+            params = {}
 
         # print(name, params)
 

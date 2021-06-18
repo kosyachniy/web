@@ -19,7 +19,7 @@ async def handle(this, **x):
     #
 
     query = {
-        'id': next_id('feedback'),
+        'id': next_id('reviews'),
         'name': x['name'],
         'cont': reimg(x['cont']),
         'user': this.user['id'],
@@ -27,7 +27,7 @@ async def handle(this, **x):
         'success': 0,
     }
 
-    db['feedback'].insert(query)
+    db['reviews'].insert_one(query)
 
     # Response
 

@@ -8,6 +8,7 @@ from ...models.socket import Socket
 from ...errors import ErrorWrong, ErrorAccess
 
 
+# pylint: disable=unused-argument
 async def handle(this, **x):
     """ Log out """
 

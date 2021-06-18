@@ -9,7 +9,6 @@ Background processes
 
 ## Local
 from .funcs import report
-from .funcs.mongodb import db
 from .funcs import online_user_update, online_session_close
 from .models.socket import Socket
 

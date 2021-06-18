@@ -7,6 +7,7 @@ from ...funcs.mongodb import db
 from ...errors import ErrorWrong
 
 
+# pylint: disable=unused-argument
 async def handle(this, **x):
     """ Delete """
 

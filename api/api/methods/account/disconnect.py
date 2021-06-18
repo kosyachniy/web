@@ -6,6 +6,7 @@ from ...funcs import online_user_update, online_emit_del, online_session_close
 from ...models.socket import Socket
 
 
+# pylint: disable=unused-argument
 async def handle(this, **x):
     """ Disconnect """
 

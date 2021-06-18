@@ -21,6 +21,8 @@ def _next_id(name):
     return 1
 
 def pre_process_created(cont):
+    """ Creation time pre-processing """
+
     if isinstance(cont, int):
         return float(cont)
 
@@ -58,8 +60,8 @@ class Attribute:
         if not instance:
             if isinstance(self.default, Callable):
                 return self.default(owner)
-            else:
-                return deepcopy(self.default)
+
+            return deepcopy(self.default)
 
         if self.name in instance.__dict__:
             return instance.__dict__[self.name]
@@ -245,8 +247,8 @@ class Base:
         none=False, # Return None values
         fields=None,
     ):
-        """ Get dictionary of the object """
-        """
+        """ Get dictionary of the object
+
         If default is True and there are fields, it will return only fields with
         non-default values
         """

@@ -21,22 +21,22 @@ async def handle(this, **x):
     if this.user['status'] < 4:
         raise ErrorAccess('token')
 
-    # Get news
+    # Get
 
     count = x['count'] if 'count' in x else None
 
-    news = list(db['feedback'].find(
+    reviews = list(db['reviews'].find(
         {},
         {'_id': False}
     ).sort('time', -1)[0:count])
 
-    for i in range(len(news)):
-        news[i]['user'] = get_user(news[i]['user'])
+    for review in reviews:
+        review['user'] = get_user(review['user'])
 
     # Response
 
     res = {
-        'feedback': news,
+        'reviews': reviews,
     }
 
     return res

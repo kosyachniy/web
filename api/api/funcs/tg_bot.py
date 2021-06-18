@@ -103,7 +103,7 @@ def delete(to, message, attempt=1):
 
     except:
         if attempt == 1:
-            return delete(to, message, 2)
+            delete(to, message, 2)
 
         raise Exception('Telegram del message')
 

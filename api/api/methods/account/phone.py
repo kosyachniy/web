@@ -4,7 +4,7 @@ The authorization by phone method of the account object of the API
 
 # import re
 
-from ...funcs import check_params, online_start
+from ...funcs import check_params, online_start, get_sids
 from ...funcs.mongodb import db
 # from ...funcs.smsc import SMSC
 from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
@@ -84,7 +84,7 @@ async def handle(this, **x):
 
     # Update online users
 
-    await online_start(this.sio, this.timestamp, res, this.token)
+    await online_start(this.sio, res, this.token)
 
     # There is an active space
 

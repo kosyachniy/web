@@ -2,6 +2,8 @@
 The password recover method of the account object of the API
 """
 
+import string
+import random
 import hashlib
 
 from ...funcs import check_params
@@ -9,6 +11,10 @@ from ...funcs.mongodb import db
 from ...errors import ErrorWrong
 
 
+ALL_SYMBOLS = string.digits + string.ascii_letters
+
+
+# pylint: disable=unused-argument
 async def handle(this, **x):
     """ Recover password """
 

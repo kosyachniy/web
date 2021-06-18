@@ -8,6 +8,7 @@ from ...funcs import check_params
 from ...models.post import Post
 
 
+# pylint: disable=unused-argument
 async def handle(this, **x):
     """ Get """
 
@@ -63,23 +64,23 @@ async def handle(this, **x):
 
     # Processing
 
-    for i in range(len(posts)):
+    for post in posts:
         ## Cover from the first image
-        if not posts[i].cover:
-            try:
-                posts[i].cover = re.search(
-                    r'<img src="[^"]*">',
-                    posts[i].cont
-                )[0].split('"')[1].split('/')[-1]
-            except Exception as e:
-                pass
+        if not post.cover:
+            res = re.search(
+                r'<img src="[^"]*">',
+                post.cont
+            )
+
+            if res is not None:
+                post.cover = res[0].split('"')[1].split('/')[-1]
 
         ## Content
         if not process_single:
-            posts[i].cont = re.sub(
+            post.cont = re.sub(
                 '<[^>]*>',
                 '',
-                posts[i].cont
+                post.cont
             ).replace('&nbsp;', ' ')
 
     # Response

@@ -61,6 +61,7 @@ def process_login(cont):
 
     return cont.lower()
 
+# pylint: disable=W0613
 def check_password(id_, cont):
     """ Password checking """
 
@@ -81,16 +82,19 @@ def process_password(cont):
 
     return hashlib.md5(bytes(cont, 'utf-8')).hexdigest()
 
+# pylint: disable=W0613
 def check_name(id_, cont):
     """ Name checking """
 
     return cont.isalpha()
 
+# pylint: disable=W0613
 def check_surname(id_, cont):
     """ Surname checking """
 
     return cont.replace('-', '').isalpha()
 
+# pylint: disable=W0613
 def check_phone(id_, cont):
     """ Phone checking """
 
@@ -101,7 +105,7 @@ def pre_process_phone(cont):
 
     cont = str(cont)
 
-    if not len(cont):
+    if not cont:
         return ''
 
     if cont[0] == '8':

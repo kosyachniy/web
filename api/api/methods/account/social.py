@@ -18,6 +18,7 @@ with open('keys.json', 'r') as file:
     GOOGLE = keys['google']
 
 
+# pylint: disable=unused-argument
 async def handle(this, **x):
     """ By social network """
 
