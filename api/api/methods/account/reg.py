@@ -54,7 +54,7 @@ async def handle(this, **x):
 
     # Update online users
 
-    await online_start(this.sio, user, this.token)
+    await online_start(this.sio, this.token)
 
     # Response
 

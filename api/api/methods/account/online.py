@@ -7,6 +7,7 @@ The online socket of the account object of the API
 from ...funcs import online_start, report
 from ...funcs.mongodb import db
 from ...models.user import User
+from ...models.token import Token
 # from ...models.socket import Socket
 
 
@@ -42,7 +43,12 @@ async def handle(this, **x):
             'id': user_current['id'],
         }, db_filter)
 
+    else:
+        token = Token(id=x['token'])
+        token.save()
+
     # Online users
+
     ## Emit all users to this user
 
     # ? Отправлять неавторизованным пользователям информацию об онлайн?
@@ -78,8 +84,7 @@ async def handle(this, **x):
 
     ## Already online
 
-    user = User.get(ids=user_current['id']) if user_current else User()
-    await online_start(this.sio, user, x['token'], this.sid)
+    await online_start(this.sio, x['token'], this.sid)
 
     # # Visits
 

@@ -7,6 +7,7 @@ import time
 from ._reports import report
 from .mongodb import db
 from ..models.user import User
+from ..models.token import Token
 from ..models.socket import Socket
 
 
@@ -46,33 +47,42 @@ def online_back(user_id):
     last = max(i['stop'] for i in user)
     return time.time() - last
 
-async def online_start(sio, user, token, sid=None):
+async def online_start(sio, token_id, socket_id=None):
     """ Start / update online session of the user """
 
     # TODO: save user data cache in db.sockets
 
+    # Get user
+
+    token = Token.get(ids=token_id)
+
+    if token.user:
+        user = User.get(ids=token.user)
+    else:
+        user = User()
+
     # Already online
-    already = _other_sessions(user.id, token)
+    already = _other_sessions(user.id, token.id)
 
     # Save current socket with user & token data
 
-    if sid:
+    if socket_id:
         changed = False
 
         try:
-            socket = Socket.get(ids=sid, fields={'user'})
+            socket = Socket.get(ids=socket_id, fields={'user'})
 
         except:
             socket = Socket(
-                id=sid,
+                id=socket_id,
                 user=user.id,
-                token=token,
+                token=token.id,
             )
             changed = True
 
         else:
-            if socket.token != token:
-                socket.token = token
+            if socket.token != token.id:
+                socket.token = token.id
                 changed = True
                 report(
                     "Wrong `socket.token` in `funcs/_online/online_start`"
@@ -88,7 +98,7 @@ async def online_start(sio, user, token, sid=None):
 
     # Update other sockets by token
 
-    sockets = Socket.get(token=token, fields={'user'})
+    sockets = Socket.get(token=token.id, fields={'user'})
 
     for socket in sockets:
         socket.user = user.id
