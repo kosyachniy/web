@@ -4,12 +4,12 @@ Background processes
 
 # Libraries
 ## System
-# import timestamp
-# from multiprocessing import Process
+import time
+from multiprocessing import Process
 
 ## Local
-from .funcs import report
-from .funcs import online_user_update, online_session_close
+from .funcs import online_user_update, online_session_close, report
+from .funcs.mongodb import db
 from .models.socket import Socket
 
 
@@ -21,6 +21,22 @@ def reset_online_users():
     for socket in sockets:
         online_user_update(socket.user)
         online_session_close(socket)
+
+def update_server_status():
+    """ Update last server time """
+
+    while True:
+        req = int(time.time())
+
+        res = db.sys.update_one(
+            {'name': 'last_server_time'},
+            {'$set': {'cont': req}}
+        )
+
+        if not res.modified_count:
+            db.sys.insert_one({'name': 'last_server_time', 'cont': req})
+
+        time.sleep(60)
 
 
 def background(sio):
@@ -34,6 +50,10 @@ def background(sio):
     reset_online_users()
 
     # Regular
-    # ## Reports
+    ## Update last server time
+    process_status = Process(target=update_server_status)
+    process_status.start()
+
+    ## Reports
     # process_reports = Process(target=reports_process)
     # process_reports.start()
