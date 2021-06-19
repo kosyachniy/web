@@ -3,6 +3,7 @@ Users functionality for the API
 """
 
 from .mongodb import db
+from ..models.user import User
 
 
 def get_user(user_id):
@@ -36,8 +37,6 @@ def get_user(user_id):
 
 def get_user_by_token(token):
     """ Get user object by token """
-
-    from ..models.user import User
 
     user = User()
 

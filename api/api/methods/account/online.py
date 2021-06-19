@@ -4,7 +4,7 @@ The online socket of the account object of the API
 
 # import re
 
-from ...funcs import online_start
+from ...funcs import online_start, report
 from ...funcs.mongodb import db
 from ...models.user import User
 # from ...models.socket import Socket
@@ -14,6 +14,9 @@ async def handle(this, **x):
     """ Online """
 
     print('ON', this.sid)
+
+    if 'token' not in x or not x['token']:
+        report("Invalid `token` in `methods/account/online`", 1)
 
     # Define user
 

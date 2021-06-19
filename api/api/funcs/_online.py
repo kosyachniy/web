@@ -4,9 +4,33 @@ Online status update functionality for the API
 
 import time
 
+from ._reports import report
 from .mongodb import db
 from ..models.user import User
 from ..models.socket import Socket
+
+
+def _other_sessions(user_id, token=None):
+    """ Checking for open online sessions of the user """
+
+    if not user_id:
+        if not token:
+            return False
+
+        sockets = Socket.get(token=token)
+
+    else:
+        sockets = Socket.get(user=user_id)
+
+    return bool(sockets)
+
+def _online_count():
+    """ Counting the total number of online users """
+
+    sockets = Socket.get(fields={'user', 'token'})
+    count = len({el.user if el.user else el.token for el in sockets})
+
+    return count
 
 
 def online_back(user_id):
@@ -22,31 +46,47 @@ def online_back(user_id):
     last = max(i['stop'] for i in user)
     return time.time() - last
 
-def other_sessions(user_id, token=None):
-    """ Checking for open online sessions of the user """
-
-    if not user_id:
-        if not token:
-            return False
-
-        sockets = Socket.get(token=token)
-
-    else:
-        sockets = Socket.get(user=user_id)
-
-    return bool(sockets)
-
-# Online update
-
 async def online_start(sio, user, token, sid=None):
     """ Start / update online session of the user """
 
-    # TODO: save user data cache in db.online
+    # TODO: save user data cache in db.sockets
 
     # Already online
-    already = other_sessions(user.id, token)
+    already = _other_sessions(user.id, token)
 
-    # Update DB
+    # Save current socket with user & token data
+
+    if sid:
+        changed = False
+
+        try:
+            socket = Socket.get(ids=sid, fields={'user'})
+
+        except:
+            socket = Socket(
+                id=sid,
+                user=user.id,
+                token=token,
+            )
+            changed = True
+
+        else:
+            if socket.token != token:
+                socket.token = token
+                changed = True
+                report(
+                    "Wrong `socket.token` in `funcs/_online/online_start`"
+                , 1)
+
+            if socket.user != user.id:
+                socket.user = user.id
+                changed = True
+                report("Wrong `socket.user` in `funcs/_online/online_start`", 1)
+
+        if changed:
+            socket.save()
+
+    # Update other sockets by token
 
     sockets = Socket.get(token=token, fields={'user'})
 
@@ -54,35 +94,19 @@ async def online_start(sio, user, token, sid=None):
         socket.user = user.id
         socket.save()
 
-    if not sockets:
-        # TODO: если нет sid нужно добавить уникальный, т.к. иначе будет
-        # создавать при сохранении новый экземпляр
-        socket = Socket(
-            id=sid,
-            user=user.id,
-            token=token,
-        )
-
-        socket.save()
-
     # Send sockets
-    if not already:
-        await online_emit_add(sio, user)
+
+    if already:
+        return
 
     # TODO: Сокет на обновление сессий в браузере
 
-async def online_emit_add(sio, user):
-    """ Send sockets about adding / updating online users """
+    # Send the socket about the user to all online users
 
-    # Counting the total number of online users
-
-    sockets = Socket.get(fields={'user', 'token'})
-    count = len({el.user if el.user else el.token for el in sockets})
-
-    # Send a socket about the user to all online users
+    count = _online_count()
 
     fields = {'id', 'login', 'avatar', 'name', 'surname'}
-    data = user.json(fields=fields) if user else {} # TODO: delete if-else
+    data = user.json(fields=fields)
     # TODO: Full info for all / Full info only for admins
 
     res = {
@@ -122,7 +146,7 @@ async def online_emit_del(sio, user_id):
     # Online users
     ## Other sessions of this user
 
-    other = other_sessions(user_id)
+    other = _other_sessions(user_id)
 
     if other:
         return
