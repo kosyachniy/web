@@ -2,7 +2,7 @@
 The logout method of the account object of the API
 """
 
-from ...funcs import online_user_update, online_emit_del
+from ...funcs import online_stop
 from ...funcs.mongodb import db
 from ...models.socket import Socket
 from ...errors import ErrorWrong, ErrorAccess
@@ -31,15 +31,13 @@ async def handle(this, **x):
 
     # Close session
 
-    sockets = Socket.get(token=this.token)
+    sockets = Socket.get(token=this.token, fields={})
 
     for socket in sockets:
-        online_user_update(socket.user)
+        # socket.user = 0
+        # socket.created = this.timestamp
+        # socket.save()
 
-        socket.user = 0
-        socket.created = this.timestamp
-        socket.save()
-
-        await online_emit_del(this.sio, this.user['id'])
+        await online_stop(this.sio, socket.id)
 
     # ! Отправлять сокет всем сессиям этого браузера на выход

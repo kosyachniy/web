@@ -8,19 +8,18 @@ import time
 from multiprocessing import Process
 
 ## Local
-from .funcs import online_user_update, online_session_close, report
+from .funcs import online_stop, report
 from .funcs.mongodb import db
 from .models.socket import Socket
 
 
-def reset_online_users():
+async def reset_online_users(sio):
     """ Reset online users """
 
-    sockets = Socket.get(fields={'user'})
+    sockets = Socket.get(fields={})
 
     for socket in sockets:
-        online_user_update(socket.user)
-        online_session_close(socket)
+        await online_stop(sio, socket.id)
 
 def update_server_status():
     """ Update last server time """
@@ -39,7 +38,7 @@ def update_server_status():
         time.sleep(60)
 
 
-def background(sio):
+async def background(sio):
     """ Background infinite process """
 
     # Primary
@@ -47,7 +46,7 @@ def background(sio):
     report("Restart server")
 
     ## Online users
-    reset_online_users()
+    await reset_online_users(sio)
 
     # Regular
     ## Update last server time

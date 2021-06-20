@@ -7,7 +7,6 @@ import time
 from ._users import get_user
 from ._reports import report
 from .mongodb import db
-from ..models.user import User
 from ..models.socket import Socket
 
 
@@ -104,7 +103,7 @@ async def online_start(sio, token_id, socket_id=None):
 
     # TODO: Сокет на обновление сессий в браузере
 
-    # Send the socket about the user to all online users
+    # Send sockets about the user to all online users
 
     count = _online_count()
 
@@ -119,50 +118,44 @@ async def online_start(sio, token_id, socket_id=None):
 
     await sio.emit('online_add', res)
 
-def online_stop(sio):
-    pass
-
-def online_user_update(user_id):
-    """ User data about online update """
+async def online_stop(sio, socket_id):
+    """ Stop online session of the user """
 
     # TODO: Объединять сессии в онлайн по пользователю
     # TODO: Если сервер был остановлен, отслеживать сессию
 
-    if not user_id:
+    try:
+        socket = Socket.get(ids=socket_id)
+    except:
+        report("Wrong `socket_id` in `funcs/_online/online_stop`", 1)
         return
 
-    user = User.get(ids=user_id) # TODO: error handler
-    user.online.append({'start': online['start'], 'stop': time.time()})
-    user.save()
+    user = get_user(socket.token)
 
-def online_session_close(socket):
-    """ Close online session """
+    # Update user online info
 
-    # Remove from online users
+    if user.id:
+        user.online.append({'start': socket.created, 'stop': time.time()})
+        user.save()
 
-    socket = db['sockets'].find_one({'id': socket.id})
-    db['sockets'].remove(socket)
+    # Other sessions of this user
 
-async def online_emit_del(sio, user_id):
-    """ Send sockets about deleting online users """
-
-    if not user_id:
-        return
-
-    # Online users
-    ## Other sessions of this user
-
-    other = _other_sessions(user_id)
+    other = _other_sessions(user.id, socket.token)
 
     if other:
         return
 
-    ## Emit to clients
+    # Delete online session info
+    # TODO: socket.rm()
 
-    sockets = Socket.get(fields={'user', 'token'})
-    count = len({el.user if el.user else el.token for el in sockets})
+    socket = db['sockets'].find_one({'id': socket_id})
+    db['sockets'].remove(socket)
+
+    # Send sockets about the user to all online users
+
+    count = _online_count()
 
     await sio.emit('online_del', {
         'count': count,
-        'users': [{'id': user_id}], # ! Админам
+        'users': [{'id': user.id}], # ! Админам
     })
