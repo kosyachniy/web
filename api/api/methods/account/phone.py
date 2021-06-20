@@ -89,10 +89,10 @@ async def handle(this, **x):
     # TODO: redirect to active space
     
     # if space_id:
-    #     for sid in get_sids(user.id):
+    #     for socket_id in Socket(user=user.id):
     #         this.sio.emit('space_return', {
     #             'url': f'/space/{space_id}',
-    #         }, room=sid, namespace='/main')
+    #         }, room=socket_id)
 
     # Response
 

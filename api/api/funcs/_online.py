@@ -4,9 +4,10 @@ Online status update functionality for the API
 
 import time
 
-from ._users import get_user
 from ._reports import report
 from .mongodb import db
+from ..models.user import User
+from ..models.token import Token
 from ..models.socket import Socket
 
 
@@ -32,6 +33,17 @@ def _online_count():
 
     return count
 
+
+def get_user(token_id):
+    """ Get user object by token """
+
+    if token_id is not None:
+        token = Token.get(ids=token_id)
+
+        if token.user:
+            return User.get(ids=token.user)
+    
+    return User()
 
 def online_back(user_id):
     """ Checking how long has been online """

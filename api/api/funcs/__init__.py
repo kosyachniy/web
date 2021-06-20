@@ -9,9 +9,7 @@ import random
 from ._types import check_params
 from ._files import get_file, max_image, load_image, reimg
 from ._codes import get_network, get_language
-from ._online import online_back, online_start, online_stop
-from ._users import get_user, get_status, get_status_condition, \
-                    get_id, get_sids
+from ._online import get_user, online_back, online_start, online_stop
 from ._reports import report
 from .mongodb import db
 
