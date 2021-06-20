@@ -11,8 +11,8 @@ from ._files import get_file, max_image, load_image, reimg
 from ._codes import get_network, get_language
 from ._online import online_back, online_start, online_user_update, \
                      online_session_close, online_emit_del
-from ._users import get_user, get_user_by_token, get_status, \
-                    get_status_condition, get_id, get_sids
+from ._users import get_user, get_status, get_status_condition, \
+                    get_id, get_sids
 from ._reports import report
 from .mongodb import db
 

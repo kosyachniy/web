@@ -2,8 +2,9 @@
 The getting method of the review object of the API
 """
 
-from ...funcs import get_user, check_params
+from ...funcs import check_params
 from ...funcs.mongodb import db
+from ...models.user import User
 from ...errors import ErrorAccess
 
 
@@ -31,7 +32,12 @@ async def handle(this, **x):
     ).sort('time', -1)[0:count])
 
     for review in reviews:
-        review['user'] = get_user(review['user'])
+        review['user'] = User.get(ids=review['user'], fields={
+            'login',
+            'name',
+            'surname',
+            'avatar',
+        })
 
     # Response
 

@@ -7,10 +7,9 @@ The API
 import time
 
 ## Local
-from .funcs import get_network, get_language, get_user_by_token
+from .funcs import get_network, get_language, get_user
 from .methods import call
 from .background import background
-from .errors import ErrorWrong
 
 
 # pylint: disable=R0902,R0903,W0201
@@ -48,7 +47,7 @@ class API():
         self.token = token
         self.network = get_network(network)
         self.language = get_language(language)
-        self.user = get_user_by_token(token)
+        self.user = get_user(token)
 
         # Remove extra indentation
 

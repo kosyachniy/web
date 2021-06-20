@@ -4,10 +4,10 @@ Online status update functionality for the API
 
 import time
 
+from ._users import get_user
 from ._reports import report
 from .mongodb import db
 from ..models.user import User
-from ..models.token import Token
 from ..models.socket import Socket
 
 
@@ -52,17 +52,10 @@ async def online_start(sio, token_id, socket_id=None):
 
     # TODO: save user data cache in db.sockets
 
-    # Get user
-
-    token = Token.get(ids=token_id)
-
-    if token.user:
-        user = User.get(ids=token.user)
-    else:
-        user = User()
+    user = get_user(token_id)
 
     # Already online
-    already = _other_sessions(user.id, token.id)
+    already = _other_sessions(user.id, token_id)
 
     # Save current socket with user & token data
 
@@ -76,13 +69,13 @@ async def online_start(sio, token_id, socket_id=None):
             socket = Socket(
                 id=socket_id,
                 user=user.id,
-                token=token.id,
+                token=token_id,
             )
             changed = True
 
         else:
-            if socket.token != token.id:
-                socket.token = token.id
+            if socket.token != token_id:
+                socket.token = token_id
                 changed = True
                 report(
                     "Wrong `socket.token` in `funcs/_online/online_start`"
@@ -98,7 +91,7 @@ async def online_start(sio, token_id, socket_id=None):
 
     # Update other sockets by token
 
-    sockets = Socket.get(token=token.id, fields={'user'})
+    sockets = Socket.get(token=token_id, fields={'user'})
 
     for socket in sockets:
         socket.user = user.id
@@ -125,6 +118,9 @@ async def online_start(sio, token_id, socket_id=None):
     }
 
     await sio.emit('online_add', res)
+
+def online_stop(sio):
+    pass
 
 def online_user_update(user_id):
     """ User data about online update """

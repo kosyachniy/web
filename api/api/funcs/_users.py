@@ -4,57 +4,19 @@ Users functionality for the API
 
 from .mongodb import db
 from ..models.user import User
+from ..models.token import Token
 
 
-def get_user(user_id):
-    """ Get user by ID """
-
-    if user_id:
-        db_condition = {
-            'id': user_id,
-        }
-
-        db_filter = {
-            '_id': False,
-            'id': True,
-            'login': True,
-            'name': True,
-            'surname': True,
-            'avatar': True,
-        }
-
-        user_req = db['users'].find_one(db_condition, db_filter)
-
-        if 'avatar' in user_req:
-            user_req['avatar'] = '/load/opt/' + user_req['avatar']
-        else:
-            user_req['avatar'] = 'user.png'
-
-    else:
-        user_req = 0
-
-    return user_req
-
-def get_user_by_token(token):
+def get_user(token_id):
     """ Get user object by token """
 
-    user = User()
+    if token_id is not None:
+        token = Token.get(ids=token_id)
 
-    if not token:
-        return user
-
-    db_filter = {'user': True, '_id': False}
-    token_data = db['tokens'].find_one({'token': token}, db_filter)
-
-    if not token_data or not token_data['user']:
-        return user
-
-    try:
-        user = User.get(ids=token_data['user'])
-    except:
-        pass
-
-    return user
+        if token.user:
+            return User.get(ids=token.user)
+    
+    return User()
 
 def get_status(user):
     """ Get available status for the user """
