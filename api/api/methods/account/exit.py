@@ -20,14 +20,14 @@ async def handle(this, **x):
         raise ErrorAccess('token')
 
     # Check token
-    token = db['tokens'].find_one({'token': this.token}, {'_id': True})
+    token = db.tokens.find_one({'token': this.token}, {'_id': True})
 
     # Wrong token
     if not token:
         raise ErrorWrong('token')
 
     # Remove token
-    db['tokens'].remove(token['_id']) # TODO: не удалять токены (выданные ботам)
+    db.tokens.remove(token['_id']) # TODO: не удалять токены (выданные ботам)
 
     # Close session
 

@@ -76,7 +76,7 @@ async def handle(this, **x):
             raise ErrorUpload('avatar')
 
     # Save changes
-    db['users'].save(this.user)
+    db.users.save(this.user)
 
     # Response
 

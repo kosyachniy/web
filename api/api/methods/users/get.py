@@ -70,7 +70,7 @@ async def handle(this, **x):
 
     # for i in range(len(users)):
     #     # Online
-    #     users[i]['online'] = db['sockets'].find_one(
+    #     users[i]['online'] = db.sockets.find_one(
     #         {'id': users[i]['id']},
     #         {'_id': True}
     #     ) == True

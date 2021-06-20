@@ -18,7 +18,7 @@ async def handle(this, **x):
 
     # Get user
 
-    users = db['users'].find_one({'id': x['id']})
+    users = db.users.find_one({'id': x['id']})
 
     ## Wrond ID
     if not users:
@@ -32,4 +32,4 @@ async def handle(this, **x):
     users['status'] = 1
 
     # Save
-    db['users'].save(users)
+    db.users.save(users)

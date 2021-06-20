@@ -56,7 +56,7 @@ def get_id(sid):
         'id': True,
     }
 
-    user = db['sockets'].find_one({'sid': sid}, db_filter)
+    user = db.sockets.find_one({'sid': sid}, db_filter)
 
     if not user:
         raise Exception('sid not found')
@@ -75,6 +75,6 @@ def get_sids(user):
         'sid': True,
     }
 
-    user_sessions = db['sockets'].find({'id': user}, db_filter)
+    user_sessions = db.sockets.find({'id': user}, db_filter)
 
     return [i['sid'] for i in user_sessions]

@@ -21,11 +21,11 @@ async def handle(this, **x):
 
     # Get
 
-    review = db['reviews'].find_one({'id': x['id']}, {'_id': True})
+    review = db.reviews.find_one({'id': x['id']}, {'_id': True})
 
     ## Wrong ID
     if not review:
         raise ErrorWrong('id')
 
     # Remove
-    db['reviews'].remove(review['_id'])
+    db.reviews.remove(review['_id'])

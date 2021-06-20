@@ -65,7 +65,7 @@ class API():
         #     'params': params,
         # }
 
-        # db['actions'].insert_one(req)
+        # db.actions.insert_one(req)
 
         # API method
 

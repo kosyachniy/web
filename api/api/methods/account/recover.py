@@ -26,7 +26,7 @@ async def handle(this, **x):
 
     # Get user
 
-    users = db['users'].find_one({'login': x['login']})
+    users = db.users.find_one({'login': x['login']})
 
     if not users:
         raise ErrorWrong('login')
@@ -39,4 +39,4 @@ async def handle(this, **x):
     # Update password
 
     users['password'] = password_crypt
-    db['users'].save(users)
+    db.users.save(users)

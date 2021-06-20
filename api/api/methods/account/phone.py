@@ -27,7 +27,7 @@ async def handle(this, **x):
 
     new = False
 
-    if not list(db['users'].find({'phone': x['phone']}, {'_id': True})):
+    if not list(db.users.find({'phone': x['phone']}, {'_id': True})):
         # raise ErrorWrong('login')
 
         _registrate(
@@ -61,7 +61,7 @@ async def handle(this, **x):
         'discount': True,
     }
 
-    res = db['users'].find_one(db_condition, db_filter)
+    res = db.users.find_one(db_condition, db_filter)
 
     # Assignment of the token to the user
 
@@ -73,51 +73,26 @@ async def handle(this, **x):
         'user': res['id'],
         'time': this.timestamp,
     }
-    db['tokens'].insert_one(req)
+    db.tokens.insert_one(req)
 
     # Assignment of the tasks to the user
 
-    for task in db['tasks'].find({'token': this.token}):
+    for task in db.tasks.find({'token': this.token}):
         task['user'] = res['id']
         del task['token']
-        db['tasks'].save(task)
+        db.tasks.save(task)
 
     # Update online users
 
     await online_start(this.sio, this.token)
 
-    # There is an active space
-
-    db_condition = {
-        '$or': [
-            {'teacher': res['id']},
-            {'student': res['id']}
-        ],
-        'status': {'$in': (0, 1)}
-    }
-
-    db_filter = {
-        '_id': False,
-        'id': True,
-        'student': True,
-        'task': True,
-    }
-    study = db['study'].find_one(db_condition, {'_id': False})
-
-    if study:
-        # Redirect to space
-
-        space = '/space/{}/?task={}&type={}'.format(
-            study['id'], study['task'],
-            ('student', 'teacher')[study['student'] != res['id']],
-        )
-
-        sids = get_sids(res['id'])
-
-        for sid in sids:
-            this.sio.emit('space_return', {
-                'url': space,
-            }, room=sid, namespace='/main')
+    # TODO: redirect to active space
+    
+    # if space_id:
+    #     for sid in get_sids(user.id):
+    #         this.sio.emit('space_return', {
+    #             'url': f'/space/{space_id}',
+    #         }, room=sid, namespace='/main')
 
     # Response
 
@@ -161,7 +136,7 @@ async def handle(this, **x):
 
 #     # Already sent
 
-#     code = db['codes'].find_one({'phone': phone}, {'_id': True})
+#     code = db.codes.find_one({'phone': phone}, {'_id': True})
 
 #     if code:
 #         raise ErrorRepeat('send')
@@ -186,7 +161,7 @@ async def handle(this, **x):
 #     if 'promo' in x:
 #         req['promo'] = x['promo']
 
-#     db['codes'].insert_one(req)
+#     db.codes.insert_one(req)
 
 #     #
 
@@ -253,12 +228,12 @@ async def handle(this, **x):
 #             'phone': True,
 #         }
 
-#         code = db['codes'].find_one(db_condition, db_filter)
+#         code = db.codes.find_one(db_condition, db_filter)
 
 #         if code:
 #             # ! Входить по старым кодам
 #             pass
-#             # db['codes'].remove(code)
+#             # db.codes.remove(code)
 
 #         else:
 #             raise ErrorWrong('code')
@@ -273,7 +248,7 @@ async def handle(this, **x):
 
 #     #
 
-#     user = db['users'].find_one({'phone': code['phone']})
+#     user = db.users.find_one({'phone': code['phone']})
 
 #     #
 
@@ -290,7 +265,7 @@ async def handle(this, **x):
 
 #         #
 
-#         user = db['users'].find_one({'id': res['id']})
+#         user = db.users.find_one({'id': res['id']})
 
 #     if 'promo' in code:
 #         # Referal code
@@ -300,15 +275,15 @@ async def handle(this, **x):
 
 #             if user['id'] != referal_parent:
 #                 user['referal_parent'] = referal_parent
-#                 db['users'].save(user)
+#                 db.users.save(user)
 
 #         else:
 #             # Bonus code
 
-#             promo = db['promos'].find_one({'promo': code['promo'].upper()})
+#             promo = db.promos.find_one({'promo': code['promo'].upper()})
 
 #             if not promo:
-#                 promo = db['promos'].find_one({
+#                 promo = db.promos.find_one({
 #                     'promo': code['promo'].lower(),
 #                 })
 
@@ -323,12 +298,12 @@ async def handle(this, **x):
 #                             # Выполнение скрипта
 
 #                             user['balance'] += promo['balance']
-#                             db['users'].save(user)
+#                             db.users.save(user)
 
 #                             # Сохранение результатов в промокоде
 
 #                             promo['users'].append(user['id'])
-#                             db['promos'].save(promo)
+#                             db.promos.save(promo)
 
 #     # Присвоение токена пользователю
 
@@ -337,7 +312,7 @@ async def handle(this, **x):
 #         'user': user['id'],
 #         'time': this.timestamp,
 #     }
-#     db['tokens'].insert_one(req)
+#     db.tokens.insert_one(req)
 
 #     # Update online users
 

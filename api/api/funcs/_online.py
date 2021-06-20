@@ -36,12 +36,12 @@ def _online_count():
 def online_back(user_id):
     """ Checking how long has been online """
 
-    online = db['sockets'].find_one({'id': user_id}, {'_id': True})
+    online = db.sockets.find_one({'id': user_id}, {'_id': True})
     if online:
         return 0
 
     db_filter = {'_id': False, 'online.stop': True}
-    user = db['users'].find_one({'id': user_id}, db_filter)['online']
+    user = db.users.find_one({'id': user_id}, db_filter)['online']
 
     last = max(i['stop'] for i in user)
     return time.time() - last
@@ -148,8 +148,8 @@ async def online_stop(sio, socket_id):
     # Delete online session info
     # TODO: socket.rm()
 
-    socket = db['sockets'].find_one({'id': socket_id})
-    db['sockets'].remove(socket)
+    socket = db.sockets.find_one({'id': socket_id})
+    db.sockets.remove(socket)
 
     # Send sockets about the user to all online users
 

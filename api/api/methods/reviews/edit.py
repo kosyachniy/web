@@ -27,7 +27,7 @@ async def handle(this, **x):
         'success': 0,
     }
 
-    db['reviews'].insert_one(query)
+    db.reviews.insert_one(query)
 
     # Response
 

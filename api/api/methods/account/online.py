@@ -26,7 +26,7 @@ async def handle(this, **x):
         'id': True,
     }
 
-    user_current = db['tokens'].find_one({'token': x['token']}, db_filter)
+    user_current = db.tokens.find_one({'token': x['token']}, db_filter)
 
     if user_current:
         db_filter = {
@@ -39,7 +39,7 @@ async def handle(this, **x):
             'status': True,
         }
 
-        user_current = db['users'].find_one({
+        user_current = db.users.find_one({
             'id': user_current['id'],
         }, db_filter)
 
@@ -59,10 +59,10 @@ async def handle(this, **x):
     #     'user': True,
     # }
 
-    # users_auth = list(db['sockets'].find({
+    # users_auth = list(db.sockets.find({
     #     'user': {'$ne': 0},
     # }, db_filter))
-    # users_all = list(db['sockets'].find({}, db_filter))
+    # users_all = list(db.sockets.find({}, db_filter))
     # count = len({i['user'] for i in users_all})
 
     # sockets = Socket.get(fields={'user', 'token'})
@@ -95,7 +95,7 @@ async def handle(this, **x):
     #     'user': user_id,
     # }
 
-    # utm = db['utms'].find_one(db_condition)
+    # utm = db.utms.find_one(db_condition)
 
     # if not utm:
     #     utm = {
@@ -106,7 +106,7 @@ async def handle(this, **x):
     #         'steps': [],
     #     }
 
-    #     db['utms'].insert_one(utm)
+    #     db.utms.insert_one(utm)
 
     # | Sessions (sid) |
     # | Tokens (token) |
@@ -130,7 +130,7 @@ async def handle(this, **x):
     # if utm:
     #     if utm_mark and not utm['utm']:
     #         utm['utm'] = utm_mark
-    #         db['utms'].save(utm)
+    #         db.utms.save(utm)
 
     # else:
     #     utm = {
@@ -141,4 +141,4 @@ async def handle(this, **x):
     #         'steps': [],
     #     }
 
-    #     db['utms'].insert_one(utm)
+    #     db.utms.insert_one(utm)

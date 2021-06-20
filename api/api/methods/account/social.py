@@ -110,7 +110,7 @@ async def handle(this, **x):
     #     # 'balance': True,
     # }
 
-    # res = db['users'].find_one(db_condition, db_filter)
+    # res = db.users.find_one(db_condition, db_filter)
 
     # # Wrong password
     # if not res:
@@ -213,7 +213,7 @@ async def handle(this, **x):
     #         '_id': True,
     #     }
 
-    #     user = db['users'].find_one(db_condition, db_filter)
+    #     user = db.users.find_one(db_condition, db_filter)
 
     #     if user:
     #         raise ErrorWrong('hash')
@@ -249,7 +249,7 @@ async def handle(this, **x):
     #             'mail': True,
     #         }
 
-    #         user = db['users'].find_one({'id': user['id']}, db_filter)
+    #         user = db.users.find_one({'id': user['id']}, db_filter)
 
     # # Assignment of the token to the user
 
@@ -261,7 +261,7 @@ async def handle(this, **x):
     #     'user': user['id'],
     #     'time': this.timestamp,
     # }
-    # db['tokens'].insert_one(req)
+    # db.tokens.insert_one(req)
 
     # # Update online users
 

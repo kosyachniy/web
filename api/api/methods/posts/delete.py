@@ -19,7 +19,7 @@ async def handle(this, **x):
 
     # Get
 
-    post = db['posts'].find_one({'id': x['id']})
+    post = db.posts.find_one({'id': x['id']})
 
     ## Wrong ID
     if not post:
@@ -27,4 +27,4 @@ async def handle(this, **x):
 
     # Delete
 
-    db['posts'].remove(post)
+    db.posts.remove(post)

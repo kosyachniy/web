@@ -45,7 +45,7 @@ async def handle(this, **x):
     # Formation
 
     if 'id' in x:
-        post = db['posts'].find_one({'id': x['id']})
+        post = db.posts.find_one({'id': x['id']})
 
         # Wrong ID
         if not post:
@@ -110,7 +110,7 @@ async def handle(this, **x):
     #     pass
 
     # Save
-    db['posts'].save(post)
+    db.posts.save(post)
 
     # Response
 

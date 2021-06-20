@@ -26,7 +26,7 @@ async def handle(this, **x):
 
     count = x['count'] if 'count' in x else None
 
-    reviews = list(db['reviews'].find(
+    reviews = list(db.reviews.find(
         {},
         {'_id': False}
     ).sort('time', -1)[0:count])
