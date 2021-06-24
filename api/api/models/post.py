@@ -9,16 +9,16 @@ class Post(Base):
     """ Post """
 
     _db = 'posts'
-    reactions = Attribute(dict, {
+    cont = Attribute(types=str, default='')
+    reactions = Attribute(types=dict, default={
         'views': [], # TODO: + UTM
         'likes': [],
         'reposts': [],
         'comments': [],
     }) # TODO: attributes
-    cont = Attribute(str, '')
-    cover = Attribute(str)
+    cover = Attribute(types=str)
+    tags = Attribute(types=list, default=[])
     # TODO: language
     # TODO: category
-    # TODO: tags
     # TODO: source
     # TODO: actions

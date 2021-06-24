@@ -11,39 +11,34 @@ from ...errors import ErrorInvalid, ErrorWrong, ErrorUpload
 
 
 async def handle(this, **x):
-    """ Add / edit """
+    """ Save """
 
     # Checking parameters
-
-    # Edit
+    ## Edit
     if 'id' in x:
         check_params(x, (
             ('id', True, int),
             ('name', False, str),
             ('cont', False, str),
             ('cover', False, str),
-            ('file', False, str),
-            ('category', False, int),
             ('tags', False, list, str),
+            # ('category', False, int),
         ))
 
-    # Add
+    ## Add
     else:
         check_params(x, (
             ('name', True, str),
             ('cont', True, str),
             ('cover', False, str),
-            ('file', False, str),
-            ('category', False, int),
             ('tags', False, list, str),
+            # ('category', False, int),
         ))
 
     # Processed
-
     processed = False
 
     # Formation
-
     if 'id' in x:
         post = db.posts.find_one({'id': x['id']})
 
@@ -78,7 +73,6 @@ async def handle(this, **x):
         post['cont'] = post_updated
 
     ## Cover
-
     if 'cover' in x:
         try:
             file_type = x['file'].split('.')[-1]
@@ -95,19 +89,6 @@ async def handle(this, **x):
             raise ErrorUpload('cover')
 
         post['cover'] = link
-
-    ### Cover from the first image
-    # try:
-    #     img = re.search(
-    #         '<img src="[^"]*">',
-    #         post['cont']
-    #     )[0].split('"')[1].split('/')[2]
-    #     shutil.copyfile(
-    #         '../data/load/{}'.format(img),
-    #         '../data/load/posts/{}.{}'.format(post['id'], img.split('.')[-1])
-    #     )
-    # except:
-    #     pass
 
     # Save
     db.posts.save(post)

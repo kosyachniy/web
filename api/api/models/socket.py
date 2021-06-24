@@ -9,5 +9,5 @@ class Socket(Base):
     """ Socket """
 
     _db = 'sockets'
-    id = Attribute(str)
-    token = Attribute(str)
+    id = Attribute(types=str)
+    token = Attribute(types=str)

@@ -9,7 +9,7 @@ class Review(Base):
     """ Review """
 
     _db = 'reviews'
-    cont = Attribute(str, '')
-    network = Attribute(int, 0)
+    cont = Attribute(types=str, default='')
+    network = Attribute(types=int, default=0)
     # TODO: link
     # TODO: executor

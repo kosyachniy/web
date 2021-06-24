@@ -7,7 +7,7 @@ from ...funcs.mongodb import db
 
 
 async def handle(this, **x):
-    """ Add / edit """
+    """ Save """
 
     # Checking parameters
 

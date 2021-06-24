@@ -42,13 +42,11 @@ async def handle(this, **x):
 
     fields = {
         'name',
+        'cont',
         'reactions',
         'created',
         # 'geo',
     }
-
-    if process_single:
-        fields.add('cont')
 
     # Get
 

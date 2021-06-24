@@ -29,7 +29,7 @@ const Edit = (props) => {
             }
         }
 
-        api('posts.edit', data, handlerSuccess)
+        api('posts.save', data, handlerSuccess)
     }
 
     if (redirect) {

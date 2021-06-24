@@ -73,7 +73,7 @@ Android | Front-end | React Native | JavaScript | planned
 2. Run Docker Compose
 ```
 cd docker/
-docker-compose -p <your project name> up --build
+sudo docker-compose -p <your project name> up --build
 ```
 
 3. Open
