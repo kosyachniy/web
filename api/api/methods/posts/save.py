@@ -2,12 +2,9 @@
 The creating and editing method of the post object of the API
 """
 
-# import re
-# import shutil
-
-from ...funcs import reimg, check_params, next_id, load_image
-from ...funcs.mongodb import db
-from ...errors import ErrorInvalid, ErrorWrong, ErrorUpload
+from ...funcs import check_params, load_image, reimg
+from ...models.post import Post
+from ...errors import ErrorWrong, ErrorUpload
 
 
 async def handle(this, **x):
@@ -35,71 +32,42 @@ async def handle(this, **x):
             # ('category', False, int),
         ))
 
-    # Processed
+    # Processing params
     processed = False
 
-    # Formation
+    # Get
     if 'id' in x:
-        post = db.posts.find_one({'id': x['id']})
-
-        # Wrong ID
-        if not post:
+        try:
+            post = Post.get(ids=x['id'], fields={})
+        except:
             raise ErrorWrong('id')
-
     else:
-        post = {
-            'id': next_id('posts'),
-            'time': this.timestamp,
-            'reactions': {
-                'likes': [],
-                'reposts': [],
-                'comments': [],
-                'views': [],
-            },
-        }
+        post = Post(
+            user=this.user.id,
+        )
 
     # Change fields
-    for field in ('name', 'category', 'tags'):
-        if field in x:
-            post[field] = x[field]
+    post.name = x['name']
+    post.tags = x['tags']
+    # TODO: category
 
     ## Content
-    if 'cont' in x:
-        post_updated = reimg(x['cont'])
+    post.cont = reimg(x['cont'])
 
-        if x['cont'] != post_updated:
-            processed = True
-
-        post['cont'] = post_updated
+    if x['cont'] != post.cont:
+        processed = True
 
     ## Cover
-    if 'cover' in x:
-        try:
-            file_type = x['file'].split('.')[-1]
-
-        # Invalid file extension
-        except:
-            raise ErrorInvalid('file')
-
-        try:
-            link = load_image(x['cover'], file_type)
-
-        # Error loading cover
-        except:
-            raise ErrorUpload('cover')
-
-        post['cover'] = link
+    try:
+        post.cover = load_image(x['cover'])
+    except:
+        raise ErrorUpload('cover')
 
     # Save
-    db.posts.save(post)
+    post.save()
 
     # Response
-
-    res = {
-        'id': post['id'],
+    return {
+        'id': post.id,
+        'cont': post.cont if processed else None,
     }
-
-    if processed:
-        res['cont'] = post['cont']
-
-    return res

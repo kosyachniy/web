@@ -41,6 +41,9 @@ def max_image(url):
 def load_image(data, encoding='base64', file_format=None):
     """ Upload image """
 
+    if data is None:
+        return data
+
     url = '../data/load/'
     url_opt = url + 'opt/'
 
@@ -113,6 +116,9 @@ def reimg(text):
     """ Replace image in text """
 
     # TODO: Переписать
+
+    if text is None:
+        return text
 
     k = 0
 

@@ -38,10 +38,13 @@ def get_user(token_id):
     """ Get user object by token """
 
     if token_id is not None:
-        token = Token.get(ids=token_id)
-
-        if token.user:
-            return User.get(ids=token.user)
+        try:
+            token = Token.get(ids=token_id)
+        except:
+            pass
+        else:
+            if token.user:
+                return User.get(ids=token.user)
     
     return User()
 
