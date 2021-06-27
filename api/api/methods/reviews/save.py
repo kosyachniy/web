@@ -2,37 +2,54 @@
 The creating and editing method of the review object of the API
 """
 
-from ...funcs import reimg, check_params, next_id
-from ...funcs.mongodb import db
+from ...funcs import check_params, reimg
+from ...models.review import Review
 
 
 async def handle(this, **x):
     """ Save """
 
     # Checking parameters
+    ## Edit
+    if 'id' in x:
+        check_params(x, (
+            ('id', True, int),
+            ('name', False, str),
+            ('cont', False, str),
+        ))
 
-    check_params(x, (
-        ('name', True, str),
-        ('cont', True, str),
-    ))
+    ## Add
+    else:
+        check_params(x, (
+            ('name', True, str),
+            ('cont', True, str),
+        ))
 
-    #
+    # Processing params
+    processed = False
 
-    query = {
-        'id': next_id('reviews'),
-        'name': x['name'],
-        'cont': reimg(x['cont']),
-        'user': this.user['id'],
-        'time': this.timestamp,
-        'success': 0,
-    }
+    # Get
+    if 'id' in x:
+        review = Review.get(ids=x['id'], fields={})
+    else:
+        review = Review(
+            user=this.user.id,
+        )
 
-    db.reviews.insert_one(query)
+    # Change fields
+    review.name = x['name']
+
+    ## Content
+    review.cont = reimg(x['cont'])
+
+    if x['cont'] != review.cont:
+        processed = True
+
+    # Save
+    review.save()
 
     # Response
-
-    res = {
-        'id': query['id'],
+    return {
+        'id': review.id,
+        'cont': review.cont if processed else None,
     }
-
-    return res

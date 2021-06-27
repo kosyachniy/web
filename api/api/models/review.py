@@ -13,3 +13,4 @@ class Review(Base):
     network = Attribute(types=int, default=0)
     # TODO: link
     # TODO: executor
+    # TODO: category / type : system / custom / ...

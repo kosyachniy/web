@@ -4,7 +4,7 @@ The creating and editing method of the post object of the API
 
 from ...funcs import check_params, load_image, reimg
 from ...models.post import Post
-from ...errors import ErrorWrong, ErrorUpload
+from ...errors import ErrorUpload
 
 
 async def handle(this, **x):
@@ -37,10 +37,7 @@ async def handle(this, **x):
 
     # Get
     if 'id' in x:
-        try:
-            post = Post.get(ids=x['id'], fields={})
-        except:
-            raise ErrorWrong('id')
+        post = Post.get(ids=x['id'], fields={})
     else:
         post = Post(
             user=this.user.id,
