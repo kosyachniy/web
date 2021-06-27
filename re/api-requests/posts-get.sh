@@ -1,12 +1,12 @@
-# All posts
+# All
 
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Multiple posts
+# Multiple
 
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"id": [1, 2]}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# One post
+# One
 
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"id": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
@@ -14,11 +14,11 @@ curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"meth
 
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"search": "new"}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Limited number of posts
+# Limited number
 
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"count": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# Limited number of posts with a shift
+# Limited number with a shift
 
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "posts.get", "params": {"count": 1, "offset": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 

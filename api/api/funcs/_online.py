@@ -39,13 +39,13 @@ def get_user(token_id):
 
     if token_id is not None:
         try:
-            token = Token.get(ids=token_id)
+            token = Token.get(ids=token_id, fields={'user'})
         except:
             pass
         else:
             if token.user:
                 return User.get(ids=token.user)
-    
+
     return User()
 
 def online_back(user_id):

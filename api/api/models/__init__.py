@@ -181,10 +181,11 @@ class Base:
 
         db_filter = {
             '_id': False,
-            'id': True,
         }
 
         if fields:
+            db_filter['id'] = True
+
             for value in fields:
                 db_filter[value] = True
 
@@ -214,6 +215,9 @@ class Base:
 
         #         if 'tags' in posts[i]:
         #             del posts[i]['tags']
+
+        if offset is None:
+            offset = 0
 
         els = els.sort('id', -1)
         last = count + offset if count else None
