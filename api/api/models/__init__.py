@@ -221,7 +221,13 @@ class Base:
         els = list(map(cls, els))
 
         if process_one:
+            if not els:
+                raise ErrorWrong('ids')
+
             return els[0]
+
+        if ids and len(ids) != len(els):
+            raise ErrorWrong('ids')
 
         return els
 

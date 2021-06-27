@@ -4,5 +4,7 @@
         "db": "uple"
     },
     "client": "http://localhost/",
-    "side_optimized": 250
+    "mode": "LOCAL",
+    "side_optimized": 250,
+    "bug_chat": -1001223126154
 }
