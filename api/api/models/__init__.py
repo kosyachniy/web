@@ -82,8 +82,8 @@ class Attribute:
             value = self.pre_processing(value)
 
         if value is None:
-            if self.name in instance.__dict__:
-                del instance.__dict__[self.name]
+            # if self.name in instance.__dict__:
+            #     del instance.__dict__[self.name]
 
             return
 

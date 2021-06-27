@@ -53,9 +53,9 @@ async def handle(this, **x):
 
     if isinstance(reviews, list):
         for i, review in enumerate(reviews):
-            ## User info
             reviews[i] = review.json(default=False)
 
+            ## User info
             if review.user:
                 user = User.get(ids=review.user, fields=fields)
                 reviews[i]['user'] = user.json(default=False, fields=fields)
@@ -63,6 +63,7 @@ async def handle(this, **x):
     else:
         reviews = reviews.json(default=False)
 
+        ## User info
         if 'user' in reviews and reviews['user']:
             user = User.get(ids=reviews['user'], fields=fields)
             reviews['user'] = user.json(default=False, fields=fields)

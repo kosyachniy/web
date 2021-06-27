@@ -6,7 +6,7 @@ import re
 import hashlib
 
 from . import Base, Attribute
-from ..funcs import load_image
+from ..funcs import load_image, get_language
 from ..funcs.mongodb import db
 
 
@@ -185,7 +185,11 @@ class User(Base):
     mail_verified = Attribute(types=bool, default=True)
     social = Attribute(types=list, default=[]) # TODO: list[{}] # TODO: checking
     description = Attribute(types=str)
-    language = Attribute(types=int, default=0)
+    language = Attribute(
+        types=int,
+        default=0,
+        pre_processing=get_language,
+    )
     status = Attribute(types=int, default=2) # TODO: or 3
     funnel = Attribute(types=list, default=[]) # TODO: list[dict]
     online = Attribute(types=list, default=[]) # TODO: list[tuple]

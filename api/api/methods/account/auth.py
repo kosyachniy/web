@@ -49,8 +49,8 @@ async def handle(this, **x):
 
     if new:
         try:
-            mail = process_lower(x['mail'])
-            user = User.get(mail=mail,fields=fields)[0]
+            mail = process_lower(x['login'])
+            user = User.get(mail=mail, fields=fields)[0]
         except:
             pass
         else:

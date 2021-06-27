@@ -44,6 +44,12 @@ def load_image(data, encoding='base64', file_format='png'):
     if data is None:
         return data
 
+    if encoding != 'bytes':
+        match = re.search(r'^\w+\.\w+$', data)
+
+        if match:
+            return data
+
     url = '../data/load/'
     url_opt = url + 'opt/'
 

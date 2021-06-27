@@ -37,7 +37,7 @@ const Profile = (props) => {
             data['file'] = file
         }
 
-        api('account.edit', data, handlerSuccess)
+        api('account.save', data, handlerSuccess)
     }
 
     const updateAvatar = (avatar, file) => {
