@@ -3,8 +3,7 @@ The removal method of the post object of the API
 """
 
 from ...funcs import check_params
-from ...funcs.mongodb import db
-from ...errors import ErrorWrong
+from ...models.post import Post
 
 
 # pylint: disable=unused-argument
@@ -12,19 +11,12 @@ async def handle(this, **x):
     """ Delete """
 
     # Checking parameters
-
     check_params(x, (
         ('id', True, int),
     ))
 
     # Get
-
-    post = db.posts.find_one({'id': x['id']})
-
-    ## Wrong ID
-    if not post:
-        raise ErrorWrong('id')
+    post = Post.get(ids=x['id'])
 
     # Delete
-
-    db.posts.remove(post)
+    post.rm()

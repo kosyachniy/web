@@ -8,6 +8,7 @@ from typing import Union, Optional, Any, Callable
 from copy import deepcopy
 
 from ..funcs.mongodb import db
+from ..errors import ErrorWrong
 
 
 def _next_id(name):
@@ -79,11 +80,11 @@ class Attribute:
     def __set__(self, instance, value) -> None:
         if self.pre_processing:
             value = self.pre_processing(value)
-        
+
         if value is None:
             if self.name in instance.__dict__:
                 del instance.__dict__[self.name]
-            
+
             return
 
         if not isinstance(value, self.types):
@@ -246,6 +247,16 @@ class Base:
         if self.id == 0: # NOTE: `id` may not be int
             self.id = _next_id(self._db)
         db[self._db].insert_one(self.json(default=False))
+
+    def rm(
+        self,
+    ):
+        """ Delete the instance """
+
+        res = db[self._db].delete_one({'id': self.id}).deleted_count
+
+        if not res:
+            raise ErrorWrong('id')
 
     def json(
         self,
