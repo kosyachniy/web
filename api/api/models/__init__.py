@@ -226,12 +226,12 @@ class Base:
 
         if process_one:
             if not els:
-                raise ErrorWrong('ids')
+                raise ErrorWrong('id')
 
             return els[0]
 
         if ids and len(ids) != len(els):
-            raise ErrorWrong('ids')
+            raise ErrorWrong('id')
 
         return els
 

@@ -3,8 +3,8 @@ The removal method of the review object of the API
 """
 
 from ...funcs import check_params
-from ...funcs.mongodb import db
-from ...errors import ErrorAccess, ErrorWrong
+from ...models.review import Review
+from ...errors import ErrorAccess
 
 
 async def handle(this, **x):
@@ -16,16 +16,11 @@ async def handle(this, **x):
     ))
 
     # No access
-    if this.user['status'] < 5:
-        raise ErrorAccess('token')
+    if this.user.status < 5:
+        raise ErrorAccess('delete')
 
     # Get
+    review = Review.get(ids=x['id'])
 
-    review = db.reviews.find_one({'id': x['id']}, {'_id': True})
-
-    ## Wrong ID
-    if not review:
-        raise ErrorWrong('id')
-
-    # Remove
-    db.reviews.remove(review['_id'])
+    # Delete
+    review.rm()
