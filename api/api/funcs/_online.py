@@ -161,10 +161,9 @@ async def online_stop(sio, socket_id):
         return
 
     # Delete online session info
-    # TODO: socket.rm()
 
-    socket = db.sockets.find_one({'id': socket_id})
-    db.sockets.remove(socket)
+    socket = Socket.get(ids=socket_id)
+    socket.rm()
 
     # Send sockets about the user to all online users
 

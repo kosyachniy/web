@@ -14,6 +14,8 @@ from ...models.token import Token
 async def handle(this, **x):
     """ Online """
 
+    # TODO: Удалённый сокет, заново зарегистрировать
+
     print('ON', this.sid)
 
     if 'token' not in x or not x['token']:
