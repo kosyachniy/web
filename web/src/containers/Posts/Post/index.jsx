@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-// import ReactHtmlParser from 'react-html-parser'
 import MathJax from 'react-mathjax-preview'
 
 import api from '../../../func/api'
@@ -17,7 +16,7 @@ const Post = () => {
 
     const getPost = (data={}) => {
         const handlerSuccess = (res) => {
-            setPost(res['posts'][0])
+            setPost(res['posts'])
         }
 
         api('posts.get', data, handlerSuccess)
@@ -91,9 +90,22 @@ const Post = () => {
                     />
                 ) : (
                     <>
-                        {/* <img src={ post.cover } alt={ post.name } /> */}
+                        { post.cover ? (
+                            <img
+                                src={ "/load/" + post.cover }
+                                alt={ post.name }
+                            />
+                        ) : (<></>) }
                         <br /><br />
-                        <MathJax math={ post.cont } />
+                        <MathJax
+                            math={ post.cont }
+                            sanitizeOptions={{
+                                USE_PROFILES: {
+                                    html: true,
+                                    mathMl: true,
+                                }
+                            }}
+                        />
 
                         {/* <div style={{ marginTop: '50px', height: '250px' }}>
                             { post.geo ? (

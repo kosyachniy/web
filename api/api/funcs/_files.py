@@ -38,7 +38,7 @@ def max_image(url):
             k = int(j[0])
     return k+1
 
-def load_image(data, encoding='base64', file_format=None):
+def load_image(data, encoding='base64', file_format='png'):
     """ Upload image """
 
     if data is None:
@@ -111,70 +111,66 @@ def load_image(data, encoding='base64', file_format=None):
 
     return file_name
 
-# pylint: disable=W0702
 def reimg(text):
-    """ Replace image in text """
-
-    # TODO: Переписать
+    """ Load all images images from the text to the server """
 
     if text is None:
         return text
 
-    k = 0
-
+    # Base64
     while True:
-        img = re.search(r'<img ', text[k:])
-        if img:
-            first, last = list(img.span())
-            last = first + text[k+first:].index('>')
-            result = ''
-            if 'src=' in text[k+first:k+last]:
-                if re.search(
-                    r'image/.*;',
-                    text[k+first:k+last]
-                ) and 'base64,' in text[k+first:k+last]:
-                    start = k + first + text[k+first:].index('base64,') + 7
-                    try:
-                        stop = start + text[start:].index('"')
-                    except:
-                        stop = start + text[start:].index('\'')
+        fragment = re.search(
+            r'<img [^>]*src=[^>]+data:image/\w+;base64,[^\'">]+=[^>]+>', text
+        )
 
-                    b64 = text[start:stop]
-                    form = re.search(
-                        r'image/.*;',
-                        text[k+first:start]
-                    ).group(0)[6:-1]
-                    adr = load_image(b64, form)
-
-                    # result = '<img src="/load/{}">'.format(adr)
-                    result = '<img src="/load/opt/{}">'.format(adr)
-                else:
-                    start = k + re.search(r'src=.*', text[k:]).span()[0] + 5
-                    try:
-                        stop = start + text[start:].index('"')
-                    except:
-                        stop = start + text[start:].index('\'')
-
-                    href = text[start:stop]
-
-                    if href[:4] == 'http':
-                        b64 = str(base64.b64encode(
-                            requests.get(href).content
-                        ))[2:-1]
-                        form = href.split('.')[-1]
-                        if 'latex' in form or '/' in form or len(form) > 5:
-                            form = 'png'
-                        adr = load_image(b64, form)
-
-                        # result = '<img src="/load/{}">'.format(adr)
-                        result = '<img src="/load/opt/{}">'.format(adr)
-
-            if result:
-                text = text[:k+first] + result + text[k+last+1:]
-                k += first + len(result)
-            else:
-                k += last
-        else:
+        if fragment is None:
             break
+
+        first, last = fragment.span()
+        meta_fragment = re.search(
+            r'data:image/\w+;base64,[^\'">]+=', fragment.group()
+        )
+
+        meta_first, meta_last = meta_fragment.span()
+        data = load_image(meta_fragment.group())
+        text = text[:first+meta_first] \
+               + '/load/' + data \
+               + text[first+meta_last:]
+
+    # External links
+    while True:
+        fragment = re.search(
+            r'<img [^>]*src=[^\'">]*[\'"][^\'">]*http[^\'">]+[^>]*>', text
+        )
+
+        if fragment is None:
+            break
+
+        first, last = fragment.span()
+        meta_fragment = re.search(
+            r'http[^\'">]+', fragment.group()
+        )
+
+        meta_first, meta_last = meta_fragment.span()
+        link = meta_fragment.group()
+        data = requests.get(link).content
+
+        if '.' in link:
+            file_format = link.split('.')[-1]
+
+            if (
+                'latex' in file_format
+                or '/' in file_format
+                or len(file_format) > 5
+            ):
+                file_format = 'png'
+
+        else:
+            file_format = None
+
+        data = load_image(data, encoding='bytes', file_format=file_format)
+        text = text[:first+meta_first] \
+               + '/load/' + data \
+               + text[first+meta_last:]
 
     return text

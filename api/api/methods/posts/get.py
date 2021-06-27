@@ -13,7 +13,6 @@ async def handle(this, **x):
     """ Get """
 
     # Checking parameters
-
     check_params(x, (
         ('id', False, (int, list), int),
         ('count', False, int),
@@ -25,31 +24,22 @@ async def handle(this, **x):
 
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
-
     # if 'language' in x:
     #     x['language'] = get_language(x['language'])
     # else:
     #     x['language'] = this.language
 
-    # Single / multiple
-
-    process_single = False
-
-    if 'id' in x and not isinstance(x['id'], (list, tuple, set)):
-        process_single = True
-
     # Fields
-
     fields = {
         'name',
         'cont',
         'reactions',
+        'cover',
         'created',
         # 'geo',
     }
 
     # Get
-
     posts = Post.get(
         ids=x.get('id', None),
         count=x.get('count', None),
@@ -61,20 +51,19 @@ async def handle(this, **x):
     )
 
     # Processing
+    if isinstance(posts, list):
+        for post in posts:
+            ## Cover from the first image
+            if not post.cover:
+                res = re.search(
+                    r'<img src="[^"]*">',
+                    post.cont
+                )
 
-    for post in posts:
-        ## Cover from the first image
-        if not post.cover:
-            res = re.search(
-                r'<img src="[^"]*">',
-                post.cont
-            )
+                if res is not None:
+                    post.cover = res[0].split('"')[1].split('/')[-1]
 
-            if res is not None:
-                post.cover = res[0].split('"')[1].split('/')[-1]
-
-        ## Content
-        if not process_single:
+            ## Content
             post.cont = re.sub(
                 '<[^>]*>',
                 '',
@@ -82,9 +71,6 @@ async def handle(this, **x):
             ).replace('&nbsp;', ' ')
 
     # Response
-
-    res = {
+    return {
         'posts': posts,
     }
-
-    return res
