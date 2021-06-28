@@ -40,8 +40,11 @@ def get_user(token_id):
     if token_id is not None:
         try:
             token = Token.get(ids=token_id, fields={'user'})
+
         except:
-            pass
+            token = Token(id=token_id)
+            token.save()
+
         else:
             if token.user:
                 return User.get(ids=token.user)
@@ -72,7 +75,6 @@ async def online_start(sio, token_id, socket_id=None):
     already = _other_sessions(user.id, token_id)
 
     # Save current socket with user & token data
-
     if socket_id:
         changed = False
 
@@ -153,17 +155,17 @@ async def online_stop(sio, socket_id):
         user.online.append({'start': socket.created, 'stop': time.time()})
         user.save()
 
+    # Delete online session info
+
+    socket = Socket.get(ids=socket_id)
+    socket.rm()
+
     # Other sessions of this user
 
     other = _other_sessions(user.id, socket.token)
 
     if other:
         return
-
-    # Delete online session info
-
-    socket = Socket.get(ids=socket_id)
-    socket.rm()
 
     # Send sockets about the user to all online users
 

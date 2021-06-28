@@ -2,58 +2,44 @@
 The online socket of the account object of the API
 """
 
-# import re
-
-from ...funcs import online_start, report
-from ...funcs.mongodb import db
-from ...models.user import User
-from ...models.token import Token
-# from ...models.socket import Socket
+from ...funcs import check_params, online_start, report
 
 
 async def handle(this, **x):
     """ Online """
 
-    # TODO: Удалённый сокет, заново зарегистрировать
+    # Checking parameters
+    check_params(x, (
+        ('token', True, str),
+    ))
 
     print('ON', this.sid)
 
-    if 'token' not in x or not x['token']:
+    if not x['token']:
         report("Invalid `token` in `methods/account/online`", 1)
+        return
 
-    # Define user
+    # # Get token
+    # try:
+    #     token = Token.get(ids=x['token'], fields={'user'})
+    # except:
+    #     token = Token(id=x['token'])
+    #     token.save()
 
-    db_filter = {
-        '_id': False,
-        'id': True,
-    }
-
-    user_current = db.tokens.find_one({'token': x['token']}, db_filter)
-
-    if user_current:
-        db_filter = {
-            '_id': False,
-            'id': True,
-            'login': True,
-            'name': True,
-            'surname': True,
-            'avatar': True,
-            'status': True,
-        }
-
-        user_current = db.users.find_one({
-            'id': user_current['id'],
-        }, db_filter)
-
-    else:
-        token = Token(id=x['token'])
-        token.save()
+    # # Get
+    # user = User.get(ids=token.user, fields={
+    #     'login',
+    #     'avatar',
+    #     'name',
+    #     'surname',
+    #     'status',
+    # })
 
     # Online users
 
-    ## Emit all users to this user
+    # ## Emit all users to this user
 
-    # ? Отправлять неавторизованным пользователям информацию об онлайн?
+    # # ? Отправлять неавторизованным пользователям информацию об онлайн?
 
     # db_filter = {
     #     '_id': False,
