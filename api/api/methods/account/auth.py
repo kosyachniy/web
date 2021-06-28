@@ -2,7 +2,7 @@
 The authorization method of the account object of the API
 """
 
-from ...funcs import check_params, online_start
+from ...funcs import check_params, online_start, report
 from ...models.user import User, process_login, process_lower, \
                            pre_process_phone, process_password
 from ...models.token import Token
@@ -37,7 +37,7 @@ async def handle(this, **x):
         'status',
     } # TODO: optimize
 
-    # Login
+    # Authorize
 
     new = False
 
@@ -74,7 +74,6 @@ async def handle(this, **x):
             raise ErrorWrong('password')
 
     # Register
-
     if new:
         user_data = User(
             password=x['password'],
@@ -84,29 +83,42 @@ async def handle(this, **x):
         user_data.save()
         user_id = user_data.id
 
-        user = User.get(id=user_id, fields=fields)[0]
+        user = User.get(ids=user_id, fields=fields)
 
     # Assignment of the token to the user
 
     if not this.token:
-        raise ErrorAccess('token')
+        raise ErrorAccess('auth')
 
-    token = Token(
-        id=this.token,
-        user=user.id,
-    )
+    if new and this.user.status > 2:
+        token = Token.get(ids=this.token, fields={'user'})
+
+        report(f"Reauth {token.user} -> {user.id}", 1)
+
+        token.user = user.id
+
+    else:
+        token = Token(
+            id=this.token,
+            user=user.id,
+        )
 
     token.save()
 
     # Update online users
-
     await online_start(this.sio, this.token)
 
     # Response
-
-    res = user.json(fields={
-        'id', 'login', 'avatar', 'name', 'surname', 'mail', 'status',
-    })
-    res['new'] = new
-
-    return res # TODO: del None
+    # TODO: del None
+    return {
+        **user.json(fields={
+            'id',
+            'login',
+            'avatar',
+            'name',
+            'surname',
+            'mail',
+            'status',
+        }),
+        'new': new,
+    }

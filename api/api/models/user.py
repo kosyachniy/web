@@ -194,9 +194,12 @@ class User(Base):
     funnel = Attribute(types=list, default=[]) # TODO: list[dict]
     online = Attribute(types=list, default=[]) # TODO: list[tuple]
     # TODO: UTM / promo
+    # TODO: discount
     # TODO: balance
+    # TODO: subscription
     # TODO: rating
     # TODO: referal_parent
     # TODO: referal_code
+    # TODO: channels
 
     # TODO: del Base.user

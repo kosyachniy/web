@@ -4,90 +4,85 @@ The authorization by phone method of the account object of the API
 
 # import re
 
-from ...funcs import check_params, online_start, get_sids
-from ...funcs.mongodb import db
+from ...funcs import check_params, online_start, report
+from ...models.user import User, pre_process_phone
+from ...models.token import Token
 # from ...funcs.smsc import SMSC
-from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
+from ...errors import ErrorAccess
 
 
 async def handle(this, **x):
     """ By phone """
 
     # Checking parameters
-
     check_params(x, (
         ('phone', True, str),
     ))
 
-    #
+    # Authorize
 
-    x['phone'] = _process_phone(x['phone'])
-
-    # Login
-
-    new = False
-
-    if not list(db.users.find({'phone': x['phone']}, {'_id': True})):
-        # raise ErrorWrong('login')
-
-        _registrate(
-            this.user,
-            this.timestamp,
-            3 if this.language == 1 else 4,
-            phone=x['phone'],
-        )
-
-        new = True
-
-    #
-
-    db_condition = {'phone': x['phone']}
-
-    db_filter = {
-        '_id': False,
-        'id': True,
-        'status': True,
-        'balance': True,
-        # 'rating': True,
-        'login': True,
-        'name': True,
-        'surname': True,
-        'busy': True,
-        'avatar': True,
-        'subscription': True,
-        'channels': True,
-        'description': True,
-        'phone': True,
-        'discount': True,
+    fields = {
+        'login',
+        'avatar',
+        'name',
+        'surname',
+        'mail',
+        'status',
     }
 
-    res = db.users.find_one(db_condition, db_filter)
+    phone = pre_process_phone(x['phone'])
+    new = False
+    users = User.get(phone=phone, fields=fields)
+
+    if len(users) == 0:
+        new = True
+    elif len(users) > 1:
+        report(f"More than 1 user by {x['phone']}", 1)
+
+    # Register
+    if new:
+        user_data = User(
+            phone=x['phone'],
+            phone_verified=False,
+        )
+        user_data.save()
+        user_id = user_data.id
+
+        user = User.get(ids=user_id, fields=fields)
+
+    else:
+        user = users[0]
 
     # Assignment of the token to the user
 
     if not this.token:
-        raise ErrorAccess('token')
+        raise ErrorAccess('phone')
 
-    req = {
-        'token': this.token,
-        'user': res['id'],
-        'time': this.timestamp,
-    }
-    db.tokens.insert_one(req)
+    if new and this.user.status > 2:
+        token = Token.get(ids=this.token, fields={'user'})
 
-    # Assignment of the tasks to the user
+        report(f"Reauth {token.user} -> {user.id}", 1)
 
-    for task in db.tasks.find({'token': this.token}):
-        task['user'] = res['id']
-        del task['token']
-        db.tasks.save(task)
+        token.user = user.id
+
+    else:
+        token = Token(
+            id=this.token,
+            user=user.id,
+        )
+
+    token.save()
+
+    # # TODO: Assignment of the tasks to the user
+    # for task in db.tasks.find({'token': this.token}):
+    #     task['user'] = res['id']
+    #     del task['token']
+    #     db.tasks.save(task)
 
     # Update online users
-
     await online_start(this.sio, this.token)
 
-    # TODO: redirect to active space
-    
+    # # TODO: redirect to active space
     # if space_id:
     #     for socket_id in Socket(user=user.id):
     #         this.sio.emit('space_return', {
@@ -95,28 +90,18 @@ async def handle(this, **x):
     #         }, room=socket_id)
 
     # Response
-
-    req = {
-        'id': res['id'],
-        'status': res['status'],
-        'balance': res['balance'],
-        'login': res['login'],
+    return {
+        **user.json(fields={
+            'id',
+            'login',
+            'avatar',
+            'name',
+            'surname',
+            'mail',
+            'status',
+        }),
         'new': new,
-        'description': res['description'],
-        'subscription': res['subscription'],
-        'private': bool(len(res['channels'])),
-        'phone': res['phone'] if 'phone' in res else '',
     }
-
-    if 'avatar' in res:
-        req['avatar'] = '/load/opt/' + res['avatar']
-    else:
-        req['avatar'] = 'user.png'
-
-    if 'discount' in res:
-        req['discount'] = res['discount']
-
-    return req
 
 # By phone
 
