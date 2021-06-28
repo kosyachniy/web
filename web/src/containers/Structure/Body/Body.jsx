@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
+import getToken from '../../../func/token'
 import { socketIO } from '../../../func/sockets'
 
 import './style.css'
@@ -23,7 +24,7 @@ import PostsEdit from '../../Posts/Edit'
 
 const App = (props) => {
     useEffect(() => { // WillMount
-        const token = localStorage.getItem('token')
+        let token = getToken()
 
         // Online
 

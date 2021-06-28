@@ -16,25 +16,8 @@ import Mail from './containers/Pages/Mail'
 import Online from './containers/Pages/Online'
 
 
-function genereteToken() {
-    const res = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    return res.substr(0, 32);
-}
-
-
 const App = () => {
     const [showPopUp, setShowPopUp] = useState(false)
-
-    useEffect(() => { // WillMount
-        // Token
-
-        let token = localStorage.getItem('token')
-
-        if (token === null) {
-            token = genereteToken()
-            localStorage.setItem('token', token)
-        }
-    }, [])
 
     return (
         <Provider store={store}>
