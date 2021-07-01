@@ -58,7 +58,7 @@ async def handle(this, **x):
 
     if new:
         try:
-            phone = pre_process_phone(x['phone'])
+            phone = pre_process_phone(x['login'])
             user = User.get(phone=phone, fields=fields)[0]
         except:
             pass

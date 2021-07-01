@@ -68,7 +68,7 @@ def check_password(id_, cont):
     # Invalid password
 
     cond_length = not 6 <= len(cont) <= 40
-    cond_symbols = re.findall(r'[^a-zA-Z0-9!@#$%&*-+=,./?|~]', cont)
+    cond_symbols = re.findall(r'[^a-zA-Z0-9!@#$%&*-+=,./?|]~', cont)
     cond_letters = not re.findall(r'[a-zA-Z]', cont)
     cond_digits = not re.findall(r'[0-9]', cont)
 
@@ -201,5 +201,6 @@ class User(Base):
     # TODO: referal_parent
     # TODO: referal_code
     # TODO: channels
+    # TODO: attempts (password)
 
     # TODO: del Base.user

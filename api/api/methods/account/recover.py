@@ -2,16 +2,9 @@
 The password recover method of the account object of the API
 """
 
-import string
-import random
-import hashlib
-
-from ...funcs import check_params
-from ...funcs.mongodb import db
+from ...funcs import check_params, generate_password, report
+from ...models.user import User, process_login, process_lower, pre_process_phone
 from ...errors import ErrorWrong
-
-
-ALL_SYMBOLS = string.digits + string.ascii_letters
 
 
 # pylint: disable=unused-argument
@@ -19,24 +12,48 @@ async def handle(this, **x):
     """ Recover password """
 
     # Checking parameters
-
     check_params(x, (
         ('login', True, str),
     ))
 
-    # Get user
+    # Get
 
-    users = db.users.find_one({'login': x['login']})
+    new = False
 
-    if not users:
+    try:
+        login = process_login(x['login'])
+        user = User.get(login=login, fields={})[0]
+    except:
+        new = True
+
+    if new:
+        try:
+            mail = process_lower(x['login'])
+            user = User.get(mail=mail, fields={})[0]
+        except:
+            pass
+        else:
+            new = False
+
+    if new:
+        try:
+            phone = pre_process_phone(x['login'])
+            user = User.get(phone=phone, fields={})[0]
+        except:
+            pass
+        else:
+            new = False
+
+    if new:
         raise ErrorWrong('login')
 
-    password = ''.join(random.sample(ALL_SYMBOLS, 15))
-    password_crypt = hashlib.md5(bytes(password, 'utf-8')).hexdigest()
+    # Update password
+    password = generate_password()
+    user.password = password
+    user.save()
 
     # Send
-
-    # Update password
-
-    users['password'] = password_crypt
-    db.users.save(users)
+    # TODO: send by mail
+    # TODO: send by SMS
+    report(f"Recover password `{password }` for user={user.id}", 1)
+    # TODO: warning -> request

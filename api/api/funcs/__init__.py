@@ -3,23 +3,15 @@ The main functionality for the API
 """
 
 import time
-import string
-import random
 
 from ._types import check_params
 from ._files import get_file, max_image, load_image, reimg
 from ._codes import get_network, get_language
+from ._generate import generate, generate_password
 from ._online import get_user, online_back, online_start, online_stop
 from ._reports import report
 from .mongodb import db
 
-
-ALL_SYMBOLS = string.digits + string.ascii_letters
-
-def generate(length: int = 32) -> str:
-    """ Token / code generation """
-
-    return ''.join(random.choice(ALL_SYMBOLS) for _ in range(length))
 
 def next_id(name):
     """ Next DB ID """
