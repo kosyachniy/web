@@ -3,7 +3,6 @@ The getting method of the user object of the API
 """
 
 from ...funcs import check_params
-# from ...funcs.mongodb import db
 from ...models.user import User
 
 
@@ -11,7 +10,6 @@ async def handle(this, **x):
     """ Get """
 
     # Checking parameters
-
     check_params(x, (
         ('id', False, (int, list), int),
         ('count', False, int),
@@ -58,7 +56,6 @@ async def handle(this, **x):
         }
 
     # Get
-
     users = User.get(
         ids=x.get('id', None),
         count=x.get('count', None),
@@ -76,9 +73,6 @@ async def handle(this, **x):
     #     ) == True
 
     # Response
-
-    res = {
+    return {
         'users': users,
     }
-
-    return res

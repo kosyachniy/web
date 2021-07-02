@@ -4,7 +4,7 @@ curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"meth
 # Multiple
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "users.get", "params": {"id": [1, 2]}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
-# One
+# Single
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "users.get", "params": {"id": 1}, "token": "test"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
 # Search
