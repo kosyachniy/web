@@ -8,7 +8,7 @@ import math
 
 
 SYMBOLS = string.digits + string.ascii_letters
-SPEC_SYMBOLS = '!@#$%&*-+=,./?|~]'
+SPEC_SYMBOLS = '!@#$%&*-+=,./?|]~'
 
 
 def generate(length: int = 32) -> str:

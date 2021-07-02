@@ -9,7 +9,6 @@ import json
 # import requests
 
 from ...funcs import check_params # online_start
-# from ...funcs.mongodb import db
 # from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
 
@@ -24,7 +23,6 @@ async def handle(this, **x):
     """ By social network """
 
     # Checking parameters
-
     check_params(x, (
         ('user', True, int),
         # ('code', True, str),
