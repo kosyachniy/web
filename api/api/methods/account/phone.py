@@ -54,6 +54,13 @@ async def handle(this, **x):
 
         user = User.get(ids=user_id, fields=fields)
 
+        # Report
+        report.important(
+            "User registration by phone",
+            {'user': user_id, 'token': this.token},
+            path='methods.account.phone',
+        )
+
     else:
         user = users[0]
 

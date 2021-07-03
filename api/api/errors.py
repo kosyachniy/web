@@ -169,8 +169,8 @@ class ErrorCount(BaseError):
     def code(self):
         return 14
 
-class ErrorRepeat(BaseError):
-    """ Repeat action """
+class ErrorRepeat(BaseError): # Already / Duplicate
+    """ Duplicate """
 
     def __init__(self, par):
         super().__init__(par)

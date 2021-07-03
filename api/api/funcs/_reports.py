@@ -34,13 +34,18 @@ class Report():
         text = preview + "\n\n" + text
 
         if extra:
-            text_with_extra = text + "\n\n" + str(extra)
+            if isinstance(extra, dict):
+                extra_text = "\n".join(f"{i} = {extra[i]}" for i in extra)
+            else:
+                extra_text = str(extra)
+
+            text_with_extra = text + "\n\n" + extra_text
         else:
             text_with_extra = text
 
         tags = [self.mode.lower()] + tags
-        text += "\n\n#" + ' #'.join(tags)
-        text_with_extra += "\n\n#" + ' #'.join(tags)
+        text += "\n\n#" + " #".join(tags)
+        text_with_extra += "\n\n#" + " #".join(tags)
 
         try:
             send_tg(BUG_CHAT, text_with_extra, markup=None)

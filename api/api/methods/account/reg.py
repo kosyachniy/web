@@ -2,10 +2,12 @@
 The registration method of the account object of the API
 """
 
-from ...funcs import check_params, online_start
+import sys
+
+from ...funcs import check_params, online_start, report
 from ...models.user import User
 from ...models.token import Token
-from ...errors import ErrorAccess
+from ...errors import ErrorAccess, ErrorRepeat
 
 
 async def handle(this, **x):
@@ -27,17 +29,30 @@ async def handle(this, **x):
         ('social', False, list, dict),
     ))
 
-    #
+    # Create
 
-    user = User(
-        login=x['login'],
-        password=x['password'],
-        avatar=x['avatar'],
-        name=x['name'],
-        surname=x['surname'],
-        mail=x['mail'],
-        mail_verified=False,
-        social=x['social'],
+    try:
+        user = User(
+            login=x['login'],
+            password=x['password'],
+            avatar=x['avatar'],
+            name=x['name'],
+            surname=x['surname'],
+            mail=x['mail'],
+            mail_verified=False,
+            social=x['social'],
+        )
+    except ValueError as e:
+        type_, value, traceback = sys.exc_info() # TODO: to errors.py
+        raise ErrorRepeat(str(value))
+
+    user.save()
+
+    # Report
+    report.important(
+        "User registration",
+        {'user': user.id, 'token': this.token},
+        path='methods.account.reg',
     )
 
     # Assignment of the token to the user

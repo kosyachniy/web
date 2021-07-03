@@ -77,13 +77,20 @@ async def handle(this, **x):
     if new:
         user_data = User(
             password=x['password'],
-            mail=x['login'], # TODO: login / phone
+            mail=x['login'], # TODO: login
             mail_verified=False,
         )
         user_data.save()
         user_id = user_data.id
 
         user = User.get(ids=user_id, fields=fields)
+
+        # Report
+        report.important(
+            "User registration by mail",
+            {'user': user_id, 'token': this.token},
+            path='methods.account.auth',
+        )
 
     # Assignment of the token to the user
 

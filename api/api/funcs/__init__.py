@@ -9,4 +9,3 @@ from ._codes import get_network, get_language
 from ._generate import generate, generate_password
 from ._online import get_user, online_back, online_start, online_stop
 from ._reports import report
-from .mongodb import db

@@ -2,7 +2,7 @@
 The creating and editing method of the review object of the API
 """
 
-from ...funcs import check_params, reimg
+from ...funcs import check_params, reimg, report
 from ...models.review import Review
 
 
@@ -47,6 +47,19 @@ async def handle(this, **x):
 
     # Save
     review.save()
+
+    # Report
+    report.request(
+        "New review",
+        {
+            'review': review.id,
+            'name': review.name,
+            'cont': review.cont,
+            'user': this.user.id,
+            'token': this.token,
+        },
+        path='methods.reviews.save',
+    )
 
     # Response
     return {
