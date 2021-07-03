@@ -93,14 +93,20 @@ async def online_start(sio, token_id, socket_id=None):
             if socket.token != token_id:
                 socket.token = token_id
                 changed = True
-                report(
-                    "Wrong `socket.token` in `funcs/_online/online_start`"
-                , 1)
+                report.warning(
+                    "Wrong socket.token",
+                    {'from': socket.token, 'to': token_id},
+                    path='funcs._online.online_start',
+                )
 
             if socket.user != user.id:
                 socket.user = user.id
                 changed = True
-                report("Wrong `socket.user` in `funcs/_online/online_start`", 1)
+                report.warning(
+                    "Wrong socket.user",
+                    {'from': socket.user, 'to': user.id},
+                    path='funcs._online.online_start',
+                )
 
         if changed:
             socket.save()
@@ -144,7 +150,12 @@ async def online_stop(sio, socket_id):
     try:
         socket = Socket.get(ids=socket_id)
     except:
-        report("Wrong `socket_id` in `funcs/_online/online_stop`", 1)
+        report.warning(
+            "Wrong socket_id",
+            {'socket': socket_id},
+            path='funcs._online.online_stop',
+        )
+
         return
 
     user = get_user(socket.token)

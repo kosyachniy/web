@@ -55,5 +55,9 @@ async def handle(this, **x):
     # Send
     # TODO: send by mail
     # TODO: send by SMS
-    report(f"Recover password `{password }` for user={user.id}", 1)
-    # TODO: warning -> request
+
+    report.request(
+        "Recover password",
+        {'password': password, 'user': user.id},
+        path='methods.account.recover',
+    )

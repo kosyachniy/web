@@ -37,7 +37,11 @@ async def handle(this, **x):
     if len(users) == 0:
         new = True
     elif len(users) > 1:
-        report(f"More than 1 user by {x['phone']}", 1)
+        report.warning(
+            "More than 1 user",
+            {'phone': x['phone']},
+            path='methods.account.phone'
+        )
 
     # Register
     if new:
@@ -61,7 +65,11 @@ async def handle(this, **x):
     if new and this.user.status > 2:
         token = Token.get(ids=this.token, fields={'user'})
 
-        report(f"Reauth {token.user} -> {user.id}", 1)
+        report.warning(
+            "Reauth",
+            {'from': token.user, 'to': user.id},
+            path='methods.account.phone'
+        )
 
         token.user = user.id
 

@@ -16,7 +16,7 @@ async def handle(this, **x):
     print('ON', this.sid)
 
     if not x['token']:
-        report("Invalid `token` in `methods/account/online`", 1)
+        report.warning("Invalid token", path='methods.account.online')
         return
 
     # # Get token

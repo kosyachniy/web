@@ -93,7 +93,11 @@ async def handle(this, **x):
     if new and this.user.status > 2:
         token = Token.get(ids=this.token, fields={'user'})
 
-        report(f"Reauth {token.user} -> {user.id}", 1)
+        report.warning(
+            "Reauth",
+            {'from': token.user, 'to': user.id, 'token': this.token},
+            path='methods.account.auth',
+        )
 
         token.user = user.id
 

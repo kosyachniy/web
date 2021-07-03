@@ -43,7 +43,7 @@ async def background(sio):
 
     # Primary
     ## Reports
-    report("Restart server")
+    report.info("Restart server", path='background.background')
 
     ## Online users
     await reset_online_users(sio)
