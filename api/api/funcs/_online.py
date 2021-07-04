@@ -29,7 +29,7 @@ def _online_count():
     """ Counting the total number of online users """
 
     sockets = Socket.get(fields={'user', 'token'})
-    count = len({el.user if el.user else el.token for el in sockets})
+    count = len({socket.user or socket.token for socket in sockets})
 
     return count
 
@@ -70,6 +70,20 @@ async def online_start(sio, token_id, socket_id=None):
     # TODO: save user data cache in db.sockets
 
     user = get_user(token_id)
+
+    # Send socket about all online users to the user
+
+    if socket_id:
+        sockets_auth = Socket.get(user={'$exists': True}, fields={'user'})
+        users_uniq = {socket.user for socket in sockets_auth} - {0, None}
+        count = _online_count()
+        # TODO: Full info for all / auth / only for admins
+
+        if count:
+            await sio.emit('online_add', {
+                'count': count,
+                'users': [{'id': i} for i in users_uniq],
+            }, room=socket_id)
 
     # Already online
     already = _other_sessions(user.id, token_id)
@@ -129,17 +143,13 @@ async def online_start(sio, token_id, socket_id=None):
     # Send sockets about the user to all online users
 
     count = _online_count()
+    data = user.json(fields={'id', 'login', 'avatar', 'name', 'surname'})
+    # TODO: Full info for all / auth / only for admins
 
-    fields = {'id', 'login', 'avatar', 'name', 'surname'}
-    data = user.json(fields=fields)
-    # TODO: Full info for all / Full info only for admins
-
-    res = {
+    await sio.emit('online_add', {
         'count': count,
         'users': [data],
-    }
-
-    await sio.emit('online_add', res)
+    })
 
 async def online_stop(sio, socket_id):
     """ Stop online session of the user """
