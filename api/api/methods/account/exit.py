@@ -2,7 +2,7 @@
 The logout method of the account object of the API
 """
 
-from ...funcs import online_stop
+from ...funcs import online_stop, report
 from ...models.token import Token
 from ...models.socket import Socket
 from ...errors import ErrorAccess
@@ -18,6 +18,12 @@ async def handle(this, **x):
 
     # Not authorized
     if this.user.status < 3:
+        report.error(
+            "Wrong token",
+            {'token': this.token, 'user': this.user.id},
+            path='methods.account.exit',
+        )
+
         raise ErrorAccess('exit')
 
     # Check

@@ -137,6 +137,14 @@ def process_lower(cont):
 
     return cont.lower()
 
+def default_status(instance):
+    """ Default status """
+
+    if instance.id:
+        return 3
+
+    return 2
+
 # def default_referal_code():
 #     ALL_SYMBOLS = string.ascii_lowercase + string.digits
 #     generate = lambda length=8: ''.join(
@@ -190,7 +198,7 @@ class User(Base):
         default=0,
         pre_processing=get_language,
     )
-    status = Attribute(types=int, default=2) # TODO: or 3
+    status = Attribute(types=int, default=default_status)
     funnel = Attribute(types=list, default=[]) # TODO: list[dict]
     online = Attribute(types=list, default=[]) # TODO: list[tuple]
     # TODO: UTM / promo
