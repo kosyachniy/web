@@ -2,9 +2,8 @@
 The creating and editing method of the post object of the API
 """
 
-from ...funcs import check_params, load_image, reimg, report
+from ...funcs import check_params, report
 from ...models.post import Post
-from ...errors import ErrorUpload
 
 
 async def handle(this, **x):
@@ -32,11 +31,10 @@ async def handle(this, **x):
             # ('category', False, int),
         ))
 
-    # Processing params
-    processed = False
+    # Get
+
     new = False
 
-    # Get
     if 'id' in x:
         post = Post.get(ids=x['id'], fields={})
     else:
@@ -48,19 +46,9 @@ async def handle(this, **x):
     # Change fields
     post.name = x['name']
     post.tags = x['tags']
+    post.cont = x['cont']
+    post.cover = x['cover']
     # TODO: category
-
-    ## Content
-    post.cont = reimg(x['cont'])
-
-    if x['cont'] != post.cont:
-        processed = True
-
-    ## Cover
-    try:
-        post.cover = load_image(x['cover'])
-    except:
-        raise ErrorUpload('cover')
 
     # Save
     post.save()
@@ -80,6 +68,6 @@ async def handle(this, **x):
     # Response
     return {
         'id': post.id,
-        'cont': post.cont if processed else None,
+        'cont': post.cont if x['cont'] != post.cont else None,
         'new': new,
     }

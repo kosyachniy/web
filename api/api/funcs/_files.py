@@ -8,9 +8,12 @@ import base64
 import string
 import random
 import json
+import binascii
 
 import requests
-from PIL import Image, ExifTags
+from PIL import Image, ExifTags, UnidentifiedImageError
+
+from ..errors import ErrorUpload
 
 
 with open('sets.json', 'r') as file:
@@ -45,7 +48,10 @@ def load_image(data, encoding='base64', file_format='png'):
         return data
 
     if encoding != 'bytes':
-        match = re.search(r'^\w+\.\w+$', data)
+        try:
+            match = re.search(r'^\w+\.\w+$', data)
+        except TypeError:
+            raise ErrorUpload('image')
 
         if match:
             return data
@@ -54,9 +60,12 @@ def load_image(data, encoding='base64', file_format='png'):
     url_opt = url + 'opt/'
 
     if encoding == 'base64':
-        file_format = re.search(r'data:image/.+;base64,', data).group()[11:-8]
-        b64 = data.split(',')[1]
-        data = base64.b64decode(b64)
+        try:
+            file_format = re.search(r'data:image/.+;base64,', data).group()[11:-8]
+            b64 = data.split(',')[1]
+            data = base64.b64decode(b64)
+        except (AttributeError, binascii.Error):
+            raise ErrorUpload('image')
 
     file_id = max_image(url)
     file_id = '{}{}{}'.format(
@@ -69,14 +78,22 @@ def load_image(data, encoding='base64', file_format='png'):
     url += file_name
     url_opt += file_name
 
+    # TODO: check image data before save
     with open(url, 'wb') as file:
-        file.write(data)
+        try:
+            file.write(data)
+        except TypeError:
+            raise ErrorUpload('image')
 
     # EXIF data
     # pylint: disable=W0212
 
     try:
-        img = Image.open(url)
+        try:
+            img = Image.open(url)
+        except UnidentifiedImageError:
+            raise ErrorUpload('image')
+
         orientation = None
 
         for orientation in ExifTags.TAGS.keys():

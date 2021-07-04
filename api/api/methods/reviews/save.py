@@ -2,7 +2,7 @@
 The creating and editing method of the review object of the API
 """
 
-from ...funcs import check_params, reimg, report
+from ...funcs import check_params, report
 from ...models.review import Review
 
 
@@ -25,25 +25,21 @@ async def handle(this, **x):
             ('cont', True, str),
         ))
 
-    # Processing params
-    processed = False
-
     # Get
+
+    new = False
+
     if 'id' in x:
         review = Review.get(ids=x['id'], fields={})
     else:
         review = Review(
             user=this.user.id,
         )
+        new = True
 
     # Change fields
     review.name = x['name']
-
-    ## Content
-    review.cont = reimg(x['cont'])
-
-    if x['cont'] != review.cont:
-        processed = True
+    review.cont = x['cont']
 
     # Save
     review.save()
@@ -64,5 +60,6 @@ async def handle(this, **x):
     # Response
     return {
         'id': review.id,
-        'cont': review.cont if processed else None,
+        'cont': review.cont if x['cont'] != review.cont else None,
+        'new': new,
     }
