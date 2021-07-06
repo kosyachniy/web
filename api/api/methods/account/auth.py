@@ -2,32 +2,30 @@
 The authorization method of the account object of the API
 """
 
-from ...funcs import check_params, online_start, report
+from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, process_login, process_lower, \
                            pre_process_phone, process_password
 from ...models.token import Token
 from ...errors import ErrorWrong, ErrorAccess
 
 
-async def handle(this, **x):
+class Type(BaseType):
+    login: str # login / mail / phone
+    password: str
+
+@validate(Type)
+async def handle(this, request):
     """ Sign in / Sign up """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Pre-registration data (promos, actions, posts)
 
-    # Checking parameters
-
-    check_params(x, (
-        ('login', True, str), # login / mail / phone
-        ('password', True, str),
-    ))
-
     # Data preparation
 
     # TODO: None / not ''
-    # if 'password' in x and not x['password']:
-    #     del x['password']
+    # if 'password' in x and not request.password:
+    #     del request.password
 
     fields = {
         'login',
@@ -43,14 +41,14 @@ async def handle(this, **x):
     new = False
 
     try:
-        login = process_login(x['login'])
+        login = process_login(request.login)
         user = User.get(login=login, fields=fields)[0]
     except:
         new = True
 
     if new:
         try:
-            mail = process_lower(x['login'])
+            mail = process_lower(request.login)
             user = User.get(mail=mail, fields=fields)[0]
         except:
             pass
@@ -59,7 +57,7 @@ async def handle(this, **x):
 
     if new:
         try:
-            phone = pre_process_phone(x['login'])
+            phone = pre_process_phone(request.login)
             user = User.get(phone=phone, fields=fields)[0]
         except:
             pass
@@ -67,7 +65,7 @@ async def handle(this, **x):
             new = False
 
     if not new:
-        password = process_password(x['password'])
+        password = process_password(request.password)
 
         try:
             User.get(id=user.id, password=password)
@@ -77,8 +75,8 @@ async def handle(this, **x):
     # Register
     if new:
         user_data = User(
-            password=x['password'],
-            mail=x['login'], # TODO: login
+            password=request.password,
+            mail=request.login, # TODO: login
             mail_verified=False,
         )
         user_data.save()

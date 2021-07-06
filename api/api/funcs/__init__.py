@@ -2,7 +2,7 @@
 The main functionality for the API
 """
 
-from ._types import check_params
+from ._types import BaseType, validate
 from ._files import get_file, max_image, load_image, reimg
 from ._time import get_date
 from ._codes import get_network, get_language

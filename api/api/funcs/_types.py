@@ -2,46 +2,32 @@
 Types checking functionality for the API
 """
 
-from ..errors import ErrorSpecified, ErrorInvalid, ErrorType
+from functools import wraps
+
+from pydantic import BaseModel as BaseType
+from pydantic.error_wrappers import ValidationError
+
+from ..errors import ErrorSpecified, ErrorType
 
 
-def check_params(data, filters):
-    """ Checking parameters """
+def _check_params(params, filters):
+    try:
+        return filters(**params)
 
-    # TODO: Удалять другие поля (которых нет в списке)
+    except ValidationError as e:
+        param_name = e.errors()[0]['loc'][0]
 
-    for i in filters:
-        if i[0] in data:
-            # Invalid data type
-            if not isinstance(i[2], (list, tuple)):
-                el_type = (i[2],)
-            else:
-                el_type = i[2]
+        if param_name in params:
+            raise ErrorType(param_name)
 
-            cond_type = not isinstance(data[i[0]], el_type)
-            cond_iter = isinstance(data[i[0]], (tuple, list))
+        raise ErrorSpecified(param_name)
 
-            try:
-                cond_iter_el = cond_iter \
-                    and any(not isinstance(j, i[3]) for j in data[i[0]])
-            except:
-                raise ErrorType(i[0])
 
-            if cond_type or cond_iter_el:
-                raise ErrorType(i[0])
-
-            cond_null = isinstance(i[-1], bool) and i[-1] and cond_iter \
-                and not data[i[0]]
-
-            if cond_null:
-                raise ErrorInvalid(i[0])
-
-        # Not all fields are filled
-        elif i[1]:
-            raise ErrorSpecified(i[0])
-
-        # Default
-        else:
-            data[i[0]] = None
-
-    return data
+def validate(filters):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(this, **params):
+            params = _check_params(params, filters)
+            return f(this, params)
+        return wrapper
+    return decorator
