@@ -6,7 +6,7 @@ from ...funcs import online_stop
 
 
 # pylint: disable=unused-argument
-async def handle(this, **x):
+async def handle(this, request):
     """ Disconnect """
 
     print('OUT', this.sid)

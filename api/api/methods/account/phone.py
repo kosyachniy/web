@@ -4,20 +4,19 @@ The authorization by phone method of the account object of the API
 
 # import re
 
-from ...funcs import check_params, online_start, report
+from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, pre_process_phone
 from ...models.token import Token
 # from ...funcs.smsc import SMSC
 from ...errors import ErrorAccess
 
 
-async def handle(this, **x):
-    """ By phone """
+class Type(BaseType):
+    phone: str
 
-    # Checking parameters
-    check_params(x, (
-        ('phone', True, str),
-    ))
+@validate(Type)
+async def handle(this, request):
+    """ By phone """
 
     # Authorize
 
@@ -30,7 +29,7 @@ async def handle(this, **x):
         'status',
     }
 
-    phone = pre_process_phone(x['phone'])
+    phone = pre_process_phone(request.phone)
     new = False
     users = User.get(phone=phone, fields=fields)
 
@@ -39,14 +38,14 @@ async def handle(this, **x):
     elif len(users) > 1:
         report.warning(
             "More than 1 user",
-            {'phone': x['phone']},
+            {'phone': request.phone},
             path='methods.account.phone'
         )
 
     # Register
     if new:
         user_data = User(
-            phone=x['phone'],
+            phone=request.phone,
             phone_verified=False,
         )
         user_data.save()
@@ -128,7 +127,7 @@ async def handle(this, **x):
 
 #     # Process a phone number
 
-#     phone = _process_phone(x['phone'])
+#     phone = _process_phone(request.phone)
 
 #     # Already sent
 
@@ -155,7 +154,7 @@ async def handle(this, **x):
 #     }
 
 #     if 'promo' in x:
-#         req['promo'] = x['promo']
+#         req['promo'] = request.promo
 
 #     db.codes.insert_one(req)
 
@@ -195,27 +194,27 @@ async def handle(this, **x):
 
 #     #
 
-#     if 'code' in x and not x['code']:
-#         del x['code']
+#     if 'code' in x and not request.code:
+#         del request.code
 
 #     if 'phone' in x:
-#         x['phone'] = _process_phone(x['phone'])
+#         request.phone = _process_phone(request.phone)
 
 #     #
 
 #     if 'code' in x:
 #         # Code preparation
 
-#         x['code'] = str(x['code'])
+#         request.code = str(request.code)
 
 #         # Verification of code
 
 #         db_condition = {
-#             'code': x['code'],
+#             'code': request.code,
 #         }
 
 #         if 'phone' in x:
-#             db_condition['phone'] = x['phone']
+#             db_condition['phone'] = request.phone
 #         else:
 #             db_condition['token'] = this.token
 
@@ -236,11 +235,11 @@ async def handle(this, **x):
 
 #     else:
 #         code = {
-#             'phone': x['phone'],
+#             'phone': request.phone,
 #         }
 
 #         if 'promo' in x:
-#             code['promo'] = x['promo']
+#             code['promo'] = request.promo
 
 #     #
 

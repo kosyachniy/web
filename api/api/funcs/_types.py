@@ -26,7 +26,7 @@ def _check_params(params, filters):
 def validate(filters):
     def decorator(f):
         @wraps(f)
-        def wrapper(this, **params):
+        def wrapper(this, params):
             params = _check_params(params, filters)
             return f(this, params)
         return wrapper

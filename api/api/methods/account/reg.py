@@ -2,50 +2,44 @@
 The registration method of the account object of the API
 """
 
-import sys
-
-from ...funcs import check_params, online_start, report
+from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User
 from ...models.token import Token
 from ...errors import ErrorAccess, ErrorRepeat
 
 
-async def handle(this, **x):
+class Type(BaseType):
+    login: str = None
+    password: str = None
+    avatar: str = None
+    name: str = None
+    surname: str = None
+    mail: str = None
+    social: list[dict] = None
+
+@validate(Type)
+async def handle(this, request):
     """ Sign up """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Pre-registration data (promos, actions, posts)
 
-    # Checking parameters
-
-    x = check_params(x, (
-        ('login', False, str),
-        ('password', False, str),
-        ('name', False, str),
-        ('surname', False, str),
-        ('avatar', False, str),
-        ('file', False, str),
-        ('mail', False, str),
-        ('social', False, list, dict),
-    ))
-
     # Create
 
     try:
         user = User(
-            login=x['login'],
-            password=x['password'],
-            avatar=x['avatar'],
-            name=x['name'],
-            surname=x['surname'],
-            mail=x['mail'],
+            login=request.login,
+            password=request.password,
+            avatar=request.avatar,
+            name=request.name,
+            surname=request.surname,
+            mail=request.mail,
             mail_verified=False,
-            social=x['social'],
+            social=request.social,
         )
     except ValueError as e:
-        type_, value, traceback = sys.exc_info() # TODO: to errors.py
-        raise ErrorRepeat(str(value))
+        raise ErrorRepeat(e.args[0]) # TODO: to errors.py
 
     user.save()
 

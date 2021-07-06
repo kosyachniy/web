@@ -25,7 +25,7 @@ async def call(method, this, params):
 
     module = importlib.import_module(module_name)
     handle = getattr(module, 'handle')
-    return await handle(this, **params)
+    return await handle(this, params)
 
 
 # for loader, module_name, is_pkg in pkgutil.walk_packages(

@@ -9,7 +9,7 @@ from ...errors import ErrorAccess
 
 
 # pylint: disable=unused-argument
-async def handle(this, **x):
+async def handle(this, request):
     """ Log out """
 
     # TODO: Сокет на авторизацию на всех вкладках токена

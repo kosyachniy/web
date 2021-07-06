@@ -8,7 +8,7 @@ import json
 
 # import requests
 
-from ...funcs import check_params # online_start
+from ...funcs import BaseType, validate # online_start
 # from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
 
@@ -18,15 +18,14 @@ with open('keys.json', 'r') as file:
     GOOGLE = keys['google']
 
 
-# pylint: disable=unused-argument
-async def handle(this, **x):
-    """ By social network """
+class Type(BaseType):
+    user: int
+    # code: str
 
-    # Checking parameters
-    check_params(x, (
-        ('user', True, int),
-        # ('code', True, str),
-    ))
+# pylint: disable=unused-argument
+@validate(Type)
+async def handle(this, request):
+    """ By social network """
 
     #
 
@@ -35,7 +34,7 @@ async def handle(this, **x):
     # mail = ''
 
     # # ВКонтакте
-    # if x['id'] == 1:
+    # if request.id == 1:
     #     link = 'https://oauth.vk.com/access_token?client_id={}&client_secret=' \
     #            '{}&redirect_uri={}callback&code={}'
     #     response = json.loads(
@@ -44,7 +43,7 @@ async def handle(this, **x):
     #                 VK['client_id'],
     #                 VK['client_secret'],
     #                 this.client,
-    #                 x['code'],
+    #                 request.code,
     #             )
     #         ).text
     #     )
@@ -58,14 +57,14 @@ async def handle(this, **x):
     #         mail = response['email']
 
     # # Google
-    # elif x['id'] == 3:
+    # elif request.id == 3:
     #     link = 'https://accounts.google.com/o/oauth2/token'
     #     cont = {
     #         'client_id': GOOGLE['client_id'],
     #         'client_secret': GOOGLE['client_secret'],
     #         'redirect_uri': '{}callback'.format(this.client),
     #         'grant_type': 'authorization_code',
-    #         'code': urllib.parse.unquote(x['code']),
+    #         'code': urllib.parse.unquote(request.code),
     #     }
     #     response = json.loads(requests.post(link, json=cont).text)
 
@@ -92,7 +91,7 @@ async def handle(this, **x):
     # # Sign in
 
     # db_condition = {
-    #     'social': {'$elemMatch': {'id': x['id'], 'user': user_id}},
+    #     'social': {'$elemMatch': {'id': request.id, 'user': user_id}},
     # }
 
     # db_filter = {
@@ -119,7 +118,7 @@ async def handle(this, **x):
     #     login = ''
     #     avatar = None
 
-    #     if x['id'] == 1:
+    #     if request.id == 1:
     #         if 'access_token' in response:
     #             token = response['access_token']
     #         else:
@@ -170,9 +169,9 @@ async def handle(this, **x):
     #         except Exception:
     #             mail = ''
 
-    #     elif x['id'] == 3:
+    #     elif request.id == 3:
     #         # link = 'https://www.googleapis.com/oauth2/v1/userinfo' \
-    #         #        '?access_token={}'.format(x['data']['access_token'])
+    #         #        '?access_token={}'.format(request.data['access_token'])
     #         # res_google = json.loads(requests.get(link).text)
 
     #         try:
@@ -224,7 +223,7 @@ async def handle(this, **x):
     #             this.user,
     #             this.timestamp,
     #             social=[{
-    #                 'id': x['id'],
+    #                 'id': request.id,
     #                 'user': user_id,
     #             }],
     #             name=name,

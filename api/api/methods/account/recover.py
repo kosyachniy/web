@@ -2,33 +2,32 @@
 The password recover method of the account object of the API
 """
 
-from ...funcs import check_params, generate_password, report
+from ...funcs import BaseType, validate, generate_password, report
 from ...models.user import User, process_login, process_lower, pre_process_phone
 from ...errors import ErrorWrong
 
 
-# pylint: disable=unused-argument
-async def handle(this, **x):
-    """ Recover password """
+class Type(BaseType):
+    login: str
 
-    # Checking parameters
-    check_params(x, (
-        ('login', True, str),
-    ))
+# pylint: disable=unused-argument
+@validate(Type)
+async def handle(this, request):
+    """ Recover password """
 
     # Get
 
     new = False
 
     try:
-        login = process_login(x['login'])
+        login = process_login(request.login)
         user = User.get(login=login, fields={})[0]
     except:
         new = True
 
     if new:
         try:
-            mail = process_lower(x['login'])
+            mail = process_lower(request.login)
             user = User.get(mail=mail, fields={})[0]
         except:
             pass
@@ -37,7 +36,7 @@ async def handle(this, **x):
 
     if new:
         try:
-            phone = pre_process_phone(x['login'])
+            phone = pre_process_phone(request.login)
             user = User.get(phone=phone, fields={})[0]
         except:
             pass
