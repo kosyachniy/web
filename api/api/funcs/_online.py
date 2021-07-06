@@ -54,15 +54,18 @@ def get_user(token_id):
 def online_back(user_id):
     """ Checking how long has been online """
 
-    online = db.sockets.find_one({'id': user_id}, {'_id': True})
-    if online:
+    sockets = Socket.get(user=user_id, fields={})
+
+    if sockets:
         return 0
 
-    db_filter = {'_id': False, 'online.stop': True}
-    user = db.users.find_one({'id': user_id}, db_filter)['online']
+    user = User.get(ids=user_id, fields={'online.stop'})
 
-    last = max(i['stop'] for i in user)
-    return time.time() - last
+    if not user['online']:
+        return None
+
+    last = user['online'][-1]['stop']
+    return int(time.time() - last)
 
 async def online_start(sio, token_id, socket_id=None):
     """ Start / update online session of the user """

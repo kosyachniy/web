@@ -57,15 +57,16 @@ class API():
 
         # # Action tracking
 
-        # req = {
-        #     'time': self.timestamp,
-        #     'user': self.user['id'],
-        #     'ip': self.ip,
-        #     'method': name,
-        #     'params': params,
+        # action = Action(
+        #     user=self.user.id,
+        #     token=self.token,
+        #     socket=self.sid,
+        #     ip=self.ip,
+        #     method=name,
+        #     params=params,
         # }
 
-        # db.actions.insert_one(req)
+        # action.save()
 
         # API method
 

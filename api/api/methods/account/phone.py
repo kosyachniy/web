@@ -88,11 +88,7 @@ async def handle(this, **x):
 
     token.save()
 
-    # # TODO: Assignment of the tasks to the user
-    # for task in db.tasks.find({'token': this.token}):
-    #     task['user'] = res['id']
-    #     del task['token']
-    #     db.tasks.save(task)
+    # TODO: Pre-registration data (promos, actions, posts)
 
     # Update online users
     await online_start(this.sio, this.token)

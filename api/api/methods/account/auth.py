@@ -14,6 +14,7 @@ async def handle(this, **x):
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
+    # TODO: Pre-registration data (promos, actions, posts)
 
     # Checking parameters
 

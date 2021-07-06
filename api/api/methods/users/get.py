@@ -2,7 +2,7 @@
 The getting method of the user object of the API
 """
 
-from ...funcs import check_params
+from ...funcs import check_params, online_back
 from ...models.user import User
 
 
@@ -63,14 +63,15 @@ async def handle(this, **x):
         fields=fields,
     )
 
-    # # Processing
-
-    # for i in range(len(users)):
-    #     # Online
-    #     users[i]['online'] = db.sockets.find_one(
-    #         {'id': users[i]['id']},
-    #         {'_id': True}
-    #     ) == True
+    # Processing
+    if isinstance(users, list):
+        for i, user in enumerate(users):
+            user = user.json(default=False, fields=fields)
+            user['online'] = online_back(user['id'])
+            users[i] = user
+    else:
+        users = users.json(default=False, fields=fields)
+        users['online'] = online_back(users['id'])
 
     # Response
     return {
