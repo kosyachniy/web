@@ -1,6 +1,6 @@
 # Template full stack application
 ## Description
-Web-app on JS with JSON-RPC API
+Web-app on JS with Python JSON-RPC API
 
 Form | Side | Stack | Language | Path
 ---|---|---|---|---

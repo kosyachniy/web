@@ -12,7 +12,7 @@ class Type(BaseType):
     cont: str = None
     cover: str = None
     tags: list[str] = None
-    category: int = None
+    # category: int = None
 
 @validate(Type)
 async def handle(this, request):

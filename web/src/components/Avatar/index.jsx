@@ -15,11 +15,9 @@ class Avatar extends React.Component {
 
         fileReader.onload = (_eventFileReader) => {
             const base64 = _eventFileReader.target.result
-            const avatar = base64.split(',')[1]
-            const file = cover[0].name
 
             this.setState({ img: base64 })
-            this.props.updateAvatar(avatar, file)
+            this.props.setAvatar(base64)
         }
         fileReader.readAsDataURL(cover[0])
     }
@@ -31,7 +29,7 @@ class Avatar extends React.Component {
             <div id="avatar-preview">
                 <label htmlFor="avatar-loader">
                     { this.state.img ? (
-                        <img src={ this.state.img } alt={ 'аватарка' } />
+                        <img src={ this.state.img } alt={ 'Avatar' } />
                     ) : (
                         <div>{t('system.upload')}</div>
                     ) }

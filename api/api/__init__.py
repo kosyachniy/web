@@ -29,7 +29,7 @@ class API():
         name,
         params=None,
         ip=None,
-        sid=None,
+        socket=None,
         token=None,
         network=0,
         language=0,
@@ -43,7 +43,7 @@ class API():
 
         self.timestamp = time.time()
         self.ip = ip
-        self.sid = sid
+        self.socket = socket
         self.token = token
         self.network = get_network(network)
         self.language = get_language(language)
@@ -60,7 +60,7 @@ class API():
         # action = Action(
         #     user=self.user.id,
         #     token=self.token,
-        #     socket=self.sid,
+        #     socket=self.socket,
         #     ip=self.ip,
         #     method=name,
         #     params=params,

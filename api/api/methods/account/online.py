@@ -15,14 +15,14 @@ async def handle(this, request):
     # TODO: Проверка, что токен не скомпрометирован - по ip?
     # TODO: Определить вкладку (tab - sid)
 
-    print('ON', this.sid)
+    print('ON', this.socket)
 
     if not request.token:
         report.warning("Invalid token", path='methods.account.online')
         return
 
     # Send sockets
-    await online_start(this.sio, request.token, this.sid)
+    await online_start(this.sio, request.token, this.socket)
 
     # TODO: UTM parameters
     # TODO: Promos

@@ -9,6 +9,6 @@ from ...funcs import online_stop
 async def handle(this, request):
     """ Disconnect """
 
-    print('OUT', this.sid)
+    print('OUT', this.socket)
 
-    await online_stop(this.sio, this.sid)
+    await online_stop(this.sio, this.socket)

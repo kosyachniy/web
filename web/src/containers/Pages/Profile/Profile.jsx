@@ -19,7 +19,6 @@ const Profile = (props) => {
     const [mail, setMail] = useState(profile.mail)
     const [password, setPassword] = useState('')
     const [avatar, setAvatar] = useState(profile.avatar)
-    const [file, setFile] = useState(null)
 
     const accountEdit = () => {
         const handlerSuccess = res => {
@@ -34,15 +33,9 @@ const Profile = (props) => {
 
         if (avatar !== profile.avatar) {
             data['avatar'] = avatar
-            data['file'] = file
         }
 
         api('account.save', data, handlerSuccess)
-    }
-
-    const updateAvatar = (avatar, file) => {
-        setAvatar(avatar)
-        setFile(file)
     }
 
     if (profile.id === 0) {
@@ -54,7 +47,7 @@ const Profile = (props) => {
     return (
         <div className="album py-5">
             <div className="container">
-                <Avatar avatar={avatar} file={file} updateAvatar={updateAvatar} />
+                <Avatar avatar={avatar} setAvatar={setAvatar} />
                 <form>
                     <div className="input-group mb-3">
                         <input

@@ -25,7 +25,7 @@ async def handle(this, request):
     """ Save personal information """
 
     # No access
-    if this.user['status'] < 3:
+    if this.user.status < 3:
         raise ErrorAccess('edit')
 
     # Get

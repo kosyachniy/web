@@ -141,7 +141,7 @@ async def connect(sid, request, data):
     api.method(
         'account.connect',
         ip=request['asgi.scope']['client'][0],
-        sid=sid,
+        socket=sid,
     )
 
 @sio.on('online')
@@ -151,7 +151,7 @@ async def online(sid, data):
     await api.method(
         'account.online',
         data,
-        sid=sid,
+        socket=sid,
     )
 
 @sio.on('disconnect')
@@ -160,7 +160,7 @@ async def disconnect(sid):
 
     await api.method(
         'account.disconnect',
-        sid=sid,
+        socket=sid,
     )
 
 

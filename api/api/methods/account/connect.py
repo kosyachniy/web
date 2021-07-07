@@ -6,4 +6,4 @@ The connect socket of the account object of the API
 async def handle(this, request):
     """ Connect """
 
-    print('IN', this.sid)
+    print('IN', this.socket)

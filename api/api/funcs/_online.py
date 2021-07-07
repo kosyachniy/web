@@ -75,17 +75,22 @@ async def online_start(sio, token_id, socket_id=None):
     user = get_user(token_id)
 
     # Send socket about all online users to the user
+    # TODO: Full info for all / auth / only for admins
 
     if socket_id:
         sockets_auth = Socket.get(user={'$exists': True}, fields={'user'})
-        users_uniq = {socket.user for socket in sockets_auth} - {0, None}
+        fields = {'id', 'login', 'avatar', 'name', 'surname', 'status'}
+        users_uniq = [
+            User.get(ids=socket.user, fields=fields).json(fields=fields)
+            for socket in sockets_auth
+            if socket.user not in {0, None}
+        ]
         count = _online_count()
-        # TODO: Full info for all / auth / only for admins
 
         if count:
             await sio.emit('online_add', {
                 'count': count,
-                'users': [{'id': i} for i in users_uniq],
+                'users': users_uniq,
             }, room=socket_id)
 
     # Already online
@@ -144,14 +149,21 @@ async def online_start(sio, token_id, socket_id=None):
     # TODO: Сокет на обновление сессий в браузере
 
     # Send sockets about the user to all online users
+    # TODO: Full info for all / auth / only for admins
+    # NOTE: user.json(default=True) -> login, status
 
     count = _online_count()
-    data = user.json(fields={'id', 'login', 'avatar', 'name', 'surname'})
-    # TODO: Full info for all / auth / only for admins
+
+    if user.id:
+        data = [user.json(
+            fields={'id', 'login', 'avatar', 'name', 'surname', 'status'}
+        )]
+    else:
+        data = []
 
     await sio.emit('online_add', {
         'count': count,
-        'users': [data],
+        'users': data,
     })
 
 async def online_stop(sio, socket_id):
