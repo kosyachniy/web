@@ -2,41 +2,28 @@
 The creating and editing method of the post object of the API
 """
 
-from ...funcs import check_params, report
+from ...funcs import BaseType, validate, report
 from ...models.post import Post
 
 
-async def handle(this, **x):
+class Type(BaseType):
+    id: int = None
+    name: str = None
+    cont: str = None
+    cover: str = None
+    tags: list[str] = None
+    category: int = None
+
+@validate(Type)
+async def handle(this, request):
     """ Save """
-
-    # Checking parameters
-    ## Edit
-    if 'id' in x:
-        check_params(x, (
-            ('id', True, int),
-            ('name', False, str),
-            ('cont', False, str),
-            ('cover', False, str),
-            ('tags', False, list, str),
-            # ('category', False, int),
-        ))
-
-    ## Add
-    else:
-        check_params(x, (
-            ('name', True, str),
-            ('cont', True, str),
-            ('cover', False, str),
-            ('tags', False, list, str),
-            # ('category', False, int),
-        ))
 
     # Get
 
     new = False
 
-    if 'id' in x:
-        post = Post.get(ids=x['id'], fields={})
+    if request.id:
+        post = Post.get(ids=request.id, fields={})
     else:
         post = Post(
             user=this.user.id,
@@ -44,10 +31,10 @@ async def handle(this, **x):
         new = True
 
     # Change fields
-    post.name = x['name']
-    post.tags = x['tags']
-    post.cont = x['cont']
-    post.cover = x['cover']
+    post.name = request.name # TODO: checking if add
+    post.tags = request.tags
+    post.cont = request.cont # TODO: checking if add
+    post.cover = request.cover
     # TODO: category
 
     # Save
@@ -65,9 +52,14 @@ async def handle(this, **x):
         path='methods.posts.save',
     )
 
+    # Processing
+    cont = None
+    if request.cont and request.cont != post.cont:
+        cont = post.cont
+
     # Response
     return {
         'id': post.id,
-        'cont': post.cont if x['cont'] != post.cont else None,
+        'cont': cont,
         'new': new,
     }

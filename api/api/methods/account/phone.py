@@ -13,6 +13,8 @@ from ...errors import ErrorAccess
 
 class Type(BaseType):
     phone: str
+    # code: Union[str, int] = None
+    # promo: str = None
 
 @validate(Type)
 async def handle(this, request):
@@ -113,17 +115,8 @@ async def handle(this, request):
         'new': new,
     }
 
-# By phone
-
-# async def phone_send(this, **x):
+# async def phone_send(this, request):
 #     """ Send a code to the phone """
-
-#     # Checking parameters
-
-#     check_params(x, (
-#         ('phone', True, str),
-#         ('promo', False, str),
-#     ))
 
 #     # Process a phone number
 
@@ -146,17 +139,14 @@ async def handle(this, request):
 
 #     #
 
-#     req = {
-#         'phone': phone,
-#         'code': code,
-#         'token': this.token,
-#         'time': this.timestamp,
-#     }
+#     promo = Promo(
+#         phone=phone,
+#         code=code,
+#         token=this.token,
+#         promo=request.promo,
+#     )
 
-#     if 'promo' in x:
-#         req['promo'] = request.promo
-
-#     db.codes.insert_one(req)
+#     promo.save()
 
 #     #
 
@@ -176,16 +166,8 @@ async def handle(this, request):
 
 #     return res
 
-# async def phone_check(this, **x):
+# async def phone_check(this, request):
 #     """ Phone checking """
-
-#     # Checking parameters
-
-#     check_params(x, (
-#         ('phone', False, str),
-#         ('code', False, (int, str)),
-#         ('promo', False, str),
-#     ))
 
 #     #
 
@@ -194,15 +176,11 @@ async def handle(this, request):
 
 #     #
 
-#     if 'code' in x and not request.code:
-#         del request.code
-
-#     if 'phone' in x:
-#         request.phone = _process_phone(request.phone)
+#     request.phone = _process_phone(request.phone)
 
 #     #
 
-#     if 'code' in x:
+#     if request.code:
 #         # Code preparation
 
 #         request.code = str(request.code)
@@ -213,7 +191,7 @@ async def handle(this, request):
 #             'code': request.code,
 #         }
 
-#         if 'phone' in x:
+#         if request.phone:
 #             db_condition['phone'] = request.phone
 #         else:
 #             db_condition['token'] = this.token
@@ -238,7 +216,7 @@ async def handle(this, request):
 #             'phone': request.phone,
 #         }
 
-#         if 'promo' in x:
+#         if request.promo:
 #             code['promo'] = request.promo
 
 #     #

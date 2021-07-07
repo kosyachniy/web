@@ -3,31 +3,32 @@ The getting method of the post object of the API
 """
 
 import re
+from typing import Union
 
-from ...funcs import check_params
+from ...funcs import BaseType, validate
 from ...models.post import Post
 
 
-# pylint: disable=unused-argument
-async def handle(this, **x):
-    """ Get """
+class Type(BaseType):
+    id: Union[int, list[int]] = None
+    count: int = None
+    offset: int = None
+    search: str = None
+    # category: int = None
+    # language: Union[str, int] = None
+    # fields: list[str] = None
 
-    # Checking parameters
-    check_params(x, (
-        ('id', False, (int, list), int),
-        ('count', False, int),
-        ('offset', False, int),
-        ('search', False, str),
-        # ('category', False, int),
-        # ('language', False, (int, str)),
-    ))
+# pylint: disable=unused-argument
+@validate(Type)
+async def handle(this, request):
+    """ Get """
 
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
-    # if 'language' in x:
-    #     x['language'] = get_language(x['language'])
+    # if request.language:
+    #     request.language = get_language(request.language)
     # else:
-    #     x['language'] = this.language
+    #     request.language = this.language
 
     # Fields
     fields = {
@@ -41,13 +42,13 @@ async def handle(this, **x):
 
     # Get
     posts = Post.get(
-        ids=x.get('id', None),
-        count=x.get('count', None),
-        offset=x.get('offset', None),
-        search=x.get('search', None),
+        ids=request.id,
+        count=request.count,
+        offset=request.offset,
+        search=request.search,
         fields=fields,
-        # category=x.get('category', None),
-        # language=x.get('language', None),
+        # category=request.category,
+        # language=request.language,
     )
 
     # Processing

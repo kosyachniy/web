@@ -20,12 +20,9 @@ async def handle(this, request):
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Pre-registration data (promos, actions, posts)
+    # TODO: without password
 
     # Data preparation
-
-    # TODO: None / not ''
-    # if 'password' in x and not request.password:
-    #     del request.password
 
     fields = {
         'login',

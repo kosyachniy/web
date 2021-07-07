@@ -2,20 +2,21 @@
 The getting method of the user object of the API
 """
 
-from ...funcs import check_params, online_back
+from typing import Union
+
+from ...funcs import BaseType, validate, online_back
 from ...models.user import User
 
 
-async def handle(this, **x):
-    """ Get """
+class Type(BaseType):
+    id: Union[int, list[int]] = None
+    count: int = None
+    offset: int = None
+    fields: list[str] = None
 
-    # Checking parameters
-    check_params(x, (
-        ('id', False, (int, list), int),
-        ('count', False, int),
-        ('offset', False, int),
-        ('fields', False, list, str),
-    ))
+@validate(Type)
+async def handle(this, request):
+    """ Get """
 
     # Fields
 
@@ -32,7 +33,7 @@ async def handle(this, **x):
         # 'online',
     }
 
-    process_self = 'id' in x and x['id'] == this.user['id']
+    process_self = request.id == this.user['id']
     # process_moderator = this.user['status'] >= 5
     process_admin = this.user['status'] >= 7
 
@@ -57,9 +58,9 @@ async def handle(this, **x):
 
     # Get
     users = User.get(
-        ids=x.get('id', None),
-        count=x.get('count', None),
-        offset=x.get('offset', None),
+        ids=request.id,
+        count=request.count,
+        offset=request.offset,
         fields=fields,
     )
 

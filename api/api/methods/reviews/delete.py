@@ -2,25 +2,24 @@
 The removal method of the review object of the API
 """
 
-from ...funcs import check_params
+from ...funcs import BaseType, validate
 from ...models.review import Review
 from ...errors import ErrorAccess
 
 
-async def handle(this, **x):
-    """ Delete """
+class Type(BaseType):
+    id: int
 
-    # Checking parameters
-    check_params(x, (
-        ('id', True, int),
-    ))
+@validate(Type)
+async def handle(this, request):
+    """ Delete """
 
     # No access
     if this.user.status < 5:
         raise ErrorAccess('delete')
 
     # Get
-    review = Review.get(ids=x['id'])
+    review = Review.get(ids=request.id)
 
     # Delete
     review.rm()

@@ -2,35 +2,25 @@
 The creating and editing method of the review object of the API
 """
 
-from ...funcs import check_params, report
+from ...funcs import BaseType, validate, report
 from ...models.review import Review
 
 
-async def handle(this, **x):
+class Type(BaseType):
+    id: int = None
+    name: str = None
+    cont: str = None
+
+@validate(Type)
+async def handle(this, request):
     """ Save """
-
-    # Checking parameters
-    ## Edit
-    if 'id' in x:
-        check_params(x, (
-            ('id', True, int),
-            ('name', False, str),
-            ('cont', False, str),
-        ))
-
-    ## Add
-    else:
-        check_params(x, (
-            ('name', True, str),
-            ('cont', True, str),
-        ))
 
     # Get
 
     new = False
 
-    if 'id' in x:
-        review = Review.get(ids=x['id'], fields={})
+    if request.id:
+        review = Review.get(ids=request.id, fields={})
     else:
         review = Review(
             user=this.user.id,
@@ -38,8 +28,8 @@ async def handle(this, **x):
         new = True
 
     # Change fields
-    review.name = x['name']
-    review.cont = x['cont']
+    review.name = request.name # TODO: checking if add
+    review.cont = request.cont # TODO: checking if add
 
     # Save
     review.save()
@@ -57,9 +47,14 @@ async def handle(this, **x):
         path='methods.reviews.save',
     )
 
+    # Processing
+    cont = None
+    if request.cont and request.cont != review.cont:
+        cont = review.cont
+
     # Response
     return {
         'id': review.id,
-        'cont': review.cont if x['cont'] != review.cont else None,
+        'cont': cont,
         'new': new,
     }

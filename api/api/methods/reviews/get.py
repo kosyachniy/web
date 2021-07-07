@@ -2,22 +2,24 @@
 The getting method of the review object of the API
 """
 
-from ...funcs import check_params
+from typing import Union
+
+from ...funcs import BaseType, validate
 from ...models.user import User
 from ...models.review import Review
 from ...errors import ErrorAccess
 
 
-async def handle(this, **x):
-    """ Get """
+class Type(BaseType):
+    id: Union[int, list[int]] = None
+    count: int = None
+    offset: int = None
+    search: str = None
+    # fields: list[str] = None
 
-    # Checking parameters
-    check_params(x, (
-        ('id', False, (int, list), int),
-        ('count', False, int),
-        ('offset', False, int),
-        ('search', False, str),
-    ))
+@validate(Type)
+async def handle(this, request):
+    """ Get """
 
     # No access
     if this.user.status < 4:
@@ -34,10 +36,10 @@ async def handle(this, **x):
 
     # Get
     reviews = Review.get(
-        ids=x.get('id', None),
-        count=x.get('count', None),
-        offset=x.get('offset', None),
-        search=x.get('search', None),
+        ids=request.id,
+        count=request.count,
+        offset=request.offset,
+        search=request.search,
         fields=fields,
     )
 

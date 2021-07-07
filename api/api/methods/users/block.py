@@ -2,22 +2,21 @@
 The blocking method of the user object of the API
 """
 
-from ...funcs import check_params
+from ...funcs import BaseType, validate
 from ...models.user import User
 from ...errors import ErrorWrong, ErrorAccess
 
 
-async def handle(this, **x):
-    """ Block """
+class Type(BaseType):
+    id: int
 
-    # Checking parameters
-    check_params(x, (
-        ('id', True, int),
-    ))
+@validate(Type)
+async def handle(this, request):
+    """ Block """
 
     # Get user
     try:
-        user = User.get(ids=x['id'], fields={'status'})
+        user = User.get(ids=request.id, fields={'status'})
     except:
         raise ErrorWrong('id')
 
@@ -28,3 +27,8 @@ async def handle(this, **x):
     # Save
     user.status = 1
     user.save()
+
+    # Response
+    return {
+        'status': user.status,
+    }
