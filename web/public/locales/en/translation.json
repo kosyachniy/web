@@ -62,8 +62,10 @@
     },
     "profile": {
         "login": "Login",
+        "avatar": "Avatar",
         "name": "Name",
         "surname": "Surname",
+        "phone": "Phone number",
         "mail": "E-mail",
         "password": "Password",
         "passwordTip1": "length should be 6 or more",

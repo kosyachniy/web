@@ -6,7 +6,7 @@ import './style.css'
 
 class Avatar extends React.Component {
     state = {
-        img: null, // this.props.avatar,
+        img: this.props.avatar,
     }
 
     handleAvatar = (_e) => {
@@ -29,9 +29,12 @@ class Avatar extends React.Component {
             <div id="avatar-preview">
                 <label htmlFor="avatar-loader">
                     { this.state.img ? (
-                        <img src={ this.state.img } alt={ 'Avatar' } />
+                        <img
+                            src={ this.state.img.indexOf('.')<0 ? this.state.img : `/load/${this.state.img}`}
+                            alt={ t('profile.avatar') }
+                        />
                     ) : (
-                        <div>{t('system.upload')}</div>
+                        <div>{ t('system.upload') }</div>
                     ) }
 
                     <input

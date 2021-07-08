@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -14,18 +14,62 @@ const Profile = (props) => {
     const { profile, profileUpdate } = props
     const { t } = useTranslation()
     const [login, setLogin] = useState(profile.login)
-    const [name, setName] = useState(profile.name)
-    const [surname, setSurname] = useState(profile.surname)
-    const [mail, setMail] = useState(profile.mail)
     const [password, setPassword] = useState('')
     const [avatar, setAvatar] = useState(profile.avatar)
+    const [name, setName] = useState(profile.name)
+    const [surname, setSurname] = useState(profile.surname)
+    const [phone, setPhone] = useState(profile.phone)
+    const [mail, setMail] = useState(profile.mail)
+    const [social, setSocial] = useState(profile.social)
+    const [status, setStatus] = useState(profile.status)
+
+    useEffect(() => {
+        if (profile.id === 0) {
+            return (
+                <Redirect to="/" />
+            )
+        }
+
+        api('users.get', {id: +profile.id}, res => {
+            profileUpdate({
+                login: res.users.login,
+                avatar: res.users.avatar,
+                name: res.users.name,
+                surname: res.users.surname,
+                phone: res.users.phone,
+                mail: res.users.mail,
+                social: res.users.social,
+                status: res.users.status,
+            })
+        })
+    }, [])
 
     const accountEdit = () => {
         const handlerSuccess = res => {
-            profileUpdate({login, name, surname, mail, password, avatar})
+            profileUpdate({login, avatar, name, surname, phone, mail})
         }
 
-        const data = { login, name, surname, mail}
+        const data = {}
+
+        if (login && login !== profile.login) {
+            data['login'] = login
+        }
+
+        if (name && name !== profile.name) {
+            data['name'] = name
+        }
+
+        if (surname && surname !== profile.surname) {
+            data['surname'] = surname
+        }
+
+        if (phone && phone !== profile.phone) {
+            data['phone'] = phone
+        }
+
+        if (mail && mail !== profile.mail) {
+            data['mail'] = mail
+        }
 
         if (password.length) {
             data['password'] = password
@@ -36,12 +80,6 @@ const Profile = (props) => {
         }
 
         api('account.save', data, handlerSuccess)
-    }
-
-    if (profile.id === 0) {
-        return (
-            <Redirect to="/" />
-        )
     }
 
     return (
@@ -65,6 +103,20 @@ const Profile = (props) => {
                             type="text"
                             aria-label="Last name"
                             className="form-control"
+                        />
+                    </div>
+                    <div className="input-group flex-nowrap mb-3">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text" id="addon-wrapping">+</span>
+                        </div>
+                        <input
+                            value={phone}
+                            onChange={(event) => { setPhone(event.target.value) }}
+                            placeholder={t('profile.phone')}
+                            type="text"
+                            className="form-control"
+                            aria-label="Phone number"
+                            aria-describedby="addon-wrapping"
                         />
                     </div>
                     <div className="input-group flex-nowrap mb-3">

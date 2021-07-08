@@ -78,14 +78,15 @@ class Attribute:
         return None
 
     def __set__(self, instance, value) -> None:
+        if value is None:
+            return
+
         if self.pre_processing:
             value = self.pre_processing(value)
 
-        if value is None:
-            # if self.name in instance.__dict__:
-            #     del instance.__dict__[self.name]
-
-            return
+        # if value is None:
+        #     if self.name in instance.__dict__:
+        #         del instance.__dict__[self.name]
 
         if not isinstance(value, self.types):
             raise TypeError(self.name)

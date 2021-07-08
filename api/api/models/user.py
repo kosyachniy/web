@@ -210,5 +210,6 @@ class User(Base):
     # TODO: referal_code
     # TODO: channels
     # TODO: attempts (password)
+    # TODO: middle name
 
     # TODO: del Base.user

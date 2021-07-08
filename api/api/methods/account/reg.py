@@ -63,20 +63,20 @@ async def handle(this, request):
     token.save()
 
     # Update online users
-
     await online_start(this.sio, this.token)
 
     # Response
-
-    res = {
-        'id': user.id,
-        'login': user.login,
-        'avatar': user.avatar,
-        'name': user.name,
-        'surname': user.surname,
-        'mail': user.mail,
-        'status': user.status,
+    return {
+        **user.json(fields={
+            'id',
+            'login',
+            'avatar',
+            'name',
+            'surname',
+            'phone',
+            'mail',
+            'social',
+            'status',
+        }),
         'new': True,
     }
-
-    return res

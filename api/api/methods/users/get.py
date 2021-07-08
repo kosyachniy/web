@@ -18,6 +18,12 @@ class Type(BaseType):
 async def handle(this, request):
     """ Get """
 
+    # TODO: cursor
+
+    # TODO: Get myself
+    # if not request.id and this.user.id:
+    #     request.id = this.user.id
+
     # Fields
 
     fields = {
@@ -39,6 +45,7 @@ async def handle(this, request):
 
     if process_self:
         fields |= {
+            'phone',
             'mail',
             'social',
             # 'phone',
@@ -51,10 +58,14 @@ async def handle(this, request):
 
     if process_admin:
         fields |= {
+            'phone',
             'mail',
             'social',
             # 'phone',
         }
+
+    if request.fields:
+        fields = fields & set(request.fields)
 
     # Get
     users = User.get(

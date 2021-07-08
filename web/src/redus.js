@@ -63,30 +63,34 @@ export const changeLang = lang => {
 }
 
 export const profileIn = profile => {
-    const { id, login, name, surname, mail, avatar, admin } = profile
+    const { id, login, avatar, name, surname, phone, mail, social, status } = profile
 
     localStorage.setItem('id', id)
     localStorage.setItem('login', login)
+    localStorage.setItem('avatar', avatar)
     localStorage.setItem('name', name)
     localStorage.setItem('surname', surname)
+    localStorage.setItem('phone', phone)
     localStorage.setItem('mail', mail)
-    localStorage.setItem('avatar', avatar)
-    localStorage.setItem('admin', admin)
+    localStorage.setItem('social', social)
+    localStorage.setItem('status', status)
 
     return {
         type: 'PROFILE_IN',
-        id, login, name, surname, mail, avatar, admin,
+        id, login, avatar, name, surname, phone, mail, social, status,
     }
 };
 
 export const profileOut = () => {
     localStorage.removeItem('id')
     localStorage.removeItem('login')
+    localStorage.removeItem('avatar')
     localStorage.removeItem('name')
     localStorage.removeItem('surname')
+    localStorage.removeItem('phone')
     localStorage.removeItem('mail')
-    localStorage.removeItem('avatar')
-    localStorage.removeItem('admin')
+    localStorage.removeItem('social')
+    localStorage.removeItem('status')
 
     return {
         type: 'PROFILE_OUT',
@@ -94,7 +98,7 @@ export const profileOut = () => {
 };
 
 export const profileUpdate = profile => {
-    ['login', 'name', 'surname', 'mail', 'avatar'].map(el => {
+    ['login', 'avatar', 'name', 'surname', 'phone', 'mail', 'social', 'status'].map(el => {
         if (el in profile) {
             localStorage.setItem(el, profile[el])
         }
@@ -255,10 +259,12 @@ export const profile = (state = {
             return {
                 id: state.id || localStorage.getItem('id') || 0,
                 login: state.login || localStorage.getItem('login'),
+                avatar: state.avatar || localStorage.getItem('avatar'),
                 name: state.name || localStorage.getItem('name'),
                 surname: state.surname || localStorage.getItem('surname'),
+                phone: state.phone || localStorage.getItem('phone'),
                 mail: state.mail || localStorage.getItem('mail'),
-                avatar: state.avatar || localStorage.getItem('avatar'),
+                social: state.social || localStorage.getItem('social') || [],
                 admin: state.admin || localStorage.getItem('admin') || 2,
             };
     }
