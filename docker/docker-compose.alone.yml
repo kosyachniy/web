@@ -68,7 +68,7 @@ services:
                 - HOST=${EXTERNAL_HOST}
                 - PORT=${CRYPTO_PORT}
                 - NAME=${NAME}
-                - MAIL=${MAIL}
+                - MAIL=${EMAIL}
                 - PHONE=${PHONE}
                 - SOCIAL=${SOCIAL}
                 - GOOGLE_MAP_KEY=${GOOGLE_MAP_KEY}

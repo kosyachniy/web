@@ -102,7 +102,7 @@ const Header = (props) => {
                                         <div className="online"></div>
                                         <div
                                             className="badge badge-secondary"
-                                            onClick={ ()=>{handlerPopUp('online'); console.log('online')} }
+                                            onClick={ ()=>{handlerPopUp('online')} }
                                         >{ online.count } </div>
                                     </>
                                 ) : (

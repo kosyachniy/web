@@ -8,7 +8,7 @@ source <(cat .env | \
 set +a
 
 echo $EXTERNAL_HOST
-echo $MAIL
+echo $EMAIL
 
 #
 
@@ -69,9 +69,9 @@ for domain in "${domains[@]}"; do
 done
 
 # Select appropriate email arg
-case "$MAIL" in
+case "$EMAIL" in
   "") email_arg="--register-unsafely-without-email" ;;
-  *) email_arg="--email $MAIL" ;;
+  *) email_arg="--email $EMAIL" ;;
 esac
 
 # Enable staging mode if needed
