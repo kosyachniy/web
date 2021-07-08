@@ -164,4 +164,4 @@ async def disconnect(sid):
     )
 
 
-app.mount('/', asgi) # ?
+app.mount('/', asgi) # TODO: check it

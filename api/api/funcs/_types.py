@@ -10,7 +10,23 @@ from pydantic.error_wrappers import ValidationError
 from ..errors import ErrorSpecified, ErrorType
 
 
-def _check_params(params, filters):
+def _prepare(data):
+    """ Remove extra indentation """
+
+    for i in data:
+        if isinstance(data[i], str):
+            data[i] = data[i].strip()
+
+        elif isinstance(data[i], (list, dict)):
+            for j in data[i]:
+                if isinstance(data[i][j], str):
+                    data[i][j] = data[i][j].strip()
+
+    return data
+
+def _check(params, filters):
+    """ Convert the parameters to the required object """
+
     try:
         return filters(**params)
 
@@ -24,10 +40,13 @@ def _check_params(params, filters):
 
 
 def validate(filters):
+    """ Validation of function parameters """
+
     def decorator(f):
         @wraps(f)
         def wrapper(this, params):
-            params = _check_params(params, filters)
+            params = _prepare(params)
+            params = _check(params, filters)
             return f(this, params)
         return wrapper
     return decorator

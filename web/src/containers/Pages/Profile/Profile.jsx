@@ -20,16 +20,10 @@ const Profile = (props) => {
     const [surname, setSurname] = useState(profile.surname)
     const [phone, setPhone] = useState(profile.phone)
     const [mail, setMail] = useState(profile.mail)
-    const [social, setSocial] = useState(profile.social)
-    const [status, setStatus] = useState(profile.status)
+    // const [social, setSocial] = useState(profile.social)
+    // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
-        if (profile.id === 0) {
-            return (
-                <Redirect to="/" />
-            )
-        }
-
         api('users.get', {id: +profile.id}, res => {
             profileUpdate({
                 login: res.users.login,
@@ -43,6 +37,12 @@ const Profile = (props) => {
             })
         })
     }, [])
+
+    if (profile.id === 0) {
+        return (
+            <Redirect to="/" />
+        )
+    }
 
     const accountEdit = () => {
         const handlerSuccess = res => {

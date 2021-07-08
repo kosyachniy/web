@@ -49,12 +49,6 @@ class API():
         self.language = get_language(language)
         self.user = get_user(token)
 
-        # Remove extra indentation
-
-        for i in params:
-            if isinstance(params[i], str):
-                params[i] = params[i].strip()
-
         # # Action tracking
 
         # action = Action(
