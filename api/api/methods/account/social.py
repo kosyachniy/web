@@ -20,14 +20,12 @@ with open('keys.json', 'r') as file:
 
 class Type(BaseType):
     user: int
-    # code: str
+    # TODO: code: str
 
 # pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request):
     """ By social network """
-
-    #
 
     # user_id = 0
     # new = False

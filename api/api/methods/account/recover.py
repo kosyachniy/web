@@ -55,6 +55,7 @@ async def handle(this, request):
     # TODO: send by mail
     # TODO: send by SMS
 
+    # Report
     report.request(
         "Recover password",
         {'password': password, 'user': user.id},

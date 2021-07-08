@@ -15,7 +15,7 @@ class Type(BaseType):
     count: int = None
     offset: int = None
     search: str = None
-    # fields: list[str] = None
+    # TODO: fields: list[str] = None
 
 @validate(Type)
 async def handle(this, request):

@@ -23,7 +23,7 @@ async def handle(this, request):
     # TODO: without password
 
     # Data preparation
-
+    # TODO: optimize
     fields = {
         'login',
         'avatar',
@@ -31,7 +31,7 @@ async def handle(this, request):
         'surname',
         'mail',
         'status',
-    } # TODO: optimize
+    }
 
     # Authorize
 

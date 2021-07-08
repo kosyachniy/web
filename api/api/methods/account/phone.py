@@ -94,7 +94,7 @@ async def handle(this, request):
     # Update online users
     await online_start(this.sio, this.token)
 
-    # # TODO: redirect to active space
+    # TODO: redirect to active space
     # if space_id:
     #     for socket_id in Socket(user=user.id):
     #         this.sio.emit('space_return', {

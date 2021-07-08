@@ -14,9 +14,9 @@ class Type(BaseType):
     count: int = None
     offset: int = None
     search: str = None
-    # category: int = None
-    # language: Union[str, int] = None
-    # fields: list[str] = None
+    # TODO: category: int = None
+    # TODO: language: Union[str, int] = None
+    # TODO: fields: list[str] = None
 
 # pylint: disable=unused-argument
 @validate(Type)

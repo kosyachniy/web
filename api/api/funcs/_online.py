@@ -172,6 +172,8 @@ async def online_stop(sio, socket_id):
     # TODO: Объединять сессии в онлайн по пользователю
     # TODO: Если сервер был остановлен, отслеживать сессию
 
+    print('!', socket_id)
+
     try:
         socket = Socket.get(ids=socket_id)
     except:
@@ -186,13 +188,11 @@ async def online_stop(sio, socket_id):
     user = get_user(socket.token)
 
     # Update user online info
-
     if user.id:
         user.online.append({'start': socket.created, 'stop': time.time()})
         user.save()
 
     # Delete online session info
-
     socket = Socket.get(ids=socket_id)
     socket.rm()
 
@@ -209,5 +209,5 @@ async def online_stop(sio, socket_id):
 
     await sio.emit('online_del', {
         'count': count,
-        'users': [{'id': user.id}], # ! Админам
+        'users': [{'id': user.id}], # TODO: Админам
     })

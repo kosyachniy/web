@@ -169,7 +169,7 @@ class ErrorCount(BaseError):
     def code(self):
         return 14
 
-class ErrorRepeat(BaseError): # Already / Duplicate
+class ErrorRepeat(BaseError): # TODO: Already / Duplicate
     """ Duplicate """
 
     def __init__(self, par):

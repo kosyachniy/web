@@ -32,7 +32,6 @@ def check_login(id_, cont):
     """ Login checking """
 
     # Already registered
-
     users = db.users.find_one({'login': cont}, {'_id': True, 'id': True})
     if users and users['id'] != id_:
         return False

@@ -131,7 +131,6 @@ def load_image(data, encoding='base64', file_format='png'):
     img.save(url_opt)
 
     # Response
-
     return file_name
 
 def reimg(text):

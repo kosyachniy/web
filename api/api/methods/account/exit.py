@@ -30,9 +30,11 @@ async def handle(this, request):
     token = Token.get(ids=this.token, fields={})
 
     # Remove
-    token.rm() # TODO: не удалять токены (выданные ботам)
+    # TODO: не удалять токены (выданные ботам)
+    token.rm()
 
     # Close session
+
     sockets = Socket.get(token=this.token, fields={})
 
     for socket in sockets:

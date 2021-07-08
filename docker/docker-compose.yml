@@ -43,7 +43,7 @@ services:
         env_file: .env
         volumes:
             - ../data/load:/data/load
-            # Для горячей перезагрузки
+            # For hot reload
             - ../api/api:/api
             - ../api/app.py:/app.py
 
@@ -66,7 +66,7 @@ services:
         env_file: .env
         volumes:
             - ../web/public:/public
-            # Нельзя указывать src, т.к. не сгенерируются sets & keys
+            # NOTE: Нельзя указывать src, т.к. не сгенерируются sets & keys
             - ../web/src/components:/src/components
             - ../web/src/containers:/src/containers
             - ../web/src/func:/src/func

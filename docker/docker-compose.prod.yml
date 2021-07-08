@@ -41,7 +41,7 @@ services:
         env_file: .env
         volumes:
             - ../data/load:/data/load
-            # Для горячей перезагрузки
+            # For hot reload
             - ../api/api:/api
             - ../api/app.py:/app.py
 
