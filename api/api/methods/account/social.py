@@ -9,7 +9,7 @@ import json
 # import requests
 
 from ...funcs import BaseType, validate # online_start
-# from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
+from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
 
 
 with open('keys.json', 'r') as file:
@@ -26,6 +26,10 @@ class Type(BaseType):
 @validate(Type)
 async def handle(this, request):
     """ By social network """
+
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('social')
 
     # user_id = 0
     # new = False

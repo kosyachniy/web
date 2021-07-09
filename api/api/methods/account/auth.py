@@ -22,14 +22,21 @@ async def handle(this, request):
     # TODO: Pre-registration data (promos, actions, posts)
     # TODO: without password
 
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('auth')
+
     # Data preparation
     # TODO: optimize
     fields = {
+        'id',
         'login',
         'avatar',
         'name',
         'surname',
+        'phone',
         'mail',
+        'social',
         'status',
     }
 
@@ -93,23 +100,19 @@ async def handle(this, request):
     if not this.token:
         raise ErrorAccess('auth')
 
-    if new and this.user.status > 2:
+    try:
         token = Token.get(ids=this.token, fields={'user'})
+    except:
+        token = Token(id=this.token)
 
+    if token.user:
         report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': this.token},
             path='methods.account.auth',
         )
 
-        token.user = user.id
-
-    else:
-        token = Token(
-            id=this.token,
-            user=user.id,
-        )
-
+    token.user = user.id
     token.save()
 
     # Update online users
@@ -118,16 +121,6 @@ async def handle(this, request):
     # Response
     # TODO: del None
     return {
-        **user.json(fields={
-            'id',
-            'login',
-            'avatar',
-            'name',
-            'surname',
-            'phone',
-            'mail',
-            'social',
-            'status',
-        }),
+        **user.json(fields=fields),
         'new': new,
     }

@@ -20,14 +20,21 @@ class Type(BaseType):
 async def handle(this, request):
     """ By phone """
 
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('phone')
+
     # Authorize
 
     fields = {
+        'id',
         'login',
         'avatar',
         'name',
         'surname',
+        'phone',
         'mail',
+        'social',
         'status',
     }
 
@@ -70,23 +77,19 @@ async def handle(this, request):
     if not this.token:
         raise ErrorAccess('phone')
 
-    if new and this.user.status > 2:
+    try:
         token = Token.get(ids=this.token, fields={'user'})
+    except:
+        token = Token(id=this.token)
 
+    if token.user:
         report.warning(
             "Reauth",
-            {'from': token.user, 'to': user.id},
-            path='methods.account.phone'
+            {'from': token.user, 'to': user.id, 'token': this.token},
+            path='methods.account.auth',
         )
 
-        token.user = user.id
-
-    else:
-        token = Token(
-            id=this.token,
-            user=user.id,
-        )
-
+    token.user = user.id
     token.save()
 
     # TODO: Pre-registration data (promos, actions, posts)
@@ -103,15 +106,7 @@ async def handle(this, request):
 
     # Response
     return {
-        **user.json(fields={
-            'id',
-            'login',
-            'avatar',
-            'name',
-            'surname',
-            'mail',
-            'status',
-        }),
+        **user.json(fields=fields),
         'new': new,
     }
 

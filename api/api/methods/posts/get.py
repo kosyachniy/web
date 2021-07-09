@@ -7,6 +7,7 @@ from typing import Union
 
 from ...funcs import BaseType, validate
 from ...models.post import Post
+from ...errors import ErrorAccess
 
 
 class Type(BaseType):
@@ -22,6 +23,10 @@ class Type(BaseType):
 @validate(Type)
 async def handle(this, request):
     """ Get """
+
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('get')
 
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)

@@ -25,6 +25,10 @@ async def handle(this, request):
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Pre-registration data (promos, actions, posts)
 
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('reg')
+
     # Create
 
     try:

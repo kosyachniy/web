@@ -6,6 +6,7 @@ from typing import Union
 
 from ...funcs import BaseType, validate, online_back
 from ...models.user import User
+from ...errors import ErrorAccess
 
 
 class Type(BaseType):
@@ -19,6 +20,10 @@ async def handle(this, request):
     """ Get """
 
     # TODO: cursor
+
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('get')
 
     # TODO: Get myself
     # if not request.id and this.user.id:

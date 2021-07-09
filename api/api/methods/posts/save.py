@@ -4,6 +4,7 @@ The creating and editing method of the post object of the API
 
 from ...funcs import BaseType, validate, report
 from ...models.post import Post
+from ...errors import ErrorAccess
 
 
 class Type(BaseType):
@@ -17,6 +18,10 @@ class Type(BaseType):
 @validate(Type)
 async def handle(this, request):
     """ Save """
+
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('save')
 
     # Get
 

@@ -4,7 +4,7 @@ The password recover method of the account object of the API
 
 from ...funcs import BaseType, validate, generate_password, report
 from ...models.user import User, process_login, process_lower, pre_process_phone
-from ...errors import ErrorWrong
+from ...errors import ErrorWrong, ErrorAccess
 
 
 class Type(BaseType):
@@ -14,6 +14,10 @@ class Type(BaseType):
 @validate(Type)
 async def handle(this, request):
     """ Recover password """
+
+    # No access
+    if this.user.status < 2:
+        raise ErrorAccess('recover')
 
     # Get
 

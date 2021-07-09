@@ -18,14 +18,15 @@ NETWORKS = (
 )
 
 USER_STATUSES = (
-    'deleted',
-    'blocked', # 'archive',
+    'deleted', # not specified # Does not exist
+    'blocked', # archive # Does not have access to resources
     'normal',
-    'registered', # 'confirmed',
-    'editor', # 'curator',
-    'moderator',
-    'admin',
-    'owner',
+    'registered', # confirmed # Save personal data & progress
+    'editor', # curator # View reviews
+    'verified', # Delete reviews
+    'moderator', # Block users
+    'admin', # Delete posts
+    'owner', # Can't be blocked
 )
 
 
