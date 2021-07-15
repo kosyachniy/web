@@ -49,19 +49,19 @@ class Report():
 
         try:
             send_tg(BUG_CHAT, text_with_extra, markup=None)
-        except Exception as error:
+        except Exception as e:
             if extra:
-                print("❗️❗️❗️", error)
+                print("❗️❗️❗️", e)
                 print(extra)
 
                 try:
                     send_tg(BUG_CHAT, text, markup=None)
-                except Exception as error:
-                    print("❗️❗️❗️", error)
+                except Exception as e:
+                    print("❗️❗️❗️", e)
                     print(type_, text)
 
             else:
-                print("❗️❗️❗️", error)
+                print("❗️❗️❗️", e)
                 print(type_, text)
 
 

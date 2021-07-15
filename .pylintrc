@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+disable=import-error
+
+[BASIC]
+good-names=i,j,e
