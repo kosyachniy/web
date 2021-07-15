@@ -12,7 +12,7 @@ from .methods import call
 from .background import background
 
 
-# pylint: disable=R0902,R0903,W0201
+# pylint: disable=attribute-defined-outside-init
 class API():
     """ API """
 
@@ -23,7 +23,6 @@ class API():
         # Background processes
         background(self.sio)
 
-    # pylint: disable=C0103,R0913
     async def method(
         self,
         name,

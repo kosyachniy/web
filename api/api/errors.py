@@ -2,8 +2,6 @@
 Errors of the API
 """
 
-# pylint: disable=C0116
-
 class BaseError(Exception):
     """ Base error """
 

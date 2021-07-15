@@ -171,6 +171,8 @@ async def online_stop(sio, socket_id):
     # TODO: Объединять сессии в онлайн по пользователю
     # TODO: Если сервер был остановлен, отслеживать сессию
 
+    print('!', socket_id)
+
     try:
         socket = Socket.get(ids=socket_id)
     except:

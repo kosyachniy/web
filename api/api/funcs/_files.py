@@ -34,12 +34,14 @@ def max_image(url):
     """ Next image ID """
 
     files = os.listdir(url)
-    k = 0
+    count = 0
+
     for i in files:
         j = re.findall(r'\d+', i)
-        if len(j) and int(j[0]) > k:
-            k = int(j[0])
-    return k+1
+        if len(j) and int(j[0]) > count:
+            count = int(j[0])
+
+    return count+1
 
 def load_image(data, encoding='base64', file_format='png'):
     """ Upload image """
@@ -86,7 +88,7 @@ def load_image(data, encoding='base64', file_format='png'):
             raise ErrorUpload('image')
 
     # EXIF data
-    # pylint: disable=W0212
+    # pylint: disable=protected-access
 
     try:
         try:
@@ -148,7 +150,7 @@ def reimg(text):
         if fragment is None:
             break
 
-        first, last = fragment.span()
+        first, _ = fragment.span()
         meta_fragment = re.search(
             r'data:image/\w+;base64,[^\'">]+=', fragment.group()
         )
@@ -168,7 +170,7 @@ def reimg(text):
         if fragment is None:
             break
 
-        first, last = fragment.span()
+        first, _ = fragment.span()
         meta_fragment = re.search(
             r'http[^\'">]+', fragment.group()
         )

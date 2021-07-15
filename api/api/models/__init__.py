@@ -103,7 +103,6 @@ class Attribute:
         if self.name in instance.__dict__:
             del instance.__dict__[self.name]
 
-# pylint: disable=C0103,R0913
 class Base:
     """ Base model """
 

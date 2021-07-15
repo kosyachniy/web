@@ -22,9 +22,12 @@ class Report():
     def __init__(self, mode):
         self.mode = mode
 
-    def _report(self, text, type_=0, extra=None, path=None, tags=[]):
+    def _report(self, text, type_=0, extra=None, path=None, tags=None):
         if self.mode != 'PROD' and type_ == 0:
             return
+
+        if not tags:
+            tags = []
 
         preview = f"{SYMBOLS[type_]} {MODE} {TYPES[type_]}"
 
@@ -65,22 +68,22 @@ class Report():
                 print(type_, text)
 
 
-    def info(self, text, extra=None, path=None, tags=[]):
+    def info(self, text, extra=None, path=None, tags=None):
         self._report(text, 0, extra, path, tags)
 
-    def warning(self, text, extra=None, path=None, tags=[]):
+    def warning(self, text, extra=None, path=None, tags=None):
         self._report(text, 1, extra, path, tags)
 
-    def error(self, text, extra=None, path=None, tags=[]):
+    def error(self, text, extra=None, path=None, tags=None):
         self._report(text, 2, extra, path, tags)
 
-    def critical(self, text, extra=None, path=None, tags=[]):
+    def critical(self, text, extra=None, path=None, tags=None):
         self._report(text, 3, extra, path, tags)
 
-    def important(self, text, extra=None, path=None, tags=[]):
+    def important(self, text, extra=None, path=None, tags=None):
         self._report(text, 4, extra, path, tags)
 
-    def request(self, text, extra=None, path=None, tags=[]):
+    def request(self, text, extra=None, path=None, tags=None):
         self._report(text, 5, extra, path, tags)
 
 

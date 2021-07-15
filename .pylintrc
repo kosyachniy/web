@@ -1,7 +1,14 @@
+[MASTER]
+jobs=2
+
 [MESSAGES CONTROL]
 disable=import-error
 
 [BASIC]
-good-names=i,j,e
+good-names=i,j,e,f,ip,id,to,rm
 no-docstring-rgx=Type
+
+[DESIGN]
+max-args=8
+max-attributes=10
 min-public-methods=0
