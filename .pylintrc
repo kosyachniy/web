@@ -3,3 +3,5 @@ disable=import-error
 
 [BASIC]
 good-names=i,j,e
+no-docstring-rgx=Type
+min-public-methods=0

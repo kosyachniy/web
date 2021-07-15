@@ -6,7 +6,7 @@ from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, process_login, process_lower, \
                            pre_process_phone, process_password
 from ...models.token import Token
-from ...errors import ErrorWrong, ErrorAccess
+from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
 
 class Type(BaseType):
@@ -78,11 +78,15 @@ async def handle(this, request):
 
     # Register
     if new:
-        user_data = User(
-            password=request.password,
-            mail=request.login, # TODO: login
-            mail_verified=False,
-        )
+        try:
+            user_data = User(
+                password=request.password,
+                mail=request.login, # TODO: login
+                mail_verified=False,
+            )
+        except ValueError as e:
+            raise ErrorInvalid(e)
+
         user_data.save()
         user_id = user_data.id
 

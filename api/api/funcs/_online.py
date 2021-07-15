@@ -5,7 +5,6 @@ Online status update functionality for the API
 import time
 
 from ._reports import report
-from .mongodb import db
 from ..models.user import User
 from ..models.token import Token
 from ..models.socket import Socket
