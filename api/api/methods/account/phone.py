@@ -48,7 +48,6 @@ async def handle(this, request):
         report.warning(
             "More than 1 user",
             {'phone': request.phone},
-            path='methods.account.phone'
         )
 
     # Register
@@ -66,7 +65,6 @@ async def handle(this, request):
         report.important(
             "User registration by phone",
             {'user': user_id, 'token': this.token},
-            path='methods.account.phone',
         )
 
     else:
@@ -86,7 +84,6 @@ async def handle(this, request):
         report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': this.token},
-            path='methods.account.auth',
         )
 
     token.user = user.id

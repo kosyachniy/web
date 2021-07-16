@@ -18,7 +18,7 @@ async def handle(this, request):
     print('ON', this.socket)
 
     if not request.token:
-        report.warning("Invalid token", path='methods.account.online')
+        report.warning("Invalid token")
         return
 
     # Send sockets

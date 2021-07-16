@@ -2,195 +2,86 @@
 Errors of the API
 """
 
+import inspect
+
+
 class BaseError(Exception):
     """ Base error """
 
-    def __init__(self, par):
-        self.txt = par
-        self._code = -1
+    code = 0
 
-    @property
-    def code(self):
-        raise AttributeError('Base class hasn\'t its own code!')
+    def __init__(self, field, file=None, line=None):
+        previous = inspect.stack()[1]
+
+        self.txt = field
+        self.file = file or previous.filename
+        self.line = line or previous.lineno
 
 class ErrorSpecified(BaseError):
     """ Not all parameters """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 4
+    code = 4
 
 class ErrorBusy(BaseError):
     """ Busy """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 5
+    code = 5
 
 class ErrorInvalid(BaseError):
-    """ Invalid (Does not pass the criteria) """
+    """ Invalid
+    Does not pass the criteria
+    """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 6
+    code = 6
 
 class ErrorWrong(BaseError):
-    """ Wrong (Passes the criteria, but is incorrect) """
+    """ Wrong
+    Passes the criteria, but is incorrect
+    """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 7
+    code = 7
 
 class ErrorUpload(BaseError):
     """ Uploading to the server """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 8
+    code = 8
 
 class ErrorAccess(BaseError):
     """ No rights """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 9
+    code = 9
 
 class ErrorEmpty(BaseError):
     """ Nothing to display """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 10
+    code = 10
 
 class ErrorEnough(BaseError):
     """ Not enough """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 11
+    code = 11
 
 class ErrorBlock(BaseError):
     """ Blocked """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 12
+    code = 12
 
 class ErrorType(BaseError):
     """ Incorrect data type """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 13
+    code = 13
 
 class ErrorCount(BaseError):
     """ Quantity limit """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 14
+    code = 14
 
 class ErrorRepeat(BaseError): # TODO: Already / Duplicate
     """ Duplicate """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 15
+    code = 15
 
 class ErrorTime(BaseError):
     """ Time expired """
 
-    def __init__(self, par):
-        super().__init__(par)
-
-    @property
-    def code(self):
-        return self._code
-
-    @code.getter
-    def code(self):
-        return 16
+    code = 16

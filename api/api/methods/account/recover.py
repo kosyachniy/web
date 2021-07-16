@@ -63,5 +63,4 @@ async def handle(this, request):
     report.request(
         "Recover password",
         {'password': password, 'user': user.id},
-        path='methods.account.recover',
     )

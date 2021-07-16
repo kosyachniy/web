@@ -54,7 +54,6 @@ async def handle(this, request):
             'user': this.user.id,
             'new': new,
         },
-        path='methods.posts.save',
     )
 
     # Processing

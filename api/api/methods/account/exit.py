@@ -21,7 +21,6 @@ async def handle(this, request):
         report.error(
             "Wrong token",
             {'token': this.token, 'user': this.user.id},
-            path='methods.account.exit',
         )
 
         raise ErrorAccess('exit')

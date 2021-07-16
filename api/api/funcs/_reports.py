@@ -3,6 +3,7 @@ Reports functionality for the API
 """
 
 import json
+import inspect
 
 from .tg_bot import send as send_tg
 
@@ -22,19 +23,27 @@ class Report():
     def __init__(self, mode):
         self.mode = mode
 
-    def _report(self, text, type_=0, extra=None, path=None, tags=None):
+    def _report(self, text, type_=0, extra=None, tags=None):
         if self.mode != 'PROD' and type_ == 0:
             return
 
         if not tags:
             tags = []
 
-        preview = f"{SYMBOLS[type_]} {MODE} {TYPES[type_]}"
+        previous = inspect.stack()[2]
+        path = previous.filename.replace('/', '.').split('.')[2:-1]
 
-        if path:
-            preview += "\n" + path
+        if path[0] == 'api':
+            path = path[1:]
 
-        text = preview + "\n\n" + text
+        if previous.function != 'handle':
+            path.append(previous.function)
+
+        path = '.'.join(path)
+
+        text = f"{SYMBOLS[type_]} {MODE} {TYPES[type_]}" \
+               f"\n{path}" \
+               f"\n\n{text}"
 
         if extra:
             if isinstance(extra, dict):
@@ -47,8 +56,11 @@ class Report():
             text_with_extra = text
 
         tags = [self.mode.lower()] + tags
-        text += "\n\n#" + " #".join(tags)
-        text_with_extra += "\n\n#" + " #".join(tags)
+        outro = f"\n\n{previous.filename}:{previous.lineno}" \
+                f"\n#" + " #".join(tags)
+
+        text += outro
+        text_with_extra += outro
 
         try:
             send_tg(BUG_CHAT, text_with_extra, markup=None)
@@ -68,23 +80,23 @@ class Report():
                 print(type_, text)
 
 
-    def info(self, text, extra=None, path=None, tags=None):
-        self._report(text, 0, extra, path, tags)
+    def info(self, text, extra=None, tags=None):
+        self._report(text, 0, extra, tags)
 
-    def warning(self, text, extra=None, path=None, tags=None):
-        self._report(text, 1, extra, path, tags)
+    def warning(self, text, extra=None, tags=None):
+        self._report(text, 1, extra, tags)
 
-    def error(self, text, extra=None, path=None, tags=None):
-        self._report(text, 2, extra, path, tags)
+    def error(self, text, extra=None, tags=None):
+        self._report(text, 2, extra, tags)
 
-    def critical(self, text, extra=None, path=None, tags=None):
-        self._report(text, 3, extra, path, tags)
+    def critical(self, text, extra=None, tags=None):
+        self._report(text, 3, extra, tags)
 
-    def important(self, text, extra=None, path=None, tags=None):
-        self._report(text, 4, extra, path, tags)
+    def important(self, text, extra=None, tags=None):
+        self._report(text, 4, extra, tags)
 
-    def request(self, text, extra=None, path=None, tags=None):
-        self._report(text, 5, extra, path, tags)
+    def request(self, text, extra=None, tags=None):
+        self._report(text, 5, extra, tags)
 
 
 report = Report(MODE)

@@ -1,7 +1,6 @@
 """
 The registration method of the account object of the API
 """
-
 from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User
 from ...models.token import Token
@@ -43,7 +42,7 @@ async def handle(this, request):
             social=request.social,
         )
     except ValueError as e:
-        raise ErrorRepeat(e.args[0]) # TODO: to errors.py
+        raise ErrorRepeat(e) # TODO: to errors.py
 
     user.save()
 
@@ -51,7 +50,6 @@ async def handle(this, request):
     report.important(
         "User registration",
         {'user': user.id, 'token': this.token},
-        path='methods.account.reg',
     )
 
     # Assignment of the token to the user

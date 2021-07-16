@@ -96,7 +96,6 @@ async def handle(this, request):
         report.important(
             "User registration by mail",
             {'user': user_id, 'token': this.token},
-            path='methods.account.auth',
         )
 
     # Assignment of the token to the user
@@ -113,7 +112,6 @@ async def handle(this, request):
         report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': this.token},
-            path='methods.account.auth',
         )
 
     token.user = user.id

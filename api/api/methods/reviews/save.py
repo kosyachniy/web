@@ -44,7 +44,6 @@ async def handle(this, request):
             'user': this.user.id,
             'token': this.token,
         },
-        path='methods.reviews.save',
     )
 
     # Processing
