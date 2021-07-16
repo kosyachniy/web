@@ -2,20 +2,13 @@
 Errors of the API
 """
 
-import inspect
-
-
 class BaseError(Exception):
     """ Base error """
 
     code = 0
 
-    def __init__(self, field, file=None, line=None):
-        previous = inspect.stack()[1]
-
+    def __init__(self, field):
         self.txt = field
-        self.file = file or previous.filename
-        self.line = line or previous.lineno
 
 class ErrorSpecified(BaseError):
     """ Not all parameters """

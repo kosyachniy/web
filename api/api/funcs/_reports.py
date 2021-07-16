@@ -24,6 +24,8 @@ class Report():
         self.mode = mode
 
     def _report(self, text, type_=0, extra=None, tags=None):
+        """ Make report message and send """
+
         if self.mode != 'PROD' and type_ == 0:
             return
 
@@ -64,6 +66,7 @@ class Report():
 
         try:
             send_tg(BUG_CHAT, text_with_extra, markup=None)
+
         except Exception as e:
             if extra:
                 print("❗️❗️❗️", e)
@@ -81,21 +84,45 @@ class Report():
 
 
     def info(self, text, extra=None, tags=None):
+        """ Info
+        System logs and event journal
+        """
+
         self._report(text, 0, extra, tags)
 
     def warning(self, text, extra=None, tags=None):
+        """ Warning
+        Unexpected / strange code behavior that does not entail consequences
+        """
+
         self._report(text, 1, extra, tags)
 
     def error(self, text, extra=None, tags=None):
+        """ Error
+        An unhandled error occurred
+        """
+
         self._report(text, 2, extra, tags)
 
     def critical(self, text, extra=None, tags=None):
+        """ Critical
+        An error occurred that affects the operation of the service
+        """
+
         self._report(text, 3, extra, tags)
 
     def important(self, text, extra=None, tags=None):
+        """ Important
+        Trigger on tracked user action was fired
+        """
+
         self._report(text, 4, extra, tags)
 
     def request(self, text, extra=None, tags=None):
+        """ Request
+        The user made a request, the intervention of administrators is necessary
+        """
+
         self._report(text, 5, extra, tags)
 
 
