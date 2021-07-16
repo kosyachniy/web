@@ -70,10 +70,9 @@ Android | Front-end | React Native | JavaScript | planned
 ### Development
 1. Customize file ` docker/.env `
 
-2. Run Docker Compose
+2. Run
 ```
-cd docker/
-sudo docker-compose -p <your project name> up --build
+make run
 ```
 
 3. Open
