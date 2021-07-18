@@ -66,6 +66,7 @@ from pydantic import BaseModel
 
 ### Local
 from api import API
+from api.funcs import report
 from api.errors import BaseError
 
 ## Params
@@ -115,9 +116,17 @@ async def index(data: Input, request: Request):
 
     except Exception as e:
         req['error'] = 1
-        req['result'] = 'Server error'
+        req['result'] = "Server error"
+
         trace = traceback.extract_tb(e.__traceback__)[-1]
-        print(trace.filename, trace.lineno, str(e)) # TODO: -> report
+        report.critical(
+            "Server error",
+            {
+                'file': trace.filename,
+                'line': trace.lineno,
+                'error': str(e),
+            },
+        )
 
     else:
         req['error'] = 0
