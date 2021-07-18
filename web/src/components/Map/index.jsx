@@ -6,7 +6,6 @@ import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-map
 // import { Link } from 'react-router-dom';
 
 import { maps as sets } from '../../sets'
-import { maps as keys } from '../../keys'
 
 import marker from './marker.svg';
 
@@ -166,7 +165,7 @@ const mapStyles = [
 
 const Map = compose(
     withProps({
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${keys.key}&v=3.exp&libraries=geometry,drawing,places`,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${sets.key}&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `100%` }} />,
         mapElement: <div style={{ height: `100%` }} />

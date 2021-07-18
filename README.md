@@ -96,7 +96,7 @@ docker-compose -f docker-compose.alone.yml -p <your project name> up --build
 
 4. Open
 
-Go to ``` https://web.kosyachniy.com/ ``` (your link)
+Go to ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (with multiple projects)
 1. Customize files ` docker/.env ` & ` docker/server/nginx.server.conf `
@@ -135,7 +135,7 @@ sudo certbot --nginx
 
 7. Open
 
-Go to ``` https://web.kosyachniy.com/ ``` (your link)
+Go to ` https://web.kosyachniy.com/ ` (your link)
 
 ## Install & Use without Docker
 ### Back-end
@@ -144,7 +144,7 @@ Go to ``` https://web.kosyachniy.com/ ``` (your link)
 cd api/
 ```
 
-2. Customize files ``` sets.json ``` & ``` keys.json ```
+2. Customize file ` sets.json `
 
 3. Virtual environment
 ```
@@ -163,7 +163,7 @@ env/bin/uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 cd web/
 ```
 
-2. Customize files ``` src/sets.json ``` & ``` src/keys.json ```
+2. Customize file ` src/sets.json `
 
 3. Virtual environment
 ```

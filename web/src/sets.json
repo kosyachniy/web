@@ -1,21 +1,21 @@
 {
     "server": "http://localhost/api/",
     "sockets": "http://localhost/",
-    "name": "Quateo",
+    "name": "Web",
     "mail": "polozhev@mail.ru",
-    "phone": "+7 (981) 163-55-78",
+    "phone": "+7 (969) 736-67-30",
     "social": [
         {
             "name": "vk",
-            "cont": "https://vk.com/freakiller"
+            "cont": "https://vk.com/alexeypoloz"
         },
         {
             "name": "fb",
-            "cont": "https://www.facebook.com/kosyachniy"
+            "cont": "https://www.facebook.com/alexeypoloz"
         },
         {
             "name": "in",
-            "cont": "https://www.linkedin.com/in/polozalex/"
+            "cont": "https://www.linkedin.com/in/alexeypoloz/"
         },
         {
             "name": "ig",
@@ -27,6 +27,7 @@
             "lat": 59.9392,
             "lng": 30.3165
         },
-        "zoom": 12
+        "zoom": 12,
+        "key": ""
     }
 }

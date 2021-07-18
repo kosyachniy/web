@@ -14,12 +14,9 @@ from aiogram.utils.executor import start_webhook
 
 # Params
 with open('sets.json', 'r') as file:
-    sets = json.loads(file.read())
-    WEBHOOK_URL = sets['tg']['server']
-
-with open('keys.json', 'r') as file:
-    keys = json.loads(file.read())
-    TG_TOKEN = keys['tg']['token']
+    sets = json.loads(file.read())['tg']
+    WEBHOOK_URL = sets['server']
+    TG_TOKEN = sets['token']
 
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 80

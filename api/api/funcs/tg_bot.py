@@ -14,7 +14,7 @@ import telebot
 # Params
 ## Token
 # pylint: disable=redefined-outer-name
-with open('keys.json', 'r') as file:
+with open('sets.json', 'r') as file:
     TG_TOKEN = json.loads(file.read())['tg']['token']
 
 

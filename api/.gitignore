@@ -3,9 +3,6 @@
 **/__pycache__/
 **/*.pyc
 
-# Keys & sets
-keys.json
-
 # Environments
 env/
 

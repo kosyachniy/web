@@ -12,10 +12,10 @@ from ...funcs import BaseType, validate # online_start
 from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
 
 
-with open('keys.json', 'r') as file:
-    keys = json.loads(file.read())
-    VK = keys['vk']
-    GOOGLE = keys['google']
+with open('sets.json', 'r') as file:
+    sets = json.loads(file.read())
+    VK = sets['vk']
+    GOOGLE = sets['google']
 
 
 class Type(BaseType):

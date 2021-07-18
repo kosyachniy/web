@@ -3,10 +3,6 @@
 dist/
 build/
 
-# Keys & sets
-keys.js
-keys.json
-
 # Environments
 node_modules/
 package-lock.json

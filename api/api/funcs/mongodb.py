@@ -14,16 +14,13 @@ from pymongo import MongoClient
 with open('sets.json', 'r') as file:
     sets = json.loads(file.read())['mongo']
 
-with open('keys.json', 'r') as file:
-    keys = json.loads(file.read())['mongo']
-
 
 # Global variables
 db = MongoClient(
     host=sets['host'],
     port=27017,
-    username=keys['login'],
-    password=keys['password'],
+    username=sets['login'],
+    password=sets['password'],
     authSource='admin',
     authMechanism='SCRAM-SHA-1'
 )[sets['db']]

@@ -1,10 +1,27 @@
 {
     "mongo": {
         "host": "localhost:27017",
-        "db": "uple"
+        "db": "",
+        "login": "",
+        "password": ""
+    },
+    "google": {
+        "client_id": "",
+        "client_secret": ""
+    },
+    "tg": {
+        "token": ""
+    },
+    "vk": {
+        "client_id": ,
+        "client_secret": ""
+    },
+    "smsc": {
+        "login": "",
+        "password": ""
     },
     "client": "http://localhost/",
     "mode": "LOCAL",
     "side_optimized": 250,
-    "bug_chat": -1001223126154
+    "bug_chat":
 }
