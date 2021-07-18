@@ -198,7 +198,7 @@ class User(Base):
         pre_processing=get_language,
     )
     status = Attribute(types=int, default=default_status)
-    funnel = Attribute(types=list, default=[]) # TODO: list[dict]
+    actions = Attribute(types=list, default=[]) # TODO: list[dict]
     online = Attribute(types=list, default=[]) # TODO: list[tuple]
     # TODO: UTM / promo
     # TODO: discount

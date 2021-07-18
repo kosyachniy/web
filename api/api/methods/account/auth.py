@@ -6,6 +6,7 @@ from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, process_login, process_lower, \
                            pre_process_phone, process_password
 from ...models.token import Token
+from ...models.action import Action
 from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
 
@@ -68,6 +69,7 @@ async def handle(this, request, data):
         else:
             new = False
 
+    # Check password
     if not new:
         password = process_password(data.password)
 
@@ -78,11 +80,22 @@ async def handle(this, request, data):
 
     # Register
     if new:
+        action = Action(
+            name='account_reg',
+            details={
+                'network': request.network,
+                'ip': request.ip,
+                'mail': data.login,
+                'password': data.password,
+            },
+        )
+
         try:
             user_data = User(
                 password=data.password,
                 mail=data.login, # TODO: login
                 mail_verified=False,
+                actions=[action.json(default=False)],
             )
         except ValueError as e:
             raise ErrorInvalid(e)
@@ -95,8 +108,24 @@ async def handle(this, request, data):
         # Report
         report.important(
             "User registration by mail",
-            {'user': user_id, 'token': request.token},
+            {
+                'user': user_id,
+                'token': request.token,
+                'network': request.network,
+            },
         )
+
+    # Update
+    else:
+        action = Action(
+            name='account_auth',
+            details={
+                'ip': request.ip,
+            },
+        )
+
+        user.actions.append(action.json(default=False))
+        user.save()
 
     # Assignment of the token to the user
 
