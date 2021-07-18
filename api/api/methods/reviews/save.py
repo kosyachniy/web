@@ -12,24 +12,24 @@ class Type(BaseType):
     cont: str = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Save """
 
     # Get
 
     new = False
 
-    if request.id:
-        review = Review.get(ids=request.id, fields={})
+    if data.id:
+        review = Review.get(ids=data.id, fields={})
     else:
         review = Review(
-            user=this.user.id,
+            user=request.user.id,
         )
         new = True
 
     # Change fields
-    review.name = request.name # TODO: checking if add
-    review.cont = request.cont # TODO: checking if add
+    review.name = data.name # TODO: checking if add
+    review.cont = data.cont # TODO: checking if add
 
     # Save
     review.save()
@@ -41,14 +41,14 @@ async def handle(this, request):
             'review': review.id,
             'name': review.name,
             'cont': review.cont,
-            'user': this.user.id,
-            'token': this.token,
+            'user': request.user.id,
+            'token': request.token,
         },
     )
 
     # Processing
     cont = None
-    if request.cont and request.cont != review.cont:
+    if data.cont and data.cont != review.cont:
         cont = review.cont
 
     # Response

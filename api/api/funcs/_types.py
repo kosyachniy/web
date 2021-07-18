@@ -24,19 +24,19 @@ def _prepare(data):
 
     return data
 
-def _check(params, filters):
+def _check(data, filters):
     """ Convert the parameters to the required object """
 
     try:
-        return filters(**params)
+        return filters(**data)
 
     except ValidationError as e:
-        param_name = e.errors()[0]['loc'][0]
+        field = e.errors()[0]['loc'][0]
 
-        if param_name in params:
-            raise ErrorType(param_name)
+        if field in data:
+            raise ErrorType(field)
 
-        raise ErrorSpecified(param_name)
+        raise ErrorSpecified(field)
 
 
 def validate(filters):
@@ -44,9 +44,9 @@ def validate(filters):
 
     def decorator(f):
         @wraps(f)
-        def wrapper(this, params):
-            params = _prepare(params)
-            params = _check(params, filters)
-            return f(this, params)
+        def wrapper(this, request, data):
+            data = _prepare(data)
+            data = _check(data, filters)
+            return f(this, request, data)
         return wrapper
     return decorator

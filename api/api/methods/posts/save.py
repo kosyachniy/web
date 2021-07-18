@@ -16,30 +16,30 @@ class Type(BaseType):
     # category: int = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Save """
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('save')
 
     # Get
 
     new = False
 
-    if request.id:
-        post = Post.get(ids=request.id, fields={})
+    if data.id:
+        post = Post.get(ids=data.id, fields={})
     else:
         post = Post(
-            user=this.user.id,
+            user=request.user.id,
         )
         new = True
 
     # Change fields
-    post.name = request.name # TODO: checking if add
-    post.tags = request.tags
-    post.cont = request.cont # TODO: checking if add
-    post.cover = request.cover
+    post.name = data.name # TODO: checking if add
+    post.tags = data.tags
+    post.cont = data.cont # TODO: checking if add
+    post.cover = data.cover
     # TODO: category
 
     # Save
@@ -51,14 +51,14 @@ async def handle(this, request):
         {
             'review': post.id,
             'name': post.name,
-            'user': this.user.id,
+            'user': request.user.id,
             'new': new,
         },
     )
 
     # Processing
     cont = None
-    if request.cont and request.cont != post.cont:
+    if data.cont and data.cont != post.cont:
         cont = post.cont
 
     # Response

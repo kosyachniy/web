@@ -17,7 +17,7 @@ class Type(BaseType):
     social: list[dict] = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Sign up """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -25,21 +25,21 @@ async def handle(this, request):
     # TODO: Pre-registration data (promos, actions, posts)
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('reg')
 
     # Create
 
     try:
         user = User(
-            login=request.login,
-            password=request.password,
-            avatar=request.avatar,
-            name=request.name,
-            surname=request.surname,
-            mail=request.mail,
+            login=data.login,
+            password=data.password,
+            avatar=data.avatar,
+            name=data.name,
+            surname=data.surname,
+            mail=data.mail,
             mail_verified=False,
-            social=request.social,
+            social=data.social,
         )
     except ValueError as e:
         raise ErrorRepeat(e) # TODO: to errors.py
@@ -49,23 +49,23 @@ async def handle(this, request):
     # Report
     report.important(
         "User registration",
-        {'user': user.id, 'token': this.token},
+        {'user': user.id, 'token': request.token},
     )
 
     # Assignment of the token to the user
 
-    if not this.token:
+    if not request.token:
         raise ErrorAccess('token')
 
     token = Token(
-        id=this.token,
+        id=request.token,
         user=user.id,
     )
 
     token.save()
 
     # Update online users
-    await online_start(this.sio, this.token)
+    await online_start(this.sio, request.token)
 
     # Response
     return {

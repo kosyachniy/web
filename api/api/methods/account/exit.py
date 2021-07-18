@@ -9,7 +9,7 @@ from ...errors import ErrorAccess
 
 
 # pylint: disable=unused-argument
-async def handle(this, request):
+async def handle(this, request, data):
     """ Log out """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -17,16 +17,16 @@ async def handle(this, request):
     # TODO: Отправлять сокет всем сессиям этого браузера на выход
 
     # Not authorized
-    if this.user.status < 3:
+    if request.user.status < 3:
         report.error(
             "Wrong token",
-            {'token': this.token, 'user': this.user.id},
+            {'token': request.token, 'user': request.user.id},
         )
 
         raise ErrorAccess('exit')
 
     # Check
-    token = Token.get(ids=this.token, fields={})
+    token = Token.get(ids=request.token, fields={})
 
     # Remove
     # TODO: не удалять токены (выданные ботам)
@@ -34,7 +34,7 @@ async def handle(this, request):
 
     # Close session
 
-    sockets = Socket.get(token=this.token, fields={})
+    sockets = Socket.get(token=request.token, fields={})
 
     for socket in sockets:
         await online_stop(this.sio, socket.id)

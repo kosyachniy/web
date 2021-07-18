@@ -3,7 +3,6 @@ The authorization via social networks method of the account object of the API
 """
 
 # import urllib
-import json
 # import base64
 
 # import requests
@@ -12,23 +11,17 @@ from ...funcs import BaseType, validate # online_start
 from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
 
 
-with open('sets.json', 'r') as file:
-    sets = json.loads(file.read())
-    VK = sets['vk']
-    GOOGLE = sets['google']
-
-
 class Type(BaseType):
     user: int
     # TODO: code: str
 
 # pylint: disable=unused-argument
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ By social network """
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('social')
 
     # user_id = 0
@@ -36,16 +29,16 @@ async def handle(this, request):
     # mail = ''
 
     # # ВКонтакте
-    # if request.id == 1:
+    # if data.id == 1:
     #     link = 'https://oauth.vk.com/access_token?client_id={}&client_secret=' \
     #            '{}&redirect_uri={}callback&code={}'
     #     response = json.loads(
     #         requests.get(
     #             link.format(
-    #                 VK['client_id'],
-    #                 VK['client_secret'],
+    #                 this.vk['client_id'],
+    #                 this.vk['client_secret'],
     #                 this.client,
-    #                 request.code,
+    #                 data.code,
     #             )
     #         ).text
     #     )
@@ -59,14 +52,14 @@ async def handle(this, request):
     #         mail = response['email']
 
     # # Google
-    # elif request.id == 3:
+    # elif data.id == 3:
     #     link = 'https://accounts.google.com/o/oauth2/token'
     #     cont = {
-    #         'client_id': GOOGLE['client_id'],
-    #         'client_secret': GOOGLE['client_secret'],
+    #         'client_id': this.google['client_id'],
+    #         'client_secret': this.google['client_secret'],
     #         'redirect_uri': '{}callback'.format(this.client),
     #         'grant_type': 'authorization_code',
-    #         'code': urllib.parse.unquote(request.code),
+    #         'code': urllib.parse.unquote(data.code),
     #     }
     #     response = json.loads(requests.post(link, json=cont).text)
 
@@ -93,7 +86,7 @@ async def handle(this, request):
     # # Sign in
 
     # db_condition = {
-    #     'social': {'$elemMatch': {'id': request.id, 'user': user_id}},
+    #     'social': {'$elemMatch': {'id': data.id, 'user': user_id}},
     # }
 
     # db_filter = {
@@ -120,7 +113,7 @@ async def handle(this, request):
     #     login = ''
     #     avatar = None
 
-    #     if request.id == 1:
+    #     if data.id == 1:
     #         if 'access_token' in response:
     #             token = response['access_token']
     #         else:
@@ -154,7 +147,7 @@ async def handle(this, request):
 
     #         try:
     #             login = response['nickname']
-    #             _check_login(login, this.user)
+    #             _check_login(login, request.user)
     #         except Exception:
     #             login = ''
 
@@ -167,13 +160,13 @@ async def handle(this, request):
 
     #         try:
     #             if mail:
-    #                 _check_mail(mail, this.user)
+    #                 _check_mail(mail, request.user)
     #         except Exception:
     #             mail = ''
 
-    #     elif request.id == 3:
+    #     elif data.id == 3:
     #         # link = 'https://www.googleapis.com/oauth2/v1/userinfo' \
-    #         #        '?access_token={}'.format(request.data['access_token'])
+    #         #        '?access_token={}'.format(data.data['access_token'])
     #         # res_google = json.loads(requests.get(link).text)
 
     #         try:
@@ -190,7 +183,7 @@ async def handle(this, request):
 
     #         try:
     #             mail = response['email']
-    #             _check_mail(mail, this.user)
+    #             _check_mail(mail, request.user)
     #         except Exception:
     #             mail = ''
 
@@ -222,10 +215,10 @@ async def handle(this, request):
     #         new = True
 
     #         user = _registrate(
-    #             this.user,
-    #             this.timestamp,
+    #             request.user,
+    #             request.timestamp,
     #             social=[{
-    #                 'id': request.id,
+    #                 'id': data.id,
     #                 'user': user_id,
     #             }],
     #             name=name,
@@ -252,19 +245,19 @@ async def handle(this, request):
 
     # # Assignment of the token to the user
 
-    # if not this.token:
+    # if not request.token:
     #     raise ErrorInvalid('token')
 
     # req = {
-    #     'token': this.token,
+    #     'token': request.token,
     #     'user': user['id'],
-    #     'time': this.timestamp,
+    #     'time': request.timestamp,
     # }
     # db.tokens.insert_one(req)
 
     # # Update online users
 
-    # await online_start(this.sio, this.token)
+    # await online_start(this.sio, request.token)
 
     # # Response
 

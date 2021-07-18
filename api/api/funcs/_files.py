@@ -118,19 +118,19 @@ def load_image(data, encoding='base64', file_format='png'):
         pass
 
     # Optimized version
+    if SIDE_OPTIMIZED:
+        img = Image.open(url)
 
-    img = Image.open(url)
+        if img.size[0] > img.size[1]:
+            hpercent = (SIDE_OPTIMIZED / float(img.size[1]))
+            wsize = int(float(img.size[0]) * float(hpercent))
+            img = img.resize((wsize, SIDE_OPTIMIZED), Image.ANTIALIAS)
+        else:
+            wpercent = (SIDE_OPTIMIZED / float(img.size[0]))
+            hsize = int(float(img.size[1]) * float(wpercent))
+            img = img.resize((SIDE_OPTIMIZED, hsize), Image.ANTIALIAS)
 
-    if img.size[0] > img.size[1]:
-        hpercent = (SIDE_OPTIMIZED / float(img.size[1]))
-        wsize = int(float(img.size[0]) * float(hpercent))
-        img = img.resize((wsize, SIDE_OPTIMIZED), Image.ANTIALIAS)
-    else:
-        wpercent = (SIDE_OPTIMIZED / float(img.size[0]))
-        hsize = int(float(img.size[1]) * float(wpercent))
-        img = img.resize((SIDE_OPTIMIZED, hsize), Image.ANTIALIAS)
-
-    img.save(url_opt)
+        img.save(url_opt)
 
     # Response
     return file_name

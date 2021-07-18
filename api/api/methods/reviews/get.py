@@ -18,11 +18,11 @@ class Type(BaseType):
     # TODO: fields: list[str] = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Get """
 
     # No access
-    if this.user.status < 4:
+    if request.user.status < 4:
         raise ErrorAccess('get')
 
     # Fields
@@ -36,10 +36,10 @@ async def handle(this, request):
 
     # Get
     reviews = Review.get(
-        ids=request.id,
-        count=request.count,
-        offset=request.offset,
-        search=request.search,
+        ids=data.id,
+        count=data.count,
+        offset=data.offset,
+        search=data.search,
         fields=fields,
     )
 

@@ -17,11 +17,11 @@ class Type(BaseType):
     # promo: str = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ By phone """
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('phone')
 
     # Authorize
@@ -38,7 +38,7 @@ async def handle(this, request):
         'status',
     }
 
-    phone = pre_process_phone(request.phone)
+    phone = pre_process_phone(data.phone)
     new = False
     users = User.get(phone=phone, fields=fields)
 
@@ -47,13 +47,13 @@ async def handle(this, request):
     elif len(users) > 1:
         report.warning(
             "More than 1 user",
-            {'phone': request.phone},
+            {'phone': data.phone},
         )
 
     # Register
     if new:
         user_data = User(
-            phone=request.phone,
+            phone=data.phone,
             phone_verified=False,
         )
         user_data.save()
@@ -64,7 +64,7 @@ async def handle(this, request):
         # Report
         report.important(
             "User registration by phone",
-            {'user': user_id, 'token': this.token},
+            {'user': user_id, 'token': request.token},
         )
 
     else:
@@ -72,18 +72,18 @@ async def handle(this, request):
 
     # Assignment of the token to the user
 
-    if not this.token:
+    if not request.token:
         raise ErrorAccess('phone')
 
     try:
-        token = Token.get(ids=this.token, fields={'user'})
+        token = Token.get(ids=request.token, fields={'user'})
     except:
-        token = Token(id=this.token)
+        token = Token(id=request.token)
 
     if token.user:
         report.warning(
             "Reauth",
-            {'from': token.user, 'to': user.id, 'token': this.token},
+            {'from': token.user, 'to': user.id, 'token': request.token},
         )
 
     token.user = user.id
@@ -92,7 +92,7 @@ async def handle(this, request):
     # TODO: Pre-registration data (promos, actions, posts)
 
     # Update online users
-    await online_start(this.sio, this.token)
+    await online_start(this.sio, request.token)
 
     # TODO: redirect to active space
     # if space_id:
@@ -107,12 +107,12 @@ async def handle(this, request):
         'new': new,
     }
 
-# async def phone_send(this, request):
+# async def phone_send(this, request, data):
 #     """ Send a code to the phone """
 
 #     # Process a phone number
 
-#     phone = _process_phone(request.phone)
+#     phone = _process_phone(data.phone)
 
 #     # Already sent
 
@@ -134,8 +134,8 @@ async def handle(this, request):
 #     promo = Promo(
 #         phone=phone,
 #         code=code,
-#         token=this.token,
-#         promo=request.promo,
+#         token=request.token,
+#         promo=data.promo,
 #     )
 
 #     promo.save()
@@ -163,30 +163,30 @@ async def handle(this, request):
 
 #     #
 
-#     if not this.token:
+#     if not request.token:
 #         raise ErrorInvalid('token')
 
 #     #
 
-#     request.phone = _process_phone(request.phone)
+#     data.phone = _process_phone(data.phone)
 
 #     #
 
-#     if request.code:
+#     if data.code:
 #         # Code preparation
 
-#         request.code = str(request.code)
+#         data.code = str(data.code)
 
 #         # Verification of code
 
 #         db_condition = {
-#             'code': request.code,
+#             'code': data.code,
 #         }
 
-#         if request.phone:
-#             db_condition['phone'] = request.phone
+#         if data.phone:
+#             db_condition['phone'] = data.phone
 #         else:
-#             db_condition['token'] = this.token
+#             db_condition['token'] = request.token
 
 #         db_filter = {
 #             '_id': False,
@@ -205,11 +205,11 @@ async def handle(this, request):
 
 #     else:
 #         code = {
-#             'phone': request.phone,
+#             'phone': data.phone,
 #         }
 
-#         if request.promo:
-#             code['promo'] = request.promo
+#         if data.promo:
+#             code['promo'] = data.promo
 
 #     #
 
@@ -221,8 +221,8 @@ async def handle(this, request):
 
 #     if not user:
 #         res = _registrate(
-#             this.user,
-#             this.timestamp,
+#             request.user,
+#             request.timestamp,
 #             phone=code['phone'],
 #         )
 
@@ -273,15 +273,15 @@ async def handle(this, request):
 #     # Присвоение токена пользователю
 
 #     req = {
-#         'token': this.token,
+#         'token': request.token,
 #         'user': user['id'],
-#         'time': this.timestamp,
+#         'time': request.timestamp,
 #     }
 #     db.tokens.insert_one(req)
 
 #     # Update online users
 
-#     await online_start(this.sio, this.token)
+#     await online_start(this.sio, request.token)
 
 #     # Response
 

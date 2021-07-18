@@ -12,11 +12,11 @@ class Type(BaseType):
 
 # pylint: disable=unused-argument
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Recover password """
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('recover')
 
     # Get
@@ -24,14 +24,14 @@ async def handle(this, request):
     new = False
 
     try:
-        login = process_login(request.login)
+        login = process_login(data.login)
         user = User.get(login=login, fields={})[0]
     except:
         new = True
 
     if new:
         try:
-            mail = process_lower(request.login)
+            mail = process_lower(data.login)
             user = User.get(mail=mail, fields={})[0]
         except:
             pass
@@ -40,7 +40,7 @@ async def handle(this, request):
 
     if new:
         try:
-            phone = pre_process_phone(request.login)
+            phone = pre_process_phone(data.login)
             user = User.get(phone=phone, fields={})[0]
         except:
             pass

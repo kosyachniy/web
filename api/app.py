@@ -70,12 +70,12 @@ from api.errors import BaseError
 
 ## Params
 with open('sets.json', 'r') as file:
-    CLIENT = json.loads(file.read())['client']
+    sets = json.loads(file.read())
 
 ## Global variables
 api = API(
-    client=CLIENT,
     sio=sio,
+    **sets,
 )
 
 ## Endpoints

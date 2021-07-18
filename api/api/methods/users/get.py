@@ -16,18 +16,18 @@ class Type(BaseType):
     fields: list[str] = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Get """
 
     # TODO: cursor
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('get')
 
     # TODO: Get myself
-    # if not request.id and this.user.id:
-    #     request.id = this.user.id
+    # if not data.id and request.user.id:
+    #     data.id = request.user.id
 
     # Fields
 
@@ -44,9 +44,9 @@ async def handle(this, request):
         # 'online',
     }
 
-    process_self = request.id == this.user.id
-    # process_moderator = this.user.status'>= 5
-    process_admin = this.user.status >= 7
+    process_self = data.id == request.user.id
+    # process_moderator = request.user.status'>= 5
+    process_admin = request.user.status >= 7
 
     if process_self:
         fields |= {
@@ -69,14 +69,14 @@ async def handle(this, request):
             # 'phone',
         }
 
-    if request.fields:
-        fields = fields & set(request.fields)
+    if data.fields:
+        fields = fields & set(data.fields)
 
     # Get
     users = User.get(
-        ids=request.id,
-        count=request.count,
-        offset=request.offset,
+        ids=data.id,
+        count=data.count,
+        offset=data.offset,
         fields=fields,
     )
 

@@ -3,7 +3,7 @@ The connect socket of the account object of the API
 """
 
 # pylint: disable=unused-argument
-async def handle(this, request):
+async def handle(this, request, data):
     """ Connect """
 
-    print('IN', this.socket)
+    print('IN', request.socket)

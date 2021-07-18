@@ -21,19 +21,19 @@ class Type(BaseType):
 
 # pylint: disable=unused-argument
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Get """
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('get')
 
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
-    # if request.language:
-    #     request.language = get_language(request.language)
+    # if data.language:
+    #     data.language = get_language(data.language)
     # else:
-    #     request.language = this.language
+    #     data.language = request.language
 
     # Fields
     fields = {
@@ -47,13 +47,13 @@ async def handle(this, request):
 
     # Get
     posts = Post.get(
-        ids=request.id,
-        count=request.count,
-        offset=request.offset,
-        search=request.search,
+        ids=data.id,
+        count=data.count,
+        offset=data.offset,
+        search=data.search,
         fields=fields,
-        # category=request.category,
-        # language=request.language,
+        # category=data.category,
+        # language=data.language,
     )
 
     # Processing

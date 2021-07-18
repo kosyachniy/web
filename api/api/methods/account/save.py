@@ -23,33 +23,33 @@ class Type(BaseType):
     language: Union[str, int] = None
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Save personal information """
 
     # No access
-    if this.user.status < 3:
+    if request.user.status < 3:
         raise ErrorAccess('edit')
 
     # Get
-    user = User.get(ids=this.user.id)
+    user = User.get(ids=request.user.id)
 
     # Change fields
 
-    user.login = request.login
-    user.password = request.password
-    user.avatar = request.avatar
-    user.name = request.name
-    user.surname = request.surname
+    user.login = data.login
+    user.password = data.password
+    user.avatar = data.avatar
+    user.name = data.name
+    user.surname = data.surname
 
     phone_old = deepcopy(user.phone)
-    user.phone = request.phone
+    user.phone = data.phone
     if phone_old != user.phone:
         user.phone_verified = False
 
-    user.mail = request.mail
-    user.social = request.social # TODO: checking
-    user.description = request.description
-    user.language = request.language
+    user.mail = data.mail
+    user.social = data.social # TODO: checking
+    user.description = data.description
+    user.language = data.language
 
     # Save
     user.save()
@@ -57,7 +57,7 @@ async def handle(this, request):
     # Processing
     ## Avatar
     avatar = None
-    if request.avatar != user.avatar:
+    if data.avatar != user.avatar:
         avatar = user.avatar
 
     ## Phone

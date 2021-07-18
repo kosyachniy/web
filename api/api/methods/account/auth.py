@@ -14,7 +14,7 @@ class Type(BaseType):
     password: str
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Sign in / Sign up """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -23,7 +23,7 @@ async def handle(this, request):
     # TODO: without password
 
     # No access
-    if this.user.status < 2:
+    if request.user.status < 2:
         raise ErrorAccess('auth')
 
     # Data preparation
@@ -45,14 +45,14 @@ async def handle(this, request):
     new = False
 
     try:
-        login = process_login(request.login)
+        login = process_login(data.login)
         user = User.get(login=login, fields=fields)[0]
     except:
         new = True
 
     if new:
         try:
-            mail = process_lower(request.login)
+            mail = process_lower(data.login)
             user = User.get(mail=mail, fields=fields)[0]
         except:
             pass
@@ -61,7 +61,7 @@ async def handle(this, request):
 
     if new:
         try:
-            phone = pre_process_phone(request.login)
+            phone = pre_process_phone(data.login)
             user = User.get(phone=phone, fields=fields)[0]
         except:
             pass
@@ -69,7 +69,7 @@ async def handle(this, request):
             new = False
 
     if not new:
-        password = process_password(request.password)
+        password = process_password(data.password)
 
         try:
             User.get(id=user.id, password=password)
@@ -80,8 +80,8 @@ async def handle(this, request):
     if new:
         try:
             user_data = User(
-                password=request.password,
-                mail=request.login, # TODO: login
+                password=data.password,
+                mail=data.login, # TODO: login
                 mail_verified=False,
             )
         except ValueError as e:
@@ -95,30 +95,30 @@ async def handle(this, request):
         # Report
         report.important(
             "User registration by mail",
-            {'user': user_id, 'token': this.token},
+            {'user': user_id, 'token': request.token},
         )
 
     # Assignment of the token to the user
 
-    if not this.token:
+    if not request.token:
         raise ErrorAccess('auth')
 
     try:
-        token = Token.get(ids=this.token, fields={'user'})
+        token = Token.get(ids=request.token, fields={'user'})
     except:
-        token = Token(id=this.token)
+        token = Token(id=request.token)
 
     if token.user:
         report.warning(
             "Reauth",
-            {'from': token.user, 'to': user.id, 'token': this.token},
+            {'from': token.user, 'to': user.id, 'token': request.token},
         )
 
     token.user = user.id
     token.save()
 
     # Update online users
-    await online_start(this.sio, this.token)
+    await online_start(this.sio, request.token)
 
     # Response
     # TODO: del None

@@ -14,7 +14,7 @@ CURRENT_PATH = str(Path(__file__).parent) + '/'
 CURRENT_MODULE = CURRENT_PATH.replace('/', '.')
 
 
-async def call(method, this, params):
+async def call(method, this, request, data):
     """ Call the API method """
 
     module_name = CURRENT_MODULE + method
@@ -25,7 +25,7 @@ async def call(method, this, params):
 
     module = importlib.import_module(module_name)
     handle = getattr(module, 'handle')
-    return await handle(this, params)
+    return await handle(this, request, data)
 
 
 # for loader, module_name, is_pkg in pkgutil.walk_packages(

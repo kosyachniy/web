@@ -9,26 +9,26 @@ class Type(BaseType):
     token: str
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Update online status """
 
     # TODO: Проверка, что токен не скомпрометирован - по ip?
     # TODO: Определить вкладку (tab - sid)
 
-    print('ON', this.socket)
+    print('ON', request.socket)
 
-    if not request.token:
+    if not data.token:
         report.warning("Invalid token")
         return
 
     # Send sockets
-    await online_start(this.sio, request.token, this.socket)
+    await online_start(this.sio, data.token, request.socket)
 
     # TODO: UTM parameters
     # TODO: Promos
 
     # user_id = user_current['id'] if user_current else 0
-    # utms = Mark.get(token=request.token, user=user_id)
+    # utms = Mark.get(token=data.token, user=user_id)
 
     # if utms:
     #     for utm in utms:
@@ -37,7 +37,7 @@ async def handle(this, request):
 
     # else:
     #     utm = Mark(
-    #         token=request.token,
+    #         token=data.token,
     #         user=user_id,
     #         name=utm_mark,
     #     )

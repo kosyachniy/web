@@ -11,15 +11,15 @@ class Type(BaseType):
     id: int
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Delete """
 
     # No access
-    if this.user.status < 5:
+    if request.user.status < 5:
         raise ErrorAccess('delete')
 
     # Get
-    review = Review.get(ids=request.id)
+    review = Review.get(ids=data.id)
 
     # Delete
     review.rm()

@@ -11,17 +11,17 @@ class Type(BaseType):
     id: int
 
 @validate(Type)
-async def handle(this, request):
+async def handle(this, request, data):
     """ Block """
 
     # Get user
     try:
-        user = User.get(ids=request.id, fields={'status'})
+        user = User.get(ids=data.id, fields={'status'})
     except:
         raise ErrorWrong('id')
 
     # No access
-    if this.user.status < 6 or user.status > this.user.status:
+    if request.user.status < 6 or user.status > request.user.status:
         raise ErrorAccess('block')
 
     # Save
