@@ -71,7 +71,7 @@ async def handle(this, request, data):
 
             ## Content
             post.cont = re.sub(
-                '<[^>]*>',
+                r'<[^>]*>',
                 '',
                 post.cont
             ).replace('&nbsp;', ' ')

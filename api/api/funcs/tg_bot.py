@@ -109,10 +109,10 @@ def edit(to, message, text, buttons=None, inline=False, markup='Markdown'):
     """ Edit message """
 
     if '<img' in text:
-        # img = re.search('<img src=".+">', text)[0].split('"')[1]
+        # img = re.search(r'<img src=".+">', text)[0].split('"')[1]
         # img = img.replace('/load', '../../data/load')[1:]
-        text = re.sub('<img src=".+">', '', text)
-        text = re.sub('\n\n\n\n', '\n\n', text)
+        text = re.sub(r'<img src=".+">', '', text)
+        text = re.sub(r'\n\n\n\n', '\n\n', text)
 
         bot.edit_message_caption(
             chat_id=to,

@@ -236,7 +236,7 @@ async def handle(this, request, data):
 #         # Referal code
 
 #         if code['promo'].lower()[:5] == 'tensy':
-#             referal_parent = int(re.sub('\D', '', code['promo']))
+#             referal_parent = int(re.sub(r'\D', '', code['promo']))
 
 #             if user['id'] != referal_parent:
 #                 user['referal_parent'] = referal_parent
