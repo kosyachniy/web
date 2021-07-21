@@ -7,6 +7,7 @@ from abc import abstractmethod
 from typing import Union, Optional, Any, Callable
 from copy import deepcopy
 
+from ..funcs import generate
 from ..funcs.mongodb import db
 from ..errors import ErrorWrong
 
@@ -20,6 +21,16 @@ def _next_id(name):
         return id_last[0]['id'] + 1
 
     return 1
+
+def _is_subobject(x):
+    if (
+        isinstance(x, (list, tuple, set))
+        and x and isinstance(x[0], dict)
+        and 'id' in x[0]
+    ):
+        return True
+
+    return False
 
 def pre_process_created(cont):
     """ Creation time pre-processing """
@@ -118,12 +129,18 @@ class Base:
     def _db(self) -> str:
         """ Database name """
 
+        return None
+
     def __init__(self, data: dict = None, **kwargs) -> None:
         # Auto complete (instead of Attribute(auto=...))
         self.created = time.time()
 
         if not data:
             data = kwargs
+
+        # Subobject
+        if data.get('id', None) is None and self._db is None:
+            data['id'] = generate()
 
         for name, value in data.items():
             setattr(self, name, value)
@@ -246,9 +263,46 @@ class Base:
 
         # Edit
         if exists:
+            data = self.json(default=False)
+
+            # Adding subobjects to existing ones
+
+            data_set = {}
+            data_push = {}
+
+            for field in data:
+                if _is_subobject(data[field]):
+                    data_push[field] = data[field]
+                    continue
+
+                data_set[field] = data[field]
+
+            fields = {'_id': False, **{field: True for field in data_push}}
+
+            data_prepush = db[self._db].find_one({'id': self.id}, fields)
+
+            # TODO: remake to MongoDB request selection
+            for field in data_prepush:
+                for value in data_prepush[field]:
+                    i = 0
+
+                    while i < len(data_push[field]):
+                        if data_push[field][i]['id'] == value['id']:
+                            del data_push[field][i]
+                            break
+
+                        i += 1
+
+            # Update
             db[self._db].update_one(
                 {'id': self.id},
-                {'$set': self.json(default=False)},
+                {
+                    '$set': data_set,
+                    '$push': {
+                        field: {'$each': data_push[field]}
+                        for field in data_push
+                    },
+                },
             )
 
             return
