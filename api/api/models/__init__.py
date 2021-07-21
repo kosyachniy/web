@@ -255,9 +255,15 @@ class Base:
     def save(
         self,
     ):
-        """ Save the instance """
+        """ Save the instance
+        If the object has subobjects (list of dicts with id),
+        1. there will be added only subobjects with new ids,
+        2. unspecified subobjects won't be deleted,
+        3. the order of subobjects won't be changed.
+        """
 
         # TODO: deleting values
+        # TODO: changed?
 
         exists = db[self._db].count_documents({'id': self.id})
 
@@ -277,33 +283,33 @@ class Base:
 
                 data_set[field] = data[field]
 
-            fields = {'_id': False, **{field: True for field in data_push}}
+            if data_push:
+                fields = {'_id': False, **{field: True for field in data_push}}
+                data_prepush = db[self._db].find_one({'id': self.id}, fields)
 
-            data_prepush = db[self._db].find_one({'id': self.id}, fields)
+                # TODO: remake to MongoDB request selection
+                for field in data_prepush:
+                    for value in data_prepush[field]:
+                        i = 0
 
-            # TODO: remake to MongoDB request selection
-            for field in data_prepush:
-                for value in data_prepush[field]:
-                    i = 0
+                        while i < len(data_push[field]):
+                            if data_push[field][i]['id'] == value['id']:
+                                del data_push[field][i]
+                                break
 
-                    while i < len(data_push[field]):
-                        if data_push[field][i]['id'] == value['id']:
-                            del data_push[field][i]
-                            break
-
-                        i += 1
+                            i += 1
 
             # Update
-            db[self._db].update_one(
-                {'id': self.id},
-                {
-                    '$set': data_set,
-                    '$push': {
-                        field: {'$each': data_push[field]}
-                        for field in data_push
-                    },
-                },
-            )
+
+            db_request = {'$set': data_set}
+
+            if data_push:
+                db_request['$push'] = {
+                    field: {'$each': data_push[field]}
+                    for field in data_push
+                }
+
+            db[self._db].update_one({'id': self.id}, db_request)
 
             return
 
