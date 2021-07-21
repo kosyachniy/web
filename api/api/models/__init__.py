@@ -23,6 +23,12 @@ def _next_id(name):
     return 1
 
 def _is_subobject(x):
+    """ Checking for subobject
+
+    Theoretically, this is object, which has own model, but without DB
+    Practically, this is dictionary with id
+    """
+
     if (
         isinstance(x, (list, tuple, set))
         and x and isinstance(x[0], dict)
@@ -32,8 +38,8 @@ def _is_subobject(x):
 
     return False
 
-def pre_process_created(cont):
-    """ Creation time pre-processing """
+def pre_process_time(cont):
+    """ Time pre-processing """
 
     if isinstance(cont, int):
         return float(cont)
@@ -120,7 +126,8 @@ class Base:
     id = Attribute(types=int, default=0) # TODO: unique
     name = Attribute(types=str) # TODO: required
     user = Attribute(types=int, default=0)
-    created = Attribute(types=float, pre_processing=pre_process_created)
+    created = Attribute(types=float, pre_processing=pre_process_time)
+    updated = Attribute(types=float, pre_processing=pre_process_time)
     status = Attribute(types=int)
     # TODO: modified / updated
 
@@ -256,6 +263,7 @@ class Base:
         self,
     ):
         """ Save the instance
+
         If the object has subobjects (list of dicts with id),
         1. there will be added only subobjects with new ids,
         2. unspecified subobjects won't be deleted,
@@ -266,6 +274,9 @@ class Base:
         # TODO: changed?
 
         exists = db[self._db].count_documents({'id': self.id})
+
+        # Update time
+        self.updated = time.time()
 
         # Edit
         if exists:
@@ -336,8 +347,8 @@ class Base:
     ):
         """ Get dictionary of the object
 
-        If default is True and there are fields, it will return only fields with
-        non-default values
+        If default is True and there are fields,
+        it will return only fields with non-default values
         """
 
         data = {}
