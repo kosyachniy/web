@@ -339,6 +339,20 @@ class Base:
         if not res:
             raise ErrorWrong('id')
 
+    def rm_attr(
+        self,
+        fields: Union[list[str], tuple[str], set[str], str, None],
+    ):
+        """ Delete the attribute of the instance """
+
+        if isinstance(fields, str):
+            fields = {fields}
+
+        db[self._db].update_one(
+            {'id': self.id},
+            {'$unset': {field: '' for field in fields}}
+        )
+
     def json(
         self,
         default=True, # Return default values
