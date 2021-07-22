@@ -354,12 +354,18 @@ class Base:
         if not db[self._db].count_documents({'id': self.id}):
             raise ErrorUnsaved('id')
 
+        # Update time
+        self.updated = time.time()
+
         if isinstance(fields, str):
             fields = {fields}
 
         db[self._db].update_one(
             {'id': self.id},
-            {'$unset': {field: '' for field in fields}}
+            {
+                '$set': {'updated': self.updated},
+                '$unset': {field: '' for field in fields},
+            }
         )
 
         self.reload()
@@ -374,17 +380,27 @@ class Base:
         After calling this function, all unsaved instance data will be erased
         """
 
-        # TODO: delete default values from DB
-
         if not db[self._db].count_documents({'id': self.id}):
             raise ErrorUnsaved('id')
 
+        # Update time
+        self.updated = time.time()
+
         db[self._db].update_one(
             {'id': self.id},
-            {'$pull': {field: {'id': ids}}}
+            {
+                '$set': {'updated': self.updated},
+                '$pull': {field: {'id': ids}},
+            }
         )
 
         self.reload()
+
+        if self._is_default(field):
+            db[self._db].update_one(
+                {'id': self.id},
+                {'$unset': {field: ''}}
+            )
 
     def json(
         self,
