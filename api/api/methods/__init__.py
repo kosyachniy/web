@@ -14,6 +14,26 @@ CURRENT_PATH = str(Path(__file__).parent) + '/'
 CURRENT_MODULE = CURRENT_PATH.replace('/', '.')
 
 
+def _rm_none(data):
+    """ Remove None values """
+
+    if not isinstance(data, dict):
+        return
+
+    for field in set(data):
+        if data[field] is None:
+            del data[field]
+            continue
+
+        if isinstance(data[field], dict):
+            _rm_none(data[field])
+            continue
+
+        if isinstance(data[field], (list, tuple, set)):
+            for el in data[field]:
+                _rm_none(el)
+
+
 async def call(method, this, request, data):
     """ Call the API method """
 
@@ -25,7 +45,12 @@ async def call(method, this, request, data):
 
     module = importlib.import_module(module_name)
     handle = getattr(module, 'handle')
-    return await handle(this, request, data)
+    response = await handle(this, request, data)
+
+    # Delete None values
+    _rm_none(response)
+
+    return response
 
 
 # for loader, module_name, is_pkg in pkgutil.walk_packages(

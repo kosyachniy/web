@@ -10,19 +10,24 @@ from pydantic.error_wrappers import ValidationError
 from ..errors import ErrorSpecified, ErrorType
 
 
-def _prepare(data):
+def _strip(data):
     """ Remove extra indentation """
 
-    for i in data:
-        if isinstance(data[i], str):
-            data[i] = data[i].strip()
+    if not isinstance(data, dict):
+        return
 
-        elif isinstance(data[i], (list, dict)):
-            for j in data[i]:
-                if isinstance(data[i][j], str):
-                    data[i][j] = data[i][j].strip()
+    for field in set(data):
+        if isinstance(data[field], str):
+            data[field] = data[field].strip()
+            continue
 
-    return data
+        if isinstance(data[field], dict):
+            _strip(data[field])
+            continue
+
+        if isinstance(data[field], (list, tuple, set)):
+            for el in data[field]:
+                _strip(el)
 
 def _check(data, filters):
     """ Convert the parameters to the required object """
@@ -45,7 +50,7 @@ def validate(filters):
     def decorator(f):
         @wraps(f)
         def wrapper(this, request, data):
-            data = _prepare(data)
+            _strip(data)
             data = _check(data, filters)
             return f(this, request, data)
         return wrapper
