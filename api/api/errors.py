@@ -78,3 +78,8 @@ class ErrorTime(BaseError):
     """ Time expired """
 
     code = 16
+
+class ErrorUnsaved(BaseError):
+    """ The object has not been saved yet """
+
+    code = 17

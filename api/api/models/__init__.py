@@ -9,7 +9,7 @@ from copy import deepcopy
 
 from ..funcs import generate
 from ..funcs.mongodb import db
-from ..errors import ErrorWrong
+from ..errors import ErrorWrong, ErrorUnsaved
 
 
 def _next_id(name):
@@ -264,13 +264,16 @@ class Base:
     ):
         """ Save the instance
 
+        Default and None values are not written to DB
+        To delete attributes, use .rm_attr()
+
         If the object has subobjects (list of dicts with id),
         1. there will be added only subobjects with new ids,
         2. unspecified subobjects won't be deleted,
         3. the order of subobjects won't be changed.
+        To delete subobjects, use .rm_sub()
         """
 
-        # TODO: deleting values
         # TODO: changed?
 
         exists = db[self._db].count_documents({'id': self.id})
@@ -343,7 +346,13 @@ class Base:
         self,
         fields: Union[list[str], tuple[str], set[str], str, None],
     ):
-        """ Delete the attribute of the instance """
+        """ Delete the attribute of the instance
+
+        After calling this function, all unsaved instance data will be erased
+        """
+
+        if not db[self._db].count_documents({'id': self.id}):
+            raise ErrorUnsaved('id')
 
         if isinstance(fields, str):
             fields = {fields}
@@ -352,6 +361,30 @@ class Base:
             {'id': self.id},
             {'$unset': {field: '' for field in fields}}
         )
+
+        self.reload()
+
+    def rm_sub(
+        self,
+        field: str,
+        ids: Union[int, str],
+    ):
+        """ Delete the subobject of the instance
+
+        After calling this function, all unsaved instance data will be erased
+        """
+
+        # TODO: delete default values from DB
+
+        if not db[self._db].count_documents({'id': self.id}):
+            raise ErrorUnsaved('id')
+
+        db[self._db].update_one(
+            {'id': self.id},
+            {'$pull': {field: {'id': ids}}}
+        )
+
+        self.reload()
 
     def json(
         self,
@@ -385,3 +418,18 @@ class Base:
             data[attr] = value
 
         return data
+
+    def reload(
+        self,
+    ):
+        """ Update the object according to the data from the DB
+
+        After calling this function, all unsaved instance data will be erased
+        """
+
+        try:
+            data = self.get(ids=self.id, fields=self.__dict__)
+        except ErrorWrong as e:
+            raise ErrorUnsaved(e)
+
+        self.__dict__ = data.json(default=False)
