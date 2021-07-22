@@ -20,6 +20,9 @@ class Type(BaseType):
 async def handle(this, request, data):
     """ By social network """
 
+    # TODO: reports
+    # TODO: actions
+
     # No access
     if request.user.status < 2:
         raise ErrorAccess('social')

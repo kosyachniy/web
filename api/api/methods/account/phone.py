@@ -7,8 +7,9 @@ The authorization by phone method of the account object of the API
 from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, pre_process_phone
 from ...models.token import Token
+from ...models.action import Action
 # from ...funcs.smsc import SMSC
-from ...errors import ErrorAccess
+from ...errors import ErrorAccess, ErrorInvalid
 
 
 class Type(BaseType):
@@ -52,10 +53,24 @@ async def handle(this, request, data):
 
     # Register
     if new:
-        user_data = User(
-            phone=data.phone,
-            phone_verified=False,
+        action = Action(
+            name='account_reg',
+            details={
+                'network': request.network,
+                'ip': request.ip,
+                'phone': data.phone,
+            },
         )
+
+        try:
+            user_data = User(
+                phone=data.phone,
+                phone_verified=False,
+                actions=[action.json(default=False)],
+            )
+        except ValueError as e:
+            raise ErrorInvalid(e)
+
         user_data.save()
         user_id = user_data.id
 
@@ -64,11 +79,25 @@ async def handle(this, request, data):
         # Report
         report.important(
             "User registration by phone",
-            {'user': user_id, 'token': request.token},
+            {
+                'user': user_id,
+                'token': request.token,
+                'network': request.network,
+            },
         )
 
     else:
         user = users[0]
+
+        action = Action(
+            name='account_auth',
+            details={
+                'ip': request.ip,
+            },
+        )
+
+        user.actions.append(action.json(default=False))
+        user.save()
 
     # Assignment of the token to the user
 

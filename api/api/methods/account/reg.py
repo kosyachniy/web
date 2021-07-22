@@ -4,6 +4,7 @@ The registration method of the account object of the API
 from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User
 from ...models.token import Token
+from ...models.action import Action
 from ...errors import ErrorAccess, ErrorRepeat
 
 
@@ -30,6 +31,20 @@ async def handle(this, request, data):
 
     # Create
 
+    action = Action(
+        name='account_reg',
+        details={
+            'network': request.network,
+            'ip': request.ip,
+            'login': data.login,
+            'name': data.name,
+            'surname': data.surname,
+            'mail': data.mail,
+            'social': data.social,
+            'password': data.password,
+        },
+    )
+
     try:
         user = User(
             login=data.login,
@@ -40,6 +55,7 @@ async def handle(this, request, data):
             mail=data.mail,
             mail_verified=False,
             social=data.social,
+            actions=[action.json(default=False)],
         )
     except ValueError as e:
         raise ErrorRepeat(e) # TODO: to errors.py
@@ -49,7 +65,11 @@ async def handle(this, request, data):
     # Report
     report.important(
         "User registration",
-        {'user': user.id, 'token': request.token},
+        {
+            'user': user.id,
+            'token': request.token,
+            'network': request.network,
+        },
     )
 
     # Assignment of the token to the user
