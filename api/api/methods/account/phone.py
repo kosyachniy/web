@@ -239,8 +239,10 @@ async def handle(this, request, data):
 #             referal_parent = int(re.sub(r'\D', '', code['promo']))
 
 #             if user['id'] != referal_parent:
-#                 user['referal_parent'] = referal_parent
-#                 db.users.save(user)
+#                 db.users.update_one(
+#                     {'id': user['id']},
+#                     {'$set': {'referal_parent': referal_parent}}
+#                 )
 
 #         else:
 #             # Bonus code
@@ -261,14 +263,16 @@ async def handle(this, request, data):
 #                         if promo['repeat'] \
 #                             or user['id'] not in promo['users']:
 #                             # Выполнение скрипта
-
-#                             user['balance'] += promo['balance']
-#                             db.users.save(user)
+#                             db.users.update_one(
+#                                 {'id': user['id']},
+#                                 {'$inc': {'balance': promo['balance']}}
+#                             )
 
 #                             # Сохранение результатов в промокоде
-
-#                             promo['users'].append(user['id'])
-#                             db.promos.save(promo)
+#                             db.promos.update_one(
+#                                 {'id': user['id']},
+#                                 {'$push': {'users': user['id']}}
+#                             )
 
 #     # Присвоение токена пользователю
 
