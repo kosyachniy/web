@@ -22,7 +22,7 @@ def _next_id(name):
 
     return 1
 
-def _is_subobject(x):
+def _is_subobject(data):
     """ Checking for subobject
 
     Theoretically, this is object, which has own model, but without DB
@@ -30,9 +30,9 @@ def _is_subobject(x):
     """
 
     if (
-        isinstance(x, (list, tuple, set))
-        and x and isinstance(x[0], dict)
-        and 'id' in x[0]
+        isinstance(data, (list, tuple, set))
+        and data and isinstance(data[0], dict)
+        and 'id' in data[0]
     ):
         return True
 
@@ -200,8 +200,8 @@ class Base:
             db_condition = {}
 
         if kwargs:
-            for arg in kwargs:
-                db_condition[arg] = kwargs[arg]
+            for key, value in kwargs.items():
+                db_condition[key] = value
 
         db_filter = {
             '_id': False,
@@ -290,12 +290,12 @@ class Base:
             data_set = {}
             data_push = {}
 
-            for field in data:
-                if _is_subobject(data[field]):
-                    data_push[field] = data[field]
+            for key, value in data.items():
+                if _is_subobject(value):
+                    data_push[key] = value
                     continue
 
-                data_set[field] = data[field]
+                data_set[key] = value
 
             if data_push:
                 fields = {'_id': False, **{field: True for field in data_push}}
@@ -319,8 +319,8 @@ class Base:
 
             if data_push:
                 db_request['$push'] = {
-                    field: {'$each': data_push[field]}
-                    for field in data_push
+                    key: {'$each': value}
+                    for key, value in data_push.items()
                 }
 
             db[self._db].update_one({'id': self.id}, db_request)

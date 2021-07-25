@@ -150,7 +150,6 @@ async def handle(this, request, data):
     await online_start(this.sio, request.token)
 
     # Response
-    # TODO: del None
     return {
         **user.json(fields=fields),
         'new': new,

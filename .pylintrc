@@ -2,11 +2,11 @@
 jobs=2
 
 [MESSAGES CONTROL]
-disable=import-error
+disable=import-error,fixme,unsubscriptable-object,unused-argument
 
 [BASIC]
-good-names=i,j,e,f,ip,id,to,rm
-no-docstring-rgx=Type
+good-names=i,j,e,f,ip,id,to,rm,tg,vk
+no-docstring-rgx=[(__.*__)(Type)]
 
 [DESIGN]
 max-args=8
