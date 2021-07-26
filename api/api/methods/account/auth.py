@@ -72,10 +72,9 @@ async def handle(this, request, data):
     # Check password
     if not new:
         password = process_password(data.password)
+        users = User.get(id=user.id, password=password)
 
-        try:
-            User.get(id=user.id, password=password)
-        except:
+        if not users:
             raise ErrorWrong('password')
 
     # Register

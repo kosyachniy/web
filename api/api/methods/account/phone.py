@@ -224,13 +224,12 @@ async def handle(this, request, data):
 
 #         code = db.codes.find_one(db_condition, db_filter)
 
-#         if code:
-#             # ! Входить по старым кодам
-#             pass
-#             # db.codes.remove(code)
-
-#         else:
+#         if not code:
 #             raise ErrorWrong('code')
+
+#         # ! Входить по старым кодам
+#         pass
+#         # db.codes.remove(code)
 
 #     else:
 #         code = {
