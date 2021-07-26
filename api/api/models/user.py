@@ -10,7 +10,7 @@ from ..funcs import load_image, get_language
 from ..funcs.mongodb import db
 
 
-RESERVED = (
+RESERVED = {
     'admin', 'admins', 'administrator', 'administrators', 'administration',
     'author', 'support', 'manager', 'client',
     'account', 'profile', 'login', 'sign', 'signin', 'signup', 'password',
@@ -20,7 +20,7 @@ RESERVED = (
     'phone', 'code', 'codes', 'mail',
     'google', 'facebook', 'telegram', 'instagram', 'twitter',
     'anon', 'anonym', 'anonymous', 'undefined', 'ufo',
-)
+}
 
 
 def default_login(instance):
