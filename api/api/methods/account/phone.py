@@ -174,7 +174,7 @@ async def handle(this, request, data):
 #     sms = SMSC()
 #     res = sms.send_sms(
 #         str(phone),
-#         'Hi!\n{} — This is your login code.'.format(code)
+#         f"Hi!\n{code} — This is your login code."
 #     )
 #     print(phone, res)
 

@@ -24,7 +24,7 @@ with open('sets.json', 'r') as file:
 def get_file(url, num):
     """ Check existence the file by name """
 
-    for i in os.listdir('../data/load/{}/'.format(url)):
+    for i in os.listdir(f'../data/load/{url}/'):
         if re.search(rf"^{str(num)}.", i):
             return i
 
@@ -70,13 +70,11 @@ def load_image(data, encoding='base64', file_format='png'):
             raise ErrorUpload('image')
 
     file_id = max_image(url)
-    file_id = '{}{}{}'.format(
-        '0' * max(0, 10-len(str(file_id))),
-        file_id,
-        ''.join(random.choice(string.ascii_lowercase) for _ in range(6)),
-    )
+    offset = '0' * max(0, 10-len(str(file_id)))
+    payload = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
+    file_id = f'{offset}{file_id}{payload}'
     file_format = file_format.lower()
-    file_name = '{}.{}'.format(file_id, file_format)
+    file_name = f'{file_id}.{file_format}'
     url += file_name
     url_opt += file_name
 

@@ -33,8 +33,8 @@ async def handle(this, request, data):
 
     # # ВКонтакте
     # if data.id == 1:
-    #     link = 'https://oauth.vk.com/access_token?client_id={}&client_secret=' \
-    #            '{}&redirect_uri={}callback&code={}'
+    #     link = 'https://oauth.vk.com/access_token?client_id={}' \
+    #            '&client_secret={}&redirect_uri={}callback&code={}'
     #     response = json.loads(
     #         requests.get(
     #             link.format(
@@ -60,7 +60,7 @@ async def handle(this, request, data):
     #     cont = {
     #         'client_id': this.google['client_id'],
     #         'client_secret': this.google['client_secret'],
-    #         'redirect_uri': '{}callback'.format(this.client),
+    #         'redirect_uri': f'{this.client}callback',
     #         'grant_type': 'authorization_code',
     #         'code': urllib.parse.unquote(data.code),
     #     }
