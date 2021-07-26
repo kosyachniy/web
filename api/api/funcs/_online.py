@@ -169,16 +169,10 @@ async def online_stop(sio, socket_id):
     # TODO: Объединять сессии в онлайн по пользователю
     # TODO: Если сервер был остановлен, отслеживать сессию
 
-    print('!', socket_id)
-
     try:
         socket = Socket.get(ids=socket_id)
     except:
-        report.warning(
-            "Wrong socket_id",
-            {'socket': socket_id},
-        )
-
+        # NOTE: method "exit" -> socket "disconnect"
         return
 
     user = get_user(socket.token)
