@@ -23,13 +23,13 @@ def _next_id(name):
     return 1
 
 def _search(value, search):
+    """ Search for matches by value """
+
     if isinstance(value, str):
         return search in value.lower()
 
     if isinstance(value, (int, float)):
-        if search.isdigit():
-            return int(search) == value
-        return False
+        return search.isdigit() and int(search) == value
 
     if isinstance(value, (list, tuple, set)):
         for el in value:
@@ -206,7 +206,7 @@ class Base:
         ids: Union[list, tuple, set, int, str, None] = None,
         count: Optional[int] = None,
         offset: int = 0,
-        search: Optional[str] = None, # TODO: name, cont, tags
+        search: Optional[str] = None,
         fields: Union[list[str], tuple[str], set[str], None] = None,
         **kwargs,
     ):
@@ -259,10 +259,14 @@ class Base:
                 if match:
                     els.append(el)
 
+            els.sort(key=lambda el: el['id'], reverse=True)
+
+        else:
+            els = res.sort('id', -1)
+
         if offset is None:
             offset = 0
 
-        els.sort(key=lambda el: el['id'], reverse=True)
         last = count + offset if count else None
         els = els[offset:last]
         els = list(map(cls, els))

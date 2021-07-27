@@ -5,7 +5,7 @@ jobs=2
 disable=import-error,fixme,unsubscriptable-object,unused-argument
 
 [BASIC]
-good-names=i,j,e,f,ip,id,to,rm,tg,vk
+good-names=i,j,e,f,ip,id,to,rm,el,tg,vk
 no-docstring-rgx=[(__.*__)(Type)]
 
 [DESIGN]
