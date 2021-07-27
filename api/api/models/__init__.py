@@ -164,6 +164,9 @@ class Base:
     def __setitem__(self, name, value):
         setattr(self, name, value)
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.json(none=True)})'
+
     def _is_default(self, name):
         """ Check the value for the default value """
 
