@@ -10,6 +10,8 @@ class Review(Base):
     """ Review """
 
     _db = 'reviews'
+    _search_fields = ['name', 'cont']
+
     cont = Attribute(types=str, default='', processing=reimg)
     network = Attribute(types=int, default=0)
     # TODO: link

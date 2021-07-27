@@ -9,4 +9,5 @@ class Token(Base):
     """ Token """
 
     _db = 'tokens'
+
     id = Attribute(types=str)

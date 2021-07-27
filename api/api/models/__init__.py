@@ -22,6 +22,29 @@ def _next_id(name):
 
     return 1
 
+def _search(value, search):
+    if isinstance(value, str):
+        return search in value.lower()
+
+    if isinstance(value, (int, float)):
+        if search.isdigit():
+            return int(search) == value
+        return False
+
+    if isinstance(value, (list, tuple, set)):
+        for el in value:
+            if _search(el, search):
+                return True
+        return False
+
+    if isinstance(value, dict):
+        for el in value.values():
+            if _search(el, search):
+                return True
+        return False
+
+    return False
+
 def _is_subobject(data):
     """ Checking for subobject
 
@@ -138,6 +161,8 @@ class Base:
 
         return None
 
+    _search_fields = ['name']
+
     def __init__(self, data: dict = None, **kwargs) -> None:
         # Auto complete (instead of Attribute(auto=...))
         self.created = time.time()
@@ -216,37 +241,28 @@ class Base:
             for value in fields:
                 db_filter[value] = True
 
-        els = db[cls._db].find(db_condition, db_filter)
+        res = db[cls._db].find(db_condition, db_filter)
+        els = []
 
-        # if 'search' in x and x['search']:
-        #     x['search'] = x['search'].lower()
-        #     i = 0
+        if search:
+            search = search.lower()
 
-        #     while i < len(posts):
-        #         cond_name = x['search'] not in posts[i]['name'].lower()
-        #         # TODO: HTML tags
-        #         cond_cont = x['search'] not in posts[i]['cont'].lower()
-        #         cond_tags = all(
-        #             x['search'] not in tag.lower()
-        #             for tag in posts[i]['tags']
-        #         ) if 'tags' in posts[i] else True
+            for el in res:
+                match = False
 
-        #         if cond_name and cond_cont and cond_tags:
-        #             del posts[i]
-        #             continue
+                for field in cls._search_fields:
+                    if field in el:
+                        if _search(el[field], search):
+                            match = True
+                            break
 
-        #         i += 1
-
-        #     for i in range(len(posts)):
-        #         # del posts[i]['cont'] # !
-
-        #         if 'tags' in posts[i]:
-        #             del posts[i]['tags']
+                if match:
+                    els.append(el)
 
         if offset is None:
             offset = 0
 
-        els = els.sort('id', -1)
+        els.sort(key=lambda el: el['id'], reverse=True)
         last = count + offset if count else None
         els = els[offset:last]
         els = list(map(cls, els))

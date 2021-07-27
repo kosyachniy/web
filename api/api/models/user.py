@@ -156,6 +156,16 @@ class User(Base):
     """ User """
 
     _db = 'users'
+    _search_fields = [
+        'login',
+        'name',
+        'surname',
+        'phone',
+        'mail',
+        'description',
+        # 'actions',
+    ]
+
     login = Attribute(
         types=str,
         default=default_login,

@@ -10,6 +10,8 @@ class Post(Base):
     """ Post """
 
     _db = 'posts'
+    _search_fields = ['name', 'cont', 'tags']
+
     cont = Attribute(types=str, default='', processing=reimg)
     reactions = Attribute(types=dict, default={
         'views': [], # TODO: + UTM
