@@ -9,7 +9,7 @@ from copy import deepcopy
 
 from ..funcs import generate
 from ..funcs.mongodb import db
-from ..errors import ErrorWrong, ErrorUnsaved
+from ..errors import ErrorInvalid, ErrorWrong, ErrorUnsaved
 
 
 def _next_id(name):
@@ -245,6 +245,9 @@ class Base:
         els = []
 
         if search:
+            if len(search) < 3:
+                raise ErrorInvalid('search')
+
             search = search.lower()
 
             for el in res:

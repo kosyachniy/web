@@ -8,6 +8,7 @@ import Grid from './Grid';
 
 // AppContainer.jsx
 const mapStateToProps = state => ({
+    system: state.system,
     posts: state.posts,
     online: state.online,
 });

@@ -52,6 +52,15 @@ export const changeTheme = theme => {
     }
 }
 
+export const searching = search => {
+    localStorage.setItem('search', search)
+
+    return {
+        type: 'SEARCH',
+        search,
+    }
+}
+
 export const changeLang = lang => {
     localStorage.setItem('lang', lang)
     i18n.changeLanguage(lang)
@@ -181,6 +190,7 @@ export const system = (state = {
     lang: localStorage.getItem('lang'),
     theme: localStorage.getItem('theme'),
     color: localStorage.getItem('color'),
+    search: localStorage.getItem('search'),
 }, action) => {
     switch (action.type) {
         case 'CHANGE_THEME':
@@ -202,12 +212,19 @@ export const system = (state = {
                 loaded: true,
             };
 
+        case 'SEARCH':
+            return {
+                ...state,
+                search: action.search,
+            }
+
         default:
             return {
                 loaded: state.loaded,
                 lang: state.lang || 'ru',
                 theme: state.theme || 'light',
                 color: state.color || 'dark',
+                search: state.search || '',
             };
     }
 };

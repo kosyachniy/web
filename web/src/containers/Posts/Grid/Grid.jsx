@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 
@@ -8,19 +8,33 @@ import Card from '../../../components/Card'
 
 
 const Grid = (props) => {
-    // const { t } = props
+    const {
+        system, posts,
+        postsGet,
+    } = props
+
+    const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => {
         const handlerSuccess = (res) => {
-            props.postsGet(res['posts']);
+            postsGet(res['posts']);
         }
 
         api('posts.get', data, handlerSuccess)
     }
 
     useEffect(() => {
-        getPost()
-    }, [])
+        if (
+            system.search != loaded
+            && (
+                system.search == ''
+                || system.search.length >= 3
+            )
+        ) {
+            setLoaded(system.search)
+            getPost({search: system.search})
+        }
+    })
 
     return (
         <>
@@ -49,7 +63,7 @@ const Grid = (props) => {
 
             <div className="album py-2">
                 <div className="row">
-                    { props.posts.map((el, num) =>
+                    { posts.map((el, num) =>
                         <Card post={ el } key={ num } />
                     ) }
                 </div>

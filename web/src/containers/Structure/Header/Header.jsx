@@ -23,7 +23,7 @@ const Header = (props) => {
     const {
         system, online, profile,
         changeTheme, changeLang, profileOut,
-        handlerPopUp,
+        handlerPopUp, searching,
     } = props
     const { t } = useTranslation()
 
@@ -90,6 +90,8 @@ const Header = (props) => {
                                 className="form-control"
                                 type="search"
                                 placeholder={ t('system.search') }
+                                value={ system.search }
+                                onChange={ (event) => {searching(event.target.value)} }
                             />
                         </li>
                     </ul>
