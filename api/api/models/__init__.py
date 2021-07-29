@@ -235,11 +235,17 @@ class Base:
             '_id': False,
         }
 
-        if fields:
-            db_filter['id'] = True
+        if fields is not None:
+            # NOTE: We need `id` to save the element
+            # NOTE: Leave `id` in `fields` for fields selections in the end
+            fields.add('id')
 
-            for value in fields:
-                db_filter[value] = True
+            for field in fields:
+                db_filter[field] = True
+
+            if search:
+                for field in cls._search_fields:
+                    db_filter[field] = True
 
         res = db[cls._db].find(db_condition, db_filter)
         els = []
@@ -273,6 +279,13 @@ class Base:
         last = count + offset if count else None
         els = els[offset:last]
         els = list(map(cls, els))
+
+        # Clear attributes for fields selection after searching
+        if fields:
+            for el in els:
+                for key in set(el.__dict__):
+                    if key not in fields:
+                        del el.__dict__[key]
 
         if process_one:
             if not els:

@@ -20,7 +20,7 @@ NETWORKS = (
 USER_STATUSES = (
     'deleted', # not specified # Does not exist
     'blocked', # archive # Does not have access to resources
-    'normal',
+    'normal', # guest
     'registered', # confirmed # Save personal data & progress
     'editor', # curator # View reviews
     'verified', # Delete reviews
@@ -36,7 +36,7 @@ def get_network(code):
     if code in NETWORKS:
         return NETWORKS.index(code)
 
-    if code in range(len(NETWORKS)):
+    if 0 <= code < len(NETWORKS):
         return code
 
     return 0
