@@ -156,7 +156,7 @@ class User(Base):
     """ User """
 
     _db = 'users'
-    _search_fields = [
+    _search_fields = {
         'login',
         'name',
         'surname',
@@ -164,7 +164,7 @@ class User(Base):
         'mail',
         'description',
         # 'actions',
-    ]
+    }
 
     login = Attribute(
         types=str,

@@ -161,9 +161,24 @@ class Base:
 
         return None
 
-    _search_fields = ['name']
+    # Specified field of an instance
+    _fields: set = None
+    # Fields of the class for searching
+    _search_fields: set = {'name'}
 
-    def __init__(self, data: dict = None, **kwargs) -> None:
+    def __init__(
+        self,
+        data: dict = None,
+        fields: set = None,
+        **kwargs,
+    ) -> None:
+        # Save specified object fields for
+        # 1. saving without autocomplete values
+        # 2. showing data only from DB
+        if fields is None:
+            fields = set()
+        self._fields = fields
+
         # Auto complete (instead of Attribute(auto=...))
         self.created = time.time()
 
@@ -190,7 +205,8 @@ class Base:
         setattr(self, name, value)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.json(none=True)})'
+        pure = self.json(none=True, fields=self._fields)
+        return f'{self.__class__.__name__}({pure})'
 
     def _is_default(self, name):
         """ Check the value for the default value """
@@ -238,6 +254,7 @@ class Base:
         if fields is not None:
             # NOTE: We need `id` to save the element
             # NOTE: Leave `id` in `fields` for fields selections in the end
+            fields = set(fields)
             fields.add('id')
 
             for field in fields:
@@ -278,13 +295,13 @@ class Base:
 
         last = count + offset if count else None
         els = els[offset:last]
-        els = list(map(cls, els))
+        els = list(map(lambda el: cls(data=el, fields=fields), els))
 
         # Clear attributes for fields selection after searching
         if fields:
             for el in els:
                 for key in set(el.__dict__):
-                    if key not in fields:
+                    if key not in fields and key[0] != '_':
                         del el.__dict__[key]
 
         if process_one:
