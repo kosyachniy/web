@@ -198,6 +198,9 @@ class Base:
 
         super().__setattr__(name, value)
 
+        if self._fields:
+            self._fields.add(name)
+
     def __getitem__(self, name):
         return getattr(self, name)
 
@@ -297,7 +300,9 @@ class Base:
         els = els[offset:last]
         els = list(map(lambda el: cls(data=el, fields=fields), els))
 
-        # Clear attributes for fields selection after searching
+        # Leave requested attributes, clear of unnecessary ones:
+        # 1. after searching
+        # 2. autocomplete
         if fields:
             for el in els:
                 for key in set(el.__dict__):
@@ -328,6 +333,11 @@ class Base:
         2. unspecified subobjects won't be deleted,
         3. the order of subobjects won't be changed.
         To delete subobjects, use .rm_sub()
+
+        What attributes are not saved:
+        * None values (via `.json(none=False)`)
+        * Static & callable default values (via `.json(default=False)`)
+        * Replaced autocomplete values (via fields cleaning in the `get` method)
         """
 
         # TODO: changed?
@@ -384,7 +394,8 @@ class Base:
             return
 
         # Create
-        if self.id == 0: # NOTE: `id` may not be int
+        # NOTE: `id` may not be int
+        if self.id == 0:
             self.id = _next_id(self._db)
         db[self._db].insert_one(self.json(default=False))
 
