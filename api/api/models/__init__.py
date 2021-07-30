@@ -5,7 +5,7 @@ Base model of DB object
 import time
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable
-from copy import copy, deepcopy
+from copy import deepcopy
 
 from ..funcs import generate
 from ..funcs.mongodb import db
@@ -15,10 +15,10 @@ from ..errors import ErrorInvalid, ErrorWrong, ErrorUnsaved
 def _next_id(name):
     """ Next DB ID """
 
-    id_last = list(db[name].find({}, {'id': True, '_id': False}).sort('id', -1))
+    last = list(db[name].find().sort('id', -1).limit(1))
 
-    if id_last:
-        return id_last[0]['id'] + 1
+    if last:
+        return last[0]['id'] + 1
 
     return 1
 
@@ -48,8 +48,8 @@ def _search(value, search):
 def _is_subobject(data):
     """ Checking for subobject
 
-    Theoretically, this is object, which has own model, but without DB
-    Practically, this is dictionary with id
+    Theoretically, it is object, which has own model, but without DB
+    Practically, it is dictionary with `id`
     """
 
     if (
@@ -118,15 +118,13 @@ class Attribute:
         return None
 
     def __set__(self, instance, value) -> None:
+        # NOTE: Or we can delete the attribute by `=None`,
+        # but there could be problem if we just passed undeclared parameter
         if value is None:
             return
 
         if self.pre_processing:
             value = self.pre_processing(value)
-
-        # if value is None:
-        #     if self.name in instance.__dict__:
-        #         del instance.__dict__[self.name]
 
         if not isinstance(value, self.types):
             raise TypeError(self.name)
@@ -152,7 +150,6 @@ class Base:
     created = Attribute(types=float, pre_processing=pre_process_time)
     updated = Attribute(types=float, pre_processing=pre_process_time)
     status = Attribute(types=int)
-    # TODO: modified / updated
 
     @property
     @abstractmethod
@@ -161,8 +158,6 @@ class Base:
 
         return None
 
-    # Specified field of an instance
-    _fields: set = None
     # Loaded fields and values of an instance from DB
     _loaded_values: dict = None
     # Fields of the class for searching
@@ -171,29 +166,20 @@ class Base:
     def __init__(
         self,
         data: dict = None,
-        fields: set = None, # Only for loaded instances
+        loaded: bool = False,
         **kwargs,
     ) -> None:
         if not data:
             data = kwargs
 
-        if fields is not None:
-            # Save specified object fields for
-            # 1. saving without autocomplete values (`.save()`)
-            # 2. showing data only from DB (`__repr__`)
-            # NOTE: The fields will be specified in the assignment
-            self._fields = set()
-
-            # Save the loaded values from DB for
-            # 1. further saving only changed ones
-            if fields is not None:
-                self._loaded_values = deepcopy(data)
+        # Save the loaded values from DB for further saving only changed ones
+        if loaded:
+            self._loaded_values = deepcopy(data)
 
         # Autocomplete
         # NOTE: Instead of `Attribute(auto=...)`
-        # NOTE: Autocomplete values will be added only if
-        # it is not a loaded instance
-        if fields is not None:
+        # NOTE: Will be added only if it is not a loaded instance
+        if not loaded:
             self.created = time.time()
 
         # Subobject
@@ -201,16 +187,18 @@ class Base:
             data['id'] = generate()
 
         for name, value in data.items():
-            setattr(self, name, value)
+            if loaded:
+                # Without fields checking & processing
+                self.__dict__[name] = value
+            else:
+                # With fields checking & processing
+                setattr(self, name, value)
 
     def __setattr__(self, name, value):
         if not hasattr(self, name):
             raise AttributeError('key')
 
         super().__setattr__(name, value)
-
-        if self._fields is not None:
-            self._fields.add(name)
 
     def __getitem__(self, name):
         return getattr(self, name)
@@ -219,8 +207,7 @@ class Base:
         setattr(self, name, value)
 
     def __repr__(self):
-        pure = self.json(none=True, fields=self._fields)
-        return f'{self.__class__.__name__}({pure})'
+        return f'{self.__class__.__name__}({self.json(none=True)})'
 
     def _is_default(self, name):
         """ Check the value for the default value """
@@ -310,8 +297,7 @@ class Base:
 
         last = count + offset if count else None
         els = els[offset:last]
-        # NOTE: `fields={}` to indicate that the instance was loaded
-        els = list(map(lambda el: cls(data=el, fields=fields or {}), els))
+        els = list(map(lambda el: cls(data=el, loaded=True), els))
 
         # Leave requested attributes, clear of unnecessary ones:
         # 1. after searching
@@ -362,7 +348,7 @@ class Base:
         if exists:
             data = self.json(default=False)
 
-            # Adding subobjects to existing ones
+            # Add subobjects to existing ones
 
             data_set = {}
             data_push = {}
