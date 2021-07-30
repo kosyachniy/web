@@ -5,7 +5,7 @@ Base model of DB object
 import time
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable
-from copy import deepcopy
+from copy import copy, deepcopy
 
 from ..funcs import generate
 from ..funcs.mongodb import db
@@ -173,13 +173,15 @@ class Base:
         **kwargs,
     ) -> None:
         # Save specified object fields for
-        # 1. saving without autocomplete values
-        # 2. showing data only from DB
+        # TODO: 1. saving without autocomplete values (`.save()`)
+        # 2. showing data only from DB (`__repr__`)
         if fields is None:
-            fields = set()
-        self._fields = fields
+            self._fields = set()
+        else:
+            self._fields = copy(fields)
 
-        # Auto complete (instead of Attribute(auto=...))
+        # Autocomplete
+        # NOTE: Instead of `Attribute(auto=...)`
         self.created = time.time()
 
         if not data:
@@ -214,6 +216,7 @@ class Base:
     def _is_default(self, name):
         """ Check the value for the default value """
 
+        # Get full copy of the instance to restore the dependent default values
         data = deepcopy(self)
         delattr(data, name)
 
@@ -255,7 +258,7 @@ class Base:
         }
 
         if fields is not None:
-            # NOTE: We need `id` to save the element
+            # Add `id` for further saving the instance
             # NOTE: Leave `id` in `fields` for fields selections in the end
             fields = set(fields)
             fields.add('id')
@@ -300,6 +303,8 @@ class Base:
         els = els[offset:last]
         els = list(map(lambda el: cls(data=el, fields=fields), els))
 
+        print('!1', els, fields)
+
         # Leave requested attributes, clear of unnecessary ones:
         # 1. after searching
         # 2. autocomplete
@@ -308,6 +313,8 @@ class Base:
                 for key in set(el.__dict__):
                     if key not in fields and key[0] != '_':
                         del el.__dict__[key]
+
+        print('!2', els)
 
         if process_one:
             if not els:
@@ -325,19 +332,17 @@ class Base:
     ):
         """ Save the instance
 
-        Default and None values are not written to DB
-        To delete attributes, use .rm_attr()
-
-        If the object has subobjects (list of dicts with id),
-        1. there will be added only subobjects with new ids,
-        2. unspecified subobjects won't be deleted,
-        3. the order of subobjects won't be changed.
-        To delete subobjects, use .rm_sub()
-
-        What attributes are not saved:
+        What attributes are not written to DB:
         * None values (via `.json(none=False)`)
         * Static & callable default values (via `.json(default=False)`)
         * Replaced autocomplete values (via fields cleaning in the `get` method)
+        To delete attributes, use `.rm_attr()`
+
+        If the object has subobjects (list of dicts with `id`),
+        1. there will be added only subobjects with new ids,
+        2. unspecified subobjects won't be deleted,
+        3. the order of subobjects won't be changed.
+        To delete subobjects, use `.rm_sub()`
         """
 
         # TODO: changed?
