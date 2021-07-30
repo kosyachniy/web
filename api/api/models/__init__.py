@@ -163,29 +163,38 @@ class Base:
 
     # Specified field of an instance
     _fields: set = None
+    # Loaded fields and values of an instance from DB
+    _loaded_values: dict = None
     # Fields of the class for searching
     _search_fields: set = {'name'}
 
     def __init__(
         self,
         data: dict = None,
-        fields: set = None,
+        fields: set = None, # Only for loaded instances
         **kwargs,
     ) -> None:
-        # Save specified object fields for
-        # TODO: 1. saving without autocomplete values (`.save()`)
-        # 2. showing data only from DB (`__repr__`)
-        if fields is None:
+        if not data:
+            data = kwargs
+
+        if fields is not None:
+            # Save specified object fields for
+            # 1. saving without autocomplete values (`.save()`)
+            # 2. showing data only from DB (`__repr__`)
+            # NOTE: The fields will be specified in the assignment
             self._fields = set()
-        else:
-            self._fields = copy(fields)
+
+            # Save the loaded values from DB for
+            # 1. further saving only changed ones
+            if fields is not None:
+                self._loaded_values = deepcopy(data)
 
         # Autocomplete
         # NOTE: Instead of `Attribute(auto=...)`
-        self.created = time.time()
-
-        if not data:
-            data = kwargs
+        # NOTE: Autocomplete values will be added only if
+        # it is not a loaded instance
+        if fields is not None:
+            self.created = time.time()
 
         # Subobject
         if data.get('id', None) is None and self._db is None:
@@ -200,7 +209,7 @@ class Base:
 
         super().__setattr__(name, value)
 
-        if self._fields:
+        if self._fields is not None:
             self._fields.add(name)
 
     def __getitem__(self, name):
@@ -301,9 +310,8 @@ class Base:
 
         last = count + offset if count else None
         els = els[offset:last]
-        els = list(map(lambda el: cls(data=el, fields=fields), els))
-
-        print('!1', els, fields)
+        # NOTE: `fields={}` to indicate that the instance was loaded
+        els = list(map(lambda el: cls(data=el, fields=fields or {}), els))
 
         # Leave requested attributes, clear of unnecessary ones:
         # 1. after searching
@@ -313,8 +321,6 @@ class Base:
                 for key in set(el.__dict__):
                     if key not in fields and key[0] != '_':
                         del el.__dict__[key]
-
-        print('!2', els)
 
         if process_one:
             if not els:
