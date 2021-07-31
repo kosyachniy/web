@@ -4,7 +4,7 @@ Base model of DB object
 
 import time
 from abc import abstractmethod
-from typing import Union, Optional, Any, Callable
+from typing import Union, Optional, Any, Callable, List, Tuple, Set
 from copy import deepcopy
 
 from ..funcs import generate
@@ -241,7 +241,7 @@ class Base:
         count: Optional[int] = None,
         offset: int = 0,
         search: Optional[str] = None,
-        fields: Union[list[str], tuple[str], set[str], None] = None,
+        fields: Union[List[str], Tuple[str], Set[str], None] = None,
         **kwargs,
     ):
         """ Get instances of the object """
@@ -425,7 +425,7 @@ class Base:
 
     def rm_attr(
         self,
-        fields: Union[list[str], tuple[str], set[str], str, None],
+        fields: Union[List[str], Tuple[str], Set[str], str, None],
     ):
         """ Delete the attribute of the instance
 
