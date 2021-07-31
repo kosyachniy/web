@@ -2,11 +2,16 @@ import time
 
 import pytest
 
-from api.models import Base
+from api.errors import ErrorWrong
+from api.models import Base, Attribute
 
 
 class ObjectModel(Base):
     _db = 'tests'
+
+    meta = Attribute(types=str)
+    delta = Attribute(types=str, default='')
+    extra = Attribute(types=str, default=lambda instance: f'u{instance.delta}o')
 
 
 def test_attr():
@@ -19,6 +24,9 @@ def test_attr():
     assert instance.created < now + 1
     assert instance.updated is None
     assert instance.status is None
+    assert instance.meta is None
+    assert instance.delta == ''
+    assert instance.extra == 'uo'
 
     with pytest.raises(AttributeError):
         assert instance.undefined_field
@@ -33,6 +41,9 @@ def test_item():
     assert instance['created'] < now + 1
     assert instance['updated'] is None
     assert instance['status'] is None
+    assert instance['meta'] is None
+    assert instance['delta'] == ''
+    assert instance['extra'] == 'uo'
 
     with pytest.raises(AttributeError):
         assert instance['undefined_field']
@@ -41,33 +52,45 @@ def test_data():
     now = time.time()
     instance = ObjectModel({
         'id': 1,
-        'name': 'test',
+        'name': 'test_data',
         'user': 2,
         'status': 3,
+        'meta': 'onigiri',
+        'delta': 'hinkali',
+        'extra': 'ramen',
     })
 
     assert instance.id == 1
-    assert instance.name == 'test'
+    assert instance.name == 'test_data'
     assert instance.created < now + 1
     assert instance.user == 2
     assert instance.status == 3
+    assert instance.meta == 'onigiri'
+    assert instance.delta == 'hinkali'
+    assert instance.extra == 'ramen'
 
 def test_kwargs():
     now = time.time()
     instance = ObjectModel(
         id=1,
-        name='TEST',
+        name='test_kwargs',
         user=2,
         status=3,
+        meta='oNiGiRi',
+        delta='HINKali',
+        extra='RAMEN',
     )
 
     assert instance.id == 1
-    assert instance.name == 'TEST'
+    assert instance.name == 'test_kwargs'
     assert instance.created < now + 1
     assert instance.user == 2
     assert instance.status == 3
+    assert instance.meta == 'oNiGiRi'
+    assert instance.delta == 'HINKali'
+    assert instance.extra == 'RAMEN'
 
-def test_empty_save():
+def test_save_empty():
     instance = ObjectModel()
 
     now = time.time()
@@ -78,7 +101,8 @@ def test_empty_save():
 
 def test_save():
     instance = ObjectModel(
-        name='test',
+        name='test_save',
+        meta='onigiri',
     )
 
     now = time.time()
@@ -93,6 +117,9 @@ def test_load():
         name='test_load',
         user=2,
         status=3,
+        meta='onigiri',
+        delta='hinkali',
+        extra='ramen',
     )
     instance.save()
 
@@ -105,6 +132,9 @@ def test_load():
     assert instance.updated < now + 1
     assert instance.user == 2
     assert instance.status == 3
+    assert recieved.meta == 'onigiri'
+    assert recieved.delta == 'hinkali'
+    assert recieved.extra == 'ramen'
 
 def test_list():
     now = time.time()
@@ -113,6 +143,9 @@ def test_list():
         name='test_list',
         user=2,
         status=3,
+        meta='onigiri',
+        delta='hinkali',
+        extra='ramen',
     )
     instance1.save()
 
@@ -134,9 +167,27 @@ def test_list():
         assert recieved1.updated < now + 1
         assert recieved1.user == 2
         assert recieved1.status == 3
+        assert recieved1.meta == 'onigiri'
+        assert recieved1.delta == 'hinkali'
+        assert recieved1.extra == 'ramen'
 
     with recieved[0] as recieved2:
         assert isinstance(recieved2, ObjectModel)
         assert recieved2.id == instance2.id
         assert recieved2.created < now + 1
         assert recieved2.updated < now + 1
+
+def test_rm():
+    instance = ObjectModel()
+    instance.save()
+
+    instance.rm()
+
+    with pytest.raises(ErrorWrong):
+        ObjectModel.get(ids=instance.id)
+
+def test_rm_nondb():
+    instance = ObjectModel()
+
+    with pytest.raises(ErrorWrong):
+        instance.rm()
