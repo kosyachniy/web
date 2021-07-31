@@ -209,6 +209,12 @@ class Base:
     def __repr__(self):
         return f'{self.__class__.__name__}({self.json(none=True)})'
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
+
     def _is_default(self, name):
         """ Check the value for the default value """
 
