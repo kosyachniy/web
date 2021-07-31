@@ -53,7 +53,7 @@ def _is_subobject(data):
     """
 
     if (
-        isinstance(data, (list, tuple, set))
+        isinstance(data, (list, tuple))
         and data and isinstance(data[0], dict)
         and 'id' in data[0]
     ):
@@ -218,6 +218,22 @@ class Base:
 
         return getattr(self, name) == getattr(data, name)
 
+    def _leave_changes(self, data):
+        if self._loaded_values is None:
+            return
+
+        keys = data.keys() & self._loaded_values.keys()
+
+        for key in keys:
+            if data[key] == self._loaded_values[key]:
+                del data[key]
+                continue
+
+            if _is_subobject(data[key]):
+                for i, el in enumerate(data[key]):
+                    if el in self._loaded_values[key]:
+                        del data[key][i]
+
     @classmethod
     def get(
         cls,
@@ -337,8 +353,6 @@ class Base:
         To delete subobjects, use `.rm_sub()`
         """
 
-        # TODO: changed?
-
         exists = db[self._db].count_documents({'id': self.id})
 
         # Update time
@@ -347,6 +361,9 @@ class Base:
         # Edit
         if exists:
             data = self.json(default=False)
+
+            # Only changes
+            self._leave_changes(data)
 
             # Add subobjects to existing ones
 
