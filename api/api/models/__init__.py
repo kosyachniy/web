@@ -45,22 +45,6 @@ def _search(value, search):
 
     return False
 
-def _is_subobject(data):
-    """ Checking for subobject
-
-    Theoretically, it is object, which has own model, but without DB
-    Practically, it is dictionary with `id`
-    """
-
-    if (
-        isinstance(data, (list, tuple))
-        and data and isinstance(data[0], dict)
-        and 'id' in data[0]
-    ):
-        return True
-
-    return False
-
 def pre_process_time(cont):
     """ Time pre-processing """
 
@@ -224,21 +208,43 @@ class Base:
 
         return getattr(self, name) == getattr(data, name)
 
-    def _leave_changes(self, data):
+    def _is_subobject(self, data):
+        """ Checking for subobject
+
+        Theoretically, it is object, which has own model, but without DB
+        Practically, it is dictionary with `id`
+        """
+
+        if (
+            isinstance(data, (list, tuple))
+            and data and isinstance(data[0], dict)
+            and 'id' in data[0]
+        ):
+            return True
+
+        return False
+
+    def _get_changes(self, data):
         if self._loaded_values is None:
-            return
+            return data, {}
 
-        keys = data.keys() & self._loaded_values.keys()
+        data_unset = {}
 
-        for key in keys:
+        for key in set(self._loaded_values):
+            if key not in data:
+                data_unset[key] = ''
+                continue
+
             if data[key] == self._loaded_values[key]:
                 del data[key]
                 continue
 
-            if _is_subobject(data[key]):
+            if self._is_subobject(data[key]):
                 for i, el in enumerate(data[key]):
                     if el in self._loaded_values[key]:
                         del data[key][i]
+
+        return data, data_unset
 
     @classmethod
     def get(
@@ -369,7 +375,7 @@ class Base:
             data = self.json(default=False)
 
             # Only changes
-            self._leave_changes(data)
+            data, data_unset = self._get_changes(data)
 
             # Add subobjects to existing ones
 
@@ -377,7 +383,7 @@ class Base:
             data_push = {}
 
             for key, value in data.items():
-                if _is_subobject(value):
+                if self._is_subobject(value):
                     data_push[key] = value
                     continue
 
@@ -401,7 +407,10 @@ class Base:
 
             # Update
 
-            db_request = {'$set': data_set}
+            db_request = {
+                '$set': data_set,
+                '$unset': data_unset,
+            }
 
             if data_push:
                 db_request['$push'] = {
@@ -428,34 +437,6 @@ class Base:
 
         if not res:
             raise ErrorWrong('id')
-
-    def rm_attr(
-        self,
-        fields: Union[List[str], Tuple[str], Set[str], str, None],
-    ):
-        """ Delete the attribute of the instance
-
-        After calling this function, all unsaved instance data will be erased
-        """
-
-        if not db[self._db].count_documents({'id': self.id}):
-            raise ErrorUnsaved('id')
-
-        # Update time
-        self.updated = time.time()
-
-        if isinstance(fields, str):
-            fields = {fields}
-
-        db[self._db].update_one(
-            {'id': self.id},
-            {
-                '$set': {'updated': self.updated},
-                '$unset': {field: '' for field in fields},
-            }
-        )
-
-        self.reload()
 
     def rm_sub(
         self,

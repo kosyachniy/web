@@ -23,6 +23,7 @@ test-linter-all:
 	cd api && \
 	find .. -type f -name '*.py' \
 	| grep -vE 'env/' \
+	| grep -vE 'tests/' \
 	| xargs env/bin/python -m pylint -f text \
 		--rcfile=../tests/.pylintrc \
 		--msg-template='{path}:{line}:{column}: [{symbol}] {msg}'
@@ -30,6 +31,7 @@ test-linter-all:
 test-linter:
 	cd api && \
 	git status -s \
+	| grep -vE 'tests/' \
 	| grep '\.py$$' \
 	| awk '{print $$1,$$2}' \
 	| grep -i '^[ma]' \

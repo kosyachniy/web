@@ -191,3 +191,22 @@ def test_rm_nondb():
 
     with pytest.raises(ErrorWrong):
         instance.rm()
+
+def test_rm_attr():
+    instance = ObjectModel(
+        meta='onigiri',
+        delta='hinkali',
+    )
+    instance.save()
+
+    instance = ObjectModel.get(ids=instance.id)
+
+    del instance.meta
+    instance.delta = 'hacapuri'
+
+    instance.save()
+
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert instance.meta is None
+    assert instance.delta == 'hacapuri'
