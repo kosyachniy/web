@@ -94,7 +94,7 @@ async def handle(this, request, data):
                 password=data.password,
                 mail=data.login, # TODO: login
                 mail_verified=False,
-                actions=[action.json(default=False)],
+                actions=[action.json(default=False)], # TODO: without `.json()`
             )
         except ValueError as e:
             raise ErrorInvalid(e)

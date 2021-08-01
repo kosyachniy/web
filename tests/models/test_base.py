@@ -12,6 +12,14 @@ class ObjectModel(Base):
     meta = Attribute(types=str)
     delta = Attribute(types=str, default='')
     extra = Attribute(types=str, default=lambda instance: f'u{instance.delta}o')
+    multi = Attribute(types=list, default=[])
+
+class SubObject(Base):
+    _db = None
+
+    id = Attribute(types=str)
+    taiga = Attribute(types=int)
+    tundra = Attribute(types=int, default=0)
 
 
 def test_attr():
@@ -180,8 +188,13 @@ def test_list():
 def test_update():
     instance = ObjectModel(
         name='test_create',
+        delta='hinkali',
     )
     instance.save()
+
+    assert instance.name == 'test_create'
+    assert instance.meta is None
+    assert instance.delta == 'hinkali'
 
     instance_id = instance.id
     instance = ObjectModel.get(ids=instance_id)
@@ -197,6 +210,7 @@ def test_update():
 
     assert instance.name == 'test_update'
     assert instance.meta == 'onigiri'
+    assert instance.delta == 'hinkali'
 
 def test_update_empty():
     instance = ObjectModel(
@@ -205,10 +219,13 @@ def test_update_empty():
     )
     instance.save()
 
+    assert instance.name == 'test_create'
+    assert instance.meta == 'onigiri'
+
     instance_id = instance.id
     instance = ObjectModel.get(ids=instance_id)
 
-    instance.name=None
+    instance.name = None
 
     instance.save()
 
@@ -218,6 +235,27 @@ def test_update_empty():
 
     assert instance.name == 'test_create'
     assert instance.meta == 'onigiri'
+
+def test_update_resave():
+    instance = ObjectModel(
+        name='test_create',
+        delta='hinkali'
+    )
+    instance.save()
+
+    instance_id = instance.id
+
+    instance.name = 'test_update'
+    instance.meta = 'onigiri'
+    instance.save()
+
+    assert instance_id == instance.id
+
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert instance.name == 'test_update'
+    assert instance.meta == 'onigiri'
+    assert instance.delta == 'hinkali'
 
 def test_rm():
     instance = ObjectModel()
@@ -254,6 +292,7 @@ def test_rm_attr():
 
 def test_rm_attr_resave():
     instance = ObjectModel(
+        name='test_attr_resave',
         meta='onigiri',
         delta='hinkali',
     )
@@ -265,5 +304,58 @@ def test_rm_attr_resave():
     instance.save()
     instance = ObjectModel.get(ids=instance.id)
 
+    assert instance.name == 'test_attr_resave'
     assert instance.meta is None
     assert instance.delta == 'hacapuri'
+
+def test_init_sub():
+    sub = SubObject(
+        taiga=0,
+    )
+
+    assert isinstance(sub.id, str)
+    assert len(sub.id) == 32
+    assert sub.taiga == 0
+    assert sub.tundra == 0
+
+def test_init_sub_with_id():
+    sub = SubObject(
+        id='1',
+        tundra=1,
+    )
+
+    assert sub.id == '1'
+    assert sub.taiga is None
+    assert sub.tundra == 1
+
+def test_init_with_sub():
+    sub = SubObject(
+        taiga=1,
+    )
+    instance = ObjectModel(
+        multi=[sub.json(default=False)],
+    )
+
+    with SubObject(instance.multi[0]) as recieved:
+        assert recieved.id == sub.id
+        assert recieved.taiga == 1
+        assert recieved.tundra == 0
+
+def test_create_with_sub():
+    sub = SubObject(
+        taiga=1,
+    )
+    instance = ObjectModel(
+        multi=[sub.json(default=False)],
+    )
+
+    instance.save()
+
+    assert instance.id > 0
+
+    instance = ObjectModel.get(ids=instance.id)
+
+    with SubObject(instance.multi[0]) as recieved:
+        assert recieved.id == sub.id
+        assert recieved.taiga == 1
+        assert recieved.tundra == 0

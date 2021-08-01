@@ -199,6 +199,16 @@ class Base:
     def __exit__(self, exc_type, exc_value, traceback):
         pass
 
+    def __iter__(self):
+        iters = {
+            key: value
+            for key, value in self.__dict__.items()
+            if key[:2] != '__'
+        }
+
+        for key, value in iters.items():
+            yield key, value
+
     def _is_default(self, name):
         """ Check the value for the default value """
 
@@ -230,11 +240,14 @@ class Base:
         data_set = {}
         data_unset = loaded.keys() - data.keys()
         data_push = {}
+        data_pull = {}
 
         for key in data:
             if key in loaded and data[key] == loaded[key]:
                 continue
 
+            # TODO: update: -> pull & push
+            # TODO: delete: -> pull
             if self._is_subobject(data[key]):
                 for el in data[key]:
                     if key not in loaded or el not in loaded[key]:
@@ -248,6 +261,7 @@ class Base:
             data_set[key] = data[key]
 
         # Add subobjects to existing ones
+        # TODO: update: -> pull & push
         if data_push:
             fields = {'_id': False, **{field: True for field in data_push}}
             data_prepush = db[self._db].find_one({'id': self.id}, fields)
@@ -264,7 +278,7 @@ class Base:
 
                         i += 1
 
-        return data_set, data_unset, data_push
+        return data_set, data_unset, data_push, data_pull
 
     @classmethod
     def get(
@@ -394,7 +408,7 @@ class Base:
             data = self.json(default=False)
 
             # Only changes
-            data_set, data_unset, data_push = self._get_changes(data)
+            data_set, data_unset, data_push, data_pull = self._get_changes(data)
 
             # Update in DB
 
@@ -530,3 +544,4 @@ class Base:
             raise ErrorUnsaved(e)
 
         self.__dict__ = data.json(default=False)
+        self._loaded_values = data._loaded_values
