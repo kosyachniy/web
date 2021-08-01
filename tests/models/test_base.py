@@ -90,7 +90,7 @@ def test_kwargs():
     assert instance.delta == 'HINKali'
     assert instance.extra == 'RAMEN'
 
-def test_save_empty():
+def test_create_empty():
     instance = ObjectModel()
 
     now = time.time()
@@ -99,9 +99,9 @@ def test_save_empty():
     assert instance.id > 0
     assert instance.updated < now + 1
 
-def test_save():
+def test_create():
     instance = ObjectModel(
-        name='test_save',
+        name='test_create',
         meta='onigiri',
     )
 
@@ -177,6 +177,48 @@ def test_list():
         assert recieved2.created < now + 1
         assert recieved2.updated < now + 1
 
+def test_update():
+    instance = ObjectModel(
+        name='test_create',
+    )
+    instance.save()
+
+    instance_id = instance.id
+    instance = ObjectModel.get(ids=instance_id)
+
+    instance.name = 'test_update'
+    instance.meta = 'onigiri'
+
+    instance.save()
+
+    assert instance_id == instance.id
+
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert instance.name == 'test_update'
+    assert instance.meta == 'onigiri'
+
+def test_update_empty():
+    instance = ObjectModel(
+        name='test_create',
+        meta='onigiri',
+    )
+    instance.save()
+
+    instance_id = instance.id
+    instance = ObjectModel.get(ids=instance_id)
+
+    instance.name=None
+
+    instance.save()
+
+    assert instance_id == instance.id
+
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert instance.name == 'test_create'
+    assert instance.meta == 'onigiri'
+
 def test_rm():
     instance = ObjectModel()
     instance.save()
@@ -205,7 +247,22 @@ def test_rm_attr():
     instance.delta = 'hacapuri'
 
     instance.save()
+    instance = ObjectModel.get(ids=instance.id)
 
+    assert instance.meta is None
+    assert instance.delta == 'hacapuri'
+
+def test_rm_attr_resave():
+    instance = ObjectModel(
+        meta='onigiri',
+        delta='hinkali',
+    )
+    instance.save()
+
+    del instance.meta
+    instance.delta = 'hacapuri'
+
+    instance.save()
     instance = ObjectModel.get(ids=instance.id)
 
     assert instance.meta is None

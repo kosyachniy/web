@@ -225,26 +225,46 @@ class Base:
         return False
 
     def _get_changes(self, data):
-        if self._loaded_values is None:
-            return data, {}
+        loaded = self._loaded_values or {}
 
-        data_unset = {}
+        data_set = {}
+        data_unset = loaded.keys() - data.keys()
+        data_push = {}
 
-        for key in set(self._loaded_values):
-            if key not in data:
-                data_unset[key] = ''
-                continue
-
-            if data[key] == self._loaded_values[key]:
-                del data[key]
+        for key in data:
+            if key in loaded and data[key] == loaded[key]:
                 continue
 
             if self._is_subobject(data[key]):
-                for i, el in enumerate(data[key]):
-                    if el in self._loaded_values[key]:
-                        del data[key][i]
+                for el in data[key]:
+                    if key not in loaded or el not in loaded[key]:
+                        if key in data_push:
+                            data_push[key].append(el)
+                        else:
+                            data_push[key] = [el]
 
-        return data, data_unset
+                continue
+
+            data_set[key] = data[key]
+
+        # Add subobjects to existing ones
+        if data_push:
+            fields = {'_id': False, **{field: True for field in data_push}}
+            data_prepush = db[self._db].find_one({'id': self.id}, fields)
+
+            # TODO: remake to MongoDB request selection
+            for field in data_prepush:
+                for value in data_prepush[field]:
+                    i = 0
+
+                    while i < len(data_push[field]):
+                        if data_push[field][i]['id'] == value['id']:
+                            del data_push[field][i]
+                            break
+
+                        i += 1
+
+        return data_set, data_unset, data_push
 
     @classmethod
     def get(
@@ -356,7 +376,6 @@ class Base:
         * None values (via `.json(none=False)`)
         * Static & callable default values (via `.json(default=False)`)
         * Replaced autocomplete values (via fields cleaning in the `get` method)
-        To delete attributes, use `.rm_attr()`
 
         If the object has subobjects (list of dicts with `id`),
         1. there will be added only subobjects with new ids,
@@ -370,47 +389,24 @@ class Base:
         # Update time
         self.updated = time.time()
 
-        # Edit
+        # Update
         if exists:
             data = self.json(default=False)
 
             # Only changes
-            data, data_unset = self._get_changes(data)
+            data_set, data_unset, data_push = self._get_changes(data)
 
-            # Add subobjects to existing ones
-
-            data_set = {}
-            data_push = {}
-
-            for key, value in data.items():
-                if self._is_subobject(value):
-                    data_push[key] = value
-                    continue
-
-                data_set[key] = value
-
-            if data_push:
-                fields = {'_id': False, **{field: True for field in data_push}}
-                data_prepush = db[self._db].find_one({'id': self.id}, fields)
-
-                # TODO: remake to MongoDB request selection
-                for field in data_prepush:
-                    for value in data_prepush[field]:
-                        i = 0
-
-                        while i < len(data_push[field]):
-                            if data_push[field][i]['id'] == value['id']:
-                                del data_push[field][i]
-                                break
-
-                            i += 1
-
-            # Update
+            # Update in DB
 
             db_request = {
                 '$set': data_set,
-                '$unset': data_unset,
             }
+
+            if data_unset:
+                db_request['$unset'] = {
+                    key: ''
+                    for key in data_unset
+                }
 
             if data_push:
                 db_request['$push'] = {
@@ -420,13 +416,30 @@ class Base:
 
             db[self._db].update_one({'id': self.id}, db_request)
 
+            # Update saved fields
+
+            for key in data_set:
+                self._loaded_values[key] = data[key]
+
+            for key in data_unset:
+                del self._loaded_values[key]
+
+            for key in data_push:
+                self._loaded_values[key] = data[key]
+
             return
 
         # Create
+
         # NOTE: `id` may not be int
         if self.id == 0:
             self.id = _next_id(self._db)
-        db[self._db].insert_one(self.json(default=False))
+
+        data = self.json(default=False)
+        db[self._db].insert_one(deepcopy(data))
+
+        # Update saved fields
+        self._loaded_values = data
 
     def rm(
         self,
