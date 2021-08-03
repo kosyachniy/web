@@ -1,26 +1,30 @@
 PROJECT_NAME = web
 
 setup-dev:
-	cd api && \
+	cd api/ && \
 	python3 -m venv env && \
 	env/bin/pip install -r requirements.txt
 
 setup-tests:
-	cd api && \
+	cd api/ && \
 	python3 -m venv env && \
 	env/bin/pip install -r requirements.txt && \
 	env/bin/pip install -r ../tests/requirements.txt
 
 run:
-	cd docker && \
+	cd docker/ && \
 	sudo docker-compose -p ${PROJECT_NAME} up --build
+
+deploy:
+	cd docker/ && \
+	docker-compose -f docker-compose.prod.yml -p ${PROJECT_NAME} up --build
 
 dev:
 	cd api && \
 	env/bin/python
 
 test-linter-all:
-	cd api && \
+	cd api/ && \
 	find .. -type f -name '*.py' \
 	| grep -vE 'env/' \
 	| grep -vE 'tests/' \
@@ -29,7 +33,7 @@ test-linter-all:
 		--msg-template='{path}:{line}:{column}: [{symbol}] {msg}'
 
 test-linter:
-	cd api && \
+	cd api/ && \
 	git status -s \
 	| grep -vE 'tests/' \
 	| grep '\.py$$' \
@@ -41,5 +45,5 @@ test-linter:
 		--msg-template='{path}:{line}:{column}: [{symbol}] {msg}'
 
 test-unit-all:
-	cd api && \
+	cd api/ && \
 	env/bin/python -m pytest ../tests/

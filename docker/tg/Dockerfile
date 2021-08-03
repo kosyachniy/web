@@ -30,4 +30,4 @@ RUN echo '{ \n\
 ' >> sets.json
 
 # Run
-CMD python main.py
+CMD python app.py

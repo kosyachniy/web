@@ -35,23 +35,26 @@ dp = Dispatcher(bot)
 async def echo(message: types.Message):
     """ Main handler """
 
-    social_user_id = message.chat.id
+    social_user = message.from_user
     text = message.text
 
-    error, result = api(social_user_id, 'posts.get', {
+    error, result = api(social_user, 'posts.get', {
         'search': text,
     })
 
     if not error:
         posts = result['posts']
-        res = ("-"*15).join(f"#{post['id']} {post['name']}" for post in posts)
+        res = "\n---------------\n".join(
+            f"#{post['id']} {post['name']}"
+            for post in posts
+        )
     else:
         res = f"{text}: {result}"
 
-    await bot.send_message(social_user_id, res)
+    await bot.send_message(social_user.id, f"---\n{res}\n---")
 
 
-async def on_start():
+async def on_start(dp):
     """ Handler on the bot start """
 
     await bot.set_webhook(WEBHOOK_URL)
