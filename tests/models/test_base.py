@@ -450,3 +450,53 @@ def test_save_sub_partially():
     with SubObject(recieved2.multi[0]) as recieved:
         assert recieved.id == sub1.id
         assert recieved.taiga == 1
+
+def test_reload():
+    instance = ObjectModel(
+        delta='hinkali',
+    )
+    instance.save()
+
+    recieved1 = ObjectModel.get(ids=instance.id)
+    recieved2 = ObjectModel.get(ids=instance.id)
+
+    recieved1.delta = 'hacapuri'
+    recieved1.save()
+
+    assert recieved1.delta == 'hacapuri'
+    assert recieved2.delta == 'hinkali'
+
+    recieved2.reload()
+
+    assert recieved2.id == recieved1.id == instance.id
+    assert recieved2.delta == 'hacapuri'
+
+    recieved1.reload()
+
+    assert recieved1.id == recieved1.id == instance.id
+    assert recieved1.delta == 'hacapuri'
+
+def test_reload_with_fields():
+    now = time.time()
+
+    instance = ObjectModel(
+        name='test_reload_fields',
+        meta='onigiri',
+        delta='hinkali',
+    )
+    instance.save()
+
+    recieved = ObjectModel.get(ids=instance.id, fields={'meta'})
+
+    recieved.delta = 'hacapuri'
+    recieved.save()
+
+    recieved.reload()
+
+    assert recieved.id == instance.id
+    assert recieved.name is None
+    assert recieved.meta == 'onigiri'
+    assert recieved.delta == 'hacapuri'
+    assert recieved.extra == 'uhacapurio'
+    assert recieved.created is None
+    assert recieved.updated < now + 1

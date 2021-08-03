@@ -530,8 +530,10 @@ class Base:
         After calling this function, all unsaved instance data will be erased
         """
 
+        specified_fields = self._loaded_values and set(self._loaded_values)
+
         try:
-            data = self.get(ids=self.id, fields=self.__dict__)
+            data = self.get(ids=self.id, fields=specified_fields)
         except ErrorWrong as e:
             raise ErrorUnsaved(e)
 
