@@ -359,3 +359,94 @@ def test_create_with_sub():
         assert recieved.id == sub.id
         assert recieved.taiga == 1
         assert recieved.tundra == 0
+
+def test_get_with_fields():
+    instance = ObjectModel(
+        meta='onigiri',
+        delta='hinkali',
+    )
+
+    instance.save()
+    recieved = ObjectModel.get(ids=instance.id, fields={'delta'})
+
+    assert recieved.id == instance.id
+    assert recieved.meta is None
+    assert recieved.delta == 'hinkali'
+    assert recieved.extra == 'uhinkalio'
+    assert recieved.created is None
+    assert recieved.updated is None
+
+def test_save_none_with_fields():
+    instance = ObjectModel(
+        meta='onigiri',
+        delta='hinkali',
+    )
+
+    instance.save()
+    recieved1 = ObjectModel.get(ids=instance.id, fields={'delta'})
+
+    recieved1.extra = 'ramen'
+
+    recieved1.save()
+    recieved2 = ObjectModel.get(ids=instance.id)
+
+    assert recieved2.id == instance.id
+    assert recieved2.meta == 'onigiri'
+    assert recieved2.delta == 'hinkali'
+    assert recieved2.extra == 'ramen'
+    assert recieved2.created == instance.created
+    assert recieved2.updated != instance.updated
+
+def test_save_data_with_fields():
+    instance = ObjectModel(
+        name='test_save_fields',
+        meta='onigiri',
+        delta='hinkali',
+    )
+
+    instance.save()
+    recieved1 = ObjectModel.get(ids=instance.id, fields={'name', 'delta'})
+
+    recieved1.name = None
+    recieved1.delta = 'hacapuri'
+
+    recieved1.save()
+    recieved2 = ObjectModel.get(ids=instance.id)
+
+    assert recieved2.id == instance.id
+    assert recieved2.name == 'test_save_fields'
+    assert recieved2.meta == 'onigiri'
+    assert recieved2.delta == 'hacapuri'
+    assert recieved2.extra == 'uhacapurio'
+    assert recieved2.created == instance.created
+    assert recieved2.updated != instance.updated
+
+def test_save_sub_partially():
+    sub1 = SubObject(
+        taiga=1,
+    )
+    instance = ObjectModel(
+        multi=[sub1.json(default=False)],
+    )
+
+    instance.save()
+    recieved1 = ObjectModel.get(ids=instance.id, fields={'delta'})
+
+    assert recieved1.multi == []
+
+
+    sub2 = SubObject()
+    recieved1.multi += [sub2.json(default=False)]
+
+    recieved1.save()
+    recieved2 = ObjectModel.get(ids=instance.id, fields={'multi'})
+
+    assert recieved2.id == instance.id
+
+    with SubObject(recieved2.multi[1]) as recieved:
+        assert recieved.id == sub2.id
+        assert recieved.taiga is None
+
+    with SubObject(recieved2.multi[0]) as recieved:
+        assert recieved.id == sub1.id
+        assert recieved.taiga == 1

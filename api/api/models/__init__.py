@@ -431,15 +431,7 @@ class Base:
             db[self._db].update_one({'id': self.id}, db_request)
 
             # Update saved fields
-
-            for key in data_set:
-                self._loaded_values[key] = data[key]
-
-            for key in data_unset:
-                del self._loaded_values[key]
-
-            for key in data_push:
-                self._loaded_values[key] = data[key]
+            self._loaded_values = data
 
             return
 
