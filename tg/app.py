@@ -1,5 +1,5 @@
 """
-Telegram bot
+Telegram bot Endpoints (Transport level)
 """
 
 # Libraries
@@ -10,6 +10,9 @@ import json
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
+
+## Local
+from funcs import api
 
 
 # Params
@@ -32,7 +35,20 @@ dp = Dispatcher(bot)
 async def echo(message: types.Message):
     """ Main handler """
 
-    await bot.send_message(message.chat.id, message.text)
+    social_user_id = message.chat.id
+    text = message.text
+
+    error, result = api(social_user_id, 'posts.get', {
+        'search': text,
+    })
+
+    if not error:
+        posts = result['posts']
+        res = ("-"*15).join(f"#{post['id']} {post['name']}" for post in posts)
+    else:
+        res = f"{text}: {result}"
+
+    await bot.send_message(social_user_id, res)
 
 
 async def on_start():

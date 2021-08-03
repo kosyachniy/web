@@ -1,5 +1,5 @@
 """
-Endpoints (Transport level)
+API Endpoints (Transport level)
 """
 
 # pylint: disable=wrong-import-order,wrong-import-position

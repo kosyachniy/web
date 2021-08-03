@@ -483,6 +483,7 @@ def test_reload_with_fields():
         name='test_reload_fields',
         meta='onigiri',
         delta='hinkali',
+        multi=[1, 2, 3],
     )
     instance.save()
 
@@ -498,5 +499,6 @@ def test_reload_with_fields():
     assert recieved.meta == 'onigiri'
     assert recieved.delta == 'hacapuri'
     assert recieved.extra == 'uhacapurio'
+    assert recieved.multi == []
     assert recieved.created is None
     assert recieved.updated < now + 1
