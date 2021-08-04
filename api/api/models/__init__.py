@@ -3,6 +3,7 @@ Base model of DB object
 """
 
 import time
+import json
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable, List, Tuple, Set
 from copy import deepcopy
@@ -144,26 +145,29 @@ class Base:
 
     # Loaded fields and values of an instance from DB
     _loaded_values: dict = None
+    # Specified fields on getting
+    _specified_fields: set = None
     # Fields of the class for searching
     _search_fields: set = {'name'}
 
     def __init__(
         self,
         data: dict = None,
-        loaded: bool = False,
+        fields: set = None,
         **kwargs,
     ) -> None:
         if not data:
             data = kwargs
 
         # Save the loaded values from DB for further saving only changed ones
-        if loaded:
+        if fields is not None:
             self._loaded_values = deepcopy(data)
+            self._specified_fields = fields
 
         # Autocomplete
         # NOTE: Instead of `Attribute(auto=...)`
         # NOTE: Will be added only if it is not a loaded instance
-        if not loaded:
+        if fields is None:
             self.created = time.time()
 
         # Subobject
@@ -171,7 +175,7 @@ class Base:
             data['id'] = generate()
 
         for name, value in data.items():
-            if loaded:
+            if fields is not None:
                 # Without fields checking & processing
                 self.__dict__[name] = value
             else:
@@ -191,7 +195,15 @@ class Base:
         setattr(self, name, value)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.json(none=True)})'
+        if self._specified_fields is None:
+            pure = self.json(none=True)
+            prefix = ""
+        else:
+            # UGLY: Changed fields are not displayed
+            pure = self.json(fields=self._specified_fields)
+            prefix = "Partial"
+
+        return f"{prefix}Object {self.__class__.__name__}({json.dumps(pure)})"
 
     def __enter__(self):
         return self
@@ -359,7 +371,14 @@ class Base:
 
         last = count + offset if count else None
         els = els[offset:last]
-        els = list(map(lambda el: cls(data=el, loaded=True), els))
+
+        # NOTE: `fields` to indicate:
+        # 1. that the instance was loaded and avoid unnecessary data saving
+        # 2. what fields were requested and use it for `reload`
+        els = list(map(lambda el: cls(
+            data=el,
+            fields=fields or {},
+        ), els))
 
         # Leave requested attributes, clear of unnecessary ones:
         # 1. after searching
@@ -524,18 +543,16 @@ class Base:
 
     def reload(
         self,
+        # fields: set = None, # TODO: fields
     ):
         """ Update the object according to the data from the DB
 
         After calling this function, all unsaved instance data will be erased
         """
 
-        specified_fields = self._loaded_values and set(self._loaded_values)
-
         try:
-            data = self.get(ids=self.id, fields=specified_fields)
+            data = self.get(ids=self.id, fields=self._specified_fields)
         except ErrorWrong as e:
             raise ErrorUnsaved(e)
 
-        self.__dict__ = data.json(default=False)
-        self._loaded_values = data._loaded_values
+        self.__dict__ = data.__dict__

@@ -1,4 +1,5 @@
 import time
+import json
 
 import pytest
 
@@ -460,6 +461,9 @@ def test_reload():
     recieved1 = ObjectModel.get(ids=instance.id)
     recieved2 = ObjectModel.get(ids=instance.id)
 
+    assert recieved1._specified_fields is None
+    assert recieved2._specified_fields is None
+
     recieved1.delta = 'hacapuri'
     recieved1.save()
 
@@ -468,16 +472,18 @@ def test_reload():
 
     recieved2.reload()
 
+    assert recieved2._specified_fields is None
     assert recieved2.id == recieved1.id == instance.id
     assert recieved2.delta == 'hacapuri'
 
     recieved1.reload()
 
+    assert recieved1._specified_fields is None
     assert recieved1.id == recieved1.id == instance.id
     assert recieved1.delta == 'hacapuri'
 
 def test_reload_with_fields():
-    now = time.time()
+    # now = time.time()
 
     instance = ObjectModel(
         name='test_reload_fields',
@@ -494,11 +500,39 @@ def test_reload_with_fields():
 
     recieved.reload()
 
+    assert set(recieved._loaded_values) == {
+        'id', # Default
+        'meta', # Specified
+        # 'delta', # Changed
+        # 'updated', # Auto changed
+    }
     assert recieved.id == instance.id
     assert recieved.name is None
     assert recieved.meta == 'onigiri'
-    assert recieved.delta == 'hacapuri'
-    assert recieved.extra == 'uhacapurio'
+    assert recieved.delta == '' # 'hacapuri' if reload with None fields
+    assert recieved.extra == 'uo' # 'uhacapurio' if reload with None fields
     assert recieved.multi == []
     assert recieved.created is None
-    assert recieved.updated < now + 1
+    assert recieved.updated is None # < now + 1 if reload with None fields
+
+def test_init_print():
+    instance = ObjectModel(
+        meta='onigiri',
+        multi=[1, 2, 3],
+    )
+
+    text = str(instance)
+    assert text[:19] == 'Object ObjectModel('
+    assert text[-1] == ')'
+    assert json.loads(text[19:-1]) == {
+        'id': 0,
+        'name': None,
+        'meta': 'onigiri',
+        'delta': '',
+        'extra': 'uo',
+        'multi': [1, 2, 3],
+        'status': None,
+        'user': 0,
+        'created': instance.created,
+        'updated': None,
+    }
