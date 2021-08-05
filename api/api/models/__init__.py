@@ -162,7 +162,7 @@ class Base:
         # Save the loaded values from DB for further saving only changed ones
         if fields is not None:
             self._loaded_values = deepcopy(data)
-            self._specified_fields = fields
+            self._specified_fields = fields or None
 
         # Autocomplete
         # NOTE: Instead of `Attribute(auto=...)`
@@ -372,9 +372,11 @@ class Base:
         last = count + offset if count else None
         els = els[offset:last]
 
-        # NOTE: `fields` to indicate:
+        # `fields` to indicate:
         # 1. that the instance was loaded and avoid unnecessary data saving
         # 2. what fields were requested and use it for `reload`
+        # NOTE: `fields={}` to not confuse unloaded and loaded with fields
+        # NOTE: `fields` can't be partially loaded with `{}`, only `{'id'}`
         els = list(map(lambda el: cls(
             data=el,
             fields=fields or {},
@@ -543,15 +545,19 @@ class Base:
 
     def reload(
         self,
-        # fields: set = None, # TODO: fields
+        fields: set = None,
     ):
         """ Update the object according to the data from the DB
 
         After calling this function, all unsaved instance data will be erased
         """
 
+        # TODO: Reloading from Partial Object to Object with all fields
+
+        fields = fields or self._specified_fields
+
         try:
-            data = self.get(ids=self.id, fields=self._specified_fields)
+            data = self.get(ids=self.id, fields=fields)
         except ErrorWrong as e:
             raise ErrorUnsaved(e)
 

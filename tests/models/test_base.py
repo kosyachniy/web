@@ -495,25 +495,36 @@ def test_reload_with_fields():
 
     recieved = ObjectModel.get(ids=instance.id, fields={'meta'})
 
+    assert set(recieved._loaded_values) == {'id', 'meta'}
+    assert recieved._specified_fields == {'id', 'meta'}
+
     recieved.delta = 'hacapuri'
+    recieved.multi = [4, 5, 6]
     recieved.save()
 
-    recieved.reload()
+    recieved.reload(fields={'meta', 'extra', 'multi'})
 
     assert set(recieved._loaded_values) == {
         'id', # Default
         'meta', # Specified
+        'multi', # Specified
         # 'delta', # Changed
         # 'updated', # Auto changed
+    }
+    assert recieved._specified_fields == {
+        'id',
+        'meta',
+        'extra',
+        'multi',
     }
     assert recieved.id == instance.id
     assert recieved.name is None
     assert recieved.meta == 'onigiri'
-    assert recieved.delta == '' # 'hacapuri' if reload with None fields
-    assert recieved.extra == 'uo' # 'uhacapurio' if reload with None fields
-    assert recieved.multi == []
+    assert recieved.delta == '' # default
+    assert recieved.extra == 'uo' # default
+    assert recieved.multi == [4, 5, 6] # new
     assert recieved.created is None
-    assert recieved.updated is None # < now + 1 if reload with None fields
+    assert recieved.updated is None
 
 def test_init_print():
     instance = ObjectModel(
