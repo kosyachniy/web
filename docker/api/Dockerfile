@@ -18,9 +18,9 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED MONGO_LOGIN MONGO_PASSWORD \
-    GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT SMSC_LOGIN SMSC_PASSWORD VK_ID \
-    VK_SECRET
+ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED LOCALES LOCALE TIMEZONE \
+    MONGO_LOGIN MONGO_PASSWORD GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT \
+    SMSC_LOGIN SMSC_PASSWORD VK_ID VK_SECRET
 RUN rm -f sets.json
 RUN echo '{ \n\
     "mongo": { \n\
@@ -47,6 +47,9 @@ RUN echo '{ \n\
     "client": "'$PROTOCOL'://'$HOST':'$PORT'/", \n\
     "mode": "'$MODE'", \n\
     "side_optimized": '$SIDE_OPTIMIZED', \n\
+    "locales": '$LOCALES', \n\
+    "locale": "'$LOCALE'", \n\
+    "timezone": '$TIMEZONE', \n\
     "bug_chat": '$BUG_CHAT' \n\
 } \n\
 ' >> sets.json

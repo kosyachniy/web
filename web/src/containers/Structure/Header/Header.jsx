@@ -127,7 +127,7 @@ const Header = (props) => {
                             )}
                         </li>
                         <li className="nav-item">
-                            {system.lang === 'ru' ? (
+                            {system.locale === 'ru' ? (
                                 <div id="lang" className="badge" onClick={ () => {changeLang('en')} }>
                                     <img src="/lang/en.svg" alt="en" />
                                 </div>

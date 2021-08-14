@@ -44,7 +44,7 @@ def api(social_user, method, data=None):
         'params': data,
         'token': tokens[social_user_id],
         'network': 'tg',
-        'language': languages[social_user_id],
+        'locale': languages[social_user_id],
     }
 
     print(

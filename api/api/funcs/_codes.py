@@ -2,11 +2,14 @@
 Database ciphers
 """
 
-# NOTE: ISO 639-1
-LANGUAGES = (
-    'en',
-    'ru',
-)
+import json
+
+
+with open('sets.json', 'r') as file:
+    sets=json.loads(file.read())
+    LOCALES = sets['locales']
+    DEFAULT_LOCALE = sets['locale']
+
 
 NETWORKS = (
     '',
@@ -44,10 +47,13 @@ def get_network(code):
 def get_language(code):
     """ Get language code by cipher """
 
-    if code in LANGUAGES:
-        return LANGUAGES.index(code)
+    if code is None:
+        return DEFAULT_LOCALE
 
-    if code in range(len(LANGUAGES)):
+    if code in LOCALES:
+        return LOCALES.index(code)
+
+    if code in range(len(LOCALES)):
         return code
 
     return 0

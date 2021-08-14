@@ -3,6 +3,9 @@ import i18n from './i18n'
 import { combineReducers, createStore } from 'redux';
 
 
+import { locale as default_locale } from './sets';
+
+
 // actions.js
 export const postsGet = posts => ({
     type: 'POSTS_GET',
@@ -61,13 +64,13 @@ export const searching = search => {
     }
 }
 
-export const changeLang = lang => {
-    localStorage.setItem('lang', lang)
-    i18n.changeLanguage(lang)
+export const changeLang = locale => {
+    localStorage.setItem('locale', locale)
+    i18n.changeLanguage(locale)
 
     return {
         type: 'CHANGE_LANG',
-        lang,
+        locale,
     }
 }
 
@@ -187,7 +190,7 @@ export const online = (state = {count: null, users: []}, action) => {
 
 export const system = (state = {
     loaded: false,
-    lang: localStorage.getItem('lang'),
+    locale: localStorage.getItem('locale'),
     theme: localStorage.getItem('theme'),
     color: localStorage.getItem('color'),
     search: localStorage.getItem('search'),
@@ -203,7 +206,7 @@ export const system = (state = {
         case 'CHANGE_LANG':
             return {
                 ...state,
-                lang: action.lang,
+                locale: action.locale,
             };
 
         case 'SYSTEM_LOADED':
@@ -221,7 +224,7 @@ export const system = (state = {
         default:
             return {
                 loaded: state.loaded,
-                lang: state.lang || 'ru',
+                locale: state.locale || default_locale,
                 theme: state.theme || 'light',
                 color: state.color || 'dark',
                 search: state.search || '',

@@ -87,7 +87,7 @@ class Input(BaseModel):
     method: str
     params: dict = {}
     network: str = ''
-    locale: str = 'en'
+    locale: str = None
     token: str = None
 
 @app.post('/')
@@ -107,7 +107,7 @@ async def index(data: Input, request: Request):
             ip=request.client.host,
             token=data.token,
             network=data.network,
-            language=data.locale,
+            locale=data.locale,
         )
 
     except BaseError as e:

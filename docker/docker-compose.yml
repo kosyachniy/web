@@ -27,6 +27,9 @@ services:
                 - PORT=${EXTERNAL_PORT}
                 - MODE=${MODE}
                 - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
+                - LOCALES=${LOCALES}
+                - LOCALE=${LOCALE}
+                - TIMEZONE=${TIMEZONE}
                 - MONGO_LOGIN=${MONGO_LOGIN}
                 - MONGO_PASSWORD=${MONGO_PASSWORD}
                 - GOOGLE_ID=${GOOGLE_ID}
@@ -55,6 +58,9 @@ services:
                 - PROTOCOL=${PROTOCOL}
                 - HOST=${EXTERNAL_HOST}
                 - PORT=${EXTERNAL_PORT}
+                - LOCALES=${LOCALES}
+                - LOCALE=${LOCALE}
+                - TIMEZONE=${TIMEZONE}
                 - NAME=${NAME}
                 - MAIL=${EMAIL}
                 - PHONE=${PHONE}

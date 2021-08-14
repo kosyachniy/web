@@ -15,13 +15,13 @@ from .background import background
 class Request():
     """ Request container """
 
-    def __init__(self, ip, socket, token, network, language):
+    def __init__(self, ip, socket, token, network, locale):
         self.timestamp = time.time()
         self.ip = ip
         self.socket = socket
         self.token = token
         self.network = get_network(network)
-        self.language = get_language(language)
+        self.locale = get_language(locale)
         self.user = get_user(token)
 
 
@@ -52,16 +52,16 @@ class API():
         socket=None,
         token=None,
         network=0,
-        language=0,
+        locale=0,
     ):
         """ Call API method """
 
         if not data:
             data = {}
 
-        # print(name, data)
+        # print(name, data, ip, socket, token, network, locale)
 
-        request = Request(ip, socket, token, network, language)
+        request = Request(ip, socket, token, network, locale)
 
         # # Action tracking
 

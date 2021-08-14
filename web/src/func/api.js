@@ -21,17 +21,24 @@ function handlerResult(res, handlerSuccess, handlerError) {
     }
 }
 
-export default function api(method, params={}, handlerSuccess=()=>{}, handlerError=()=>{}) {
+export default function api(
+    method,
+    params={},
+    handlerSuccess=()=>{},
+    handlerError=()=>{},
+) {
     let json = {
         'method': method,
         'params': params,
     }
 
     json['network'] = 'web'
-    json['language'] = localStorage.getItem('lang')
+    json['locale'] = localStorage.getItem('locale')
     json['token'] = getToken()
 
-    serverRequest(json).then((res) => handlerResult(res.data, handlerSuccess, handlerError))
+    serverRequest(json).then(
+        (res) => handlerResult(res.data, handlerSuccess, handlerError)
+    )
 }
 
 // Socket.IO
