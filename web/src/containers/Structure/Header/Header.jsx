@@ -22,7 +22,7 @@ import Hexagon from '../../../components/Hexagon'
 const Header = (props) => {
     const {
         system, online, profile,
-        changeTheme, changeLang, profileOut,
+        profileOut,
         handlerPopUp, searching,
     } = props
     const { t } = useTranslation()
@@ -114,28 +114,6 @@ const Header = (props) => {
                                     </>
                                 ) }
                             </div>
-                        </li>
-                        <li className="nav-item">
-                            {system.theme === 'dark' ? (
-                                <div id="theme" className="badge" onClick={() => {changeTheme('light')}}>
-                                    <i className="fas fa-sun" />
-                                </div>
-                            ) : (
-                                <div id="theme" className="badge" onClick={() => {changeTheme('dark')}}>
-                                    <i className="fas fa-moon" />
-                                </div>
-                            )}
-                        </li>
-                        <li className="nav-item">
-                            {system.locale === 'ru' ? (
-                                <div id="lang" className="badge" onClick={ () => {changeLang('en')} }>
-                                    <img src="/lang/en.svg" alt="en" />
-                                </div>
-                            ) : (
-                                <div id="lang" className="badge" onClick={ () => {changeLang('ru')} }>
-                                    <img src="/lang/ru.svg" alt="ru" />
-                                </div>
-                            )}
                         </li>
                         <li className="nav-item dropdown">
                             {profile.id ? (

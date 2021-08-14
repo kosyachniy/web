@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-    changeTheme, changeLang, profileOut, searching,
+    changeTheme, searching,
 } from '../../../redus';
 
 import Header from './Header';
@@ -15,8 +15,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     changeTheme,
-    changeLang,
-    profileOut,
     searching,
 };
 
