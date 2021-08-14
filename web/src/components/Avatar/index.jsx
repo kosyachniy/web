@@ -30,7 +30,7 @@ class Avatar extends React.Component {
                 <label htmlFor="avatar-loader">
                     { this.state.img ? (
                         <img
-                            src={ this.state.img.indexOf('.')<0 ? this.state.img : `/load/${this.state.img}`}
+                            src={ this.state.img }
                             alt={ t('profile.avatar') }
                         />
                     ) : (

@@ -125,7 +125,7 @@ const Header = (props) => {
                                         aria-expanded="false"
                                         style={ {padding: 0} }
                                     >
-                                        <Hexagon url={ profile.avatar && (profile.avatar.indexOf('.')<1 ? profile.avatar : `/load/opt/${profile.avatar}`) } />
+                                        <Hexagon url={ profile.avatar_optimize } />
                                     </div>
                                     <div className={`dropdown-menu dropdown-menu-right ${system.theme}`} id="menu">
                                         <Link className="dropdown-item" to="/profile/">{t('system.profile')}</Link>

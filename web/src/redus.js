@@ -77,15 +77,33 @@ export const changeLang = locale => {
 export const profileIn = profile => {
     const { id, login, avatar, name, surname, phone, mail, social, status } = profile
 
-    localStorage.setItem('id', id)
-    localStorage.setItem('login', login)
-    localStorage.setItem('avatar', avatar)
-    localStorage.setItem('name', name)
-    localStorage.setItem('surname', surname)
-    localStorage.setItem('phone', phone)
-    localStorage.setItem('mail', mail)
-    localStorage.setItem('social', social)
-    localStorage.setItem('status', status)
+    if (id) {
+        localStorage.setItem('id', id)
+    }
+    if (login) {
+        localStorage.setItem('login', login)
+    }
+    if (avatar) {
+        localStorage.setItem('avatar', avatar)
+    }
+    if (name) {
+        localStorage.setItem('name', name)
+    }
+    if (surname) {
+        localStorage.setItem('surname', surname)
+    }
+    if (phone) {
+        localStorage.setItem('phone', phone)
+    }
+    if (mail) {
+        localStorage.setItem('mail', mail)
+    }
+    if (social) {
+        localStorage.setItem('social', social)
+    }
+    if (status) {
+        localStorage.setItem('status', status)
+    }
 
     return {
         type: 'PROFILE_IN',
@@ -111,7 +129,7 @@ export const profileOut = () => {
 
 export const profileUpdate = profile => {
     ['login', 'avatar', 'name', 'surname', 'phone', 'mail', 'social', 'status'].map(el => {
-        if (el in profile) {
+        if (el in profile && profile[el]) {
             localStorage.setItem(el, profile[el])
         }
 
@@ -239,6 +257,7 @@ export const profile = (state = {
     surname: null,
     mail: null,
     avatar: null,
+    avatar_optimize: null,
     admin: 2,
 }, action) => {
     switch (action.type) {
@@ -249,7 +268,8 @@ export const profile = (state = {
                 name: action.name,
                 surname: action.surname,
                 mail: action.mail,
-                avatar: action.avatar,
+                avatar: action.avatar ? '/load/' + action.avatar : '/user.png',
+                avatar_optimize: action.avatar ? '/load/opt/' + action.avatar : '/user.png',
                 admin: action.admin,
             };
 
@@ -261,17 +281,32 @@ export const profile = (state = {
                 surname: null,
                 mail: null,
                 avatar: null,
+                avatar_optimize: null,
                 admin: 2,
             };
 
         case 'PROFILE_UPDATE':
-            ['login', 'name', 'surname', 'mail', 'avatar'].map(el => {
-                if (el in action.profile) {
-                    state[el] = action.profile[el]
+            if (action.profile.login) {
+                state.login = action.profile.login
+            }
+            if (action.profile.name) {
+                state.name = action.profile.name
+            }
+            if (action.profile.surname) {
+                state.surname = action.profile.surname
+            }
+            if (action.profile.mail) {
+                state.mail = action.profile.mail
+            }
+            if (action.profile.avatar) {
+                if (action.profile.avatar.indexOf('.')<1) {
+                    state.avatar = action.profile.avatar
+                    state.avatar_optimize = action.profile.avatar
+                } else {
+                    state.avatar = '/load/' + action.profile.avatar
+                    state.avatar_optimize = '/load/opt/' + action.profile.avatar
                 }
-
-                return null;
-            })
+            }
 
             return state
 
@@ -279,7 +314,8 @@ export const profile = (state = {
             return {
                 id: state.id || localStorage.getItem('id') || 0,
                 login: state.login || localStorage.getItem('login'),
-                avatar: state.avatar || localStorage.getItem('avatar'),
+                avatar: state.avatar || (localStorage.getItem('avatar') ? '/load/' + localStorage.getItem('avatar') : '/user.png'),
+                avatar_optimize: state.avatar || (localStorage.getItem('avatar') ? '/load/opt/' + localStorage.getItem('avatar') : '/user.png'),
                 name: state.name || localStorage.getItem('name'),
                 surname: state.surname || localStorage.getItem('surname'),
                 phone: state.phone || localStorage.getItem('phone'),
