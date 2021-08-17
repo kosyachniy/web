@@ -109,6 +109,7 @@ async def handle(this, request, data):
             "User registration by mail",
             {
                 'user': user_id,
+                'login': data.login,
                 'token': request.token,
                 'network': request.network,
             },

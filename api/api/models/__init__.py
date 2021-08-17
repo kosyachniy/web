@@ -304,6 +304,8 @@ class Base:
     ):
         """ Get instances of the object """
 
+        # TODO: key: Callable for complex conditions
+
         process_one = False
 
         if ids:

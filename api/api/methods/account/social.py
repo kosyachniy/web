@@ -7,12 +7,18 @@ The authorization via social networks method of the account object of the API
 
 # import requests
 
-from ...funcs import BaseType, validate # online_start
+from ...funcs import BaseType, validate, report # online_start
+from ...models.user import User
+from ...models.token import Token
+from ...models.action import Action
 from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
 
 
 class Type(BaseType):
     user: int
+    login: str
+    name: str
+    surname: str
     # TODO: code: str
 
 # pylint: disable=unused-argument
@@ -22,10 +28,108 @@ async def handle(this, request, data):
 
     # TODO: reports
     # TODO: actions
+    # TODO: avatar
 
     # No access
     if request.user.status < 2:
         raise ErrorAccess('social')
+
+    fields = {
+        'id',
+        'login',
+        'avatar',
+        'name',
+        'surname',
+        'phone',
+        'mail',
+        'social',
+        'status',
+    }
+
+    users = User.get(social={'$elemMatch': {
+        'id': request.network,
+        'user': data.user,
+    }}, fields=fields)
+
+    if len(users):
+        new = False
+        user = users[0]
+
+        action = Action(
+            name='account_auth',
+            details={
+                'network': request.network,
+            },
+        )
+
+        user.actions.append(action.json(default=False))
+        user.save()
+
+    else:
+        new = True
+
+        action = Action(
+            name='account_reg',
+            details={
+                'network': request.network,
+                'ip': request.ip,
+                'social_user': data.user,
+                'login': data.login,
+            },
+        )
+
+        user = User(
+            login=data.login, # TODO: conflicts
+            name=data.name,
+            surname=data.surname,
+            social=[{
+                'id': request.network, # TODO: Several accounts in one network
+                'user': data.user,
+                'login': data.login,
+                'name': data.name,
+                'surname': data.surname,
+                'language': request.locale,
+            }],
+            actions=[action.json(default=False)], # TODO: without `.json()`
+        )
+
+        user.save()
+
+        # Report
+        report.important(
+            "User registration by mail",
+            {
+                'user': user.id,
+                'login': f'@{data.login}' if data.login else None,
+                'token': request.token,
+                'network': request.network,
+            },
+        )
+
+    # Assignment of the token to the user
+
+    if not request.token:
+        raise ErrorAccess('auth')
+
+    try:
+        token = Token.get(ids=request.token, fields={'user'})
+    except:
+        token = Token(id=request.token)
+
+    if token.user:
+        report.warning(
+            "Reauth",
+            {'from': token.user, 'to': user.id, 'token': request.token},
+        )
+
+    token.user = user.id
+    token.save()
+
+    # Response
+    return {
+        **request.user.json(fields=fields),
+        'new': new,
+    }
 
     # user_id = 0
     # new = False
