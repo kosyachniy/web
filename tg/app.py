@@ -7,12 +7,12 @@ Telegram bot Endpoints (Transport level)
 import json
 
 ## External
-from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher
+from aiogram import types
 from aiogram.utils.executor import start_webhook
 
 ## Local
 from funcs import api
+from funcs.tg import bot, dp, send
 
 
 # Params
@@ -51,7 +51,8 @@ async def echo(message: types.Message):
     else:
         res = f"{text}: {result}"
 
-    await bot.send_message(social_user.id, f"---\n{res}\n---")
+    text = f"---\n{res}\n---"
+    await send(social_user.id, text)
 
 
 async def on_start(dp):
