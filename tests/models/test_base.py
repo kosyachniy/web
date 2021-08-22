@@ -547,3 +547,37 @@ def test_init_print():
         'created': instance.created,
         'updated': None,
     }
+
+def test_pull():
+    sub1 = SubObject(
+        taiga=1,
+    )
+    sub2 = SubObject(
+        taiga=2,
+    )
+    sub3 = SubObject(
+        taiga=3,
+    )
+    instance = ObjectModel(
+        multi=[
+            sub1.json(default=False),
+            sub2.json(default=False),
+            sub3.json(default=False),
+        ],
+    )
+
+    instance.save()
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert len(instance.multi) == 3
+
+    instance.multi[2]['taiga'] = 0
+    del instance.multi[0]
+
+    instance.save()
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert len(instance.multi) == 2
+    assert instance.multi[0]['id'] == sub2.id
+    assert instance.multi[0]['taiga'] == sub2.taiga
+    assert instance.multi[1]['id'] == sub3.id

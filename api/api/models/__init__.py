@@ -259,7 +259,6 @@ class Base:
                 continue
 
             # TODO: update: -> pull & push
-            # TODO: delete: -> pull
             if self._is_subobject(data[key]):
                 for el in data[key]:
                     if key not in loaded or el not in loaded[key]:
@@ -267,6 +266,16 @@ class Base:
                             data_push[key].append(el)
                         else:
                             data_push[key] = [el]
+
+                for el in loaded[key]:
+                    if (
+                        key not in data
+                        or el['id'] not in {i['id'] for i in data[key]}
+                    ):
+                        if key in data_pull:
+                            data_pull[key]['id']['$in'].append(el['id'])
+                        else:
+                            data_pull[key] = {'id': {'$in': [el['id']]}}
 
                 continue
 
@@ -289,6 +298,9 @@ class Base:
                             break
 
                         i += 1
+
+                if not data_push[field]:
+                    del data_push[field]
 
         return data_set, data_unset, data_push, data_pull
 
@@ -450,6 +462,9 @@ class Base:
                     key: {'$each': value}
                     for key, value in data_push.items()
                 }
+
+            if data_pull:
+                db_request['$pull'] = data_pull
 
             db[self._db].update_one({'id': self.id}, db_request)
 

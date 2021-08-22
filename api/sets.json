@@ -23,5 +23,8 @@
     "client": "http://localhost/",
     "mode": "LOCAL",
     "side_optimized": 250,
+    "locales": ["en", "ru"],
+    "locale": "en",
+    "timezone": 3,
     "bug_chat":
 }
