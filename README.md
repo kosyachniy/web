@@ -68,7 +68,7 @@ Android | Front-end | React Native | JavaScript | planned
 
 ## Install & Use with Docker
 ### Development
-1. Customize file ` docker/.env `
+1. Customize file ` docker/.env ` & ` Makefile `
 
 2. Run
 ```
@@ -80,7 +80,7 @@ make run
 Go to ` http://localhost/ `
 
 ### Production (dedicated server)
-1. Customize file ` docker/.env `
+1. Customize file ` docker/.env ` & ` Makefile `
 
 2. Create encryption keys
 ```
@@ -91,49 +91,29 @@ chmod 777 cert.sh
 
 3. Run Docker Compose
 ```
-docker-compose -f docker-compose.alone.yml -p <your project name> up --build
+docker-compose -f docker-compose.alone.yml -p web up --build
 ```
+(your project name instead of ` web `)
 
 4. Open
 
 Go to ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (with multiple projects)
-1. Customize files ` docker/.env ` & ` docker/server/nginx.server.conf `
+1. Customize files ` docker/.env ` & ` Makefile `
 
 2. Run Docker Compose
 ```
 cd docker/
-docker-compose -f docker-compose.prod.yml -p <your project name> up --build
+docker-compose -f docker-compose.prod.yml -p web up --build
 ```
+(your project name instead of ` web `)
 
-3. Set up NGINX (if not done)
-```
-sudo apt-get update
-sudo apt install nginx
-y
-```
+3. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
 
-4. Configure NGINX
-```
-sudo cp <path to repo>/docker/server/nginx.server.conf /etc/nginx/sites-enabled/<your project name>.conf
-sudo systemctl restart nginx
-```
+More: [SERVER.md](SERVER.md)
 
-5. Set up encryption (if not done)
-```
-sudo snap install core; sudo snap refresh core
-sudo apt-get remove certbot
-sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
-```
-
-6. Configure encryption
-```
-sudo certbot --nginx
-```
-
-7. Open
+4. Open
 
 Go to ` https://web.kosyachniy.com/ ` (your link)
 
