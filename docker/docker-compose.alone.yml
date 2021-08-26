@@ -12,8 +12,9 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
         volumes:
             - ../data/db:/data/db
-        #     - ../data/logs:/data/logs
-        # command: --logpath /data/logs/mongodb.log
+            - ../data/logs:/data/logs
+            - ../docker/db/mongod.conf:/etc/mongod.conf
+        command: --config /etc/mongod.conf
 
     api:
         build:
