@@ -1,7 +1,7 @@
 {
     "mongo": {
         "host": "localhost:27017",
-        "db": "",
+        "db": "NAME",
         "login": "",
         "password": ""
     },
@@ -13,7 +13,7 @@
         "token": ""
     },
     "vk": {
-        "client_id": ,
+        "client_id": 0,
         "client_secret": ""
     },
     "smsc": {
@@ -26,5 +26,5 @@
     "locales": ["en", "ru"],
     "locale": "en",
     "timezone": 3,
-    "bug_chat":
+    "bug_chat": -0
 }

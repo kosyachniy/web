@@ -267,6 +267,9 @@ class Base:
                         else:
                             data_push[key] = [el]
 
+                if key not in loaded:
+                    continue
+
                 for el in loaded[key]:
                     if (
                         key not in data
