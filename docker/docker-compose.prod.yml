@@ -29,6 +29,7 @@ services:
                 - LOCALES=${LOCALES}
                 - LOCALE=${LOCALE}
                 - TIMEZONE=${TIMEZONE}
+                - MONGO_DB=${MONGO_DB}
                 - MONGO_LOGIN=${MONGO_LOGIN}
                 - MONGO_PASSWORD=${MONGO_PASSWORD}
                 - GOOGLE_ID=${GOOGLE_ID}
