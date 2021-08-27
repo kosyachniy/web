@@ -7,7 +7,7 @@ sudo apt install nginx
 
 2. Customize NGINX for your project
 
-Take `docker/server/nginx.server.conf` as a basis and add configuration:
+Take [`docker/server/nginx.server.conf`](docker/server/nginx.server.conf) as a basis and add configuration:
 ```
 sudo nano /etc/nginx/sites-enabled/<your project name>.conf
 ```

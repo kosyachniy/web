@@ -29,6 +29,7 @@ async def handle(this, request, data):
     # TODO: reports
     # TODO: actions
     # TODO: avatar
+    # TODO: the same token
 
     # No access
     if request.user.status < 2:
@@ -127,7 +128,7 @@ async def handle(this, request, data):
 
     # Response
     return {
-        **request.user.json(fields=fields),
+        **user.json(fields=fields),
         'new': new,
     }
 

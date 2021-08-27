@@ -21,6 +21,8 @@ class Type(BaseType):
 async def handle(this, request, data):
     """ By phone """
 
+    # TODO: the same token
+
     # No access
     if request.user.status < 2:
         raise ErrorAccess('phone')

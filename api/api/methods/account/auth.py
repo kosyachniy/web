@@ -22,6 +22,8 @@ async def handle(this, request, data):
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Pre-registration data (promos, actions, posts)
     # TODO: without password
+    # TODO: the same token
+    # TODO: Only by token (automaticaly, without any info)
 
     # No access
     if request.user.status < 2:
