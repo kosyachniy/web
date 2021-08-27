@@ -13,9 +13,8 @@ services:
         volumes:
             - ../data/db:/data/db
             - ../data/logs:/data/logs
-        #     - "../mongod.conf:/etc/mongod.conf"
-        # command: --config /etc/mongod.conf
-        command: --logpath /data/logs/mongodb.log
+            - ../docker/db/mongod.conf:/etc/mongod.conf
+        command: --config /etc/mongod.conf
 
     api:
         build:
