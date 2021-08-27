@@ -1,4 +1,13 @@
-from tests.models.test_base_init import ObjectModel
+from api.models import Base, Attribute
+
+
+class ObjectModel(Base):
+    _db = 'tests'
+
+    meta = Attribute(types=str)
+    delta = Attribute(types=str, default='')
+    extra = Attribute(types=str, default=lambda instance: f'u{instance.delta}o')
+    multi = Attribute(types=list, default=[])
 
 
 def test_get_with_fields():

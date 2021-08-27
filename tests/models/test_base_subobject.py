@@ -1,6 +1,13 @@
 from api.models import Base, Attribute
-from tests.models.test_base_init import ObjectModel
 
+
+class ObjectModel(Base):
+    _db = 'tests'
+
+    meta = Attribute(types=str)
+    delta = Attribute(types=str, default='')
+    extra = Attribute(types=str, default=lambda instance: f'u{instance.delta}o')
+    multi = Attribute(types=list, default=[])
 
 class SubObject(Base):
     _db = None
