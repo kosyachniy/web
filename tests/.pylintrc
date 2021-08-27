@@ -2,7 +2,7 @@
 jobs=2
 
 [MESSAGES CONTROL]
-disable=import-error,fixme,unsubscriptable-object,unused-argument
+disable=import-error,fixme,unsubscriptable-object,unused-argument, duplicate-code,bare-except,broad-except,too-many-branches,too-many-statements,too-many-locals,too-many-return-statements,consider-using-dict-items,consider-iterating-dictionary,raise-missing-from,inconsistent-return-statements,redefined-outer-name,invalid-name,super-init-not-called,no-self-use,isinstance-second-argument-not-valid-type,unused-variable,unused-import,no-name-in-module
 
 [BASIC]
 good-names=i,j,e,f,ip,id,to,rm,el,tg,vk

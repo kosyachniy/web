@@ -17,8 +17,8 @@ from funcs._generate import generate
 
 # Params
 with open('sets.json', 'r') as file:
-	sets = json.loads(file.read())
-	SERVER_LINK = sets['server']
+    sets = json.loads(file.read())
+    SERVER_LINK = sets['server']
 
 LOG_LIMIT = 330
 

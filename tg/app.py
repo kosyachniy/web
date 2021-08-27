@@ -25,11 +25,6 @@ WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 80
 
 
-# Global variables
-bot = Bot(token=TG_TOKEN)
-dp = Dispatcher(bot)
-
-
 # Funcs
 @dp.message_handler()
 async def echo(message: types.Message):

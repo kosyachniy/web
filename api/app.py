@@ -5,7 +5,6 @@ API Endpoints (Transport level)
 # pylint: disable=wrong-import-order,wrong-import-position
 
 # # Logging
-
 # import logging
 # logging.basicConfig(filename='error.log', level=logging.DEBUG)
 # logging.getLogger('socketio').setLevel(logging.ERROR)
@@ -13,12 +12,10 @@ API Endpoints (Transport level)
 # logging.getLogger('geventwebsocket.handler').setLevel(logging.ERROR)
 
 # Main app
-
 from fastapi import FastAPI, Request
 app = FastAPI(title='Web app API')
 
 # CORS
-
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +26,6 @@ app.add_middleware(
 )
 
 # Socket.IO
-
 import socketio
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 asgi = socketio.ASGIApp(sio)
