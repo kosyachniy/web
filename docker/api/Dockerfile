@@ -19,13 +19,13 @@ COPY . .
 
 # Settings
 ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED LOCALES LOCALE TIMEZONE \
-    MONGO_LOGIN MONGO_PASSWORD GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT \
-    SMSC_LOGIN SMSC_PASSWORD VK_ID VK_SECRET
+    MONGO_DB MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
+    GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT VK_ID VK_SECRET
 RUN rm -f sets.json
 RUN echo '{ \n\
     "mongo": { \n\
         "host": "db", \n\
-        "db": "uple", \n\
+        "db": "'$MONGO_DB'", \n\
         "login": "'$MONGO_LOGIN'", \n\
         "password": "'$MONGO_PASSWORD'" \n\
     }, \n\

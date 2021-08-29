@@ -7,6 +7,7 @@ import json
 from abc import abstractmethod
 from typing import Union, Optional, Any, Callable, List, Tuple, Set
 from copy import deepcopy
+from collections import defaultdict
 
 from ..funcs import generate
 from ..funcs.mongodb import db
@@ -251,21 +252,22 @@ class Base:
 
         data_set = {}
         data_unset = loaded.keys() - data.keys()
-        data_push = {}
-        data_pull = {}
+        data_push = defaultdict(list)
+        data_pull = defaultdict(list)
+        data_update = defaultdict(list)
 
         for key in data:
             if key in loaded and data[key] == loaded[key]:
                 continue
 
-            # TODO: update: -> pull & push
             if self._is_subobject(data[key]):
                 for el in data[key]:
-                    if key not in loaded or el not in loaded[key]:
-                        if key in data_push:
-                            data_push[key].append(el)
-                        else:
-                            data_push[key] = [el]
+                    if (
+                        key not in loaded
+                        or el['id'] not in {i['id'] for i in loaded[key]}
+                        or el not in loaded[key]
+                    ):
+                        data_push[key].append(el)
 
                 if key not in loaded:
                     continue
@@ -275,37 +277,37 @@ class Base:
                         key not in data
                         or el['id'] not in {i['id'] for i in data[key]}
                     ):
-                        if key in data_pull:
-                            data_pull[key]['id']['$in'].append(el['id'])
-                        else:
-                            data_pull[key] = {'id': {'$in': [el['id']]}}
+                        data_pull[key].append(el['id'])
 
                 continue
 
             data_set[key] = data[key]
 
         # Add subobjects to existing ones
-        # TODO: update: -> pull & push
         if data_push:
+            # NOTE: I can't find way to select elements from array
             fields = {'_id': False, **{field: True for field in data_push}}
             data_prepush = db[self._db].find_one({'id': self.id}, fields)
 
-            # TODO: remake to MongoDB request selection
             for field in data_prepush:
                 for value in data_prepush[field]:
-                    i = 0
-
-                    while i < len(data_push[field]):
+                    for i in range(len(data_push[field])):
                         if data_push[field][i]['id'] == value['id']:
-                            del data_push[field][i]
                             break
+                    else:
+                        continue
 
-                        i += 1
+                    if data_push[field][i] != value:
+                        # NOTE: More often we save point changes,
+                        # so it's better to make specific update request
+                        data_update[field].append(data_push[field][i])
+
+                    del data_push[field][i]
 
                 if not data_push[field]:
                     del data_push[field]
 
-        return data_set, data_unset, data_push, data_pull
+        return data_set, data_unset, data_push, data_pull, data_update
 
     @classmethod
     def get(
@@ -446,7 +448,7 @@ class Base:
             data = self.json(default=False)
 
             # Only changes
-            data_set, data_unset, data_push, data_pull = self._get_changes(data)
+            data_set, data_unset, data_push, data_pull, data_update = self._get_changes(data)
 
             # Update in DB
 
@@ -467,9 +469,20 @@ class Base:
                 }
 
             if data_pull:
-                db_request['$pull'] = data_pull
+                db_request['$pull'] = {
+                    key: {'id': {'$in': value}}
+                    for key, value in data_pull.items()
+                }
 
             db[self._db].update_one({'id': self.id}, db_request)
+
+            if data_update:
+                for key, value in data_update.items():
+                    for el in value:
+                        db[self._db].update_one(
+                            {'id': self.id, f'{key}.id': el['id']},
+                            {'$set': {f'{key}.$': el}}
+                        )
 
             # Update saved fields
             self._loaded_values = data
