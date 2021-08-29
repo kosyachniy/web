@@ -132,3 +132,112 @@ def test_pull():
     assert instance.multi[0]['id'] == sub2.id
     assert instance.multi[0]['taiga'] == sub2.taiga
     assert instance.multi[1]['id'] == sub3.id
+
+def test_update():
+    sub1 = SubObject(
+        taiga=1,
+    )
+    sub2 = SubObject(
+        taiga=1,
+    )
+    sub3 = SubObject(
+        taiga=3,
+    )
+    sub4 = SubObject(
+        taiga=4,
+        tundra=1,
+    )
+    sub5 = SubObject(
+        taiga=5,
+    )
+    sub6 = SubObject(
+        taiga=6,
+        tundra=1,
+    )
+    instance = ObjectModel(
+        multi=[
+            sub1.json(default=False),
+            sub2.json(default=False),
+            sub3.json(default=False),
+            sub4.json(default=False),
+            sub5.json(default=False),
+            sub6.json(default=False),
+        ],
+    )
+
+    instance.save()
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert len(instance.multi) == 6
+
+    instance.multi[1]['taiga'] = 2
+    del instance.multi[3]['tundra']
+    instance.multi[4]['taiga'] = 5
+    instance.multi[5]['tundra'] = 0
+
+    instance.save()
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert len(instance.multi) == 6
+    assert instance.multi[0]['id'] == sub1.id
+    assert instance.multi[0]['taiga'] == 1
+    assert instance.multi[1]['id'] == sub2.id
+    assert instance.multi[1]['taiga'] == 2
+    assert instance.multi[2]['id'] == sub3.id
+    assert instance.multi[2]['taiga'] == 3
+    assert instance.multi[3]['id'] == sub4.id
+    assert instance.multi[3]['taiga'] == 4
+    assert 'tundra' not in instance.multi[3]
+    assert instance.multi[4]['id'] == sub5.id
+    assert instance.multi[4]['taiga'] == 5
+    assert instance.multi[5]['id'] == sub6.id
+    assert instance.multi[5]['taiga'] == 6
+    assert instance.multi[5]['tundra'] == 0
+
+def test_replace():
+    sub1 = SubObject(
+        taiga=1,
+    )
+    sub2 = SubObject(
+        taiga=2,
+    )
+    sub3 = SubObject(
+        taiga=3,
+        tundra=-1,
+    )
+    sub4 = SubObject(
+        taiga=4,
+        tundra=0,
+    )
+    instance = ObjectModel(
+        multi=[
+            sub1.json(default=False),
+            sub2.json(default=False),
+            sub3.json(default=False),
+            sub4.json(default=False),
+        ],
+    )
+
+    instance.save()
+    instance = ObjectModel.get(ids=instance.id, fields={})
+
+    assert len(instance.multi) == 0
+
+    sub2.taiga = -1
+    instance.multi.append(sub2.json(default=False))
+    instance.multi.append({'id': sub3.id, 'taiga': 0})
+
+    instance.save()
+    instance = ObjectModel.get(ids=instance.id)
+
+    assert len(instance.multi) == 4
+    assert instance.multi[0]['id'] == sub1.id
+    assert instance.multi[0]['taiga'] == 1
+    assert instance.multi[1]['id'] == sub2.id
+    assert instance.multi[1]['taiga'] == -1
+    assert instance.multi[2]['id'] == sub3.id
+    assert instance.multi[2]['taiga'] == 0
+    assert 'tundra' not in instance.multi[2]
+    assert instance.multi[3]['id'] == sub4.id
+    assert instance.multi[3]['taiga'] == 4
+    assert 'tundra' not in instance.multi[3]
