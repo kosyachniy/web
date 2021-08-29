@@ -23,6 +23,9 @@ dev:
 	cd api && \
 	env/bin/python
 
+connect:
+	sudo docker exec -it ${PROJECT_NAME}_api_1 bash
+
 test-linter-all:
 	cd api/ && \
 	find .. -type f -name '*.py' \
@@ -47,3 +50,12 @@ test-linter:
 test-unit-all:
 	cd api/ && \
 	env/bin/python -m pytest ../tests/
+
+test-unit:
+	cd api/ && \
+	git status -s \
+	| grep '\.py$$' \
+	| awk '{print $$1,$$2}' \
+	| grep -i '^[ma]' \
+	| awk '{print $$2}' \
+	| xargs env/bin/python -m pytest
