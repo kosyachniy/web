@@ -299,7 +299,7 @@ class Base:
 
                     if data_push[field][i] != value:
                         # NOTE: More often we save point changes,
-                        # so it's better to make specific update request
+                        # so it's better to make specific update requests
                         data_update[field].append(data_push[field][i])
 
                     del data_push[field][i]
