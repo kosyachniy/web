@@ -3,8 +3,8 @@ The authorization method of the account object of the API
 """
 
 from ...funcs import BaseType, validate, online_start, report
-from ...models.user import User, process_login, process_lower, \
-                           pre_process_phone, process_password
+from ...models.user import User, process_lower, pre_process_phone, \
+                           process_password
 from ...models.token import Token
 from ...models.action import Action
 from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
@@ -48,7 +48,7 @@ async def handle(this, request, data):
     new = False
 
     try:
-        login = process_login(data.login)
+        login = process_lower(data.login)
         user = User.get(login=login, fields=fields)[0]
     except:
         new = True
