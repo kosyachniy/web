@@ -115,6 +115,7 @@ async def handle(this, request, data):
                 'token': request.token,
                 'network': request.network,
             },
+            tags=['reg'],
         )
 
     # Update

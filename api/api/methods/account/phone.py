@@ -83,9 +83,11 @@ async def handle(this, request, data):
             "User registration by phone",
             {
                 'user': user_id,
+                'phone': f"+{data.phone}",
                 'token': request.token,
                 'network': request.network,
             },
+            tags=['reg'],
         )
 
     else:
