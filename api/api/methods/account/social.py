@@ -8,6 +8,9 @@ import base64
 import requests
 
 from ...funcs import BaseType, validate, report, online_start
+from ...models.user import User
+from ...models.token import Token
+from ...models.action import Action
 from ...errors import ErrorAccess, ErrorInvalid, ErrorWrong
 
 
@@ -19,11 +22,21 @@ class Type(BaseType):
 async def handle(this, request, data):
     """ By social network """
 
-    # TODO: reports
     # TODO: actions
     # TODO: avatar
     # TODO: the same token
-    # TODO: reports
+
+    fields = {
+        'id',
+        'login',
+        'avatar',
+        'name',
+        'surname',
+        'phone',
+        'mail',
+        'social',
+        'status',
+    }
 
     user_id = 0
     new = False
@@ -211,50 +224,51 @@ async def handle(this, request, data):
         if user:
             raise ErrorWrong('hash')
 
-        # Sign up
+        # Register
         else:
             new = True
 
-            user = _registrate(
-                request.user,
-                request.timestamp,
-                social=[{
-                    'id': data.id,
-                    'user': user_id,
-                }],
-                name=name,
-                surname=surname,
-                avatar=avatar,
-                mail=mail,
+            action = Action(
+                name='account_reg',
+                details={
+                    'social': data.social,
+                    'ip': request.ip,
+                    'social_user': social_user,
+                    'social_login': social_login,
+                    'social_mail': social_mail,
+                },
             )
 
-            report.info(
+            user = User(
+                login=social_login, # TODO: conflicts
+                name=social_name,
+                surname=social_surname,
+                social=[{
+                    'id': data.social, # TODO: Several accounts in one network
+                    'user': social_user,
+                    'login': social_login,
+                    'mail': social_mail,
+                    'name': social_name,
+                    'surname': social_surname,
+                }],
+                actions=[action.json(default=False)], # TODO: without `.json()`
+                # TODO: avatar
+            )
+
+            user.save()
+
+            # Report
+            report.important(
                 "Registration via social",
                 {
-                    'user': user['id'],
-                    'social': data['id'],
+                    'user': user.id,
+                    'name': f"{social_name or ''} {social_surname or ''}",
+                    'login': social_login and f"@{social_login}",
                     'token': request.token,
-                    'name': f"{data.name or ''} {data.surname or ''}",
-                    'login': f"@{data.login}" if data.login else None,
+                    'social': data.social,
                 },
                 tags=['reg'],
             )
-
-            #
-
-            db_filter = {
-                '_id': False,
-                'id': True,
-                'status': True,
-                # 'balance': True,
-                # 'rating': True,
-                'login': True,
-                'name': True,
-                'surname': True,
-                'mail': True,
-            }
-
-            user = db.users.find_one({'id': user['id']}, db_filter)
 
     # Assignment of the token to the user
 

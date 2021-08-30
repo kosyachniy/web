@@ -20,8 +20,6 @@ class Type(BaseType):
 async def handle(this, request, data):
     """ By social network """
 
-    # TODO: reports
-    # TODO: actions
     # TODO: avatar
     # TODO: the same token
 
@@ -67,9 +65,8 @@ async def handle(this, request, data):
             name='account_reg',
             details={
                 'network': request.network,
-                'ip': request.ip,
                 'social_user': data.user,
-                'login': data.login,
+                'social_login': data.login,
             },
         )
 
@@ -86,6 +83,7 @@ async def handle(this, request, data):
                 'language': request.locale,
             }],
             actions=[action.json(default=False)], # TODO: without `.json()`
+            # TODO: avatar
         )
 
         user.save()
@@ -96,7 +94,7 @@ async def handle(this, request, data):
             {
                 'user': user.id,
                 'name': f"{data.name or ''} {data.surname or ''}",
-                'login': f"@{data.login}" if data.login else None,
+                'login': data.login and f"@{data.login}",
                 'token': request.token,
                 'network': request.network,
             },
