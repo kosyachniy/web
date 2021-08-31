@@ -26,3 +26,35 @@ def test_repeated_mail():
 
     with pytest.raises(ValueError): # TODO: ErrorWrong
         User(mail=mail.upper())
+
+def test_none_fields():
+    user = User(
+        id=None,
+        login=None,
+        password=None,
+        avatar=None,
+        name=None,
+        surname=None,
+        phone=None,
+        phone_verified=None,
+        mail=None,
+        mail_verified=None,
+        social=None,
+        description=None,
+        language=None,
+        actions=None,
+        online=None,
+        user=None,
+        created=None,
+        updated=None,
+        status=None,
+    )
+
+    assert user
+    assert not user.id
+    assert user.login == 'id0'
+
+    user.save()
+
+    assert user.id
+    assert user.login != 'id0'
