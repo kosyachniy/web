@@ -3,7 +3,7 @@ The authorization via social networks method of the account object of the API
 """
 
 from ...funcs import BaseType, validate, report
-from ...models.user import User
+from ...models.user import User, process_lower
 from ...models.token import Token
 from ...models.action import Action
 from ...errors import ErrorAccess
@@ -11,14 +11,14 @@ from ...errors import ErrorAccess
 
 class Type(BaseType):
     user: int
-    login: str
-    name: str
-    surname: str
+    login: str = None
+    name: str = None
+    surname: str = None
 
 # pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request, data):
-    """ By social network """
+    """ By bot """
 
     # TODO: avatar
     # TODO: the same token
@@ -58,6 +58,7 @@ async def handle(this, request, data):
         user.actions.append(action.json(default=False))
         user.save()
 
+    # Register
     else:
         new = True
 
@@ -70,10 +71,19 @@ async def handle(this, request, data):
             },
         )
 
+        if data.login:
+            login = process_lower(data.login)
+            users = User.get(login=login, fields={})
+
+            if users:
+                login = None
+        else:
+            login = None
+
         user = User(
-            login=data.login, # TODO: conflicts
-            name=data.name,
-            surname=data.surname,
+            login=login,
+            name=data.name or None,
+            surname=data.surname or None,
             social=[{
                 'id': request.network, # TODO: Several accounts in one network
                 'user': data.user,

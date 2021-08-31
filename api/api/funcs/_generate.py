@@ -16,6 +16,11 @@ def generate(length: int = 32) -> str:
 
     return ''.join(random.choice(SYMBOLS) for _ in range(length))
 
+def generate_id(length: int = 8) -> int:
+    """ ID generation """
+
+    return int(''.join(random.choice(string.digits) for _ in range(length)))
+
 def generate_password(length: int = 8) -> str:
     """ Password generation """
 
