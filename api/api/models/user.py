@@ -100,12 +100,17 @@ def pre_process_phone(cont):
     cont = str(cont)
 
     if not cont:
-        return ''
+        return 0
 
     if cont[0] == '8':
         cont = '7' + cont[1:]
 
-    return int(re.sub(r'[^0-9]', '', cont))
+    cont = re.sub(r'[^0-9]', '', cont)
+
+    if not cont:
+        return 0
+
+    return int(cont)
 
 def check_mail(id_, cont):
     """ Mail checking """
