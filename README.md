@@ -77,9 +77,7 @@ Android | Front-end | React Native | JavaScript | planned
 make run
 ```
 
-3. Open
-
-Go to ` http://localhost/ `
+3. Open ` http://localhost/ `
 
 ### Production (dedicated server)
 1. Customize file ` docker/.env ` & ` Makefile `
@@ -97,9 +95,7 @@ docker-compose -f docker-compose.alone.yml -p web up --build
 ```
 (your project name instead of ` web `)
 
-4. Open
-
-Go to ` https://web.kosyachniy.com/ ` (your link)
+4. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (with multiple projects)
 1. Customize files ` docker/.env ` & ` Makefile `
@@ -113,11 +109,9 @@ docker-compose -f docker-compose.prod.yml -p web up --build
 
 3. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
 
-More: [SERVER.md](SERVER.md)
+More: [Server set up](SERVER.md)
 
-4. Open
-
-Go to ` https://web.kosyachniy.com/ ` (your link)
+4. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ## Install & Use without Docker
 ### Back-end
