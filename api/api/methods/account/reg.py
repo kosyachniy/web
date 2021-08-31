@@ -5,7 +5,7 @@ from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User
 from ...models.token import Token
 from ...models.action import Action
-from ...errors import ErrorAccess, ErrorRepeat
+from ...errors import ErrorAccess, ErrorInvalid
 
 
 class Type(BaseType):
@@ -14,6 +14,7 @@ class Type(BaseType):
     avatar: str = None
     name: str = None
     surname: str = None
+    phone: str = None
     mail: str = None
     social: list[dict] = None
 
@@ -39,6 +40,7 @@ async def handle(this, request, data):
             'login': data.login,
             'name': data.name,
             'surname': data.surname,
+            'phone': data.phone,
             'mail': data.mail,
             'social': data.social,
             'password': data.password,
@@ -52,24 +54,32 @@ async def handle(this, request, data):
             avatar=data.avatar,
             name=data.name,
             surname=data.surname,
+            phone=data.phone,
             mail=data.mail,
             mail_verified=False,
             social=data.social,
             actions=[action.json(default=False)],
         )
     except ValueError as e:
-        raise ErrorRepeat(e) # TODO: to errors.py
+        raise ErrorInvalid(e) # TODO: or ErrorRepeat, to errors.py
 
     user.save()
 
     # Report
     report.important(
-        "User registration",
+        "User registration by login",
         {
             'user': user.id,
+            'login': data.login,
+            'name': f"{data.name or ''} {data.surname or ''}",
+            'phone': data.phone and f"+{data.phone}",
+            'mail': data.mail,
+            'social': data.social,
             'token': request.token,
             'network': request.network,
+            # TODO: ip, geo
         },
+        tags=['reg'],
     )
 
     # Assignment of the token to the user

@@ -2,135 +2,44 @@
 The authorization via social networks method of the account object of the API
 """
 
-# import urllib
-# import base64
+# pylint: disable=unused-argument,unused-import # TODO: fix
 
-# import requests
+import urllib
+import base64
 
-from ...funcs import BaseType, validate, report # online_start
+import requests
+
+from ...funcs import BaseType, validate, report, online_start
 from ...models.user import User
 from ...models.token import Token
 from ...models.action import Action
-from ...errors import ErrorAccess # ErrorInvalid, ErrorWrong
+from ...errors import ErrorAccess, ErrorInvalid, ErrorWrong
 
 
 class Type(BaseType):
-    user: int
-    login: str
-    name: str
-    surname: str
-    # TODO: code: str
+    social: str
+    code: str
 
-# pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request, data):
-    """ By social network """
+    """ Via social network """
 
-    # TODO: reports
     # TODO: actions
     # TODO: avatar
     # TODO: the same token
+    # TODO: Сшивать профили, если уже есть с такой почтой / ...
 
-    # No access
-    if request.user.status < 2:
-        raise ErrorAccess('social')
-
-    fields = {
-        'id',
-        'login',
-        'avatar',
-        'name',
-        'surname',
-        'phone',
-        'mail',
-        'social',
-        'status',
-    }
-
-    users = User.get(social={'$elemMatch': {
-        'id': request.network,
-        'user': data.user,
-    }}, fields=fields)
-
-    if len(users):
-        new = False
-        user = users[0]
-
-        action = Action(
-            name='account_auth',
-            details={
-                'network': request.network,
-            },
-        )
-
-        user.actions.append(action.json(default=False))
-        user.save()
-
-    else:
-        new = True
-
-        action = Action(
-            name='account_reg',
-            details={
-                'network': request.network,
-                'ip': request.ip,
-                'social_user': data.user,
-                'login': data.login,
-            },
-        )
-
-        user = User(
-            login=data.login, # TODO: conflicts
-            name=data.name,
-            surname=data.surname,
-            social=[{
-                'id': request.network, # TODO: Several accounts in one network
-                'user': data.user,
-                'login': data.login,
-                'name': data.name,
-                'surname': data.surname,
-                'language': request.locale,
-            }],
-            actions=[action.json(default=False)], # TODO: without `.json()`
-        )
-
-        user.save()
-
-        # Report
-        report.important(
-            "User registration by mail",
-            {
-                'user': user.id,
-                'login': f'@{data.login}' if data.login else None,
-                'token': request.token,
-                'network': request.network,
-            },
-        )
-
-    # Assignment of the token to the user
-
-    if not request.token:
-        raise ErrorAccess('auth')
-
-    try:
-        token = Token.get(ids=request.token, fields={'user'})
-    except:
-        token = Token(id=request.token)
-
-    if token.user:
-        report.warning(
-            "Reauth",
-            {'from': token.user, 'to': user.id, 'token': request.token},
-        )
-
-    token.user = user.id
-    token.save()
-
-    # Response
-    return {
-        **user.json(fields=fields),
-        'new': new,
-    }
+    # fields = {
+    #     'id',
+    #     'login',
+    #     'avatar',
+    #     'name',
+    #     'surname',
+    #     'phone',
+    #     'mail',
+    #     'social',
+    #     'status',
+    # }
 
     # user_id = 0
     # new = False
@@ -318,38 +227,51 @@ async def handle(this, request, data):
     #     if user:
     #         raise ErrorWrong('hash')
 
-    #     # Sign up
+    #     # Register
     #     else:
     #         new = True
 
-    #         user = _registrate(
-    #             request.user,
-    #             request.timestamp,
-    #             social=[{
-    #                 'id': data.id,
-    #                 'user': user_id,
-    #             }],
-    #             name=name,
-    #             surname=surname,
-    #             avatar=avatar,
-    #             mail=mail,
+    #         action = Action(
+    #             name='account_reg',
+    #             details={
+    #                 'social': data.social,
+    #                 'ip': request.ip,
+    #                 'social_user': social_user,
+    #                 'social_login': social_login,
+    #                 'social_mail': social_mail,
+    #             },
     #         )
 
-    #         #
+    #         user = User(
+    #             login=social_login, # TODO: conflicts
+    #             name=social_name,
+    #             surname=social_surname,
+    #             social=[{
+    #                 'id': data.social, # TODO: Several accounts in one network
+    #                 'user': social_user,
+    #                 'login': social_login,
+    #                 'mail': social_mail,
+    #                 'name': social_name,
+    #                 'surname': social_surname,
+    #             }],
+    #             actions=[action.json(default=False)], # TODO: without `.json()`
+    #             # TODO: avatar
+    #         )
 
-    #         db_filter = {
-    #             '_id': False,
-    #             'id': True,
-    #             'status': True,
-    #             # 'balance': True,
-    #             # 'rating': True,
-    #             'login': True,
-    #             'name': True,
-    #             'surname': True,
-    #             'mail': True,
-    #         }
+    #         user.save()
 
-    #         user = db.users.find_one({'id': user['id']}, db_filter)
+    #         # Report
+    #         report.important(
+    #             "Registration via social network",
+    #             {
+    #                 'user': user.id,
+    #                 'name': f"{social_name or ''} {social_surname or ''}",
+    #                 'login': social_login and f"@{social_login}",
+    #                 'token': request.token,
+    #                 'social': data.social,
+    #             },
+    #             tags=['reg'],
+    #         )
 
     # # Assignment of the token to the user
 

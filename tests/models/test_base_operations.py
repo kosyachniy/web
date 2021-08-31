@@ -2,8 +2,8 @@ import time
 
 import pytest
 
-from api.errors import ErrorWrong
 from api.models import Base, Attribute
+from api.errors import ErrorWrong
 
 
 class ObjectModel(Base):

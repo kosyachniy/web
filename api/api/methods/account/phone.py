@@ -65,7 +65,7 @@ async def handle(this, request, data):
         )
 
         try:
-            user_data = User(
+            user = User(
                 phone=data.phone,
                 phone_verified=False,
                 actions=[action.json(default=False)],
@@ -73,19 +73,18 @@ async def handle(this, request, data):
         except ValueError as e:
             raise ErrorInvalid(e)
 
-        user_data.save()
-        user_id = user_data.id
-
-        user = User.get(ids=user_id, fields=fields)
+        user.save()
 
         # Report
         report.important(
             "User registration by phone",
             {
-                'user': user_id,
+                'user': user.id,
+                'phone': f"+{data.phone}",
                 'token': request.token,
                 'network': request.network,
             },
+            tags=['reg'],
         )
 
     else:

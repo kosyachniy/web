@@ -94,11 +94,12 @@ class Attribute:
             return instance.__dict__[self.name]
 
         if self.default is not None:
+            # NOTE: Otherwise, the auto values will remain after accessing them
+            # and will not change after changing the dependent values
             if isinstance(self.default, Callable):
-                instance.__dict__[self.name] = self.default(instance)
-            else:
-                instance.__dict__[self.name] = deepcopy(self.default)
+                return self.default(instance)
 
+            instance.__dict__[self.name] = deepcopy(self.default)
             return instance.__dict__[self.name]
 
         return None

@@ -3,8 +3,8 @@ The authorization method of the account object of the API
 """
 
 from ...funcs import BaseType, validate, online_start, report
-from ...models.user import User, process_login, process_lower, \
-                           pre_process_phone, process_password
+from ...models.user import User, process_lower, pre_process_phone, \
+                           process_password
 from ...models.token import Token
 from ...models.action import Action
 from ...errors import ErrorInvalid, ErrorWrong, ErrorAccess
@@ -48,7 +48,7 @@ async def handle(this, request, data):
     new = False
 
     try:
-        login = process_login(data.login)
+        login = process_lower(data.login)
         user = User.get(login=login, fields=fields)[0]
     except:
         new = True
@@ -92,29 +92,28 @@ async def handle(this, request, data):
         )
 
         try:
-            user_data = User(
+            user = User(
                 password=data.password,
-                mail=data.login, # TODO: login
+                mail=data.login, # TODO: login # TODO: phone
                 mail_verified=False,
                 actions=[action.json(default=False)], # TODO: without `.json()`
             )
         except ValueError as e:
             raise ErrorInvalid(e)
 
-        user_data.save()
-        user_id = user_data.id
-
-        user = User.get(ids=user_id, fields=fields)
+        user.save()
 
         # Report
         report.important(
             "User registration by mail",
             {
-                'user': user_id,
-                'login': data.login,
+                'user': user.id,
+                'mail': data.login,
                 'token': request.token,
                 'network': request.network,
+                # TODO: ip, geo
             },
+            tags=['reg'],
         )
 
     # Update

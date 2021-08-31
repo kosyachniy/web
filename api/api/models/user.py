@@ -55,11 +55,6 @@ def check_login(id_, cont):
 
     return True
 
-def process_login(cont):
-    """ Login pre-processing """
-
-    return cont.lower()
-
 # pylint: disable=unused-argument
 def check_password(id_, cont):
     """ Password checking """
@@ -170,7 +165,7 @@ class User(Base):
         types=str,
         default=default_login,
         checking=check_login,
-        processing=process_login,
+        pre_processing=process_lower,
     )
     password = Attribute(
         types=str,
@@ -197,7 +192,7 @@ class User(Base):
     mail = Attribute(
         types=str,
         checking=check_mail,
-        processing=process_lower,
+        pre_processing=process_lower,
     )
     mail_verified = Attribute(types=bool, default=True)
     social = Attribute(types=list, default=[]) # TODO: list[{}] # TODO: checking

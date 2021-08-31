@@ -88,7 +88,8 @@ def auth(social_user) -> bool:
     tokens[social_user_id] = token
 
     ## Call the API
-    error, result = api(social_user, 'account.social', {
+    error, result = api(social_user, 'account.bot', {
+        'user': social_user.id,
         'name': social_user.first_name or None,
         'surname': social_user.last_name or None,
         'login': social_user.username or None,
