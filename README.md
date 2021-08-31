@@ -24,46 +24,46 @@ Android | Front-end | React Native | JavaScript | planned
     <tbody>
         <tr>
             <td rowspan="3" align="center">DevOps</td>
-            <td align="center"><img src="re/img/docker_logo.png" alt="Docker" height="70" /></td>
-            <td><img src="re/img/docker_name.png" alt="Docker" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/docker_logo.png?raw=true" alt="Docker" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/docker_name.png?raw=true" alt="Docker" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/nginx_logo.png" alt="NGINX" height="70" /></td>
-            <td><img src="re/img/nginx_name.png" alt="NGINX" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_logo.png?raw=true" alt="NGINX" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_name.png?raw=true" alt="NGINX" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/letsencrypt_logo.png" alt="Let's Encrypt" height="70" /></td>
-            <td><img src="re/img/letsencrypt_name.png" alt="Let's Encrypt" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/letsencrypt_logo.png?raw=true" alt="Let's Encrypt" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/letsencrypt_name.png?raw=true" alt="Let's Encrypt" height="70" /></td>
         </tr>
         <tr>
             <td rowspan="3" align="center">Back-end</td>
-            <td align="center"<img src="re/img/fastapi_logo.png" alt="FastAPI" height="70" /></td>
-            <td><img src="re/img/fastapi_name.png" alt="FastAPI" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_logo.png?raw=true" alt="FastAPI" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_name.png?raw=true" alt="FastAPI" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/mongodb_logo.png" alt="MongoDB" height="70" /></td>
-            <td><img src="re/img/mongodb_name.png" alt="MongoDB" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_logo.png?raw=true" alt="MongoDB" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_name.png?raw=true" alt="MongoDB" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/socketio_logo.png" alt="Socket.IO" height="70" /></td>
-            <td><img src="re/img/socketio_name.png" alt="Socket.IO" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_logo.png?raw=true" alt="Socket.IO" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_name.png?raw=true" alt="Socket.IO" height="70" /></td>
         </tr>
         <tr>
             <td rowspan="4" align="center">Front-end</td>
-            <td align="center"><img src="re/img/reactjs_logo.png" alt="ReactJS" height="70" /></td>
-            <td><img src="re/img/reactjs_name.png" alt="ReactJS" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_logo.png?raw=true" alt="ReactJS" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_name.png?raw=true" alt="ReactJS" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/redux_logo.png" alt="Redux" height="70" /></td>
-            <td><img src="re/img/redux_name.png" alt="Redux" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_logo.png?raw=true" alt="Redux" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_name.png?raw=trueg" alt="Redux" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/bootstrap_logo.png" alt="Bootstrap 4" height="70" /></td>
-            <td><img src="re/img/bootstrap_name.png" alt="Bootstrap 4" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/bootstrap_logo.png?raw=true" alt="Bootstrap 4" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/bootstrap_name.png?raw=true" alt="Bootstrap 4" height="70" /></td>
         </tr>
         <tr>
-            <td align="center"><img src="re/img/ckeditor_logo.png" alt="CKEditor 5" height="70" /></td>
-            <td><img src="re/img/ckeditor_name.png" alt="CKEditor 5" height="70" /></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/ckeditor_logo.png?raw=true" alt="CKEditor 5" height="70" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/ckeditor_name.png?raw=true" alt="CKEditor 5" height="70" /></td>
         </tr>
     </tbody>
 </table>
