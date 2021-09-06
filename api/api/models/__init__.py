@@ -10,8 +10,8 @@ from copy import deepcopy
 from collections import defaultdict
 
 from ..funcs import generate
-from ..funcs.mongodb import db
-from ..errors import ErrorInvalid, ErrorWrong, ErrorUnsaved
+from ..funcs.mongodb import db, DuplicateKeyError
+from ..errors import ErrorInvalid, ErrorWrong, ErrorRepeat, ErrorUnsaved
 
 
 def _next_id(name):
@@ -436,10 +436,13 @@ class Base:
         1. there will be added only subobjects with new ids,
         2. unspecified subobjects won't be deleted,
         3. the order of subobjects won't be changed.
-        To delete subobjects, use `.rm_sub()`
+        To delete subobjects, you can also use `.rm_sub()`
         """
 
-        exists = db[self._db].count_documents({'id': self.id})
+        exists = self.id and db[self._db].count_documents({'id': self.id})
+
+        if exists and self._loaded_values is None:
+            raise ErrorRepeat(self._db)
 
         # Update time
         self.updated = time.time()
@@ -497,7 +500,11 @@ class Base:
             self.id = _next_id(self._db)
 
         data = self.json(default=False)
-        db[self._db].insert_one(deepcopy(data))
+
+        try:
+            db[self._db].insert_one({'_id': self.id, **data})
+        except DuplicateKeyError:
+            raise ErrorRepeat(self._db)
 
         # Update saved fields
         self._loaded_values = data

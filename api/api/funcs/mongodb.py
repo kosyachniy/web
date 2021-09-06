@@ -5,6 +5,7 @@ Database
 import json
 
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 
 
 with open('sets.json', 'r') as file:

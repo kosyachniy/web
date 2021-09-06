@@ -2,8 +2,8 @@ import time
 
 import pytest
 
-from api.models import Base, Attribute
-from api.errors import ErrorWrong
+from api.models import Base, Attribute, _next_id
+from api.errors import ErrorWrong, ErrorRepeat
 
 
 class ObjectModel(Base):
@@ -233,3 +233,23 @@ def test_reload():
     assert recieved1._specified_fields is None
     assert recieved1.id == recieved1.id == instance.id
     assert recieved1.delta == 'hacapuri'
+
+def test_concurrently_init():
+    id_ = _next_id(ObjectModel._db)
+
+    instance1 = ObjectModel(
+        id=id_,
+        meta='onigiri',
+    )
+    instance2 = ObjectModel(
+        id=id_,
+        meta='onigiri',
+    )
+
+    instance1.save()
+
+    with pytest.raises(ErrorRepeat):
+        instance2.save()
+
+# def test_concurrently_create():
+# def test_concurrently_update():
