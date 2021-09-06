@@ -1,8 +1,10 @@
 import time
+from multiprocessing import Process
 
 import pytest
 
-from api.models import Base, Attribute, _next_id
+from api.funcs.mongodb import db, DuplicateKeyError
+from api.models import Base, Attribute
 from api.errors import ErrorWrong, ErrorRepeat
 
 
@@ -235,21 +237,34 @@ def test_reload():
     assert recieved1.delta == 'hacapuri'
 
 def test_concurrently_init():
-    id_ = _next_id(ObjectModel._db)
-
-    instance1 = ObjectModel(
-        id=id_,
+    instance = ObjectModel(
         meta='onigiri',
     )
-    instance2 = ObjectModel(
-        id=id_,
-        meta='onigiri',
-    )
+    instance.save()
 
-    instance1.save()
+    instance = ObjectModel(
+        id=instance.id,
+    )
 
     with pytest.raises(ErrorRepeat):
-        instance2.save()
+        instance.save()
 
-# def test_concurrently_create():
+def test_concurrently_create():
+    instance = ObjectModel(
+        meta='onigiri',
+    )
+    instance.save()
+
+    instance = ObjectModel(
+        id=instance.id,
+        meta='onigiri',
+    )
+
+    # UGLY: The piece of code was taken out
+
+    data = instance.json(default=False)
+
+    with pytest.raises(DuplicateKeyError):
+        db[instance._db].insert_one({'_id': instance.id, **data})
+
 # def test_concurrently_update():
