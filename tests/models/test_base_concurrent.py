@@ -59,17 +59,19 @@ def test_concurrently_update():
     )
     instance.save()
 
-    instance1 = ObjectModel.get(ids=instance.id, fields={'delta'})
-    instance2 = ObjectModel.get(ids=instance.id, fields={'delta'})
+    instance1 = ObjectModel.get(ids=instance.id, fields={'meta'})
+    instance2 = ObjectModel.get(ids=instance.id, fields={'meta'})
 
-    instance1.meta = 'sodzu'
+    # Allowed parallel changes
+    instance1.delta = 'sodzu'
     instance2.extra = 'sake'
 
     instance1.save()
     instance2.save()
 
-    instance1.delta = 'hinkali'
-    instance2.delta = 'hacapuri'
+    # Conflicting parallel changes
+    instance1.meta = 'hinkali'
+    instance2.meta = 'hacapuri'
 
     instance1.save()
 
@@ -78,6 +80,6 @@ def test_concurrently_update():
 
     instance.reload()
 
-    assert instance.meta == 'sodzu'
-    assert instance.delta == 'hinkali'
+    assert instance.meta == 'hinkali'
+    assert instance.delta == 'sodzu'
     assert instance.extra == 'sake'

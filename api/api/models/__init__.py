@@ -451,15 +451,25 @@ class Base:
         if exists and self._loaded_values is None:
             raise ErrorRepeat(self._db)
 
-        # Update time
-        self.updated = time.time()
-
         # Update
         if exists:
             data = self.json(default=False)
+            data['updated'] = time.time()
 
             # Only changes
             data_set, data_unset, data_push, data_pull, data_update = self._get_changes(data)
+
+            changed = (
+                set(data_set) | data_unset | set(data_push)
+                | set(data_pull) | set(data_update)
+            ) - {'updated'}
+
+            if not changed:
+                return
+
+            # Update time
+            # NOTE: After checking that there are changes
+            self.updated = data['updated']
 
             # Update in DB
 
@@ -485,14 +495,14 @@ class Base:
                     for key, value in data_pull.items()
                 }
 
-            # TODO: Если изменилось поле
-
-            loaded_values = deepcopy(self._loaded_values)
-            loaded_values.pop('updated', None)
-            print(loaded_values)
+            loaded_values = {
+                key: self._loaded_values[key]
+                for key in changed
+                if key in self._loaded_values
+            }
+            loaded_values['id'] = self.id
 
             res = db[self._db].update_one(loaded_values, db_request)
-            print(res.modified_count)
 
             if not res.modified_count:
                 raise ErrorRepeat(self._db)
@@ -515,6 +525,9 @@ class Base:
         # NOTE: `id` may not be int
         if self.id == 0:
             self.id = _next_id(self._db)
+
+        # Update time
+        self.updated = time.time()
 
         data = self.json(default=False)
 
