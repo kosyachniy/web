@@ -10,8 +10,8 @@ from copy import deepcopy
 from collections import defaultdict
 
 from ..funcs import generate
-from ..funcs.mongodb import db
-from ..errors import ErrorInvalid, ErrorWrong, ErrorUnsaved
+from ..funcs.mongodb import db, DuplicateKeyError
+from ..errors import ErrorInvalid, ErrorWrong, ErrorRepeat, ErrorUnsaved
 
 
 def _next_id(name):
@@ -436,20 +436,40 @@ class Base:
         1. there will be added only subobjects with new ids,
         2. unspecified subobjects won't be deleted,
         3. the order of subobjects won't be changed.
-        To delete subobjects, use `.rm_sub()`
+        To delete subobjects, you can also use `.rm_sub()`
+
+        We can get a save conflict if:
+        * Create instance with already existed `id`
+        * Parallel saving of instances without `id`
+        * Saving changes for an instances that has already changed in DB
+        ! We will not get a save conflict if we change a field
+        that was not loaded from the database (`_loaded_values`)
         """
 
-        exists = db[self._db].count_documents({'id': self.id})
+        exists = self.id and db[self._db].count_documents({'id': self.id})
 
-        # Update time
-        self.updated = time.time()
+        if exists and self._loaded_values is None:
+            raise ErrorRepeat(self._db)
 
         # Update
         if exists:
             data = self.json(default=False)
+            data['updated'] = time.time()
 
             # Only changes
             data_set, data_unset, data_push, data_pull, data_update = self._get_changes(data)
+
+            changed = (
+                set(data_set) | data_unset | set(data_push)
+                | set(data_pull) | set(data_update)
+            ) - {'updated'}
+
+            if not changed:
+                return
+
+            # Update time
+            # NOTE: After checking that there are changes
+            self.updated = data['updated']
 
             # Update in DB
 
@@ -475,7 +495,17 @@ class Base:
                     for key, value in data_pull.items()
                 }
 
-            db[self._db].update_one({'id': self.id}, db_request)
+            loaded_values = {
+                key: self._loaded_values[key]
+                for key in changed
+                if key in self._loaded_values
+            }
+            loaded_values['id'] = self.id
+
+            res = db[self._db].update_one(loaded_values, db_request)
+
+            if not res.modified_count:
+                raise ErrorRepeat(self._db)
 
             if data_update:
                 for key, value in data_update.items():
@@ -496,8 +526,15 @@ class Base:
         if self.id == 0:
             self.id = _next_id(self._db)
 
+        # Update time
+        self.updated = time.time()
+
         data = self.json(default=False)
-        db[self._db].insert_one(deepcopy(data))
+
+        try:
+            db[self._db].insert_one({'_id': self.id, **data})
+        except DuplicateKeyError:
+            raise ErrorRepeat(self._db)
 
         # Update saved fields
         self._loaded_values = data

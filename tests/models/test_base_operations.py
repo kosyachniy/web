@@ -233,3 +233,16 @@ def test_reload():
     assert recieved1._specified_fields is None
     assert recieved1.id == recieved1.id == instance.id
     assert recieved1.delta == 'hacapuri'
+
+def test_resave():
+    instance = ObjectModel(
+        delta='hinkali',
+    )
+
+    instance.save()
+
+    updated = instance.updated
+
+    instance.save()
+
+    assert instance.updated == updated
