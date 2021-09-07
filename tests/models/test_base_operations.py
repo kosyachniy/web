@@ -1,11 +1,9 @@
 import time
-from multiprocessing import Process
 
 import pytest
 
-from api.funcs.mongodb import db, DuplicateKeyError
 from api.models import Base, Attribute
-from api.errors import ErrorWrong, ErrorRepeat
+from api.errors import ErrorWrong
 
 
 class ObjectModel(Base):
@@ -235,36 +233,3 @@ def test_reload():
     assert recieved1._specified_fields is None
     assert recieved1.id == recieved1.id == instance.id
     assert recieved1.delta == 'hacapuri'
-
-def test_concurrently_init():
-    instance = ObjectModel(
-        meta='onigiri',
-    )
-    instance.save()
-
-    instance = ObjectModel(
-        id=instance.id,
-    )
-
-    with pytest.raises(ErrorRepeat):
-        instance.save()
-
-def test_concurrently_create():
-    instance = ObjectModel(
-        meta='onigiri',
-    )
-    instance.save()
-
-    instance = ObjectModel(
-        id=instance.id,
-        meta='onigiri',
-    )
-
-    # UGLY: The piece of code was taken out
-
-    data = instance.json(default=False)
-
-    with pytest.raises(DuplicateKeyError):
-        db[instance._db].insert_one({'_id': instance.id, **data})
-
-# def test_concurrently_update():

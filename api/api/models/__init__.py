@@ -437,6 +437,13 @@ class Base:
         2. unspecified subobjects won't be deleted,
         3. the order of subobjects won't be changed.
         To delete subobjects, you can also use `.rm_sub()`
+
+        We can get a save conflict if:
+        * Create instance with already existed `id`
+        * Parallel saving of instances without `id`
+        * Saving changes for an instances that has already changed in DB
+        ! We will not get a save conflict if we change a field
+        that was not loaded from the database (`_loaded_values`)
         """
 
         exists = self.id and db[self._db].count_documents({'id': self.id})
@@ -478,7 +485,17 @@ class Base:
                     for key, value in data_pull.items()
                 }
 
-            db[self._db].update_one({'id': self.id}, db_request)
+            # TODO: Если изменилось поле
+
+            loaded_values = deepcopy(self._loaded_values)
+            loaded_values.pop('updated', None)
+            print(loaded_values)
+
+            res = db[self._db].update_one(loaded_values, db_request)
+            print(res.modified_count)
+
+            if not res.modified_count:
+                raise ErrorRepeat(self._db)
 
             if data_update:
                 for key, value in data_update.items():
