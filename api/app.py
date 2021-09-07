@@ -4,13 +4,6 @@ API Endpoints (Transport level)
 
 # pylint: disable=wrong-import-order,wrong-import-position
 
-# # Logging
-# import logging
-# logging.basicConfig(filename='error.log', level=logging.DEBUG)
-# logging.getLogger('socketio').setLevel(logging.ERROR)
-# logging.getLogger('engineio').setLevel(logging.ERROR)
-# logging.getLogger('geventwebsocket.handler').setLevel(logging.ERROR)
-
 # Main app
 from fastapi import FastAPI, Request
 app = FastAPI(title='Web app API')
@@ -56,6 +49,7 @@ asgi = socketio.ASGIApp(sio)
 ### System
 import json
 import traceback
+import logging
 
 ### External
 from pydantic import BaseModel
@@ -114,6 +108,10 @@ async def index(data: Input, request: Request):
         req['error'] = 1
         req['result'] = "Server error"
 
+        logging.critical(
+            ''.join(traceback.format_exception(None, e, e.__traceback__))
+        )
+
         trace = traceback.extract_tb(e.__traceback__)[-1]
         report.critical(
             "Server error",
@@ -131,7 +129,6 @@ async def index(data: Input, request: Request):
             req['result'] = res
 
     # Response
-
     return req
 
 # ### Facebook bot
