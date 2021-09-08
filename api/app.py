@@ -49,7 +49,6 @@ asgi = socketio.ASGIApp(sio)
 ### System
 import json
 import traceback
-import logging
 
 ### External
 from pydantic import BaseModel
@@ -108,10 +107,6 @@ async def index(data: Input, request: Request):
         req['error'] = 1
         req['result'] = "Server error"
 
-        logging.critical(
-            ''.join(traceback.format_exception(None, e, e.__traceback__))
-        )
-
         trace = traceback.extract_tb(e.__traceback__)[-1]
         report.critical(
             "Server error",
@@ -120,6 +115,7 @@ async def index(data: Input, request: Request):
                 'line': trace.lineno,
                 'error': str(e),
             },
+            error=e,
         )
 
     else:

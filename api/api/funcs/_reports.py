@@ -4,6 +4,8 @@ Reports functionality for the API
 
 import json
 import inspect
+import traceback
+import logging
 
 from .tg_bot import send as send_tg
 
@@ -13,8 +15,8 @@ with open('sets.json', 'r') as file:
     MODE = sets['mode']
     BUG_CHAT = sets['bug_chat']
 
-SYMBOLS = ['🟢', '🟡', '🔴', '❗️', '✅', '🛎']
-TYPES = ['INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT', 'REQUEST']
+SYMBOLS = ['💬', '🟢', '🟡', '🔴', '❗️', '✅', '🛎']
+TYPES = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT', 'REQUEST']
 
 
 class Report():
@@ -69,61 +71,83 @@ class Report():
 
         except Exception as e:
             if extra:
-                print("❗️❗️❗️", e)
-                print(extra)
+                logging.error(f"{SYMBOLS[3]}  Send report  {extra}")
 
                 try:
                     send_tg(BUG_CHAT, text, markup=None)
                 except Exception as e:
-                    print("❗️❗️❗️", e)
-                    print(type_, text)
+                    logging.error(f"{SYMBOLS[3]}  Send report  {type_} {text}")
 
             else:
-                print("❗️❗️❗️", e)
-                print(type_, text)
+                logging.error(f"{SYMBOLS[3]}  Send report  {type_} {text}")
 
+
+    def debug(self, text, extra=None):
+        """ Debug
+        Sequence of function calls, internal values
+        """
+
+        logging.debug(f"{SYMBOLS[0]}  {text}  {json.dumps(extra)}")
 
     def info(self, text, extra=None, tags=None):
         """ Info
         System logs and event journal
         """
 
-        self._report(text, 0, extra, tags)
+        logging.info(f"{SYMBOLS[1]}  {text}  {json.dumps(extra)}")
+        self._report(text, 1, extra, tags)
 
     def warning(self, text, extra=None, tags=None):
         """ Warning
         Unexpected / strange code behavior that does not entail consequences
         """
 
-        self._report(text, 1, extra, tags)
+        logging.warning(f"{SYMBOLS[2]}  {text}  {json.dumps(extra)}")
+        self._report(text, 2, extra, tags)
 
-    def error(self, text, extra=None, tags=None):
+    def error(self, text, extra=None, tags=None, error=None):
         """ Error
         An unhandled error occurred
         """
 
-        self._report(text, 2, extra, tags)
+        content = (
+            "".join(traceback.format_exception(None, error, error.__traceback__))
+            if error is not None else
+            f'{text}  {json.dumps(extra)}'
+        )
 
-    def critical(self, text, extra=None, tags=None):
+        logging.error(f"{SYMBOLS[3]}  {content}")
+        self._report(text, 3, extra, tags)
+
+    def critical(self, text, extra=None, tags=None, error=None):
         """ Critical
         An error occurred that affects the operation of the service
         """
 
-        self._report(text, 3, extra, tags)
+        content = (
+            "".join(traceback.format_exception(None, error, error.__traceback__))
+            if error is not None else
+            f'{text}  {json.dumps(extra)}'
+        )
+
+        logging.critical(f"{SYMBOLS[4]}  {content}")
+        self._report(text, 4, extra, tags)
 
     def important(self, text, extra=None, tags=None):
         """ Important
         Trigger on tracked user action was fired
         """
 
-        self._report(text, 4, extra, tags)
+        logging.info(f"{SYMBOLS[5]}  {text}  {json.dumps(extra)}")
+        self._report(text, 5, extra, tags)
 
     def request(self, text, extra=None, tags=None):
         """ Request
         The user made a request, the intervention of administrators is necessary
         """
 
-        self._report(text, 5, extra, tags)
+        logging.info(f"{SYMBOLS[6]}  {text}  {json.dumps(extra)}")
+        self._report(text, 6, extra, tags)
 
 
 report = Report(MODE)
