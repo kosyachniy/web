@@ -19,6 +19,10 @@ SYMBOLS = ['💬', '🟢', '🟡', '🔴', '❗️', '✅', '🛎']
 TYPES = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT', 'REQUEST']
 
 
+logger_err = logging.getLogger(__name__)
+logger_log = logging.getLogger('info')
+
+
 class Report():
     """ Report logs and notifications on Telegram chat or in log files """
 
@@ -69,17 +73,17 @@ class Report():
         try:
             send_tg(BUG_CHAT, text_with_extra, markup=None)
 
-        except Exception as e:
+        except Exception:
             if extra:
-                logging.error(f"{SYMBOLS[3]}  Send report  {extra}")
+                logger_err.error("%s  Send report  %s", SYMBOLS[3], extra)
 
                 try:
                     send_tg(BUG_CHAT, text, markup=None)
-                except Exception as e:
-                    logging.error(f"{SYMBOLS[3]}  Send report  {type_} {text}")
+                except Exception:
+                    logger_err.error("%s  Send report  %s %s", SYMBOLS[3], type_, text)
 
             else:
-                logging.error(f"{SYMBOLS[3]}  Send report  {type_} {text}")
+                logger_err.error("%s  Send report  %s %s", SYMBOLS[3], type_, text)
 
 
     def debug(self, text, extra=None):
@@ -87,14 +91,14 @@ class Report():
         Sequence of function calls, internal values
         """
 
-        logging.debug(f"{SYMBOLS[0]}  {text}  {json.dumps(extra)}")
+        logger_log.debug("%s  %s  %s", SYMBOLS[0], text, json.dumps(extra))
 
     def info(self, text, extra=None, tags=None):
         """ Info
         System logs and event journal
         """
 
-        logging.info(f"{SYMBOLS[1]}  {text}  {json.dumps(extra)}")
+        logger_log.info("%s  %s  %s", SYMBOLS[1], text, json.dumps(extra))
         self._report(text, 1, extra, tags)
 
     def warning(self, text, extra=None, tags=None):
@@ -102,7 +106,7 @@ class Report():
         Unexpected / strange code behavior that does not entail consequences
         """
 
-        logging.warning(f"{SYMBOLS[2]}  {text}  {json.dumps(extra)}")
+        logger_err.warning("%s  %s  %s", SYMBOLS[2], text, json.dumps(extra))
         self._report(text, 2, extra, tags)
 
     def error(self, text, extra=None, tags=None, error=None):
@@ -116,7 +120,7 @@ class Report():
             f'{text}  {json.dumps(extra)}'
         )
 
-        logging.error(f"{SYMBOLS[3]}  {content}")
+        logger_err.error("%s  %s", SYMBOLS[3], content)
         self._report(text, 3, extra, tags)
 
     def critical(self, text, extra=None, tags=None, error=None):
@@ -130,7 +134,7 @@ class Report():
             f'{text}  {json.dumps(extra)}'
         )
 
-        logging.critical(f"{SYMBOLS[4]}  {content}")
+        logger_err.critical("%s  %s", SYMBOLS[4], content)
         self._report(text, 4, extra, tags)
 
     def important(self, text, extra=None, tags=None):
@@ -138,7 +142,7 @@ class Report():
         Trigger on tracked user action was fired
         """
 
-        logging.info(f"{SYMBOLS[5]}  {text}  {json.dumps(extra)}")
+        logger_log.info("%s  %s  %s", SYMBOLS[5], text, json.dumps(extra))
         self._report(text, 5, extra, tags)
 
     def request(self, text, extra=None, tags=None):
@@ -146,7 +150,7 @@ class Report():
         The user made a request, the intervention of administrators is necessary
         """
 
-        logging.info(f"{SYMBOLS[6]}  {text}  {json.dumps(extra)}")
+        logger_log.info("%s  %s  %s", SYMBOLS[6], text, json.dumps(extra))
         self._report(text, 6, extra, tags)
 
 
