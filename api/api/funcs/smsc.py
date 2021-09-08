@@ -7,6 +7,7 @@ Sending SMS messages
 
 # pylint: disable=all
 
+import json
 from datetime import datetime
 import smtplib
 
@@ -16,7 +17,9 @@ except ImportError:
     from urllib.request import urlopen
     from urllib.parse import quote
 
-import json
+from . import report
+
+
 with open('sets.json', 'r') as file:
     s = json.loads(file.read())['smsc']
 
@@ -90,13 +93,13 @@ class SMSC():
 
         if SMSC_DEBUG:
             if res[1] > "0":
-                print(
+                report.debug(
                     "Сообщение отправлено успешно. ID: " + res[0] \
                     + ", всего SMS: " + res[1] + ", стоимость: " + res[2] \
                     + ", баланс: " + res[3]
                 )
             else:
-                print(
+                report.error(
                     "Ошибка №" + res[1][1:] \
                     + ifs(res[0] > "0", ", ID: " + res[0], "")
                 )
@@ -165,11 +168,11 @@ class SMSC():
 
         if SMSC_DEBUG:
             if res[1] > "0":
-                print(
+                report.debug(
                     "Стоимость рассылки: " + res[0] + ". Всего SMS: " + res[1]
                 )
             else:
-                print("Ошибка №" + res[1][1:])
+                report.error("Ошибка №" + res[1][1:])
 
         return res
 
@@ -206,7 +209,7 @@ class SMSC():
                 text = ""
                 if res[1] > "0":
                     text = str(datetime.fromtimestamp(int(res[1])))
-                print(
+                report.debug(
                     "Статус SMS = " + res[0] + ifs(
                         res[1] > "0",
                         ", время изменения статуса - " + text,
@@ -214,7 +217,7 @@ class SMSC():
                     ),
                 )
             else:
-                print("Ошибка №" + res[1][1:])
+                report.error("Ошибка №" + res[1][1:])
 
         if all and len(res) > 9 and (len(res) < 14 or res[14] != "HLR"):
             res = (",".join(res)).split(",", 8)
@@ -233,9 +236,9 @@ class SMSC():
 
         if SMSC_DEBUG:
             if len(res) < 2:
-                print("Сумма на счете: " + res[0])
+                report.debug("Сумма на счете: " + res[0])
             else:
-                print("Ошибка №" + res[1][1:])
+                report.error("Ошибка №" + res[1][1:])
 
         return ifs(len(res) > 1, False, res[0])
 
@@ -277,7 +280,7 @@ class SMSC():
 
         if ret == "":
             if SMSC_DEBUG:
-                print("Ошибка чтения адреса: " + url)
+                report.error("Ошибка чтения адреса: " + url)
             ret = "," # фиктивный ответ
 
         return ret.split(",")
@@ -293,4 +296,4 @@ class SMSC():
 # r = smsc.get_sms_cost("79999999999", "Вы успешно зарегистрированы!")
 # smsc.send_sms_mail("79999999999", "test2", format=1)
 # r = smsc.get_status(12345, "79999999999")
-# print(smsc.get_balance())
+# report.important(smsc.get_balance())

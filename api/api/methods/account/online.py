@@ -15,7 +15,7 @@ async def handle(this, request, data):
     # TODO: Проверка, что токен не скомпрометирован - по ip?
     # TODO: Определить вкладку (tab - sid)
 
-    print('ON', request.socket)
+    report.debug('ON', request.socket)
 
     if not data.token:
         report.warning("Invalid token")

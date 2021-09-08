@@ -177,7 +177,7 @@ async def handle(this, request, data):
 #         str(phone),
 #         f"Hi!\n{code} — This is your login code."
 #     )
-#     print(phone, res)
+#     report.debug(phone, res)
 
 #     # Response
 
