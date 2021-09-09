@@ -82,6 +82,7 @@ async def handle(this, request, data):
         )
 
         user = User(
+            ignore={'login', 'name', 'surname'},
             login=data.login or None,
             name=data.name or None,
             surname=data.surname or None,

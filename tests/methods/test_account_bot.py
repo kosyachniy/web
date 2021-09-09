@@ -12,8 +12,6 @@ async def test_repeated_login():
     user_old = User(login=login)
 
     user_old.save()
-    assert user_old.id
-    assert user_old.login == process_lower(login)
 
     request = Request(None, None, generate(), 2, 0)
     data = {
