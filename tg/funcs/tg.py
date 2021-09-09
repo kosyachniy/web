@@ -58,7 +58,7 @@ def keyboard(rows, inline=False):
 
     return buttons
 
-def send(
+async def send(
     user, text='', buttons=None, inline=False, image=None, markup='Markdown',
 ):
     """ Send message """
@@ -68,7 +68,7 @@ def send(
     # TODO: return bot.forward_message(user, forward, text)
 
     if not image:
-        return bot.send_message(
+        return await bot.send_message(
             user,
             text,
             reply_markup=keyboard(buttons, inline),
@@ -76,7 +76,7 @@ def send(
             disable_web_page_preview=True,
         )
 
-    return bot.send_photo(
+    return await bot.send_photo(
         user,
         image,
         text,

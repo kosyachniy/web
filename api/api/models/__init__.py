@@ -65,6 +65,7 @@ class Attribute:
     checking: Callable = None
     pre_processing: Callable = None
     processing: Callable = None
+    ignore: bool = False
 
     def __init__(
         self,
@@ -73,12 +74,14 @@ class Attribute:
         checking=None,
         pre_processing=None,
         processing=None,
+        ignore=False,
     ):
         self.types = types
         self.default = default
         self.checking = checking
         self.pre_processing = pre_processing
         self.processing = processing
+        self.ignore = ignore
 
     def __set_name__(self, instance, name):
         self.name = name
@@ -114,9 +117,15 @@ class Attribute:
             value = self.pre_processing(value)
 
         if not isinstance(value, self.types):
+            if self.ignore:
+                return
+
             raise TypeError(self.name)
 
         if self.checking and not self.checking(instance.id, value):
+            if self.ignore:
+                return
+
             raise ValueError(self.name)
 
         if self.processing:
@@ -151,13 +160,19 @@ class Base:
     _specified_fields: set = None
     # Fields of the class for searching
     _search_fields: set = {'name'}
+    # Ignored fields in case of an error
+    _ignore_fields: set = {}
 
     def __init__(
         self,
         data: dict = None,
         fields: set = None,
+        ignore: set = None,
         **kwargs,
     ) -> None:
+        if ignore is None:
+            ignore = self._ignore_fields
+
         if not data:
             data = kwargs
 
@@ -177,12 +192,19 @@ class Base:
             data['id'] = generate()
 
         for name, value in data.items():
-            if fields is not None:
-                # Without fields checking & processing
-                self.__dict__[name] = value
-            else:
-                # With fields checking & processing
-                setattr(self, name, value)
+            try:
+                if fields is not None:
+                    # Without fields checking & processing
+                    self.__dict__[name] = value
+                else:
+                    # With fields checking & processing
+                    setattr(self, name, value)
+
+            except Exception as e:
+                if name in ignore:
+                    continue
+
+                raise e
 
     def __setattr__(self, name, value):
         if not hasattr(self, name):

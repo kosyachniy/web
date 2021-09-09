@@ -81,17 +81,9 @@ async def handle(this, request, data):
             },
         )
 
-        if data.login:
-            login = process_lower(data.login)
-            users = User.get(login=login, fields={})
-
-            if users:
-                login = None
-        else:
-            login = None
-
         user = User(
-            login=login,
+            ignore={'login', 'name', 'surname'},
+            login=data.login or None,
             name=data.name or None,
             surname=data.surname or None,
             social=[{

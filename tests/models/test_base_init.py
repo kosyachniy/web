@@ -12,6 +12,7 @@ class ObjectModel(Base):
     meta = Attribute(types=str)
     delta = Attribute(types=str, default='')
     extra = Attribute(types=str, default=lambda instance: f'u{instance.delta}o')
+    teta = Attribute(types=str, ignore=True)
     multi = Attribute(types=list, default=[])
 
 
@@ -127,9 +128,17 @@ def test_init_print():
         'meta': 'onigiri',
         'delta': '',
         'extra': 'uo',
+        'teta': None,
         'multi': [1, 2, 3],
         'status': None,
         'user': 0,
         'created': instance.created,
         'updated': None,
     }
+
+def test_ignore():
+    with pytest.raises(TypeError):
+        ObjectModel(meta=1)
+
+    instance = ObjectModel(teta=1)
+    assert instance.teta is None
