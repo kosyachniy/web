@@ -9,4 +9,4 @@ from ...funcs import report
 async def handle(this, request, data):
     """ Connect """
 
-    report.debug('IN', request.socket)
+    await report.debug('IN', request.socket)

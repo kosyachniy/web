@@ -104,7 +104,7 @@ async def handle(this, request, data):
         user.save()
 
         # Report
-        report.important(
+        await report.important(
             "User registration by mail",
             {
                 'user': user.id,
@@ -139,7 +139,7 @@ async def handle(this, request, data):
         token = Token(id=request.token)
 
     if token.user:
-        report.warning(
+        await report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': request.token},
         )

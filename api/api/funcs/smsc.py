@@ -48,7 +48,7 @@ def ifs(cond, val1, val2):
 class SMSC():
     """ Класс для взаимодействия с сервером smsc.ru """
 
-    def send_sms(
+    async def send_sms(
         self, phones, message, translit=0, time="",
         id_=0, format=0, sender=False, query="",
     ):
@@ -82,7 +82,7 @@ class SMSC():
             "ping=1", "mms=1", "mail=1", "call=1",
         ]
 
-        res = self._smsc_send_cmd("send", "cost=3&phones=" + quote(phones) \
+        res = await self._smsc_send_cmd("send", "cost=3&phones=" + quote(phones) \
             + "&mes=" + quote(message) + "&translit=" + str(translit) + "&id=" \
             + str(id_) + ifs(format > 0, "&" + formats[format-1], "") \
             + ifs(sender is False, "", "&sender=" + quote(str(sender)))
@@ -93,13 +93,13 @@ class SMSC():
 
         if SMSC_DEBUG:
             if res[1] > "0":
-                report.debug(
+                await report.debug(
                     "Сообщение отправлено успешно. ID: " + res[0] \
                     + ", всего SMS: " + res[1] + ", стоимость: " + res[2] \
                     + ", баланс: " + res[3]
                 )
             else:
-                report.error(
+                await report.error(
                     "Ошибка №" + res[1][1:] \
                     + ifs(res[0] > "0", ", ID: " + res[0], "")
                 )
@@ -128,7 +128,7 @@ class SMSC():
         )
         server.quit()
 
-    def get_sms_cost(
+    async def get_sms_cost(
         self, phones, message, translit=0, format=0, sender=False, query="",
     ):
         """ Метод получения стоимости SMS """
@@ -156,7 +156,7 @@ class SMSC():
             "ping=1", "mms=1", "mail=1", "call=1",
         ]
 
-        res = self._smsc_send_cmd(
+        res = await self._smsc_send_cmd(
             "send", "cost=1&phones=" + quote(phones) + "&mes=" \
             + quote(message) + ifs(sender is False, "", "&sender=" \
             + quote(str(sender))) + "&translit=" + str(translit) \
@@ -168,15 +168,15 @@ class SMSC():
 
         if SMSC_DEBUG:
             if res[1] > "0":
-                report.debug(
+                await report.debug(
                     "Стоимость рассылки: " + res[0] + ". Всего SMS: " + res[1]
                 )
             else:
-                report.error("Ошибка №" + res[1][1:])
+                await report.error("Ошибка №" + res[1][1:])
 
         return res
 
-    def get_status(self, id_, phone, all = 0):
+    async def get_status(self, id_, phone, all = 0):
         """ Метод проверки статуса отправленного SMS или HLR-запроса """
         """
         id_ - ID cообщения
@@ -197,7 +197,7 @@ class SMSC():
         либо массив (0, -<код ошибки>) в случае ошибки
         """
 
-        res = self._smsc_send_cmd(
+        res = await self._smsc_send_cmd(
             "status",
             "phone=" + quote(phone) + "&id=" + str(id_) + "&all=" + str(all),
         )
@@ -209,7 +209,7 @@ class SMSC():
                 text = ""
                 if res[1] > "0":
                     text = str(datetime.fromtimestamp(int(res[1])))
-                report.debug(
+                await report.debug(
                     "Статус SMS = " + res[0] + ifs(
                         res[1] > "0",
                         ", время изменения статуса - " + text,
@@ -217,14 +217,14 @@ class SMSC():
                     ),
                 )
             else:
-                report.error("Ошибка №" + res[1][1:])
+                await report.error("Ошибка №" + res[1][1:])
 
         if all and len(res) > 9 and (len(res) < 14 or res[14] != "HLR"):
             res = (",".join(res)).split(",", 8)
 
         return res
 
-    def get_balance(self):
+    async def get_balance(self):
         """ Метод получения баланса """
         """
         без параметров
@@ -232,20 +232,20 @@ class SMSC():
         возвращает баланс в виде строки или False в случае ошибки
         """
 
-        res = self._smsc_send_cmd("balance") # (balance) или (0, -error)
+        res = await self._smsc_send_cmd("balance") # (balance) или (0, -error)
 
         if SMSC_DEBUG:
             if len(res) < 2:
-                report.debug("Сумма на счете: " + res[0])
+                await report.debug("Сумма на счете: " + res[0])
             else:
-                report.error("Ошибка №" + res[1][1:])
+                await report.error("Ошибка №" + res[1][1:])
 
         return ifs(len(res) > 1, False, res[0])
 
 
     # ВНУТРЕННИЕ МЕТОДЫ
 
-    def _smsc_send_cmd(self, cmd, arg=""):
+    async def _smsc_send_cmd(self, cmd, arg=""):
         """ Метод вызова запроса """
         """
         Формирует URL и делает 3 попытки чтения
@@ -280,7 +280,7 @@ class SMSC():
 
         if ret == "":
             if SMSC_DEBUG:
-                report.error("Ошибка чтения адреса: " + url)
+                await report.error("Ошибка чтения адреса: " + url)
             ret = "," # фиктивный ответ
 
         return ret.split(",")
@@ -288,12 +288,12 @@ class SMSC():
 
 # Examples:
 # smsc = SMSC()
-# smsc.send_sms("79999999999", "test", sender="sms")
-# smsc.send_sms("79999999999", "http://smsc.ru\nSMSC.RU", query="maxsms=3")
-# smsc.send_sms("79999999999", "0605040B8423F0DC0601AE02056A0045C60C036D7973697\
+# await smsc.send_sms("79999999999", "test", sender="sms")
+# await smsc.send_sms("79999999999", "http://smsc.ru\nSMSC.RU", query="maxsms=3")
+# await smsc.send_sms("79999999999", "0605040B8423F0DC0601AE02056A0045C60C036D7973697\
 # 4652E72750001036D7973697465000101", format=5)
-# smsc.send_sms("79999999999", "", format=3)
-# r = smsc.get_sms_cost("79999999999", "Вы успешно зарегистрированы!")
-# smsc.send_sms_mail("79999999999", "test2", format=1)
-# r = smsc.get_status(12345, "79999999999")
-# report.important(smsc.get_balance())
+# await smsc.send_sms("79999999999", "", format=3)
+# r = await smsc.get_sms_cost("79999999999", "Вы успешно зарегистрированы!")
+# await smsc.send_sms_mail("79999999999", "test2", format=1)
+# r = await smsc.get_status(12345, "79999999999")
+# await report.important(await smsc.get_balance())

@@ -114,7 +114,7 @@ async def index(data: Input, request: Request):
         else:
             trace = traces[0]
 
-        report.critical(
+        await report.critical(
             "Server error",
             {
                 'file': trace.filename,

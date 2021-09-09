@@ -114,7 +114,7 @@ async def online_start(sio, token_id, socket_id=None):
             if socket.token != token_id:
                 socket.token = token_id
                 changed = True
-                report.warning(
+                await report.warning(
                     "Wrong socket.token",
                     {'from': socket.token, 'to': token_id},
                 )
@@ -122,7 +122,7 @@ async def online_start(sio, token_id, socket_id=None):
             if socket.user != user.id:
                 socket.user = user.id
                 changed = True
-                report.warning(
+                await report.warning(
                     "Wrong socket.user",
                     {'from': socket.user, 'to': user.id},
                 )

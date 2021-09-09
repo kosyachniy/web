@@ -18,7 +18,7 @@ async def handle(this, request, data):
 
     # Not authorized
     if request.user.status < 3:
-        report.error(
+        await report.error(
             "Wrong token",
             {'token': request.token, 'user': request.user.id},
         )

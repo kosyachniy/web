@@ -46,7 +46,7 @@ async def handle(this, request, data):
     post.save()
 
     # Report
-    report.important(
+    await report.important(
         "Save post",
         {
             'review': post.id,

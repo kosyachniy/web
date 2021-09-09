@@ -261,7 +261,7 @@ async def handle(this, request, data):
     #         user.save()
 
     #         # Report
-    #         report.important(
+    #         await report.important(
     #             "Registration via social network",
     #             {
     #                 'user': user.id,

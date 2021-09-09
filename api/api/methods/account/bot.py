@@ -44,7 +44,17 @@ async def handle(this, request, data):
         'user': data.user,
     }}, fields=fields)
 
-    if len(users):
+    if len(users) > 1:
+        await report.warning(
+            "More than 1 user",
+            {
+                'network': request.network,
+                'social_user': data.user,
+                'social_login': data.login,
+            },
+        )
+
+    elif len(users):
         new = False
         user = users[0]
 
@@ -99,7 +109,7 @@ async def handle(this, request, data):
         user.save()
 
         # Report
-        report.important(
+        await report.important(
             "User registration by bot",
             {
                 'user': user.id,
@@ -122,7 +132,7 @@ async def handle(this, request, data):
         token = Token(id=request.token)
 
     if token.user:
-        report.warning(
+        await report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': request.token},
         )

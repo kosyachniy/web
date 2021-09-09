@@ -29,7 +29,7 @@ class Report():
     def __init__(self, mode):
         self.mode = mode
 
-    def _report(self, text, type_=0, extra=None, tags=None):
+    async def _report(self, text, type_=0, extra=None, tags=None):
         """ Make report message and send """
 
         if self.mode != 'PROD' and type_ == 0:
@@ -71,14 +71,14 @@ class Report():
         text_with_extra += outro
 
         try:
-            send_tg(BUG_CHAT, text_with_extra, markup=None)
+            await send_tg(BUG_CHAT, text_with_extra, markup=None)
 
         except Exception:
             if extra:
                 logger_err.error("%s  Send report  %s", SYMBOLS[3], extra)
 
                 try:
-                    send_tg(BUG_CHAT, text, markup=None)
+                    await send_tg(BUG_CHAT, text, markup=None)
                 except Exception:
                     logger_err.error("%s  Send report  %s %s", SYMBOLS[3], type_, text)
 
@@ -86,30 +86,30 @@ class Report():
                 logger_err.error("%s  Send report  %s %s", SYMBOLS[3], type_, text)
 
 
-    def debug(self, text, extra=None):
+    async def debug(self, text, extra=None):
         """ Debug
         Sequence of function calls, internal values
         """
 
         logger_log.debug("%s  %s  %s", SYMBOLS[0], text, json.dumps(extra))
 
-    def info(self, text, extra=None, tags=None):
+    async def info(self, text, extra=None, tags=None):
         """ Info
         System logs and event journal
         """
 
         logger_log.info("%s  %s  %s", SYMBOLS[1], text, json.dumps(extra))
-        self._report(text, 1, extra, tags)
+        await self._report(text, 1, extra, tags)
 
-    def warning(self, text, extra=None, tags=None):
+    async def warning(self, text, extra=None, tags=None):
         """ Warning
         Unexpected / strange code behavior that does not entail consequences
         """
 
         logger_err.warning("%s  %s  %s", SYMBOLS[2], text, json.dumps(extra))
-        self._report(text, 2, extra, tags)
+        await self._report(text, 2, extra, tags)
 
-    def error(self, text, extra=None, tags=None, error=None):
+    async def error(self, text, extra=None, tags=None, error=None):
         """ Error
         An unhandled error occurred
         """
@@ -121,9 +121,9 @@ class Report():
         )
 
         logger_err.error("%s  %s", SYMBOLS[3], content)
-        self._report(text, 3, extra, tags)
+        await self._report(text, 3, extra, tags)
 
-    def critical(self, text, extra=None, tags=None, error=None):
+    async def critical(self, text, extra=None, tags=None, error=None):
         """ Critical
         An error occurred that affects the operation of the service
         """
@@ -135,23 +135,23 @@ class Report():
         )
 
         logger_err.critical("%s  %s", SYMBOLS[4], content)
-        self._report(text, 4, extra, tags)
+        await self._report(text, 4, extra, tags)
 
-    def important(self, text, extra=None, tags=None):
+    async def important(self, text, extra=None, tags=None):
         """ Important
         Trigger on tracked user action was fired
         """
 
         logger_log.info("%s  %s  %s", SYMBOLS[5], text, json.dumps(extra))
-        self._report(text, 5, extra, tags)
+        await self._report(text, 5, extra, tags)
 
-    def request(self, text, extra=None, tags=None):
+    async def request(self, text, extra=None, tags=None):
         """ Request
         The user made a request, the intervention of administrators is necessary
         """
 
         logger_log.info("%s  %s  %s", SYMBOLS[6], text, json.dumps(extra))
-        self._report(text, 6, extra, tags)
+        await self._report(text, 6, extra, tags)
 
 
 report = Report(MODE)
