@@ -18,14 +18,16 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST PORT TG_TOKEN
+ARG PROTOCOL HOST PORT TG_TOKEN MODE BUG_CHAT
 RUN rm -f sets.json
 RUN echo '{ \n\
     "server": "'$PROTOCOL'://'$HOST':'$PORT'/api/", \n\
     "tg": { \n\
         "server": "'$PROTOCOL'://'$HOST':'$PORT'/tg/", \n\
         "token": "'$TG_TOKEN'" \n\
-    } \n\
+    }, \n\
+    "mode": "'$MODE'", \n\
+    "bug_chat": '$BUG_CHAT' \n\
 } \n\
 ' >> sets.json
 

@@ -60,7 +60,11 @@ services:
                 - HOST=${EXTERNAL_HOST}
                 - PORT=443
                 - TG_TOKEN=${TG_TOKEN}
+                - MODE=${MODE}
+                - BUG_CHAT=${BUG_CHAT}
         env_file: .env
+        volumes:
+            - ../data/logs:/data/logs
         depends_on:
             - api
         restart: unless-stopped
