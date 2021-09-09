@@ -66,7 +66,7 @@ async def handle(this, request, data):
     user.save()
 
     # Report
-    report.important(
+    await report.important(
         "User registration by login",
         {
             'user': user.id,

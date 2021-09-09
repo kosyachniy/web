@@ -10,6 +10,9 @@ curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"meth
 # Name & surname
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"name": "Alexey", "surname": "Poloz"}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
+# Phone
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"phone": "+7 (969) 736-67-30"}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
+
 # Mail
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"mail": "polozhev@mail.ru"}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
 

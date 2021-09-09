@@ -11,8 +11,9 @@ import time
 import requests
 
 ## Local
-from funcs import languages, languages_chosen, tokens, ids
-from funcs._generate import generate
+from ._variables import languages, languages_chosen, tokens, ids
+from ._generate import generate
+from ._reports import report
 
 
 # Params
@@ -24,7 +25,7 @@ LOG_LIMIT = 330
 
 
 # Funcs
-def api(social_user, method, data=None):
+async def api(social_user, method, data=None):
     """ API request """
 
     social_user_id = social_user.id
@@ -33,7 +34,7 @@ def api(social_user, method, data=None):
         data = {}
 
     if social_user_id not in tokens:
-        res = auth(social_user)
+        res = await auth(social_user)
 
         # TODO: social auth
         # if res is None:
@@ -47,9 +48,12 @@ def api(social_user, method, data=None):
         'locale': languages[social_user_id],
     }
 
-    print(
-        f"req\t{social_user_id}"
-        f"\t{json.dumps(req, ensure_ascii=False)[:LOG_LIMIT]}"
+    await report.debug(
+        "API request",
+        {
+            'user': social_user_id,
+            'data': json.dumps(req, ensure_ascii=False)[:LOG_LIMIT],
+        }
     )
 
     # UGLY: Rewrite `while True` & `time.sleep`
@@ -62,16 +66,32 @@ def api(social_user, method, data=None):
         time.sleep(5)
 
     if res.status_code != 200:
-        print("ERROR `api`")
+        await report.error(
+            "API response",
+            {
+                'user': social_user_id,
+                'method': method,
+                'params': data,
+                'token': tokens[social_user_id],
+                'locale': languages[social_user_id],
+                'error': res.status_code,
+            }
+        )
         return 1, None
 
     res = res.json()
 
-    print(f"res\t{social_user_id}\t{res}")
+    await report.debug(
+        "API response",
+        {
+            'user': social_user_id,
+            'data': res,
+        }
+    )
 
     return res['error'], res['result']
 
-def auth(social_user) -> bool:
+async def auth(social_user) -> bool:
     """ User authentication """
 
     social_user_id = social_user.id
@@ -88,7 +108,7 @@ def auth(social_user) -> bool:
     tokens[social_user_id] = token
 
     ## Call the API
-    error, result = api(social_user, 'account.bot', {
+    error, result = await api(social_user, 'account.bot', {
         'user': social_user.id,
         'name': social_user.first_name or None,
         'surname': social_user.last_name or None,
@@ -97,7 +117,17 @@ def auth(social_user) -> bool:
 
     # Errors
     if error:
-        print("ERROR `auth`")
+        await report.error(
+            "Authorization",
+            {
+                'user': social_user.id,
+                'name': social_user.first_name or None,
+                'surname': social_user.last_name or None,
+                'login': social_user.username or None,
+                'error': error,
+                'result': result,
+            }
+        )
         return
 
     ## Update global variables

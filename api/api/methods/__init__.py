@@ -51,9 +51,3 @@ async def call(method, this, request, data):
     _rm_none(response)
 
     return response
-
-
-# for loader, module_name, is_pkg in pkgutil.walk_packages(
-#     [CURRENT_PATH], CURRENT_MODULE,
-# ):
-#     print(importlib.import_module(module_name))

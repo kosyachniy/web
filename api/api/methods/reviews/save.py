@@ -35,7 +35,7 @@ async def handle(this, request, data):
     review.save()
 
     # Report
-    report.request(
+    await report.request(
         "New review",
         {
             'review': review.id,

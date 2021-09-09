@@ -6,8 +6,9 @@ import json
 import inspect
 import traceback
 import logging
+import logging.config
 
-from .tg_bot import send as send_tg
+from .tg import send as send_tg
 
 
 with open('sets.json', 'r') as file:
@@ -19,6 +20,7 @@ SYMBOLS = ['💬', '🟢', '🟡', '🔴', '❗️', '✅', '🛎']
 TYPES = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT', 'REQUEST']
 
 
+logging.config.fileConfig('/log.conf')
 logger_err = logging.getLogger(__name__)
 logger_log = logging.getLogger('info')
 

@@ -60,7 +60,7 @@ async def handle(this, request, data):
     # TODO: send by SMS
 
     # Report
-    report.request(
+    await report.request(
         "Recover password",
         {'password': password, 'user': user.id},
     )

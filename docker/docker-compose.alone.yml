@@ -46,6 +46,7 @@ services:
         env_file: .env
         volumes:
             - ../data/load:/data/load
+            - ../data/logs:/data/logs
             # For hot reload
             - ../api/api:/api
             - ../api/app.py:/app.py
@@ -59,7 +60,11 @@ services:
                 - HOST=${EXTERNAL_HOST}
                 - PORT=${CRYPTO_PORT}
                 - TG_TOKEN=${TG_TOKEN}
+                - MODE=${MODE}
+                - BUG_CHAT=${BUG_CHAT}
         env_file: .env
+        volumes:
+            - ../data/logs:/data/logs
         depends_on:
             - api
         restart: unless-stopped

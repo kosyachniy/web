@@ -48,7 +48,7 @@ async def handle(this, request, data):
     if len(users) == 0:
         new = True
     elif len(users) > 1:
-        report.warning(
+        await report.warning(
             "More than 1 user",
             {'phone': data.phone},
         )
@@ -76,7 +76,7 @@ async def handle(this, request, data):
         user.save()
 
         # Report
-        report.important(
+        await report.important(
             "User registration by phone",
             {
                 'user': user.id,
@@ -111,7 +111,7 @@ async def handle(this, request, data):
         token = Token(id=request.token)
 
     if token.user:
-        report.warning(
+        await report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': request.token},
         )
@@ -173,11 +173,11 @@ async def handle(this, request, data):
 #     #
 
 #     sms = SMSC()
-#     res = sms.send_sms(
+#     res = await sms.send_sms(
 #         str(phone),
 #         f"Hi!\n{code} — This is your login code."
 #     )
-#     print(phone, res)
+#     await report.debug(phone, res)
 
 #     # Response
 

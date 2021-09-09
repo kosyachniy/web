@@ -4,13 +4,6 @@ API Endpoints (Transport level)
 
 # pylint: disable=wrong-import-order,wrong-import-position
 
-# # Logging
-# import logging
-# logging.basicConfig(filename='error.log', level=logging.DEBUG)
-# logging.getLogger('socketio').setLevel(logging.ERROR)
-# logging.getLogger('engineio').setLevel(logging.ERROR)
-# logging.getLogger('geventwebsocket.handler').setLevel(logging.ERROR)
-
 # Main app
 from fastapi import FastAPI, Request
 app = FastAPI(title='Web app API')
@@ -114,14 +107,21 @@ async def index(data: Input, request: Request):
         req['error'] = 1
         req['result'] = "Server error"
 
-        trace = traceback.extract_tb(e.__traceback__)[-1]
-        report.critical(
+        traces = traceback.extract_tb(e.__traceback__)[::-1]
+        for trace in traces:
+            if 'python' not in trace.filename:
+                break
+        else:
+            trace = traces[0]
+
+        await report.critical(
             "Server error",
             {
                 'file': trace.filename,
                 'line': trace.lineno,
                 'error': str(e),
             },
+            error=e,
         )
 
     else:
@@ -131,7 +131,6 @@ async def index(data: Input, request: Request):
             req['result'] = res
 
     # Response
-
     return req
 
 # ### Facebook bot

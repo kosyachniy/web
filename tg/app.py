@@ -33,7 +33,7 @@ async def echo(message: types.Message):
     social_user = message.from_user
     text = message.text
 
-    error, result = api(social_user, 'posts.get', {
+    error, result = await api(social_user, 'posts.get', {
         'search': text,
     })
 
