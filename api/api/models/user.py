@@ -171,6 +171,7 @@ class User(Base):
         default=default_login,
         checking=check_login,
         pre_processing=process_lower,
+        ignore=True,
     )
     password = Attribute(
         types=str,
@@ -182,11 +183,13 @@ class User(Base):
         types=str,
         checking=check_name,
         processing=process_title,
+        ignore=True,
     )
     surname = Attribute(
         types=str,
         checking=check_surname,
         processing=process_title,
+        ignore=True,
     )
     phone = Attribute(
         types=int,

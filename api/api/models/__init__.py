@@ -65,6 +65,7 @@ class Attribute:
     checking: Callable = None
     pre_processing: Callable = None
     processing: Callable = None
+    ignore: bool = False
 
     def __init__(
         self,
@@ -73,12 +74,14 @@ class Attribute:
         checking=None,
         pre_processing=None,
         processing=None,
+        ignore=False,
     ):
         self.types = types
         self.default = default
         self.checking = checking
         self.pre_processing = pre_processing
         self.processing = processing
+        self.ignore = ignore
 
     def __set_name__(self, instance, name):
         self.name = name
@@ -114,9 +117,15 @@ class Attribute:
             value = self.pre_processing(value)
 
         if not isinstance(value, self.types):
+            if self.ignore:
+                return
+
             raise TypeError(self.name)
 
         if self.checking and not self.checking(instance.id, value):
+            if self.ignore:
+                return
+
             raise ValueError(self.name)
 
         if self.processing:

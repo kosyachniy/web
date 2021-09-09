@@ -36,9 +36,8 @@ async def api(social_user, method, data=None):
     if social_user_id not in tokens:
         res = await auth(social_user)
 
-        # TODO: social auth
-        # if res is None:
-        #     return 1, None
+        if res is None:
+            return 1, None
 
     req = {
         'method': method,
@@ -128,6 +127,8 @@ async def auth(social_user) -> bool:
                 'result': result,
             }
         )
+
+        del tokens[social_user_id]
         return
 
     ## Update global variables
