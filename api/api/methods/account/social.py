@@ -254,7 +254,8 @@ async def handle(this, request, data):
     #                 'name': social_name,
     #                 'surname': social_surname,
     #             }],
-    #             actions=[action.json(default=False)], # TODO: without `.json()`
+    #             actions=[action.json(default=False)],
+    #             # TODO: without `.json()`
     #             # TODO: avatar
     #         )
 

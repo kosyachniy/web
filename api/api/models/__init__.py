@@ -457,7 +457,11 @@ class Base:
             data['updated'] = time.time()
 
             # Only changes
-            data_set, data_unset, data_push, data_pull, data_update = self._get_changes(data)
+            (
+                data_set, data_unset,
+                data_push, data_pull,
+                data_update,
+            ) = self._get_changes(data)
 
             changed = (
                 set(data_set) | data_unset | set(data_push)

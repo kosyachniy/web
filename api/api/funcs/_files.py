@@ -63,7 +63,8 @@ def load_image(data, encoding='base64', file_format='png'):
 
     if encoding == 'base64':
         try:
-            file_format = re.search(r'data:image/.+;base64,', data).group()[11:-8]
+            file_format = re.search(r'data:image/.+;base64,', data) \
+                            .group()[11:-8]
             b64 = data.split(',')[1]
             data = base64.b64decode(b64)
         except (AttributeError, binascii.Error):

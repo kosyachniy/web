@@ -17,7 +17,11 @@ with open('sets.json', 'r') as file:
     BUG_CHAT = sets['bug_chat']
 
 SYMBOLS = ['💬', '🟢', '🟡', '🔴', '❗️', '✅', '🛎']
-TYPES = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL', 'IMPORTANT', 'REQUEST']
+TYPES = [
+    'DEBUG', 'INFO',
+    'WARNING', 'ERROR', 'CRITICAL',
+    'IMPORTANT', 'REQUEST',
+]
 
 
 logging.config.fileConfig('/log.conf')
@@ -77,15 +81,24 @@ class Report():
 
         except Exception:
             if extra:
-                logger_err.error("%s  Send report  %s", SYMBOLS[3], extra)
+                logger_err.error(
+                    "%s  Send report  %s",
+                    SYMBOLS[3], extra,
+                )
 
                 try:
                     await send_tg(BUG_CHAT, text, markup=None)
                 except Exception:
-                    logger_err.error("%s  Send report  %s %s", SYMBOLS[3], type_, text)
+                    logger_err.error(
+                        "%s  Send report  %s %s",
+                        SYMBOLS[3], type_, text,
+                    )
 
             else:
-                logger_err.error("%s  Send report  %s %s", SYMBOLS[3], type_, text)
+                logger_err.error(
+                    "%s  Send report  %s %s",
+                    SYMBOLS[3], type_, text,
+                )
 
 
     async def debug(self, text, extra=None):
@@ -117,9 +130,11 @@ class Report():
         """
 
         content = (
-            "".join(traceback.format_exception(None, error, error.__traceback__))
+            "".join(
+                traceback.format_exception(None, error, error.__traceback__)
+            )
             if error is not None else
-            f'{text}  {json.dumps(extra)}'
+            f"{text}  {json.dumps(extra)}"
         )
 
         logger_err.error("%s  %s", SYMBOLS[3], content)
@@ -131,9 +146,11 @@ class Report():
         """
 
         content = (
-            "".join(traceback.format_exception(None, error, error.__traceback__))
+            "".join(
+                traceback.format_exception(None, error, error.__traceback__)
+            )
             if error is not None else
-            f'{text}  {json.dumps(extra)}'
+            f"{text}  {json.dumps(extra)}"
         )
 
         logger_err.critical("%s  %s", SYMBOLS[4], content)
