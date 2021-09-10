@@ -137,8 +137,22 @@ def test_init_print():
     }
 
 def test_ignore():
+    # Initialization error
     with pytest.raises(TypeError):
         ObjectModel(meta=1)
 
+    # Ignore in case of an error during initialization
     instance = ObjectModel(teta=1)
     assert instance.teta is None
+
+    # Ignore in case of an error during assignment
+    instance.teta = 1
+    assert instance.teta is None
+
+    # Ignore in case of an error during initialization
+    instance = ObjectModel(ignore={'meta'}, meta=1)
+    assert instance.meta is None
+
+    # Ignore in case of an error during assignment
+    with pytest.raises(TypeError):
+        instance.meta = 1
