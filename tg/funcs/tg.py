@@ -78,28 +78,81 @@ def keyboard(rows, inline=False):
 
     return buttons
 
+
 async def send(
-    user, text='', buttons=None, inline=False, image=None, markup='Markdown',
+    user, text='', buttons=None, inline=False,
+    image=None, markup='Markdown', preview=False,
 ):
     """ Send message """
 
     # TODO: users=[], forward=None, next_message=func
     # TODO: Если пустой buttons - убирать кнопки (но не None)
     # TODO: return bot.forward_message(user, forward, text)
+    # TODO: Attempts
 
-    if not image:
-        return await bot.send_message(
+    if image:
+        return await bot.send_photo(
             user,
+            image,
             text,
             reply_markup=keyboard(buttons, inline),
             parse_mode=markup,
-            disable_web_page_preview=True,
         )
 
-    return await bot.send_photo(
+    return await bot.send_message(
         user,
-        image,
         text,
         reply_markup=keyboard(buttons, inline),
         parse_mode=markup,
+        disable_web_page_preview=not preview,
     )
+
+async def send_file(user, file):
+    """ Send file """
+
+    return await bot.send_document(user, file)
+
+async def edit(
+    user, message, text='', buttons=None, inline=False,
+    image=None, markup='Markdown', preview=False,
+):
+    """ Edit message """
+
+    # TODO: change image
+
+    if image:
+        return await bot.edit_message_caption(
+            chat_id=user,
+            message_id=message,
+            caption=text,
+            reply_markup=keyboard(buttons, inline),
+            parse_mode=markup,
+        )
+
+    return await bot.edit_message_text(
+        user,
+        message_id=message,
+        text=text,
+		reply_markup=keyboard(buttons, inline),
+		parse_mode=markup,
+		disable_web_page_preview=not preview,
+    )
+
+async def delete(user, message):
+    """ Delete message """
+
+    return await bot.delete_message(user, message)
+
+async def check_entry(chat, user):
+    """ Check entry """
+
+    try:
+        user_type = await bot.get_chat_member(chat, user)
+
+        if user_type.status in ('creator', 'administrator', 'member'):
+            return True
+
+        return False
+
+    except:
+        return False
