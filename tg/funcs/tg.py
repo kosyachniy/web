@@ -18,43 +18,63 @@ dp = Dispatcher(bot)
 
 
 def keyboard(rows, inline=False):
-    """ Make keyboard """
+    """ Make keyboard
 
-    if rows == []:
+    None                → No changes
+    [] / [[]]           → Clear keyboard
+    [x, y]              → Button column
+    [[x, y], [z]]       → Button table
+    [[{'data': 'x'}]]   → Inline buttons
+    """
+
+    # TODO: Check difference between [] / [[]] / types.ReplyKeyboardRemove()
+    # TODO: easy way for inline mode, without parameter ` inline `
+
+    # Type formation
+    if isinstance(rows, (tuple, set)):
+        rows = list(rows)
+    elif not isinstance(rows, list):
+        rows = [rows]
+
+    # Empty queries
+
+    if rows in ([], [[]]):
         if inline:
             return types.InlineKeyboardMarkup()
 
         return types.ReplyKeyboardRemove()
 
-    if rows in (None, [], [[]]):
-        return rows
+    if rows is None:
+        return
 
+    # Base
     if inline:
         buttons = types.InlineKeyboardMarkup()
     else:
         buttons = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
+    # Inner elements formation
     if not isinstance(rows[0], (list, tuple)):
-        rows = [[button] for button in rows]
+        rows = list(map(lambda cols: [cols], rows))
 
+    # Filling
     for cols in rows:
-        if inline:
-            buttons.add(
-                *[
-                    types.InlineKeyboardButton(
-                        col['name'],
-                        **(
-                            {'url': col['data']}
-                            if 'type' in col and col['type'] == 'link'
-                            else {'callback_data': col['data']}
-                        ),
-                    ) for col in cols
-                ]
-            )
-            # buttons.add(*[types.InlineKeyboardButton(col['name'], \
-            # callback_data=col['data']) for col in cols])
-        else:
+        if not inline:
             buttons.add(*[types.KeyboardButton(col) for col in cols])
+            continue
+
+        buttons.add(
+            *[
+                types.InlineKeyboardButton(
+                    col['name'],
+                    **(
+                        {'url': col['data']}
+                        if col.get('type') == 'link'
+                        else {'callback_data': col['data']}
+                    ),
+                ) for col in cols
+            ]
+        )
 
     return buttons
 
