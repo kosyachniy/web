@@ -6,6 +6,7 @@ import json
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
+from aiogram.utils.exceptions import BotBlocked
 
 
 with open('sets.json', 'r') as file:
@@ -27,8 +28,9 @@ def keyboard(rows, inline=False):
     [[{'data': 'x'}]]   → Inline buttons
     """
 
-    # TODO: Check difference between [] / [[]] / types.ReplyKeyboardRemove()
-    # TODO: easy way for inline mode, without parameter ` inline `
+    # Empty queries
+    if rows is None:
+        return
 
     # Type formation
     if isinstance(rows, (tuple, set)):
@@ -36,26 +38,27 @@ def keyboard(rows, inline=False):
     elif not isinstance(rows, list):
         rows = [rows]
 
-    # Empty queries
+    # Inner elements formation
+    for i in range(len(rows)):
+        if not isinstance(rows[i], (list, tuple)):
+            rows[i] = [rows[i]]
 
+    # Clear
     if rows in ([], [[]]):
         if inline:
             return types.InlineKeyboardMarkup()
 
         return types.ReplyKeyboardRemove()
 
-    if rows is None:
-        return
+    # Determine mode
+    if isinstance(rows[0][0], dict):
+        inline = True
 
     # Base
     if inline:
         buttons = types.InlineKeyboardMarkup()
     else:
         buttons = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-    # Inner elements formation
-    if not isinstance(rows[0], (list, tuple)):
-        rows = list(map(lambda cols: [cols], rows))
 
     # Filling
     for cols in rows:
@@ -69,7 +72,7 @@ def keyboard(rows, inline=False):
                     col['name'],
                     **(
                         {'url': col['data']}
-                        if col.get('type') == 'link'
+                        if col['data'][:4] == 'http'
                         else {'callback_data': col['data']}
                     ),
                 ) for col in cols
@@ -85,27 +88,38 @@ async def send(
 ):
     """ Send message """
 
-    # TODO: users=[], forward=None, next_message=func
+    # TODO: forward=None, next_message=func
     # TODO: Если пустой buttons - убирать кнопки (но не None)
     # TODO: return bot.forward_message(user, forward, text)
-    # TODO: Attempts
+
+    if isinstance(user, (list, tuple, set)):
+        return [
+            await send(el, text, buttons, inline, image, markup, preview)
+            for el in user
+        ]
 
     if image:
-        return await bot.send_photo(
+        try:
+            return (await bot.send_photo(
+                user,
+                image,
+                text,
+                reply_markup=keyboard(buttons, inline),
+                parse_mode=markup,
+            ))['message_id']
+        except BotBlocked:
+            return 0
+
+    try:
+        return (await bot.send_message(
             user,
-            image,
             text,
             reply_markup=keyboard(buttons, inline),
             parse_mode=markup,
-        )
-
-    return await bot.send_message(
-        user,
-        text,
-        reply_markup=keyboard(buttons, inline),
-        parse_mode=markup,
-        disable_web_page_preview=not preview,
-    )
+            disable_web_page_preview=not preview,
+        ))['message_id']
+    except BotBlocked:
+        return 0
 
 async def send_file(user, file):
     """ Send file """
