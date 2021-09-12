@@ -12,6 +12,16 @@ async def main():
     await send(136563129, 'https://www.google.ru/')
     await send(136563129, 'https://www.google.ru/', preview=True)
 
+    # Send media
+    with open('test.png', 'rb') as file:
+        await send(136563129, image=file)
+    with open('test.png', 'rb') as file:
+        image = file.read()
+        await send(136563129, image=image)
+    await send(136563129, image='test.png')
+    await send(136563129, 'ola', image='test.png')
+    await send(136563129, 'ola', image='https://s1.1zoom.ru/big0/621/359909-svetik.jpg')
+
     # Send message with markup
     await send(136563129, 'ola *bold* **text** ***bold*** _italic_ __text__ ___italic___ `code` ``text`` ```code```', markup='Markdown')
     await send(136563129, 'ola *bold* _italic_ __underline__ ~strikethrough~ `code`')
@@ -25,6 +35,11 @@ async def main():
     await send(136563129, '<a href="tg://user?id=136563129">mention of a user</a> <a href="http://www.example.com/">URL</a>', markup='HTML')
     await send(136563129, '<pre>pre-formatted fixed-width code block</pre>', markup='HTML')
     await send(136563129, '<pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>', markup='HTML')
+    await send(136563129, 'ola <a>ola</b>', markup='HTML')
+    await send(136563129, '*bold*', ['x', 'y'], image='test.png')
+    await send(136563129, '*bold_', ['x', 'y'], image='test.png')
+    with open('test.png', 'rb') as file:
+        await send(136563129, '*bold_', ['x', 'y'], image=file)
 
     # Send buttons
     await send(136563129, 'ola', ['x', 'y'])

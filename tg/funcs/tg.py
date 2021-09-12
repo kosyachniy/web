@@ -2,7 +2,10 @@
 Functionality for working with Telegram
 """
 
+import io
 import json
+
+import requests
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -97,9 +100,18 @@ async def send(
             for el in chat
         ]
 
-    if image:
-        try:
-            return (await bot.send_photo(
+    try:
+        if image:
+            if isinstance(image, io.BufferedReader):
+                image = image.read()
+            elif isinstance(image, str) and len(image) >= 4:
+                if image[:4] == 'http':
+                    image = requests.get(image).content
+                else:
+                    with open(image, 'rb') as file:
+                        image = file.read()
+
+            message = await bot.send_photo(
                 chat,
                 image,
                 text,
@@ -108,21 +120,18 @@ async def send(
                 disable_notification=silent,
                 reply_to_message_id=reply,
                 allow_sending_without_reply=True,
-            ))['message_id']
-        except BotBlocked:
-            return 0
-
-    try:
-        return (await bot.send_message(
-            chat,
-            text,
-            reply_markup=keyboard(buttons, inline),
-            parse_mode=markup,
-            disable_web_page_preview=not preview,
-            disable_notification=silent,
-            reply_to_message_id=reply,
-            allow_sending_without_reply=True,
-        ))['message_id']
+            )
+        else:
+            message = await bot.send_message(
+                chat,
+                text,
+                reply_markup=keyboard(buttons, inline),
+                parse_mode=markup,
+                disable_web_page_preview=not preview,
+                disable_notification=silent,
+                reply_to_message_id=reply,
+                allow_sending_without_reply=True,
+            )
     except BotBlocked:
         return 0
     except CantParseEntities:
@@ -130,6 +139,8 @@ async def send(
             chat, text, buttons, inline, image,
             None, preview, reply, silent,
         )
+    else:
+        return message['message_id']
 
 async def send_file(chat, file):
     """ Send file """
