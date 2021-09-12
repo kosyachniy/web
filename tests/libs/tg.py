@@ -32,9 +32,12 @@ async def main():
     await send(136563129, files={'data': 'https://github.com/postbird/Mp4ToBlob/blob/master/video/v0-new.mp4?raw=true', 'type': 'video'})
     ## Multi
     await send(136563129, 'ola', files=['test.png', 'test.png'])
+    await send(136563129, 'ola', files=['test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png', 'test.png'])
     with open('test.png', 'rb') as file:
         await send(136563129, 'ola', files=['test.png', 'https://s1.1zoom.ru/big0/621/359909-svetik.jpg', file])
     await send(136563129, 'ola', files=['test.png', {'data': 'test.mov', 'type': 'video'}])
+    await send(136563129, 'ola', files=[{'data': 'test.mp3', 'type': 'audio'}, {'data': 'test.mp3', 'type': 'audio'}])
+    await send(136563129, 'ola', files=[{'data': 'test.txt', 'type': 'document'}, {'data': 'test.txt', 'type': 'document'}])
     ## Audio
     await send(136563129, 'ola', files={'data': 'test.mp3', 'type': 'audio'})
     await send(136563129, 'ola', files={'data': 'test.mp3', 'type': 'audio', 'title': 'Название', 'performer': 'Исполнитель'})
@@ -72,7 +75,7 @@ async def main():
     await send(136563129, '*bold*', ['x', 'y'], files='test.png')
     ## Recall path after wrong markup
     await send(136563129, '*bold_', ['x', 'y'], files='test.png')
-    ## Recall buffer after wrong markup
+    ## Recall buffer after wrong markup - ERROR
     with open('test.png', 'rb') as file:
         await send(136563129, '*bold_', ['x', 'y'], files=file)
 

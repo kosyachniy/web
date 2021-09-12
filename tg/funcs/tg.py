@@ -4,8 +4,7 @@ Functionality for working with Telegram
 
 import io
 import json
-
-import requests
+from copy import deepcopy
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -31,36 +30,35 @@ def prepare_files(files):
     if files['type'] in {'location',}:
         return files
 
-    if isinstance(files['data'], io.BufferedReader):
-        files['data'] = files['data'].read()
-
-    elif isinstance(files['data'], str) and files['data'][:4] != 'http':
-        with open(files['data'], 'rb') as file:
-            files['data'] = file.read()
+    if (
+        isinstance(files['data'], io.BufferedReader)
+        or (isinstance(files['data'], str) and files['data'][:4] != 'http')
+    ):
+        files['data'] = types.InputFile(files['data'])
 
     return files
 
 def make_attachment(file, text=None, markup='MarkdownV2'):
     if isinstance(file['data'], str) and file['data'][:4] == 'http':
-        return file
+        return file['data']
 
     if file['type'] == 'image':
         return types.InputMediaPhoto(
-            io.BytesIO(file['data']),
+            file['data'],
             caption=text,
             parse_mode=markup,
         )
 
     if file['type'] == 'video':
         return types.InputMediaVideo(
-            io.BytesIO(file['data']),
+            file['data'],
             caption=text,
             parse_mode=markup,
         )
 
     if file['type'] == 'audio':
         return types.InputMediaAudio(
-            io.BytesIO(file['data']),
+            file['data'],
             caption=text,
             title=file.get('title'),
             performer=file.get('performer'),
@@ -68,7 +66,7 @@ def make_attachment(file, text=None, markup='MarkdownV2'):
         )
 
     return types.InputMediaDocument(
-        io.BytesIO(file['data']),
+        file['data'],
         caption=text,
         parse_mode=markup,
     )
@@ -147,17 +145,34 @@ async def send(
     # NOTE: ` reply ` doesn't work with multiple images / videos
     # TODO: next_message
     # TODO: more than 10 image / video
-    # TODO: rewrite process_image
 
     if isinstance(chat, (list, tuple, set)):
         return [
-            await send(el, text, buttons, inline, files, markup, preview)
+            await send(
+                el, text, buttons, inline, files,
+                markup, preview, reply, silent,
+            )
             for el in chat
         ]
+
+    files_reserved = deepcopy(files)
 
     try:
         if files:
             files = prepare_files(files)
+
+            if len(files) > 10:
+                messages = []
+
+                for i in range((len(files)-1)//10+1):
+                    messages.extend(
+                        await send(
+                            chat, text, buttons, inline, files[i*10:(i+1)*10],
+                            markup, preview, reply, silent,
+                        )
+                    )
+
+                return messages
 
             if isinstance(files, list):
                 media = types.MediaGroup()
@@ -187,9 +202,13 @@ async def send(
                 )
 
             elif files['type'] == 'video':
+                video = types.Video(files['data'])
                 message = await bot.send_video(
                     chat,
-                    files['data'],
+                    video.file_id, # files['data'],
+                    duration=video.duration,
+                    width=video.width,
+                    height=video.height,
                     caption=text,
                     reply_markup=keyboard(buttons, inline),
                     parse_mode=markup,
@@ -287,7 +306,7 @@ async def send(
         return 0
     except CantParseEntities:
         return await send(
-            chat, text, buttons, inline, files,
+            chat, text, buttons, inline, files_reserved,
             None, preview, reply, silent,
         )
     else:
