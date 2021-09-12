@@ -6,7 +6,7 @@ import json
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
-from aiogram.utils.exceptions import BotBlocked
+from aiogram.utils.exceptions import BotBlocked, CantParseEntities
 
 
 with open('sets.json', 'r') as file:
@@ -83,51 +83,61 @@ def keyboard(rows, inline=False):
 
 
 async def send(
-    user, text='', buttons=None, inline=False,
-    image=None, markup='Markdown', preview=False,
+    chat, text='', buttons=None, inline=False, image=None,
+    markup='MarkdownV2', preview=False, reply=None, silent=False,
 ):
     """ Send message """
 
-    # TODO: forward=None, next_message=func
-    # TODO: Если пустой buttons - убирать кнопки (но не None)
-    # TODO: return bot.forward_message(user, forward, text)
+    # NOTE: Markup: https://core.telegram.org/bots/api#formatting-options
+    # TODO: next_message
 
-    if isinstance(user, (list, tuple, set)):
+    if isinstance(chat, (list, tuple, set)):
         return [
             await send(el, text, buttons, inline, image, markup, preview)
-            for el in user
+            for el in chat
         ]
 
     if image:
         try:
             return (await bot.send_photo(
-                user,
+                chat,
                 image,
                 text,
                 reply_markup=keyboard(buttons, inline),
                 parse_mode=markup,
+                disable_notification=silent,
+                reply_to_message_id=reply,
+                allow_sending_without_reply=True,
             ))['message_id']
         except BotBlocked:
             return 0
 
     try:
         return (await bot.send_message(
-            user,
+            chat,
             text,
             reply_markup=keyboard(buttons, inline),
             parse_mode=markup,
             disable_web_page_preview=not preview,
+            disable_notification=silent,
+            reply_to_message_id=reply,
+            allow_sending_without_reply=True,
         ))['message_id']
     except BotBlocked:
         return 0
+    except CantParseEntities:
+        return await send(
+            chat, text, buttons, inline, image,
+            None, preview, reply, silent,
+        )
 
-async def send_file(user, file):
+async def send_file(chat, file):
     """ Send file """
 
-    return await bot.send_document(user, file)
+    return await bot.send_document(chat, file)
 
 async def edit(
-    user, message, text='', buttons=None, inline=False,
+    chat, message, text='', buttons=None, inline=False,
     image=None, markup='Markdown', preview=False,
 ):
     """ Edit message """
@@ -136,7 +146,7 @@ async def edit(
 
     if image:
         return await bot.edit_message_caption(
-            chat_id=user,
+            chat,
             message_id=message,
             caption=text,
             reply_markup=keyboard(buttons, inline),
@@ -144,7 +154,7 @@ async def edit(
         )
 
     return await bot.edit_message_text(
-        user,
+        chat,
         message_id=message,
         text=text,
 		reply_markup=keyboard(buttons, inline),
@@ -152,10 +162,10 @@ async def edit(
 		disable_web_page_preview=not preview,
     )
 
-async def delete(user, message):
+async def delete(chat, message):
     """ Delete message """
 
-    return await bot.delete_message(user, message)
+    return await bot.delete_message(chat, message)
 
 async def check_entry(chat, user):
     """ Check entry """
@@ -168,5 +178,18 @@ async def check_entry(chat, user):
 
         return False
 
-    except:
+    except: # FIXME: exception
         return False
+
+async def forward(chat, from_chat, message, silent=False):
+    """ Forward message """
+
+    try:
+        return await bot.forward_message(
+            chat,
+            from_chat,
+            message,
+            disable_notification=silent,
+        )['message_id']
+    except BotBlocked:
+        return 0
