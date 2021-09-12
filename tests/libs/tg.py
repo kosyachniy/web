@@ -31,6 +31,7 @@ async def main():
     with open('test.mov', 'rb') as file:
         await send(136563129, video=file)
     await send(136563129, video='https://v16-web.tiktok.com/video/tos/alisg/tos-alisg-pve-0037c001/5699531b06b74fbb80daf10e0f838873/?a=1988&br=1158&bt=579&cd=0%7C0%7C0&ch=0&cr=0&cs=0&dr=0&ds=3&er=&expire=1631466602&ft=9wMeRebG4kag3&l=20210912110948010190218226287C8320&lr=tiktok_m&mime_type=video_mp4&net=0&pl=0&policy=3&qs=0&rc=ajRqcmp3bHJxMzMzMzczM0ApNWk8aWQ3ZmRlNzgzNWk4NmdhLWQvcHJuNi1gLS01MTRzczI0MDQ1LzZfYDI1MWFgYGE6Yw%3D%3D&signature=d1d631ac890951da15d2d7ae33f9ba7a&tk=0&vl=&vr=')
+    await send(136563129, 'ola', image=['test.png', 'test.png'])
 
     # Send message with markup
     ## Markdown
