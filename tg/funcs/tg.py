@@ -86,7 +86,7 @@ def keyboard(rows, inline=False):
 
 
 async def send(
-    chat, text='', buttons=None, inline=False, image=None,
+    chat, text='', buttons=None, inline=False, image=None, video=None,
     markup='MarkdownV2', preview=False, reply=None, silent=False,
 ):
     """ Send message """
@@ -100,6 +100,9 @@ async def send(
             for el in chat
         ]
 
+    if video:
+        image = video
+
     try:
         if image:
             if isinstance(image, io.BufferedReader):
@@ -111,16 +114,29 @@ async def send(
                     with open(image, 'rb') as file:
                         image = file.read()
 
-            message = await bot.send_photo(
-                chat,
-                image,
-                text,
-                reply_markup=keyboard(buttons, inline),
-                parse_mode=markup,
-                disable_notification=silent,
-                reply_to_message_id=reply,
-                allow_sending_without_reply=True,
-            )
+            if video:
+                message = await bot.send_video(
+                    chat,
+                    image,
+                    caption=text,
+                    reply_markup=keyboard(buttons, inline),
+                    parse_mode=markup,
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+            else:
+                message = await bot.send_photo(
+                    chat,
+                    image,
+                    caption=text,
+                    reply_markup=keyboard(buttons, inline),
+                    parse_mode=markup,
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
         else:
             message = await bot.send_message(
                 chat,
