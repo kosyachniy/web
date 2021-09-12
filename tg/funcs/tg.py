@@ -21,21 +21,57 @@ bot = Bot(token=TG_TOKEN)
 dp = Dispatcher(bot)
 
 
-def prepare_image(image):
-    if isinstance(image, (list, tuple, set)):
-        return [prepare_image(el) for el in image]
+def prepare_files(files):
+    if isinstance(files, (list, tuple, set)):
+        return [prepare_files(file) for file in files]
 
-    if isinstance(image, io.BufferedReader):
-        image = image.read()
+    if not isinstance(files, dict):
+        files = {'data': files, 'type': 'image'}
 
-    elif isinstance(image, str) and len(image) >= 4:
-        if image[:4] == 'http':
-            image = requests.get(image).content
-        else:
-            with open(image, 'rb') as file:
-                image = file.read()
+    if files['type'] in {'location',}:
+        return files
 
-    return image
+    if isinstance(files['data'], io.BufferedReader):
+        files['data'] = files['data'].read()
+
+    elif isinstance(files['data'], str) and files['data'][:4] != 'http':
+        with open(files['data'], 'rb') as file:
+            files['data'] = file.read()
+
+    return files
+
+def make_attachment(file, text=None, markup='MarkdownV2'):
+    if isinstance(file['data'], str) and file['data'][:4] == 'http':
+        return file
+
+    if file['type'] == 'image':
+        return types.InputMediaPhoto(
+            io.BytesIO(file['data']),
+            caption=text,
+            parse_mode=markup,
+        )
+
+    if file['type'] == 'video':
+        return types.InputMediaVideo(
+            io.BytesIO(file['data']),
+            caption=text,
+            parse_mode=markup,
+        )
+
+    if file['type'] == 'audio':
+        return types.InputMediaAudio(
+            io.BytesIO(file['data']),
+            caption=text,
+            title=file.get('title'),
+            performer=file.get('performer'),
+            parse_mode=markup,
+        )
+
+    return types.InputMediaDocument(
+        io.BytesIO(file['data']),
+        caption=text,
+        parse_mode=markup,
+    )
 
 def keyboard(rows, inline=False):
     """ Make keyboard
@@ -102,7 +138,7 @@ def keyboard(rows, inline=False):
 
 
 async def send(
-    chat, text='', buttons=None, inline=False, image=None, video=None,
+    chat, text='', buttons=None, inline=False, files=None,
     markup='MarkdownV2', preview=False, reply=None, silent=False,
 ):
     """ Send message """
@@ -115,28 +151,20 @@ async def send(
 
     if isinstance(chat, (list, tuple, set)):
         return [
-            await send(el, text, buttons, inline, image, markup, preview)
+            await send(el, text, buttons, inline, files, markup, preview)
             for el in chat
         ]
 
-    if video:
-        image = video
-
     try:
-        if image:
-            image = prepare_image(image)
+        if files:
+            files = prepare_files(files)
 
-            if isinstance(image, list):
+            if isinstance(files, list):
                 media = types.MediaGroup()
+                media.attach_photo(make_attachment(files[0], text, markup))
 
-                media.attach_photo(types.InputMediaPhoto(
-                    io.BytesIO(image[0]),
-                    caption=text,
-                    parse_mode=markup,
-                ))
-
-                for el in image[1:]:
-                    media.attach_photo(types.InputMediaPhoto(io.BytesIO(el)))
+                for el in files[1:]:
+                    media.attach_photo(make_attachment(el))
 
                 message = await bot.send_media_group(
                     chat,
@@ -145,10 +173,11 @@ async def send(
                     reply_to_message_id=reply,
                     allow_sending_without_reply=True,
                 )
-            elif video:
-                message = await bot.send_video(
+
+            elif files['type'] == 'image':
+                message = await bot.send_photo(
                     chat,
-                    image,
+                    files['data'],
                     caption=text,
                     reply_markup=keyboard(buttons, inline),
                     parse_mode=markup,
@@ -156,10 +185,84 @@ async def send(
                     reply_to_message_id=reply,
                     allow_sending_without_reply=True,
                 )
-            else:
-                message = await bot.send_photo(
+
+            elif files['type'] == 'video':
+                message = await bot.send_video(
                     chat,
-                    image,
+                    files['data'],
+                    caption=text,
+                    reply_markup=keyboard(buttons, inline),
+                    parse_mode=markup,
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
+            elif files['type'] == 'audio':
+                message = await bot.send_audio(
+                    chat,
+                    files['data'],
+                    caption=text,
+                    title=files.get('title'),
+                    performer=files.get('performer'),
+                    reply_markup=keyboard(buttons, inline),
+                    parse_mode=markup,
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
+            elif files['type'] == 'animation':
+                message = await bot.send_animation(
+                    chat,
+                    files['data'],
+                    caption=text,
+                    reply_markup=keyboard(buttons, inline),
+                    parse_mode=markup,
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
+            elif files['type'] == 'voice':
+                message = await bot.send_voice(
+                    chat,
+                    files['data'],
+                    caption=text,
+                    reply_markup=keyboard(buttons, inline),
+                    parse_mode=markup,
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
+            elif files['type'] == 'video_note':
+                message = await bot.send_video_note(
+                    chat,
+                    files['data'],
+                    duration=files.get('duration'),
+                    length=files.get('length'),
+                    reply_markup=keyboard(buttons, inline),
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
+            elif files['type'] == 'location':
+                message = await bot.send_location(
+                    chat,
+                    files['data']['lat'],
+                    files['data']['lng'],
+                    reply_markup=keyboard(buttons, inline),
+                    disable_notification=silent,
+                    reply_to_message_id=reply,
+                    allow_sending_without_reply=True,
+                )
+
+            else:
+                message = await bot.send_document(
+                    chat,
+                    files['data'],
                     caption=text,
                     reply_markup=keyboard(buttons, inline),
                     parse_mode=markup,
@@ -184,11 +287,14 @@ async def send(
         return 0
     except CantParseEntities:
         return await send(
-            chat, text, buttons, inline, image,
+            chat, text, buttons, inline, files,
             None, preview, reply, silent,
         )
     else:
-        return message['message_id']
+        if isinstance(message, (list, tuple)):
+            return [el['message_id'] for el in message]
+        else:
+            return message['message_id']
 
 async def send_file(chat, file):
     """ Send file """

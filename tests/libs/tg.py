@@ -15,23 +15,39 @@ async def main():
     # Send media
     ## Buffer
     with open('test.png', 'rb') as file:
-        await send(136563129, image=file)
+        await send(136563129, files=file)
     ## Bytes
     with open('test.png', 'rb') as file:
-        image = file.read()
-        await send(136563129, image=image)
+        await send(136563129, files=file.read())
     ## Path
-    await send(136563129, image='test.png')
+    await send(136563129, files='test.png')
     ## Caption
-    await send(136563129, 'ola', image='test.png')
+    await send(136563129, 'ola', files='test.png')
     ## URL
-    await send(136563129, 'ola', image='https://s1.1zoom.ru/big0/621/359909-svetik.jpg')
+    await send(136563129, 'ola', files='https://s1.1zoom.ru/big0/621/359909-svetik.jpg')
     ## Video
-    await send(136563129, 'ola', video='test.mov')
+    await send(136563129, 'ola', files={'data': 'test.mov', 'type': 'video'})
     with open('test.mov', 'rb') as file:
-        await send(136563129, video=file)
-    await send(136563129, video='https://v16-web.tiktok.com/video/tos/alisg/tos-alisg-pve-0037c001/5699531b06b74fbb80daf10e0f838873/?a=1988&br=1158&bt=579&cd=0%7C0%7C0&ch=0&cr=0&cs=0&dr=0&ds=3&er=&expire=1631466602&ft=9wMeRebG4kag3&l=20210912110948010190218226287C8320&lr=tiktok_m&mime_type=video_mp4&net=0&pl=0&policy=3&qs=0&rc=ajRqcmp3bHJxMzMzMzczM0ApNWk8aWQ3ZmRlNzgzNWk4NmdhLWQvcHJuNi1gLS01MTRzczI0MDQ1LzZfYDI1MWFgYGE6Yw%3D%3D&signature=d1d631ac890951da15d2d7ae33f9ba7a&tk=0&vl=&vr=')
-    await send(136563129, 'ola', image=['test.png', 'test.png'])
+        await send(136563129, files={'data': file, 'type': 'video'})
+    await send(136563129, files={'data': 'https://github.com/postbird/Mp4ToBlob/blob/master/video/v0-new.mp4?raw=true', 'type': 'video'})
+    ## Multi
+    await send(136563129, 'ola', files=['test.png', 'test.png'])
+    with open('test.png', 'rb') as file:
+        await send(136563129, 'ola', files=['test.png', 'https://s1.1zoom.ru/big0/621/359909-svetik.jpg', file])
+    await send(136563129, 'ola', files=['test.png', {'data': 'test.mov', 'type': 'video'}])
+    ## Audio
+    await send(136563129, 'ola', files={'data': 'test.mp3', 'type': 'audio'})
+    await send(136563129, 'ola', files={'data': 'test.mp3', 'type': 'audio', 'title': 'Название', 'performer': 'Исполнитель'})
+    ## Animation
+    await send(136563129, 'ola', files={'data': 'http://techslides.com/demos/sample-videos/small.mp4', 'type': 'animation'})
+    ## Voice
+    await send(136563129, 'ola', files={'data': 'test.ogg', 'type': 'voice'})
+    ## Video note
+    await send(136563129, files={'data': 'test.mp4', 'type': 'video_note', 'duration': 10, 'length': 100})
+    ## Location
+    await send(136563129, files={'data': {'lat': 59.9392, 'lng': 30.3165}, 'type': 'location'})
+    ## Document
+    await send(136563129, 'ola', files={'data': 'test.txt', 'type': 'document'})
 
     # Send message with markup
     ## Markdown
@@ -53,12 +69,12 @@ async def main():
     ## Invalid markup
     await send(136563129, 'ola <a>ola</b>', markup='HTML')
     ## Image & markup
-    await send(136563129, '*bold*', ['x', 'y'], image='test.png')
+    await send(136563129, '*bold*', ['x', 'y'], files='test.png')
     ## Recall path after wrong markup
-    await send(136563129, '*bold_', ['x', 'y'], image='test.png')
+    await send(136563129, '*bold_', ['x', 'y'], files='test.png')
     ## Recall buffer after wrong markup
     with open('test.png', 'rb') as file:
-        await send(136563129, '*bold_', ['x', 'y'], image=file)
+        await send(136563129, '*bold_', ['x', 'y'], files=file)
 
     # Send buttons
     await send(136563129, 'ola', ['x', 'y'])
