@@ -36,6 +36,10 @@ async def main():
     with open('test.png', 'rb') as file:
         await send(136563129, 'ola', files=['test.png', 'https://s1.1zoom.ru/big0/621/359909-svetik.jpg', file])
     await send(136563129, 'ola', files=['test.png', {'data': 'test.mov', 'type': 'video'}])
+    with open('test.mov', 'rb') as file:
+        await send(136563129, 'ola', files=['api/a.png', {'data': file, 'type': 'video'}])
+    with open('test.mov', 'rb') as file:
+        await send(136563129, 'ola', files=['api/a.png', {'data': file.read(), 'type': 'video'}])
     await send(136563129, 'ola', files=[{'data': 'test.mp3', 'type': 'audio'}, {'data': 'test.mp3', 'type': 'audio'}])
     await send(136563129, 'ola', files=[{'data': 'test.txt', 'type': 'document'}, {'data': 'test.txt', 'type': 'document'}])
     ## Audio
@@ -75,7 +79,7 @@ async def main():
     await send(136563129, '*bold*', ['x', 'y'], files='test.png')
     ## Recall path after wrong markup
     await send(136563129, '*bold_', ['x', 'y'], files='test.png')
-    ## Recall buffer after wrong markup - ERROR
+    ## Recall buffer after wrong markup
     with open('test.png', 'rb') as file:
         await send(136563129, '*bold_', ['x', 'y'], files=file)
 

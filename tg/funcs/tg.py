@@ -22,25 +22,46 @@ dp = Dispatcher(bot)
 
 def prepare_files(files):
     if isinstance(files, (list, tuple, set)):
-        return [prepare_files(file) for file in files]
+        data, reserv = zip(*[prepare_files(file) for file in files])
+        return list(data), list(reserv)
 
     if not isinstance(files, dict):
         files = {'data': files, 'type': 'image'}
 
     if files['type'] in {'location',}:
-        return files
+        return files, files
 
-    if (
+    if isinstance(files['data'], dict):
+        reserv = deepcopy(files)
+        files['data'] = types.InputFile(
+            io.BytesIO(files['data']['data']),
+            files['data']['name'],
+        )
+        return files, reserv
+
+    if not (
         isinstance(files['data'], io.BufferedReader)
         or (isinstance(files['data'], str) and files['data'][:4] != 'http')
     ):
-        files['data'] = types.InputFile(files['data'])
+        return files, files
 
-    return files
+    file = types.InputFile(files['data'])
+
+    if files['type'] in {'video',}:
+        files['data'] = file.file.read()
+        return files, files
+
+    file = {'name': file.filename, 'data': file.file.read()}
+    files['data'] = types.InputFile(io.BytesIO(file['data']), file['name'])
+
+    return files, {'data': file, 'type': files['type']}
 
 def make_attachment(file, text=None, markup='MarkdownV2'):
     if isinstance(file['data'], str) and file['data'][:4] == 'http':
         return file['data']
+
+    if isinstance(file['data'], bytes):
+        file['data'] = io.BytesIO(file['data'])
 
     if file['type'] == 'image':
         return types.InputMediaPhoto(
@@ -155,11 +176,9 @@ async def send(
             for el in chat
         ]
 
-    files_reserved = deepcopy(files)
-
     try:
         if files:
-            files = prepare_files(files)
+            files, reserv = prepare_files(files)
 
             if len(files) > 10:
                 messages = []
@@ -202,13 +221,9 @@ async def send(
                 )
 
             elif files['type'] == 'video':
-                video = types.Video(files['data'])
                 message = await bot.send_video(
                     chat,
-                    video.file_id, # files['data'],
-                    duration=video.duration,
-                    width=video.width,
-                    height=video.height,
+                    files['data'],
                     caption=text,
                     reply_markup=keyboard(buttons, inline),
                     parse_mode=markup,
@@ -306,7 +321,7 @@ async def send(
         return 0
     except CantParseEntities:
         return await send(
-            chat, text, buttons, inline, files_reserved,
+            chat, text, buttons, inline, reserv,
             None, preview, reply, silent,
         )
     else:
