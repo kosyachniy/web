@@ -15,6 +15,10 @@ with open('sets.json', 'r') as file:
     sets = json.loads(file.read())['tg']
     TG_TOKEN = sets['token']
 
+TEXT_LIMIT = 4096
+CAPTION_LIMIT = 1024
+FILES_LIMIT = 10
+
 
 bot = Bot(token=TG_TOKEN)
 dp = Dispatcher(bot)
@@ -165,7 +169,6 @@ async def send(
     # NOTE: Markup: https://core.telegram.org/bots/api#formatting-options
     # NOTE: ` reply ` doesn't work with multiple images / videos
     # TODO: next_message
-    # TODO: more than 10 image / video
 
     if isinstance(chat, (list, tuple, set)):
         return [
@@ -180,16 +183,46 @@ async def send(
         if files:
             files, reserv = prepare_files(files)
 
-            if len(files) > 10:
+            if len(files) > FILES_LIMIT:
                 messages = []
 
-                for i in range((len(files)-1)//10+1):
-                    messages.extend(
-                        await send(
-                            chat, text, buttons, inline, files[i*10:(i+1)*10],
-                            markup, preview, reply, silent,
-                        )
+                for i in range((len(files)-1)//FILES_LIMIT+1):
+                    message = await send(
+                        chat, text, buttons, inline,
+                        files[i*FILES_LIMIT:(i+1)*FILES_LIMIT],
+                        markup, preview, reply, silent,
                     )
+
+                    if message is None:
+                        return None
+
+                    messages.extend(message)
+
+                return messages
+
+            if text and len(text) > CAPTION_LIMIT:
+                messages = []
+
+                message = await send(
+                    chat, text[:CAPTION_LIMIT],
+                    buttons, inline, reserv, markup, preview, reply, silent,
+                )
+
+                if message is None:
+                    return None
+
+                messages.extend(message)
+
+                for i in range(1, (len(text)-1)//CAPTION_LIMIT+1):
+                    message = await send(
+                        chat, text[i*CAPTION_LIMIT:(i+1)*CAPTION_LIMIT],
+                        buttons, inline, None, markup, preview, reply, silent,
+                    )
+
+                    if message is None:
+                        return None
+
+                    messages.extend(message)
 
                 return messages
 
@@ -306,6 +339,24 @@ async def send(
                 )
 
         else:
+            reserv = None
+
+            if text and len(text) > TEXT_LIMIT:
+                messages = []
+
+                for i in range((len(text)-1)//TEXT_LIMIT+1):
+                    message = await send(
+                        chat, text[i*TEXT_LIMIT:(i+1)*TEXT_LIMIT], buttons,
+                        inline, reserv, markup, preview, reply, silent,
+                    )
+
+                    if message is None:
+                        return None
+
+                    messages.extend(message)
+
+                return messages
+
             message = await bot.send_message(
                 chat,
                 text,
@@ -318,7 +369,7 @@ async def send(
             )
 
     except BotBlocked:
-        return 0
+        return None
     except CantParseEntities:
         return await send(
             chat, text, buttons, inline, reserv,
@@ -328,12 +379,7 @@ async def send(
         if isinstance(message, (list, tuple)):
             return [el['message_id'] for el in message]
         else:
-            return message['message_id']
-
-async def send_file(chat, file):
-    """ Send file """
-
-    return await bot.send_document(chat, file)
+            return [message['message_id']]
 
 async def edit(
     chat, message, text='', buttons=None, inline=False,
