@@ -9,7 +9,9 @@ from typing import Union, Optional
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
-from aiogram.utils.exceptions import BotBlocked, CantParseEntities
+from aiogram.utils.exceptions import (
+    BotBlocked, CantParseEntities, MessageToDeleteNotFound,
+)
 
 
 with open('sets.json', 'r') as file:
@@ -449,10 +451,22 @@ async def edit(
 		disable_web_page_preview=not preview,
     ))['message_id']
 
-async def delete(chat, message):
+async def delete(
+    chat: Union[int, str],
+    message: Union[int, str, list, tuple, set],
+):
     """ Delete message """
 
-    return await bot.delete_message(chat, message)
+    if isinstance(message, (list, tuple, set)):
+        return [
+            await delete(chat, el)
+            for el in message
+        ]
+
+    try:
+        return await bot.delete_message(chat, message)
+    except MessageToDeleteNotFound:
+        return False
 
 async def check_entry(chat, user):
     """ Check entry """

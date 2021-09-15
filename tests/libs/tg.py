@@ -1,6 +1,6 @@
 import asyncio
 
-from api.funcs.tg import send, edit
+from api.funcs.tg import send, edit, delete, check_entry
 
 
 async def main():
@@ -93,7 +93,7 @@ async def main():
     print(await send(136563129, 'ola', None))
     print(await send(136563129, 'ola', []))
 
-    # Edit buttons
+    # Edit
     print(await edit(
         136563129,
         (await send(136563129, 'ola', [[{'name': 'Data', 'data': 'x'}], {'name': 'Link', 'data': 'https://www.google.ru/'}]))[0],
@@ -116,6 +116,16 @@ async def main():
         (await send(136563129, 'ola'))[0],
         'ulu',
         [[{'name': 'Data', 'data': 'x'}], {'name': 'Link', 'data': 'https://www.google.ru/'}],
+    ))
+
+    # Delete
+    print(await delete(
+        136563129,
+        (await send(136563129, 'ola'))[0],
+    ))
+    print(await delete(
+        136563129,
+        [((await send(136563129, 'ola'))[0], {123123123})],
     ))
 
 
