@@ -10,7 +10,7 @@ from typing import Union, Optional
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.exceptions import (
-    BotBlocked, CantParseEntities, MessageToDeleteNotFound,
+    BotBlocked, CantParseEntities, MessageToDeleteNotFound, ChatNotFound,
 )
 
 
@@ -468,18 +468,16 @@ async def delete(
     except MessageToDeleteNotFound:
         return False
 
-async def check_entry(chat, user):
+async def check_entry(
+    chat: Union[int, str],
+    user: Union[int, str],
+):
     """ Check entry """
 
     try:
         user_type = await bot.get_chat_member(chat, user)
-
-        if user_type.status in ('creator', 'administrator', 'member'):
-            return True
-
-        return False
-
-    except: # FIXME: exception
+        return user_type.status in ('creator', 'administrator', 'member')
+    except ChatNotFound:
         return False
 
 async def forward(chat, from_chat, message, silent=False):

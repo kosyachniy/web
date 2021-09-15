@@ -128,6 +128,10 @@ async def main():
         [((await send(136563129, 'ola'))[0], {123123123})],
     ))
 
+    # Check entry
+    print(await check_entry(-1001142824902, 136563129))
+    print(await check_entry(0, 136563129))
+
 
 if __name__ == '__main__':
     asyncio.run(main())
