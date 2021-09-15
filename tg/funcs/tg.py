@@ -28,6 +28,8 @@ dp = Dispatcher(bot)
 
 
 def prepare_files(files):
+    """ Prepare a file for single sending """
+
     if isinstance(files, (list, tuple, set)):
         data, reserv = zip(*[prepare_files(file) for file in files])
         return list(data), list(reserv)
@@ -64,6 +66,8 @@ def prepare_files(files):
     return files, {'data': file, 'type': files['type']}
 
 def make_attachment(file, text=None, markup='MarkdownV2'):
+    """ Prepare a file for multiple sending """
+
     if isinstance(file['data'], str) and file['data'][:4] == 'http':
         return file['data']
 
@@ -120,9 +124,9 @@ def keyboard(rows, inline=False):
         rows = [rows]
 
     # Inner elements formation
-    for i in range(len(rows)):
-        if not isinstance(rows[i], (list, tuple)):
-            rows[i] = [rows[i]]
+    for i, el in enumerate(rows):
+        if not isinstance(el, (list, tuple)):
+            rows[i] = [el]
 
     # Clear
     if rows in ([], [[]]):
@@ -163,6 +167,7 @@ def keyboard(rows, inline=False):
     return buttons
 
 
+# pylint: disable=too-many-arguments
 async def send(
     chat: Union[int, str, list, tuple, set],
     text: Optional[str] = '',
@@ -387,11 +392,11 @@ async def send(
             chat, text, buttons, inline, reserv,
             None, preview, reply, silent,
         )
-    else:
-        if isinstance(message, (list, tuple)):
-            return [el['message_id'] for el in message]
-        else:
-            return [message['message_id']]
+
+    if isinstance(message, (list, tuple)):
+        return [el['message_id'] for el in message]
+
+    return [message['message_id']]
 
 async def edit(
     chat: Union[int, str],
