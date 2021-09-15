@@ -1,6 +1,6 @@
 import asyncio
 
-from api.funcs.tg import send
+from api.funcs.tg import send, edit
 
 
 async def main():
@@ -94,7 +94,29 @@ async def main():
     print(await send(136563129, 'ola', []))
 
     # Edit buttons
-    print(await send(136563129, 'ola', [[{'name': 'Data', 'data': 'x'}], {'name': 'Link', 'data': 'https://www.google.ru/'}]))
+    print(await edit(
+        136563129,
+        (await send(136563129, 'ola', [[{'name': 'Data', 'data': 'x'}], {'name': 'Link', 'data': 'https://www.google.ru/'}]))[0],
+        'ulu',
+    ))
+    print(await edit(
+        136563129,
+        (await send(136563129, 'ola', files='test.png'))[0],
+        'ulu',
+        files={'data': 'test.mov', 'type': 'video'},
+    ))
+    print(await edit(
+        136563129,
+        (await send(136563129, 'ola', files=['test.png', 'test.png']))[0],
+        'ulu',
+        files='test.jpg',
+    ))
+    print(await edit(
+        136563129,
+        (await send(136563129, 'ola'))[0],
+        'ulu',
+        [[{'name': 'Data', 'data': 'x'}], {'name': 'Link', 'data': 'https://www.google.ru/'}],
+    ))
 
 
 if __name__ == '__main__':

@@ -5,6 +5,7 @@ Functionality for working with Telegram
 import io
 import json
 from copy import deepcopy
+from typing import Union, Optional
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -161,8 +162,17 @@ def keyboard(rows, inline=False):
 
 
 async def send(
-    chat, text='', buttons=None, inline=False, files=None,
-    markup='MarkdownV2', preview=False, reply=None, silent=False,
+    chat: Union[int, str, list, tuple, set],
+    text: Optional[str] = '',
+    buttons: Optional[Union[list, tuple, set, str]] = None,
+    inline: Optional[bool] = False,
+    files: Optional[Union[
+        str, list, tuple, set, bytes, io.BufferedReader,
+    ]] = None,
+    markup: Optional[str] = 'MarkdownV2',
+    preview: Optional[bool] = False,
+    reply: Optional[Union[int, str]] = None,
+    silent: Optional[bool] = False,
 ):
     """ Send message """
 
@@ -382,30 +392,62 @@ async def send(
             return [message['message_id']]
 
 async def edit(
-    chat, message, text='', buttons=None, inline=False,
-    image=None, markup='Markdown', preview=False,
+    chat: Union[int, str],
+    message: Union[int, str],
+    text: Optional[str] = '',
+    buttons: Optional[Union[list, tuple, set, str]] = None,
+    inline: Optional[bool] = False,
+    files: Optional[Union[
+        str, list, tuple, set, bytes, io.BufferedReader,
+    ]] = None,
+    markup: Optional[str] = 'MarkdownV2',
+    preview: Optional[bool] = False,
 ):
     """ Edit message """
 
-    # TODO: change image
+    # NOTE: 1 file per 1 message
 
-    if image:
-        return await bot.edit_message_caption(
-            chat,
-            message_id=message,
-            caption=text,
-            reply_markup=keyboard(buttons, inline),
-            parse_mode=markup,
-        )
+    if files is not None:
+        res = None
 
-    return await bot.edit_message_text(
+        if files:
+            files, _ = prepare_files(files)
+
+            if isinstance(files, (list, tuple, set)):
+                media = types.MediaGroup()
+
+                for el in files:
+                    media.attach_photo(make_attachment(el))
+
+            else:
+                media = make_attachment(files)
+
+            res = await bot.edit_message_media(
+                media,
+                chat,
+                message,
+                reply_markup=keyboard(buttons, inline),
+            )
+
+        if text is not None:
+            res = await bot.edit_message_caption(
+                chat,
+                message,
+                caption=text,
+                reply_markup=keyboard(buttons, inline),
+                parse_mode=markup,
+            )
+
+        return res['message_id'] if res is not None else None
+
+    return (await bot.edit_message_text(
+        text,
         chat,
-        message_id=message,
-        text=text,
+        message,
 		reply_markup=keyboard(buttons, inline),
 		parse_mode=markup,
 		disable_web_page_preview=not preview,
-    )
+    ))['message_id']
 
 async def delete(chat, message):
     """ Delete message """
