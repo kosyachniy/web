@@ -472,7 +472,7 @@ async def check_entry(
     chat: Union[int, str],
     user: Union[int, str],
 ):
-    """ Check entry """
+    """ Check a user entry into a chat """
 
     try:
         user_type = await bot.get_chat_member(chat, user)
@@ -480,15 +480,20 @@ async def check_entry(
     except ChatNotFound:
         return False
 
-async def forward(chat, from_chat, message, silent=False):
+async def forward(
+    chat: Union[int, str],
+    from_chat: Union[int, str],
+    message: Union[int, str],
+    silent: Optional[bool] = False,
+):
     """ Forward message """
 
     try:
-        return await bot.forward_message(
+        return (await bot.forward_message(
             chat,
             from_chat,
             message,
             disable_notification=silent,
-        )['message_id']
+        ))['message_id']
     except BotBlocked:
         return 0

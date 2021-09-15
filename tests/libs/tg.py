@@ -1,6 +1,6 @@
 import asyncio
 
-from api.funcs.tg import send, edit, delete, check_entry
+from api.funcs.tg import send, edit, delete, check_entry, forward
 
 
 async def main():
@@ -8,7 +8,7 @@ async def main():
     print(await send(136563129, 'ola'))
     print(await send([136563129, 136563129], 'ola'))
     print(await send(136563129, 'ola', silent=True))
-    print(await send(136563129, 'ola', reply=await send(136563129, 'ola')))
+    print(await send(136563129, 'ola', reply=(await send(136563129, 'ola'))[0]))
     print(await send(136563129, 'https://www.google.ru/'))
     print(await send(136563129, 'https://www.google.ru/', preview=True))
     print(await send(136563129, 'x'*4097))
@@ -38,9 +38,9 @@ async def main():
         print(await send(136563129, 'ola', files=['test.png', 'https://s1.1zoom.ru/big0/621/359909-svetik.jpg', file]))
     print(await send(136563129, 'ola', files=['test.png', {'data': 'test.mov', 'type': 'video'}]))
     with open('test.mov', 'rb') as file:
-        print(await send(136563129, 'ola', files=['api/a.png', {'data': file, 'type': 'video'}]))
+        print(await send(136563129, 'ola', files=['test.png', {'data': file, 'type': 'video'}]))
     with open('test.mov', 'rb') as file:
-        print(await send(136563129, 'ola', files=['api/a.png', {'data': file.read(), 'type': 'video'}]))
+        print(await send(136563129, 'ola', files=['test.png', {'data': file.read(), 'type': 'video'}]))
     print(await send(136563129, 'ola', files=[{'data': 'test.mp3', 'type': 'audio'}, {'data': 'test.mp3', 'type': 'audio'}]))
     print(await send(136563129, 'ola', files=[{'data': 'test.txt', 'type': 'document'}, {'data': 'test.txt', 'type': 'document'}]))
     ## Audio
@@ -131,6 +131,13 @@ async def main():
     # Check entry
     print(await check_entry(-1001142824902, 136563129))
     print(await check_entry(0, 136563129))
+
+    # Forward
+    print(await forward(
+        136563129,
+        136563129,
+        (await send(136563129, 'ola'))[0],
+    ))
 
 
 if __name__ == '__main__':
