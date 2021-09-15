@@ -7,7 +7,7 @@ import inspect
 import traceback
 import logging
 
-from .tg_bot import send as send_tg
+from .tg import send as send_tg
 
 
 with open('sets.json', 'r') as file:
