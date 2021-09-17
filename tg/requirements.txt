@@ -1,2 +1,2 @@
 requests==2.25.1
-aiogram==2.13
+tgio==0.2

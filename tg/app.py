@@ -12,7 +12,7 @@ from aiogram.utils.executor import start_webhook
 
 ## Local
 from funcs import api
-from funcs.tg import bot, dp, send
+from funcs.tg import tg, dp
 
 
 # Params
@@ -47,13 +47,13 @@ async def echo(message: types.Message):
         res = f"{text}: {result}"
 
     text = f"---\n{res}\n---"
-    await send(social_user.id, text)
+    await tg.send(social_user.id, text)
 
 
 async def on_start(dp):
     """ Handler on the bot start """
 
-    await bot.set_webhook(WEBHOOK_URL)
+    await tg.bot.set_webhook(WEBHOOK_URL)
 
     # # Actions after start
 
@@ -63,7 +63,7 @@ async def on_start(dp):
 #     # # Actions before shutdown
 
 #     # Remove webhook (not acceptable in some cases)
-#     await bot.delete_webhook()
+#     await tg.bot.delete_webhook()
 
 #     # Close DB connection (if used)
 #     await dp.storage.close()
