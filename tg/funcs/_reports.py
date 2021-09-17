@@ -8,7 +8,7 @@ import traceback
 import logging
 import logging.config
 
-from .tg import send as send_tg
+from .tg import tg
 
 
 with open('sets.json', 'r') as file:
@@ -77,7 +77,7 @@ class Report():
         text_with_extra += outro
 
         try:
-            await send_tg(BUG_CHAT, text_with_extra, markup=None)
+            await tg.send(BUG_CHAT, text_with_extra, markup=None)
 
         except Exception:
             if extra:
@@ -87,7 +87,7 @@ class Report():
                 )
 
                 try:
-                    await send_tg(BUG_CHAT, text, markup=None)
+                    await tg.send(BUG_CHAT, text, markup=None)
                 except Exception:
                     logger_err.error(
                         "%s  Send report  %s %s",
