@@ -7,7 +7,7 @@ The API
 import time
 
 ## Local
-from .funcs import get_network, get_language, get_user
+from .funcs import get_network, get_language, get_user, report
 from .methods import call
 from .background import background
 
@@ -55,6 +55,9 @@ class API():
         locale=0,
     ):
         """ Call API method """
+
+        if socket is None and token is None:
+            report.warning("There is no socket id and token", {'method': name})
 
         if not data:
             data = {}
