@@ -2,8 +2,9 @@
 Functionality for working with Telegram
 """
 
-from tgio import Telegram
 import json
+
+from tgio import Telegram
 
 
 with open('sets.json', 'r') as file:
