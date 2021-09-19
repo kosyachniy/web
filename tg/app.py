@@ -2,32 +2,22 @@
 Telegram bot Endpoints (Transport level)
 """
 
-# Libraries
-## System
 import json
 
-## External
-from aiogram import types
-from aiogram.utils.executor import start_webhook
-
-## Local
 from funcs import api
-from funcs.tg import tg, dp
+from funcs.tg import tg
 
 
-# Params
 with open('sets.json', 'r') as file:
     sets = json.loads(file.read())['tg']
     WEBHOOK_URL = sets['server']
-    TG_TOKEN = sets['token']
 
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 80
 
 
-# Funcs
-@dp.message_handler()
-async def echo(message: types.Message):
+@tg.dp.message_handler()
+async def echo(message: tg.types.Message):
     """ Main handler """
 
     social_user = message.from_user
@@ -50,10 +40,10 @@ async def echo(message: types.Message):
     await tg.send(social_user.id, text)
 
 
-async def on_start(dp):
+async def on_start(_):
     """ Handler on the bot start """
 
-    await tg.bot.set_webhook(WEBHOOK_URL)
+    await tg.set(WEBHOOK_URL)
 
     # # Actions after start
 
@@ -63,7 +53,7 @@ async def on_start(dp):
 #     # # Actions before shutdown
 
 #     # Remove webhook (not acceptable in some cases)
-#     await tg.bot.delete_webhook()
+#     await tg.stop()
 
 #     # Close DB connection (if used)
 #     await dp.storage.close()
@@ -71,8 +61,8 @@ async def on_start(dp):
 
 
 if __name__ == '__main__':
-    start_webhook(
-        dispatcher=dp,
+    tg.start(
+        dispatcher=tg.dp,
         webhook_path='',
         on_startup=on_start,
         # on_shutdown=on_stop,

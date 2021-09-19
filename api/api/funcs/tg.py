@@ -13,4 +13,3 @@ with open('sets.json', 'r') as file:
 
 
 tg = Telegram(TG_TOKEN)
-dp = tg.dp

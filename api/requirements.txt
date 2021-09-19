@@ -8,4 +8,4 @@ python-socketio==5.1.0
 pymongo==3.11.2
 requests==2.25.1
 Pillow==8.1.
-tgio==0.2
+tgio==0.5
