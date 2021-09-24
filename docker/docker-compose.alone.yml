@@ -46,7 +46,8 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
-      - ../data/logs:/data/logs
+      - ../data/logs/api.err:/app.err
+      - ../data/logs/api.log:/app.log
       # For hot reload
       - ../api/api:/api
       - ../api/app.py:/app.py
@@ -64,7 +65,8 @@ services:
         - BUG_CHAT=${BUG_CHAT}
     env_file: .env
     volumes:
-      - ../data/logs:/data/logs
+      - ../data/logs/tg.err:/app.err
+      - ../data/logs/tg.log:/app.log
     depends_on:
       - api
     restart: unless-stopped
