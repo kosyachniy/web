@@ -9,5 +9,8 @@
 # Keys & sets
 *.env
 
+# Environments
+env/
+
 # Data
 /data/
