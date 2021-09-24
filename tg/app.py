@@ -20,10 +20,10 @@ WEBAPP_PORT = 80
 async def echo(message: tg.types.Message):
     """ Main handler """
 
-    social_user = message.from_user
+    chat = message.chat
     text = message.text
 
-    error, result = await api(social_user, 'posts.get', {
+    error, result = await api(chat, 'posts.get', {
         'search': text,
     })
 
@@ -37,7 +37,7 @@ async def echo(message: tg.types.Message):
         res = f"{text}: {result}"
 
     text = f"---\n{res}\n---"
-    await tg.send(social_user.id, text)
+    await tg.send(chat.id, text)
 
 
 async def on_start(_):

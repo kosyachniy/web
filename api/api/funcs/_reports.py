@@ -59,7 +59,11 @@ class Report():
 
         if extra:
             if isinstance(extra, dict):
-                extra_text = "\n".join(f"{i} = {extra[i]}" for i in extra)
+                extra_text = "\n".join(
+                    f"{i} = {extra[i]}"
+                    for i in extra
+                    if extra[i] is not None
+                )
             else:
                 extra_text = str(extra)
 

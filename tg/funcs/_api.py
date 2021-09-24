@@ -25,16 +25,16 @@ LOG_LIMIT = 330
 
 
 # Funcs
-async def api(social_user, method, data=None):
+async def api(chat, method, data=None):
     """ API request """
 
-    social_user_id = social_user.id
+    chat_id = chat.id
 
     if data is None:
         data = {}
 
-    if social_user_id not in tokens:
-        res = await auth(social_user)
+    if chat_id not in tokens:
+        res = await auth(chat)
 
         if res is None:
             return 1, None
@@ -42,15 +42,15 @@ async def api(social_user, method, data=None):
     req = {
         'method': method,
         'params': data,
-        'token': tokens[social_user_id],
+        'token': tokens[chat_id],
         'network': 'tg',
-        'locale': languages[social_user_id],
+        'locale': languages[chat_id],
     }
 
     await report.debug(
         "API request",
         {
-            'user': social_user_id,
+            'user': chat_id,
             'data': json.dumps(req, ensure_ascii=False)[:LOG_LIMIT],
         }
     )
@@ -68,11 +68,11 @@ async def api(social_user, method, data=None):
         await report.error(
             "API response",
             {
-                'user': social_user_id,
+                'user': chat_id,
                 'method': method,
                 'params': data,
-                'token': tokens[social_user_id],
-                'locale': languages[social_user_id],
+                'token': tokens[chat_id],
+                'locale': languages[chat_id],
                 'error': res.status_code,
             }
         )
@@ -83,35 +83,35 @@ async def api(social_user, method, data=None):
     await report.debug(
         "API response",
         {
-            'user': social_user_id,
+            'user': chat_id,
             'data': res,
         }
     )
 
     return res['error'], res['result']
 
-async def auth(social_user) -> bool:
+async def auth(chat) -> bool:
     """ User authentication """
 
-    social_user_id = social_user.id
+    chat_id = chat.id
 
-    if social_user_id in ids:
+    if chat_id in ids:
         return False
 
     # Default settings
-    if social_user_id not in languages:
-        languages[social_user_id] = 1 # TODO: 0
+    if chat_id not in languages:
+        languages[chat_id] = 1 # TODO: 0
 
     ## Token
     token = generate()
-    tokens[social_user_id] = token
+    tokens[chat_id] = token
 
     ## Call the API
-    error, result = await api(social_user, 'account.bot', {
-        'user': social_user.id,
-        'name': social_user.first_name or None,
-        'surname': social_user.last_name or None,
-        'login': social_user.username or None,
+    error, result = await api(chat, 'account.bot', {
+        'user': chat.id,
+        'name': chat.first_name or chat.title or None,
+        'surname': chat.last_name or None,
+        'login': chat.username or None,
     })
 
     # Errors
@@ -119,24 +119,24 @@ async def auth(social_user) -> bool:
         await report.error(
             "Authorization",
             {
-                'user': social_user.id,
-                'name': social_user.first_name or None,
-                'surname': social_user.last_name or None,
-                'login': social_user.username or None,
+                'user': chat.id,
+                'name': chat.first_name or chat.title or None,
+                'surname': chat.last_name or None,
+                'login': chat.username or None,
                 'error': error,
                 'result': result,
             }
         )
 
-        del tokens[social_user_id]
+        del tokens[chat_id]
         return
 
     ## Update global variables
 
-    ids[social_user_id] = result['id']
+    ids[chat_id] = result['id']
 
     if 'language' in result['social']:
-        languages[social_user_id] = result['social']['language']
-        languages_chosen[social_user_id] = True
+        languages[chat_id] = result['social']['language']
+        languages_chosen[chat_id] = True
 
     return True
