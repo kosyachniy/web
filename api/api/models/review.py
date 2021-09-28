@@ -9,7 +9,7 @@ from ..funcs import reimg
 class Review(Base):
     """ Review """
 
-    _db = 'reviews'
+    _name = 'reviews'
     _search_fields = {'name', 'cont'}
 
     cont = Attribute(types=str, default='', processing=reimg)
