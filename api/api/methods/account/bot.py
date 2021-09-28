@@ -2,11 +2,12 @@
 The authorization via social networks method of the account object of the API
 """
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate, report
 from ...models.user import User, process_lower
 from ...models.token import Token
 from ...models.action import Action
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):

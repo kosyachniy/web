@@ -5,9 +5,10 @@ The getting method of the post object of the API
 import re
 from typing import Union
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate
 from ...models.post import Post
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):

@@ -4,9 +4,10 @@ The getting method of the user object of the API
 
 from typing import Union
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate, online_back
 from ...models.user import User
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):
