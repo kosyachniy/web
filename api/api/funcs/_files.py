@@ -15,7 +15,7 @@ from PIL import Image, ExifTags, UnidentifiedImageError
 from consys.errors import ErrorUpload
 
 
-with open('sets.json', 'r') as file:
+with open('sets.json', 'r', encoding='utf-8') as file:
     sets = json.loads(file.read())
     SIDE_OPTIMIZED = sets['side_optimized']
 
