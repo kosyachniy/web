@@ -2,6 +2,7 @@ import _ from "lodash";
 import React from 'react';
 import { compose, withProps } from 'recompose';
 
+// NOTE: "react-google-maps": "^9.4.5"
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps'; // , InfoWindow
 // import { Link } from 'react-router-dom';
 
