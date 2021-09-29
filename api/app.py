@@ -52,11 +52,11 @@ import traceback
 
 ### External
 from pydantic import BaseModel
+from consys.errors import BaseError
 
 ### Local
 from api import API
 from api.funcs import report
-from api.errors import BaseError
 
 ## Params
 with open('sets.json', 'r') as file:

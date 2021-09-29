@@ -1,11 +1,13 @@
 """
 The registration method of the account object of the API
 """
+
+from consys.errors import ErrorAccess, ErrorInvalid
+
 from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User
 from ...models.token import Token
 from ...models.action import Action
-from ...errors import ErrorAccess, ErrorInvalid
 
 
 class Type(BaseType):

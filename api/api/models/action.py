@@ -8,7 +8,7 @@ from . import Base, Attribute
 class Action(Base):
     """ Action """
 
-    _db = None
+    _name = None
 
     id = Attribute(types=str)
     details = Attribute(types=dict, default={})

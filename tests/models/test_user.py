@@ -1,8 +1,9 @@
 import pytest
 
+# from consys.errors import ErrorWrong
+
 from api.funcs import generate
 from api.models.user import User
-# from api.errors import ErrorWrong
 
 
 def test_repeated_login():

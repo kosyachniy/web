@@ -2,14 +2,13 @@
 Background processes
 """
 
-# Libraries
-## System
 import time
 from multiprocessing import Process
 
-## Local
+from consys.errors import ErrorWrong
+
 from .funcs import online_stop, report
-from .funcs.mongodb import db
+from .models.system import System
 from .models.socket import Socket
 
 
@@ -25,15 +24,13 @@ def update_server_status():
     """ Update last server time """
 
     while True:
-        req = int(time.time())
+        try:
+            system = System.get('last_server_time')
+        except ErrorWrong:
+            system = System(id='last_server_time')
 
-        res = db.sys.update_one(
-            {'name': 'last_server_time'},
-            {'$set': {'cont': req}}
-        )
-
-        if not res.modified_count:
-            db.sys.insert_one({'name': 'last_server_time', 'cont': req})
+        system.data = int(time.time())
+        system.save()
 
         time.sleep(60)
 

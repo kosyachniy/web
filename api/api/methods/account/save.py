@@ -5,9 +5,10 @@ The editing method of the account object of the API
 from typing import Union
 from copy import deepcopy
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate
 from ...models.user import User
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):

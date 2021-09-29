@@ -6,8 +6,7 @@ from functools import wraps
 
 from pydantic import BaseModel as BaseType
 from pydantic.error_wrappers import ValidationError
-
-from ..errors import ErrorSpecified, ErrorType
+from consys.errors import ErrorSpecified, ErrorType
 
 
 def _strip(data):

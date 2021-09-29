@@ -4,10 +4,11 @@ The getting method of the review object of the API
 
 from typing import Union
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate
 from ...models.user import User
 from ...models.review import Review
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):
