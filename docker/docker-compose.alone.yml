@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: "mongo:4.4.2"
+    image: "mongo:5.0.3"
     # ports:
     #   - "27017:27017"
     restart: unless-stopped

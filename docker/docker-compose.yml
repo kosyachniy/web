@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: "mongo:4.4.2"
+    image: "mongo:5.0.3"
     ports:
       - "27017:27017"
     restart: unless-stopped
@@ -82,7 +82,7 @@ services:
       - ../web/src/redus.js:/src/redus.js
 
   server:
-    image: "nginx:1.19.6"
+    image: "nginx:1.21.3"
     env_file: .env
     volumes:
       - ../docker/server/nginx.conf:/etc/nginx/nginx.conf

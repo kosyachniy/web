@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:1.15-alpine
+    image: nginx:1.21.3
     container_name: "nginx"
     restart: unless-stopped
     env_file: .env

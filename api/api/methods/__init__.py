@@ -11,7 +11,7 @@ from consys.errors import ErrorWrong
 
 
 CURRENT_PATH = str(Path(__file__).parent) + '/'
-CURRENT_MODULE = CURRENT_PATH.replace('/', '.')
+CURRENT_MODULE = CURRENT_PATH.replace('/', '.')[1:]
 
 
 def _rm_none(data):
