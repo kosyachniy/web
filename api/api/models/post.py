@@ -9,7 +9,7 @@ from ..funcs import load_image, reimg
 class Post(Base):
     """ Post """
 
-    _db = 'posts'
+    _name = 'posts'
     _search_fields = {'name', 'cont', 'tags'}
 
     cont = Attribute(types=str, default='', processing=reimg) # TODO: data

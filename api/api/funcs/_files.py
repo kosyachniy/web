@@ -12,8 +12,7 @@ import binascii
 
 import requests
 from PIL import Image, ExifTags, UnidentifiedImageError
-
-from ..errors import ErrorUpload
+from consys.errors import ErrorUpload
 
 
 with open('sets.json', 'r') as file:

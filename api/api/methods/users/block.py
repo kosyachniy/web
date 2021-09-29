@@ -2,9 +2,10 @@
 The blocking method of the user object of the API
 """
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate
 from ...models.user import User
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):

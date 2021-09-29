@@ -7,7 +7,7 @@ import importlib
 import importlib.util
 # import pkgutil
 
-from ..errors import ErrorWrong
+from consys.errors import ErrorWrong
 
 
 CURRENT_PATH = str(Path(__file__).parent) + '/'

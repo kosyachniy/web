@@ -2,9 +2,10 @@
 The removal method of the review object of the API
 """
 
+from consys.errors import ErrorAccess
+
 from ...funcs import BaseType, validate
 from ...models.review import Review
-from ...errors import ErrorAccess
 
 
 class Type(BaseType):

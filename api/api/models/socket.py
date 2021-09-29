@@ -8,7 +8,7 @@ from . import Base, Attribute
 class Socket(Base):
     """ Socket """
 
-    _db = 'sockets'
+    _name = 'sockets'
 
     id = Attribute(types=str)
     token = Attribute(types=str)

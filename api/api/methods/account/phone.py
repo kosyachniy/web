@@ -4,12 +4,13 @@ The authorization by phone method of the account object of the API
 
 # import re
 
+from consys.errors import ErrorAccess, ErrorInvalid
+
 from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, pre_process_phone
 from ...models.token import Token
 from ...models.action import Action
 # from ...funcs.smsc import SMSC
-from ...errors import ErrorAccess, ErrorInvalid
 
 
 class Type(BaseType):
