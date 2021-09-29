@@ -5,7 +5,7 @@ Database ciphers
 import json
 
 
-with open('sets.json', 'r') as file:
+with open('sets.json', 'r', encoding='utf-8') as file:
     sets=json.loads(file.read())
     LOCALES = sets['locales']
     DEFAULT_LOCALE = sets['locale']

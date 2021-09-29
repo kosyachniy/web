@@ -59,7 +59,7 @@ from api import API
 from api.funcs import report
 
 ## Params
-with open('sets.json', 'r') as file:
+with open('sets.json', 'r', encoding='utf-8') as file:
     sets = json.loads(file.read())
 
 ## Global variables

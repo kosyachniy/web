@@ -1,12 +1,12 @@
 # env/bin/python -m pip install -U --force-reinstall pip
 
-fastapi==0.63.0
-uvicorn==0.13.4
-websockets==8.1 # For Socket.IO
-httptools==0.1.1 # For routing
-python-socketio==5.1.0
-requests==2.25.1
-Pillow==8.1.
+fastapi==0.68.1
+uvicorn==0.15.0
+websockets==10.0 # For Socket.IO
+httptools==0.3.0 # For routing
+python-socketio==5.4.0
+requests==2.26.0
+Pillow==8.3.2
 tgio==0.5
-tgreports==0.6
+tgreports==0.7
 consys==0.3

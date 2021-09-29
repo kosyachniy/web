@@ -7,7 +7,7 @@ import json
 from consys import make_base, Attribute
 
 
-with open('sets.json', 'r') as file:
+with open('sets.json', 'r', encoding='utf-8') as file:
     sets = json.loads(file.read())['mongo']
     host = sets['host']
     name = sets['db']

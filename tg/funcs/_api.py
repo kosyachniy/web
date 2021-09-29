@@ -17,7 +17,7 @@ from ._reports import report
 
 
 # Params
-with open('sets.json', 'r') as file:
+with open('sets.json', 'r', encoding='utf-8') as file:
     sets = json.loads(file.read())
     SERVER_LINK = sets['server']
 
