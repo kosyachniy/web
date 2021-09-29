@@ -10,7 +10,7 @@ from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, pre_process_phone
 from ...models.token import Token
 from ...models.action import Action
-# from ...funcs.smsc import SMSC
+# from ...funcs.sms import SMSC
 
 
 class Type(BaseType):

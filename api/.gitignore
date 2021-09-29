@@ -7,4 +7,5 @@
 env/
 
 # Logs
-error.log
+app.log
+app.err
