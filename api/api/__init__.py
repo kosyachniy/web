@@ -4,6 +4,7 @@ The API
 
 # Libraries
 ## System
+import asyncio
 import time
 
 ## Local
@@ -42,7 +43,7 @@ class API():
         self.google = sets['google']
 
         # Background processes
-        background(self.sio)
+        asyncio.create_task(background(sio))
 
     async def method(
         self,

@@ -12,7 +12,7 @@ class Post(Base):
     _db = 'posts'
     _search_fields = {'name', 'cont', 'tags'}
 
-    cont = Attribute(types=str, default='', processing=reimg)
+    cont = Attribute(types=str, default='', processing=reimg) # TODO: data
     reactions = Attribute(types=dict, default={
         'views': [], # TODO: + UTM
         'likes': [],
