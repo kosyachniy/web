@@ -5,9 +5,8 @@ uvicorn==0.13.4
 websockets==8.1 # For Socket.IO
 httptools==0.1.1 # For routing
 python-socketio==5.1.0
-pymongo==3.11.2
 requests==2.25.1
 Pillow==8.1.
 tgio==0.5
 tgreports==0.6
-consys==0.2
+consys==0.3
