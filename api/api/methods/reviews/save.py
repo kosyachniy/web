@@ -2,7 +2,7 @@
 The creating and editing method of the review object of the API
 """
 
-from ...funcs import BaseType, validate, report
+from ...lib import BaseType, validate, report
 from ...models.review import Review
 
 

@@ -8,7 +8,7 @@ import asyncio
 import time
 
 ## Local
-from .funcs import get_network, get_language, get_user, report
+from .lib import get_network, get_language, get_user, report
 from .methods import call
 from .background import background
 

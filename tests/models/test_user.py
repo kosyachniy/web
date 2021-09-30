@@ -2,7 +2,7 @@ import pytest
 
 # from consys.errors import ErrorWrong
 
-from api.funcs import generate
+from api.lib import generate
 from api.models.user import User
 
 

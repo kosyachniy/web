@@ -10,7 +10,7 @@ import base64
 import requests
 from consys.errors import ErrorAccess, ErrorInvalid, ErrorWrong
 
-from ...funcs import BaseType, validate, report, online_start
+from ...lib import BaseType, validate, report, online_start
 from ...models.user import User
 from ...models.token import Token
 from ...models.action import Action

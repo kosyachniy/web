@@ -4,7 +4,7 @@ The logout method of the account object of the API
 
 from consys.errors import ErrorAccess
 
-from ...funcs import online_stop, report
+from ...lib import online_stop, report
 from ...models.token import Token
 from ...models.socket import Socket
 

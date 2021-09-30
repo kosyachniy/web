@@ -2,7 +2,7 @@
 The disconnect socket of the account object of the API
 """
 
-from ...funcs import online_stop, report
+from ...lib import online_stop, report
 
 
 # pylint: disable=unused-argument

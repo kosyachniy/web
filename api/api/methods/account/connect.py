@@ -2,7 +2,7 @@
 The connect socket of the account object of the API
 """
 
-from ...funcs import report
+from ...lib import report
 
 
 # pylint: disable=unused-argument

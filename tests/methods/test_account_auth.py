@@ -1,7 +1,7 @@
 import pytest
 
 from api import Request
-from api.funcs import generate
+from api.lib import generate
 from api.models.user import User, process_lower
 from api.methods.account.auth import handle
 

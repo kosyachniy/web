@@ -9,7 +9,7 @@ from consys.handlers import (
 )
 
 from . import Base, Attribute
-from ..funcs import load_image, get_language
+from ..lib import load_image, get_language
 
 
 class User(Base):

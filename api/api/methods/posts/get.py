@@ -7,7 +7,7 @@ from typing import Union
 
 from consys.errors import ErrorAccess
 
-from ...funcs import BaseType, validate
+from ...lib import BaseType, validate
 from ...models.post import Post
 
 

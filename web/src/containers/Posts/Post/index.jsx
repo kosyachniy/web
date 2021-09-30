@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import MathJax from 'react-mathjax-preview'
 
-import api from '../../../func/api'
+import api from '../../../lib/api'
 
 import './style.css'
 import Edit from '../Edit'

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import getToken from '../../../func/token'
-import { socketIO } from '../../../func/sockets'
+import getToken from '../../../lib/token'
+import { socketIO } from '../../../lib/sockets'
 
 import './style.css'
 

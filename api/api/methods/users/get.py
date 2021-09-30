@@ -6,7 +6,7 @@ from typing import Union
 
 from consys.errors import ErrorAccess
 
-from ...funcs import BaseType, validate, online_back
+from ...lib import BaseType, validate, online_back
 from ...models.user import User
 
 

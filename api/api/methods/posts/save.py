@@ -4,7 +4,7 @@ The creating and editing method of the post object of the API
 
 from consys.errors import ErrorAccess
 
-from ...funcs import BaseType, validate, report
+from ...lib import BaseType, validate, report
 from ...models.post import Post
 
 

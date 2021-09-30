@@ -7,7 +7,7 @@ from copy import deepcopy
 
 from consys.errors import ErrorAccess
 
-from ...funcs import BaseType, validate
+from ...lib import BaseType, validate
 from ...models.user import User
 
 

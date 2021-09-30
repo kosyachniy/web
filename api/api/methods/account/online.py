@@ -2,7 +2,7 @@
 The online socket of the account object of the API
 """
 
-from ...funcs import BaseType, validate, online_start, report
+from ...lib import BaseType, validate, online_start, report
 
 
 class Type(BaseType):

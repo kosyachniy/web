@@ -4,8 +4,8 @@ Telegram bot Endpoints (Transport level)
 
 import json
 
-from funcs import api
-from funcs.tg import tg
+from lib import api
+from lib.tg import tg
 
 
 with open('sets.json', 'r', encoding='utf-8') as file:

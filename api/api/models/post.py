@@ -3,7 +3,7 @@ Post model of DB object
 """
 
 from . import Base, Attribute
-from ..funcs import load_image, reimg
+from ..lib import load_image, reimg
 
 
 class Post(Base):

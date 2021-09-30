@@ -6,11 +6,11 @@ The authorization by phone method of the account object of the API
 
 from consys.errors import ErrorAccess, ErrorInvalid
 
-from ...funcs import BaseType, validate, online_start, report
+from ...lib import BaseType, validate, online_start, report
+# from ...lib.sms import send_sms
 from ...models.user import User, pre_process_phone
 from ...models.token import Token
 from ...models.action import Action
-# from ...funcs.sms import send_sms
 
 
 class Type(BaseType):

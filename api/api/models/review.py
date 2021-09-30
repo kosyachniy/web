@@ -3,7 +3,7 @@ Review model of DB object
 """
 
 from . import Base, Attribute
-from ..funcs import reimg
+from ..lib import reimg
 
 
 class Review(Base):
