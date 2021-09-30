@@ -10,7 +10,7 @@ from ...funcs import BaseType, validate, online_start, report
 from ...models.user import User, pre_process_phone
 from ...models.token import Token
 from ...models.action import Action
-# from ...funcs.sms import SMSC
+# from ...funcs.sms import send_sms
 
 
 class Type(BaseType):
@@ -173,8 +173,7 @@ async def handle(this, request, data):
 
 #     #
 
-#     sms = SMSC()
-#     res = await sms.send_sms(
+#     res = await send_sms(
 #         str(phone),
 #         f"Hi!\n{code} — This is your login code."
 #     )
