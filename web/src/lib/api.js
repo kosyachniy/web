@@ -1,44 +1,59 @@
-import axios from 'axios'
-
-import getToken from './token'
+import getToken from './token';
 
 
-import { server } from '../sets'
+import { server } from '../sets';
 
 
-function serverRequest(json={}) {
-    console.log(server, json)
-    return axios.post(server, json)
+async function serverRequest(json={}) {
+    return fetch(server, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(json),
+    })
+    .catch((error) => {
+        let errCode;
+        const errText = error.toString();
+
+        if (errText === 'Error: Request failed with status code 429') {
+            errCode = 429;
+        } else if (errText === 'Error: Network Error') {
+            errCode = 'network';
+        } else {
+            errCode = 400;
+        }
+
+        return {
+            error: errCode,
+            result: errText,
+        };
+    });
 }
 
-function handlerResult(res, handlerSuccess, handlerError) {
-    if (res['error']) {
-        console.log(res)
-        handlerError(res)
-    } else {
-        console.log(res)
-        handlerSuccess(res['result'])
-    }
+export default function api(method, params={}) {
+    return new Promise((resolve, reject) => {
+        const json = {
+            method,
+            params,
+            network: 'web',
+            language: localStorage.getItem('locale'),
+            token: getToken(),
+        };
+
+        serverRequest(json).then(async (responce) => {
+            const data = await responce.json();
+
+            if (data.error !== 0) {
+                console.log(data.result);
+                reject(data.error, data.result);
+            } else if (data.result === undefined) {
+                resolve({});
+            } else {
+                resolve(data.result);
+            }
+        });
+    });
 }
 
-export default function api(
-    method,
-    params={},
-    handlerSuccess=()=>{},
-    handlerError=()=>{},
-) {
-    let json = {
-        'method': method,
-        'params': params,
-    }
-
-    json['network'] = 'web'
-    json['locale'] = localStorage.getItem('locale')
-    json['token'] = getToken()
-
-    serverRequest(json).then(
-        (res) => handlerResult(res.data, handlerSuccess, handlerError)
-    )
-}
-
-// Socket.IO
+// TODO: Socket.IO

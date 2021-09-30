@@ -18,17 +18,10 @@ const Auth = (props) => {
     const [password, setPassword] = useState('')
 
     const signIn = (event) => {
-        const handlerSuccess = res => {
+        api('account.auth', {login: mail, password}).then(res => {
             profileIn(res)
             handlerPopUp(false)
-        }
-
-        const handlerError = res => {
-            console.log(res)
-        }
-
-        const data = {login: mail, password: password}
-        api('account.auth', data, handlerSuccess, handlerError)
+        })
 
         event.preventDefault();
     }

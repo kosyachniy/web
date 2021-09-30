@@ -24,7 +24,7 @@ const Profile = (props) => {
     // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
-        api('users.get', {id: +profile.id}, res => {
+        api('users.get', {id: +profile.id}).then(res => {
             profileUpdate({
                 login: res.users.login,
                 avatar: res.users.avatar,
@@ -45,10 +45,6 @@ const Profile = (props) => {
     }
 
     const accountEdit = () => {
-        const handlerSuccess = res => {
-            profileUpdate({login, avatar, name, surname, phone, mail})
-        }
-
         const data = {}
 
         if (login && login !== profile.login) {
@@ -79,7 +75,9 @@ const Profile = (props) => {
             data['avatar'] = avatar
         }
 
-        api('account.save', data, handlerSuccess)
+        api('account.save', data).then(res => {
+            profileUpdate({login, avatar, name, surname, phone, mail})
+        })
     }
 
     return (

@@ -21,15 +21,13 @@ const Edit = (props) => {
             data['id'] = props.post.id
         }
 
-        const handlerSuccess = res => {
+        api('posts.save', data).then(res => {
             if (props.post) {
                 props.handlerSave()
             } else {
                 setRedirect(res.id)
             }
-        }
-
-        api('posts.save', data, handlerSuccess)
+        })
     }
 
     if (redirect) {

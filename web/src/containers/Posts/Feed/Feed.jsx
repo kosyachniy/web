@@ -11,11 +11,9 @@ const Feed = (props) => {
     const { t } = props
 
     const getPost = (data={}) => {
-        const handlerSuccess = (res) => {
-            props.postsGet(res['posts']);
-        }
-
-        api('posts.get', data, handlerSuccess)
+        api('posts.get', data).then(res => {
+            props.postsGet(res['posts'])
+        })
     }
 
     useEffect(() => {

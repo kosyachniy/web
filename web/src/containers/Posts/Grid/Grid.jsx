@@ -16,11 +16,9 @@ const Grid = (props) => {
     const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => {
-        const handlerSuccess = (res) => {
-            postsGet(res['posts']);
-        }
-
-        api('posts.get', data, handlerSuccess)
+        api('posts.get', data).then(res => {
+            postsGet(res['posts'])
+        })
     }
 
     useEffect(() => {

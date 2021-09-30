@@ -15,11 +15,9 @@ const Post = () => {
     const [deleted, setDeleted] = useState(false)
 
     const getPost = (data={}) => {
-        const handlerSuccess = (res) => {
+        api('posts.get', data).then(res => {
             setPost(res['posts'])
-        }
-
-        api('posts.get', data, handlerSuccess)
+        })
     }
 
     const savePost = () => {
@@ -32,11 +30,9 @@ const Post = () => {
             id: post.id,
         }
 
-        const handlerSuccess = (res) => {
+        api('posts.delete', data).then(res => {
             setDeleted(true)
-        }
-
-        api('posts.delete', data, handlerSuccess)
+        })
     }
 
     useEffect(() => { // WillMount

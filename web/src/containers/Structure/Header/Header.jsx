@@ -28,11 +28,9 @@ const Header = (props) => {
     const { t } = useTranslation()
 
     const signOut = () => {
-        const handlerSuccess = res => {
+        api('account.exit', {}).then(res => {
             profileOut(res)
-        }
-
-        api('account.exit', {}, handlerSuccess)
+        })
     }
 
     return (
