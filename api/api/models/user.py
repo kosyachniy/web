@@ -8,8 +8,8 @@ from consys.handlers import (
     process_lower, default_status,
 )
 
-from . import Base, Attribute
-from ..lib import load_image, get_language
+from . import Base, Attribute, uploader
+from ..lib import get_language
 
 
 class User(Base):
@@ -37,7 +37,7 @@ class User(Base):
         checking=check_password,
         processing=process_password,
     )
-    avatar = Attribute(types=str, processing=load_image)
+    avatar = Attribute(types=str, processing=uploader.image)
     name = Attribute(
         types=str,
         checking=check_name,

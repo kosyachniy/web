@@ -8,5 +8,5 @@ python-socketio==5.4.0
 requests==2.26.0
 tgio==0.5
 tgreports==0.7
-consys==0.3
+consys==0.5
 gens==0.1
