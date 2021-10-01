@@ -1,7 +1,7 @@
 import pytest
+from gens import generate, generate_id
 
 from api import Request
-from api.lib import generate, generate_id
 from api.models.user import User, process_lower
 from api.methods.account.bot import handle
 

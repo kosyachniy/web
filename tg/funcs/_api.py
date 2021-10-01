@@ -9,10 +9,10 @@ import time
 
 ## External
 import requests
+from gens import generate
 
 ## Local
 from ._variables import languages, languages_chosen, tokens, ids
-from ._generate import generate
 from ._reports import report
 
 
