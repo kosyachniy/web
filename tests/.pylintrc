@@ -2,7 +2,7 @@
 jobs=2
 
 [MESSAGES CONTROL]
-disable=import-error,unsubscriptable-object,unused-argument,no-name-in-module ,duplicate-code,bare-except,broad-except,too-many-branches,too-many-statements,too-many-locals,too-many-return-statements,consider-using-dict-items,consider-iterating-dictionary
+disable=import-error,unsubscriptable-object,unused-argument,no-name-in-module ,duplicate-code,bare-except,broad-except,too-many-branches
 
 [FORMAT]
 max-line-length=80
