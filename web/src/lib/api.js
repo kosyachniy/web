@@ -26,7 +26,7 @@ async function serverRequest(json={}) {
 
         return {
             error: errCode,
-            result: errText,
+            data: errText,
         };
     });
 }
@@ -42,15 +42,15 @@ export default function api(method, params={}) {
         };
 
         serverRequest(json).then(async (responce) => {
-            const data = await responce.json();
+            const res = await responce.json();
 
-            if (data.error !== 0) {
-                console.log(data.result);
-                reject(data.error, data.result);
-            } else if (data.result === undefined) {
+            if (res.error !== 0) {
+                console.log(res.data);
+                reject(res.error, res.data);
+            } else if (res.data === undefined) {
                 resolve({});
             } else {
-                resolve(data.result);
+                resolve(res.data);
             }
         });
     });

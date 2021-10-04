@@ -101,11 +101,11 @@ async def index(data: Input, request: Request):
 
     except BaseError as e:
         req['error'] = e.code
-        req['result'] = str(e)
+        req['data'] = str(e)
 
     except Exception as e:
         req['error'] = 1
-        req['result'] = "Server error"
+        req['data'] = "Server error"
 
         traces = traceback.extract_tb(e.__traceback__)[::-1]
         for trace in traces:
@@ -128,7 +128,7 @@ async def index(data: Input, request: Request):
         req['error'] = 0
 
         if res is not None:
-            req['result'] = res
+            req['data'] = res
 
     # Response
     return req

@@ -23,18 +23,18 @@ async def echo(message: tg.types.Message):
     chat = message.chat
     text = message.text
 
-    error, result = await api(chat, 'posts.get', {
+    error, data = await api(chat, 'posts.get', {
         'search': text,
     })
 
     if not error:
-        posts = result['posts']
+        posts = data['posts']
         res = "\n---------------\n".join(
             f"#{post['id']} {post['name']}"
             for post in posts
         )
     else:
-        res = f"{text}: {result}"
+        res = f"{text}: {data}"
 
     text = f"---\n{res}\n---"
     await tg.send(chat.id, text)

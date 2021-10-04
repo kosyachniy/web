@@ -44,7 +44,7 @@ const Auth = (props) => {
                     <div className="form-group">
                         <input
                             className="form-control"
-                            // className={(responce !== null && responce.result === 'password') ? 'error' : ''}
+                            // className={(responce !== null && responce.data === 'password') ? 'error' : ''}
                             type="password"
                             placeholder={t('profile.password')}
                             value={password}

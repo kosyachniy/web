@@ -88,7 +88,7 @@ async def api(chat, method, data=None):
         }
     )
 
-    return res['error'], res['result']
+    return res['error'], res['data']
 
 async def auth(chat) -> bool:
     """ User authentication """
@@ -107,7 +107,7 @@ async def auth(chat) -> bool:
     tokens[chat_id] = token
 
     ## Call the API
-    error, result = await api(chat, 'account.bot', {
+    error, data = await api(chat, 'account.bot', {
         'user': chat.id,
         'name': chat.first_name or chat.title or None,
         'surname': chat.last_name or None,
@@ -124,7 +124,7 @@ async def auth(chat) -> bool:
                 'surname': chat.last_name or None,
                 'login': chat.username or None,
                 'error': error,
-                'result': result,
+                'data': data,
             }
         )
 
@@ -133,10 +133,10 @@ async def auth(chat) -> bool:
 
     ## Update global variables
 
-    ids[chat_id] = result['id']
+    ids[chat_id] = data['id']
 
-    if 'language' in result['social']:
-        languages[chat_id] = result['social']['language']
+    if 'language' in data['social']:
+        languages[chat_id] = data['social']['language']
         languages_chosen[chat_id] = True
 
     return True
