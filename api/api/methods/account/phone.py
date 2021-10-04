@@ -73,7 +73,7 @@ async def handle(this, request, data):
                 actions=[action.json(default=False)],
             )
         except ValueError as e:
-            raise ErrorInvalid(e)
+            raise ErrorInvalid(e) from e
 
         user.save()
 

@@ -64,7 +64,7 @@ async def handle(this, request, data):
             actions=[action.json(default=False)],
         )
     except ValueError as e:
-        raise ErrorInvalid(e) # TODO: or ErrorRepeat, to errors.py
+        raise ErrorInvalid(e) from e # TODO: or ErrorRepeat, to errors.py
 
     user.save()
 

@@ -38,9 +38,9 @@ def _check(data, filters):
         field = e.errors()[0]['loc'][0]
 
         if field in data:
-            raise ErrorType(field)
+            raise ErrorType(field) from e
 
-        raise ErrorSpecified(field)
+        raise ErrorSpecified(field) from e
 
 
 def validate(filters):
