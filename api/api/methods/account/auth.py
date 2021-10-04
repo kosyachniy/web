@@ -4,11 +4,12 @@ The authorization method of the account object of the API
 
 from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
-from ...lib import BaseType, validate, online_start, report
+from ...lib import BaseType, validate, report
 from ...models.user import User, process_lower, pre_process_phone, \
                            process_password
 from ...models.token import Token
 from ...models.action import Action
+from .online import online_start
 
 
 class Type(BaseType):

@@ -18,6 +18,7 @@ NETWORKS = (
     'vk',
     'g',
     'fb',
+    'a',
 )
 
 USER_STATUSES = (

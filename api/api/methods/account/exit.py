@@ -4,9 +4,10 @@ The logout method of the account object of the API
 
 from consys.errors import ErrorAccess
 
-from ...lib import online_stop, report
+from ...lib import report
 from ...models.token import Token
 from ...models.socket import Socket
+from .disconnect import online_stop
 
 
 # pylint: disable=unused-argument

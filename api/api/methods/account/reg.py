@@ -4,10 +4,11 @@ The registration method of the account object of the API
 
 from consys.errors import ErrorAccess, ErrorInvalid
 
-from ...lib import BaseType, validate, online_start, report
+from ...lib import BaseType, validate, report
 from ...models.user import User
 from ...models.token import Token
 from ...models.action import Action
+from .online import online_start
 
 
 class Type(BaseType):

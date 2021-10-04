@@ -2,7 +2,51 @@
 The disconnect socket of the account object of the API
 """
 
-from ...lib import online_stop, report
+import time
+
+from ...lib import report
+from ...models.socket import Socket
+from .online import _other_sessions, _online_count, get_user
+
+
+async def online_stop(sio, socket_id):
+    """ Stop online session of the user """
+
+    # TODO: Объединять сессии в онлайн по пользователю
+    # TODO: Если сервер был остановлен, отслеживать сессию
+
+    try:
+        socket = Socket.get(ids=socket_id)
+    except:
+        # NOTE: method "exit" -> socket "disconnect"
+        return
+
+    user = get_user(socket.token)
+
+    # Update user online info
+    if user.id:
+        user.online.append({'start': socket.created, 'stop': time.time()})
+        user.save()
+
+    # Delete online session info
+    socket = Socket.get(ids=socket_id)
+    socket.rm()
+
+    # Other sessions of this user
+
+    other = _other_sessions(user.id, socket.token)
+
+    if other:
+        return
+
+    # Send sockets about the user to all online users
+
+    count = _online_count()
+
+    await sio.emit('online_del', {
+        'count': count,
+        'users': [{'id': user.id}], # TODO: Админам
+    })
 
 
 # pylint: disable=unused-argument

@@ -2,12 +2,31 @@
 The getting method of the user object of the API
 """
 
+import time
 from typing import Union
 
 from consys.errors import ErrorAccess
 
-from ...lib import BaseType, validate, online_back
+from ...lib import BaseType, validate
 from ...models.user import User
+from ...models.socket import Socket
+
+
+def online_back(user_id):
+    """ Checking how long has been online """
+
+    sockets = Socket.get(user=user_id, fields={})
+
+    if sockets:
+        return 0
+
+    user = User.get(ids=user_id, fields={'online.stop'})
+
+    if not user['online']:
+        return None
+
+    last = user['online'][-1]['stop']
+    return int(time.time() - last)
 
 
 class Type(BaseType):
