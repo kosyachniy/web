@@ -16,7 +16,7 @@ class Type(BaseType):
     login: str # login / mail / phone
     password: str
 
-# pylint: disable=too-many-statements
+# pylint: disable=too-many-statements,too-many-branches
 @validate(Type)
 async def handle(this, request, data):
     """ Sign in / Sign up """
