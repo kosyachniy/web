@@ -2,6 +2,8 @@
 The online socket of the account object of the API
 """
 
+from consys.errors import ErrorWrong
+
 from ...lib import BaseType, validate, report
 from ...models.user import User
 from ...models.token import Token
@@ -36,8 +38,7 @@ def get_user(token_id):
     if token_id is not None:
         try:
             token = Token.get(ids=token_id, fields={'user'})
-
-        except:
+        except ErrorWrong:
             token = Token(id=token_id)
             token.save()
 
@@ -82,8 +83,7 @@ async def online_start(sio, token_id, socket_id=None):
 
         try:
             socket = Socket.get(ids=socket_id, fields={'user'})
-
-        except:
+        except ErrorWrong:
             socket = Socket(
                 id=socket_id,
                 user=user.id,

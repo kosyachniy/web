@@ -2,7 +2,7 @@
 The authorization via social networks method of the account object of the API
 """
 
-from consys.errors import ErrorAccess
+from consys.errors import ErrorWrong, ErrorAccess
 
 from ...lib import BaseType, validate, report
 from ...models.user import User # , process_lower
@@ -121,7 +121,7 @@ async def handle(this, request, data):
 
     try:
         token = Token.get(ids=request.token, fields={'user'})
-    except:
+    except ErrorWrong:
         token = Token(id=request.token)
 
     if token.user:
