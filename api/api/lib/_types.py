@@ -54,3 +54,9 @@ def validate(filters):
             return f(this, request, data)
         return wrapper
     return decorator
+
+
+__all__ = (
+    'BaseType',
+    'validate',
+)

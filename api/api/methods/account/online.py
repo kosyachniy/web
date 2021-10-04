@@ -2,8 +2,6 @@
 The online socket of the account object of the API
 """
 
-import time
-
 from ...lib import BaseType, validate, report
 from ...models.user import User
 from ...models.token import Token
