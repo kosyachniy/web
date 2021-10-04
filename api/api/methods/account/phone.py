@@ -4,7 +4,7 @@ The authorization by phone method of the account object of the API
 
 # import re
 
-from consys.errors import ErrorAccess, ErrorInvalid
+from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
 from ...lib import BaseType, validate, report
 # from ...lib.sms import send_sms
@@ -73,7 +73,7 @@ async def handle(this, request, data):
                 actions=[action.json(default=False)],
             )
         except ValueError as e:
-            raise ErrorInvalid(e)
+            raise ErrorInvalid(e) from e
 
         user.save()
 
@@ -109,7 +109,7 @@ async def handle(this, request, data):
 
     try:
         token = Token.get(ids=request.token, fields={'user'})
-    except:
+    except ErrorWrong:
         token = Token(id=request.token)
 
     if token.user:

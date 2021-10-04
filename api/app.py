@@ -79,6 +79,7 @@ class Input(BaseModel):
     locale: str = None
     token: str = None
 
+# pylint: disable=broad-except
 @app.post('/')
 async def index(data: Input, request: Request):
     """ Main API endpoint """

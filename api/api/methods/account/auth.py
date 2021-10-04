@@ -16,6 +16,7 @@ class Type(BaseType):
     login: str # login / mail / phone
     password: str
 
+# pylint: disable=too-many-statements,too-many-branches
 @validate(Type)
 async def handle(this, request, data):
     """ Sign in / Sign up """
@@ -52,14 +53,14 @@ async def handle(this, request, data):
     try:
         login = process_lower(data.login)
         user = User.get(login=login, fields=fields)[0]
-    except:
+    except ErrorWrong:
         new = True
 
     if new:
         try:
             mail = process_lower(data.login)
             user = User.get(mail=mail, fields=fields)[0]
-        except:
+        except ErrorWrong:
             pass
         else:
             new = False
@@ -68,7 +69,7 @@ async def handle(this, request, data):
         try:
             phone = pre_process_phone(data.login)
             user = User.get(phone=phone, fields=fields)[0]
-        except:
+        except ErrorWrong:
             pass
         else:
             new = False
@@ -101,7 +102,7 @@ async def handle(this, request, data):
                 actions=[action.json(default=False)], # TODO: without `.json()`
             )
         except ValueError as e:
-            raise ErrorInvalid(e)
+            raise ErrorInvalid(e) from e
 
         user.save()
 
@@ -137,7 +138,7 @@ async def handle(this, request, data):
 
     try:
         token = Token.get(ids=request.token, fields={'user'})
-    except:
+    except ErrorWrong:
         token = Token(id=request.token)
 
     if token.user:

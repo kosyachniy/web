@@ -12,7 +12,6 @@ from ...models.user import User, process_lower, pre_process_phone
 class Type(BaseType):
     login: str
 
-# pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request, data):
     """ Recover password """
@@ -28,14 +27,14 @@ async def handle(this, request, data):
     try:
         login = process_lower(data.login)
         user = User.get(login=login, fields={})[0]
-    except:
+    except ErrorWrong:
         new = True
 
     if new:
         try:
             mail = process_lower(data.login)
             user = User.get(mail=mail, fields={})[0]
-        except:
+        except ErrorWrong:
             pass
         else:
             new = False
@@ -44,7 +43,7 @@ async def handle(this, request, data):
         try:
             phone = pre_process_phone(data.login)
             user = User.get(phone=phone, fields={})[0]
-        except:
+        except ErrorWrong:
             pass
         else:
             new = False

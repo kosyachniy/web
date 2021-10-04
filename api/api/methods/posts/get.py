@@ -20,7 +20,6 @@ class Type(BaseType):
     # TODO: language: Union[str, int] = None
     # TODO: fields: list[str] = None
 
-# pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request, data):
     """ Get """

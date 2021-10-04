@@ -4,6 +4,8 @@ The disconnect socket of the account object of the API
 
 import time
 
+from consys.errors import ErrorWrong
+
 from ...lib import report
 from ...models.socket import Socket
 from .online import _other_sessions, _online_count, get_user
@@ -17,7 +19,7 @@ async def online_stop(sio, socket_id):
 
     try:
         socket = Socket.get(ids=socket_id)
-    except:
+    except ErrorWrong:
         # NOTE: method "exit" -> socket "disconnect"
         return
 
@@ -49,7 +51,6 @@ async def online_stop(sio, socket_id):
     })
 
 
-# pylint: disable=unused-argument
 async def handle(this, request, data):
     """ Disconnect """
 
