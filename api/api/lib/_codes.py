@@ -7,18 +7,24 @@ import json
 
 with open('sets.json', 'r', encoding='utf-8') as file:
     sets=json.loads(file.read())
-    LOCALES = sets['locales']
     DEFAULT_LOCALE = sets['locale']
 
 
+# NOTE: ISO 639-1
+LOCALES = (
+    'en',
+    'ru',
+    'es',
+)
+
 NETWORKS = (
-    '',
-    'web',
-    'tg',
-    'vk',
-    'g',
-    'fb',
-    'a',
+    '', # Console
+    'web', # Web-interface
+    'tg', # Telegram
+    'vk', # VKontakte
+    'g', # Google
+    'fb', # Facebook
+    'a', # Apple
 )
 
 USER_STATUSES = (

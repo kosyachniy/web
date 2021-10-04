@@ -26,7 +26,6 @@ services:
         - PORT=${EXTERNAL_PORT}
         - MODE=${MODE}
         - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
-        - LOCALES=${LOCALES}
         - LOCALE=${LOCALE}
         - TIMEZONE=${TIMEZONE}
         - MONGO_DB=${MONGO_DB}
