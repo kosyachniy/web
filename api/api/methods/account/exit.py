@@ -10,7 +10,6 @@ from ...models.socket import Socket
 from .disconnect import online_stop
 
 
-# pylint: disable=unused-argument
 async def handle(this, request, data):
     """ Log out """
 

@@ -16,7 +16,6 @@ class Type(BaseType):
     name: str = None
     surname: str = None
 
-# pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request, data):
     """ By bot """

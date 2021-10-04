@@ -51,7 +51,6 @@ async def online_stop(sio, socket_id):
     })
 
 
-# pylint: disable=unused-argument
 async def handle(this, request, data):
     """ Disconnect """
 

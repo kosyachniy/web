@@ -2,13 +2,13 @@
 jobs=2
 
 [MESSAGES CONTROL]
-disable=import-error,unsubscriptable-object,unused-argument,no-name-in-module ,duplicate-code
+disable=unsubscriptable-object,unused-argument,no-name-in-module,duplicate-code
 
 [FORMAT]
 max-line-length=80
 
 [MISCELLANEOUS]
-notes=FIXME # TODO,BUG,UGLY
+notes=FIXME,BUG # TODO,UGLY
 
 [BASIC]
 good-names=i,j,e,f,ip,id,to,rm,el,tg,vk

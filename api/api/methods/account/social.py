@@ -2,19 +2,17 @@
 The authorization via social networks method of the account object of the API
 """
 
-# pylint: disable=unused-argument,unused-import # TODO: fix
+# import urllib
+# import base64
 
-import urllib
-import base64
+# import requests
+# from consys.errors import ErrorAccess, ErrorInvalid, ErrorWrong
 
-import requests
-from consys.errors import ErrorAccess, ErrorInvalid, ErrorWrong
-
-from ...lib import BaseType, validate, report
-from ...models.user import User
-from ...models.token import Token
-from ...models.action import Action
-from .online import online_start
+from ...lib import BaseType, validate # report
+# from ...models.user import User
+# from ...models.token import Token
+# from ...models.action import Action
+# from .online import online_start
 
 
 class Type(BaseType):

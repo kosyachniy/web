@@ -12,7 +12,6 @@ from ...models.user import User, process_lower, pre_process_phone
 class Type(BaseType):
     login: str
 
-# pylint: disable=unused-argument
 @validate(Type)
 async def handle(this, request, data):
     """ Recover password """
