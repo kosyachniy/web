@@ -9,11 +9,11 @@ import time
 
 ## External
 import requests
-from gens import generate
+from libdev.gen import generate
 
 ## Local
 from ._variables import languages, languages_chosen, tokens, ids
-from ._reports import report
+from .reports import report
 
 
 # Params

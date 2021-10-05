@@ -7,7 +7,7 @@ from typing import Union
 
 from consys.errors import ErrorAccess
 
-from ...lib import BaseType, validate
+from ...lib.types import BaseType, validate
 from ...models.post import Post
 
 
@@ -31,7 +31,7 @@ async def handle(this, request, data):
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
     # if data.language:
-    #     data.language = get_language(data.language)
+    #     data.language = get_language(data.language) # TODO: case if None
     # else:
     #     data.language = request.language
 

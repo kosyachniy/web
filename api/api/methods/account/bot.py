@@ -4,7 +4,8 @@ The authorization via social networks method of the account object of the API
 
 from consys.errors import ErrorWrong, ErrorAccess
 
-from ...lib import BaseType, validate, report
+from ...lib.types import BaseType, validate
+from ...lib.reports import report
 from ...models.user import User # , process_lower
 from ...models.token import Token
 from ...models.action import Action

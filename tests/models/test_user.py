@@ -1,6 +1,6 @@
 import pytest
 # from consys.errors import ErrorWrong
-from gens import generate
+from libdev.gen import generate
 
 from api.models.user import User
 

@@ -1,5 +1,5 @@
 import pytest
-from gens import generate, generate_id
+from libdev.gen import generate, generate_id
 
 from api import Request
 from api.models.user import User, process_lower

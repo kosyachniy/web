@@ -6,7 +6,7 @@ import time
 
 from consys.errors import ErrorWrong
 
-from ...lib import report
+from ...lib.reports import report
 from ...models.socket import Socket
 from .online import _other_sessions, _online_count, get_user
 

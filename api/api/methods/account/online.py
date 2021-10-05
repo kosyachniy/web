@@ -4,7 +4,8 @@ The online socket of the account object of the API
 
 from consys.errors import ErrorWrong
 
-from ...lib import BaseType, validate, report
+from ...lib.types import BaseType, validate
+from ...lib.reports import report
 from ...models.user import User
 from ...models.token import Token
 from ...models.socket import Socket
