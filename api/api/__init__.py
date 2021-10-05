@@ -15,8 +15,8 @@ from .background import background
 
 
 with open('sets.json', 'r', encoding='utf-8') as file:
-    sets=json.loads(file.read())
-    DEFAULT_LOCALE = sets['locale']
+    env_sets=json.loads(file.read())
+    DEFAULT_LOCALE = env_sets['locale']
 
 
 class Request():
