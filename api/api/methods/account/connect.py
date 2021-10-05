@@ -2,7 +2,7 @@
 The connect socket of the account object of the API
 """
 
-from ...lib import report
+from ...lib.reports import report
 
 
 async def handle(this, request, data):

@@ -8,7 +8,7 @@ import json
 
 from libdev.codes import get_network, get_language
 
-from .lib import report
+from .lib.reports import report
 from .methods import call
 from .methods.account.online import get_user
 from .background import background

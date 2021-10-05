@@ -56,7 +56,7 @@ from consys.errors import BaseError
 
 ### Local
 from api import API
-from api.lib import report
+from api.lib.reports import report
 
 ## Params
 with open('sets.json', 'r', encoding='utf-8') as file:

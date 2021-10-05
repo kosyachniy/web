@@ -6,7 +6,8 @@ The authorization by phone method of the account object of the API
 
 from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
-from ...lib import BaseType, validate, report
+from ...lib import BaseType, validate
+from ...lib.reports import report
 # from ...lib.sms import send_sms
 from ...models.user import User, pre_process_phone
 from ...models.token import Token

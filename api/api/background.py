@@ -7,7 +7,7 @@ from multiprocessing import Process
 
 from consys.errors import ErrorWrong
 
-from .lib import report
+from .lib.reports import report
 from .models.system import System
 from .models.socket import Socket
 from .methods.account.disconnect import online_stop
