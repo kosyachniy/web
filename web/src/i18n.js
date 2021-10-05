@@ -3,9 +3,10 @@ import { initReactI18next } from 'react-i18next'
 import Backend from 'i18next-xhr-backend'
 
 
-import { locales, locale as default_locale } from './sets'
+import { locale as default_locale } from './sets'
 
 
+const locales = ['en', 'ru', 'es'];
 let locale = localStorage.getItem('locale');
 if (locale === null || locales.indexOf(locale) === -1) {
     const language = window.navigator ? (
