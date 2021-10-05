@@ -4,7 +4,7 @@ The removal method of the post object of the API
 
 from consys.errors import ErrorAccess
 
-from ...lib import BaseType, validate
+from ...lib.types import BaseType, validate
 from ...models.post import Post
 
 
