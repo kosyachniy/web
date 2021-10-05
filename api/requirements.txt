@@ -8,4 +8,4 @@ python-socketio==5.4.0
 requests==2.26.0
 tgreports==0.7
 consys==0.5
-gens==0.1
+libdev==0.1

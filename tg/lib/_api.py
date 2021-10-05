@@ -9,7 +9,7 @@ import time
 
 ## External
 import requests
-from gens import generate
+from libdev.gen import generate
 
 ## Local
 from ._variables import languages, languages_chosen, tokens, ids
