@@ -2,16 +2,21 @@
 The API
 """
 
-# Libraries
-## System
 import asyncio
 import time
+import json
 
-## Local
-from .lib import get_network, get_language, report
+from libdev.codes import get_network, get_language
+
+from .lib import report
 from .methods import call
 from .methods.account.online import get_user
 from .background import background
+
+
+with open('sets.json', 'r', encoding='utf-8') as file:
+    sets=json.loads(file.read())
+    DEFAULT_LOCALE = sets['locale']
 
 
 class Request():
@@ -25,6 +30,9 @@ class Request():
         self.network = get_network(network)
         self.locale = get_language(locale)
         self.user = get_user(token)
+
+        if self.locale is None:
+            self.locale = DEFAULT_LOCALE
 
 
 class API():

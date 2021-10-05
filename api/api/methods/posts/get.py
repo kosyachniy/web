@@ -31,7 +31,7 @@ async def handle(this, request, data):
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
     # if data.language:
-    #     data.language = get_language(data.language)
+    #     data.language = get_language(data.language) # TODO: case if None
     # else:
     #     data.language = request.language
 
