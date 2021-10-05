@@ -5,7 +5,6 @@ Import API methods from submodules and call the API method
 from pathlib import Path
 import importlib
 import importlib.util
-# import pkgutil
 
 from consys.errors import ErrorWrong
 

@@ -24,29 +24,28 @@ async def handle(this, request, data):
     # Get
 
     new = False
+    login = process_lower(data.login)
+    users = User.get(login=login, fields={})
 
-    try:
-        login = process_lower(data.login)
-        user = User.get(login=login, fields={})[0]
-    except ErrorWrong:
+    if users:
+        user = users[0]
+    else:
         new = True
 
     if new:
-        try:
-            mail = process_lower(data.login)
-            user = User.get(mail=mail, fields={})[0]
-        except ErrorWrong:
-            pass
-        else:
+        mail = process_lower(data.login)
+        users = User.get(mail=mail, fields={})
+
+        if users:
+            user = users[0]
             new = False
 
     if new:
-        try:
-            phone = pre_process_phone(data.login)
-            user = User.get(phone=phone, fields={})[0]
-        except ErrorWrong:
-            pass
-        else:
+        phone = pre_process_phone(data.login)
+        users = User.get(phone=phone, fields={})
+
+        if users:
+            user = users[0]
             new = False
 
     if new:

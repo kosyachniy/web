@@ -50,29 +50,28 @@ async def handle(this, request, data):
     # Authorize
 
     new = False
+    login = process_lower(data.login)
+    users = User.get(login=login, fields=fields)
 
-    try:
-        login = process_lower(data.login)
-        user = User.get(login=login, fields=fields)[0]
-    except ErrorWrong:
+    if users:
+        user = users[0]
+    else:
         new = True
 
     if new:
-        try:
-            mail = process_lower(data.login)
-            user = User.get(mail=mail, fields=fields)[0]
-        except ErrorWrong:
-            pass
-        else:
+        mail = process_lower(data.login)
+        users = User.get(mail=mail, fields=fields)
+
+        if users:
+            user = users[0]
             new = False
 
     if new:
-        try:
-            phone = pre_process_phone(data.login)
-            user = User.get(phone=phone, fields=fields)[0]
-        except ErrorWrong:
-            pass
-        else:
+        phone = pre_process_phone(data.login)
+        users = User.get(phone=phone, fields=fields)
+
+        if users:
+            user = users[0]
             new = False
 
     # Check password
