@@ -27,18 +27,8 @@ class Request():
 class API():
     """ API """
 
-    def __init__(self, sio=None, **sets):
-        # TODO: Libraries
-
+    def __init__(self, sio=None):
         self.sio = sio
-
-        # Settings
-        self.client = sets['client']
-
-        # Networks
-        self.tg = sets['tg']
-        self.vk = sets['vk']
-        self.google = sets['google']
 
         # Background processes
         asyncio.create_task(background(sio))
