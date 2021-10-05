@@ -2,14 +2,12 @@
 Functionality for working with Telegram
 """
 
-import json
-
 from tgio import Telegram
 
+from . import cfg
 
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())['tg']
-    TG_TOKEN = sets['token']
+
+TG_TOKEN = cfg('tg.token')
 
 
 tg = Telegram(TG_TOKEN)

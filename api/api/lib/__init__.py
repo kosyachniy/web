@@ -1,0 +1,19 @@
+"""
+The main functionality for the API
+"""
+
+from libdev.cfg import cfg
+from libdev.codes import get_network, get_language
+from libdev.gen import generate, generate_id, generate_password
+
+from .types import BaseType, validate
+from .reports import report
+
+
+__all__ = (
+    'cfg',
+    'get_network', 'get_language',
+    'generate', 'generate_id', 'generate_password',
+    'BaseType', 'validate',
+    'report',
+)

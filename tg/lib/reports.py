@@ -2,16 +2,14 @@
 Reports functionality for the Telegram bot
 """
 
-import json
-
 from tgreports import Report
 
+from . import cfg
 
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())
-    MODE = sets['mode']
-    TG_TOKEN = sets['tg']['token']
-    BUG_CHAT = sets['bug_chat']
+
+MODE = cfg('mode')
+TG_TOKEN = cfg('tg.token')
+BUG_CHAT = cfg('bug_chat')
 
 
 report = Report(MODE, TG_TOKEN, BUG_CHAT)

@@ -8,8 +8,7 @@ The authorization via social networks method of the account object of the API
 # import requests
 # from consys.errors import ErrorAccess, ErrorInvalid, ErrorWrong
 
-from ...lib.types import BaseType, validate
-# from ...lib.reports import report
+from ...lib import BaseType, validate # report
 # from ...models.user import User
 # from ...models.token import Token
 # from ...models.action import Action
@@ -52,9 +51,9 @@ async def handle(this, request, data):
     #     response = json.loads(
     #         requests.get(
     #             link.format(
-    #                 this.vk['client_id'],
-    #                 this.vk['client_secret'],
-    #                 this.client,
+    #                 cfg('vk.client_id'),
+    #                 cfg('vk.client_secret'),
+    #                 cfg('client'),
     #                 data.code,
     #             )
     #         ).text
@@ -72,9 +71,9 @@ async def handle(this, request, data):
     # elif data.id == 3:
     #     link = 'https://accounts.google.com/o/oauth2/token'
     #     cont = {
-    #         'client_id': this.google['client_id'],
-    #         'client_secret': this.google['client_secret'],
-    #         'redirect_uri': f'{this.client}callback',
+    #         'client_id': cfg('google.client_id'),
+    #         'client_secret': cfg('google.client_secret'),
+    #         'redirect_uri': f'{cfg('client')}callback',
     #         'grant_type': 'authorization_code',
     #         'code': urllib.parse.unquote(data.code),
     #     }

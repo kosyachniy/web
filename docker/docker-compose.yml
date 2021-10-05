@@ -59,7 +59,6 @@ services:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
         - PORT=${EXTERNAL_PORT}
-        - LOCALES=${LOCALES}
         - LOCALE=${LOCALE}
         - TIMEZONE=${TIMEZONE}
         - NAME=${NAME}

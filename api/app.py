@@ -47,7 +47,6 @@ asgi = socketio.ASGIApp(sio)
 # API
 ## Libraries
 ### System
-import json
 import traceback
 
 ### External
@@ -58,14 +57,9 @@ from consys.errors import BaseError
 from api import API
 from api.lib.reports import report
 
-## Params
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())
-
 ## Global variables
 api = API(
     sio=sio,
-    **sets,
 )
 
 ## Endpoints

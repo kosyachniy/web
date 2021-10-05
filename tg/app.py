@@ -2,16 +2,11 @@
 Telegram bot Endpoints (Transport level)
 """
 
-import json
-
-from lib import api
+from lib import api, cfg
 from lib.tg import tg
 
 
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())['tg']
-    WEBHOOK_URL = sets['server']
-
+WEBHOOK_URL = cfg('tg.server')
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 80
 
