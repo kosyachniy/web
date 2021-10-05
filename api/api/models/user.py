@@ -2,8 +2,6 @@
 User model of DB object
 """
 
-import json
-
 from consys.handlers import (
     default_login, check_login, check_password, process_password, check_name,
     check_surname, check_phone, pre_process_phone, check_mail, process_title,
@@ -12,20 +10,6 @@ from consys.handlers import (
 
 from ..lib import get_language
 from . import Base, Attribute, uploader
-
-
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets=json.loads(file.read())
-    DEFAULT_LOCALE = sets['locale']
-
-
-def process_language(lang):
-    lang = get_language(lang)
-
-    if lang is None:
-        return DEFAULT_LOCALE
-
-    return lang
 
 
 class User(Base):
@@ -81,7 +65,7 @@ class User(Base):
     language = Attribute(
         types=int,
         default=0,
-        pre_processing=process_language,
+        pre_processing=get_language,
     )
     status = Attribute(types=int, default=default_status)
     actions = Attribute(types=list, default=[]) # TODO: list[dict]

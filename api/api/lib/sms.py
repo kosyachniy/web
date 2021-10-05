@@ -2,12 +2,11 @@
 Sending SMS messages
 """
 
-import json
+from . import cfg
 
 
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())['smsc']
-    LOGIN = sets['login']
-    PASSWORD = sets['password']
+LOGIN = cfg('smsc.login')
+PASSWORD = cfg('password')
+
 
 # TODO: Use pip/smsc
