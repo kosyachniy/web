@@ -9,8 +9,8 @@ from consys.handlers import (
     check_surname, check_phone, pre_process_phone, check_mail, process_title,
     process_lower, default_status,
 )
-from libdev.codes import get_language
 
+from ..lib import get_language
 from . import Base, Attribute, uploader
 
 

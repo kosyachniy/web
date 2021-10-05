@@ -6,9 +6,7 @@ import asyncio
 import time
 import json
 
-from libdev.codes import get_network, get_language
-
-from .lib.reports import report
+from .lib import get_network, get_language, report
 from .methods import call
 from .methods.account.online import get_user
 from .background import background
