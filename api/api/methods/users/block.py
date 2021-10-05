@@ -4,7 +4,7 @@ The blocking method of the user object of the API
 
 from consys.errors import ErrorAccess
 
-from ...lib.types import BaseType, validate
+from ...lib import BaseType, validate
 from ...models.user import User
 
 

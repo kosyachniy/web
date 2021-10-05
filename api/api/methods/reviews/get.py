@@ -6,7 +6,7 @@ from typing import Union
 
 from consys.errors import ErrorAccess
 
-from ...lib.types import BaseType, validate
+from ...lib import BaseType, validate
 from ...models.user import User
 from ...models.review import Review
 
