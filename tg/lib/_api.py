@@ -9,18 +9,15 @@ import time
 
 ## External
 import requests
-from libdev.gen import generate
 
 ## Local
+from . import cfg, generate
 from ._variables import languages, languages_chosen, tokens, ids
 from .reports import report
 
 
 # Params
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())
-    SERVER_LINK = sets['server']
-
+SERVER_LINK = cfg('server')
 LOG_LIMIT = 330
 
 
