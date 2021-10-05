@@ -9,9 +9,10 @@ import time
 
 ## External
 import requests
+from libdev.cfg import cfg
+from libdev.gen import generate
 
 ## Local
-from . import cfg, generate
 from ._variables import languages, languages_chosen, tokens, ids
 from .reports import report
 

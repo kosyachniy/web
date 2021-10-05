@@ -55,7 +55,7 @@ from consys.errors import BaseError
 
 ### Local
 from api import API
-from api.lib.reports import report
+from api.lib import report
 
 ## Global variables
 api = API(
