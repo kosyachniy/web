@@ -7,5 +7,5 @@ httptools==0.3.0 # For routing
 python-socketio==5.4.0
 requests==2.26.0
 tgreports==0.7
-consys==0.5
+consys==0.6
 libdev==0.4
