@@ -91,7 +91,7 @@ Android | Front-end | React Native | JavaScript | planned
 
 ## Install & Use with Docker
 ### Development
-1. Customize file ` docker/.env ` & ` Makefile `
+1. Customize file ` docker/.env `
 
 2. Run
 ```
@@ -101,7 +101,7 @@ make run
 3. Open ` http://localhost/ `
 
 ### Production (dedicated server)
-1. Customize file ` docker/.env ` & ` Makefile `
+1. Customize file ` docker/.env `
 
 2. Create encryption keys
 ```
@@ -119,7 +119,7 @@ docker-compose -f docker-compose.alone.yml -p web up --build
 4. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (with multiple projects)
-1. Customize files ` docker/.env ` & ` Makefile `
+1. Customize files ` docker/.env `
 
 2. Run Docker Compose
 ```

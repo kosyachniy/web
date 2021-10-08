@@ -1,4 +1,5 @@
-PROJECT_NAME = web
+include docker/.env
+
 PYTHON := env/bin/python
 
 setup:
