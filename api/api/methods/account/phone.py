@@ -2,142 +2,23 @@
 The authorization by phone method of the account object of the API
 """
 
-# import re
-
-from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
-
-from ...lib import BaseType, validate, report
+from ...lib import BaseType, validate
 # from ...lib.sms import send_sms
-from ...models.user import User, pre_process_phone
-from ...models.token import Token
-from ...models.action import Action
-from .online import online_start
+from .auth import auth
 
 
 class Type(BaseType):
     phone: str
+    password: str # TODO: without password, via code
     # code: Union[str, int] = None
     # promo: str = None
 
 @validate(Type)
 async def handle(this, request, data):
     """ By phone """
-
-    # TODO: the same token
-
-    # No access
-    if request.user.status < 2:
-        raise ErrorAccess('phone')
-
-    # Authorize
-
-    fields = {
-        'id',
-        'login',
-        'avatar',
-        'name',
-        'surname',
-        'phone',
-        'mail',
-        'social',
-        'status',
-    }
-
-    phone = pre_process_phone(data.phone)
-    new = False
-    users = User.get(phone=phone, fields=fields)
-
-    if len(users) == 0:
-        new = True
-    elif len(users) > 1:
-        await report.warning(
-            "More than 1 user",
-            {'phone': data.phone},
-        )
-
-    # Register
-    if new:
-        action = Action(
-            name='account_reg',
-            details={
-                'network': request.network,
-                'ip': request.ip,
-                'phone': data.phone,
-            },
-        )
-
-        try:
-            user = User(
-                phone=data.phone,
-                phone_verified=False,
-                actions=[action.json(default=False)],
-            )
-        except ValueError as e:
-            raise ErrorInvalid(e) from e
-
-        user.save()
-
-        # Report
-        await report.important(
-            "User registration by phone",
-            {
-                'user': user.id,
-                'phone': f"+{data.phone}",
-                'token': request.token,
-                'network': request.network,
-            },
-            tags=['reg'],
-        )
-
-    else:
-        user = users[0]
-
-        action = Action(
-            name='account_auth',
-            details={
-                'ip': request.ip,
-            },
-        )
-
-        user.actions.append(action.json(default=False))
-        user.save()
-
-    # Assignment of the token to the user
-
-    if not request.token:
-        raise ErrorAccess('phone')
-
-    try:
-        token = Token.get(ids=request.token, fields={'user'})
-    except ErrorWrong:
-        token = Token(id=request.token)
-
-    if token.user:
-        await report.warning(
-            "Reauth",
-            {'from': token.user, 'to': user.id, 'token': request.token},
-        )
-
-    token.user = user.id
-    token.save()
-
-    # TODO: Pre-registration data (promos, actions, posts)
-
-    # Update online users
-    await online_start(this.sio, request.token)
-
-    # TODO: redirect to active space
-    # if space_id:
-    #     for socket_id in Socket(user=user.id):
-    #         this.sio.emit('space_return', {
-    #             'url': f'/space/{space_id}',
-    #         }, room=socket_id)
-
-    # Response
-    return {
-        **user.json(fields=fields),
-        'new': new,
-    }
+    return await auth(
+        this, request, 'phone', data.phone, data.password, 'phone'
+    )
 
 # async def phone_send(this, request, data):
 #     """ Send a code to the phone """

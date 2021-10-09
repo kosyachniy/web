@@ -2,24 +2,31 @@
 The authorization method of the account object of the API
 """
 
+from consys.handlers import process_lower, pre_process_phone, check_phone, \
+                            check_mail, process_password
 from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
 from ...lib import BaseType, validate, report
-from ...models.user import User, process_lower, pre_process_phone, \
-                           process_password
+from ...models.user import User
 from ...models.token import Token
 from ...models.action import Action
 from .online import online_start
 
 
-class Type(BaseType):
-    login: str # login / mail / phone
-    password: str
+def detect_type(login):
+    """ Detect the type of authorization """
 
-# pylint: disable=too-many-statements,too-many-branches
-@validate(Type)
-async def handle(this, request, data):
-    """ Sign in / Sign up """
+    if check_phone(None, None, pre_process_phone(login)):
+        return 'phone'
+
+    if check_mail(None, None, login):
+        return 'mail'
+
+    return 'login'
+
+# pylint: disable=too-many-locals,too-many-branches
+async def auth(this, request, method, login, password, by):
+    """ Authorization / registration in different ways """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
@@ -30,7 +37,7 @@ async def handle(this, request, data):
 
     # No access
     if request.user.status < 2:
-        raise ErrorAccess('auth')
+        raise ErrorAccess(method)
 
     # Data preparation
     # TODO: optimize
@@ -48,38 +55,26 @@ async def handle(this, request, data):
 
     # Authorize
 
+    if by == 'phone':
+        handler = pre_process_phone
+    else:
+        handler = process_lower
+
     new = False
-    login = process_lower(data.login)
-    users = User.get(login=login, fields=fields)
+    login_processed = handler(login)
+    users = User.get(fields=fields, **{by: login_processed})
 
     if users:
+        if len(users) > 1:
+            await report.warning(
+                "More than 1 user",
+                {by: login},
+            )
+
         user = users[0]
+
     else:
         new = True
-
-    if new:
-        mail = process_lower(data.login)
-        users = User.get(mail=mail, fields=fields)
-
-        if users:
-            user = users[0]
-            new = False
-
-    if new:
-        phone = pre_process_phone(data.login)
-        users = User.get(phone=phone, fields=fields)
-
-        if users:
-            user = users[0]
-            new = False
-
-    # Check password
-    if not new:
-        password = process_password(data.password)
-        users = User.get(id=user.id, password=password)
-
-        if not users:
-            raise ErrorWrong('password')
 
     # Register
     if new:
@@ -88,17 +83,31 @@ async def handle(this, request, data):
             details={
                 'network': request.network,
                 'ip': request.ip,
-                'mail': data.login,
-                'password': data.password,
+                by: login,
+                'password': password,
             },
         )
 
+        if by == 'phone':
+            req = {
+                'phone': login_processed,
+                'phone_verified': False,
+            }
+        elif by == 'mail':
+            req = {
+                'mail': login_processed,
+                'mail_verified': False,
+            }
+        else:
+            req = {
+                'login': login_processed,
+            }
+
         try:
             user = User(
-                password=data.password,
-                mail=data.login, # TODO: login # TODO: phone
-                mail_verified=False,
+                password=password,
                 actions=[action.json(default=False)], # TODO: without `.json()`
+                **req,
             )
         except ValueError as e:
             raise ErrorInvalid(e) from e
@@ -107,10 +116,10 @@ async def handle(this, request, data):
 
         # Report
         await report.important(
-            "User registration by mail",
+            f"User registration by {by}",
             {
                 'user': user.id,
-                'mail': data.login,
+                by: f"+{login}" if by == 'phone' else login,
                 'token': request.token,
                 'network': request.network,
                 # TODO: ip, geo
@@ -118,8 +127,17 @@ async def handle(this, request, data):
             tags=['reg'],
         )
 
-    # Update
     else:
+        # Check password
+
+        password = process_password(password)
+        users = User.get(id=user.id, password=password)
+
+        if not users:
+            raise ErrorWrong('password')
+
+        # Update
+
         action = Action(
             name='account_auth',
             details={
@@ -133,7 +151,7 @@ async def handle(this, request, data):
     # Assignment of the token to the user
 
     if not request.token:
-        raise ErrorAccess('auth')
+        raise ErrorAccess(method)
 
     try:
         token = Token.get(ids=request.token, fields={'user'})
@@ -149,11 +167,33 @@ async def handle(this, request, data):
     token.user = user.id
     token.save()
 
+    # TODO: Pre-registration data (promos, actions, posts)
+
     # Update online users
     await online_start(this.sio, request.token)
+
+    # TODO: redirect to active space
+    # if space_id:
+    #     for socket_id in Socket(user=user.id):
+    #         this.sio.emit('space_return', {
+    #             'url': f'/space/{space_id}',
+    #         }, room=socket_id)
 
     # Response
     return {
         **user.json(fields=fields),
         'new': new,
     }
+
+
+class Type(BaseType):
+    login: str # login / mail / phone
+    password: str
+
+@validate(Type)
+async def handle(this, request, data):
+    """ Sign in / Sign up """
+
+    by = detect_type(data.login)
+
+    return await auth(this, request, 'auth', data.login, data.password, by)

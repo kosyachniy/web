@@ -59,17 +59,17 @@ def test_none_fields():
     assert user.id
     assert user.login != 'id0'
 
-def test_phone_processing():
-    assert User(phone='+7 (969) 736-67-30').phone == 79697366730
-    assert User(phone='79697366730').phone == 79697366730
-    assert User(phone=89697366730).phone == 79697366730
-    assert User(phone='8 9697366730').phone == 79697366730
+# def test_phone_processing():
+#     assert User(phone='+7 (969) 736-67-30').phone == 79697366730
+#     assert User(phone='79697366730').phone == 79697366730
+#     assert User(phone=89697366730).phone == 79697366730
+#     assert User(phone='8 9697366730').phone == 79697366730
 
-    with pytest.raises(ValueError): # TODO: ErrorWrong
-        User(phone='(969) 7366730')
+#     with pytest.raises(ValueError): # TODO: ErrorWrong
+#         User(phone='(969) 7366730')
 
-    with pytest.raises(ValueError): # TODO: ErrorWrong
-        User(phone='abcdefghijklmn')
+#     with pytest.raises(ValueError): # TODO: ErrorWrong
+#         User(phone='abcdefghijklmn')
 
-    with pytest.raises(ValueError): # TODO: ErrorWrong
-        User(phone='')
+#     with pytest.raises(ValueError): # TODO: ErrorWrong
+#         User(phone='')
