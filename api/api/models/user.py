@@ -3,9 +3,9 @@ User model of DB object
 """
 
 from consys.handlers import (
-    default_login, check_login, check_password, process_password, check_name,
-    check_surname, check_phone, pre_process_phone, check_mail, process_title,
-    process_lower, default_status,
+    default_login, check_login_uniq, check_password, process_password,
+    check_name, check_surname, check_phone_uniq, pre_process_phone,
+    check_mail_uniq, process_title, process_lower, default_status,
 )
 
 from ..lib import get_language
@@ -29,7 +29,7 @@ class User(Base):
     login = Attribute(
         types=str,
         default=default_login,
-        checking=check_login,
+        checking=check_login_uniq,
         pre_processing=process_lower,
     )
     password = Attribute(
@@ -50,13 +50,13 @@ class User(Base):
     )
     phone = Attribute(
         types=int,
-        checking=check_phone,
+        checking=check_phone_uniq,
         pre_processing=pre_process_phone,
     )
     phone_verified = Attribute(types=bool, default=True)
     mail = Attribute(
         types=str,
-        checking=check_mail,
+        checking=check_mail_uniq,
         pre_processing=process_lower,
     )
     mail_verified = Attribute(types=bool, default=True)
