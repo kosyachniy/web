@@ -143,7 +143,7 @@ async def index(data: Input, request: Request):
 async def connect(sid, request, data):
     """ Connect socket """
 
-    api.method(
+    await api.method(
         'account.connect',
         ip=request['asgi.scope']['client'][0],
         socket=sid,
