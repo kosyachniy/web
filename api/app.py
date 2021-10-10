@@ -8,6 +8,10 @@ API Endpoints (Transport level)
 from fastapi import FastAPI, Request
 app = FastAPI(title='Web app API')
 
+# Prometheus
+from prometheus_fastapi_instrumentator import Instrumentator
+Instrumentator().instrument(app).expose(app)
+
 # CORS
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(

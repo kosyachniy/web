@@ -1,0 +1,160 @@
+version: "3.9"
+services:
+  prometheus:
+    image: web/prometheus
+    build:
+      dockerfile: ./prometheus/Dockerfile
+      context: ./
+    deploy:
+      mode: global
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    deploy:
+      mode: global
+    ports:
+      - "3000:3000"
+    environment:
+      - "GF_SECURITY_ADMIN_PASSWORD=pass"
+    depends_on:
+      - prometheus
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    deploy:
+      mode: global
+    ports:
+      - "8050:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - api
+      - prometheus
+      - grafana
+
+  node-exporter:
+    image: prom/node-exporter
+    restart: unless-stopped
+    expose:
+      - 9100
+
+  db:
+    image: "mongo:5.0.3"
+    # ports:
+    #   - "27017:27017"
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_LOGIN}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - ../data/db:/data/db
+      - ../data/logs:/data/logs
+    #   - ../docker/db/mongod.conf:/etc/mongod.conf
+    # command: --config /etc/mongod.conf
+
+  api:
+    image: web/api
+    build:
+      dockerfile: ../docker/api/Dockerfile
+      context: ../api
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=443
+        - MODE=${MODE}
+        - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
+        - LOCALE=${LOCALE}
+        - TIMEZONE=${TIMEZONE}
+        - MONGO_DB=${PROJECT_NAME}
+        - MONGO_LOGIN=${MONGO_LOGIN}
+        - MONGO_PASSWORD=${MONGO_PASSWORD}
+        - GOOGLE_ID=${GOOGLE_ID}
+        - GOOGLE_SECRET=${GOOGLE_SECRET}
+        - TG_TOKEN=${TG_TOKEN}
+        - BUG_CHAT=${BUG_CHAT}
+        - SMSC_LOGIN=${SMSC_LOGIN}
+        - SMSC_PASSWORD=${SMSC_PASSWORD}
+        - VK_ID=${VK_ID}
+        - VK_SECRET=${VK_SECRET}
+    depends_on:
+      - db
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ../data/load:/data/load
+      # - ../data/logs/api.err:/app.err
+      # - ../data/logs/api.log:/app.log
+      # For hot reload
+      - ../api/api:/api
+      - ../api/app.py:/app.py
+    deploy:
+      mode: replicated
+      replicas: 3
+    #  placement:
+    #    max_replicas_per_node: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 500M
+        reservations:
+          cpus: '0.15'
+          memory: 200M
+
+  tg:
+    image: web/tg
+    build:
+      dockerfile: ../docker/tg/Dockerfile
+      context: ../tg
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=443
+        - TG_TOKEN=${TG_TOKEN}
+        - MODE=${MODE}
+        - BUG_CHAT=${BUG_CHAT}
+    env_file: .env
+    # volumes:
+    #   - ../data/logs/tg.err:/app.err
+    #   - ../data/logs/tg.log:/app.log
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  server:
+    image: web/server
+    build:
+      dockerfile: ../docker/web/Dockerfile.prod
+      context: ../web
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
+        - PORT=443
+        - LOCALE=${LOCALE}
+        - TIMEZONE=${TIMEZONE}
+        - NAME=${NAME}
+        - MAIL=${EMAIL}
+        - PHONE=${PHONE}
+        - SOCIAL=${SOCIAL}
+        - GOOGLE_MAP_KEY=${GOOGLE_MAP_KEY}
+        - GOOGLE_MAP_LAT=${GOOGLE_MAP_LAT}
+        - GOOGLE_MAP_LNG=${GOOGLE_MAP_LNG}
+        - GOOGLE_MAP_ZOOM=${GOOGLE_MAP_ZOOM}
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template
+      - ../data/load:/load
+      - ../data/logs:/data/logs
+    depends_on:
+      - api
+      - tg
+    ports:
+      - '8010:80'
+    command: /bin/sh -c "envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g \"daemon off;\""

@@ -100,6 +100,43 @@ make run
 
 3. Open ` http://localhost/ `
 
+### Production (with multiple projects)
+1. Customize file ` docker/.env `
+
+2. Run Docker Compose
+```
+cd docker/
+docker-compose -f docker-compose.prod.yml -p web up --build
+```
+(your project name instead of ` web `)
+
+3. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
+
+More: [Server set up](SERVER.md)
+
+4. Open ` https://web.kosyachniy.com/ ` (your link)
+
+### Production (with metrics)
+1. Customize files ` docker/.env ` & ` docker/docker-compose.metrics.yml `
+
+2. Build Docker images
+```
+cd docker/
+docker-compose -f docker-compose.metrics.yml build
+```
+
+3. Run cluster
+```
+sudo docker stack deploy --compose-file docker-compose.metrics.yml web
+```
+(your project name instead of ` web `)
+
+4. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
+
+More: [Server set up](SERVER.md)
+
+5. Open ` https://web.kosyachniy.com/ ` (your link)
+
 ### Production (dedicated server)
 1. Customize file ` docker/.env `
 
@@ -115,22 +152,6 @@ chmod 777 cert.sh
 docker-compose -f docker-compose.alone.yml -p web up --build
 ```
 (your project name instead of ` web `)
-
-4. Open ` https://web.kosyachniy.com/ ` (your link)
-
-### Production (with multiple projects)
-1. Customize files ` docker/.env `
-
-2. Run Docker Compose
-```
-cd docker/
-docker-compose -f docker-compose.prod.yml -p web up --build
-```
-(your project name instead of ` web `)
-
-3. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
-
-More: [Server set up](SERVER.md)
 
 4. Open ` https://web.kosyachniy.com/ ` (your link)
 
