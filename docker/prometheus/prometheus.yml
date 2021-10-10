@@ -12,5 +12,5 @@ scrape_configs:
       - targets:
         - cadvisor:8080
 #    metric_relabel_configs:
-#      - regex: 'container_label_.*'
+#      - regex: "container_label_.*"
 #      action: labeldrop

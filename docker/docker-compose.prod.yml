@@ -1,7 +1,7 @@
-version: "3"
+version: "3.9"
 services:
   db:
-    image: "mongo:5.0.3"
+    image: mongo:5.0.3
     # ports:
     #   - "27017:27017"
     restart: unless-stopped
@@ -45,8 +45,8 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
-      - ../data/logs/api.err:/app.err
-      - ../data/logs/api.log:/app.log
+      # - ../data/logs/api.err:/app.err
+      # - ../data/logs/api.log:/app.log
       # For hot reload
       - ../api/api:/api
       - ../api/app.py:/app.py
@@ -63,9 +63,9 @@ services:
         - MODE=${MODE}
         - BUG_CHAT=${BUG_CHAT}
     env_file: .env
-    volumes:
-      - ../data/logs/tg.err:/app.err
-      - ../data/logs/tg.log:/app.log
+    # volumes:
+    #   - ../data/logs/tg.err:/app.err
+    #   - ../data/logs/tg.log:/app.log
     depends_on:
       - api
     restart: unless-stopped
@@ -98,5 +98,5 @@ services:
       - api
       - tg
     ports:
-      - '${EXTERNAL_PORT}:80'
+      - "${EXTERNAL_PORT}:80"
     command: /bin/sh -c "envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g \"daemon off;\""
