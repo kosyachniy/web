@@ -89,8 +89,12 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
-      # - ../data/logs/api.err:/app.err
-      # - ../data/logs/api.log:/app.log
+      - type: bind
+        source: ../data/logs/api.err
+        target: /app.err
+      - type: bind
+        source: ../data/logs/api.log
+        target: /app.log
       # For hot reload
       - ../api/api:/api
       - ../api/app.py:/app.py
@@ -120,9 +124,13 @@ services:
         - MODE=${MODE}
         - BUG_CHAT=${BUG_CHAT}
     env_file: .env
-    # volumes:
-    #   - ../data/logs/tg.err:/app.err
-    #   - ../data/logs/tg.log:/app.log
+    volumes:
+      - type: bind
+        source: ../data/logs/tg.err
+        target: /app.err
+      - type: bind
+        source: ../data/logs/tg.log
+        target: /app.log
     depends_on:
       - api
     restart: unless-stopped

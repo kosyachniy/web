@@ -45,8 +45,12 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
-      - ../data/logs/api.err:/app.err
-      - ../data/logs/api.log:/app.log
+      - type: bind
+        source: ../data/logs/api.err
+        target: /app.err
+      - type: bind
+        source: ../data/logs/api.log
+        target: /app.log
       # For hot reload
       - ../api/api:/api
       - ../api/app.py:/app.py
