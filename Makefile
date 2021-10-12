@@ -17,6 +17,10 @@ run:
 deploy:
 	docker-compose -f docker/docker-compose.prod.yml -p ${PROJECT_NAME} up --build
 
+node:
+	docker-compose -f docker/docker-compose.metrics.yml build
+	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml {PROJECT_NAME}
+
 dev:
 	$(PYTHON)
 

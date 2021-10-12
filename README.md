@@ -119,23 +119,36 @@ More: [Server set up](SERVER.md)
 ### Production (with metrics)
 1. Customize files ` docker/.env ` & ` docker/docker-compose.metrics.yml `
 
-2. Build Docker images
+2. Set up Docker Swarm
+```
+docker swarm init --advertise-addr 157.230.103.16
+```
+(your IP instead of ` 157.230.103.16 `)
+
+3. Run to configure MongoDB
+```
+cd docker/
+docker-compose -f docker-compose.prod.yml -p web up --build
+```
+(your project name instead of ` web `)
+
+4. Build Docker images
 ```
 cd docker/
 docker-compose -f docker-compose.metrics.yml build
 ```
 
-3. Run cluster
+5. Run cluster
 ```
 sudo docker stack deploy --compose-file docker-compose.metrics.yml web
 ```
 (your project name instead of ` web `)
 
-4. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
+6. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
 
 More: [Server set up](SERVER.md)
 
-5. Open ` https://web.kosyachniy.com/ ` (your link)
+7. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (dedicated server)
 1. Customize file ` docker/.env `
