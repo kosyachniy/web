@@ -1,7 +1,7 @@
 # Server set up
 1. Install NGINX (if not done)
 ```
-sudo apt-get update
+sudo apt update
 sudo apt install nginx
 ```
 
@@ -9,8 +9,9 @@ sudo apt install nginx
 
 Take [`docker/server/nginx.server.conf`](docker/server/nginx.server.conf) as a basis and add configuration:
 ```
-sudo nano /etc/nginx/sites-enabled/<your project name>.conf
+sudo nano /etc/nginx/sites-enabled/web.conf
 ```
+(your project name instead of ` web `)
 
 3. Configure NGINX
 

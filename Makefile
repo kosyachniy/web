@@ -19,7 +19,13 @@ deploy:
 
 node:
 	docker-compose -f docker/docker-compose.metrics.yml build
-	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml {PROJECT_NAME}
+	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml ${PROJECT_NAME}
+
+check:
+	docker stack services ${PROJECT_NAME}
+
+stop:
+	docker stack rm ${PROJECT_NAME}
 
 dev:
 	$(PYTHON)
