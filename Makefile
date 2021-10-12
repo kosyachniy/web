@@ -57,6 +57,10 @@ test-unit:
 	| awk '{print $$2}' \
 	| xargs $(PYTHON) -m pytest -s
 
+test:
+	make test-linter-all
+	make test-unit-all
+
 clear:
 	rm -rf env/
 	rm -rf **/env/

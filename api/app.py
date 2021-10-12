@@ -2,7 +2,7 @@
 API Endpoints (Transport level)
 """
 
-# pylint: disable=wrong-import-order,wrong-import-position
+# pylint: disable=wrong-import-order,wrong-import-position,ungrouped-imports
 
 # Main app
 from fastapi import FastAPI, Request
