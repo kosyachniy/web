@@ -1,11 +1,12 @@
 # env/bin/python -m pip install -U --force-reinstall pip
 
 fastapi==0.68.1
+prometheus_fastapi_instrumentator==5.7.1
 uvicorn==0.15.0
 websockets==10.0 # For Socket.IO
 httptools==0.3.0 # For routing
 python-socketio==5.4.0
 requests==2.26.0
-tgreports==0.7
+tgreports==0.8
 consys==0.7
 libdev==0.4

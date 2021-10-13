@@ -10,5 +10,4 @@ install:
   - make setup-tests
 
 script:
-  - make test-unit-all
-  - make test-linter-all
+  - make test

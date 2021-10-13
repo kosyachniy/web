@@ -17,6 +17,16 @@ run:
 deploy:
 	docker-compose -f docker/docker-compose.prod.yml -p ${PROJECT_NAME} up --build
 
+node:
+	docker-compose -f docker/docker-compose.metrics.yml build
+	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml ${PROJECT_NAME}
+
+check:
+	docker stack services ${PROJECT_NAME}
+
+stop:
+	docker stack rm ${PROJECT_NAME}
+
 dev:
 	$(PYTHON)
 
@@ -52,6 +62,10 @@ test-unit:
 	| grep -i '^[ma]' \
 	| awk '{print $$2}' \
 	| xargs $(PYTHON) -m pytest -s
+
+test:
+	make test-linter-all
+	make test-unit-all
 
 clear:
 	rm -rf env/
