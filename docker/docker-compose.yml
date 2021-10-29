@@ -79,7 +79,7 @@ services:
       # NOTE: Нельзя указывать src, т.к. не сгенерируется sets.json
       - ../web/src/components:/src/components
       - ../web/src/containers:/src/containers
-      - ../web/src/func:/src/func
+      - ../web/src/lib:/src/lib
       - ../web/src/App.jsx:/src/App.jsx
       - ../web/src/redus.js:/src/redus.js
 

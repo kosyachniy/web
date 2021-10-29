@@ -41,7 +41,6 @@ def get_user(token_id):
         except ErrorWrong:
             token = Token(id=token_id)
             token.save()
-
         else:
             if token.user:
                 return User.get(ids=token.user)

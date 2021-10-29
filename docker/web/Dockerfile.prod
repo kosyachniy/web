@@ -36,6 +36,7 @@ RUN echo '{ \n\
 ' >> src/sets.json
 
 # Create build
+RUN npm cache clean --force
 RUN npm run build
 
 # NGINX

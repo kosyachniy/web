@@ -90,7 +90,7 @@ Android | Front-end | React Native | JavaScript | planned
 </table>
 
 ## Install & Use with Docker
-[Before starting, you can learn how to configure the server →](SERVER.md)
+[Before starting, you can learn how to configure the server →](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
 
 ### Development
 1. Customize file ` docker/.env `
@@ -113,7 +113,7 @@ make deploy
 3. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (with metrics)
-Here you need to complete step 10 from [SERVER.md](SERVER.md)
+Here you need to complete step 10 from [SERVER.md](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
 
 1. Customize files ` docker/.env ` & ` docker/docker-compose.metrics.yml `
 
