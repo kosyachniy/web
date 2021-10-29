@@ -90,6 +90,8 @@ Android | Front-end | React Native | JavaScript | planned
 </table>
 
 ## Install & Use with Docker
+[Before starting, you can learn how to configure the server →](SERVER.md)
+
 ### Development
 1. Customize file ` docker/.env `
 
@@ -105,42 +107,28 @@ make run
 
 2. Run Docker Compose
 ```
-cd docker/
-docker-compose -f docker-compose.prod.yml -p web up --build
+make deploy
 ```
-(your project name instead of ` web `)
 
-3. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
-
-More: [Server set up](SERVER.md)
-
-4. Open ` https://web.kosyachniy.com/ ` (your link)
+3. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (with metrics)
+Here you need to complete step 10 from [SERVER.md](SERVER.md)
+
 1. Customize files ` docker/.env ` & ` docker/docker-compose.metrics.yml `
 
-2. Set up Docker Swarm (if not done)
-```
-docker swarm init --advertise-addr 157.230.103.16
-```
-(your IP instead of ` 157.230.103.16 `)
-
-3. Run to configure MongoDB (if not done)
+2. Run to configure MongoDB (if not done)
 ```
 make deploy
 ```
 And stop it
 
-4. Run cluster
+3. Run cluster
 ```
 make node
 ```
 
-5. Set up NGINX using [docker/server/nginx.server.conf](docker/server/nginx.server.conf) (if not done)
-
-More: [Server set up](SERVER.md)
-
-6. Open ` https://web.kosyachniy.com/ ` (your link)
+4. Open ` https://web.kosyachniy.com/ ` (your link)
 
 ### Production (dedicated server)
 1. Customize file ` docker/.env `
