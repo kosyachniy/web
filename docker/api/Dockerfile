@@ -20,7 +20,8 @@ COPY . .
 # Settings
 ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
     MONGO_DB MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
-    GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT VK_ID VK_SECRET
+    GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT VK_ID VK_SECRET \
+    YOOKASSA_ID YOOKASSA_KEY
 RUN rm -f sets.json
 RUN echo '{ \n\
     "mongo": { \n\
@@ -28,6 +29,10 @@ RUN echo '{ \n\
         "db": "'$MONGO_DB'", \n\
         "login": "'$MONGO_LOGIN'", \n\
         "password": "'$MONGO_PASSWORD'" \n\
+    }, \n\
+    "yookassa": { \n\
+        "id": '$YOOKASSA_ID', \n\
+        "key": "'$YOOKASSA_KEY'" \n\
     }, \n\
     "google": { \n\
         "client_id": "'$GOOGLE_ID'", \n\

@@ -31,6 +31,8 @@ services:
         - MONGO_DB=${PROJECT_NAME}
         - MONGO_LOGIN=${MONGO_LOGIN}
         - MONGO_PASSWORD=${MONGO_PASSWORD}
+        - YOOKASSA_ID=${YOOKASSA_ID}
+        - YOOKASSA_KEY=${YOOKASSA_KEY}
         - GOOGLE_ID=${GOOGLE_ID}
         - GOOGLE_SECRET=${GOOGLE_SECRET}
         - TG_TOKEN=${TG_TOKEN}
