@@ -102,7 +102,7 @@ make run
 
 3. Open ` http://localhost/ `
 
-### Production (with multiple projects)
+### Production
 1. Customize file ` docker/.env `
 
 2. Run Docker Compose
@@ -129,48 +129,3 @@ make node
 ```
 
 4. Open ` https://web.kosyachniy.com/ ` (your link)
-
-## Install & Use without Docker
-### Back-end
-1. Change folder
-```
-cd api/
-```
-
-2. Customize file ` sets.json `
-
-3. Virtual environment
-```
-python3 -m venv env
-env/bin/pip install -r requirements.txt
-```
-
-4. Run
-```
-env/bin/uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
-```
-
-### Front-end
-1. Change folder
-```
-cd web/
-```
-
-2. Customize file ` src/sets.json `
-
-3. Virtual environment
-```
-npm install
-```
-
-4. Run
-#### Development
-```
-npm start
-```
-
-#### Production
-```
-npm run build
-serve -s build -p 3000
-```
