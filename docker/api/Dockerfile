@@ -21,7 +21,9 @@ COPY . .
 ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
     MONGO_DB MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
     GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT VK_ID VK_SECRET \
-    YOOKASSA_ID YOOKASSA_KEY
+    YOOKASSA_ID YOOKASSA_KEY \
+    SUBSCRIPTION_DAY SUBSCRIPTION_WEEK SUBSCRIPTION_MONTH SUBSCRIPTION_SEASON \
+    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR DISCOUNT
 RUN rm -f sets.json
 RUN echo '{ \n\
     "mongo": { \n\
@@ -54,7 +56,16 @@ RUN echo '{ \n\
     "side_optimized": '$SIDE_OPTIMIZED', \n\
     "locale": "'$LOCALE'", \n\
     "timezone": '$TIMEZONE', \n\
-    "bug_chat": '$BUG_CHAT' \n\
+    "bug_chat": '$BUG_CHAT', \n\
+    "subscription": { \n\
+        "day": '$SUBSCRIPTION_DAY', \n\
+        "week": '$SUBSCRIPTION_WEEK', \n\
+        "month": '$SUBSCRIPTION_MONTH', \n\
+        "season": '$SUBSCRIPTION_SEASON', \n\
+        "ay": '$SUBSCRIPTION_ACADEMIC_YEAR', \n\
+        "year": '$SUBSCRIPTION_YEAR' \n\
+    }, \n\
+    "discount": '$DISCOUNT' \n\
 } \n\
 ' >> sets.json
 

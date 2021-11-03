@@ -76,8 +76,8 @@ async def handle(this, request, data):
             'phone',
             'mail',
             'social',
-            # 'subscription',
-            # 'pay',
+            'subscription',
+            'pay',
         }
 
     # if process_moderator:
@@ -90,8 +90,8 @@ async def handle(this, request, data):
             'phone',
             'mail',
             'social',
-            # 'subscription',
-            # 'pay',
+            'subscription',
+            'pay',
         }
 
     if data.fields:
