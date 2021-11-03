@@ -21,7 +21,7 @@ class Request():
         self.token = token
         self.network = get_network(network)
         self.locale = get_language(locale)
-        self.user = get_user(token)
+        self.user = get_user(token, socket)
 
 
 class API():
@@ -46,7 +46,7 @@ class API():
         """ Call API method """
 
         if socket is None and token is None:
-            report.warning("There is no socket id and token", {'method': name})
+            await report.warning("There is no socket id and token", {'method': name})
 
         if not data:
             data = {}

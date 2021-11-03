@@ -2,6 +2,7 @@
 Background processes
 """
 
+# import asyncio
 import time
 from multiprocessing import Process
 
@@ -54,3 +55,6 @@ async def background(sio):
     ## Reports
     # process_reports = Process(target=reports_process)
     # process_reports.start()
+
+    # await asyncio.gather(
+    # )

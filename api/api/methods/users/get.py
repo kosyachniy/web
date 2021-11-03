@@ -20,12 +20,12 @@ def online_back(user_id):
     if sockets:
         return 0
 
-    user = User.get(ids=user_id, fields={'online.stop'})
+    user = User.get(ids=user_id, fields={'online'})
 
-    if not user['online']:
-        return None
+    if not user.online:
+        return 0
 
-    last = user['online'][-1]['stop']
+    last = user.online[-1]['stop']
     return int(time.time() - last)
 
 
@@ -50,6 +50,7 @@ async def handle(this, request, data):
     #     data.id = request.user.id
 
     # Fields
+    # TODO: right to roles
 
     fields = {
         'id',
@@ -60,8 +61,10 @@ async def handle(this, request, data):
         'status',
         # 'balance',
         # 'rating',
-        # 'description',
-        # 'online',
+        'description',
+        # 'channels',
+        # 'global_channel',
+        # 'discount',
     }
 
     process_self = data.id == request.user.id
@@ -73,7 +76,8 @@ async def handle(this, request, data):
             'phone',
             'mail',
             'social',
-            # 'phone',
+            # 'subscription',
+            # 'pay',
         }
 
     # if process_moderator:
@@ -86,11 +90,14 @@ async def handle(this, request, data):
             'phone',
             'mail',
             'social',
-            # 'phone',
+            # 'subscription',
+            # 'pay',
         }
 
     if data.fields:
         fields = fields & set(data.fields)
+
+    data.fields = data.fields and set(data.fields) | {'id'}
 
     # Get
     users = User.get(
@@ -104,11 +111,11 @@ async def handle(this, request, data):
     # NOTE: user.json(default=True) -> login, status
     if isinstance(users, list):
         for i, user in enumerate(users):
-            user = user.json(fields=fields)
+            user = user.json(fields=data.fields or fields)
             user['online'] = online_back(user['id'])
             users[i] = user
     else:
-        users = users.json(fields=fields)
+        users = users.json(fields=data.fields or fields)
         users['online'] = online_back(users['id'])
 
     # Response
