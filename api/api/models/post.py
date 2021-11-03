@@ -2,7 +2,7 @@
 Post model of DB object
 """
 
-from . import Base, Attribute, uploader
+from api.models import Base, Attribute, uploader
 
 
 class Post(Base):

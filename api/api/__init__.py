@@ -5,10 +5,10 @@ The API
 import asyncio
 import time
 
-from .lib import get_network, get_language, report
-from .methods import call
-from .methods.account.online import get_user
-from .background import background
+from api.lib import get_network, get_language, report
+from api.methods import call
+from api.methods.account.online import get_user
+from api.background import background
 
 
 class Request():

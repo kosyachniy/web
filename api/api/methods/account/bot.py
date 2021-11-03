@@ -4,11 +4,11 @@ The authorization via social networks method of the account object of the API
 
 from consys.errors import ErrorWrong, ErrorAccess
 
-from ...lib import BaseType, validate, report
-from ...models.user import User # process_lower
-from ...models.token import Token
-from ...models.action import Action
-from .auth import reg
+from api.lib import BaseType, validate, report
+from api.models.user import User # process_lower
+from api.models.token import Token
+from api.models.action import Action
+from api.methods.account.auth import reg
 
 
 class Type(BaseType):

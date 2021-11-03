@@ -6,11 +6,11 @@ from consys.handlers import process_lower, pre_process_phone, check_phone, \
                             check_mail, process_password
 from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
 
-from ...lib import BaseType, validate, report
-from ...models.user import User
-from ...models.token import Token
-from ...models.action import Action
-from .online import online_start
+from api.lib import BaseType, validate, report
+from api.models.user import User
+from api.models.token import Token
+from api.models.action import Action
+from api.methods.account.online import online_start
 
 
 def detect_type(login):

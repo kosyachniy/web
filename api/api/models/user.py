@@ -8,8 +8,8 @@ from consys.handlers import (
     check_mail_uniq, process_title, process_lower, default_status,
 )
 
-from ..lib import get_language
-from . import Base, Attribute, uploader
+from api.lib import get_language
+from api.models import Base, Attribute, uploader
 
 
 class User(Base):

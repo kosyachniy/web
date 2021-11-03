@@ -4,8 +4,8 @@ The password recover method of the account object of the API
 
 from consys.errors import ErrorWrong, ErrorAccess
 
-from ...lib import generate_password, BaseType, validate, report
-from ...models.user import User, process_lower, pre_process_phone
+from api.lib import generate_password, BaseType, validate, report
+from api.models.user import User, process_lower, pre_process_phone
 
 
 class Type(BaseType):

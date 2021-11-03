@@ -2,7 +2,7 @@
 Sending SMS messages
 """
 
-from . import cfg
+from api.lib import cfg
 
 
 LOGIN = cfg('smsc.login')

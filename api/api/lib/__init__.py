@@ -7,7 +7,7 @@ from libdev.cfg import cfg
 from libdev.codes import get_network, get_language
 from libdev.gen import generate, generate_id, generate_password
 
-from .reports import report
+from api.lib.reports import report
 
 
 __all__ = (

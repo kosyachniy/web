@@ -4,7 +4,7 @@ Reports functionality for the API
 
 from tgreports import Report
 
-from . import cfg
+from api.lib import cfg
 
 
 MODE = cfg('mode')

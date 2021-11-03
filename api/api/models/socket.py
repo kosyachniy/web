@@ -2,7 +2,7 @@
 Socket model of DB object
 """
 
-from . import Base, Attribute
+from api.models import Base, Attribute
 
 
 class Socket(Base):

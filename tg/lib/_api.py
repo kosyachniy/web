@@ -13,8 +13,8 @@ from libdev.cfg import cfg
 from libdev.gen import generate
 
 ## Local
-from ._variables import languages, languages_chosen, tokens, ids
-from .reports import report
+from lib._variables import languages, languages_chosen, tokens, ids
+from lib.reports import report
 
 
 # Params

@@ -5,7 +5,7 @@ Base model of DB object
 from consys import make_base, Attribute
 from consys.files import FileUploader
 
-from ..lib import cfg
+from api.lib import cfg
 
 
 HOST = cfg('mongo.host')
