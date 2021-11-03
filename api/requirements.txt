@@ -7,6 +7,6 @@ websockets==10.0 # For Socket.IO
 httptools==0.3.0 # For routing
 python-socketio==5.4.0
 requests==2.26.0
-tgreports==0.8
+tgreports==0.9
 consys==0.7
 libdev==0.4
