@@ -122,28 +122,28 @@ async def index(data: Input, request: Request):
 ### Payments
 DISCOUNT = cfg('discount')
 
-class Input(BaseModel):
+class InputPayment(BaseModel):
     """ Payment endpoint model """
 
     object: dict
 
+# pylint: disable=too-many-branches
 @app.post('/pay/ya/')
-async def pay(data: Input, request: Request):
+async def pay(data: InputPayment, request: Request):
     """ Payments endpoint """
 
     data = data.object
 
-    try:
-        count = float(data['amount']['value'])
-    except:
-        count = 0
+    count = float(data.get('amount', {}).get('value') or 0)
+    user_id = data.get('metadata', {}).get('user')
 
-    try:
-        user_id = int(data['metadata']['user'])
-    except:
-        await report.warning("Wrong user")
+    if not user_id:
+        await report.warning("Wrong user", {
+            'metadata': data.get('metadata'),
+        })
         return '', 200
 
+    user_id = int(user_id)
     user = User.get(user_id)
     timestamp = int(time.time())
 
@@ -178,7 +178,7 @@ async def pay(data: Input, request: Request):
     )
 
     if data['payment_method']['saved']:
-        user.pay = [payment.json(default=False)] # FIXME
+        user.pay = [payment.json(default=False)] # TODO: Fix in consys.model
 
     # Report
     await report.important("Payment", {

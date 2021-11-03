@@ -5,7 +5,7 @@ Payments functionality for the API
 
 from yookassa import Configuration, Payment
 
-from . import cfg
+from api.lib import cfg
 
 
 Configuration.account_id = cfg('yookassa.id')

@@ -7,9 +7,9 @@ from typing import Union
 
 from consys.errors import ErrorAccess
 
-from ...lib import BaseType, validate
-from ...models.user import User
-from ...models.socket import Socket
+from api.lib import BaseType, validate
+from api.models.user import User
+from api.models.socket import Socket
 
 
 def online_back(user_id):

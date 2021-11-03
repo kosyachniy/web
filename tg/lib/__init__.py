@@ -5,9 +5,9 @@ The main functionality for the Telegram bot
 from libdev.cfg import cfg
 from libdev.gen import generate
 
-from ._variables import languages, languages_chosen, tokens, ids
-from ._api import api
-from .reports import report
+from lib._variables import languages, languages_chosen, tokens, ids
+from lib._api import api
+from lib.reports import report
 
 
 __all__ = (

@@ -4,11 +4,11 @@ The online socket of the account object of the API
 
 from consys.errors import ErrorWrong
 
-from ...lib import BaseType, validate, report
-from ...models.user import User
-from ...models.token import Token
-from ...models.socket import Socket
-# from ...models.space import Space
+from api.lib import BaseType, validate, report
+from api.models.user import User
+from api.models.token import Token
+from api.models.socket import Socket
+# from api.models.space import Space
 
 
 # async def _get_active_space(user_id):

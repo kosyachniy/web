@@ -6,11 +6,11 @@ from typing import Union
 
 from consys.handlers import pre_process_phone
 
-from ...lib import BaseType, validate
-from ...lib.pay import create
-from ...models.user import User
-from ..account.auth import reg
-# from ..promos.invite import get_promo
+from api.lib import BaseType, validate
+from api.lib.pay import create
+from api.models.user import User
+from api.methods.account.auth import reg
+# from api.methods.promos.invite import get_promo
 
 
 class Type(BaseType):

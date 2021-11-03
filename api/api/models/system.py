@@ -2,7 +2,7 @@
 System parameters model of DB object
 """
 
-from . import Base, Attribute
+from api.models import Base, Attribute
 
 
 class System(Base):

@@ -8,11 +8,11 @@ The authorization via social networks method of the account object of the API
 # import requests
 # from consys.errors import ErrorAccess, ErrorInvalid, ErrorWrong
 
-from ...lib import BaseType, validate # report
-# from ...models.user import User
-# from ...models.token import Token
-# from ...models.action import Action
-# from .online import online_start
+from api.lib import BaseType, validate # report
+# from api.models.user import User
+# from api.models.token import Token
+# from api.models.action import Action
+# from api.methods.account.online import online_start
 
 
 class Type(BaseType):

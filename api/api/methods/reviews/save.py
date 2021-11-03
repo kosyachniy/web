@@ -2,8 +2,8 @@
 The creating and editing method of the review object of the API
 """
 
-from ...lib import BaseType, validate, report
-from ...models.review import Review
+from api.lib import BaseType, validate, report
+from api.models.review import Review
 
 
 class Type(BaseType):

@@ -2,7 +2,7 @@
 Payment model of User object
 """
 
-from . import Base, Attribute
+from api.models import Base, Attribute
 
 
 class Payment(Base):

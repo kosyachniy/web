@@ -4,7 +4,7 @@ Reports functionality for the Telegram bot
 
 from tgreports import Report
 
-from . import cfg
+from lib import cfg
 
 
 MODE = cfg('mode')

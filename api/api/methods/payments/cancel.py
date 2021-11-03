@@ -4,7 +4,7 @@ The cancel method of the payment object of the API
 
 from consys.errors import ErrorAccess, ErrorRepeat
 
-from ...lib import BaseType, validate
+from api.lib import BaseType, validate
 
 
 class Type(BaseType):

@@ -7,8 +7,8 @@ from copy import deepcopy
 
 from consys.errors import ErrorAccess
 
-from ...lib import BaseType, validate
-from ...models.user import User
+from api.lib import BaseType, validate
+from api.models.user import User
 
 
 class Type(BaseType):
