@@ -56,11 +56,15 @@ async def reg(request, data, by, method=None):
         req = {
             'phone': data.login,
             'phone_verified': False,
+            # NOTE: Remove this if no password verification is required
+            'password': data.password,
         }
     elif by == 'mail':
         req = {
             'mail': data.login,
             'mail_verified': False,
+            # NOTE: Remove this if no password verification is required
+            'password': data.password,
         }
     elif by == 'bot':
         req = {
@@ -84,8 +88,6 @@ async def reg(request, data, by, method=None):
 
     try:
         user = User(
-            # NOTE: Remove this if no password verification is required
-            password=data.password,
             actions=[action.json(default=False)], # TODO: without `.json()`
             **req,
         )
