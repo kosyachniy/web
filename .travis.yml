@@ -7,6 +7,7 @@ services:
   - mongodb
 
 install:
+  - cp docker/local.env docker/.env
   - make setup-tests
 
 script:
