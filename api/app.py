@@ -49,19 +49,13 @@ asgi = socketio.ASGIApp(sio)
 # )
 
 # API
-## Libraries
-### System
-import traceback
-
-### External
 from pydantic import BaseModel
 from consys.errors import BaseError
 
-### Local
 from api import API
 from api.lib import report
 
-## Global variables
+
 api = API(
     sio=sio,
 )
@@ -76,8 +70,8 @@ class Input(BaseModel):
     network: str = ''
     locale: str = None
     token: str = None
+    socket: str = None
 
-# pylint: disable=broad-except
 @app.post('/')
 async def index(data: Input, request: Request):
     """ Main API endpoint """
@@ -94,14 +88,16 @@ async def index(data: Input, request: Request):
             data.params,
             ip=request.client.host,
             token=data.token,
+            socket=data.socket,
             network=data.network,
             locale=data.locale,
         )
 
     except BaseError as e:
         req['error'] = e.code
-        req['data'] = str(e)
+        req['data'] = str(e.txt) # TODO: Fix in consys.errors
 
+    # pylint: disable=broad-except
     except Exception as e:
         req['error'] = 1
         req['data'] = "Server error"
