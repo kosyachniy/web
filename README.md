@@ -130,24 +130,6 @@ make node
 
 4. Open ` https://web.kosyachniy.com/ ` (your link)
 
-### Production (dedicated server)
-1. Customize file ` docker/.env `
-
-2. Create encryption keys
-```
-cd docker/
-chmod 777 cert.sh
-./cert.sh
-```
-
-3. Run Docker Compose
-```
-docker-compose -f docker-compose.alone.yml -p web up --build
-```
-(your project name instead of ` web `)
-
-4. Open ` https://web.kosyachniy.com/ ` (your link)
-
 ## Install & Use without Docker
 ### Back-end
 1. Change folder
