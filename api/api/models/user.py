@@ -37,6 +37,7 @@ class User(Base):
         checking=check_password,
         processing=process_password,
     )
+    # Personal info
     avatar = Attribute(types=str, processing=uploader.image)
     name = Attribute(
         types=str,
@@ -61,6 +62,7 @@ class User(Base):
     )
     mail_verified = Attribute(types=bool, default=True)
     social = Attribute(types=list, default=[]) # TODO: list[{}] # TODO: checking
+    #
     description = Attribute(types=str)
     language = Attribute(
         types=int,
@@ -70,14 +72,21 @@ class User(Base):
     status = Attribute(types=int, default=default_status)
     actions = Attribute(types=list, default=[]) # TODO: list[dict]
     online = Attribute(types=list, default=[]) # TODO: list[tuple]
+    rating = Attribute(types=float)
+    # global_channel = Attribute(types=int, default=1)
+    # channels = Attribute(types=list, default=[])
+    discount = Attribute(types=float)
+    balance = Attribute(types=int, default=0)
+    subscription = Attribute(types=int, default=0)
+    utm = Attribute(types=str) # Source
+    pay = Attribute(types=list, default=[]) # Saved data for payment
+    # Permissions
+    mailing = Attribute(types=dict, default={})
+    # Cache
+
     # TODO: UTM / promo
-    # TODO: discount
-    # TODO: balance
-    # TODO: subscription
-    # TODO: rating
     # TODO: referal_parent
     # TODO: referal_code
-    # TODO: channels
     # TODO: attempts (password)
     # TODO: middle name
 

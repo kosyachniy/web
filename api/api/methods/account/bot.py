@@ -8,6 +8,7 @@ from ...lib import BaseType, validate, report
 from ...models.user import User # process_lower
 from ...models.token import Token
 from ...models.action import Action
+from .auth import reg
 
 
 class Type(BaseType):
@@ -37,6 +38,8 @@ async def handle(this, request, data):
         'mail',
         'social',
         'status',
+        # 'subscription',
+        # 'balance',
     }
 
     users = User.get(social={'$elemMatch': {
@@ -71,47 +74,7 @@ async def handle(this, request, data):
     # Register
     else:
         new = True
-
-        action = Action(
-            name='account_reg',
-            details={
-                'network': request.network,
-                'social_user': data.user,
-                'social_login': data.login,
-            },
-        )
-
-        user = User(
-            ignore={'login', 'name', 'surname'},
-            login=data.login or None,
-            name=data.name or None,
-            surname=data.surname or None,
-            social=[{
-                'id': request.network, # TODO: Several accounts in one network
-                'user': data.user,
-                'login': data.login,
-                'name': data.name,
-                'surname': data.surname,
-                'language': request.locale,
-            }],
-            actions=[action.json(default=False)], # TODO: without `.json()`
-            # TODO: avatar
-        )
-
-        user.save()
-
-        # Report
-        await report.important(
-            "User registration by bot",
-            {
-                'user': user.id,
-                'name': f"{data.name or ''} {data.surname or ''}",
-                'login': data.login and f"@{data.login}",
-                'token': request.token,
-                'network': request.network,
-            },
-            tags=['reg'],
-        )
+        user = await reg(request, data, 'bot')
 
     # Assignment of the token to the user
 
@@ -123,7 +86,7 @@ async def handle(this, request, data):
     except ErrorWrong:
         token = Token(id=request.token)
 
-    if token.user:
+    if token.user and token.user != user.id:
         await report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': request.token},
