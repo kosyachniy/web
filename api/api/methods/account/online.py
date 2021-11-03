@@ -8,7 +8,25 @@ from ...lib import BaseType, validate, report
 from ...models.user import User
 from ...models.token import Token
 from ...models.socket import Socket
+# from ...models.space import Space
 
+
+# async def _get_active_space(user_id):
+#     db_condition = {
+#         # TODO: participant
+#         # TODO: active
+#     }
+
+#     spaces = Space.get(**db_condition, fields={})
+
+#     if spaces:
+#         if len(spaces) > 1:
+#             await report.warning("More than 1 active space", {
+#                 'user': user_id,
+#                 'spaces': [space.id for space in spaces],
+#             })
+
+#         return spaces[0].id
 
 def _other_sessions(user_id, token=None):
     """ Checking for open online sessions of the user """
@@ -32,18 +50,27 @@ def _online_count():
 
     return count
 
-def get_user(token_id):
+def get_user(token_id, socket_id=None):
     """ Get user object by token """
 
     if token_id is not None:
         try:
-            token = Token.get(ids=token_id, fields={'user'})
+            token = Token.get(token_id, fields={'user'})
         except ErrorWrong:
             token = Token(id=token_id)
             token.save()
         else:
             if token.user:
                 return User.get(ids=token.user)
+
+    elif socket_id is not None:
+        try:
+            socket = Socket.get(socket_id, fields={'user'})
+        except ErrorWrong:
+            pass
+        else:
+            if socket.user:
+                return User.get(ids=socket.user)
 
     return User()
 
@@ -142,6 +169,15 @@ async def online_start(sio, token_id, socket_id=None):
         'count': count,
         'users': data,
     })
+
+    # # Redirect to active space
+    # # TODO: cache
+    # space = await _get_active_space(user.id)
+    # if space:
+    #     for socket in Socket.get(user=user.id, fields={}):
+    #         await sio.emit('space_return', {
+    #             'id': space,
+    #         }, room=socket.id)
 
 
 class Type(BaseType):

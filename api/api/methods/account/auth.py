@@ -24,14 +24,103 @@ def detect_type(login):
 
     return 'login'
 
-# pylint: disable=too-many-locals,too-many-branches
-async def auth(this, request, method, login, password, by):
+async def reg(request, data, by, method=None):
+    # Action
+
+    details = {
+        'network': request.network,
+        'ip': request.ip,
+    }
+
+    if by == 'bot':
+        details['social_user'] = data.user
+        details['social_login'] = data.login
+    else:
+        details[by] = data.login
+        # NOTE: Remove this if no password verification is required
+        details['password'] = process_password(data.password)
+
+    if method is not None:
+        details['type'] = method
+
+    action = Action(
+        name='account_reg',
+        details=details,
+    )
+
+    # Create user
+
+    if by == 'phone':
+        req = {
+            'phone': data.login,
+            'phone_verified': False,
+        }
+    elif by == 'mail':
+        req = {
+            'mail': data.login,
+            'mail_verified': False,
+        }
+    elif by == 'bot':
+        req = {
+            'ignore': {'login', 'name', 'surname'},
+            'login': data.login or None,
+            'name': data.name or None,
+            'surname': data.surname or None,
+            'social': [{
+                'id': request.network, # TODO: Several accounts in one network
+                'user': data.user,
+                'login': data.login,
+                'name': data.name,
+                'surname': data.surname,
+                'language': request.locale,
+            }],
+        }
+    else:
+        req = {
+            'login': data.login,
+        }
+
+    try:
+        user = User(
+            # NOTE: Remove this if no password verification is required
+            password=data.password,
+            actions=[action.json(default=False)], # TODO: without `.json()`
+            **req,
+        )
+    except ValueError as e:
+        raise ErrorInvalid(e) from e
+
+    # TODO: Subscription
+
+    user.save()
+
+    # Report
+
+    req = {
+        'user': user.id,
+        'network': request.network,
+        'type': method,
+        # TODO: ip, geo
+    }
+
+    if by=='bot':
+        req['login'] = data.login and f"@{data.login}"
+    else:
+        req[by] = f"+{user.phone}" if by == 'phone' else user.login
+
+    if data.name or data.surname:
+        req['name'] = f"{data.name or ''} {data.surname or ''}"
+
+    await report.important(f"User registration by {by}", req, tags=['reg', by])
+
+    return user
+
+async def auth(this, request, method, data, by):
     """ Authorization / registration in different ways """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Pre-registration data (promos, actions, posts)
-    # TODO: without password
     # TODO: the same token
     # TODO: Only by token (automaticaly, without any info)
 
@@ -51,6 +140,8 @@ async def auth(this, request, method, login, password, by):
         'mail',
         'social',
         'status',
+        # 'subscription',
+        # 'balance',
     }
 
     # Authorize
@@ -61,14 +152,14 @@ async def auth(this, request, method, login, password, by):
         handler = process_lower
 
     new = False
-    login_processed = handler(login)
+    login_processed = handler(data.login)
     users = User.get(fields=fields, **{by: login_processed})
 
     if users:
         if len(users) > 1:
             await report.warning(
                 "More than 1 user",
-                {by: login},
+                {by: data.login},
             )
 
         user = users[0]
@@ -76,66 +167,17 @@ async def auth(this, request, method, login, password, by):
     else:
         new = True
 
-    # Register
     if new:
-        action = Action(
-            name='account_reg',
-            details={
-                'network': request.network,
-                'ip': request.ip,
-                by: login,
-                'password': password,
-            },
-        )
-
-        if by == 'phone':
-            req = {
-                'phone': login_processed,
-                'phone_verified': False,
-            }
-        elif by == 'mail':
-            req = {
-                'mail': login_processed,
-                'mail_verified': False,
-            }
-        else:
-            req = {
-                'login': login_processed,
-            }
-
-        try:
-            user = User(
-                password=password,
-                actions=[action.json(default=False)], # TODO: without `.json()`
-                **req,
-            )
-        except ValueError as e:
-            raise ErrorInvalid(e) from e
-
-        user.save()
-
-        # Report
-        await report.important(
-            f"User registration by {by}",
-            {
-                'user': user.id,
-                by: f"+{login}" if by == 'phone' else login,
-                'token': request.token,
-                'network': request.network,
-                # TODO: ip, geo
-            },
-            tags=['reg'],
-        )
+        # Register
+        user = await reg(request, data, by)
 
     else:
+        # NOTE: Remove this if no password verification is required
         # Check password
-
-        password = process_password(password)
+        password = process_password(data.password)
         users = User.get(id=user.id, password=password)
-
         if not users:
             raise ErrorWrong('password')
-
         # Update
 
         action = Action(
@@ -158,7 +200,7 @@ async def auth(this, request, method, login, password, by):
     except ErrorWrong:
         token = Token(id=request.token)
 
-    if token.user:
+    if token.user and token.user != user.id:
         await report.warning(
             "Reauth",
             {'from': token.user, 'to': user.id, 'token': request.token},
@@ -172,13 +214,6 @@ async def auth(this, request, method, login, password, by):
     # Update online users
     await online_start(this.sio, request.token)
 
-    # TODO: redirect to active space
-    # if space_id:
-    #     for socket_id in Socket(user=user.id):
-    #         this.sio.emit('space_return', {
-    #             'url': f'/space/{space_id}',
-    #         }, room=socket_id)
-
     # Response
     return {
         **user.json(fields=fields),
@@ -188,7 +223,11 @@ async def auth(this, request, method, login, password, by):
 
 class Type(BaseType):
     login: str # login / mail / phone
+    # NOTE: Remove this if no password verification is required
     password: str
+    # NOTE: For general authorization method fields
+    name: str = None
+    surname: str = None
 
 @validate(Type)
 async def handle(this, request, data):
@@ -196,4 +235,4 @@ async def handle(this, request, data):
 
     by = detect_type(data.login)
 
-    return await auth(this, request, 'auth', data.login, data.password, by)
+    return await auth(this, request, 'auth', data, by)

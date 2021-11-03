@@ -22,6 +22,7 @@ class Type(BaseType):
     social: list[dict] = None
     description: str = None
     language: Union[str, int] = None
+    mailing: dict = None
 
 @validate(Type)
 async def handle(this, request, data):
@@ -35,6 +36,7 @@ async def handle(this, request, data):
     user = User.get(ids=request.user.id)
 
     # Change fields
+    # TODO: Fix exceptions on bad fields
 
     user.login = data.login
     user.password = data.password
@@ -51,6 +53,8 @@ async def handle(this, request, data):
     user.social = data.social # TODO: checking
     user.description = data.description
     user.language = data.language
+
+    user.mailing = data.mailing
 
     # Save
     user.save()
