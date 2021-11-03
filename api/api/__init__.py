@@ -46,7 +46,9 @@ class API():
         """ Call API method """
 
         if socket is None and token is None:
-            await report.warning("There is no socket id and token", {'method': name})
+            await report.warning("There is no socket id and token", {
+                'method': name,
+            })
 
         if not data:
             data = {}

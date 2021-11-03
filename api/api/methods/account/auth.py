@@ -25,6 +25,8 @@ def detect_type(login):
     return 'login'
 
 async def reg(request, data, by, method=None):
+    """ Register an account """
+
     # Action
 
     details = {

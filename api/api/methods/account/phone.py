@@ -17,7 +17,7 @@ class Type(BaseType):
 async def handle(this, request, data):
     """ By phone """
     return await auth(
-        this, request, 'phone', data.phone, data.password, 'phone'
+        this, request, 'phone', data, 'phone'
     )
 
 # async def phone_send(this, request, data):
