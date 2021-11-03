@@ -105,23 +105,7 @@ async def index(data: Input, request: Request):
     except Exception as e:
         req['error'] = 1
         req['data'] = "Server error"
-
-        traces = traceback.extract_tb(e.__traceback__)[::-1]
-        for trace in traces:
-            if 'python' not in trace.filename:
-                break
-        else:
-            trace = traces[0]
-
-        await report.critical(
-            "Server error",
-            {
-                'file': trace.filename,
-                'line': trace.lineno,
-                'error': str(e),
-            },
-            error=e,
-        )
+        await report.critical(str(e), error=e)
 
     else:
         req['error'] = 0
