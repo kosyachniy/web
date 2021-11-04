@@ -54,15 +54,16 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
+      # NOTE: To provide files
       - type: bind
         source: ../data/logs/api.err
         target: /app.err
       - type: bind
         source: ../data/logs/api.log
         target: /app.log
-      # For hot reload
+      # To reserve data from the inside
       - ../api/api:/api
-      - ../api/app.py:/app.py
+    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
 
   tg:
     build:

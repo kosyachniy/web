@@ -68,6 +68,3 @@ RUN echo '{ \n\
     "discount": '$DISCOUNT' \n\
 } \n\
 ' >> sets.json
-
-# Run
-CMD bash run.sh

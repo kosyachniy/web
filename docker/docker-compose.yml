@@ -54,6 +54,7 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
+      # NOTE: To provide files
       - type: bind
         source: ../data/logs/api.err
         target: /app.err
@@ -63,6 +64,7 @@ services:
       # For hot reload
       - ../api/api:/api
       - ../api/app.py:/app.py
+    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
   web:
     build:
@@ -92,7 +94,7 @@ services:
     env_file: .env
     volumes:
       - ../web/public:/public
-      # NOTE: Нельзя указывать src, т.к. не сгенерируется sets.json
+      # NOTE: src/ cannot be specified, because sets.json will not be generated
       - ../web/src/components:/src/components
       - ../web/src/containers:/src/containers
       - ../web/src/lib:/src/lib
