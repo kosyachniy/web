@@ -21,7 +21,7 @@ class Type(BaseType):
     # TODO: fields: list[str] = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Get """
 
     # No access

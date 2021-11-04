@@ -14,7 +14,7 @@ from api.background import background
 class Request():
     """ Request container """
 
-    def __init__(self, ip, socket, token, network, locale):
+    def __init__(self, ip, socket, token, network, locale, sio=None):
         self.timestamp = time.time()
         self.ip = ip
         self.socket = socket
@@ -22,6 +22,7 @@ class Request():
         self.network = get_network(network)
         self.locale = get_language(locale)
         self.user = get_user(token, socket)
+        self.sio = sio
 
 
 class API():
@@ -55,17 +56,14 @@ class API():
 
         # print(name, data, ip, socket, token, network, locale)
 
-        request = Request(ip, socket, token, network, locale)
+        request = Request(ip, socket, token, network, locale, self.sio)
 
         # # Action tracking
-
-        # action = Action(
+        # Action(
         #     name=name,
         #     data=data,
         #     request=request,
-        # }
-
-        # action.save()
+        # }.save()
 
         # API method
-        return await call(name, self, request, data)
+        return await call(name, request, data)

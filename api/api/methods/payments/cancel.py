@@ -11,7 +11,7 @@ class Type(BaseType):
     pass
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Delete payments data """
 
     # No access

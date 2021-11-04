@@ -12,7 +12,7 @@ class Type(BaseType):
     login: str
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Recover password """
 
     # No access

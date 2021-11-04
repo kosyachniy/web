@@ -25,7 +25,7 @@ class Type(BaseType):
     mailing: dict = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Save personal information """
 
     # No access

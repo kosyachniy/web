@@ -24,7 +24,7 @@ class Type(BaseType):
     surname: str = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Create a payment request """
 
     if data.login:

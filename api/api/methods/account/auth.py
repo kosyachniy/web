@@ -119,7 +119,7 @@ async def reg(request, data, by, method=None):
 
     return user
 
-async def auth(this, request, method, data, by):
+async def auth(request, method, data, by):
     """ Authorization / registration in different ways """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -216,7 +216,7 @@ async def auth(this, request, method, data, by):
     # TODO: Pre-registration data (promos, actions, posts)
 
     # Update online users
-    await online_start(this.sio, request.token)
+    await online_start(request.sio, request.token)
 
     # Response
     return {
@@ -234,9 +234,9 @@ class Type(BaseType):
     surname: str = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Sign in / Sign up """
 
     by = detect_type(data.login)
 
-    return await auth(this, request, 'auth', data, by)
+    return await auth(request, 'auth', data, by)

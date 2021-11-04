@@ -19,7 +19,7 @@ async def test_repeated_login():
         'login': login.upper(),
     }
 
-    res = await handle(None, request, data)
+    res = await handle(request, data)
 
     assert res.get('id')
     assert res.get('new')

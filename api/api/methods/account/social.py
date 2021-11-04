@@ -20,7 +20,7 @@ class Type(BaseType):
     code: str
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Via social network """
 
     # TODO: actions
@@ -287,7 +287,7 @@ async def handle(this, request, data):
 
     # # Update online users
 
-    # await online_start(this.sio, request.token)
+    # await online_start(request.sio, request.token)
 
     # # Response
 

@@ -184,7 +184,7 @@ class Type(BaseType):
     token: str
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Update online status """
 
     # TODO: Проверка, что токен не скомпрометирован - по ip?
@@ -197,7 +197,7 @@ async def handle(this, request, data):
         return
 
     # Send sockets
-    await online_start(this.sio, data.token, request.socket)
+    await online_start(request.sio, data.token, request.socket)
 
     # TODO: UTM parameters
     # TODO: Promos

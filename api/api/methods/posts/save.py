@@ -17,7 +17,7 @@ class Type(BaseType):
     # category: int = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Save """
 
     # No access

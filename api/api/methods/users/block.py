@@ -12,7 +12,7 @@ class Type(BaseType):
     id: int
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Block """
 
     # Get user

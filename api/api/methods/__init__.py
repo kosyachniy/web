@@ -33,7 +33,7 @@ def _rm_none(data):
                 _rm_none(el)
 
 
-async def call(method, this, request, data):
+async def call(method, request, data):
     """ Call the API method """
 
     module_name = CURRENT_MODULE + method
@@ -44,7 +44,7 @@ async def call(method, this, request, data):
 
     module = importlib.import_module(module_name)
     handle = getattr(module, 'handle')
-    response = await handle(this, request, data)
+    response = await handle(request, data)
 
     # Delete None values
     _rm_none(response)

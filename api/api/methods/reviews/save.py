@@ -12,7 +12,7 @@ class Type(BaseType):
     cont: str = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Save """
 
     # Get

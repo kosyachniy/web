@@ -36,7 +36,7 @@ class Type(BaseType):
     fields: list[str] = None
 
 @validate(Type)
-async def handle(this, request, data):
+async def handle(request, data):
     """ Get """
 
     # TODO: cursor

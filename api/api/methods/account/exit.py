@@ -10,7 +10,7 @@ The logout method of the account object of the API
 # from api.methods.account.disconnect import online_stop
 
 
-async def handle(this, request, data):
+async def handle(request, data):
     """ Log out """
 
     # # TODO: Сокет на авторизацию на всех вкладках токена
@@ -38,4 +38,4 @@ async def handle(this, request, data):
     # sockets = Socket.get(token=request.token, fields={})
 
     # for socket in sockets:
-    #     await online_stop(this.sio, socket.id)
+    #     await online_stop(request.sio, socket.id)
