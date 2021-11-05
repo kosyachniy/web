@@ -46,8 +46,8 @@ async def reg(request, data, by, method=None):
         details['type'] = method
 
     action = Action(
-        name='account_reg',
-        details=details,
+        title='account_reg',
+        data=details,
     )
 
     # Create user
@@ -68,7 +68,7 @@ async def reg(request, data, by, method=None):
         }
     elif by == 'bot':
         req = {
-            'ignore': {'login', 'name', 'surname'},
+            'arg_ignore': {'login', 'name', 'surname'},
             'login': data.login or None,
             'name': data.name or None,
             'surname': data.surname or None,
@@ -185,8 +185,8 @@ async def auth(request, method, data, by):
         # Update
 
         action = Action(
-            name='account_auth',
-            details={
+            title='account_auth',
+            data={
                 'ip': request.ip,
             },
         )

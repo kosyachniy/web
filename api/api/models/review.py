@@ -2,16 +2,15 @@
 Review model of DB object
 """
 
-from api.models import Base, Attribute, uploader
+from api.models import Base, Attribute
 
 
 class Review(Base):
     """ Review """
 
     _name = 'reviews'
-    _search_fields = {'name', 'cont'}
+    _search_fields = {'title', 'data'}
 
-    cont = Attribute(types=str, default='', processing=uploader.reimg)
     network = Attribute(types=int, default=0)
     # TODO: link
     # TODO: executor

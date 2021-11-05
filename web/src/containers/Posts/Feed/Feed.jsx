@@ -69,15 +69,15 @@ const Feed = (props) => {
                     <div className="cards" key={ post.id }>
                         <Link to={ `/post/${post.id}` } >
                             <div className="cards-content">
-                                <h3 className="title">{ post.name }</h3>
+                                <h3 className="title">{ post.title }</h3>
                                 <div className="additional"><i className="fas fa-ellipsis-v" /></div>
                                 <div className="time">{ getTime(post.time) }</div>
                             </div>
                             { post.cover && (
-                                <img src={ post.cover } alt={ post.name } />
+                                <img src={ post.cover } alt={ post.title } />
                             ) }
                             <div className="cards-content">
-                                <div className="content short">{ post.cont }</div>
+                                <div className="content short">{ post.data }</div>
                             </div>
                         </Link>
                         <div className="cards-content reactions">

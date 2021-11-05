@@ -55,7 +55,7 @@ const Post = () => {
     return (
         <div id="post">
             <div className="album py-2">
-                <h1>{ post.name }</h1>
+                <h1>{ post.title }</h1>
 
                 { edit ? (
                     <button
@@ -89,12 +89,12 @@ const Post = () => {
                         { post.cover ? (
                             <img
                                 src={ "/load/" + post.cover }
-                                alt={ post.name }
+                                alt={ post.title }
                             />
                         ) : (<></>) }
                         <br /><br />
                         <MathJax
-                            math={ post.cont }
+                            math={ post.data }
                             sanitizeOptions={{
                                 USE_PROFILES: {
                                     html: true,

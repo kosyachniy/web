@@ -48,7 +48,7 @@ const Footer = (props) => {
                         <br />
                         <div className="social">
                             { social.map((el, num) =>
-                                <a href={ el.cont } key={ num }><span className="badge"><img src={ '/social/' + el.name + '.ico' } alt={ el.name } /></span></a>
+                                <a href={ el.data } key={ num }><span className="badge"><img src={ '/social/' + el.title + '.ico' } alt={ el.title } /></span></a>
                             ) }
                         </div>
                     </div>

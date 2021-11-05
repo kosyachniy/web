@@ -96,6 +96,7 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
+      - ../scripts:/scripts
       # NOTE: To provide files
       - type: bind
         source: ../data/logs/api.err

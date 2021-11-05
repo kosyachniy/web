@@ -10,8 +10,8 @@ from api.models.post import Post
 
 class Type(BaseType):
     id: int = None
-    name: str = None
-    cont: str = None
+    title: str = None
+    data: str = None
     cover: str = None
     tags: list[str] = None
     # category: int = None
@@ -37,9 +37,9 @@ async def handle(request, data):
         new = True
 
     # Change fields
-    post.name = data.name # TODO: checking if add
+    post.title = data.title # TODO: checking if add
     post.tags = data.tags
-    post.cont = data.cont # TODO: checking if add
+    post.data = data.data # TODO: checking if add
     post.cover = data.cover
     # TODO: category
 
@@ -51,7 +51,7 @@ async def handle(request, data):
         "Save post",
         {
             'review': post.id,
-            'name': post.name,
+            'title': post.title,
             'user': request.user.id,
             'new': new,
         },
@@ -59,12 +59,12 @@ async def handle(request, data):
 
     # Processing
     cont = None
-    if data.cont and data.cont != post.cont:
-        cont = post.cont
+    if data.data and data.data != post.data:
+        cont = post.data
 
     # Response
     return {
         'id': post.id,
-        'cont': cont,
+        'data': cont,
         'new': new,
     }

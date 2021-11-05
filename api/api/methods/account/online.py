@@ -207,14 +207,14 @@ async def handle(request, data):
 
     # if utms:
     #     for utm in utms:
-    #         utm.name = utm_mark
+    #         utm.title = utm_mark
     #         utm.save()
 
     # else:
     #     utm = Mark(
     #         token=data.token,
     #         user=user_id,
-    #         name=utm_mark,
+    #         title=utm_mark,
     #     )
 
     #     utm.save()

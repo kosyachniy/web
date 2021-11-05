@@ -28,8 +28,8 @@ async def handle(request, data):
 
     # Fields
     fields = {
-        'name',
-        'cont',
+        'title',
+        'data',
         'user',
         'created',
         'network',

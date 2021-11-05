@@ -28,8 +28,8 @@ async def handle(request, data):
         new = True
 
     # Change fields
-    review.name = data.name # TODO: checking if add
-    review.cont = data.cont # TODO: checking if add
+    review.title = data.title # TODO: checking if add
+    review.data = data.data # TODO: checking if add
 
     # Save
     review.save()
@@ -39,8 +39,8 @@ async def handle(request, data):
         "New review",
         {
             'review': review.id,
-            'name': review.name,
-            'cont': review.cont,
+            'title': review.title,
+            'data': review.data,
             'user': request.user.id,
             'token': request.token,
         },
@@ -48,12 +48,12 @@ async def handle(request, data):
 
     # Processing
     cont = None
-    if data.cont and data.cont != review.cont:
-        cont = review.cont
+    if data.data and data.data != review.data:
+        cont = review.data
 
     # Response
     return {
         'id': review.id,
-        'cont': cont,
+        'data': cont,
         'new': new,
     }

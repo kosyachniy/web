@@ -227,8 +227,8 @@ async def pay(data: InputPayment, request: Request):
     })
 
     action = Action(
-        name='payment',
-        details={
+        title='payment',
+        data={
             'value': value_real,
             'days': day,
         },

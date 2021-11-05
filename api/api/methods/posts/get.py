@@ -37,8 +37,8 @@ async def handle(request, data):
 
     # Fields
     fields = {
-        'name',
-        'cont',
+        'title',
+        'data',
         'reactions',
         'cover',
         'created',
@@ -63,17 +63,17 @@ async def handle(request, data):
             if not post.cover:
                 res = re.search(
                     r'<img src="[^"]*">',
-                    post.cont
+                    post.data
                 )
 
                 if res is not None:
                     post.cover = res[0].split('"')[1].split('/')[-1]
 
             ## Content
-            post.cont = re.sub(
+            post.data = re.sub(
                 r'<[^>]*>',
                 '',
-                post.cont
+                post.data
             ).replace('&nbsp;', ' ')
 
     # Response

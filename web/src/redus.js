@@ -161,7 +161,7 @@ export const posts = (state = [], action) => {
         case 'POSTS_EDIT':
             return state.map(post => {
                 if (post.id === action.post.id) {
-                    ['name', 'cont'].map(el => {
+                    ['title', 'data'].map(el => {
                         if (el in action.post) {
                             post[el] = action.post[el]
                         }

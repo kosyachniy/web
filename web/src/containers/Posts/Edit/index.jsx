@@ -9,19 +9,19 @@ import Editor from '../../../components/Editor'
 
 
 const Edit = (props) => {
-    const [name, setName] = useState(props.post ? props.post.name : '')
-    const [cont, setCont] = useState(props.post ? props.post.cont : '')
+    const [title, setName] = useState(props.post ? props.post.title : '')
+    const [data, setCont] = useState(props.post ? props.post.data : '')
     const [redirect, setRedirect] = useState(null)
     const { t } = useTranslation()
 
     const editPost = () => {
-        let data = { name, cont }
+        let req = { title, data }
 
         if (props.post) {
-            data['id'] = props.post.id
+            req['id'] = props.post.id
         }
 
-        api('posts.save', data).then(res => {
+        api('posts.save', req).then(res => {
             if (props.post) {
                 props.handlerSave()
             } else {
@@ -43,14 +43,14 @@ const Edit = (props) => {
                     <input
                         type="text"
                         className="form-control name"
-                        placeholder={ t('posts.name') }
-                        value={ name }
+                        placeholder={ t('posts.title') }
+                        value={ title }
                         onChange={ (event) => {setName(event.target.value)} }
                     />
                 </div>
 
                 <Editor
-                    cont={ cont }
+                    data={ data }
                     updatePost={ (text) => {setCont(text)} }
                 />
 

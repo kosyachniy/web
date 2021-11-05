@@ -11,7 +11,7 @@ export default class Editor extends React.Component {
         return (
             <CKEditor
                 editor={ ClassicEditor }
-                data={ this.props.cont }
+                data={ this.props.data }
                 // onReady={ editor => {
                 //     // You can store the "editor" and use when it is needed.
                 //     console.log( 'Editor is ready to use!', editor );

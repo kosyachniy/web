@@ -6,10 +6,11 @@ from consys.handlers import (
     default_login, check_login_uniq, check_password, process_password,
     check_name, check_surname, check_phone_uniq, pre_process_phone,
     check_mail_uniq, process_title, process_lower, default_status,
+    default_title,
 )
 
 from api.lib import get_language
-from api.models import Base, Attribute, uploader
+from api.models import Base, Attribute
 
 
 class User(Base):
@@ -38,7 +39,7 @@ class User(Base):
         processing=process_password,
     )
     # Personal info
-    avatar = Attribute(types=str, processing=uploader.image)
+    avatar = Attribute(types=str)
     name = Attribute(
         types=str,
         checking=check_name,
@@ -48,6 +49,10 @@ class User(Base):
         types=str,
         checking=check_surname,
         processing=process_title,
+    )
+    title = Attribute(
+        types=str,
+        default=default_title,
     )
     phone = Attribute(
         types=int,

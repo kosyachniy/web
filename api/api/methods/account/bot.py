@@ -62,8 +62,8 @@ async def handle(request, data):
         user = users[0]
 
         action = Action(
-            name='account_auth',
-            details={
+            title='account_auth',
+            data={
                 'network': request.network,
             },
         )
