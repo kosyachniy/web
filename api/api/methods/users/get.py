@@ -99,24 +99,19 @@ async def handle(request, data):
 
     data.fields = data.fields and set(data.fields) | {'id'}
 
+    # Processing
+    def handler(user):
+        user['online'] = online_back(user['id'])
+        return user
+
     # Get
-    users = User.get(
+    users = User.composite(
         ids=data.id,
         count=data.count,
         offset=data.offset,
         fields=fields,
+        handler=handler,
     )
-
-    # Processing
-    # NOTE: user.json(default=True) -> login, status
-    if isinstance(users, list):
-        for i, user in enumerate(users):
-            user = user.json(fields=data.fields or fields)
-            user['online'] = online_back(user['id'])
-            users[i] = user
-    else:
-        users = users.json(fields=data.fields or fields)
-        users['online'] = online_back(users['id'])
 
     # Response
     return {

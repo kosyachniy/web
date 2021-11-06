@@ -8,8 +8,8 @@ from api.models.review import Review
 
 class Type(BaseType):
     id: int = None
-    name: str = None
-    cont: str = None
+    title: str = None
+    data: str = None
 
 @validate(Type)
 async def handle(request, data):

@@ -37,6 +37,7 @@ async def handle(request, data):
 
     # Fields
     fields = {
+        'id',
         'title',
         'data',
         'reactions',
@@ -45,8 +46,35 @@ async def handle(request, data):
         # 'geo',
     }
 
+    # Processing
+
+    if isinstance(data.id, int):
+        def handler(post):
+            return post
+
+    else:
+        def handler(post):
+            # Cover from the first image
+            if not post.get('cover'):
+                res = re.search(
+                    r'<img src="[^"]*">',
+                    post['data']
+                )
+
+                if res is not None:
+                    post['cover'] = res[0].split('"')[1].split('/')[-1]
+
+            # Content
+            post['data'] = re.sub(
+                r'<[^>]*>',
+                '',
+                post['data']
+            ).replace('&nbsp;', ' ')
+
+            return post
+
     # Get
-    posts = Post.get(
+    posts = Post.composite(
         ids=data.id,
         count=data.count,
         offset=data.offset,
@@ -54,27 +82,8 @@ async def handle(request, data):
         fields=fields,
         # category=data.category,
         # language=data.language,
+        handler=handler,
     )
-
-    # Processing
-    if isinstance(posts, list):
-        for post in posts:
-            ## Cover from the first image
-            if not post.cover:
-                res = re.search(
-                    r'<img src="[^"]*">',
-                    post.data
-                )
-
-                if res is not None:
-                    post.cover = res[0].split('"')[1].split('/')[-1]
-
-            ## Content
-            post.data = re.sub(
-                r'<[^>]*>',
-                '',
-                post.data
-            ).replace('&nbsp;', ' ')
 
     # Response
     return {

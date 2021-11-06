@@ -35,41 +35,33 @@ async def handle(request, data):
         'network',
     }
 
+    # Processing
+    def handler(review):
+        # User info
+        if review.get('user'):
+            review['user'] = User.composite(
+                ids=review['user'],
+                fields={
+                    'id',
+                    'login',
+                    'name',
+                    'surname',
+                    'avatar',
+                },
+                handler=lambda el: el,
+            )
+
+        return review
+
     # Get
-    reviews = Review.get(
+    reviews = Review.composite(
         ids=data.id,
         count=data.count,
         offset=data.offset,
         search=data.search,
         fields=fields,
+        handler=handler,
     )
-
-    # Processing
-
-    fields = {
-        'id',
-        'login',
-        'name',
-        'surname',
-        'avatar',
-    }
-
-    if isinstance(reviews, list):
-        for i, review in enumerate(reviews):
-            reviews[i] = review.json(default=False)
-
-            ## User info
-            if review.user:
-                user = User.get(ids=review.user, fields=fields)
-                reviews[i]['user'] = user.json(default=False, fields=fields)
-
-    else:
-        reviews = reviews.json(default=False)
-
-        ## User info
-        if 'user' in reviews and reviews['user']:
-            user = User.get(ids=reviews['user'], fields=fields)
-            reviews['user'] = user.json(default=False, fields=fields)
 
     # Response
     return {
