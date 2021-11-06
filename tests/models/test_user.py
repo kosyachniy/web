@@ -1,5 +1,5 @@
 import pytest
-# from consys.errors import ErrorWrong
+from consys.errors import ErrorInvalid
 from libdev.gen import generate
 
 from api.models.user import User
@@ -13,7 +13,7 @@ def test_repeated_login():
 
     assert user.id
 
-    with pytest.raises(ValueError): # TODO: ErrorWrong
+    with pytest.raises(ErrorInvalid):
         User(login=login.upper())
 
 def test_repeated_mail():
@@ -24,7 +24,7 @@ def test_repeated_mail():
 
     assert user.id
 
-    with pytest.raises(ValueError): # TODO: ErrorWrong
+    with pytest.raises(ErrorInvalid):
         User(mail=mail.upper())
 
 def test_none_fields():

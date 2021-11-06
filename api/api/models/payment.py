@@ -12,8 +12,8 @@ class Payment(Base):
 
     id = Attribute(types=str)
     type = Attribute(types=str)
-    card = Attribute(types=dict, default={})
-    frequency = Attribute(types=int, default=30)
+    card = Attribute(types=dict)
+    frequency = Attribute(types=int, default=30) # Days
     value = Attribute(types=int)
     currency = Attribute(types=str)
     discount = Attribute(types=float)

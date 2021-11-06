@@ -11,4 +11,4 @@ class Action(Base):
     _name = None
 
     id = Attribute(types=str)
-    data = Attribute(types=dict, default={})
+    data = Attribute(types=dict)

@@ -18,7 +18,7 @@ class Post(Base):
         'comments': [],
     }) # TODO: attributes
     cover = Attribute(types=str)
-    tags = Attribute(types=list, default=[])
+    tags = Attribute(types=list)
     # TODO: language
     # TODO: category
     # TODO: source

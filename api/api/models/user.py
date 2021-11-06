@@ -66,7 +66,7 @@ class User(Base):
         pre_processing=process_lower,
     )
     mail_verified = Attribute(types=bool, default=True)
-    social = Attribute(types=list, default=[]) # TODO: list[{}] # TODO: checking
+    social = Attribute(types=list) # TODO: list[{}] # TODO: checking
     #
     description = Attribute(types=str)
     language = Attribute(
@@ -75,18 +75,18 @@ class User(Base):
         pre_processing=get_language,
     )
     status = Attribute(types=int, default=default_status)
-    actions = Attribute(types=list, default=[]) # TODO: list[dict]
-    online = Attribute(types=list, default=[]) # TODO: list[tuple]
+    actions = Attribute(types=list) # TODO: list[dict]
+    online = Attribute(types=list) # TODO: list[tuple]
     rating = Attribute(types=float)
     # global_channel = Attribute(types=int, default=1)
-    # channels = Attribute(types=list, default=[])
+    # channels = Attribute(types=list)
     discount = Attribute(types=float)
     balance = Attribute(types=int, default=0)
     subscription = Attribute(types=int, default=0)
     utm = Attribute(types=str) # Source
-    pay = Attribute(types=list, default=[]) # Saved data for payment
+    pay = Attribute(types=list) # Saved data for payment
     # Permissions
-    mailing = Attribute(types=dict, default={})
+    mailing = Attribute(types=dict)
     # Cache
 
     # TODO: UTM / promo
