@@ -92,7 +92,7 @@ Android | Front-end | React Native | JavaScript | planned
 ## Install & Use with Docker
 [Before starting, you can learn how to configure the server →](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
 
-### Development
+### Local
 1. Customize file ` docker/.env `
 
 2. Run

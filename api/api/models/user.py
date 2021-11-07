@@ -21,6 +21,7 @@ class User(Base):
         'login',
         'name',
         'surname',
+        'title',
         'phone',
         'mail',
         'description',

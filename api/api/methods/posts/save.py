@@ -50,7 +50,7 @@ async def handle(request, data):
     await report.important(
         "Save post",
         {
-            'review': post.id,
+            'post': post.id,
             'title': post.title,
             'user': request.user.id,
             'new': new,
