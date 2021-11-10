@@ -8,6 +8,7 @@ from consys.errors import ErrorWrong
 
 from api.lib import report
 from api.models.socket import Socket
+from api.models.track import Track
 from api.methods.account.online import _other_sessions, _online_count, get_user
 
 
@@ -27,7 +28,16 @@ async def online_stop(sio, socket_id):
 
     # Update user online info
     if user.id:
-        user.online.append({'start': socket.created, 'stop': time.time()})
+        now = time.time()
+
+        # Action tracking
+        Track(
+            title='online',
+            created=socket.created,
+            expired=now,
+        ).save()
+
+        user.last_online = now
         user.save()
 
     # Delete online session info

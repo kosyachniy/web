@@ -59,7 +59,7 @@ class API():
         request = Request(ip, socket, token, network, locale, self.sio)
 
         # # Action tracking
-        # Action(
+        # Track(
         #     title=name,
         #     data=data,
         #     request=request,

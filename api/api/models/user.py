@@ -77,7 +77,6 @@ class User(Base):
     )
     status = Attribute(types=int, default=default_status)
     actions = Attribute(types=list) # TODO: list[dict]
-    online = Attribute(types=list) # TODO: list[tuple]
     rating = Attribute(types=float)
     # global_channel = Attribute(types=int, default=1)
     # channels = Attribute(types=list)
@@ -89,6 +88,7 @@ class User(Base):
     # Permissions
     mailing = Attribute(types=dict)
     # Cache
+    last_online = Attribute(types=int)
 
     # TODO: UTM / promo
     # TODO: referal_parent

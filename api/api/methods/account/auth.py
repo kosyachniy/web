@@ -10,6 +10,7 @@ from api.lib import BaseType, validate, report
 from api.models.user import User
 from api.models.token import Token
 from api.models.action import Action
+from api.models.track import Track
 from api.methods.account.online import online_start
 
 
@@ -30,6 +31,7 @@ async def reg(request, data, by, method=None):
     # Action
 
     details = {
+        'type': by,
         'network': request.network,
         'ip': request.ip,
     }
@@ -179,20 +181,19 @@ async def auth(request, method, data, by):
         # NOTE: Remove this if no password verification is required
         # Check password
         password = process_password(data.password)
-        users = User.get(id=user.id, password=password)
+        users = User.get(id=user.id, password=password, fields={})
         if not users:
             raise ErrorWrong('password')
-        # Update
 
-        action = Action(
-            title='account_auth',
+        # Action tracking
+        Track(
+            title='auth',
             data={
+                'type': by,
                 'ip': request.ip,
             },
-        )
-
-        user.actions.append(action.json(default=False))
-        user.save()
+            user=user.id,
+        ).save()
 
     # Assignment of the token to the user
 

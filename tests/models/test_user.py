@@ -43,11 +43,11 @@ def test_none_fields():
         description=None,
         language=None,
         actions=None,
-        online=None,
         user=None,
         created=None,
         updated=None,
         status=None,
+        last_online=None,
     )
 
     assert user

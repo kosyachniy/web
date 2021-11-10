@@ -31,7 +31,7 @@ dev:
 	$(PYTHON)
 
 connect:
-	sudo docker exec -it ${PROJECT_NAME}_api_1 bash
+	sudo docker exec -it ${PROJECT_NAME}-api-1 bash
 
 test-linter-all:
 	find . -type f -name '*.py' \

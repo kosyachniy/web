@@ -20,13 +20,12 @@ def online_back(user_id):
     if sockets:
         return 0
 
-    user = User.get(ids=user_id, fields={'online'})
+    user = User.get(user_id, fields={'last_online'})
 
-    if not user.online:
+    if not user.last_online:
         return 0
 
-    last = user.online[-1]['stop']
-    return int(time.time() - last)
+    return int(time.time() - user.last_online)
 
 
 class Type(BaseType):

@@ -7,7 +7,7 @@ from consys.errors import ErrorWrong, ErrorAccess
 from api.lib import BaseType, validate, report
 from api.models.user import User # process_lower
 from api.models.token import Token
-from api.models.action import Action
+from api.models.track import Track
 from api.methods.account.auth import reg
 
 
@@ -61,15 +61,15 @@ async def handle(request, data):
         new = False
         user = users[0]
 
-        action = Action(
-            title='account_auth',
+        # Action tracking
+        Track(
+            title='auth',
             data={
+                'type': 'bot',
                 'network': request.network,
             },
-        )
-
-        user.actions.append(action.json(default=False))
-        user.save()
+            user=user.id,
+        ).save()
 
     # Register
     else:

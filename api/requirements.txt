@@ -9,5 +9,5 @@ python-socketio==5.4.0
 requests==2.26.0
 tgreports==0.11
 consys==0.14
-libdev==0.4
+libdev==0.5
 yookassa==2.1.3
