@@ -23,7 +23,6 @@ services:
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
-        - PORT=${EXTERNAL_PORT}
         - MODE=${MODE}
         - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
         - LOCALE=${LOCALE}
@@ -74,7 +73,6 @@ services:
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
-        - PORT=${EXTERNAL_PORT}
         - LOCALE=${LOCALE}
         - TIMEZONE=${TIMEZONE}
         - NAME=${NAME}

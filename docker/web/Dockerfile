@@ -12,14 +12,14 @@ RUN npm install
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST PORT LOCALE TIMEZONE NAME MAIL PHONE SOCIAL \
+ARG PROTOCOL HOST LOCALE TIMEZONE NAME MAIL PHONE SOCIAL \
     GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM \
     SUBSCRIPTION_DAY SUBSCRIPTION_WEEK SUBSCRIPTION_MONTH SUBSCRIPTION_SEASON \
     SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR DISCOUNT
 RUN rm -f src/sets.json
 RUN echo '{ \n\
-    "server": "'$PROTOCOL'://'$HOST':'$PORT'/api/", \n\
-    "sockets": "'$PROTOCOL'://'$HOST':'$PORT'/", \n\
+    "server": "'$PROTOCOL'://'$HOST'/api/", \n\
+    "sockets": "'$PROTOCOL'://'$HOST'/", \n\
     "locale": "'$LOCALE'", \n\
     "timezone": '$TIMEZONE', \n\
     "name": "'$NAME'", \n\

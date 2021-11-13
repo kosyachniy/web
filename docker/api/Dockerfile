@@ -18,7 +18,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST PORT MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
+ARG PROTOCOL HOST MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
     MONGO_DB MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
     GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT VK_ID VK_SECRET \
     YOOKASSA_ID YOOKASSA_KEY \
@@ -51,7 +51,7 @@ RUN echo '{ \n\
         "login": "'$SMSC_LOGIN'", \n\
         "password": "'$SMSC_PASSWORD'" \n\
     }, \n\
-    "client": "'$PROTOCOL'://'$HOST':'$PORT'/", \n\
+    "client": "'$PROTOCOL'://'$HOST'/", \n\
     "mode": "'$MODE'", \n\
     "side_optimized": '$SIDE_OPTIMIZED', \n\
     "locale": "'$LOCALE'", \n\
