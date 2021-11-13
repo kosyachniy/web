@@ -88,13 +88,10 @@ async def reg(request, data, by, method=None):
             'login': data.login,
         }
 
-    try:
-        user = User(
-            actions=[action.json(default=False)], # TODO: without `.json()`
-            **req,
-        )
-    except ValueError as e:
-        raise ErrorInvalid(e) from e
+    user = User(
+        actions=[action.json(default=False)], # TODO: without `.json()`
+        **req,
+    )
 
     # TODO: Subscription
 

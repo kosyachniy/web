@@ -65,11 +65,11 @@ def test_none_fields():
 #     assert User(phone=89697366730).phone == 79697366730
 #     assert User(phone='8 9697366730').phone == 79697366730
 
-#     with pytest.raises(ValueError): # TODO: ErrorWrong
+#     with pytest.raises(ErrorInvalid):
 #         User(phone='(969) 7366730')
 
-#     with pytest.raises(ValueError): # TODO: ErrorWrong
+#     with pytest.raises(ErrorInvalid):
 #         User(phone='abcdefghijklmn')
 
-#     with pytest.raises(ValueError): # TODO: ErrorWrong
+#     with pytest.raises(ErrorInvalid):
 #         User(phone='')

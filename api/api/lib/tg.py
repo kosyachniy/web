@@ -4,7 +4,7 @@ Functionality for working with Telegram
 
 from tgio import Telegram
 
-from . import cfg
+from api.lib import cfg
 
 
 TG_TOKEN = cfg('tg.token')
