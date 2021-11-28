@@ -8,7 +8,6 @@ import time
 from api.lib import get_network, get_language, report
 from api.methods import call
 from api.methods.account.online import get_user
-from api.background import background
 
 
 class Request():
@@ -30,9 +29,6 @@ class API():
 
     def __init__(self, sio=None):
         self.sio = sio
-
-        # Background processes
-        asyncio.create_task(background(sio))
 
     async def method(
         self,
