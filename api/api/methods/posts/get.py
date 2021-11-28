@@ -74,7 +74,7 @@ async def handle(request, data):
             return post
 
     # Get
-    posts = Post.composite(
+    posts = Post.complex(
         ids=data.id,
         count=data.count,
         offset=data.offset,

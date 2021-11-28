@@ -39,7 +39,7 @@ async def handle(request, data):
     def handler(review):
         # User info
         if review.get('user'):
-            review['user'] = User.composite(
+            review['user'] = User.complex(
                 ids=review['user'],
                 fields={
                     'id',
@@ -54,7 +54,7 @@ async def handle(request, data):
         return review
 
     # Get
-    reviews = Review.composite(
+    reviews = Review.complex(
         ids=data.id,
         count=data.count,
         offset=data.offset,

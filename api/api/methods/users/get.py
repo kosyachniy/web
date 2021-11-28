@@ -57,13 +57,15 @@ async def handle(request, data):
         'avatar',
         'name',
         'surname',
+        'title',
         'status',
         # 'balance',
-        # 'rating',
+        'rating',
         'description',
         # 'channels',
         # 'global_channel',
-        # 'discount',
+        'discount',
+        # 'online',
     }
 
     process_self = data.id == request.user.id
@@ -94,17 +96,17 @@ async def handle(request, data):
         }
 
     if data.fields:
-        fields = fields & set(data.fields)
-
-    data.fields = data.fields and set(data.fields) | {'id'}
+        fields = fields & set(data.fields) | {'id'}
 
     # Processing
     def handler(user):
-        user['online'] = online_back(user['id'])
+        if data.fields and 'online' in data.fields:
+            user['online'] = online_back(user['id'])
+
         return user
 
     # Get
-    users = User.composite(
+    users = User.complex(
         ids=data.id,
         count=data.count,
         offset=data.offset,

@@ -10,4 +10,4 @@ class Track(Base):
 
     _name = 'tracking'
 
-    data = Attribute(types=dict, default={})
+    data = Attribute(types=dict)

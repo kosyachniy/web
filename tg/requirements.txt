@@ -1,4 +1,4 @@
 requests==2.26.0
 tgio==0.5
 tgreports==0.8
-libdev==0.5
+libdev==0.6

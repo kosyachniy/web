@@ -35,6 +35,7 @@ async def online_stop(sio, socket_id):
             title='online',
             created=socket.created,
             expired=now,
+            user=user.id,
         ).save()
 
         user.last_online = now
