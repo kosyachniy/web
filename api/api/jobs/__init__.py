@@ -28,9 +28,6 @@ async def background(sio):
         [current_path], current_module,
     ):
         name = module_name.split('.')[-1]
-        if name == 'sockets':
-            continue
-
         module = importlib.import_module(module_name[1:])
         handlers.append(getattr(module, name)(sio))
 

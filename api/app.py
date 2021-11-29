@@ -22,11 +22,6 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-# Socket.IO
-import socketio
-sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
-asgi = socketio.ASGIApp(sio)
-
 # # Limiter
 
 # from flask import request, jsonify
@@ -65,7 +60,7 @@ from api.models.payment import Payment
 
 
 api = API(
-    sio=sio,
+    # sio=sio,
 )
 
 ## Endpoints
@@ -268,6 +263,3 @@ async def pay(data: InputPayment, request: Request):
 #     x = request.json
 #     print(x)
 #     return jsonify({'qwe': 'asd'})
-
-
-app.mount('/', asgi) # TODO: check it
