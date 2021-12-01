@@ -66,6 +66,51 @@ services:
       - ../api/app.py:/app.py
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
+  jobs:
+    build:
+      dockerfile: ../docker/api/Dockerfile
+      context: ../api
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
+        - MODE=${MODE}
+        - SIDE_OPTIMIZED=${SIDE_OPTIMIZED}
+        - LOCALE=${LOCALE}
+        - TIMEZONE=${TIMEZONE}
+        - MONGO_DB=${PROJECT_NAME}
+        - MONGO_LOGIN=${MONGO_LOGIN}
+        - MONGO_PASSWORD=${MONGO_PASSWORD}
+        - YOOKASSA_ID=${YOOKASSA_ID}
+        - YOOKASSA_KEY=${YOOKASSA_KEY}
+        - GOOGLE_ID=${GOOGLE_ID}
+        - GOOGLE_SECRET=${GOOGLE_SECRET}
+        - TG_TOKEN=${TG_TOKEN}
+        - BUG_CHAT=${BUG_CHAT}
+        - SMSC_LOGIN=${SMSC_LOGIN}
+        - SMSC_PASSWORD=${SMSC_PASSWORD}
+        - VK_ID=${VK_ID}
+        - VK_SECRET=${VK_SECRET}
+        - SUBSCRIPTION_DAY=${SUBSCRIPTION_DAY}
+        - SUBSCRIPTION_WEEK=${SUBSCRIPTION_WEEK}
+        - SUBSCRIPTION_MONTH=${SUBSCRIPTION_MONTH}
+        - SUBSCRIPTION_SEASON=${SUBSCRIPTION_SEASON}
+        - SUBSCRIPTION_ACADEMIC_YEAR=${SUBSCRIPTION_ACADEMIC_YEAR}
+        - SUBSCRIPTION_YEAR=${SUBSCRIPTION_YEAR}
+        - DISCOUNT=${DISCOUNT}
+    depends_on:
+      - db
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      # NOTE: To provide files
+      - type: bind
+        source: ../data/logs/jobs.err
+        target: /app.err
+      - type: bind
+        source: ../data/logs/jobs.log
+        target: /app.log
+    command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
+
   web:
     build:
       dockerfile: ../docker/web/Dockerfile
@@ -109,6 +154,7 @@ services:
       - ../data/logs:/data/logs
     depends_on:
       - api
+      - jobs
       - web
     ports:
       - "${EXTERNAL_PORT}:80"

@@ -7,6 +7,7 @@ import time
 from consys.errors import ErrorWrong
 
 from api.lib import report
+from api.models.job import Job
 from api.models.socket import Socket
 from api.models.track import Track
 from api.methods.account.online import _other_sessions, _online_count, get_user
@@ -56,10 +57,18 @@ async def online_stop(sio, socket_id):
 
     count = _online_count()
 
-    await sio.emit('online_del', {
-        'count': count,
-        'users': [{'id': user.id}], # TODO: Админам
-    })
+    if count:
+        Job(
+            method='online_del',
+            data={
+                'count': count,
+                'users': [{'id': user.id}], # TODO: Админам
+            },
+        ).save()
+        # await sio.emit('online_del', {
+        #     'count': count,
+        #     'users': [{'id': user.id}], # TODO: Админам
+        # })
 
 
 async def handle(request, data):

@@ -22,11 +22,6 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-# Socket.IO
-import socketio
-sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
-asgi = socketio.ASGIApp(sio)
-
 # # Limiter
 
 # from flask import request, jsonify
@@ -59,12 +54,13 @@ from api import API
 from api.lib import report
 from api.models.user import User
 from api.models.action import Action
-from api.models.socket import Socket
+from api.models.job import Job
+# from api.models.socket import Socket
 from api.models.payment import Payment
 
 
 api = API(
-    sio=sio,
+    # sio=sio,
 )
 
 ## Endpoints
@@ -242,12 +238,21 @@ async def pay(data: InputPayment, request: Request):
     # TODO: TG notification
 
     # Send sockets for real-time update
-    for socket in Socket.get(user=user_id, fields={}):
-        await sio.emit('money_recieve', {
+    Job(
+        method='money_recieve',
+        users=[user_id],
+        data={
             'add': count,
             'balance': user.balance,
             'subscription': user.subscription,
-        }, room=socket.id)
+        },
+    ).save()
+    # for socket in Socket.get(user=user_id, fields={}):
+    #     await sio.emit('money_recieve', {
+    #         'add': count,
+    #         'balance': user.balance,
+    #         'subscription': user.subscription,
+    #     }, room=socket.id)
 
     return '', 200
 
@@ -258,38 +263,3 @@ async def pay(data: InputPayment, request: Request):
 #     x = request.json
 #     print(x)
 #     return jsonify({'qwe': 'asd'})
-
-## Sockets
-### Online users
-
-@sio.on('connect')
-async def connect(sid, request, data):
-    """ Connect socket """
-
-    await api.method(
-        'account.connect',
-        ip=request['asgi.scope']['client'][0],
-        socket=sid,
-    )
-
-@sio.on('online')
-async def online(sid, data):
-    """ Socket about online user """
-
-    await api.method(
-        'account.online',
-        data,
-        socket=sid,
-    )
-
-@sio.on('disconnect')
-async def disconnect(sid):
-    """ Disconnect socket """
-
-    await api.method(
-        'account.disconnect',
-        socket=sid,
-    )
-
-
-app.mount('/', asgi) # TODO: check it
