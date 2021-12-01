@@ -1,3 +1,7 @@
+"""
+Jobs worker
+"""
+
 import asyncio
 
 import requests
@@ -58,6 +62,6 @@ async def disconnect(sid):
 # Background processes
 class Background():
     """ Background handler """
-    def __init__(self, sio=None):
+    def __init__(self):
         asyncio.create_task(background(sio))
-Background(sio)
+Background()

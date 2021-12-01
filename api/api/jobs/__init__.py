@@ -10,8 +10,8 @@ import importlib
 from api.lib import report
 
 
-current_path = str(Path(__file__).parent) + '/'
-current_module = current_path.replace('/', '.')
+CURRENT_PATH = str(Path(__file__).parent) + '/'
+CURRENT_MODULE = CURRENT_PATH.replace('/', '.')
 
 
 async def background(sio):
@@ -25,7 +25,7 @@ async def background(sio):
     handlers = []
 
     for _, module_name, _ in pkgutil.walk_packages(
-        [current_path], current_module,
+        [CURRENT_PATH], CURRENT_MODULE,
     ):
         name = module_name.split('.')[-1]
         module = importlib.import_module(module_name[1:])
