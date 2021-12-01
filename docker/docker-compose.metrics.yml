@@ -158,12 +158,12 @@ services:
     volumes:
       # NOTE: To provide files
       - type: bind
-        source: ../data/logs/api.err
+        source: ../data/logs/jobs.err
         target: /app.err
       - type: bind
-        source: ../data/logs/api.log
+        source: ../data/logs/jobs.log
         target: /app.log
-    command: python jobs.py
+    command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers
 
   tg:
     image: web/tg

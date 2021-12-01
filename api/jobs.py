@@ -1,7 +1,6 @@
 import asyncio
 
 import requests
-import uvicorn
 import socketio
 
 from api.jobs import background
@@ -12,11 +11,6 @@ LINK = 'http://api:5000/'
 
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 app = socketio.ASGIApp(sio)
-
-# Background processes
-asyncio.create_task(background(sio))
-
-uvicorn.run(app, host='127.0.0.1', port=5000)
 
 
 # Online users
@@ -59,3 +53,11 @@ async def disconnect(sid):
     #     'account.disconnect',
     #     socket=sid,
     # )
+
+
+# Background processes
+class Background():
+    """ Background handler """
+    def __init__(self, sio=None):
+        asyncio.create_task(background(sio))
+Background(sio)

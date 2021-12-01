@@ -57,17 +57,18 @@ async def online_stop(sio, socket_id):
 
     count = _online_count()
 
-    Job(
-        method='online_del',
-        data={
-            'count': count,
-            'users': [{'id': user.id}], # TODO: Админам
-        },
-    ).save()
-    # await sio.emit('online_del', {
-    #     'count': count,
-    #     'users': [{'id': user.id}], # TODO: Админам
-    # })
+    if count:
+        Job(
+            method='online_del',
+            data={
+                'count': count,
+                'users': [{'id': user.id}], # TODO: Админам
+            },
+        ).save()
+        # await sio.emit('online_del', {
+        #     'count': count,
+        #     'users': [{'id': user.id}], # TODO: Админам
+        # })
 
 
 async def handle(request, data):
