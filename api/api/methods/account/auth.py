@@ -4,7 +4,7 @@ The authorization method of the account object of the API
 
 from consys.handlers import process_lower, pre_process_phone, check_phone, \
                             check_mail, process_password
-from consys.errors import ErrorInvalid, ErrorWrong, ErrorAccess
+from consys.errors import ErrorWrong, ErrorAccess
 
 from api.lib import BaseType, validate, report
 from api.models.user import User

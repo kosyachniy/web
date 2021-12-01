@@ -31,7 +31,12 @@ dev:
 	$(PYTHON)
 
 connect:
-	sudo docker exec -it ${PROJECT_NAME}-api-1 bash
+	if [ ${MODE} = LOCAL ]; \
+	then \
+		sudo docker exec -it ${PROJECT_NAME}-api-1 bash; \
+	else \
+		docker exec -it $(echo $(docker ps -a | grep ${PROJECT_NAME}/api) | tr " " "\n" | head -n1) bash; \
+	fi
 
 test-linter-all:
 	find . -type f -name '*.py' \
