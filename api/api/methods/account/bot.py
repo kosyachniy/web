@@ -63,7 +63,7 @@ async def handle(request, data):
 
         # Action tracking
         Track(
-            title='auth',
+            title='acc_auth',
             data={
                 'type': 'bot',
                 'network': request.network,

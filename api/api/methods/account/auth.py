@@ -28,7 +28,7 @@ def detect_type(login):
 async def reg(request, data, by, method=None):
     """ Register an account """
 
-    # Action
+    # Action tracking
 
     details = {
         'type': by,
@@ -48,7 +48,7 @@ async def reg(request, data, by, method=None):
         details['type'] = method
 
     action = Action(
-        title='account_reg',
+        title='acc_reg',
         data=details,
     )
 
@@ -184,7 +184,7 @@ async def auth(request, method, data, by):
 
         # Action tracking
         Track(
-            title='auth',
+            title='acc_auth',
             data={
                 'type': by,
                 'ip': request.ip,

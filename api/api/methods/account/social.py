@@ -231,7 +231,7 @@ async def handle(request, data):
     #         new = True
 
     #         action = Action(
-    #             title='account_reg',
+    #             title='acc_reg',
     #             data={
     #                 'social': data.social,
     #                 'ip': request.ip,

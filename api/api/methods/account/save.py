@@ -9,6 +9,7 @@ from consys.errors import ErrorAccess
 
 from api.lib import BaseType, validate
 from api.models.user import User
+from api.models.action import Action
 
 
 class Type(BaseType):
@@ -55,6 +56,12 @@ async def handle(request, data):
     user.language = data.language
 
     user.mailing = data.mailing
+
+    # Action tracking
+    action = Action(
+        title='acc_save',
+    )
+    user.actions.append(action.json(default=False))
 
     # Save
     user.save()

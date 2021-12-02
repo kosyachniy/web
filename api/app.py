@@ -210,26 +210,14 @@ async def pay(data: InputPayment, request: Request):
     if day:
         user.subscription = max(user.subscription, timestamp) + 86400 * day
 
-    # History
-
-    user.transactions.append({
-        'type': 5,
-        'message': 'yandex',
-        'time': timestamp,
-        'count': value_real,
-        'day': day,
-        'user': user_id,
-        'out': 0,
-    })
-
+    # Action tracking
     action = Action(
-        title='payment',
+        title='pay_ok',
         data={
             'value': value_real,
             'days': day,
         },
     )
-
     user.actions.append(action.json(default=False))
 
     # Update
