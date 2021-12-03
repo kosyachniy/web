@@ -139,6 +139,7 @@ async def auth(request, method, data, by):
         'avatar',
         'name',
         'surname',
+        'title',
         'phone',
         'mail',
         'social',

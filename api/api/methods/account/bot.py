@@ -34,6 +34,7 @@ async def handle(request, data):
         'avatar',
         'name',
         'surname',
+        'title',
         'phone',
         'mail',
         'social',

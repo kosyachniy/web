@@ -13,7 +13,10 @@ from libdev.cfg import cfg
 from libdev.gen import generate
 
 ## Local
-from lib._variables import languages, languages_chosen, tokens, ids
+from lib._variables import (
+    languages, languages_chosen, tokens,
+    user_ids, user_logins, user_names, user_titles,
+)
 from lib.reports import report
 
 
@@ -26,12 +29,10 @@ LOG_LIMIT = 330
 async def api(chat, method, data=None):
     """ API request """
 
-    chat_id = chat.id
-
     if data is None:
         data = {}
 
-    if chat_id not in tokens:
+    if chat.id not in tokens:
         res = await auth(chat)
 
         if res is None:
@@ -40,15 +41,15 @@ async def api(chat, method, data=None):
     req = {
         'method': method,
         'params': data,
-        'token': tokens[chat_id],
+        'token': tokens[chat.id],
         'network': 'tg',
-        'locale': languages[chat_id],
+        'locale': languages[chat.id],
     }
 
     await report.debug(
         "API request",
         {
-            'user': chat_id,
+            'user': chat.id,
             'data': json.dumps(req, ensure_ascii=False)[:LOG_LIMIT],
         }
     )
@@ -66,11 +67,11 @@ async def api(chat, method, data=None):
         await report.error(
             "API response",
             {
-                'user': chat_id,
+                'user': chat.id,
                 'method': method,
                 'params': data,
-                'token': tokens[chat_id],
-                'locale': languages[chat_id],
+                'token': tokens[chat.id],
+                'locale': languages[chat.id],
                 'error': res.status_code,
             }
         )
@@ -81,7 +82,7 @@ async def api(chat, method, data=None):
     await report.debug(
         "API response",
         {
-            'user': chat_id,
+            'user': chat.id,
             'data': res,
         }
     )
@@ -91,18 +92,16 @@ async def api(chat, method, data=None):
 async def auth(chat) -> bool:
     """ User authentication """
 
-    chat_id = chat.id
-
-    if chat_id in ids:
+    if chat.id in user_ids:
         return False
 
     # Default settings
-    if chat_id not in languages:
-        languages[chat_id] = 1 # TODO: 0
+    if chat.id not in languages:
+        languages[chat.id] = 1 # TODO: 0
 
     ## Token
     token = generate()
-    tokens[chat_id] = token
+    tokens[chat.id] = token
 
     ## Call the API
     error, data = await api(chat, 'account.bot', {
@@ -126,15 +125,18 @@ async def auth(chat) -> bool:
             }
         )
 
-        del tokens[chat_id]
+        del tokens[chat.id]
         return
 
     ## Update global variables
 
-    ids[chat_id] = data['id']
+    user_ids[chat.id] = data['id']
+    user_logins[chat.id] = data.get('login')
+    user_names[chat.id] = data.get('name')
+    user_titles[chat.id] = data.get('title')
 
     if 'language' in data['social']:
-        languages[chat_id] = data['social']['language']
-        languages_chosen[chat_id] = True
+        languages[chat.id] = data['social']['language']
+        languages_chosen[chat.id] = True
 
     return True
