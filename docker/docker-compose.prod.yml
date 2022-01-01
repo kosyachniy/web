@@ -53,6 +53,7 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
+      - ../data/backup:/backup
       - ../scripts:/scripts
       # NOTE: To provide files
       - type: bind
@@ -61,8 +62,6 @@ services:
       - type: bind
         source: ../data/logs/api.log
         target: /app.log
-      # To reserve data from the inside
-      - ../api/api:/api
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
 
   jobs:

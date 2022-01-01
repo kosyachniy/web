@@ -53,6 +53,7 @@ services:
     env_file: .env
     volumes:
       - ../data/load:/data/load
+      - ../data/backup:/backup
       - ../scripts:/scripts
       # NOTE: To provide files
       - type: bind
