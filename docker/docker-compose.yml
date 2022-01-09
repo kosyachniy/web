@@ -39,7 +39,8 @@ services:
       # For hot reload
       - ../api/api:/api
       - ../api/app.py:/app.py
-    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
+    # NOTE: /bin/sh -c "" to run multiple commands
+    command: /bin/sh -c "/run.sh && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   jobs:
     image: ${PROJECT_NAME}/jobs
@@ -58,7 +59,8 @@ services:
       - type: bind
         source: ../data/logs/jobs.log
         target: /app.log
-    command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
+    # NOTE: /bin/sh -c "" to run multiple commands
+    command: /bin/sh -c "/run.sh && uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   web:
     image: ${PROJECT_NAME}/web
@@ -74,6 +76,8 @@ services:
       - ../web/src/lib:/src/lib
       - ../web/src/App.jsx:/src/App.jsx
       - ../web/src/redus.js:/src/redus.js
+    # NOTE: /bin/sh -c "" to run multiple commands
+    command: /bin/sh -c "/run.sh && uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   server:
     image: "nginx:1.21.5"

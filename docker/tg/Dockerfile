@@ -17,27 +17,6 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . .
 
-# Settings
-RUN rm -f sets.json
-RUN echo '{ \n\
-    "server": "'$PROTOCOL'://'$EXTERNAL_HOST'/api/", \n\
-    "client": "'$PROTOCOL'://'$EXTERNAL_HOST'/", \n\
-    "tg": { \n\
-        "name": "'$TG_BOT'", \n\
-        "server": "'$PROTOCOL'://'$EXTERNAL_HOST'/tg/", \n\
-        "token": "'$TG_TOKEN'" \n\
-    }, \n\
-    "amazon": { \n\
-        "key": "'$AMAZON_ACCESS_ID'", \n\
-        "secret": "'$AMAZON_ACCESS_KEY'", \n\
-        "bucket": "'$AMAZON_BUCKET_NAME'", \n\
-        "directory": "'$AMAZON_DIR_NAME'", \n\
-        "region": "'$AMAZON_REGION'" \n\
-    }, \n\
-    "mode": "'$MODE'", \n\
-    "bug_chat": '$BUG_CHAT' \n\
-} \n\
-' >> sets.json
-
 # Run
-CMD python app.py
+RUN chmod +x /run.sh
+CMD /run.sh

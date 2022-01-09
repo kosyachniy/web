@@ -17,57 +17,5 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . .
 
-# Settings
-RUN rm -f sets.json
-RUN echo '{ \n\
-    "name": "'$PROJECT_NAME'", \n\
-    "mongo": { \n\
-        "host": "db", \n\
-        "db": "'$PROJECT_NAME'", \n\
-        "login": "'$MONGO_LOGIN'", \n\
-        "password": "'$MONGO_PASSWORD'" \n\
-    }, \n\
-    "yookassa": { \n\
-        "id": '$YOOKASSA_ID', \n\
-        "key": "'$YOOKASSA_KEY'" \n\
-    }, \n\
-    "google": { \n\
-        "client_id": "'$GOOGLE_ID'", \n\
-        "client_secret": "'$GOOGLE_SECRET'" \n\
-    }, \n\
-    "amazon": { \n\
-        "key": "'$AMAZON_ACCESS_ID'", \n\
-        "secret": "'$AMAZON_ACCESS_KEY'", \n\
-        "bucket": "'$AMAZON_BUCKET_NAME'", \n\
-        "directory": "'$AMAZON_DIR_NAME'", \n\
-        "region": "'$AMAZON_REGION'" \n\
-    }, \n\
-    "tg": { \n\
-        "token": "'$TG_TOKEN'", \n\
-        "bot": "'$TG_BOT'" \n\
-    }, \n\
-    "vk": { \n\
-        "client_id": '$VK_ID', \n\
-        "client_secret": "'$VK_SECRET'" \n\
-    }, \n\
-    "smsc": { \n\
-        "login": "'$SMSC_LOGIN'", \n\
-        "password": "'$SMSC_PASSWORD'" \n\
-    }, \n\
-    "client": "'$PROTOCOL'://'$EXTERNAL_HOST'/", \n\
-    "mode": "'$MODE'", \n\
-    "side_optimized": '$SIDE_OPTIMIZED', \n\
-    "locale": "'$LOCALE'", \n\
-    "timezone": '$TIMEZONE', \n\
-    "bug_chat": '$BUG_CHAT', \n\
-    "subscription": { \n\
-        "day": '$SUBSCRIPTION_DAY', \n\
-        "week": '$SUBSCRIPTION_WEEK', \n\
-        "month": '$SUBSCRIPTION_MONTH', \n\
-        "season": '$SUBSCRIPTION_SEASON', \n\
-        "ay": '$SUBSCRIPTION_ACADEMIC_YEAR', \n\
-        "year": '$SUBSCRIPTION_YEAR' \n\
-    }, \n\
-    "discount": '$DISCOUNT' \n\
-} \n\
-' >> sets.json
+# Run
+RUN chmod +x /run.sh

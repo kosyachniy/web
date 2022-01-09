@@ -89,7 +89,8 @@ services:
         reservations:
           cpus: "0.15"
           memory: 200M
-    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
+    # NOTE: /bin/sh -c "" to run multiple commands
+    command: /bin/sh -c "/run.sh && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers"
 
   jobs:
     image: web/jobs
@@ -108,7 +109,8 @@ services:
       - type: bind
         source: ../data/logs/jobs.log
         target: /app.log
-    command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers
+    # NOTE: /bin/sh -c "" to run multiple commands
+    command: /bin/sh -c "/run.sh && uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers"
 
   tg:
     image: web/tg
@@ -147,4 +149,5 @@ services:
       - cadvisor
     ports:
       - "8010:80"
+    # NOTE: /bin/sh -c "" to run multiple commands
     command: /bin/sh -c "envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g \"daemon off;\""
