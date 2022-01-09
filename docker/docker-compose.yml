@@ -17,6 +17,7 @@ services:
     command: --config /etc/mongod.conf
 
   api:
+    image: ${PROJECT_NAME}/api
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
@@ -74,6 +75,7 @@ services:
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
   jobs:
+    image: ${PROJECT_NAME}/jobs
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
@@ -125,6 +127,7 @@ services:
     command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
   web:
+    image: ${PROJECT_NAME}/web
     build:
       dockerfile: ../docker/web/Dockerfile
       context: ../web
