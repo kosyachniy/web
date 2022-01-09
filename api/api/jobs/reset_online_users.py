@@ -6,7 +6,7 @@ from api.models.socket import Socket
 from api.methods.account.disconnect import online_stop
 
 
-async def reset_online_users(sio):
+async def handle(sio):
     """ Reset online users """
 
     sockets = Socket.get(fields={})

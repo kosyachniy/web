@@ -9,7 +9,7 @@ from consys.errors import ErrorWrong
 from api.models.system import System
 
 
-async def update_server_status(_):
+async def handle(_):
     """ Update last server time """
 
     while True:

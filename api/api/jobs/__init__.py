@@ -27,8 +27,7 @@ async def background(sio):
     for _, module_name, _ in pkgutil.walk_packages(
         [CURRENT_PATH], CURRENT_MODULE,
     ):
-        name = module_name.split('.')[-1]
         module = importlib.import_module(module_name[1:])
-        handlers.append(getattr(module, name)(sio))
+        handlers.append(getattr(module, 'handle')(sio))
 
     await asyncio.gather(*handlers)

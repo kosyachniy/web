@@ -1,5 +1,5 @@
 """
-Send websockets
+Send websockets process
 """
 
 import asyncio
@@ -8,7 +8,7 @@ from api.models.job import Job
 from api.models.socket import Socket
 
 
-async def send_sockets(sio):
+async def handle(sio):
     """ Send websockets """
 
     while True:
