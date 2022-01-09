@@ -18,17 +18,20 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
-    MONGO_DB MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
-    GOOGLE_ID GOOGLE_SECRET TG_TOKEN BUG_CHAT VK_ID VK_SECRET \
+ARG PROJECT_NAME PROTOCOL HOST MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
+    MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
+    GOOGLE_ID GOOGLE_SECRET TG_TOKEN TG_BOT BUG_CHAT VK_ID VK_SECRET \
     YOOKASSA_ID YOOKASSA_KEY \
     SUBSCRIPTION_DAY SUBSCRIPTION_WEEK SUBSCRIPTION_MONTH SUBSCRIPTION_SEASON \
-    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR DISCOUNT
+    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR DISCOUNT \
+    AMAZON_ACCESS_ID AMAZON_ACCESS_KEY AMAZON_BUCKET_NAME AMAZON_DIR_NAME \
+    AMAZON_REGION
 RUN rm -f sets.json
 RUN echo '{ \n\
+    "name": "'$PROJECT_NAME'", \n\
     "mongo": { \n\
         "host": "db", \n\
-        "db": "'$MONGO_DB'", \n\
+        "db": "'$PROJECT_NAME'", \n\
         "login": "'$MONGO_LOGIN'", \n\
         "password": "'$MONGO_PASSWORD'" \n\
     }, \n\
@@ -40,8 +43,16 @@ RUN echo '{ \n\
         "client_id": "'$GOOGLE_ID'", \n\
         "client_secret": "'$GOOGLE_SECRET'" \n\
     }, \n\
+    "amazon": { \n\
+        "key": "'$AMAZON_ACCESS_ID'", \n\
+        "secret": "'$AMAZON_ACCESS_KEY'", \n\
+        "bucket": "'$AMAZON_BUCKET_NAME'", \n\
+        "directory": "'$AMAZON_DIR_NAME'", \n\
+        "region": "'$AMAZON_REGION'" \n\
+    }, \n\
     "tg": { \n\
-        "token": "'$TG_TOKEN'" \n\
+        "token": "'$TG_TOKEN'", \n\
+        "bot": "'$TG_BOT'" \n\
     }, \n\
     "vk": { \n\
         "client_id": '$VK_ID', \n\

@@ -15,10 +15,12 @@ COPY . .
 ARG PROTOCOL HOST LOCALE TIMEZONE NAME MAIL PHONE SOCIAL \
     GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM \
     SUBSCRIPTION_DAY SUBSCRIPTION_WEEK SUBSCRIPTION_MONTH SUBSCRIPTION_SEASON \
-    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR DISCOUNT
+    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR AMAZON_ACCESS_ID \
+    AMAZON_ACCESS_KEY AMAZON_BUCKET_NAME AMAZON_DIR_NAME AMAZON_REGION DISCOUNT
 RUN rm -f src/sets.json
 RUN echo '{ \n\
     "server": "'$PROTOCOL'://'$HOST'/api/", \n\
+    "client": "'$PROTOCOL'://'$HOST'/", \n\
     "sockets": "'$PROTOCOL'://'$HOST'/", \n\
     "locale": "'$LOCALE'", \n\
     "timezone": '$TIMEZONE', \n\
@@ -26,6 +28,13 @@ RUN echo '{ \n\
     "mail": "'$MAIL'", \n\
     "phone": "'$PHONE'", \n\
     "social": '$SOCIAL', \n\
+    "amazon": { \n\
+        "id": "'$AMAZON_ACCESS_ID'", \n\
+        "key": "'$AMAZON_ACCESS_KEY'", \n\
+        "bucket": "'$AMAZON_BUCKET_NAME'", \n\
+        "dir": "'$AMAZON_DIR_NAME'", \n\
+        "region": "'$AMAZON_REGION'" \n\
+    }, \n\
     "maps": { \n\
         "center": { \n\
             "lat": '$GOOGLE_MAP_LAT', \n\
