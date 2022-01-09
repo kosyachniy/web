@@ -18,7 +18,7 @@ BUTTONS = [
 
 
 @tg.dp.message_handler(commands=['start', 'help', 'info', 'about'])
-async def start(message: tg.types.Message):
+async def start(message):
     """ Start handler """
 
     chat = message.chat
@@ -34,8 +34,25 @@ async def start(message: tg.types.Message):
 
     await tg.send(chat.id, text, buttons=BUTTONS)
 
+@tg.dp.message_handler(lambda msg: msg.text.lower() == 'профиль')
+async def profile(message):
+    """ Profile """
+
+    chat = message.chat
+    res = await auth(chat)
+
+    if not res:
+        await tg.send(chat.id, "Бот обновляется 😵‍💫\nУже скоро смогу ответить!")
+        return
+
+    text = user_titles[chat.id]
+    if user_logins[chat.id]:
+        text += f" (@{user_logins[chat.id]})"
+
+    await tg.send(chat.id, text, buttons=BUTTONS)
+
 @tg.dp.message_handler()
-async def echo(message: tg.types.Message):
+async def echo(message):
     """ Main handler """
 
     chat = message.chat

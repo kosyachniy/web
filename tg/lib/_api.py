@@ -15,7 +15,7 @@ from libdev.gen import generate
 ## Local
 from lib._variables import (
     languages, languages_chosen, tokens,
-    user_ids, user_logins, user_names, user_titles,
+    user_ids, user_logins, user_statuses, user_names, user_titles
 )
 from lib.reports import report
 
@@ -87,7 +87,7 @@ async def api(chat, method, data=None):
         }
     )
 
-    return res['error'], res['data']
+    return res['error'], res.get('data', {})
 
 async def auth(chat) -> bool:
     """ User authentication """
@@ -132,8 +132,9 @@ async def auth(chat) -> bool:
 
     user_ids[chat.id] = data['id']
     user_logins[chat.id] = data.get('login')
-    user_names[chat.id] = data.get('name')
-    user_titles[chat.id] = data.get('title')
+    user_names[chat.id] = data.get('name', '')
+    user_titles[chat.id] = data.get('title', '')
+    user_statuses[chat.id] = data.get('status', 3)
 
     if 'language' in data['social']:
         languages[chat.id] = data['social']['language']
