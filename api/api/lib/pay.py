@@ -2,7 +2,6 @@
 Payments functionality for the API
 """
 
-
 from yookassa import Configuration, Payment
 
 from api.lib import cfg

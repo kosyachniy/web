@@ -28,6 +28,7 @@ async def handle(request, data):
 
     # Fields
     fields = {
+        'id',
         'title',
         'data',
         'user',

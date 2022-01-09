@@ -180,10 +180,11 @@ async def pay(data: InputPayment, request: Request):
     await report.important("Payment", {
         'service': 'yandex',
         'type': payment.type,
+        'card': payment.card,
         'value': f"{int(value_real)} {payment.currency}",
         'user': f"#{user_id} {user.name} {user.surname}",
         'discount': user.discount and f"{int((1-user.discount)*100)}%",
-        'renewal': data['payment_method']['saved']
+        'renewal': data['payment_method']['saved'],
     }, tags=['payment'])
 
     # Crediting funds
@@ -251,3 +252,6 @@ async def pay(data: InputPayment, request: Request):
 #     x = request.json
 #     print(x)
 #     return jsonify({'qwe': 'asd'})
+
+
+# app.mount('/', asgi) # TODO: check it

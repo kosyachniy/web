@@ -190,10 +190,17 @@ async def online_start(sio, token_id, socket_id=None):
     # # TODO: cache
     # space = await _get_active_space(user.id)
     # if space:
-    #     for socket in Socket.get(user=user.id, fields={}):
-    #         await sio.emit('space_return', {
+    #     Job(
+    #         method='space_return',
+    #         users=[user.id],
+    #         data={
     #             'id': space,
-    #         }, room=socket.id)
+    #         },
+    #     ).save()
+    #     # for socket in Socket.get(user=user.id, fields={}):
+    #     #     await sio.emit('space_return', {
+    #     #         'id': space,
+    #     #     }, room=socket.id)
 
 
 class Type(BaseType):

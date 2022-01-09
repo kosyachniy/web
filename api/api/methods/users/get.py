@@ -5,7 +5,7 @@ The getting method of the user object of the API
 import time
 from typing import Union
 
-from consys.errors import ErrorAccess
+from consys.errors import ErrorAccess, ErrorInvalid
 
 from api.lib import BaseType, validate
 from api.models.user import User
@@ -40,9 +40,16 @@ async def handle(request, data):
 
     # TODO: cursor
 
-    # No access
-    if request.user.status < 2:
+    # Checks
+
+    if (
+        request.user.status < 4 # TODO: 5
+        and data.id != request.user.id
+    ):
         raise ErrorAccess('get')
+
+    if request.user.id == 0:
+        raise ErrorInvalid('id')
 
     # TODO: Get myself
     # if not data.id and request.user.id:
@@ -65,7 +72,6 @@ async def handle(request, data):
         # 'channels',
         # 'global_channel',
         'discount',
-        # 'online',
     }
 
     process_self = data.id == request.user.id

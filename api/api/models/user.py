@@ -28,6 +28,17 @@ class User(Base):
         # 'actions',
     }
 
+    # status:
+    # 0 - deleted
+    # 1 - blocked
+    # 2 - unauthorized
+    # 3 - authorized
+    # 4 - has access to platform resources
+    # 5 - supervisor
+    # 6 - moderator
+    # 7 - admin
+    # 8 - owner
+
     login = Attribute(
         types=str,
         default=default_login,

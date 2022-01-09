@@ -28,19 +28,18 @@ async def online_stop(sio, socket_id):
     user = get_user(socket.token)
 
     # Update user online info
+    now = time.time()
     if user.id:
-        now = time.time()
-
-        # Action tracking
-        Track(
-            title='online',
-            created=socket.created,
-            expired=now,
-            user=user.id,
-        ).save()
-
         user.last_online = now
         user.save()
+
+    # Action tracking
+    Track(
+        title='online',
+        created=socket.created,
+        expired=now,
+        user=user.id or socket.token,
+    ).save()
 
     # Delete online session info
     socket = Socket.get(ids=socket_id)

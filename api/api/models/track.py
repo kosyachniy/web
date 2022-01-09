@@ -11,3 +11,5 @@ class Track(Base):
     _name = 'tracking'
 
     data = Attribute(types=dict)
+    user = Attribute(default=0)
+    context = Attribute(default=dict)
