@@ -1,5 +1,5 @@
 # Pull base image
-FROM node:16.10 as web
+FROM node:17.3 as web
 
 # Set work directory
 WORKDIR .
