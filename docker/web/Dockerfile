@@ -12,20 +12,15 @@ RUN npm install
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST LOCALE TIMEZONE NAME MAIL PHONE SOCIAL \
-    GOOGLE_MAP_KEY GOOGLE_MAP_LAT GOOGLE_MAP_LNG GOOGLE_MAP_ZOOM \
-    SUBSCRIPTION_DAY SUBSCRIPTION_WEEK SUBSCRIPTION_MONTH SUBSCRIPTION_SEASON \
-    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR AMAZON_ACCESS_ID \
-    AMAZON_ACCESS_KEY AMAZON_BUCKET_NAME AMAZON_DIR_NAME AMAZON_REGION DISCOUNT
 RUN rm -f src/sets.json
 RUN echo '{ \n\
-    "server": "'$PROTOCOL'://'$HOST'/api/", \n\
-    "client": "'$PROTOCOL'://'$HOST'/", \n\
-    "sockets": "'$PROTOCOL'://'$HOST'/", \n\
+    "server": "'$PROTOCOL'://'$EXTERNAL_HOST'/api/", \n\
+    "client": "'$PROTOCOL'://'$EXTERNAL_HOST'/", \n\
+    "sockets": "'$PROTOCOL'://'$EXTERNAL_HOST'/", \n\
     "locale": "'$LOCALE'", \n\
     "timezone": '$TIMEZONE', \n\
     "name": "'$NAME'", \n\
-    "mail": "'$MAIL'", \n\
+    "mail": "'$EMAIL'", \n\
     "phone": "'$PHONE'", \n\
     "social": '$SOCIAL', \n\
     "amazon": { \n\

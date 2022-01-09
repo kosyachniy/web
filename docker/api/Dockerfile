@@ -18,14 +18,6 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROJECT_NAME PROTOCOL HOST MODE SIDE_OPTIMIZED LOCALE TIMEZONE \
-    MONGO_LOGIN MONGO_PASSWORD SMSC_LOGIN SMSC_PASSWORD \
-    GOOGLE_ID GOOGLE_SECRET TG_TOKEN TG_BOT BUG_CHAT VK_ID VK_SECRET \
-    YOOKASSA_ID YOOKASSA_KEY \
-    SUBSCRIPTION_DAY SUBSCRIPTION_WEEK SUBSCRIPTION_MONTH SUBSCRIPTION_SEASON \
-    SUBSCRIPTION_ACADEMIC_YEAR SUBSCRIPTION_YEAR DISCOUNT \
-    AMAZON_ACCESS_ID AMAZON_ACCESS_KEY AMAZON_BUCKET_NAME AMAZON_DIR_NAME \
-    AMAZON_REGION
 RUN rm -f sets.json
 RUN echo '{ \n\
     "name": "'$PROJECT_NAME'", \n\
@@ -62,7 +54,7 @@ RUN echo '{ \n\
         "login": "'$SMSC_LOGIN'", \n\
         "password": "'$SMSC_PASSWORD'" \n\
     }, \n\
-    "client": "'$PROTOCOL'://'$HOST'/", \n\
+    "client": "'$PROTOCOL'://'$EXTERNAL_HOST'/", \n\
     "mode": "'$MODE'", \n\
     "side_optimized": '$SIDE_OPTIMIZED', \n\
     "locale": "'$LOCALE'", \n\

@@ -18,16 +18,13 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Settings
-ARG PROTOCOL HOST TG_TOKEN TG_BOT MODE BUG_CHAT \
-    AMAZON_ACCESS_ID AMAZON_ACCESS_KEY AMAZON_BUCKET_NAME AMAZON_DIR_NAME \
-    AMAZON_REGION
 RUN rm -f sets.json
 RUN echo '{ \n\
-    "server": "'$PROTOCOL'://'$HOST'/api/", \n\
-    "client": "'$PROTOCOL'://'$HOST'/", \n\
+    "server": "'$PROTOCOL'://'$EXTERNAL_HOST'/api/", \n\
+    "client": "'$PROTOCOL'://'$EXTERNAL_HOST'/", \n\
     "tg": { \n\
         "name": "'$TG_BOT'", \n\
-        "server": "'$PROTOCOL'://'$HOST'/tg/", \n\
+        "server": "'$PROTOCOL'://'$EXTERNAL_HOST'/tg/", \n\
         "token": "'$TG_TOKEN'" \n\
     }, \n\
     "amazon": { \n\
