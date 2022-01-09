@@ -6,7 +6,7 @@ uvicorn==0.16.0
 websockets==10.1 # For Socket.IO
 httptools==0.3.0 # For routing
 python-socketio==5.5.0
-requests==2.27.1
+requests==2.26.0
 tgio==0.7
 tgreports==0.13
 consys==0.17
