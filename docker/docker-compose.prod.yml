@@ -21,6 +21,9 @@ services:
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
     restart: unless-stopped
@@ -36,14 +39,16 @@ services:
       - type: bind
         source: ../data/logs/api.log
         target: /app.log
-    # NOTE: /bin/sh -c "" to run multiple commands
-    command: /bin/sh -c "/run.sh && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers"
+    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
 
   jobs:
     image: ${PROJECT_NAME}/jobs
     build:
       dockerfile: ../docker/api/Dockerfile
       context: ../api
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
     restart: unless-stopped
@@ -56,14 +61,16 @@ services:
       - type: bind
         source: ../data/logs/jobs.log
         target: /app.log
-    # NOTE: /bin/sh -c "" to run multiple commands
-    command: /bin/sh -c "/run.sh && uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers"
+    command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers
 
   tg:
     image: ${PROJECT_NAME}/tg
     build:
       dockerfile: ../docker/tg/Dockerfile
       context: ../tg
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
     env_file: .env
     volumes:
       - type: bind
@@ -81,6 +88,9 @@ services:
     build:
       dockerfile: ../docker/web/Dockerfile.prod
       context: ../web
+      args:
+        - PROTOCOL=${PROTOCOL}
+        - HOST=${EXTERNAL_HOST}
     restart: unless-stopped
     env_file: .env
     volumes:

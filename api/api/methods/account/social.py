@@ -51,8 +51,8 @@ async def handle(request, data):
     #     response = json.loads(
     #         requests.get(
     #             link.format(
-    #                 cfg('vk.client_id'),
-    #                 cfg('vk.client_secret'),
+    #                 cfg('vk.id'),
+    #                 cfg('vk.secret'),
     #                 cfg('client'),
     #                 data.code,
     #             )
@@ -71,8 +71,8 @@ async def handle(request, data):
     # elif data.id == 3:
     #     link = 'https://accounts.google.com/o/oauth2/token'
     #     cont = {
-    #         'client_id': cfg('google.client_id'),
-    #         'client_secret': cfg('google.client_secret'),
+    #         'client_id': cfg('google.id'),
+    #         'client_secret': cfg('google.secret'),
     #         'redirect_uri': f'{cfg('client')}callback',
     #         'grant_type': 'authorization_code',
     #         'code': urllib.parse.unquote(data.code),

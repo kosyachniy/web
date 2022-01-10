@@ -10,5 +10,5 @@ requests==2.26.0
 tgio==0.7
 tgreports==0.13
 consys==0.17
-libdev==0.16
+libdev==0.18
 yookassa==2.2.3

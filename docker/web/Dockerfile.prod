@@ -11,6 +11,11 @@ RUN npm install
 # Copy project
 COPY . .
 
+# Settings
+ARG PROTOCOL HOST
+ENV SERVER "${PROTOCOL}://${HOST}/api/"
+ENV CLIENT "${PROTOCOL}://${HOST}/"
+
 # Create build
 RUN npm cache clean --force
 RUN npm run build

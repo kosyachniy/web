@@ -8,7 +8,7 @@ from api.lib import cfg
 
 
 Configuration.account_id = cfg('yookassa.id')
-Configuration.secret_key = cfg('yookassa.key')
+Configuration.secret_key = cfg('yookassa.secret')
 
 
 def create(amount, description, data=None, renewal=None):

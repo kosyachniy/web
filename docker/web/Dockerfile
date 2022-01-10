@@ -11,5 +11,10 @@ RUN npm install
 # Copy project
 COPY . .
 
+# Settings
+ARG PROTOCOL HOST
+ENV SERVER "${PROTOCOL}://${HOST}/api/"
+ENV CLIENT "${PROTOCOL}://${HOST}/"
+
 # Run
 CMD npm start

@@ -8,7 +8,7 @@ from api.lib import cfg
 
 
 HOST = cfg('mongo.host')
-NAME = cfg('mongo.db')
+NAME = cfg('PROJECT_NAME')
 LOGIN = cfg('mongo.login')
 PASSWORD = cfg('mongo.password')
 

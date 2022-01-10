@@ -17,5 +17,8 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . .
 
-# Run
-RUN chmod +x /run.sh
+# Settings
+ARG PROTOCOL HOST
+ENV SERVER "${PROTOCOL}://${HOST}/api/"
+ENV CLIENT "${PROTOCOL}://${HOST}/"
+ENV MONGO_HOST "db"
