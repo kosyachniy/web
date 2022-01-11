@@ -54,7 +54,7 @@ async def api(chat, method, data=None):
         }
     )
 
-    # UGLY: Rewrite `while True` & `time.sleep`
+    # TODO: Rewrite `while True` & `time.sleep`
     while True:
         res = requests.post(SERVER_LINK, json=req)
 
