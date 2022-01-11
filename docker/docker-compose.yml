@@ -76,6 +76,7 @@ services:
         - HOST=${EXTERNAL_HOST}
     env_file: .env
     volumes:
+      - ../web/run.sh:/run.sh
       - ../web/public:/public
       # NOTE: src/ cannot be specified, because sets.json will not be generated
       - ../web/src/components:/src/components

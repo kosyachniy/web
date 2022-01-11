@@ -8,9 +8,9 @@ from libdev.aws import upload_file
 
 from lib._variables import (
     languages, languages_chosen, tokens,
-    user_ids, user_logins, user_names, user_titles, user_statuses,
+    user_ids, user_logins, user_statuses, user_names, user_titles,
 )
-from lib._api import api
+from lib._api import auth, api
 from lib.reports import report
 
 
@@ -18,8 +18,8 @@ __all__ = (
     'cfg',
     'generate',
     'languages', 'languages_chosen', 'tokens',
-    'user_ids', 'user_logins', 'user_names', 'user_titles', 'user_statuses',
-    'api',
+    'user_ids', 'user_logins', 'user_statuses', 'user_names', 'user_titles',
+    'auth', 'api',
     'upload_file',
     'report',
 )

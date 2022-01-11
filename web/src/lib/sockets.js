@@ -1,9 +1,8 @@
 // Socket.IO
 import openSocket from 'socket.io-client'
-import { sockets } from '../sets'
 
 
-export const socketIO = openSocket(sockets, {
+export const socketIO = openSocket(process.env.REACT_APP_SOCKETS, {
     transports: ['websocket'],
     upgrade: false,
 })

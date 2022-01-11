@@ -1,11 +1,8 @@
 import getToken from './token';
 
 
-import { server } from '../sets';
-
-
 async function serverRequest(json={}) {
-    return fetch(server, {
+    return fetch(process.env.REACT_APP_SERVER, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -95,6 +95,7 @@ services:
     env_file: .env
     volumes:
       - ../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template
+      - ../web/run.prod.sh:/run.sh
       - ../data/load:/load
       - ../data/logs:/data/logs
     depends_on:
@@ -103,5 +104,3 @@ services:
       - tg
     ports:
       - "${EXTERNAL_PORT}:80"
-    # NOTE: /bin/sh -c "" to run multiple commands
-    command: /bin/sh -c "envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g \"daemon off;\""

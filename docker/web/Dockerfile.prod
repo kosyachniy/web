@@ -15,6 +15,7 @@ COPY . .
 ARG PROTOCOL HOST
 ENV SERVER "${PROTOCOL}://${HOST}/api/"
 ENV CLIENT "${PROTOCOL}://${HOST}/"
+ENV SOCKETS "${PROTOCOL}://${HOST}/"
 
 # Create build
 RUN npm cache clean --force
@@ -23,3 +24,7 @@ RUN npm run build
 # NGINX
 FROM nginx:1.21.5
 COPY --from=web /build /web/build
+
+# Run
+RUN chmod +x /run.sh
+CMD bash /run.sh

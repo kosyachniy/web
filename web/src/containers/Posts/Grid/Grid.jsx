@@ -23,9 +23,9 @@ const Grid = (props) => {
 
     useEffect(() => {
         if (
-            system.search != loaded
+            system.search !== loaded
             && (
-                system.search == ''
+                system.search === ''
                 || system.search.length >= 3
             )
         ) {

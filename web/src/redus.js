@@ -3,9 +3,6 @@ import i18n from './i18n'
 import { combineReducers, createStore } from 'redux';
 
 
-import { locale as default_locale } from './sets';
-
-
 // actions.js
 export const postsGet = posts => ({
     type: 'POSTS_GET',
@@ -242,7 +239,7 @@ export const system = (state = {
         default:
             return {
                 loaded: state.loaded,
-                locale: state.locale || default_locale,
+                locale: state.locale || process.env.REACT_APP_LOCALE,
                 theme: state.theme || 'light',
                 color: state.color || 'dark',
                 search: state.search || '',

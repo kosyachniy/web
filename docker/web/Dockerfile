@@ -15,6 +15,8 @@ COPY . .
 ARG PROTOCOL HOST
 ENV SERVER "${PROTOCOL}://${HOST}/api/"
 ENV CLIENT "${PROTOCOL}://${HOST}/"
+ENV SOCKETS "${PROTOCOL}://${HOST}/"
 
 # Run
-CMD npm start
+RUN chmod +x /run.sh
+CMD bash /run.sh

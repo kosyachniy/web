@@ -3,7 +3,6 @@ import React from 'react'
 // import { useTranslation } from 'react-i18next'
 
 import './style.css'
-import { name } from '../../../sets'
 
 
 const Footer = (props) => {
@@ -15,7 +14,7 @@ const Footer = (props) => {
             <div className="container">
                 <div className="row">
                     <div className="col">
-                        { name } © 2018-{ new Date().getFullYear() }
+                        { process.env.REACT_APP_NAME } © 2018-{ new Date().getFullYear() }
                     </div>
                     <div className="col text-right">
                         {system.theme === 'dark' ? (

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import api from '../../../lib/api'
 
 import './style.css'
-import { name } from '../../../sets'
 
 import Hexagon from '../../../components/Hexagon'
 
@@ -36,7 +35,7 @@ const Header = (props) => {
     return (
         <nav className={`navbar navbar-expand-lg navbar-${system.theme} bg-${system.theme} sticky-top`}>
             <div className="container">
-                <Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ name } /></Link>
+                <Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.REACT_APP_NAME } /></Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>

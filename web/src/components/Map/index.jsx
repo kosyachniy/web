@@ -6,8 +6,6 @@ import { compose, withProps } from 'recompose';
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps'; // , InfoWindow
 // import { Link } from 'react-router-dom';
 
-import { maps as sets } from '../../sets'
-
 import marker from './marker.svg';
 
 
@@ -16,9 +14,15 @@ class Maps extends React.Component {
         super(props);
 
         this.state = {
-            zoom: props.zoom ? props.zoom : sets.zoom,
-            center: props.center ? props.center : sets.center,
-            current: props.center ? props.center : sets.center,
+            zoom: props.zoom ? props.zoom : process.env.REACT_APP_GOOGLE_MAPS_ZOOM,
+            center: props.center ? props.center : {
+                lat: process.env.REACT_APP_GOOGLE_MAPS_LAT,
+                lng: process.env.REACT_APP_GOOGLE_MAPS_LNG,
+            },
+            current: props.center ? props.center : {
+                lat: process.env.REACT_APP_GOOGLE_MAPS_LAT,
+                lng: process.env.REACT_APP_GOOGLE_MAPS_LNG,
+            },
             markers: [],
         }
     }
@@ -166,7 +170,7 @@ const mapStyles = [
 
 const Map = compose(
     withProps({
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${sets.key}&v=3.exp&libraries=geometry,drawing,places`,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `100%` }} />,
         mapElement: <div style={{ height: `100%` }} />

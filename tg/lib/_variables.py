@@ -9,7 +9,7 @@ tokens = {} # token of an user
 
 # Users
 user_ids = {} # ID on the platform of an user
-user_names = {}
-user_titles = {}
 user_logins = {}
 user_statuses = {} # rights level
+user_names = {}
+user_titles = {}
