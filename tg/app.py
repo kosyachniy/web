@@ -2,9 +2,11 @@
 Telegram bot (Transport level)
 """
 
+from libdev.codes import get_flag
+
 from lib import (
-    auth, api, cfg,
-    user_logins, user_titles,
+    auth, api, cfg, report,
+    languages, user_ids, user_logins, user_statuses, user_titles,
 )
 from lib.tg import tg
 
@@ -17,39 +19,66 @@ BUTTONS = [
 ]
 
 
+async def check_user(chat, public=False):
+    """ Authorize user and check access """
+
+    res = await auth(chat)
+
+    if res is None:
+        await tg.send(
+            chat.id,
+            "Бот обновляется 😵‍💫\nУже скоро смогу ответить!",
+            buttons=BUTTONS,
+        )
+        await report.error("Check user", {'user': chat.id})
+        return True
+
+    if not public and user_statuses[chat.id] < 4:
+        await tg.send(chat.id, "Нет доступа 😛", buttons=BUTTONS)
+        await report.important("Несанкционированный доступ", {
+            'user': user_ids[chat.id],
+            'name': user_titles[chat.id],
+            'social_user': chat.id,
+            'social_login': user_logins[chat.id],
+            'status': user_statuses[chat.id],
+        })
+        return True
+
+def get_user(chat_id):
+    """ Get user info """
+
+    text = f"{get_flag(languages[chat_id])} {user_titles[chat_id]}"
+    if user_logins[chat_id]:
+        text += f" (@{user_logins[chat_id]})"
+
+    return text
+
+
 @tg.dp.message_handler(commands=['start', 'help', 'info', 'about'])
 async def start(message):
     """ Start handler """
 
     chat = message.chat
-    res = await auth(chat)
 
-    if not res:
-        await tg.send(chat.id, "Бот обновляется 😵‍💫\nУже скоро смогу ответить!")
+    if await check_user(chat, True):
         return
 
-    text = f"Вы авторизованы как {user_titles[chat.id]}"
-    if user_logins[chat.id]:
-        text += f" (@{user_logins[chat.id]})"
-
-    await tg.send(chat.id, text, buttons=BUTTONS)
+    await tg.send(
+        chat.id,
+        f"Вы авторизованы как {get_user(chat.id)}",
+        buttons=BUTTONS,
+    )
 
 @tg.dp.message_handler(lambda msg: msg.text.lower() == 'профиль')
 async def profile(message):
     """ Profile """
 
     chat = message.chat
-    res = await auth(chat)
 
-    if not res:
-        await tg.send(chat.id, "Бот обновляется 😵‍💫\nУже скоро смогу ответить!")
+    if await check_user(chat, True):
         return
 
-    text = user_titles[chat.id]
-    if user_logins[chat.id]:
-        text += f" (@{user_logins[chat.id]})"
-
-    await tg.send(chat.id, text, buttons=BUTTONS)
+    await tg.send(chat.id, get_user(chat.id), buttons=BUTTONS)
 
 @tg.dp.message_handler()
 async def echo(message):
