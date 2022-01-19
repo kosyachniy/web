@@ -303,9 +303,4 @@ async def handle(request, data):
     #     'new': new,
     # }
 
-    # if 'avatar' in user:
-    #     res['avatar'] = '/load/opt/' + user['avatar']
-    # else:
-    #     res['avatar'] = 'user.png'
-
     # return res

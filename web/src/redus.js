@@ -265,8 +265,8 @@ export const profile = (state = {
                 name: action.name,
                 surname: action.surname,
                 mail: action.mail,
-                avatar: action.avatar ? '/load/' + action.avatar : '/user.png',
-                avatar_optimize: action.avatar ? '/load/opt/' + action.avatar : '/user.png',
+                avatar: action.avatar || '/user.png',
+                avatar_optimize: action.avatar || '/user.png',
                 admin: action.admin,
             };
 
@@ -300,8 +300,8 @@ export const profile = (state = {
                     state.avatar = action.profile.avatar
                     state.avatar_optimize = action.profile.avatar
                 } else {
-                    state.avatar = '/load/' + action.profile.avatar
-                    state.avatar_optimize = '/load/opt/' + action.profile.avatar
+                    state.avatar = action.profile.avatar
+                    state.avatar_optimize = action.profile.avatar
                 }
             }
 
@@ -311,8 +311,8 @@ export const profile = (state = {
             return {
                 id: state.id || localStorage.getItem('id') || 0,
                 login: state.login || localStorage.getItem('login'),
-                avatar: state.avatar || (localStorage.getItem('avatar') ? '/load/' + localStorage.getItem('avatar') : '/user.png'),
-                avatar_optimize: state.avatar || (localStorage.getItem('avatar') ? '/load/opt/' + localStorage.getItem('avatar') : '/user.png'),
+                avatar: state.avatar || localStorage.getItem('avatar') || '/user.png',
+                avatar_optimize: state.avatar || localStorage.getItem('avatar') || '/user.png',
                 name: state.name || localStorage.getItem('name'),
                 surname: state.surname || localStorage.getItem('surname'),
                 phone: state.phone || localStorage.getItem('phone'),

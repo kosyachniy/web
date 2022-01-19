@@ -88,7 +88,7 @@ const Post = () => {
                     <>
                         { post.cover ? (
                             <img
-                                src={ "/load/" + post.cover }
+                                src={ post.cover }
                                 alt={ post.title }
                             />
                         ) : (<></>) }
