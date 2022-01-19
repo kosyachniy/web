@@ -3,8 +3,6 @@
     "author": "kosyachniy",
     "version": "0.1.0",
     "dependencies": {
-        "@ckeditor/ckeditor5-react": "^2.1.0",
-        "@kosyachniy/ckeditor": "^1.0.1",
         "i18next": "^21.2.0",
         "i18next-xhr-backend": "^3.2.2",
         "react": "^16.14.0",

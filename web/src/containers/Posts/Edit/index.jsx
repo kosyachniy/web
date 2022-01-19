@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import api from '../../../lib/api'
 
 import './style.css'
-import Editor from '../../../components/Editor'
+// import Editor from '../../../components/Editor'
 
 
 const Edit = (props) => {
@@ -49,10 +49,10 @@ const Edit = (props) => {
                     />
                 </div>
 
-                <Editor
+                {/* <Editor
                     data={ data }
                     updatePost={ (text) => {setCont(text)} }
-                />
+                /> */}
 
                 <br />
                 <button
