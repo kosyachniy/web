@@ -1,4 +1,3 @@
-// Socket.IO
 import openSocket from 'socket.io-client'
 
 

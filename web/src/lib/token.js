@@ -1,4 +1,4 @@
-function genereteToken(length=32) {
+export function generete(length=32) {
     let symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
     let token = [];
 
@@ -10,11 +10,11 @@ function genereteToken(length=32) {
     return token.join("");
 }
 
-export default function getToken() {
+export function getToken() {
     let token = localStorage.getItem('token');
 
     if (token === null) {
-        token = genereteToken();
+        token = generete();
         localStorage.setItem('token', token);
     }
 

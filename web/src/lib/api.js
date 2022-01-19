@@ -1,4 +1,4 @@
-import getToken from './token';
+import { getToken } from './token';
 
 
 async function serverRequest(json={}) {
