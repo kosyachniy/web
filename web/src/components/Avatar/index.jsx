@@ -1,6 +1,8 @@
 import React from 'react'
 import { withTranslation } from 'react-i18next'
 
+import uploadImage from '../../lib/upload'
+
 import './style.css'
 
 
@@ -10,16 +12,11 @@ class Avatar extends React.Component {
     }
 
     handleAvatar = (_e) => {
-        const cover = _e.target.files
-        const fileReader = new FileReader()
-
-        fileReader.onload = (_eventFileReader) => {
-            const base64 = _eventFileReader.target.result
-
-            this.setState({ img: base64 })
-            this.props.setAvatar(base64)
-        }
-        fileReader.readAsDataURL(cover[0])
+        const image = _e.target.files[0]
+        uploadImage(image).then((link) => {
+            this.setState({ img: link })
+            this.props.setAvatar(link)
+        })
     }
 
     render() {
