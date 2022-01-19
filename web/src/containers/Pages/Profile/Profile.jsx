@@ -13,13 +13,13 @@ import Avatar from '../../../components/Avatar'
 const Profile = (props) => {
     const { profile, profileUpdate } = props
     const { t } = useTranslation()
-    const [login, setLogin] = useState(profile.login)
+    const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
     const [avatar, setAvatar] = useState(profile.avatar)
-    const [name, setName] = useState(profile.name)
-    const [surname, setSurname] = useState(profile.surname)
-    const [phone, setPhone] = useState(profile.phone)
-    const [mail, setMail] = useState(profile.mail)
+    const [name, setName] = useState(profile.name || '')
+    const [surname, setSurname] = useState(profile.surname || '')
+    const [phone, setPhone] = useState(profile.phone || '')
+    const [mail, setMail] = useState(profile.mail || '')
     // const [social, setSocial] = useState(profile.social)
     // const [status, setStatus] = useState(profile.status)
 

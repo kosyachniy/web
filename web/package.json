@@ -8,6 +8,7 @@
         "i18next": "^21.2.0",
         "i18next-xhr-backend": "^3.2.2",
         "react": "^16.14.0",
+        "react-aws-s3": "^1.5.0",
         "react-dom": "^16.14.0",
         "react-i18next": "^11.12.0",
         "react-mathjax-preview": "^2.2.3",

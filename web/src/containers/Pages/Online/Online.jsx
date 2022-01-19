@@ -16,7 +16,7 @@ const Online = (props) => {
                 <h3>{t('system.online')}</h3>
                 { online.users.map(user => (
                     <div className="user" key={ user.id }>
-                        <Hexagon url={ user.avatar ? '/load/opt/' + user.avatar : '/user.png' } />
+                        <Hexagon url={ user.avatar || '/user.png' } />
                         <div>
                             {
                                 user.name && user.surname ? (

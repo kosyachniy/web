@@ -11,7 +11,7 @@ const Card = (props) => {
         <div className="col-md-4">
             <Link to={`/post/${post.id}`} key={ post.id }>
                 <div className="card mb-4 shadow-sm">
-                    { post.cover && <img className="card-img-top" src={ "/load/opt/" + post.cover } alt={ post.title } /> }
+                    { post.cover && <img className="card-img-top" src={ post.cover } alt={ post.title } /> }
                     <div className="card-body">
                         <p className="card-text">
                             {/* <span className="badge badge-success" style={ marginRight: '10px', fontSize: '15px' }>

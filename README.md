@@ -43,7 +43,7 @@ Android | Front-end | React Native | JavaScript | planned
             <td rowspan="4" align="center">Back-end</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/python_logo.png?raw=true" alt="Python" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/python_name.png?raw=true" alt="Python" height="50" /></td>
-            <td align="center">3.9.9</td>
+            <td align="center">3.9.10</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_logo.png?raw=true" alt="FastAPI" height="50" /></td>
