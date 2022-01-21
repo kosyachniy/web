@@ -33,15 +33,22 @@ const Header = (props) => {
     }
 
     return (
-        <nav className={`navbar navbar-expand-lg navbar-${system.theme} bg-${system.theme} sticky-top`}>
+        <nav className={`navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}`}>
             <div className="container">
                 <Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.REACT_APP_NAME } /></Link>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarTogglerDemo02"
+                    aria-controls="navbarTogglerDemo02"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                    <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         {/* <li className="nav-item">
                             <Link to="/feed/" className="nav-link">{ t('structure.feed') }</Link>
                         </li> */}
@@ -80,8 +87,8 @@ const Header = (props) => {
                             <Link to="/map/" className="nav-link">{ t('structure.map') }</Link>
                         </li> */}
                     </ul>
-                    <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li className="nav-item">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li className="nav-item dropdown">
                             <input
                                 id="search"
                                 className="form-control"
@@ -100,7 +107,7 @@ const Header = (props) => {
                                         {t('system.online')}
                                         <div className="online"></div>
                                         <div
-                                            className="badge badge-secondary"
+                                            className="badge bg-secondary"
                                             onClick={ ()=>{handlerPopUp('online')} }
                                         >{ online.count } </div>
                                     </>
@@ -134,7 +141,7 @@ const Header = (props) => {
                                 </>
                             ) : (<></>)}
                             {!profile.id ? (
-                                <div style={ {paddingRight: 0} }>
+                                <div style={ {paddingRight: 0, paddingBottom: 0} }>
                                     <button
                                         type="button"
                                         className="btn btn-success"

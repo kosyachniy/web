@@ -3,25 +3,25 @@
 } */
 
 body {
-    background-color: red; /* #ffc772 */
+    background-color: var(--bs-success);
 }
 
 .bg-dark {
-    color: var(--light);
+    color: var(--bs-light);
 }
 
 .dark {
-    background-color: var(--dark);
-    color: var(--light);
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
 }
 
 .dark div, .dark a {
-    color: var(--light) !important;
+    color: var(--bs-light) !important;
 }
 
 .dark *:hover {
-    background-color: var(--dark);
-    color: var(--light);
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
 }
 
 a, a:hover, a:active, a:focus {
@@ -30,7 +30,7 @@ a, a:hover, a:active, a:focus {
 }
 
 #main {
-    min-height: calc(100vh - 158px);
+    min-height: calc(100vh - 215px);
 }
 
 #main h2 {
