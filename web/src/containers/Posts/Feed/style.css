@@ -51,7 +51,7 @@
 #feed .time {
     position: relative;
     top: -8px;
-    color: var(--secondary);
+    color: var(--bs-secondary);
     font-size: 0.9em;
     display: inline-block;
 }
@@ -61,7 +61,7 @@
 }
 
 #feed .content {
-    color: var(--secondary);
+    color: var(--bs-secondary);
 }
 
 #feed .short {

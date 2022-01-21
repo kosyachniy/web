@@ -38,10 +38,25 @@ const Grid = (props) => {
         <>
             <div className="row">
                 <div className="col-xs-10 col-sm-10 col-md-10">
-                    <div className="btn-group">
-                        <button type="button" className="btn btn-default"><i className="fas fa-th-large"></i></button>
-                        <button type="button" className="btn btn-default"><i className="fas fa-th-list"></i></button>
-                        <button type="button" className="btn btn-default"><i className="fas fa-image"></i></button>
+                    <div className="btn-group" role="group" >
+                        <button
+                            type="button"
+                            className={`btn btn-${system.theme}`}
+                        >
+                            <i className="fas fa-th-large"></i>
+                        </button>
+                        <button
+                            type="button"
+                            className={`btn btn-${system.theme}`}
+                        >
+                            <i className="fas fa-th-list"></i>
+                        </button>
+                        <button
+                            type="button"
+                            className={`btn btn-${system.theme}`}
+                        >
+                            <i className="fas fa-image"></i>
+                        </button>
                     </div>
                 </div>
                 <div className="col-xs-2 col-sm-2 col-md-2" style={ {textAlign: 'right'} }>

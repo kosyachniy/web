@@ -141,7 +141,7 @@ const Header = (props) => {
                                 </>
                             ) : (<></>)}
                             {!profile.id ? (
-                                <div style={ {paddingRight: 0} }>
+                                <div style={ {paddingRight: 0, paddingBottom: 0} }>
                                     <button
                                         type="button"
                                         className="btn btn-success"
