@@ -14,7 +14,7 @@ const Auth = (props) => {
                     className="btn"
                     onClick={ ()=>{handlerPopUp('mail')} }
                 >
-                    <i className="fas fa-envelope" />
+                    <i className="bi bi-envelope-fill" />
                 </div>
             </Popup>
         </div>

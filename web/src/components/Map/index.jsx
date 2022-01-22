@@ -115,12 +115,12 @@ class Maps extends React.Component {
                                 <div className="info-window">
                                     <div className="first-line">
                                         <div>
-                                            <i className="far fa-compass" style={{ fontSize: '1.2rem', cursor: 'pointer', color: el.donor.way ? 'red' : '#6c757d' }} onClick={ () => { this.handleFavorite(key) } } ></i>
+                                            <i className="bi bi-compass-fill" style={{ fontSize: '1.2rem', cursor: 'pointer', color: el.donor.way ? 'red' : '#6c757d' }} onClick={ () => { this.handleFavorite(key) } } />
                                         </div>
                                         <div>
-                                            <i className="fas fa-share" style={{ fontSize: '1.2rem', cursor: 'pointer' }}></i>
+                                            <i className="bi bi-share-fill" style={{ fontSize: '1.2rem', cursor: 'pointer' }} />
                                             &nbsp;
-                                            <i className="fas fa-times" style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={ () => {this.handleClose(key)} }></i>
+                                            <i className="bi bi-x" style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={ () => {this.handleClose(key)} } />
                                         </div>
                                     </div>
                                     <table>

@@ -69,7 +69,7 @@ const Post = () => {
                         className="btn btn-outline-secondary"
                         onClick={ () => {setEdit(true)} }
                     >
-                        <i className="far fa-edit" />
+                        <i className="bi bi-pencil-fill" />
                     </button>
                 ) }
                 <button
