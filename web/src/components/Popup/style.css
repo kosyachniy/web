@@ -67,16 +67,6 @@
     color: #fff;
 }
 
-.btn_green {
-    background: #2ecc71 !important;
-    display: block;
-}
-
-.btn_green:hover {
-    background: #2ecc71 !important;
-    opacity: 0.95;
-}
-
 .btn_vk {
     background-color: #517299 !important;
     display: block;
@@ -97,12 +87,4 @@
 .btn_google:hover {
     background: #db4437 !important;
     opacity: 0.95;
-}
-
-.btn_vk img, .btn_google img {
-    width: 20px;
-    height: auto;
-    margin: 0;
-    cursor: pointer;
-    transition: unset;
 }

@@ -2,3 +2,13 @@
     margin: 10px;
     width: calc(100% - 20px);
 }
+
+#auth #mail {
+    background: #2ecc71 !important;
+    display: block;
+}
+
+#auth #mail:hover {
+    background: #2ecc71 !important;
+    opacity: 0.95;
+}
