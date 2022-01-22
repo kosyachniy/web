@@ -10,9 +10,9 @@ const Footer = (props) => {
     // const { t } = useTranslation()
 
     return (
-        <footer className={`bg-${system.theme}`}>
+        <footer className={`bg-${system.theme} ${system.theme === 'dark' ? "" : "text-muted"}`}>
             <div className="container d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
-                <p class="col-md-4 mb-0 text-muted">
+                <p class="col-md-4 mb-0">
                     &copy; 2018-{ new Date().getFullYear() } { process.env.REACT_APP_NAME }
                 </p>
                 <Link to="/" className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
@@ -25,12 +25,12 @@ const Footer = (props) => {
                 <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
                     <li
                         id="theme"
-                        className="ms-3 text-muted u-cursor"
+                        className="ms-3 u-cursor"
                         onClick={() => {
                             changeTheme(system.theme === 'dark' ? 'light' : 'dark')
                         }}
                     >
-                        <i class="bi bi-moon-fill" />
+                        <i className={`bi ${system.theme === 'dark' ? "bi-sun-fill" : "bi-moon-fill"}`} />
                     </li>
                     <li
                         id="lang"
