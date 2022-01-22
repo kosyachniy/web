@@ -39,7 +39,7 @@ const Edit = (props) => {
     return (
         <div id="edit">
             <div className="album py-5">
-                <div className="form-group">
+                <div className="input-group mb-3">
                     <input
                         type="text"
                         className="form-control name"

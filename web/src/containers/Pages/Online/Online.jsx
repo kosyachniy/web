@@ -7,12 +7,12 @@ import Hexagon from '../../../components/Hexagon';
 
 
 const Online = (props) => {
-    const { online, handlerPopUp } = props
+    const { system, online, handlerPopUp } = props
     const { t } = useTranslation()
 
     return (
         <div id="online">
-            <Popup handlerPopUp={handlerPopUp} >
+            <Popup handlerPopUp={handlerPopUp} theme={system.theme} >
                 <h3>{t('system.online')}</h3>
                 { online.users.map(user => (
                     <div className="user" key={ user.id }>

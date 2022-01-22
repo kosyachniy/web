@@ -8,6 +8,7 @@ import Mail from './Mail';
 
 // AppContainer.jsx
 const mapStateToProps = state => ({
+    system: state.system,
 });
 
 const mapDispatchToProps = {

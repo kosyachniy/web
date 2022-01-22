@@ -101,37 +101,40 @@ const Header = (props) => {
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
                         <li className="nav-item">
-                            <div>
-                                { online.count ? (
-                                    <>
-                                        {t('system.online')}
-                                        <div className="online"></div>
-                                        <div
-                                            className="badge bg-secondary"
-                                            onClick={ ()=>{handlerPopUp('online')} }
-                                        >{ online.count } </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        {t('system.offline')}
-                                        <div className="offline"></div>
-                                    </>
-                                ) }
-                            </div>
+                            { online.count ? (
+                                <div>
+                                    {t('system.online')}
+                                    <div className="online"></div>
+                                    <div
+                                        className="badge bg-secondary"
+                                        onClick={ ()=>{handlerPopUp('online')} }
+                                    >{ online.count } </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    {t('system.offline')}
+                                    <div className="offline"></div>
+                                </div>
+                            ) }
                         </li>
                         <li className="nav-item dropdown">
                             {profile.id ? (
                                 <>
                                     <div
+                                        id="navbarDropdown"
                                         className="nav-link"
-                                        data-toggle="dropdown"
+                                        data-bs-toggle="dropdown"
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                         style={ {padding: 0} }
                                     >
                                         <Hexagon url={ profile.avatar_optimize } />
                                     </div>
-                                    <div className={`dropdown-menu dropdown-menu-right ${system.theme}`} id="menu">
+                                    <div
+                                        id="menu"
+                                        className={`dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}`}
+                                        aria-labelledby="navbarDropdown"
+                                    >
                                         <Link className="dropdown-item" to="/profile/">{t('system.profile')}</Link>
                                         {/* <Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link> */}
                                         {/* <Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link> */}

@@ -11,8 +11,8 @@ const checkPassword = password => {
     return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
 }
 
-const Auth = (props) => {
-    const { profileIn, handlerPopUp } = props
+const Mail = (props) => {
+    const { system, profileIn, handlerPopUp } = props
     const { t } = useTranslation()
     const [mail, setMail] = useState('')
     const [password, setPassword] = useState('')
@@ -28,9 +28,9 @@ const Auth = (props) => {
 
     return (
         <div id="mail">
-            <Popup handlerPopUp={handlerPopUp} >
+            <Popup handlerPopUp={handlerPopUp} theme={system.theme} >
                 <form onSubmit={signIn}>
-                    <div className="form-group">
+                    <div className="input-group mb-3">
                         <input
                             className="form-control"
                             type="text"
@@ -41,7 +41,7 @@ const Auth = (props) => {
                             required
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="input-group mb-3">
                         <input
                             className="form-control"
                             // className={(responce !== null && responce.data === 'password') ? 'error' : ''}
@@ -74,4 +74,4 @@ const Auth = (props) => {
     );
 };
 
-export default Auth;
+export default Mail;
