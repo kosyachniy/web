@@ -23,8 +23,26 @@ const Footer = (props) => {
                     />
                 </Link>
                 <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-                    <li className="ms-3 text-muted"><i class="bi bi-moon-fill" /></li>
-                    <li className="ms-3 text-muted"><i class="bi bi-translate" /></li>
+                    <li
+                        id="theme"
+                        className="ms-3 text-muted u-cursor"
+                        onClick={() => {
+                            changeTheme(system.theme === 'dark' ? 'light' : 'dark')
+                        }}
+                    >
+                        <i class="bi bi-moon-fill" />
+                    </li>
+                    <li
+                        id="lang"
+                        className="ms-3 d-flex u-cursor"
+                        onClick={ () => {changeLang(system.locale === 'ru' ? 'en' : 'ru')} }
+                    >
+                        <img
+                            src={`/lang/${system.locale === 'ru' ? "en" : "ru"}.svg`}
+                            alt={system.locale === 'ru' ? "en" : "ru"}
+                            style={{ height: '24px' }}
+                        />
+                    </li>
                 </ul>
             </div>
         </footer>
