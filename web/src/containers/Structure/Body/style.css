@@ -30,7 +30,7 @@ a, a:hover, a:active, a:focus {
 }
 
 #main {
-    min-height: calc(100vh - 215px);
+    min-height: calc(100vh - 153px);
 }
 
 #main h2 {

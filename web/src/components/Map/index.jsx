@@ -120,7 +120,7 @@ class Maps extends React.Component {
                                         <div>
                                             <i className="bi bi-share-fill" style={{ fontSize: '1.2rem', cursor: 'pointer' }} />
                                             &nbsp;
-                                            <i className="bi bi-x" style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={ () => {this.handleClose(key)} } />
+                                            <i className="fa fa-times" aria-hidden="true" style={{ fontSize: '1.2rem', cursor: 'pointer' }} onClick={ () => {this.handleClose(key)} } />
                                         </div>
                                     </div>
                                     <table>
