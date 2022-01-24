@@ -136,27 +136,35 @@ services:
       - api
     restart: unless-stopped
 
-  server:
-    image: web/server
+  web:
+    image: web/web
     build:
       dockerfile: ../docker/web/Dockerfile.prod
       context: ../web
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
+    env_file: .env
+    volumes:
+      - ../data/build:/build/
+
+  server:
+    image: "nginx:1.21.5"
     restart: unless-stopped
     env_file: .env
     volumes:
       - ../docker/server/nginx.metrics.conf:/etc/nginx/nginx.conf.template
-      - ../web/run.prod.sh:/run.sh
+      - ../data/build:/build/
       - ../data/load:/load
       - ../data/logs:/data/logs
     depends_on:
       - api
       - jobs
+      - web
       - tg
       - prometheus
       - grafana
       - cadvisor
     ports:
       - "8010:80"
+    command: /bin/sh -c "envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g \"daemon off;\""

@@ -7,5 +7,4 @@ do
     export "REACT_APP_${IKEY}"="${IVALUE}"
 done < <(env)
 
-envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
-nginx -g "daemon off;"
+npm run build

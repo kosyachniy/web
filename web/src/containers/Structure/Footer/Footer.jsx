@@ -13,7 +13,7 @@ const Footer = (props) => {
                 <p className="col-md-4 mb-0">
                     { process.env.REACT_APP_NAME } &copy; 2018-{ new Date().getFullYear() }
                 </p>
-                <Link to="/" className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <Link to="/" className="col-md-4 d-flex align-items-center justify-content-center mb-md-0 me-md-auto link-dark text-decoration-none">
                     <img
                         src={`/brand/logo_${system.color}.svg`}
                         alt={ process.env.REACT_APP_NAME }

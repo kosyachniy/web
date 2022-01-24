@@ -19,12 +19,6 @@ ENV SOCKETS "${PROTOCOL}://${HOST}/"
 
 # Create build
 RUN npm cache clean --force
-RUN npm run build
-
-# NGINX
-FROM nginx:1.21.5
-COPY --from=web /build /web/build
-
-# Run
-RUN chmod +x /run.sh
-CMD bash /run.sh
+RUN rm -rf /build/
+RUN chmod +x /run.prod.sh
+CMD bash /run.prod.sh
