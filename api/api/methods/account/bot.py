@@ -49,14 +49,11 @@ async def handle(request, data):
     }}, fields=fields)
 
     if len(users) > 1:
-        await report.warning(
-            "More than 1 user",
-            {
-                'network': request.network,
-                'social_user': data.user,
-                'social_login': data.login,
-            },
-        )
+        await report.warning("More than 1 user", {
+            'network': request.network,
+            'social_user': data.user,
+            'social_login': data.login,
+        })
 
     elif len(users):
         new = False
@@ -88,10 +85,11 @@ async def handle(request, data):
         token = Token(id=request.token)
 
     if token.user and token.user != user.id:
-        await report.warning(
-            "Reauth",
-            {'from': token.user, 'to': user.id, 'token': request.token},
-        )
+        await report.warning("Reauth", {
+            'from': token.user,
+            'to': user.id,
+            'token': request.token,
+        })
 
     token.user = user.id
     token.save()

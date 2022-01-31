@@ -19,10 +19,10 @@ async def handle(request, data):
 
     # # Not authorized
     # if request.user.status < 3:
-    #     await report.error(
-    #         "Wrong token",
-    #         {'token': request.token, 'user': request.user.id},
-    #     )
+    #     await report.error("Wrong token", {
+    #         'token': request.token,
+    #         'user': request.user.id,
+    #     })
 
     #     raise ErrorAccess('exit')
 

@@ -59,7 +59,7 @@ async def handle(request, data):
     # TODO: send by SMS
 
     # Report
-    await report.request(
-        "Recover password",
-        {'password': password, 'user': user.id},
-    )
+    await report.request("Recover password", {
+        'password': password,
+        'user': user.id,
+    })

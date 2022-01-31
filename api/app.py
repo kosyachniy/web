@@ -67,7 +67,6 @@ api = API(
 ### Main
 class Input(BaseModel):
     """ Main endpoint model """
-
     method: str
     params: dict = {}
     network: str = ''

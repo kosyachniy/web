@@ -161,10 +161,9 @@ async def auth(request, method, data, by):
 
     if users:
         if len(users) > 1:
-            await report.warning(
-                "More than 1 user",
-                {by: data.login},
-            )
+            await report.warning("More than 1 user", {
+                by: data.login,
+            })
 
         user = users[0]
 
@@ -204,10 +203,11 @@ async def auth(request, method, data, by):
         token = Token(id=request.token)
 
     if token.user and token.user != user.id:
-        await report.warning(
-            "Reauth",
-            {'from': token.user, 'to': user.id, 'token': request.token},
-        )
+        await report.warning("Reauth", {
+            'from': token.user,
+            'to': user.id,
+            'token': request.token,
+        })
 
     token.user = user.id
     token.save()

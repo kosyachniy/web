@@ -46,13 +46,10 @@ async def api(chat, method, data=None):
         'locale': languages[chat.id],
     }
 
-    await report.debug(
-        "API request",
-        {
-            'user': chat.id,
-            'data': json.dumps(req, ensure_ascii=False)[:LOG_LIMIT],
-        }
-    )
+    await report.debug("API request", {
+        'user': chat.id,
+        'data': json.dumps(req, ensure_ascii=False)[:LOG_LIMIT],
+    })
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
@@ -64,28 +61,22 @@ async def api(chat, method, data=None):
         time.sleep(5)
 
     if res.status_code != 200:
-        await report.error(
-            "API response",
-            {
-                'user': chat.id,
-                'method': method,
-                'params': data,
-                'token': tokens[chat.id],
-                'locale': languages[chat.id],
-                'error': res.status_code,
-            }
-        )
+        await report.error("API response", {
+            'user': chat.id,
+            'method': method,
+            'params': data,
+            'token': tokens[chat.id],
+            'locale': languages[chat.id],
+            'error': res.status_code,
+        })
         return 1, None
 
     res = res.json()
 
-    await report.debug(
-        "API response",
-        {
-            'user': chat.id,
-            'data': res,
-        }
-    )
+    await report.debug("API response", {
+        'user': chat.id,
+        'data': res,
+    })
 
     return res['error'], res.get('data', {})
 
@@ -113,17 +104,14 @@ async def auth(chat) -> bool:
 
     # Errors
     if error:
-        await report.error(
-            "Authorization",
-            {
-                'user': chat.id,
-                'name': chat.first_name or chat.title or None,
-                'surname': chat.last_name or None,
-                'login': chat.username or None,
-                'error': error,
-                'data': data,
-            }
-        )
+        await report.error("Authorization", {
+            'user': chat.id,
+            'name': chat.first_name or chat.title or None,
+            'surname': chat.last_name or None,
+            'login': chat.username or None,
+            'error': error,
+            'data': data,
+        })
 
         del tokens[chat.id]
         return

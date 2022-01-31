@@ -47,15 +47,12 @@ async def handle(request, data):
     post.save()
 
     # Report
-    await report.important(
-        "Save post",
-        {
-            'post': post.id,
-            'title': post.title,
-            'user': request.user.id,
-            'new': new,
-        },
-    )
+    await report.important("Save post", {
+        'post': post.id,
+        'title': post.title,
+        'user': request.user.id,
+        'new': new,
+    })
 
     # Processing
     cont = None

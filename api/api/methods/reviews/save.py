@@ -35,16 +35,13 @@ async def handle(request, data):
     review.save()
 
     # Report
-    await report.request(
-        "New review",
-        {
-            'review': review.id,
-            'title': review.title,
-            'data': review.data,
-            'user': request.user.id,
-            'token': request.token,
-        },
-    )
+    await report.request("New review", {
+        'review': review.id,
+        'title': review.title,
+        'data': review.data,
+        'user': request.user.id,
+        'token': request.token,
+    })
 
     # Processing
     cont = None

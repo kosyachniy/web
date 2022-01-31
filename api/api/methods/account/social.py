@@ -261,17 +261,13 @@ async def handle(request, data):
     #         user.save()
 
     #         # Report
-    #         await report.important(
-    #             "Registration via social network",
-    #             {
-    #                 'user': user.id,
-    #                 'name': f"{social_name or ''} {social_surname or ''}",
-    #                 'login': social_login and f"@{social_login}",
-    #                 'token': request.token,
-    #                 'social': data.social,
-    #             },
-    #             tags=['reg'],
-    #         )
+    #         await report.important("Registration via social network", {
+    #             'user': user.id,
+    #             'name': f"{social_name or ''} {social_surname or ''}",
+    #             'login': social_login and f"@{social_login}",
+    #             'token': request.token,
+    #             'social': data.social,
+    #         }, tags=['reg'])
 
     # # Assignment of the token to the user
 
