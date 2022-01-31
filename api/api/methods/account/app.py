@@ -10,6 +10,7 @@ from hmac import HMAC
 from urllib.parse import urlparse, parse_qsl, urlencode
 
 from consys.errors import ErrorWrong, ErrorInvalid
+# pylint: disable=import-error
 import jwt
 
 from api.lib import BaseType, validate, cfg, report
@@ -19,18 +20,21 @@ from api.methods.account.auth import reg
 
 
 def is_valid_vk(*, query: dict) -> bool:
-	vk_subset = OrderedDict(sorted(
+    """ Check url """
+
+    vk_subset = OrderedDict(sorted(
         x for x in query.items() if x[0][:3] == 'vk_'
     ))
-	hash_code = b64encode(HMAC(
+    hash_code = b64encode(HMAC(
         cfg('vk.secret').encode(),
         urlencode(vk_subset, doseq=True).encode(),
         hashlib.sha256
     ).digest())
-	decoded_hash_code = hash_code.decode('utf-8')[:-1] \
+    decoded_hash_code = hash_code.decode('utf-8')[:-1] \
                                  .replace('+', '-') \
                                  .replace('/', '_')
-	return query['sign'] == decoded_hash_code
+
+    return query['sign'] == decoded_hash_code
 
 
 class Type(BaseType):
@@ -48,7 +52,10 @@ async def handle(request, data):
     """ Mini app auth """
 
     try:
-        params = dict(parse_qsl(urlparse(data.url).query, keep_blank_values=True))
+        params = dict(parse_qsl(
+            urlparse(data.url).query,
+            keep_blank_values=True,
+        ))
         data.user = int(params['vk_user_id'])
         status = is_valid_vk(query=params)
     except Exception as e:
@@ -58,7 +65,7 @@ async def handle(request, data):
             'network': request.network,
             'error': e,
         })
-        raise ErrorInvalid('url')
+        raise ErrorInvalid('url') from e
 
     if not status:
         raise ErrorWrong('url')
@@ -117,8 +124,9 @@ async def handle(request, data):
         user = await reg(request, data, 'app')
 
     # # Referral
-    # if 'referral' in x and len(x['referral']):
-    #     db['users'].update_one({'vk': social_id}, {'$set': {'referral': x['referral']}})
+    # if data.referral:
+    #     user.referral = data.referral
+    #     user.save()
 
     # Response
     return {

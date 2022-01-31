@@ -12,3 +12,4 @@ tgreports==0.13
 consys==0.17
 libdev==0.18
 yookassa==2.2.3
+# PyJWT==2.3.0

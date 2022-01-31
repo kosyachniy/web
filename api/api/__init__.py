@@ -41,6 +41,7 @@ class API():
     ):
         """ Call API method """
 
+        # TODO: JWT
         if socket is None and token is None:
             await report.warning("There is no socket id and token", {
                 'method': name,

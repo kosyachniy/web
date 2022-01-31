@@ -45,13 +45,15 @@ app.add_middleware(
 
 # API
 import time
+# import json
+# from functools import wraps
 
+# import jwt
 from pydantic import BaseModel
 from consys.errors import BaseError
-from libdev.cfg import cfg
 
 from api import API
-from api.lib import report
+from api.lib import cfg, report
 from api.models.user import User
 from api.models.action import Action
 from api.models.job import Job
@@ -62,6 +64,37 @@ from api.models.payment import Payment
 api = API(
     # sio=sio,
 )
+
+# ## JWT
+# def token_required(f):
+#     @wraps(f)
+#     async def decorated(data, request):
+#         try:
+#             header = request.headers.get('Authorization')
+
+#             if not header:
+#                 return await f(data, request)
+
+#             token = header.split(' ')[1]
+
+#             if not token or token == 'null':
+#                 return await f(data, request)
+
+#             try:
+#                 data = jwt.decode(token, cfg('jwt'))
+#             except:
+#                 return json.dumps({'message': 'Token is invalid!'}), 403
+
+#             return await f(data, request)
+
+#         except Exception as e:
+#             await report.error("JWT handler", {
+#                 'data': data,
+#                 'error': e,
+#             })
+#             return await f(data, request)
+
+#     return decorated
 
 ## Endpoints
 ### Main
@@ -75,6 +108,7 @@ class Input(BaseModel):
     socket: str = None
 
 @app.post('/')
+# @token_required
 async def index(data: Input, request: Request):
     """ Main API endpoint """
 
