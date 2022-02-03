@@ -12,14 +12,14 @@ from api.methods.account.online import get_user
 class Request():
     """ Request container """
 
-    def __init__(self, ip, socket, token, network, locale, sio=None):
+    def __init__(self, ip, socket, token, network, locale, jwt=None, sio=None):
         self.timestamp = time.time()
         self.ip = ip
         self.socket = socket
         self.token = token
         self.network = get_network(network)
         self.locale = get_language(locale)
-        self.user = get_user(token, socket)
+        self.user = get_user(token, socket, jwt)
         self.sio = sio
 
 
@@ -38,11 +38,11 @@ class API():
         token=None,
         network=0,
         locale=0,
+        jwt=None,
     ):
         """ Call API method """
 
-        # TODO: JWT
-        if socket is None and token is None:
+        if socket is None and token is None and jwt is None:
             await report.warning("There is no socket id and token", {
                 'method': name,
             })
@@ -52,7 +52,7 @@ class API():
 
         # print(name, data, ip, socket, token, network, locale)
 
-        request = Request(ip, socket, token, network, locale, self.sio)
+        request = Request(ip, socket, token, network, locale, jwt, self.sio)
 
         # # Action tracking
         # Track(

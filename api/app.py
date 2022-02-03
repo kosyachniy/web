@@ -81,8 +81,12 @@ api = API(
 #                 return await f(data, request)
 
 #             try:
-#                 data = jwt.decode(token, cfg('jwt'))
-#             except:
+#                 data.jwt = jwt.decode(token, cfg('jwt'), algorithms='HS256')
+#             except Exception as e:
+#                 await report.error("Invalid token", {
+#                     'token': token,
+#                     'error': e,
+#                 })
 #                 return json.dumps({'message': 'Token is invalid!'}), 403
 
 #             return await f(data, request)
@@ -106,6 +110,7 @@ class Input(BaseModel):
     locale: str = None
     token: str = None
     socket: str = None
+    jwt: dict = None
 
 @app.post('/')
 # @token_required
@@ -127,6 +132,7 @@ async def index(data: Input, request: Request):
             socket=data.socket,
             network=data.network,
             locale=data.locale,
+            jwt=data.jwt,
         )
 
     except BaseError as e:

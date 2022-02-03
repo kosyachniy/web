@@ -51,7 +51,7 @@ def _online_count():
 
     return count
 
-def get_user(token_id, socket_id=None):
+def get_user(token_id, socket_id=None, jwt=None):
     """ Get user object by token """
 
     if token_id is not None:
@@ -62,7 +62,7 @@ def get_user(token_id, socket_id=None):
             token.save()
         else:
             if token.user:
-                return User.get(ids=token.user)
+                return User.get(token.user)
 
     elif socket_id is not None:
         try:
@@ -72,6 +72,15 @@ def get_user(token_id, socket_id=None):
         else:
             if socket.user:
                 return User.get(ids=socket.user)
+
+    elif jwt is not None:
+        users = User.get(social={'$elemMatch': {
+            'id': jwt['network'],
+            'user': jwt['user'],
+        }})
+
+        if users:
+            return users[0]
 
     return User()
 

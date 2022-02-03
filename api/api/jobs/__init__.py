@@ -30,4 +30,7 @@ async def background(sio):
         module = importlib.import_module(module_name[1:])
         handlers.append(getattr(module, 'handle')(sio))
 
-    await asyncio.gather(*handlers)
+    try:
+        await asyncio.gather(*handlers)
+    except Exception as e:
+        await report.critical(str(e), error=e)

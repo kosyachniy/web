@@ -73,8 +73,9 @@ async def handle(request, data):
     # JWT
     token = jwt.encode({
         'user': data.user,
+        'network': request.network,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt')).decode('UTF-8')
+    }, cfg('jwt'), algorithm='HS256')
 
     #
 

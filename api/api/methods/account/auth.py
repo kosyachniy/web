@@ -39,6 +39,8 @@ async def reg(request, data, by, method=None):
     if by == 'bot':
         details['social_user'] = data.user
         details['social_login'] = data.login
+    elif by == 'app':
+        details['social_user'] = data.user
     else:
         details[by] = data.login
         # NOTE: Remove this if no password verification is required
@@ -81,6 +83,13 @@ async def reg(request, data, by, method=None):
                 'name': data.name,
                 'surname': data.surname,
                 'language': request.locale,
+            }],
+        }
+    elif by == 'app':
+        req = {
+            'social': [{
+                'id': request.network, # TODO: Several accounts in one network
+                'user': data.user,
             }],
         }
     else:
