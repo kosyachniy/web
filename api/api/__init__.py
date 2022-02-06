@@ -29,6 +29,7 @@ class API():
     def __init__(self, sio=None):
         self.sio = sio
 
+    # pylint: disable=too-many-arguments
     async def method(
         self,
         name,
@@ -42,9 +43,13 @@ class API():
     ):
         """ Call API method """
 
-        if socket is None and token is None and jwt is None:
+        if (
+            socket is None and token is None
+            and jwt is None and name != 'account.app'
+        ):
             await report.warning("There is no socket id and token", {
                 'method': name,
+                'ip': ip,
             })
 
         if not data:
