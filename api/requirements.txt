@@ -1,15 +1,15 @@
 # env/bin/python -m pip install -U --force-reinstall pip
 
-fastapi==0.70.1
+fastapi==0.75.0
 prometheus_fastapi_instrumentator==5.7.1
-uvicorn==0.16.0
-websockets==10.1 # For Socket.IO
-httptools==0.3.0 # For routing
-python-socketio==5.5.0
-requests==2.26.0
+uvicorn==0.17.6
+websockets==10.2 # For Socket.IO
+httptools==0.4.0 # For routing
+python-socketio==5.5.2
+requests==2.27.1
 tgio==0.7
 tgreports==0.13
-consys==0.18
-libdev==0.18
+consys==0.19
+libdev==0.21
 yookassa==2.2.3
 # PyJWT==2.3.0
