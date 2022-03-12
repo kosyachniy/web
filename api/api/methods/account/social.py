@@ -9,7 +9,7 @@ import base64
 from typing import Union
 import requests
 from libdev.codes import get_network
-from consys.errors import ErrorAccess, ErrorInvalid, ErrorWrong
+from consys.errors import ErrorAccess, ErrorWrong
 
 from api.lib import BaseType, validate, cfg, report
 from api.models.user import User
@@ -30,6 +30,7 @@ class Type(BaseType):
     name: str = None
     surname: str = None
 
+# pylint: disable=too-many-branches,too-many-statements
 @validate(Type)
 async def handle(request, data):
     """ Via social network """
@@ -90,8 +91,8 @@ async def handle(request, data):
                     link.format(data.user, token)
                 ).text
             )['response'][0]
-        except:
-            raise ErrorAccess('vk')
+        except Exception as e:
+            raise ErrorAccess('vk') from e
 
         data.name = response.get('first_name')
         data.surname = response.get('last_name')

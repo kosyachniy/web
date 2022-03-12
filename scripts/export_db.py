@@ -1,3 +1,7 @@
+"""
+Export all project data from DB to backup files
+"""
+
 import json
 from bson.objectid import ObjectId
 
@@ -16,7 +20,7 @@ db = get_db(
 dbs = [collection['name'] for collection in db.list_collections()]
 
 for db_name in dbs:
-    with open(f'/backup/{db_name}.txt', 'w') as file:
+    with open(f'/backup/{db_name}.txt', 'w', encoding='utf-8') as file:
         for i in db[db_name].find():
             if isinstance(i['_id'], ObjectId):
                 del i['_id']

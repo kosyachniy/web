@@ -26,6 +26,7 @@ def detect_type(login):
 
     return 'login'
 
+# pylint: disable=too-many-branches
 async def reg(request, data, by, method=None):
     """ Register an account """
 
@@ -132,7 +133,7 @@ async def reg(request, data, by, method=None):
 
     req = {
         'user': user.id,
-        'network': request.network,
+        'network': NETWORKS[request.network].upper(),
         'type': method,
         # TODO: ip, geo
     }
@@ -141,7 +142,7 @@ async def reg(request, data, by, method=None):
         req['login'] = data.login and f"@{data.login}"
     elif by == 'social':
         req['social'] = NETWORKS[data.social].upper()
-        req['login'] = data.login and f"@{data.login}",
+        req['login'] = data.login and f"@{data.login}"
         req['mail'] = data.mail
     elif by == 'phone':
         req['phone'] = f"+{user.phone}"
