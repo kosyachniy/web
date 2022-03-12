@@ -8,7 +8,7 @@ disable=unsubscriptable-object,unused-argument,no-name-in-module,duplicate-code
 max-line-length=80
 
 [MISCELLANEOUS]
-notes=FIXME,BUG,UGLY  # TODO
+notes=FIXME,BUG,UGLY # TODO
 
 [BASIC]
 good-names=i,j,e,f,by,ip,id,to,rm,el,tz,tg,vk

@@ -32,5 +32,6 @@ async def background(sio):
 
     try:
         await asyncio.gather(*handlers)
+    # pylint: disable=broad-except
     except Exception as e:
         await report.critical(str(e), error=e)

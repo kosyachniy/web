@@ -9,7 +9,7 @@ python-socketio==5.5.0
 requests==2.26.0
 tgio==0.7
 tgreports==0.13
-consys==0.17
+consys==0.18
 libdev==0.18
 yookassa==2.2.3
 # PyJWT==2.3.0
