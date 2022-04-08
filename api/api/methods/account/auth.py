@@ -125,7 +125,7 @@ async def reg(request, data, by, method=None):
         **req,
     )
 
-    # TODO: Subscription
+    # TODO: Preauth data
 
     user.save()
 
