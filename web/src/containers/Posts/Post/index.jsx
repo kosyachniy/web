@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import MathJax from 'react-mathjax-preview'
 
 import api from '../../../lib/api'
@@ -42,7 +42,7 @@ const Post = () => {
 
     if (deleted) {
         return (
-            <Redirect to="/" />
+            <Navigate to="/" />
         )
     }
 

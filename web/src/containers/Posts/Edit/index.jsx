@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import api from '../../../lib/api'
@@ -32,7 +32,7 @@ const Edit = (props) => {
 
     if (redirect) {
         return (
-            <Redirect to={`/post/${redirect}`} />
+            <Navigate to={`/post/${redirect}`} />
         )
     }
 

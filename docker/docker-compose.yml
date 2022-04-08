@@ -78,12 +78,7 @@ services:
     volumes:
       - ../web/run.sh:/run.sh
       - ../web/public:/public
-      # NOTE: src/ cannot be specified, because sets.json will not be generated
-      - ../web/src/components:/src/components
-      - ../web/src/containers:/src/containers
-      - ../web/src/lib:/src/lib
-      - ../web/src/App.jsx:/src/App.jsx
-      - ../web/src/redus.js:/src/redus.js
+      - ../web/src:/src
 
   server:
     image: "nginx:1.21.6"
