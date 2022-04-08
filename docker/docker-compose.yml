@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   db:
-    image: mongo:5.0.5
+    image: mongo:5.0.6
     ports:
       - "27017:27017"
     restart: unless-stopped
@@ -78,15 +78,10 @@ services:
     volumes:
       - ../web/run.sh:/run.sh
       - ../web/public:/public
-      # NOTE: src/ cannot be specified, because sets.json will not be generated
-      - ../web/src/components:/src/components
-      - ../web/src/containers:/src/containers
-      - ../web/src/lib:/src/lib
-      - ../web/src/App.jsx:/src/App.jsx
-      - ../web/src/redus.js:/src/redus.js
+      - ../web/src:/src
 
   server:
-    image: "nginx:1.21.5"
+    image: "nginx:1.21.6"
     env_file: .env
     volumes:
       - ../docker/server/nginx.conf:/etc/nginx/nginx.conf

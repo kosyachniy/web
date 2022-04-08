@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   db:
-    image: mongo:5.0.5
+    image: mongo:5.0.6
     # ports:
     #   - "27017:27017"
     restart: unless-stopped
@@ -96,7 +96,7 @@ services:
       - ../data/build:/build/
 
   server:
-    image: "nginx:1.21.5"
+    image: "nginx:1.21.6"
     restart: unless-stopped
     env_file: .env
     volumes:

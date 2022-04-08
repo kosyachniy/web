@@ -32,7 +32,7 @@ Android | Front-end | React Native | JavaScript | planned
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_logo.png?raw=true" alt="NGINX" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_name.png?raw=true" alt="NGINX" height="50" /></td>
-            <td align="center">1.21.5</td>
+            <td align="center">1.21.6</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/letsencrypt_logo.png?raw=true" alt="Let's Encrypt" height="50" /></td>
@@ -43,17 +43,17 @@ Android | Front-end | React Native | JavaScript | planned
             <td rowspan="4" align="center">Back-end</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/python_logo.png?raw=true" alt="Python" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/python_name.png?raw=true" alt="Python" height="50" /></td>
-            <td align="center">3.9.10</td>
+            <td align="center">3.10</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_logo.png?raw=true" alt="FastAPI" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_name.png?raw=true" alt="FastAPI" height="50" /></td>
-            <td align="center">0.70.1</td>
+            <td align="center">0.75.0</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_logo.png?raw=true" alt="MongoDB" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_name.png?raw=true" alt="MongoDB" height="50" /></td>
-            <td align="center">5.0.5</td>
+            <td align="center">5.0.6</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_logo.png?raw=true" alt="Socket.IO" height="50" /></td>
@@ -64,7 +64,7 @@ Android | Front-end | React Native | JavaScript | planned
             <td rowspan="5" align="center">Front-end</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/javascript_logo.png?raw=true" alt="JavaScript" height="50" /></td>
             <td></td>
-            <td align="center">node 17.3</td>
+            <td align="center">node 16.14.0</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_logo.png?raw=true" alt="ReactJS" height="50" /></td>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { getToken } from '../../../lib/token'
 import { socketIO } from '../../../lib/sockets'
@@ -8,6 +8,7 @@ import './style.css'
 
 // System
 import Loader from '../../../components/Loader'
+import Callback from '../../Pages/Callback'
 
 // Users
 import Profile from '../../Pages/Profile'
@@ -62,32 +63,20 @@ const App = (props) => {
             />
             <div className={`bg-${props.system.theme}`}>
                 <div className="container" id="main">
-                    <Switch>
-                        <Route exact path="/">
-                            <PostsGrid />
-                        </Route>
+                    <Routes>
+                        <Route exact path="/" element={<PostsGrid />} />
 
-                        <Route path="/posts">
-                            <PostsGrid />
-                        </Route>
-                        <Route path="/post/add">
-                            <PostsEdit />
-                        </Route>
-                        <Route path="/post">
-                            <PostsPost />
-                        </Route>
-                        <Route path="/feed">
-                            <PostsFeed />
-                        </Route>
+                        <Route path="/posts" element={<PostsGrid />} />
+                        <Route path="/post/add" element={<PostsEdit />} />
+                        <Route path="/post" element={<PostsPost />} />
+                        <Route path="/feed" element={<PostsFeed />} />
 
-                        <Route path="/profile">
-                            <Profile />
-                        </Route>
+                        <Route path="/profile" element={<Profile />} />
 
-                        {/* <Route path="/map">
-                            <Map />
-                        </Route> */}
-                    </Switch>
+                        {/* <Route path="/map" element={<Map />} /> */}
+
+						<Route path="/callback" element={<Callback />} />
+                    </Routes>
                 </div>
             </div>
         </>

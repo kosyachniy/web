@@ -69,22 +69,20 @@
 
 .btn_vk {
     background-color: #517299 !important;
+}
+
+.btn_g {
+    background-color: #db4437 !important;
+}
+
+.btn_tg {
+    background: #0088cc !important;
+}
+
+.btn_vk, .btn_g, .btn_tg {
     display: block;
 }
 
-.btn_vk:hover {
-    background: #517299 !important;
-    opacity: 0.95;
-}
-
-.btn_google {
-    background-color: #db4437 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn_google:hover {
-    background: #db4437 !important;
+.btn_vk:hover, .btn_g:hover, .btn_tg:hover {
     opacity: 0.95;
 }

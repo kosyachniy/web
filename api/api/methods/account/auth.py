@@ -2,6 +2,7 @@
 The authorization method of the account object of the API
 """
 
+from libdev.codes import NETWORKS
 from consys.handlers import process_lower, pre_process_phone, check_phone, \
                             check_mail, process_password
 from consys.errors import ErrorWrong, ErrorAccess
@@ -25,6 +26,7 @@ def detect_type(login):
 
     return 'login'
 
+# pylint: disable=too-many-branches
 async def reg(request, data, by, method=None):
     """ Register an account """
 
@@ -39,6 +41,11 @@ async def reg(request, data, by, method=None):
     if by == 'bot':
         details['social_user'] = data.user
         details['social_login'] = data.login
+    elif by == 'social':
+        details['social'] = data.social
+        details['social_user'] = data.user
+        details['social_login'] = data.login
+        details['mail'] = data.mail
     elif by == 'app':
         details['social_user'] = data.user
     else:
@@ -85,6 +92,22 @@ async def reg(request, data, by, method=None):
                 'language': request.locale,
             }],
         }
+    elif by == 'social':
+        req = {
+            'arg_ignore': {'login', 'mail', 'name', 'surname'},
+            'login': data.login or None,
+            'mail': data.mail or None,
+            'name': data.name or None,
+            'surname': data.surname or None,
+            'social': [{
+                'id': data.social, # TODO: Several accounts in one network
+                'user': data.user,
+                'login': data.login,
+                'mail': data.mail,
+                'name': data.name,
+                'surname': data.surname,
+            }],
+        }
     elif by == 'app':
         req = {
             'social': [{
@@ -110,15 +133,21 @@ async def reg(request, data, by, method=None):
 
     req = {
         'user': user.id,
-        'network': request.network,
+        'network': NETWORKS[request.network].upper(),
         'type': method,
         # TODO: ip, geo
     }
 
-    if by=='bot':
+    if by == 'bot':
         req['login'] = data.login and f"@{data.login}"
+    elif by == 'social':
+        req['social'] = NETWORKS[data.social].upper()
+        req['login'] = data.login and f"@{data.login}"
+        req['mail'] = data.mail
+    elif by == 'phone':
+        req['phone'] = f"+{user.phone}"
     else:
-        req[by] = f"+{user.phone}" if by == 'phone' else user.login
+        req[by] = user.login
 
     if data.name or data.surname:
         req['name'] = f"{data.name or ''} {data.surname or ''}"

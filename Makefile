@@ -75,11 +75,6 @@ clear:
 	rm -rf **/.pytest_cache/
 
 clear-all:
-	rm -rf env/
-	rm -rf **/env/
-	rm -rf __pycache__/
-	rm -rf **/__pycache__/
-	rm -rf .pytest_cache/
-	rm -rf **/.pytest_cache/
+	make clear
 	rm -rf **/*.err
 	rm -rf **/*.log
