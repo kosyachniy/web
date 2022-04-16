@@ -94,7 +94,7 @@ async def echo(message):
     if not error:
         posts = data['posts']
         res = "\n---------------\n".join(
-            f"#{post['id']} {post['name']}"
+            f"#{post['id']} {post['title']}"
             for post in posts
         )
     else:

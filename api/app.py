@@ -22,6 +22,11 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+# # Socket.IO
+# import socketio
+# sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+# asgi = socketio.ASGIApp(sio)
+
 # # Limiter
 
 # from flask import request, jsonify

@@ -25,6 +25,7 @@ async def handle(request, data):
     """ Get """
 
     # No access
+    # TODO: -> middleware
     if request.user.status < 2:
         raise ErrorAccess('get')
 

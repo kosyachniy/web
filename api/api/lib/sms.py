@@ -5,8 +5,8 @@ Sending SMS messages
 from api.lib import cfg
 
 
-LOGIN = cfg('smsc.login')
-PASSWORD = cfg('smsc.password')
+USER = cfg('smsc.user')
+PASS = cfg('smsc.pass')
 
 
 # TODO: Use pip/smsc
