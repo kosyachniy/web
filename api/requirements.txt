@@ -14,8 +14,8 @@ python-socketio==5.5.2
 tgio==0.7
 # Reports
 tgreports==0.13
-# Payments
-yookassa==2.3.0
+# # Payments
+# yookassa==2.3.0
 # # Google Docs
 # google-api-python-client==2.44.0
 # google-auth-httplib2==0.1.0

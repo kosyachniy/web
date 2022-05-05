@@ -2,6 +2,7 @@
 Payments functionality for the API
 """
 
+# pylint: disable=import-error
 from yookassa import Configuration, Payment
 
 from api.lib import cfg

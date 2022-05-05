@@ -2,6 +2,7 @@
 Google Documents functionality for the API
 """
 
+# pylint: disable=import-error
 import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
@@ -19,6 +20,8 @@ service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
 
 
 def create(name, sheets, mail):
+    """ Create a document """
+
     spreadsheet = service.spreadsheets().create(
         body = {
             'properties': {
@@ -39,12 +42,12 @@ def create(name, sheets, mail):
         },
     ).execute()
 
-    spreadsheetId = spreadsheet['spreadsheetId']
-    print(f"https://docs.google.com/spreadsheets/d/{spreadsheetId}")
+    spreadsheet_id = spreadsheet['spreadsheetId']
+    print(f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}")
 
-    driveService = apiclient.discovery.build('drive', 'v3', http=httpAuth)
-    driveService.permissions().create(
-        fileId = spreadsheetId,
+    drive_service = apiclient.discovery.build('drive', 'v3', http=httpAuth)
+    drive_service.permissions().create(
+        fileId = spreadsheet_id,
         body = {
             'type': 'user',
             'role': 'writer',

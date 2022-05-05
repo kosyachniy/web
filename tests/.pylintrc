@@ -11,7 +11,7 @@ max-line-length=80
 notes=FIXME,BUG,UGLY # TODO
 
 [BASIC]
-good-names=i,j,e,f,by,ip,id,to,rm,el,tz,tg,vk
+good-names=i,j,e,f,k,v,by,db,ip,id,to,rm,el,tz,tg,vk
 no-docstring-rgx=[(__.*__)(Type)]
 
 [DESIGN]

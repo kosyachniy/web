@@ -2,6 +2,7 @@
 Managing address books, sending mail
 """
 
+# pylint: disable=import-error
 from pysendpulse.pysendpulse import PySendPulse
 
 from api.lib import cfg
