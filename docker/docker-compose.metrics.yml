@@ -54,7 +54,10 @@ services:
     volumes:
       - ../data/db:/data/db
       - ../data/logs:/data/logs
-    #   - ../docker/db/mongod.conf:/etc/mongod.conf
+      # NOTE: To provide files
+    #   - type: bind
+    #     source: ../docker/db/mongod.conf
+    #     target: /etc/mongod.conf
     # command: --config /etc/mongod.conf
 
   api:

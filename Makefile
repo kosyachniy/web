@@ -23,6 +23,12 @@ node:
 check:
 	docker stack services ${PROJECT_NAME}
 
+log-api:
+	tail -f data/logs/api.log
+
+log-web:
+	docker service logs -f ${PROJECT_NAME}_web
+
 stop:
 	docker stack rm ${PROJECT_NAME}
 
