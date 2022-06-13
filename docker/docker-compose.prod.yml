@@ -11,8 +11,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_LOGIN}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
-      - ../data/db:/data/db
-      - ../data/logs:/data/logs
+      - ${PATH_TO_DATA}/db:/data/db
+      - ${PATH_TO_DATA}/logs:/data/logs
       # NOTE: To provide files
     #   - type: bind
     #     source: ../docker/db/mongod.conf
@@ -32,15 +32,15 @@ services:
     restart: unless-stopped
     env_file: .env
     volumes:
-      - ../data/load:/data/load
-      - ../data/backup:/backup
+      - ${PATH_TO_DATA}/load:/data/load
+      - ${PATH_TO_DATA}/backup:/backup
       - ../scripts:/scripts
       # NOTE: To provide files
       - type: bind
-        source: ../data/logs/api.err
+        source: ${PATH_TO_DATA}/logs/api.err
         target: /app.err
       - type: bind
-        source: ../data/logs/api.log
+        source: ${PATH_TO_DATA}/logs/api.log
         target: /app.log
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
 
@@ -59,10 +59,10 @@ services:
     volumes:
       # NOTE: To provide files
       - type: bind
-        source: ../data/logs/jobs.err
+        source: ${PATH_TO_DATA}/logs/jobs.err
         target: /app.err
       - type: bind
-        source: ../data/logs/jobs.log
+        source: ${PATH_TO_DATA}/logs/jobs.log
         target: /app.log
     command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers
 
@@ -77,10 +77,10 @@ services:
     env_file: .env
     volumes:
       - type: bind
-        source: ../data/logs/tg.err
+        source: ${PATH_TO_DATA}/logs/tg.err
         target: /app.err
       - type: bind
-        source: ../data/logs/tg.log
+        source: ${PATH_TO_DATA}/logs/tg.log
         target: /app.log
     depends_on:
       - api
@@ -96,7 +96,7 @@ services:
         - HOST=${EXTERNAL_HOST}
     env_file: .env
     volumes:
-      - ../data/build:/build/
+      - ${PATH_TO_DATA}/build:/build/
 
   server:
     image: "nginx:1.21.6"
@@ -104,9 +104,9 @@ services:
     env_file: .env
     volumes:
       - ../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template
-      - ../data/build:/build/
-      - ../data/load:/load
-      - ../data/logs:/data/logs
+      - ${PATH_TO_DATA}/build:/build/
+      - ${PATH_TO_DATA}/load:/load
+      - ${PATH_TO_DATA}/logs:/data/logs
     depends_on:
       - api
       - jobs
