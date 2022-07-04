@@ -67,6 +67,9 @@ services:
       - type: bind
         source: ${PATH_TO_DATA}/logs/jobs.log
         target: /app.log
+      - type: bind
+        source: ${PATH_TO_DATA}/sitemap.xml
+        target: /data/sitemap.xml
     command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
   web:
