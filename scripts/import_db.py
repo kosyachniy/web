@@ -2,7 +2,6 @@
 Import all project data from backup files to DB
 """
 
-
 import os
 import json
 

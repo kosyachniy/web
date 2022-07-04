@@ -7,5 +7,4 @@ from api.lib import report
 
 async def handle(request, data):
     """ Connect """
-
     await report.debug('IN', request.socket)

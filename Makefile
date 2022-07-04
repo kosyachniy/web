@@ -26,6 +26,9 @@ check:
 log-api:
 	tail -f data/logs/api.log
 
+log-jobs:
+	tail -f data/logs/jobs.log
+
 log-web:
 	docker service logs -f ${PROJECT_NAME}_web
 
