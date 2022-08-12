@@ -2,7 +2,7 @@
 
 requests==2.28.1
 fastapi==0.79.0
-libdev==0.35
+libdev==0.36
 consys==0.20
 prometheus_fastapi_instrumentator==5.8.2
 uvicorn==0.18.2

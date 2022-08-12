@@ -41,7 +41,7 @@ async def generate_sitemap(_):
             link['priority'],
         )
 
-    with open('/data/sitemap.xml', 'w') as file:
+    with open('/data/sitemap.xml', 'w', encoding='utf-8') as file:
         print(BODY.format(data), file=file)
 
 

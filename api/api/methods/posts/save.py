@@ -54,14 +54,9 @@ async def handle(request, data):
         'new': new,
     })
 
-    # Processing
-    cont = None
-    if data.data and data.data != post.data:
-        cont = post.data
-
     # Response
     return {
         'id': post.id,
-        'data': cont,
         'new': new,
+        'resume': post.json(),
     }

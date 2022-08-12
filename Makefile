@@ -9,6 +9,7 @@ setup:
 
 setup-tests:
 	make setup
+	$(PYTHON) -m pip install -r tg/requirements.txt
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
 run:

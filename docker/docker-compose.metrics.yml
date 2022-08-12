@@ -41,6 +41,17 @@ services:
     image: prom/node-exporter
     restart: unless-stopped
 
+  redis:
+    image: redis:7.0
+    restart: on-failure
+    volumes:
+      - ../data/redis:/data
+    ports:
+      - 6379:6379
+    env_file:
+      - .env
+    command: ["redis-server", "--requirepass", "${REDIS_PASS}"]
+
   db:
     image: mongo:5.0.6
     # ports:
@@ -70,6 +81,7 @@ services:
         - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
+      - redis
     restart: unless-stopped
     env_file: .env
     volumes:
@@ -138,6 +150,7 @@ services:
         target: /app.log
     depends_on:
       - api
+      - redis
     restart: unless-stopped
 
   web:
