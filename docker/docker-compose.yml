@@ -60,6 +60,7 @@ services:
     restart: unless-stopped
     env_file: .env
     volumes:
+      - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
       # NOTE: To provide files
       - type: bind
         source: ${PATH_TO_DATA}/logs/jobs.err

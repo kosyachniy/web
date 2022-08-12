@@ -2,32 +2,42 @@
 Update sitemap.xml
 """
 
-import asyncio
 import time
+import datetime
+import asyncio
 
 from api.lib import report
 
 
-BODY = '''<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{}</urlset>
+FILE_LIMIT = 2500
+BODY = '''<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{}</sitemapindex>
 '''
-TEMPLATE = '''    <url>
+BODY_SUB = '<?xml version="1.0" encoding="utf-8" standalone="no"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{}</urlset>'
+TEMPLATE = '''    <sitemap>
         <loc>https://cut-price.ru/{}</loc>
         <lastmod>{}</lastmod>
-        <changefreq>{}</changefreq>
-        <priority>{}</priority>
-    </url>
+    </sitemap>
 '''
-LINKS = [{
+TEMPLATE_SUB = '<url><loc>https://cut-price.ru/{}</loc><lastmod>{}</lastmod><changefreq>{}</changefreq><priority>{}</priority></url>'
+LINKS = []
+LINKS_SUB = [{
     'url': '',
-    'time': 1648684800,
+    'time': time.time(),
     'freq': 'monthly',
     'priority': 0.9,
 }]
 
 
-async def generate_sitemap(_):
+def to_iso(data=datetime.datetime.utcnow()):
+    if isinstance(data, (int, float)):
+        data = datetime.datetime.utcfromtimestamp(data)
+    return data.replace(tzinfo=datetime.timezone.utc) \
+               .replace(microsecond=0) \
+               .isoformat()
+
+async def generate_sitemap():
     """ Update sitemap.xml """
 
     links = LINKS + []
@@ -50,7 +60,7 @@ async def handle(_):
 
     while True:
         try:
-            await generate_sitemap(_)
+            await generate_sitemap()
         # pylint: disable=broad-except
         except Exception as e:
             await report.critical(str(e), error=e)
