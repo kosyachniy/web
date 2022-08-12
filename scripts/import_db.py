@@ -12,8 +12,8 @@ from libdev.cfg import cfg
 db = get_db(
     cfg('mongo.host'),
     cfg('project_name'),
-    cfg('mongo.login'),
-    cfg('mongo.password'),
+    cfg('mongo.user'),
+    cfg('mongo.pass'),
 )
 
 

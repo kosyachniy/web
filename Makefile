@@ -4,6 +4,7 @@ PYTHON := env/bin/python
 
 setup:
 	python3 -m venv env
+	$(PYTHON) -m pip install -U --force-reinstall pip
 	$(PYTHON) -m pip install -r api/requirements.txt
 
 setup-tests:

@@ -9,8 +9,8 @@ from api.lib import cfg
 
 HOST = cfg('mongo.host')
 NAME = cfg('PROJECT_NAME')
-LOGIN = cfg('mongo.login')
-PASSWORD = cfg('mongo.password')
+LOGIN = cfg('mongo.user')
+PASSWORD = cfg('mongo.pass')
 
 
 Base = make_base(HOST, NAME, LOGIN, PASSWORD)
