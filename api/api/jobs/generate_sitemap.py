@@ -14,13 +14,23 @@ BODY = '''<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {}</sitemapindex>
 '''
-BODY_SUB = '<?xml version="1.0" encoding="utf-8" standalone="no"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{}</urlset>'
+BODY_SUB = (
+    '<?xml version="1.0" encoding="utf-8" standalone="no"?>'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{}</urlset>'
+)
 TEMPLATE = '''    <sitemap>
         <loc>https://cut-price.ru/{}</loc>
         <lastmod>{}</lastmod>
     </sitemap>
 '''
-TEMPLATE_SUB = '<url><loc>https://cut-price.ru/{}</loc><lastmod>{}</lastmod><changefreq>{}</changefreq><priority>{}</priority></url>'
+TEMPLATE_SUB = (
+    '<url>'
+    '<loc>https://cut-price.ru/{}</loc>'
+    '<lastmod>{}</lastmod>'
+    '<changefreq>{}</changefreq>'
+    '<priority>{}</priority>'
+    '</url>'
+)
 LINKS = []
 LINKS_SUB = [{
     'url': '',
@@ -31,6 +41,7 @@ LINKS_SUB = [{
 
 
 def to_iso(data=datetime.datetime.utcnow()):
+    """ Convert time to ISO for Sitemap """
     if isinstance(data, (int, float)):
         data = datetime.datetime.utcfromtimestamp(data)
     return data.replace(tzinfo=datetime.timezone.utc) \
