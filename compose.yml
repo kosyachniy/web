@@ -1,9 +1,9 @@
 version: "3.9"
 services:
   db:
-    image: mongo:5.0.6
+    image: mongo
     ports:
-      - "27017:27017"
+      - 27017:27017
     restart: unless-stopped
     env_file: .env
     environment:
@@ -15,15 +15,14 @@ services:
       - ${PATH_TO_DATA}/logs:/data/logs
       # NOTE: To provide files
       - type: bind
-        source: ../docker/db/mongod.conf
+        source: ./configs/mongod.conf
         target: /etc/mongod.conf
     command: --config /etc/mongod.conf
 
   api:
     image: ${PROJECT_NAME}/api
     build:
-      dockerfile: ../docker/api/Dockerfile
-      context: ../api
+      context: ./api
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
@@ -34,7 +33,7 @@ services:
     volumes:
       - ${PATH_TO_DATA}/load:/data/load
       - ${PATH_TO_DATA}/backup:/backup
-      - ../scripts:/scripts
+      - ./scripts:/scripts
       # NOTE: To provide files
       - type: bind
         source: ${PATH_TO_DATA}/logs/api.err
@@ -43,15 +42,14 @@ services:
         source: ${PATH_TO_DATA}/logs/api.log
         target: /app.log
       # For hot reload
-      - ../api/api:/api
-      - ../api/app.py:/app.py
+      - ./api/api:/api
+      - ./api/app.py:/app.py
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
   jobs:
     image: ${PROJECT_NAME}/jobs
     build:
-      dockerfile: ../docker/api/Dockerfile
-      context: ../api
+      context: ./api
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
@@ -77,22 +75,21 @@ services:
   web:
     image: ${PROJECT_NAME}/web
     build:
-      dockerfile: ../docker/web/Dockerfile
-      context: ../web
+      context: ./web
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
     env_file: .env
     volumes:
-      - ../web/run.sh:/run.sh
-      - ../web/public:/public
-      - ../web/src:/src
+      - ./web/run.sh:/run.sh
+      - ./web/public:/public
+      - ./web/src:/src
 
   server:
-    image: "nginx:1.21.6"
+    image: nginx
     env_file: .env
     volumes:
-      - ../docker/server/nginx.conf:/etc/nginx/nginx.conf
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf
       - ${PATH_TO_DATA}/load:/load
       - ${PATH_TO_DATA}/logs:/data/logs
     depends_on:
@@ -100,4 +97,4 @@ services:
       - jobs
       - web
     ports:
-      - "${EXTERNAL_PORT}:80"
+      - ${EXTERNAL_PORT}:80

@@ -1,4 +1,4 @@
-include docker/.env
+include .env
 
 PYTHON := env/bin/python
 
@@ -13,7 +13,7 @@ setup-tests:
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
 run:
-	sudo docker-compose -f docker/docker-compose.yml -p ${PROJECT_NAME} up --build
+	sudo docker-compose -p ${PROJECT_NAME} up --build
 
 deploy:
 	docker-compose -f docker/docker-compose.prod.yml -p ${PROJECT_NAME} up --build
