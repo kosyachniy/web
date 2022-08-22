@@ -12,18 +12,21 @@ setup-tests:
 	$(PYTHON) -m pip install -r tg/requirements.txt
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
-run:
+dev:
 	sudo docker-compose -p ${PROJECT_NAME} up --build
 
-deploy:
+run:
 	docker-compose -f docker/docker-compose.prod.yml -p ${PROJECT_NAME} up --build
 
-node:
-	docker-compose -f docker/docker-compose.metrics.yml build
-	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml ${PROJECT_NAME}
+# node:
+# 	docker-compose -f docker/docker-compose.metrics.yml build
+# 	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml ${PROJECT_NAME}
 
-check:
-	docker stack services ${PROJECT_NAME}
+# check:
+# 	docker stack services ${PROJECT_NAME}
+
+# stop:
+# 	docker stack rm ${PROJECT_NAME}
 
 log-api:
 	tail -f data/logs/api.log
@@ -33,12 +36,6 @@ log-jobs:
 
 log-web:
 	docker service logs -f ${PROJECT_NAME}_web
-
-stop:
-	docker stack rm ${PROJECT_NAME}
-
-dev:
-	$(PYTHON)
 
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}/api | cut -d ' ' -f 1` bash

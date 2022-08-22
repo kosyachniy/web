@@ -4,7 +4,7 @@ services:
     image: redis:7.0
     restart: on-failure
     volumes:
-      - ../data/redis:/data
+      - ${PATH_TO_DATA}/redis:/data
     ports:
       - 6379:6379
     env_file:
@@ -13,8 +13,8 @@ services:
 
   db:
     image: mongo:5.0.6
-    # ports:
-    #   - "27017:27017"
+    ports:
+      - 27017:27017
     restart: unless-stopped
     env_file: .env
     environment:
@@ -26,15 +26,51 @@ services:
       - ${PATH_TO_DATA}/logs:/data/logs
       # NOTE: To provide files
     #   - type: bind
-    #     source: ../docker/db/mongod.conf
+    #     source: ./configs/mongod.conf
     #     target: /etc/mongod.conf
     # command: --config /etc/mongod.conf
+
+  # prometheus:
+  #   image: prom/prometheus
+  #   deploy:
+  #     mode: global
+  #   volumes:
+  #     - type: bind
+  #       source: ./configs/prometheus.yml
+  #       target: /prometheus.yml
+  #   command:
+  #     - --config.file=/prometheus.yml
+  #     - --web.external-url=https://web.kosyachniy.com/prometheus/
+  #     - --web.route-prefix=/
+
+  # grafana:
+  #   image: grafana/grafana
+  #   deploy:
+  #     mode: global
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=pass
+  #     - GF_SERVER_ROOT_URL=https://web.kosyachniy.com/grafana/
+  #   depends_on:
+  #     - prometheus
+
+  # cadvisor:
+  #   image: google/cadvisor
+  #   deploy:
+  #     mode: global
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:rw
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #   depends_on:
+  #     - api
+  #     - prometheus
+  #     - grafana
 
   api:
     image: ${PROJECT_NAME}/api
     build:
-      dockerfile: ../docker/api/Dockerfile
-      context: ../api
+      context: ./api
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
@@ -46,7 +82,7 @@ services:
     volumes:
       - ${PATH_TO_DATA}/load:/data/load
       - ${PATH_TO_DATA}/backup:/backup
-      - ../scripts:/scripts
+      - ./scripts:/scripts
       # NOTE: To provide files
       - type: bind
         source: ${PATH_TO_DATA}/logs/api.err
@@ -59,8 +95,7 @@ services:
   jobs:
     image: ${PROJECT_NAME}/jobs
     build:
-      dockerfile: ../docker/api/Dockerfile
-      context: ../api
+      context: ./api
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
@@ -86,8 +121,7 @@ services:
   tg:
     image: ${PROJECT_NAME}/tg
     build:
-      dockerfile: ../docker/tg/Dockerfile
-      context: ../tg
+      context: ./tg
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
@@ -107,29 +141,11 @@ services:
   web:
     image: ${PROJECT_NAME}/web
     build:
-      dockerfile: ../docker/web/Dockerfile.prod
-      context: ../web
+      dockerfile: Dockerfile.prod
+      context: ./web
       args:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
     env_file: .env
     volumes:
       - ${PATH_TO_DATA}/build:/build/
-
-  server:
-    image: "nginx:1.21.6"
-    restart: unless-stopped
-    env_file: .env
-    volumes:
-      - ../docker/server/nginx.prod.conf:/etc/nginx/nginx.conf.template
-      - ${PATH_TO_DATA}/build:/build/
-      - ${PATH_TO_DATA}/load:/load
-      - ${PATH_TO_DATA}/logs:/data/logs
-    depends_on:
-      - api
-      - jobs
-      - web
-      - tg
-    ports:
-      - "${EXTERNAL_PORT}:80"
-    command: /bin/sh -c "envsubst '$${EXTERNAL_HOST}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g \"daemon off;\""
