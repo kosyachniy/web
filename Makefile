@@ -16,7 +16,7 @@ dev:
 	sudo docker-compose -p ${PROJECT_NAME} up --build
 
 run:
-	docker-compose -f docker/docker-compose.prod.yml -p ${PROJECT_NAME} up --build
+	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
 
 # node:
 # 	docker-compose -f docker/docker-compose.metrics.yml build

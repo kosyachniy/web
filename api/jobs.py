@@ -7,7 +7,7 @@ import asyncio
 import requests
 import socketio
 
-from api.jobs import background
+from jobs import background
 
 
 LINK = 'http://api:5000/'

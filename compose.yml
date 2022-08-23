@@ -69,6 +69,10 @@ services:
       - type: bind
         source: ${PATH_TO_DATA}/sitemap.xml
         target: /data/sitemap.xml
+      # For hot reload
+      - ./api/api:/api
+      - ./api/jobs:/jobs
+      - ./api/jobs.py:/jobs.py
     # NOTE: Only if we are running FastAPI
     command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
 
