@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   redis:
-    image: redis:7.0
+    image: redis
     restart: on-failure
     volumes:
       - ${PATH_TO_DATA}/redis:/data
@@ -12,7 +12,7 @@ services:
     command: ["redis-server", "--requirepass", "${REDIS_PASS}"]
 
   db:
-    image: mongo:5.0.6
+    image: mongo
     ports:
       - 27017:27017
     restart: unless-stopped
@@ -71,14 +71,13 @@ services:
     image: ${PROJECT_NAME}/api
     build:
       context: ./api
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
       - redis
     restart: unless-stopped
     env_file: .env
+    environment:
+      WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
       - ${PATH_TO_DATA}/load:/data/load
       - ${PATH_TO_DATA}/backup:/backup
@@ -96,13 +95,14 @@ services:
     image: ${PROJECT_NAME}/jobs
     build:
       context: ./api
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
+      - redis
     restart: unless-stopped
     env_file: .env
+    environment:
+      API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
+      WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
       - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
       # NOTE: To provide files
@@ -122,10 +122,10 @@ services:
     image: ${PROJECT_NAME}/tg
     build:
       context: ./tg
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     env_file: .env
+    environment:
+      API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
+      WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
       - type: bind
         source: ${PATH_TO_DATA}/logs/tg.err
@@ -143,9 +143,9 @@ services:
     build:
       dockerfile: Dockerfile.prod
       context: ./web
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     env_file: .env
+    environment:
+      REACT_APP_API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
+      REACT_APP_WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
       - ${PATH_TO_DATA}/build:/build/

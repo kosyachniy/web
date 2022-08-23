@@ -7,10 +7,11 @@ import asyncio
 import requests
 import socketio
 
+from api.lib.cfg import cfg
 from jobs import background
 
 
-LINK = 'http://api:5000/'
+LINK = cfg('API')
 
 
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')

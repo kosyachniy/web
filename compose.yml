@@ -1,5 +1,16 @@
 version: "3.9"
 services:
+  redis:
+    image: redis
+    restart: on-failure
+    volumes:
+      - ${PATH_TO_DATA}/redis:/data
+    ports:
+      - 6379:6379
+    env_file:
+      - .env
+    command: ["redis-server", "--requirepass", "${REDIS_PASS}"]
+
   db:
     image: mongo
     ports:
@@ -23,13 +34,13 @@ services:
     image: ${PROJECT_NAME}/api
     build:
       context: ./api
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
+      - redis
     restart: unless-stopped
     env_file: .env
+    environment:
+      WEB: http://localhost/
     volumes:
       - ${PATH_TO_DATA}/load:/data/load
       - ${PATH_TO_DATA}/backup:/backup
@@ -50,13 +61,14 @@ services:
     image: ${PROJECT_NAME}/jobs
     build:
       context: ./api
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     depends_on:
       - db
+      - redis
     restart: unless-stopped
     env_file: .env
+    environment:
+      API: http://api:5000/
+      WEB: http://localhost/
     volumes:
       - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
       # NOTE: To provide files
@@ -84,6 +96,9 @@ services:
         - PROTOCOL=${PROTOCOL}
         - HOST=${EXTERNAL_HOST}
     env_file: .env
+    environment:
+      REACT_APP_API: http://localhost/api/
+      REACT_APP_WEB: http://localhost/
     volumes:
       - ./web/run.sh:/run.sh
       - ./web/public:/public
