@@ -3,12 +3,13 @@ services:
   redis:
     image: redis
     restart: on-failure
+    env_file: .env
+    # environment:
+    #   REDIS_PASS: ${REDIS_PASS}
     volumes:
       - ${PATH_TO_DATA}/redis:/data
     ports:
       - 6379:6379
-    env_file:
-      - .env
     command: ["redis-server", "--requirepass", "${REDIS_PASS}"]
 
   db:
@@ -86,7 +87,7 @@ services:
       - ./api/jobs:/jobs
       - ./api/jobs.py:/jobs.py
     # NOTE: Only if we are running FastAPI
-    command: uvicorn jobs:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
+    command: python job.py
 
   web:
     image: ${PROJECT_NAME}/web

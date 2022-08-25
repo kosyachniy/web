@@ -22,10 +22,10 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-# # Socket.IO
-# import socketio
-# sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
-# asgi = socketio.ASGIApp(sio)
+# Socket.IO
+import socketio
+sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+asgi = socketio.ASGIApp(sio)
 
 # # Limiter
 
@@ -61,8 +61,7 @@ from api import API
 from api.lib import cfg, report
 from api.models.user import User
 from api.models.action import Action
-from api.models.job import Job
-# from api.models.socket import Socket
+from api.models.socket import Socket
 from api.models.payment import Payment
 
 
@@ -286,21 +285,12 @@ async def pay(data: InputPayment, request: Request):
         # TODO: TG notification
 
         # Send sockets for real-time update
-        Job(
-            method='money_recieve',
-            users=[user_id],
-            data={
+        for socket in Socket.get(user=user_id, fields={}):
+            await sio.emit('money_recieve', {
                 'add': count,
                 'balance': user.balance,
                 'subscription': user.subscription,
-            },
-        ).save()
-        # for socket in Socket.get(user=user_id, fields={}):
-        #     await sio.emit('money_recieve', {
-        #         'add': count,
-        #         'balance': user.balance,
-        #         'subscription': user.subscription,
-        #     }, room=socket.id)
+            }, room=socket.id)
 
     # pylint: disable=broad-except
     except Exception as e:
@@ -317,4 +307,33 @@ async def pay(data: InputPayment, request: Request):
 #     return jsonify({'qwe': 'asd'})
 
 
-# app.mount('/', asgi) # TODO: check it
+# Online users
+
+@sio.on('connect')
+async def connect(sid, request, data):
+    """ Connect socket """
+    await api.method(
+        'account.connect',
+        ip=request['asgi.scope']['client'][0],
+        socket=sid,
+    )
+
+@sio.on('online')
+async def online(sid, data):
+    """ Socket about online user """
+    await api.method(
+        'account.online',
+        data,
+        socket=sid,
+    )
+
+@sio.on('disconnect')
+async def disconnect(sid):
+    """ Disconnect socket """
+    await api.method(
+        'account.disconnect',
+        socket=sid,
+    )
+
+
+app.mount('/', asgi) # TODO: check it
