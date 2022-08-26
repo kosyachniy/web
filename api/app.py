@@ -66,7 +66,7 @@ from api.models.payment import Payment
 
 
 api = API(
-    # sio=sio,
+    sio=sio,
 )
 
 # ## JWT

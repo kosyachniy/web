@@ -89,28 +89,166 @@ Android | Front-end | React Native | JavaScript | planned
     </tbody>
 </table>
 
-## Install & Use with Docker
+## Run
 [Before starting, you can learn how to configure the server →](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
 
-### Local
-1. Customize file ` docker/.env `
+<table>
+    <thead>
+        <tr>
+            <th>local</th>
+            <th>prod</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td valign="top">
+                1. Configure ` .env `
+                <pre>
+# Type
+# LOCAL / TEST / DEV / PRE / PROD
+MODE=LOCAL
 
-2. Run
-```
-make run
-```
+# Links
+PROTOCOL=http
+EXTERNAL_HOST=localhost
+EXTERNAL_PORT=80
+                </pre>
+            </td>
+            <td valign="top">
+                1. Configure ` .env `
+                <pre>
+# Type
+# LOCAL / TEST / DEV / PRE / PROD
+MODE=PROD
 
-3. Open ` http://localhost/ `
+# Links
+PROTOCOL=https
+EXTERNAL_HOST=web.kosyachniy.com
+EXTERNAL_PORT=80
+                </pre>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <pre>
+# NOTE: The names HOST, PORT, MAIL are reserved
 
-### Production
-1. Customize file ` docker/.env `
+# Base info
+NAME=Web app
+PROJECT_NAME=web
 
-2. Run Docker Compose
-```
-make deploy
-```
+# Contacts
+EMAIL=
+PHONE=
+SOCIAL="[{\"title\": \"vk\", \"data\": \"https://vk.com/alexeypoloz\"}, {\"title\": \"fb\", \"data\": \"https://www.facebook.com/alexeypoloz\"}, {\"title\": \"in\", \"data\": \"https://www.linkedin.com/in/alexeypoloz/\"}, {\"title\": \"ig\", \"data\": \"https://instagram.com/mr.poloz/\"}]"
 
-3. Open ` https://web.kosyachniy.com/ ` (your link)
+# Data
+PATH_TO_DATA=./data
+SIDE_OPTIMIZED=250
+
+# Default
+LOCALE=ru
+TIMEZONE=3
+
+# Payments
+SUBSCRIPTION_DAY=
+SUBSCRIPTION_WEEK=
+SUBSCRIPTION_MONTH=
+SUBSCRIPTION_SEASON=
+SUBSCRIPTION_ACADEMIC_YEAR=
+SUBSCRIPTION_YEAR=
+
+# Inner
+DISCOUNT=1
+
+# Grafana
+GRAFANA_PASS=
+
+# MongoDB
+MONGO_USER=
+MONGO_PASS=
+
+# Redis
+REDIS_HOST=redis
+REDIS_PASS=
+
+# YooKassa
+YOOKASSA_ID=
+YOOKASSA_SECRET=
+
+# Google
+GOOGLE_ID=
+GOOGLE_SECRET=
+
+# Telegram
+TG_TOKEN=
+TG_BOT=
+BUG_CHAT=
+
+# VK
+VK_ID=
+VK_SECRET=
+
+# SMSC
+SMSC_USER=
+SMSC_PASS=
+
+# Google Maps
+GOOGLE_MAPS_KEY=
+GOOGLE_MAPS_LAT=59.9392
+GOOGLE_MAPS_LNG=30.3165
+GOOGLE_MAPS_ZOOM=12
+
+# Google Docs
+GOOGLE_DOCS_ID=
+GOOGLE_DOCS_SECRET=
+GOOGLE_DOCS_TYPE=service_account
+GOOGLE_DOCS_PROJECT=
+GOOGLE_DOCS_EMAIL=
+GOOGLE_DOCS_CLIENT=
+GOOGLE_DOCS_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+GOOGLE_DOCS_TOKEN_URI=https://oauth2.googleapis.com/token
+GOOGLE_DOCS_AUTH_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+GOOGLE_DOCS_CLIENT_CERT_URL=
+GOOGLE_SHEET=
+
+# Agora
+AGORA_APP_ID=
+AGORA_CUSTOMER_ID=
+AGORA_CUSTOMER_CERTIFICATE=
+
+# Amazon
+AMAZON_ID=
+AMAZON_SECRET=
+AMAZON_BUCKET=
+AMAZON_DIR=local
+AMAZON_REGION=
+
+# Redis
+REDIS_HOST=redis
+REDIS_PASS=
+                </pre>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                2. <code> make dev </code>
+            </td>
+            <td>
+                2. <code> make run </code>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                3. Open ` http://localhost/ `
+            </td>
+            <td>
+                3. Open ` https://web.kosyachniy.com/ ` (your link)
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 
 ### Production (with metrics)
 Here you need to complete step 10 from [SERVER.md](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
