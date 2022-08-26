@@ -127,6 +127,8 @@ EXTERNAL_HOST=web.kosyachniy.com
 WEB_PORT=8201
 API_PORT=8202
 TG_PORT=8203
+DB_PORT=8204
+REDIS_PORT=8205
                 </pre>
             </td>
         </tr>

@@ -19,7 +19,7 @@ run:
 	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
 
 check:
-	docker ps | grep "${PROJECT_NAME}_"
+	docker ps --filter name=web --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
 stop:
 	docker-compose -f compose.prod.yml stop

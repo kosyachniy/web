@@ -21,7 +21,6 @@ from lib.reports import report
 
 
 # Params
-SERVER_LINK = cfg('server')
 LOG_LIMIT = 330
 
 
@@ -53,7 +52,7 @@ async def api(chat, method, data=None):
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
-        res = requests.post(SERVER_LINK, json=req)
+        res = requests.post(cfg('api'), json=req)
 
         if res.status_code != 502:
             break

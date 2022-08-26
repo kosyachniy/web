@@ -10,7 +10,7 @@ services:
     volumes:
       - ${PATH_TO_DATA}/redis:/data
     ports:
-      - 6379:6379
+      - ${REDIS_PORT}:6379
     command: bash -c "redis-server --requirepass ${REDIS_PASS}"
 
   db:
@@ -115,6 +115,7 @@ services:
     environment:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
+      TG: ${PROTOCOL}://${HOST}/tg/
     volumes:
       # For logs
       - ${PATH_TO_DATA}/logs/tg.err:/app.err
