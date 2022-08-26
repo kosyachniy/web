@@ -18,15 +18,11 @@ dev:
 run:
 	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
 
-# node:
-# 	docker-compose -f docker/docker-compose.metrics.yml build
-# 	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml ${PROJECT_NAME}
+check:
+	docker ps | grep "${PROJECT_NAME}_"
 
-# check:
-# 	docker stack services ${PROJECT_NAME}
-
-# stop:
-# 	docker stack rm ${PROJECT_NAME}
+stop:
+	docker-compose -f compose.prod.yml stop
 
 log-api:
 	tail -f data/logs/api.log

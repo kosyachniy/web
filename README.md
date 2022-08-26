@@ -142,7 +142,7 @@ PROJECT_NAME=web
 \# Contacts
 EMAIL=
 PHONE=
-SOCIAL="[{\"title\": \"vk\", \"data\": \"https://vk.com/alexeypoloz\"}, {\"title\": \"fb\", \"data\": \"https://www.facebook.com/alexeypoloz\"}, {\"title\": \"in\", \"data\": \"https://www.linkedin.com/in/alexeypoloz/\"}, {\"title\": \"ig\", \"data\": \"https://instagram.com/mr.poloz/\"}]"
+SOCIAL=[{"title": "in", "data": "https://www.linkedin.com/in/alexeypoloz/"}]
 
 \# Data
 PATH_TO_DATA=./data
@@ -255,7 +255,7 @@ REDIS_PASS=
 ### Production (with metrics)
 Here you need to complete step 10 from [SERVER.md](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
 
-1. Customize files ` docker/.env ` & ` docker/docker-compose.metrics.yml `
+1. Customize file ` .env `
 
 2. Run to configure MongoDB (if not done)
 ```
