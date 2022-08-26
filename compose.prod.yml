@@ -26,10 +26,7 @@ services:
     volumes:
       - ${PATH_TO_DATA}/db:/data/db
       - ${PATH_TO_DATA}/logs:/data/logs
-      # NOTE: To provide files
-    #   - type: bind
-    #     source: ./configs/mongod.conf
-    #     target: /etc/mongod.conf
+    #   - ./configs/mongod.conf:/etc/mongod.conf
     # command: --config /etc/mongod.conf
 
   # prometheus:
@@ -37,9 +34,7 @@ services:
   #   deploy:
   #     mode: global
   #   volumes:
-  #     - type: bind
-  #       source: ./configs/prometheus.yml
-  #       target: /prometheus.yml
+  #     - ./configs/prometheus.yml:/prometheus.yml
   #   command:
   #     - --config.file=/prometheus.yml
   #     - --web.external-url=https://web.kosyachniy.com/prometheus/
@@ -84,13 +79,9 @@ services:
       - ${PATH_TO_DATA}/load:/data/load
       - ${PATH_TO_DATA}/backup:/backup
       - ./scripts:/scripts
-      # NOTE: To provide files
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/api.err
-        target: /app.err
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/api.log
-        target: /app.log
+      # For logs
+      - ${PATH_TO_DATA}/logs/api.err:/app.err
+      - ${PATH_TO_DATA}/logs/api.log:/app.log
     ports:
       - ${API_PORT}:5000
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
@@ -108,18 +99,12 @@ services:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
+      # For logs
+      - ${PATH_TO_DATA}/logs/jobs.err:/app.err
+      - ${PATH_TO_DATA}/logs/jobs.log:/app.log
+      # For sitemap
       - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
-      # NOTE: To provide files
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/jobs.err
-        target: /app.err
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/jobs.log
-        target: /app.log
-      - type: bind
-        source: ${PATH_TO_DATA}/sitemap.xml
-        target: /data/sitemap.xml
-    # NOTE: Only if we are running FastAPI
+      - ${PATH_TO_DATA}/sitemap.xml:/data/sitemap.xml
     command: python job.py
 
   tg:
@@ -131,12 +116,9 @@ services:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/tg.err
-        target: /app.err
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/tg.log
-        target: /app.log
+      # For logs
+      - ${PATH_TO_DATA}/logs/tg.err:/app.err
+      - ${PATH_TO_DATA}/logs/tg.log:/app.log
     depends_on:
       - api
       - redis
