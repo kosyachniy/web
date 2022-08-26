@@ -16,7 +16,7 @@ services:
   db:
     image: mongo
     ports:
-      - 27017:27017
+      - ${DB_PORT}:27017
     restart: unless-stopped
     env_file: .env
     environment:
@@ -25,9 +25,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
     volumes:
       - ${PATH_TO_DATA}/db:/data/db
-      - ${PATH_TO_DATA}/logs:/data/logs
-    #   - ./configs/mongod.conf:/etc/mongod.conf
-    # command: --config /etc/mongod.conf
+      - ${PATH_TO_DATA}/logs/mongodb.log:/data/logs/mongodb.log
+      - ./configs/mongod.conf:/etc/mongod.conf
+    command: --config /etc/mongod.conf
 
   # prometheus:
   #   image: prom/prometheus
