@@ -85,6 +85,6 @@ clear-all:
 
 set:
 	export EXTERNAL_HOST=${EXTERNAL_HOST} WEB_PORT=${WEB_PORT} API_PORT=${API_PORT} TG_PORT=${TG_PORT}; \
-	envsubst '$${EXTERNAL_HOST} $${WEB_PORT} $${API_PORT} $${TG_PORT}' < nginx.conf > /etc/nginx/sites-enabled/${PROJECT_NAME}.conf
+	envsubst '$${EXTERNAL_HOST} $${WEB_PORT} $${API_PORT} $${TG_PORT}' < configs/nginx.prod.conf > /etc/nginx/sites-enabled/${PROJECT_NAME}.conf
 	sudo systemctl restart nginx
 	sudo certbot --nginx
