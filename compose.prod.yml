@@ -115,7 +115,7 @@ services:
     environment:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
-      TG: ${PROTOCOL}://${HOST}/tg/
+      TG: ${PROTOCOL}://${EXTERNAL_HOST}/tg/
     volumes:
       # For logs
       - ${PATH_TO_DATA}/logs/tg.err:/app.err
