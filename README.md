@@ -108,7 +108,7 @@ Android | Front-end | React Native | JavaScript | planned
 # LOCAL / TEST / DEV / PRE / PROD
 MODE=LOCAL
 
-# Links
+\# Links
 PROTOCOL=http
 EXTERNAL_HOST=localhost
 EXTERNAL_PORT=80
@@ -117,40 +117,42 @@ EXTERNAL_PORT=80
             <td valign="top">
                 1. Configure ` .env `
                 <pre>
-# Type
-# LOCAL / TEST / DEV / PRE / PROD
+\# Type
+\# LOCAL / TEST / DEV / PRE / PROD
 MODE=PROD
 
-# Links
+\# Links
 PROTOCOL=https
 EXTERNAL_HOST=web.kosyachniy.com
-EXTERNAL_PORT=80
+WEB_PORT=8201
+API_PORT=8202
+TG_PORT=8203
                 </pre>
             </td>
         </tr>
         <tr>
             <td colspan="2">
                 <pre>
-# NOTE: The names HOST, PORT, MAIL are reserved
+\# NOTE: The names HOST, PORT, MAIL are reserved
 
-# Base info
+\# Base info
 NAME=Web app
 PROJECT_NAME=web
 
-# Contacts
+\# Contacts
 EMAIL=
 PHONE=
 SOCIAL="[{\"title\": \"vk\", \"data\": \"https://vk.com/alexeypoloz\"}, {\"title\": \"fb\", \"data\": \"https://www.facebook.com/alexeypoloz\"}, {\"title\": \"in\", \"data\": \"https://www.linkedin.com/in/alexeypoloz/\"}, {\"title\": \"ig\", \"data\": \"https://instagram.com/mr.poloz/\"}]"
 
-# Data
+\# Data
 PATH_TO_DATA=./data
 SIDE_OPTIMIZED=250
 
-# Default
+\# Default
 LOCALE=ru
 TIMEZONE=3
 
-# Payments
+\# Payments
 SUBSCRIPTION_DAY=
 SUBSCRIPTION_WEEK=
 SUBSCRIPTION_MONTH=
@@ -158,48 +160,48 @@ SUBSCRIPTION_SEASON=
 SUBSCRIPTION_ACADEMIC_YEAR=
 SUBSCRIPTION_YEAR=
 
-# Inner
+\# Inner
 DISCOUNT=1
 
-# Grafana
+\# Grafana
 GRAFANA_PASS=
 
-# MongoDB
+\# MongoDB
 MONGO_USER=
 MONGO_PASS=
 
-# Redis
+\# Redis
 REDIS_HOST=redis
 REDIS_PASS=
 
-# YooKassa
+\# YooKassa
 YOOKASSA_ID=
 YOOKASSA_SECRET=
 
-# Google
+\# Google
 GOOGLE_ID=
 GOOGLE_SECRET=
 
-# Telegram
+\# Telegram
 TG_TOKEN=
 TG_BOT=
 BUG_CHAT=
 
-# VK
+\# VK
 VK_ID=
 VK_SECRET=
 
-# SMSC
+\# SMSC
 SMSC_USER=
 SMSC_PASS=
 
-# Google Maps
+\# Google Maps
 GOOGLE_MAPS_KEY=
 GOOGLE_MAPS_LAT=59.9392
 GOOGLE_MAPS_LNG=30.3165
 GOOGLE_MAPS_ZOOM=12
 
-# Google Docs
+\# Google Docs
 GOOGLE_DOCS_ID=
 GOOGLE_DOCS_SECRET=
 GOOGLE_DOCS_TYPE=service_account
@@ -212,19 +214,19 @@ GOOGLE_DOCS_AUTH_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
 GOOGLE_DOCS_CLIENT_CERT_URL=
 GOOGLE_SHEET=
 
-# Agora
+\# Agora
 AGORA_APP_ID=
 AGORA_CUSTOMER_ID=
 AGORA_CUSTOMER_CERTIFICATE=
 
-# Amazon
+\# Amazon
 AMAZON_ID=
 AMAZON_SECRET=
 AMAZON_BUCKET=
 AMAZON_DIR=local
 AMAZON_REGION=
 
-# Redis
+\# Redis
 REDIS_HOST=redis
 REDIS_PASS=
                 </pre>

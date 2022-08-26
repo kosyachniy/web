@@ -4,13 +4,13 @@ services:
     image: redis
     restart: on-failure
     env_file: .env
-    # environment:
-    #   REDIS_PASS: ${REDIS_PASS}
+    environment:
+      REDIS_PASS: ${REDIS_PASS}
     volumes:
       - ${PATH_TO_DATA}/redis:/data
     ports:
       - 6379:6379
-    command: ["redis-server", "--requirepass", "${REDIS_PASS}"]
+    command: bash -c "redis-server --requirepass ${REDIS_PASS}"
 
   db:
     image: mongo
@@ -25,10 +25,7 @@ services:
     volumes:
       - ${PATH_TO_DATA}/db:/data/db
       - ${PATH_TO_DATA}/logs:/data/logs
-      # NOTE: To provide files
-      - type: bind
-        source: ./configs/mongod.conf
-        target: /etc/mongod.conf
+      - ./configs/mongod.conf:/etc/mongod.conf
     command: --config /etc/mongod.conf
 
   api:
@@ -46,13 +43,9 @@ services:
       - ${PATH_TO_DATA}/load:/data/load
       - ${PATH_TO_DATA}/backup:/backup
       - ./scripts:/scripts
-      # NOTE: To provide files
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/api.err
-        target: /app.err
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/api.log
-        target: /app.log
+      # For logs
+      - ${PATH_TO_DATA}/logs/api.err:/app.err
+      - ${PATH_TO_DATA}/logs/api.log:/app.log
       # For hot reload
       - ./api/api:/api
       - ./api/app.py:/app.py
@@ -71,22 +64,16 @@ services:
       API: http://api:5000/
       WEB: http://localhost/
     volumes:
-      - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
-      # NOTE: To provide files
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/jobs.err
-        target: /app.err
-      - type: bind
-        source: ${PATH_TO_DATA}/logs/jobs.log
-        target: /app.log
-      - type: bind
-        source: ${PATH_TO_DATA}/sitemap.xml
-        target: /data/sitemap.xml
+      # For logs
+      - ${PATH_TO_DATA}/logs/jobs.err:/app.err
+      - ${PATH_TO_DATA}/logs/jobs.log:/app.log
       # For hot reload
       - ./api/api:/api
       - ./api/jobs:/jobs
-      - ./api/jobs.py:/jobs.py
-    # NOTE: Only if we are running FastAPI
+      - ./api/job.py:/job.py
+      # For sitemap
+      - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
+      - ${PATH_TO_DATA}/sitemap.xml:/data/sitemap.xml
     command: python job.py
 
   web:
