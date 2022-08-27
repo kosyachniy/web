@@ -101,9 +101,11 @@ services:
       NEXT_PUBLIC_GOOGLE_MAPS_LNG: ${GOOGLE_MAPS_LNG}
       NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
     volumes:
-      - ./web/run.sh:/run.sh
       - ./web/public:/public
       - ./web/pages:/pages
+      - ./web/components:/components
+      - ./web/containers:/containers
+      - ./web/lib:/lib
       - ./web/styles:/styles
 
   server:
