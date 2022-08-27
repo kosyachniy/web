@@ -7,7 +7,6 @@ from consys.errors import ErrorWrong
 from api.lib import BaseType, validate, report
 from api.models.user import User
 from api.models.token import Token
-from api.models.job import Job
 from api.models.socket import Socket
 # from api.models.space import Space
 
@@ -105,18 +104,10 @@ async def online_start(sio, token_id, socket_id=None):
         count = _online_count()
 
         if count:
-            Job(
-                method='online_add',
-                users=[socket_id],
-                data={
-                    'count': count,
-                    'users': users_uniq,
-                },
-            ).save()
-            # await sio.emit('online_add', {
-            #     'count': count,
-            #     'users': users_uniq,
-            # }, room=socket_id)
+            await sio.emit('online_add', {
+                'count': count,
+                'users': users_uniq,
+            }, room=socket_id)
 
     # Already online
     already = _other_sessions(user.id, token_id)
@@ -183,33 +174,19 @@ async def online_start(sio, token_id, socket_id=None):
     else:
         data = []
 
-    Job(
-        method='online_add',
-        data={
-            'count': count,
-            'users': data,
-        },
-    ).save()
-    # await sio.emit('online_add', {
-    #     'count': count,
-    #     'users': data,
-    # })
+    await sio.emit('online_add', {
+        'count': count,
+        'users': data,
+    })
 
     # # Redirect to active space
     # # TODO: cache
     # space = await _get_active_space(user.id)
     # if space:
-    #     Job(
-    #         method='space_return',
-    #         users=[user.id],
-    #         data={
+    #     for socket in Socket.get(user=user.id, fields={}):
+    #         await sio.emit('space_return', {
     #             'id': space,
-    #         },
-    #     ).save()
-    #     # for socket in Socket.get(user=user.id, fields={}):
-    #     #     await sio.emit('space_return', {
-    #     #         'id': space,
-    #     #     }, room=socket.id)
+    #         }, room=socket.id)
 
 
 class Type(BaseType):

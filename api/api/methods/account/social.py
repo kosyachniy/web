@@ -67,7 +67,7 @@ async def handle(request, data):
                 link.format(
                     cfg('vk.id'),
                     cfg('vk.secret'),
-                    cfg('client'),
+                    cfg('web'),
                     data.code,
                 )
             ).text
@@ -107,7 +107,7 @@ async def handle(request, data):
         cont = {
             'client_id': cfg('google.id'),
             'client_secret': cfg('google.secret'),
-            'redirect_uri': f"{cfg('client')}callback",
+            'redirect_uri': f"{cfg('web')}callback",
             'grant_type': 'authorization_code',
             'code': urllib.parse.unquote(data.code),
         }

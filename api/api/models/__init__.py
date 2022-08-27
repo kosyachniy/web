@@ -7,13 +7,12 @@ from consys import make_base, Attribute
 from api.lib import cfg
 
 
-HOST = cfg('mongo.host')
-NAME = cfg('PROJECT_NAME')
-LOGIN = cfg('mongo.user')
-PASSWORD = cfg('mongo.pass')
-
-
-Base = make_base(HOST, NAME, LOGIN, PASSWORD)
+Base = make_base(
+    host=cfg('mongo.host', 'db'),
+    name=cfg('PROJECT_NAME'),
+    login=cfg('mongo.user'),
+    password=cfg('mongo.pass'),
+)
 
 
 __all__ = (

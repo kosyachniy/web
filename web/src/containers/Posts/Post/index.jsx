@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
-import MathJax from 'react-mathjax-preview'
+// import MathJax from 'react-mathjax-preview'
 
 import api from '../../../lib/api'
 
@@ -93,7 +93,8 @@ const Post = () => {
                             />
                         ) : (<></>) }
                         <br /><br />
-                        <MathJax
+                        { post.data }
+                        {/* <MathJax
                             math={ post.data }
                             sanitizeOptions={{
                                 USE_PROFILES: {
@@ -101,7 +102,7 @@ const Post = () => {
                                     mathMl: true,
                                 }
                             }}
-                        />
+                        /> */}
 
                         {/* <div style={{ marginTop: '50px', height: '250px' }}>
                             { post.geo ? (

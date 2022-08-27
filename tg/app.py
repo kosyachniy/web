@@ -13,9 +13,6 @@ from lib.tg import tg
 from lib.queue import save, get
 
 
-WEBHOOK_URL = cfg('tg.server')
-WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = 80
 BUTTONS = [
     ['Профиль', 'Настройки'],
 ]
@@ -307,7 +304,7 @@ async def handle_doc(message):
 
 async def on_start(_):
     """ Handler on the bot start """
-    await tg.set(WEBHOOK_URL)
+    await tg.set(cfg('tg'))
 
 # async def on_stop(dp):
 #     """ Handler on the bot stop """
@@ -329,6 +326,6 @@ if __name__ == '__main__':
         on_startup=on_start,
         # on_shutdown=on_stop,
         skip_updates=True,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
+        host='0.0.0.0',
+        port=80,
     )

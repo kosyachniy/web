@@ -2,7 +2,7 @@ import { getToken } from './token';
 
 
 async function serverRequest(json={}) {
-    return fetch(process.env.REACT_APP_SERVER, {
+    return fetch(process.env.REACT_APP_API, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

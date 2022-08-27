@@ -1,4 +1,4 @@
-include docker/.env
+include .env
 
 PYTHON := env/bin/python
 
@@ -12,18 +12,17 @@ setup-tests:
 	$(PYTHON) -m pip install -r tg/requirements.txt
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
+dev:
+	docker-compose -p ${PROJECT_NAME} up --build
+
 run:
-	sudo docker-compose -f docker/docker-compose.yml -p ${PROJECT_NAME} up --build
-
-deploy:
-	docker-compose -f docker/docker-compose.prod.yml -p ${PROJECT_NAME} up --build
-
-node:
-	docker-compose -f docker/docker-compose.metrics.yml build
-	sudo docker stack deploy --compose-file docker/docker-compose.metrics.yml ${PROJECT_NAME}
+	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
 
 check:
-	docker stack services ${PROJECT_NAME}
+	docker ps --filter name=web --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+
+stop:
+	docker-compose -f compose.prod.yml stop
 
 log-api:
 	tail -f data/logs/api.log
@@ -33,12 +32,6 @@ log-jobs:
 
 log-web:
 	docker service logs -f ${PROJECT_NAME}_web
-
-stop:
-	docker stack rm ${PROJECT_NAME}
-
-dev:
-	$(PYTHON)
 
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}/api | cut -d ' ' -f 1` bash
@@ -89,3 +82,9 @@ clear-all:
 	make clear
 	rm -rf **/*.err
 	rm -rf **/*.log
+
+set:
+	export EXTERNAL_HOST=${EXTERNAL_HOST} WEB_PORT=${WEB_PORT} API_PORT=${API_PORT} TG_PORT=${TG_PORT}; \
+	envsubst '$${EXTERNAL_HOST} $${WEB_PORT} $${API_PORT} $${TG_PORT}' < configs/nginx.prod.conf > /etc/nginx/sites-enabled/${PROJECT_NAME}.conf
+	sudo systemctl restart nginx
+	sudo certbot --nginx
