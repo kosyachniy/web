@@ -35,7 +35,7 @@ const Header = (props) => {
     return (
         <nav className={`navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}`}>
             <div className="container">
-                <Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.REACT_APP_NAME } /></Link>
+                <Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
                 <button
                     className="navbar-toggler"
                     type="button"

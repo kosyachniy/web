@@ -10,23 +10,20 @@ if (locale === null || locales.indexOf(locale) === -1) {
         window.navigator.language
         || window.navigator.systemLanguage
         || window.navigator.userLanguage
-    ) : process.env.REACT_APP_LOCALE;
+    ) : process.env.NEXT_PUBLIC_LOCALE;
     locale = language.substr(0, 2).toLowerCase();
     localStorage.setItem('locale', locale);
 }
 
-i18n
-    .use(Backend)
+i18n.use(Backend)
     .use(initReactI18next)
     .init({
-        lng: locale || process.env.REACT_APP_LOCALE,
+        lng: locale || process.env.NEXT_PUBLIC_LOCALE,
         fallbackLng: 'en',
         debug: false,
-
         interpolation: {
             escapeValue: false,
         },
-
         react: {
             useSuspense: false,
         },

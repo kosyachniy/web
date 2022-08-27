@@ -102,7 +102,7 @@ Android | Front-end | React Native | JavaScript | planned
     <tbody>
         <tr>
             <td valign="top">
-                1. Configure ` .env `
+                1. Configure <code> .env </code>
                 <pre>
 # Type
 # LOCAL / TEST / DEV / PRE / PROD

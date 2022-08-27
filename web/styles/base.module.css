@@ -1,0 +1,134 @@
+.box,
+.button,
+.search,
+.filters,
+.cards {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.box,
+.button,
+.search,
+.filters *,
+.cards * {
+    border: 0;
+    border-radius: 10px;
+}
+
+.button,
+.search,
+.filters * {
+    height: 54px;
+    font-size: 24px;
+}
+
+.box,
+.search,
+.filters *,
+.cards * {
+    padding: 0 20px;
+    box-shadow: 0 .25rem 1.5rem rgba(0, 0, 0, .12);
+    transition-duration: 0.3s;
+    transition-property: box-shadow;
+    transition-timing-function: ease-in-out;
+}
+
+.button,
+.search,
+.filters *,
+.cards * {
+    transition: all .3s cubic-bezier(0, 0, .5, 1);
+}
+
+.button:hover,
+.search:hover,
+.filters *:hover,
+.cards *:hover {
+    transform: scale3d(1.01, 1.01, 1.01);
+}
+
+.box:hover,
+.search:hover,
+.search:focus,
+.search:active,
+.filters *:hover,
+.cards *:hover {
+    box-shadow: 0 .75rem 2.25rem rgba(0, 0, 0, .2);
+}
+
+.button:first-child,
+.search:first-child {
+    margin-top: 20px;
+}
+
+.box:first-child,
+.filters:first-child {
+    margin-top: 10px;
+}
+
+.filters *,
+.cards * {
+    margin-left: 15px;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.box {
+    padding: 20px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.button,
+.active {
+    background-color: #fedd2c;
+    cursor: pointer;
+}
+
+.button:hover,
+.active:hover {
+    background-color: #ffcc33;
+}
+
+.filters {
+    width: calc(100% + 15px);
+    margin: 0 0 -30px -15px;
+    padding: 30px 0 30px 15px;
+    display: flex;
+    overflow-x: scroll;
+}
+
+.filters *:first-child {
+    margin-left: 0;
+}
+
+.cards {
+    width: calc(100% + 15px);
+    margin: 15px 0 0 -15px;
+}
+
+.cards * {
+    height: 240px;
+    width: calc(100% / 3 - 15px);
+    margin-top: 15px;
+    display: inline-block;
+    background-size: cover;
+    background-position: center center;
+    text-align: center;
+    font-size: 30px;
+    line-height: 240px;
+    color: #fff;
+}
+
+@media (max-width: 1000px) {
+    .cards * {
+        width: calc(50% - 15px);
+    }
+}
+
+@media (max-width: 750px) {
+    .cards * {
+        width: calc(100% - 15px);
+    }
+}

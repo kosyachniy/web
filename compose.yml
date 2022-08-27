@@ -85,12 +85,26 @@ services:
         - HOST=${EXTERNAL_HOST}
     env_file: .env
     environment:
-      REACT_APP_API: http://localhost/api/
-      REACT_APP_WEB: http://localhost/
+      NEXT_PUBLIC_API: http://localhost/api/
+      NEXT_PUBLIC_WEB: http://localhost/
+      NEXT_PUBLIC_NAME: ${NAME}
+      NEXT_PUBLIC_LOCALE: ${LOCALE}
+      NEXT_PUBLIC_GOOGLE_ID: ${GOOGLE_ID}
+      NEXT_PUBLIC_VK_ID: ${VK_ID}
+      NEXT_PUBLIC_AMAZON_ID: ${AMAZON_ID}
+      NEXT_PUBLIC_AMAZON_SECRET: ${AMAZON_SECRET}
+      NEXT_PUBLIC_AMAZON_BUCKET_NAME: ${AMAZON_BUCKET_NAME}
+      NEXT_PUBLIC_AMAZON_DIR_NAME: ${AMAZON_DIR_NAME}
+      NEXT_PUBLIC_AMAZON_REGION: ${AMAZON_REGION}
+      NEXT_PUBLIC_GOOGLE_MAPS_KEY: ${GOOGLE_MAPS_KEY}
+      NEXT_PUBLIC_GOOGLE_MAPS_LAT: ${GOOGLE_MAPS_LAT}
+      NEXT_PUBLIC_GOOGLE_MAPS_LNG: ${GOOGLE_MAPS_LNG}
+      NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
     volumes:
       - ./web/run.sh:/run.sh
       - ./web/public:/public
-      - ./web/src:/src
+      - ./web/pages:/pages
+      - ./web/styles:/styles
 
   server:
     image: nginx

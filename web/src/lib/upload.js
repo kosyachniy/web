@@ -4,11 +4,11 @@ import { generete } from './token'
 
 
 const ReactS3Client = new S3({
-    bucketName: process.env.REACT_APP_AMAZON_BUCKET_NAME,
-    dirName: process.env.REACT_APP_AMAZON_DIR_NAME,
-    region: process.env.REACT_APP_AMAZON_REGION,
-    accessKeyId: process.env.REACT_APP_AMAZON_ID,
-    secretAccessKey: process.env.REACT_APP_AMAZON_SECRET,
+    bucketName: process.env.NEXT_PUBLIC_AMAZON_BUCKET_NAME,
+    dirName: process.env.NEXT_PUBLIC_AMAZON_DIR_NAME,
+    region: process.env.NEXT_PUBLIC_AMAZON_REGION,
+    accessKeyId: process.env.NEXT_PUBLIC_AMAZON_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AMAZON_SECRET,
 });
 
 

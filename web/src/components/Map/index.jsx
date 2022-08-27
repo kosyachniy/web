@@ -14,14 +14,14 @@ class Maps extends React.Component {
         super(props);
 
         this.state = {
-            zoom: props.zoom ? props.zoom : process.env.REACT_APP_GOOGLE_MAPS_ZOOM,
+            zoom: props.zoom ? props.zoom : process.env.NEXT_PUBLIC_GOOGLE_MAPS_ZOOM,
             center: props.center ? props.center : {
-                lat: process.env.REACT_APP_GOOGLE_MAPS_LAT,
-                lng: process.env.REACT_APP_GOOGLE_MAPS_LNG,
+                lat: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LAT,
+                lng: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LNG,
             },
             current: props.center ? props.center : {
-                lat: process.env.REACT_APP_GOOGLE_MAPS_LAT,
-                lng: process.env.REACT_APP_GOOGLE_MAPS_LNG,
+                lat: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LAT,
+                lng: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LNG,
             },
             markers: [],
         }
@@ -170,7 +170,7 @@ const mapStyles = [
 
 const Map = compose(
     withProps({
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `100%` }} />,
         mapElement: <div style={{ height: `100%` }} />

@@ -17,14 +17,14 @@ const Auth = (props) => {
                     <i className="bi bi-envelope-fill" />
                 </div>
                 <a
-                    href={`https://oauth.vk.com/authorize?client_id=${process.env.REACT_APP_VK_ID}&display=popup&redirect_uri=${process.env.REACT_APP_WEB}callback&scope=4194304&response_type=code&v=5.103`}
+                    href={`https://oauth.vk.com/authorize?client_id=${process.env.NEXT_PUBLIC_VK_ID}&display=popup&redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&scope=4194304&response_type=code&v=5.103`}
                     className="btn btn_vk"
                     onClick={() => localStorage.setItem('previousPath', document.location.href)}
                 >
                     <i className="fab fa-vk" />
                 </a>
                 <a
-                    href={`https://accounts.google.com/o/oauth2/auth?redirect_uri=${process.env.REACT_APP_WEB}callback&response_type=code&client_id=${process.env.REACT_APP_GOOGLE_ID}&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile`}
+                    href={`https://accounts.google.com/o/oauth2/auth?redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_ID}&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile`}
                     className="btn btn_g"
                     onClick={() => localStorage.setItem('previousPath', document.location.href)}
                 >

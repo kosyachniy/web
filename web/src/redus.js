@@ -239,7 +239,7 @@ export const system = (state = {
         default:
             return {
                 loaded: state.loaded,
-                locale: state.locale || process.env.REACT_APP_LOCALE,
+                locale: state.locale || process.env.NEXT_PUBLIC_LOCALE,
                 theme: state.theme || 'light',
                 color: state.color || 'dark',
                 search: state.search || '',
