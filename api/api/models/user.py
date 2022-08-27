@@ -110,6 +110,7 @@ class User(Base):
     # TODO: del Base.user
 
     def get_social(self, social):
+        """ Get user social info by social ID """
         for i in self.social:
             if i['id'] == social:
                 return i['user'], i.get('language') or 1 # TODO: default

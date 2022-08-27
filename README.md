@@ -27,12 +27,12 @@ Android | Front-end | React Native | JavaScript | planned
             <td rowspan="3" align="center">DevOps</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/docker_logo.png?raw=true" alt="Docker" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/docker_name.png?raw=true" alt="Docker" height="50" /></td>
-            <td align="center">20.10.11</td>
+            <td align="center">20.10.17</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_logo.png?raw=true" alt="NGINX" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_name.png?raw=true" alt="NGINX" height="50" /></td>
-            <td align="center">1.21.6</td>
+            <td align="center">1.23</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/letsencrypt_logo.png?raw=true" alt="Let's Encrypt" height="50" /></td>
@@ -48,12 +48,12 @@ Android | Front-end | React Native | JavaScript | planned
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_logo.png?raw=true" alt="FastAPI" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_name.png?raw=true" alt="FastAPI" height="50" /></td>
-            <td align="center">0.75.0</td>
+            <td align="center">0.81</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_logo.png?raw=true" alt="MongoDB" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_name.png?raw=true" alt="MongoDB" height="50" /></td>
-            <td align="center">5.0.6</td>
+            <td align="center">6.0</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_logo.png?raw=true" alt="Socket.IO" height="50" /></td>
@@ -64,17 +64,17 @@ Android | Front-end | React Native | JavaScript | planned
             <td rowspan="5" align="center">Front-end</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/javascript_logo.png?raw=true" alt="JavaScript" height="50" /></td>
             <td></td>
-            <td align="center">node 16.14.0</td>
+            <td align="center">node 18.8</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_logo.png?raw=true" alt="ReactJS" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_name.png?raw=true" alt="ReactJS" height="50" /></td>
-            <td align="center">16.14.0</td>
+            <td align="center">18.2</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_logo.png?raw=true" alt="Redux" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_name.png?raw=trueg" alt="Redux" height="50" /></td>
-            <td align="center">4.1.1</td>
+            <td align="center">4.2</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/bootstrap_logo.png?raw=true" alt="Bootstrap" height="50" /></td>
@@ -252,22 +252,3 @@ REDIS_PASS=
         </tr>
     </tbody>
 </table>
-
-
-### Production (with metrics)
-Here you need to complete step 10 from [SERVER.md](https://github.com/kosyachniy/dev/blob/master/server/SERVER.md)
-
-1. Customize file ` .env `
-
-2. Run to configure MongoDB (if not done)
-```
-make deploy
-```
-And stop it
-
-3. Run cluster
-```
-make node
-```
-
-4. Open ` https://web.kosyachniy.com/ ` (your link)

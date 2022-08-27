@@ -8,8 +8,8 @@ import asyncio
 import socketio
 # from fastapi import FastAPI
 
-from api.lib import cfg
 from jobs import background
+from api.lib import cfg
 
 
 LINK = cfg('API')
