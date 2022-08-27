@@ -106,7 +106,7 @@ Android | Front-end | React Native | JavaScript | planned
                 <pre>
 # Type
 # LOCAL / TEST / DEV / PRE / PROD
-MODE=LOCAL
+MODE=LOCAL<br />
 
 \# Links
 PROTOCOL=http
