@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next'
 
-import api from '../../../lib/api'
+import api from '../../../functions/api'
 import Avatar from '../../../components/Avatar'
 
 

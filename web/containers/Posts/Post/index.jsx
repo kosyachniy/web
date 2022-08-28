@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 // import MathJax from 'react-mathjax-preview'
 
-import api from '../../../lib/api'
+import api from '../../../functions/api'
 
 import './style.css'
 import Edit from '../Edit'

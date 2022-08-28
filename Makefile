@@ -13,7 +13,7 @@ setup-tests:
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
 dev:
-	docker-compose -p ${PROJECT_NAME} up --build
+	DOCKER_SCAN_SUGGEST=false docker-compose -p ${PROJECT_NAME} up --build
 
 run:
 	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d

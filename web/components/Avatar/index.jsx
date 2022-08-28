@@ -1,5 +1,5 @@
 import React from 'react'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next';
 
 import uploadImage from '../../lib/upload'
 
@@ -20,7 +20,7 @@ class Avatar extends React.Component {
     }
 
     render() {
-        const { t } = this.props
+        const { t } = useTranslation('common')
 
         return (
             <div id="avatar-preview">

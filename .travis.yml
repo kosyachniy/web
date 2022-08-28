@@ -7,7 +7,7 @@ services:
   - mongodb
 
 install:
-  # - cp local.env .env
+  - cp base.env .env
   - make setup-tests
 
 script:

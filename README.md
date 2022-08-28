@@ -56,6 +56,11 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center">6.0</td>
         </tr>
         <tr>
+            <td align="center">Redis</td>
+            <td></td>
+            <td align="center"></td>
+        </tr>
+        <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_logo.png?raw=true" alt="Socket.IO" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_name.png?raw=true" alt="Socket.IO" height="50" /></td>
             <td align="center"></td>
@@ -70,6 +75,11 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_logo.png?raw=true" alt="ReactJS" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_name.png?raw=true" alt="ReactJS" height="50" /></td>
             <td align="center">18.2</td>
+        </tr>
+        <tr>
+            <td align="center">NextJS</td>
+            <td></td>
+            <td align="center"></td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_logo.png?raw=true" alt="Redux" height="50" /></td>

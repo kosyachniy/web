@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 
-import api from '../../../lib/api'
+import api from '../../../functions/api'
 
 import Card from '../../../components/Card'
 

@@ -1,7 +1,7 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next'
 
-import './style.css';
+import styles from '../../../styles/online.module.css'
 import Popup from '../../../components/Popup';
 import Hexagon from '../../../components/Hexagon';
 

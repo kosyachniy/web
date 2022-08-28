@@ -1,10 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-// import { useTranslation } from 'react-i18next'
+import Link from 'next/link'
+import { useSelector, useDispatch } from 'react-redux'
+// import { useTranslation } from 'next-i18next'
+
+import {
+    changeLang,
+    changeTheme,
+} from '../../../store'
 
 
 const Footer = (props) => {
-    const { system, changeLang, changeTheme } = props
+    const system = useSelector((state) => state.system)
+    const dispatch = useDispatch()
     // const { t } = useTranslation()
 
     return (
@@ -13,7 +20,7 @@ const Footer = (props) => {
                 <p className="col-md-4 mb-0">
                     { process.env.NEXT_PUBLIC_NAME } &copy; 2018-{ new Date().getFullYear() }
                 </p>
-                <Link to="/" className="col-md-4 d-flex align-items-center justify-content-center mb-md-0 me-md-auto link-dark text-decoration-none">
+                <Link href="/" className="col-md-4 d-flex align-items-center justify-content-center mb-md-0 me-md-auto link-dark text-decoration-none">
                     <img
                         src={`/brand/logo_${system.color}.svg`}
                         alt={ process.env.NEXT_PUBLIC_NAME }
@@ -24,16 +31,14 @@ const Footer = (props) => {
                     <li
                         id="theme"
                         className="ms-3 u-cursor"
-                        onClick={() => {
-                            changeTheme(system.theme === 'dark' ? 'light' : 'dark')
-                        }}
+                        onClick={ () => dispatch(changeTheme(system.theme === 'dark' ? 'light' : 'dark')) }
                     >
                         <i className={`bi ${system.theme === 'dark' ? "bi-sun-fill" : "bi-moon-fill"}`} />
                     </li>
                     <li
                         id="lang"
                         className="ms-3 d-flex u-cursor"
-                        onClick={ () => {changeLang(system.locale === 'ru' ? 'en' : 'ru')} }
+                        onClick={ () => dispatch(changeLang(system.locale === 'ru' ? 'en' : 'ru')) }
                     >
                         <img
                             src={`/lang/${system.locale === 'ru' ? "en" : "ru"}.svg`}

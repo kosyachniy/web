@@ -1,13 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
+import { useSelector, useDispatch } from 'react-redux'
 
-import api from '../../../lib/api'
+import api from '../../functions/api'
 
-import './style.css'
+import styles from '../../../styles/header.module.css'
+import Hexagon from '../../components/Hexagon'
 
-import Hexagon from '../../../components/Hexagon'
-
+import {
+    profileOut, searching,
+} from '../../../store'
 
 // const sciences = [
 //     'math', 'prog', 'bis', 'manag', 'lead', 'marketing', 'life_safety'
@@ -19,23 +22,25 @@ import Hexagon from '../../../components/Hexagon'
 
 
 const Header = (props) => {
-    const {
-        system, online, profile,
-        profileOut,
-        handlerPopUp, searching,
-    } = props
+    const { handlerPopUp } = props
+
+    const system = useSelector((state) => state.system)
+    const online = useSelector((state) => state.online)
+    const profile = useSelector((state) => state.profile)
+    // const dispatch = useDispatch()
+
     const { t } = useTranslation()
 
     const signOut = () => {
         api('account.exit', {}).then(res => {
-            profileOut(res)
+            // () => dispatch(profileOut(res))
         })
     }
 
     return (
         <nav className={`navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}`}>
             <div className="container">
-                <Link to="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
+                <Link href="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -50,32 +55,32 @@ const Header = (props) => {
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         {/* <li className="nav-item">
-                            <Link to="/feed/" className="nav-link">{ t('structure.feed') }</Link>
+                            <Link href="/feed/" className="nav-link">{ t('structure.feed') }</Link>
                         </li> */}
                         <li className="nav-item dropdown">
-                            <Link to="/posts/" className="nav-link">{ t('structure.posts') }</Link>
-                            {/* <Link to="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
+                            <Link href="/posts/" className="nav-link">{ t('structure.posts') }</Link>
+                            {/* <Link href="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
                             {/* <div className="dropdown-content">
                                 {
                                     sciences.map((science) => (
-                                        <Link to={ `/posts/${science}/` } data-toggle="tooltip">{ t(`science.${science}`) }</Link>
+                                        <Link href={ `/posts/${science}/` } data-toggle="tooltip">{ t(`science.${science}`) }</Link>
                                     ))
                                 }
                             </div> */}
                         </li>
                         {/* <li className="nav-item">
-                            <Link to="/" className="nav-link">{ t('structure.space') }</Link>
+                            <Link href="/" className="nav-link">{ t('structure.space') }</Link>
                         </li> */}
                         <li className="nav-item">
-                            <Link to="/room/" className="nav-link">{ t('structure.room') }</Link>
+                            <Link href="/room/" className="nav-link">{ t('structure.room') }</Link>
                         </li>
                         {/* <li className="nav-item dropdown">
-                            <Link to="/events/" className="nav-link">{ t('structure.events') }</Link>
+                            <Link href="/events/" className="nav-link">{ t('structure.events') }</Link>
                             <div className="dropdown-content">
                                 {
                                     events.map((event, ind) => (
                                         <Link
-                                            to={ `/events/${event}/` }
+                                            href={ `/events/${event}/` }
                                             data-toggle="tooltip"
                                             key={ ind }
                                         >{ t(`events.${event}`) }</Link>
@@ -84,7 +89,7 @@ const Header = (props) => {
                             </div>
                         </li> */}
                         {/* <li className="nav-item">
-                            <Link to="/map/" className="nav-link">{ t('structure.map') }</Link>
+                            <Link href="/map/" className="nav-link">{ t('structure.map') }</Link>
                         </li> */}
                     </ul>
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -95,7 +100,7 @@ const Header = (props) => {
                                 type="search"
                                 placeholder={ t('system.search') }
                                 value={ system.search }
-                                onChange={ (event) => {searching(event.target.value)} }
+                                // onChange={ (event) => dispatch(searching(event.target.value)) }
                             />
                         </li>
                     </ul>
@@ -135,10 +140,10 @@ const Header = (props) => {
                                         className={`dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}`}
                                         aria-labelledby="navbarDropdown"
                                     >
-                                        <Link className="dropdown-item" to="/profile/">{t('system.profile')}</Link>
-                                        {/* <Link className="dropdown-item" to="/settings/">{t('system.settings')}</Link> */}
-                                        {/* <Link className="dropdown-item" to="/analytics/">{t('system.analytics')}</Link> */}
-                                        {/* <Link className="dropdown-item" to="/admin/">{t('system.admin')}</Link> */}
+                                        <Link className="dropdown-item" href="/profile/">{t('system.profile')}</Link>
+                                        {/* <Link className="dropdown-item" href="/settings/">{t('system.settings')}</Link> */}
+                                        {/* <Link className="dropdown-item" href="/analytics/">{t('system.analytics')}</Link> */}
+                                        {/* <Link className="dropdown-item" href="/admin/">{t('system.admin')}</Link> */}
                                         <div className="dropdown-item" onClick={ signOut }>{t('system.sign_out')}</div>
                                     </div>
                                 </>

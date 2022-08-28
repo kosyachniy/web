@@ -1,6 +1,6 @@
 import React from 'react'
 
-import api from '../../../lib/api'
+import api from '../../../functions/api'
 import Loader from '../../../components/Loader'
 
 

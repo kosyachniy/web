@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
-import api from '../../../lib/api'
+import api from '../../../functions/api'
 
-import './style.css'
+import styles from '../../../styles/mail.module.css'
 import Popup from '../../../components/Popup'
 
 
@@ -13,7 +13,7 @@ const checkPassword = password => {
 
 const Mail = (props) => {
     const { system, profileIn, handlerPopUp } = props
-    const { t } = useTranslation()
+    const { t } = useTranslation('common')
     const [mail, setMail] = useState('')
     const [password, setPassword] = useState('')
 
