@@ -4,6 +4,8 @@ import { composeWithDevTools } from '@redux-devtools/extension'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
+import { generate } from './functions/generate'
+
 let store
 
 
@@ -96,7 +98,7 @@ export const systemLoaded = () => ({
 // reducers.js
 
 export const system = (state = {
-    token: null,
+    token: generate(),
     loaded: false,
     locale: 'en',
     theme: null,

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import api from '../../functions/api'
 
-import styles from '../../../styles/header.module.css'
+// import styles from '../../styles/header.module.css'
 import Hexagon from '../../components/Hexagon'
 
 import {
@@ -40,7 +40,7 @@ const Header = (props) => {
     return (
         <nav className={`navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}`}>
             <div className="container">
-                <Link href="/" className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
+                <Link href="/"><a className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.NEXT_PUBLIC_NAME } /></a></Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -55,10 +55,10 @@ const Header = (props) => {
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         {/* <li className="nav-item">
-                            <Link href="/feed/" className="nav-link">{ t('structure.feed') }</Link>
+                            <Link href="/feed/"><a className="nav-link">{ t('structure.feed') }</a></Link>
                         </li> */}
                         <li className="nav-item dropdown">
-                            <Link href="/posts/" className="nav-link">{ t('structure.posts') }</Link>
+                            <Link href="/posts/"><a className="nav-link">{ t('structure.posts') }</a></Link>
                             {/* <Link href="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
                             {/* <div className="dropdown-content">
                                 {
@@ -69,27 +69,26 @@ const Header = (props) => {
                             </div> */}
                         </li>
                         {/* <li className="nav-item">
-                            <Link href="/" className="nav-link">{ t('structure.space') }</Link>
+                            <Link href="/"><a className="nav-link">{ t('structure.space') }</a></Link>
                         </li> */}
                         <li className="nav-item">
-                            <Link href="/room/" className="nav-link">{ t('structure.room') }</Link>
+                            <Link href="/room/"><a className="nav-link">{ t('structure.room') }</a></Link>
                         </li>
                         {/* <li className="nav-item dropdown">
-                            <Link href="/events/" className="nav-link">{ t('structure.events') }</Link>
+                            <Link href="/events/"><a className="nav-link">{ t('structure.events') }</a></Link>
                             <div className="dropdown-content">
                                 {
                                     events.map((event, ind) => (
-                                        <Link
-                                            href={ `/events/${event}/` }
+                                        <Link href={ `/events/${event}/` }><a
                                             data-toggle="tooltip"
                                             key={ ind }
-                                        >{ t(`events.${event}`) }</Link>
+                                        >{ t(`events.${event}`) }</a></Link>
                                     ))
                                 }
                             </div>
                         </li> */}
                         {/* <li className="nav-item">
-                            <Link href="/map/" className="nav-link">{ t('structure.map') }</Link>
+                            <Link href="/map/"><a className="nav-link">{ t('structure.map') }</a></Link>
                         </li> */}
                     </ul>
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -140,10 +139,10 @@ const Header = (props) => {
                                         className={`dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}`}
                                         aria-labelledby="navbarDropdown"
                                     >
-                                        <Link className="dropdown-item" href="/profile/">{t('system.profile')}</Link>
-                                        {/* <Link className="dropdown-item" href="/settings/">{t('system.settings')}</Link> */}
-                                        {/* <Link className="dropdown-item" href="/analytics/">{t('system.analytics')}</Link> */}
-                                        {/* <Link className="dropdown-item" href="/admin/">{t('system.admin')}</Link> */}
+                                        <Link href="/profile/"><a className="dropdown-item">{t('system.profile')}</a></Link>
+                                        {/* <Link href="/settings/"><a className="dropdown-item">{t('system.settings')}</a></Link> */}
+                                        {/* <Link href="/analytics/"><a className="dropdown-item">{t('system.analytics')}</a></Link> */}
+                                        {/* <Link href="/admin/"><a className="dropdown-item">{t('system.admin')}</a></Link> */}
                                         <div className="dropdown-item" onClick={ signOut }>{t('system.sign_out')}</div>
                                     </div>
                                 </>

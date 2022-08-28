@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next';
 
-import uploadImage from '../../lib/upload'
+import uploadImage from '../../functions/upload'
 
 import './style.css'
 

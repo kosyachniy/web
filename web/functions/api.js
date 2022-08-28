@@ -1,6 +1,3 @@
-import { getToken } from './token';
-
-
 async function serverRequest(json={}) {
     return fetch(process.env.NEXT_PUBLIC_API, {
         method: 'POST',
