@@ -25,14 +25,14 @@ async function serverRequest(json={}) {
     });
 }
 
-export default function api(method, params={}) {
+export default function api(token, method, params={}) {
     return new Promise((resolve, reject) => {
         const json = {
             method,
             params,
             network: 'web',
             language: localStorage.getItem('locale'),
-            token: getToken(),
+            token,
         };
 
         serverRequest(json).then(async (responce) => {

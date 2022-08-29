@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { withTranslation } from 'react-i18next'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import Link from 'next/link'
 
-import api from '../../../functions/api'
+import { postsGet } from '../../store'
+import api from '../../functions/api'
+import Card from '../../components/Card'
 
-import Card from '../../../components/Card'
 
-
-const Grid = (props) => {
-    const {
-        system, posts,
-        postsGet,
-    } = props
-
+export default () => {
+    const system = useSelector((state) => state.system)
+    const posts = useSelector((state) => state.posts)
     const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => {
-        api('posts.get', data).then(res => {
+        api(system.token, 'posts.get', data).then(res => {
             postsGet(res['posts'])
         })
     }
@@ -59,9 +56,9 @@ const Grid = (props) => {
                         </button>
                     </div>
                 </div>
-                <div className="col-xs-2 col-sm-2 col-md-2" style={ {textAlign: 'right'} }>
+                <div className="col-xs-2 col-sm-2 col-md-2" style={{ textAlign: 'right' }}>
                     <div className="btn-group">
-                        <Link to="/post/add">
+                        <Link href="/post/add">
                             <button
                                 type="button"
                                 className="btn btn-success"
@@ -84,5 +81,3 @@ const Grid = (props) => {
         </>
     )
 }
-
-export default withTranslation()(Grid);

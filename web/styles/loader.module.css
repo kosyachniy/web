@@ -1,6 +1,4 @@
-/* Loader */
-
-#loader {
+.loader {
     height: 100%;
     width: 100%;
     position: fixed;
@@ -11,13 +9,13 @@
     z-index: 9999;
 }
 
-#loader div {
+.loader div {
     position: absolute;
     left: calc(50% - 100px);
     top: calc(50% - 100px);
 }
 
-#loader img {
+.loader img {
     width: 200px;
     height: 200px;
     animation: pulse 3s linear infinite;

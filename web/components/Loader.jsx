@@ -6,10 +6,7 @@ import styles from '../styles/loader.module.css'
 
 export default () => {
     const system = useSelector((state) => state.system)
-
-    const [state, setState] = useState({
-        displayed: true,
-    })
+    const [displayed, setDisplayed] = useState(true)
 
     const fadeOut = () => {
         let fadeTarget = document.getElementById("loader")
@@ -28,13 +25,13 @@ export default () => {
         }, 20)
     }
 
-    if (system.loaded && state.displayed) {
-        setState({ displayed: false })
+    if (system.loaded && displayed) {
+        setDisplayed(false)
         fadeOut()
     }
 
     return (
-        <div id="loader" className={`bg-${system.theme}`}>
+        <div id="loader" className={ styles.loader }> {/* `bg-${system.theme}` */}
             <div>
                 <img src={`/brand/logo_${system.color}.svg`} alt="loader" />
             </div>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
 
-import api from '../../../functions/api'
+import api from '../../functions/api'
 
 import './style.css'
 

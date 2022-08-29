@@ -133,6 +133,7 @@ export const system = (state = {
 
         default:
             return {
+                token: state.token || generate(),
                 loaded: state.loaded,
                 locale: state.locale || process.env.NEXT_PUBLIC_LOCALE,
                 theme: state.theme || 'light',

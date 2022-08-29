@@ -1,15 +1,14 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
-import './style.css'
+import styles from '../styles/card.module.css'
 
 
-const Card = (props) => {
-    const { post } = props;
+export default (props) => {
+    const { post } = props
 
     return (
         <div className="col-md-4">
-            <Link to={`/post/${post.id}`} key={ post.id }>
+            <Link href={`/post/${post.id}`} key={ post.id }>
                 <div className="card mb-4 shadow-sm">
                     { post.cover && <img className="card-img-top" src={ post.cover } alt={ post.title } /> }
                     <div className="card-body">
@@ -35,6 +34,4 @@ const Card = (props) => {
             </Link>
         </div>
     )
-};
-
-export default Card;
+}

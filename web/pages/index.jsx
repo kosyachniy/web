@@ -1,7 +1,8 @@
-export default ({ Component, pageProps }) => {
+import PostsGrid from '../containers/Posts/Grid'
+
+
+export default () => {
     return (
-        <>
-            main
-        </>
+        <PostsGrid />
     )
 }
