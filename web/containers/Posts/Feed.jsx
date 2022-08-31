@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 
 import api from '../../functions/api'
 
@@ -51,7 +51,7 @@ const Feed = (props) => {
     return (
         <>
             <div className="container" id="feed">
-                <Link to="/post/add">
+                <Link href="/posts/add">
                     <button
                         type="button"
                         className="btn btn-success"
@@ -67,7 +67,7 @@ const Feed = (props) => {
 
                 { props.posts.map(post => (
                     <div className="cards" key={ post.id }>
-                        <Link to={ `/post/${post.id}` } >
+                        <Link to={ `/posts/${post.id}` } >
                             <div className="cards-content">
                                 <h3 className="title">{ post.title }</h3>
                                 <div className="additional"><i className="fas fa-ellipsis-v" /></div>

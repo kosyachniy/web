@@ -1,35 +1,11 @@
-import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import Link from 'next/link'
 
-import { postsGet } from '../../store'
-import api from '../../functions/api'
-import Card from '../../components/Card'
+import Card from './Card'
 
 
-export default () => {
+export default ({ posts }) => {
     const system = useSelector((state) => state.system)
-    const posts = useSelector((state) => state.posts)
-    const [loaded, setLoaded] = useState(null)
-
-    const getPost = (data={}) => {
-        api(system.token, 'posts.get', data).then(res => {
-            postsGet(res['posts'])
-        })
-    }
-
-    useEffect(() => {
-        if (
-            system.search !== loaded
-            && (
-                system.search === ''
-                || system.search.length >= 3
-            )
-        ) {
-            setLoaded(system.search)
-            getPost({search: system.search})
-        }
-    })
 
     return (
         <>
@@ -58,7 +34,7 @@ export default () => {
                 </div>
                 <div className="col-xs-2 col-sm-2 col-md-2" style={{ textAlign: 'right' }}>
                     <div className="btn-group">
-                        <Link href="/post/add">
+                        <Link href="/posts/add">
                             <button
                                 type="button"
                                 className="btn btn-success"

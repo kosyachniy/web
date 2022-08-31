@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useSelector } from 'react-redux'
 import Link from 'next/link'
-import api from '../../functions/api'
 // import MathJax from 'react-mathjax-preview'
+
+import api from '../../functions/api'
 
 
 export const getServerSideProps = async ({ query }) => {
@@ -22,14 +23,9 @@ export default ({ id }) => {
     const [deleted, setDeleted] = useState(false)
 
     const getPost = (data={}) => {
-        api('posts.get', data).then(res => {
+        api(system.token, system.locale, 'posts.get', data).then(res => {
             setPost(res['posts'])
         })
-    }
-
-    const savePost = () => {
-        getPost({ id: post.id })
-        setEdit(false)
     }
 
     const deletePost = () => {
@@ -37,7 +33,7 @@ export default ({ id }) => {
             id: post.id,
         }
 
-        api('posts.delete', data).then(res => {
+        api(system.token, system.locale, 'posts.delete', data).then(res => {
             setDeleted(true)
         })
     }
@@ -46,11 +42,11 @@ export default ({ id }) => {
         getPost({ id })
     }, [])
 
-    if (deleted) {
-        return (
-            <Navigate to="/" />
-        )
-    }
+    // if (deleted) {
+    //     return (
+    //         <Navigate to="/" />
+    //     )
+    // }
 
     if (!post) {
         return (
@@ -60,7 +56,7 @@ export default ({ id }) => {
 
     return (
         <div id="post">
-            {/* { res } */}
+            { id }
             {/* <div className="album py-2">
                 <h1>{ post.title }</h1>
 

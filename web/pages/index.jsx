@@ -1,8 +1,8 @@
-import PostsGrid from '../containers/Posts/Grid'
+import Posts from './posts'
 
 
 export default () => {
     return (
-        <PostsGrid />
+        <Posts />
     )
 }

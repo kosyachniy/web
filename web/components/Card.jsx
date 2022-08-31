@@ -3,12 +3,10 @@ import Link from 'next/link'
 import styles from '../styles/card.module.css'
 
 
-export default (props) => {
-    const { post } = props
-
+export default ({ post }) => {
     return (
         <div className="col-md-4">
-            <Link href={`/post/${post.id}`} key={ post.id }>
+            <Link href={`/posts/${post.id}`} key={ post.id }>
                 <div className="card mb-4 shadow-sm">
                     { post.cover && <img className="card-img-top" src={ post.cover } alt={ post.title } /> }
                     <div className="card-body">

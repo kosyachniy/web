@@ -1,40 +1,45 @@
-import React, { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { useSelector } from 'react-redux'
 
-import api from '../../../functions/api'
-
-import './style.css'
+import api from '../../functions/api'
+// import { getPost } from './[id]'
 // import Editor from '../../../components/Editor'
 
 
-const Edit = (props) => {
-    const [title, setName] = useState(props.post ? props.post.title : '')
-    const [data, setCont] = useState(props.post ? props.post.data : '')
+export default ({ post }) => {
+    const { t } = useTranslation('common')
+    const system = useSelector((state) => state.system)
+    const [title, setName] = useState(post ? post.title : '')
+    const [data, setData] = useState(post ? post.data : '')
     const [redirect, setRedirect] = useState(null)
-    const { t } = useTranslation()
+
+    const savePost = () => {
+        getPost({ id: post.id })
+        setEdit(false)
+    }
 
     const editPost = () => {
         let req = { title, data }
 
-        if (props.post) {
-            req['id'] = props.post.id
+        if (post) {
+            req['id'] = post.id
         }
 
-        api('posts.save', req).then(res => {
-            if (props.post) {
-                props.handlerSave()
+        api(system.token, system.locale, 'posts.save', req).then(res => {
+            if (post) {
+                savePost()
             } else {
                 setRedirect(res.id)
             }
         })
     }
 
-    if (redirect) {
-        return (
-            <Navigate to={`/post/${redirect}`} />
-        )
-    }
+    // if (redirect) {
+    //     return (
+    //         <Navigate to={`/posts/${redirect}`} />
+    //     )
+    // }
 
     return (
         <div id="edit">
@@ -51,7 +56,7 @@ const Edit = (props) => {
 
                 {/* <Editor
                     data={ data }
-                    updatePost={ (text) => {setCont(text)} }
+                    updatePost={ (text) => {setData(text)} }
                 /> */}
 
                 <br />
@@ -64,7 +69,5 @@ const Edit = (props) => {
                 </button>
             </div>
         </div>
-    );
-};
-
-export default Edit;
+    )
+}

@@ -13,7 +13,6 @@ import Loader from '../../components/Loader'
 
 export default ({ Component, pageProps }) => {
     const dispatch = useDispatch()
-
     const system = useSelector((state) => state.system)
     const online = useSelector((state) => state.online)
 
