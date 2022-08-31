@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 
-import api from '../../../functions/api'
+import api from '../../functions/api'
 
 import styles from '../../../styles/mail.module.css'
-import Popup from '../../../components/Popup'
+import Popup from '../../components/Popup'
 
 
 const checkPassword = password => {

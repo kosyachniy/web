@@ -2,8 +2,8 @@ import React from 'react'
 import { useTranslation } from 'next-i18next'
 
 import styles from '../../../styles/online.module.css'
-import Popup from '../../../components/Popup';
-import Hexagon from '../../../components/Hexagon';
+import Popup from '../../components/Popup';
+import Hexagon from '../../components/Hexagon';
 
 
 const Online = (props) => {

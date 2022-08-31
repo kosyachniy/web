@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'next-i18next'
 
-import api from '../../../functions/api'
-import Avatar from '../../../components/Avatar'
+import api from '../../functions/api'
+import Avatar from '../../components/Avatar'
 
 
 // const checkPassword = password => {

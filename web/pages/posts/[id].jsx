@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'next-i18next'
+import { useSelector } from 'react-redux'
+import Link from 'next/link'
+import api from '../../functions/api'
 // import MathJax from 'react-mathjax-preview'
 
-import api from '../../functions/api'
 
-import './style.css'
-import Edit from './Edit'
-// import Map from '../../../components/Map'
+export const getServerSideProps = async ({ query }) => {
+    return {
+        props: {
+            id: query['id'],
+        }
+    }
+}
 
-
-const Post = () => {
+export default ({ id }) => {
+    const { t } = useTranslation('common')
+    const system = useSelector((state) => state.system)
     const [post, setPost] = useState(null)
     const [edit, setEdit] = useState(false)
     const [deleted, setDeleted] = useState(false)
@@ -35,9 +42,8 @@ const Post = () => {
         })
     }
 
-    useEffect(() => { // WillMount
-        let postID = Number(document.location.pathname.split('/').pop())
-        getPost({id: postID})
+    useEffect(() => {
+        getPost({ id })
     }, [])
 
     if (deleted) {
@@ -54,7 +60,8 @@ const Post = () => {
 
     return (
         <div id="post">
-            <div className="album py-2">
+            {/* { res } */}
+            {/* <div className="album py-2">
                 <h1>{ post.title }</h1>
 
                 { edit ? (
@@ -93,7 +100,7 @@ const Post = () => {
                             />
                         ) : (<></>) }
                         <br /><br />
-                        { post.data }
+                        { post.data } */}
                         {/* <MathJax
                             math={ post.data }
                             sanitizeOptions={{
@@ -111,11 +118,9 @@ const Post = () => {
                                 <Map />
                             )}
                         </div> */}
-                    </>
+                    {/* </>
                 ) }
-            </div>
+            </div> */}
         </div>
     )
 }
-
-export default Post;
