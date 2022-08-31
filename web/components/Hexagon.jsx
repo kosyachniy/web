@@ -1,11 +1,7 @@
-import React from 'react';
-
 import styles from '../styles/hexagon.module.css'
 
 
-const Online = (props) => {
-    const { url } = props
-
+export default ({ url }) => {
     return (
         <div className="hexagon" id="avatar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1">
@@ -18,7 +14,5 @@ const Online = (props) => {
                 </defs>
             </svg>
         </div>
-    );
-};
-
-export default Online;
+    )
+}

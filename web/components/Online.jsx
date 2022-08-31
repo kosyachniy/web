@@ -1,13 +1,11 @@
-import React from 'react'
 import { useTranslation } from 'next-i18next'
 
 import styles from '../../../styles/online.module.css'
-import Popup from '../../components/Popup';
-import Hexagon from '../../components/Hexagon';
+import Popup from './Popup';
+import Hexagon from './Hexagon';
 
 
-const Online = (props) => {
-    const { system, online, handlerPopUp } = props
+export default ({ system, online, handlerPopUp }) => {
     const { t } = useTranslation()
 
     return (
@@ -30,7 +28,5 @@ const Online = (props) => {
                 )) }
             </Popup>
         </div>
-    );
-};
-
-export default Online;
+    )
+}

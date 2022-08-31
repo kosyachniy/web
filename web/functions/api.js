@@ -25,7 +25,7 @@ async function serverRequest(json={}) {
     });
 }
 
-export default function api(token, locale, method, params={}) {
+export default (token, locale, method, params={}) => {
     return new Promise((resolve, reject) => {
         const json = {
             method,

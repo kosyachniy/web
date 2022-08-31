@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
 
 import api from '../../functions/api'
@@ -10,8 +10,7 @@ import Avatar from '../../components/Avatar'
 //     return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1);
 // }
 
-const Profile = (props) => {
-    const { profile, profileUpdate } = props
+export default ({ profile, profileUpdate }) => {
     const { t } = useTranslation()
     const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
@@ -152,7 +151,5 @@ const Profile = (props) => {
                 onClick={accountEdit}
             />
         </div>
-    );
-};
-
-export default Profile;
+    )
+}

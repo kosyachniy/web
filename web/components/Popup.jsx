@@ -1,11 +1,7 @@
-import React from 'react';
-
 import styles from '../styles/popup.module.css'
 
 
-const Popup = (props) => {
-    const { children, handlerPopUp, theme='light' } = props;
-
+export default ({ children, handlerPopUp, theme='light' }) => {
     return (
         <div className="popup">
             <div className="popup_back" onClick={ ()=>{handlerPopUp(false)} } />
@@ -13,7 +9,5 @@ const Popup = (props) => {
                 { children }
             </div>
         </div>
-    );
-};
-
-export default Popup;
+    )
+}

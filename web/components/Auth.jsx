@@ -1,12 +1,7 @@
-import React from 'react';
-
-import styles from '../../../styles/auth.module.css'
-import Popup from '../../components/Popup';
+import Popup from './Popup'
 
 
-const Auth = (props) => {
-    const { system, handlerPopUp } = props
-
+export default () => {
     return (
         <div id="auth">
             <Popup handlerPopUp={handlerPopUp} theme={system.theme} >
@@ -42,7 +37,5 @@ const Auth = (props) => {
                 </a>
             </Popup>
         </div>
-    );
-};
-
-export default Auth;
+    )
+}

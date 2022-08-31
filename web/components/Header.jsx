@@ -1,16 +1,12 @@
-import React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { profileOut, searching } from '../../../store'
 import api from '../../functions/api'
-
 // import styles from '../../styles/header.module.css'
 import Hexagon from '../../components/Hexagon'
 
-import {
-    profileOut, searching,
-} from '../../../store'
 
 // const sciences = [
 //     'math', 'prog', 'bis', 'manag', 'lead', 'marketing', 'life_safety'
@@ -21,9 +17,7 @@ import {
 // ]
 
 
-const Header = (props) => {
-    const { handlerPopUp } = props
-
+export default ({ handlerPopUp }) => {
     const system = useSelector((state) => state.system)
     const online = useSelector((state) => state.online)
     const profile = useSelector((state) => state.profile)
@@ -163,5 +157,3 @@ const Header = (props) => {
         </nav>
     )
 }
-
-export default Header;

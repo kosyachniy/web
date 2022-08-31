@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 
-import api from '../../functions/api'
+import api from '../functions/api'
 
 import styles from '../../../styles/mail.module.css'
-import Popup from '../../components/Popup'
+import Popup from './Popup'
 
 
 const checkPassword = password => {
     return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
 }
 
-const Mail = (props) => {
-    const { system, profileIn, handlerPopUp } = props
+export default ({ system, profileIn, handlerPopUp }) => {
     const { t } = useTranslation('common')
     const [mail, setMail] = useState('')
     const [password, setPassword] = useState('')
@@ -71,7 +70,5 @@ const Mail = (props) => {
                 </form>
             </Popup>
         </div>
-    );
-};
-
-export default Mail;
+    )
+}

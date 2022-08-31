@@ -1,40 +1,33 @@
 import _ from "lodash";
-import React from 'react';
-import { compose, withProps } from 'recompose';
+import { useState, useEffect } from 'react'
+import { compose, withProps } from 'recompose'
 
 // NOTE: "react-google-maps": "^9.4.5"
-import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps'; // , InfoWindow
-// import { Link } from 'react-router-dom';
+import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps' // , InfoWindow
 
-import marker from './marker.svg';
+import marker from './marker.svg'
 
 
-class Maps extends React.Component {
-    constructor(props) {
-        super(props);
+const Maps = (props) => {
+    const [zoom, setZoom] = useState(props.zoom ? props.zoom : process.env.NEXT_PUBLIC_GOOGLE_MAPS_ZOOM)
+    const [center, setCenter] = useState(props.center ? props.center : {
+        lat: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LAT,
+        lng: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LNG,
+    })
+    const [current, setCurrent] = useState(props.center ? props.center : {
+        lat: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LAT,
+        lng: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LNG,
+    })
+    const [markers, setMarkers] = useState([])
 
-        this.state = {
-            zoom: props.zoom ? props.zoom : process.env.NEXT_PUBLIC_GOOGLE_MAPS_ZOOM,
-            center: props.center ? props.center : {
-                lat: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LAT,
-                lng: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LNG,
-            },
-            current: props.center ? props.center : {
-                lat: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LAT,
-                lng: process.env.NEXT_PUBLIC_GOOGLE_MAPS_LNG,
-            },
-            markers: [],
-        }
-    }
-
-    componentWillMount() {
+    useEffect(() => {
         if (!this.props.center) {
             if (window.navigator && window.navigator.geolocation) {
                 window.navigator.geolocation.getCurrentPosition(
                     (pos) => {
                         const coords = pos.coords;
                         // console.log('My', coords);
-                        this.setState({ current: { lat: coords.latitude, lng: coords.longitude }});
+                        setCurrent({ lat: coords.latitude, lng: coords.longitude })
                     },
                     // (error) => {console.log(error)},
                     // { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -42,40 +35,38 @@ class Maps extends React.Component {
             }
         }
 
-        // getGeo(this);
-    }
+        // getGeo(this)
+    }, [])
 
     // handleOpen = (id) => {
-    //     let markers = this.state.markers
+    //     let markers = markers
     //     markers[id].toggle = true
-    //     this.setState({ markers })
+    //     setMarkers(markers)
     // }
 
     // handleClose = (id) => {
-    //     let markers = this.state.markers
+    //     let markers = markers
     //     markers[id].toggle = false
-    //     this.setState({ markers })
+    //     setMarkers(markers)
     // }
 
     // handleFavorite = (id) => {
-    //     let markers = this.state.markers;
-
     //     if (markers[id].donor.way) {
     //         delWay(this, {
     //             id: markers[id].donor.way,
     //         }).then(res => {
     //             markers[id].donor.way = 0;
-    //             this.setState({ markers });
+    //             setMarkers(markers)
     //         })
 
-    //         this.setState({ markers })
+    //         setMarkers(markers)
     //     } else {
     //         addWay(this, {
     //             type: 1,
     //             cont: markers[id].donor.id,
     //         }).then(res => {
     //             markers[id].donor.way = res;
-    //             this.setState({ markers });
+    //            setMarkers(markers)
     //         })
     //     }
     // }
@@ -83,8 +74,8 @@ class Maps extends React.Component {
     render() {
         return (
             <GoogleMap
-                defaultZoom={this.state.zoom}
-                defaultCenter={this.state.center}
+                defaultZoom={zoom}
+                defaultCenter={center}
                 options={{ streetViewControl: false, mapTypeControl: false, gestureHandling: 'greedy', styles: mapStyles }}
             >
                 <Marker
@@ -92,10 +83,10 @@ class Maps extends React.Component {
                         url: marker,
                         scaledSize: new window.google.maps.Size(40, 40)
                     }}
-                    position={ this.state.current }
+                    position={ current }
                     key="i"
                 />
-                {/* {this.state.markers.map((el, key) => (
+                {/* {markers.map((el, key) => (
                     <Marker
                         position={ el.geo }
                         key={ key }
@@ -185,5 +176,5 @@ const Map = compose(
 ));
 
 
-const enhance = _.identity;
-export default enhance(Map);
+const enhance = _.identity
+export default enhance(Map)

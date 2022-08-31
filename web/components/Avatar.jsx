@@ -1,49 +1,40 @@
-import React from 'react'
-import { useTranslation } from 'next-i18next';
+import { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
 import uploadImage from '../functions/upload'
 
-import './style.css'
 
-
-class Avatar extends React.Component {
-    state = {
-        img: this.props.avatar,
-    }
+export default ({ avatar }) => {
+    const { t } = useTranslation('common')
+    const [img, setImg] = useState(avatar)
 
     handleAvatar = (_e) => {
         const image = _e.target.files[0]
         uploadImage(image).then((link) => {
-            this.setState({ img: link })
-            this.props.setAvatar(link)
+            setImg({ link })
+            setAvatar(link)
         })
     }
 
-    render() {
-        const { t } = useTranslation('common')
-
-        return (
-            <div id="avatar-preview">
-                <label htmlFor="avatar-loader">
-                    { this.state.img ? (
-                        <img
-                            src={ this.state.img }
-                            alt={ t('profile.avatar') }
-                        />
-                    ) : (
-                        <div>{ t('system.upload') }</div>
-                    ) }
-
-                    <input
-                        id="avatar-loader"
-                        type="file"
-                        accept="image/jpeg, image/png"
-                        onChange={(_e) => { this.handleAvatar(_e) }}
+    return (
+        <div id="avatar-preview">
+            <label htmlFor="avatar-loader">
+                { img ? (
+                    <img
+                        src={ img }
+                        alt={ t('profile.avatar') }
                     />
-                </label>
-            </div>
-        )
-    }
-}
+                ) : (
+                    <div>{ t('system.upload') }</div>
+                ) }
 
-export default withTranslation()(Avatar);
+                <input
+                    id="avatar-loader"
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    onChange={(_e) => { this.handleAvatar(_e) }}
+                />
+            </label>
+        </div>
+    )
+}

@@ -1,9 +1,7 @@
 import Map from '../../components/Map'
 
-import './style.css'
 
-
-const WindowMap = () => {
+export default () => {
     // componentWillMount() {
     //     this.setState({pet: document.location.search.split('&')[0].split('=').pop()});
     // }
@@ -16,5 +14,3 @@ const WindowMap = () => {
         </div>
     )
 }
-
-export default WindowMap;

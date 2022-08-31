@@ -1,15 +1,11 @@
-import React from 'react'
 import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux'
 // import { useTranslation } from 'next-i18next'
 
-import {
-    changeLang,
-    changeTheme,
-} from '../../../store'
+import { changeLang, changeTheme } from '../../../store'
 
 
-const Footer = (props) => {
+export default () => {
     const system = useSelector((state) => state.system)
     const dispatch = useDispatch()
     // const { t } = useTranslation()
@@ -51,5 +47,3 @@ const Footer = (props) => {
         </footer>
     )
 }
-
-export default Footer;
