@@ -1,24 +1,9 @@
-import React, { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 
-import api from '../../functions/api'
 
-import './style.css'
-
-
-const Feed = (props) => {
-    const { t } = props
-
-    const getPost = (data={}) => {
-        api('posts.get', data).then(res => {
-            props.postsGet(res['posts'])
-        })
-    }
-
-    useEffect(() => {
-        getPost()
-    }, [])
+export default ({ posts }) => {
+    const { t } = useTranslation('common')
 
     const getTime = (time) => {
         const newTime = new Date(time * 1000);
@@ -92,5 +77,3 @@ const Feed = (props) => {
         </>
     )
 }
-
-export default withTranslation()(Feed);

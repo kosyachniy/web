@@ -56,8 +56,7 @@ export default ({ id }) => {
 
     return (
         <div id="post">
-            { id }
-            {/* <div className="album py-2">
+            <div className="album py-2">
                 <h1>{ post.title }</h1>
 
                 { edit ? (
@@ -96,7 +95,7 @@ export default ({ id }) => {
                             />
                         ) : (<></>) }
                         <br /><br />
-                        { post.data } */}
+                        { post.data }
                         {/* <MathJax
                             math={ post.data }
                             sanitizeOptions={{
@@ -114,9 +113,9 @@ export default ({ id }) => {
                                 <Map />
                             )}
                         </div> */}
-                    {/* </>
+                    </>
                 ) }
-            </div> */}
+            </div>
         </div>
     )
 }

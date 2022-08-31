@@ -104,7 +104,6 @@ services:
       - ./web/public:/public
       - ./web/pages:/pages
       - ./web/components:/components
-      - ./web/containers:/containers
       - ./web/functions:/functions
       - ./web/styles:/styles
 
