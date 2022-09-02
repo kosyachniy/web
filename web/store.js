@@ -47,63 +47,55 @@ export const onlineReset = () => ({
     type: 'ONLINE_RESET',
 })
 
-export const changeTheme = theme => {
-    const color = theme === 'dark' ? 'light' : 'dark'
-    return {
-        type: 'CHANGE_THEME',
-        theme, color,
-    }
-}
+export const changeTheme = theme => ({
+    type: 'CHANGE_THEME',
+    theme,
+    color: theme === 'dark' ? 'light' : 'dark',
+})
 
-export const searching = search => {
-    return {
-        type: 'SEARCH',
-        search,
-    }
-}
+export const searching = search => ({
+    type: 'SEARCH',
+    search,
+})
 
-export const changeLang = locale => {
-    // i18n.changeLanguage(locale)
-    return {
-        type: 'CHANGE_LANG',
-        locale,
-    }
-}
+export const changeLang = locale => ({
+    type: 'CHANGE_LANG',
+    locale,  // i18n.changeLanguage(locale)
+})
 
-export const profileIn = profile => {
-    const { id, login, avatar, name, surname, phone, mail, social, status } = profile
-    return {
-        type: 'PROFILE_IN',
-        id, login, avatar, name, surname, phone, mail, social, status,
-    }
-}
+export const profileIn = ({ id, login, avatar, name, surname, phone, mail, social, status }) => ({
+    type: 'PROFILE_IN',
+    id, login, avatar, name, surname, phone, mail, social, status,
+})
 
-export const profileOut = () => {
-    return {
-        type: 'PROFILE_OUT',
-    }
-}
+export const profileOut = () => ({
+    type: 'PROFILE_OUT',
+})
 
-export const profileUpdate = profile => {
-    return {
-        type: 'PROFILE_UPDATE',
-        profile,
-    }
-}
+export const profileUpdate = profile => ({
+    type: 'PROFILE_UPDATE',
+    profile,
+})
 
 export const systemLoaded = () => ({
     type: 'SYSTEM_LOADED',
+})
+
+export const popupSet = popup => ({
+    type: 'SYSTEM_POPUP',
+    popup,
 })
 
 // reducers.js
 
 export const system = (state = {
     token: generate(),
-    loaded: false,
     locale: 'en',
     theme: null,
     color: null,
     search: null,
+    loaded: false,
+    popup: null,
 }, action) => {
     switch (action.type) {
         case 'CHANGE_THEME':
@@ -125,6 +117,12 @@ export const system = (state = {
                 loaded: true,
             };
 
+        case 'SYSTEM_POPUP':
+            return {
+                ...state,
+                popup: action.popup,
+            };
+
         case 'SEARCH':
             return {
                 ...state,
@@ -134,11 +132,12 @@ export const system = (state = {
         default:
             return {
                 token: state.token || generate(),
-                loaded: state.loaded,
                 locale: state.locale || process.env.NEXT_PUBLIC_LOCALE,
                 theme: state.theme || 'light',
                 color: state.color || 'dark',
                 search: state.search || '',
+                loaded: state.loaded,
+                popup: state.popup,
             };
     }
 }

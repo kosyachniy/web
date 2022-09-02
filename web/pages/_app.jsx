@@ -20,10 +20,10 @@ import Loader from '../../components/Loader'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-// // Users
-// import Auth from '../containers/Pages/Auth'
-// import Mail from '../containers/Pages/Mail'
-// import Online from '../containers/Pages/Online'
+// Users
+import Auth from '../components/Auth'
+import AuthMail from '../components/AuthMail'
+import Online from '../components/Online'
 
 
 const Body = ({ Component, pageProps }) => {
@@ -69,19 +69,15 @@ const Body = ({ Component, pageProps }) => {
                 </div>
             </div>
 
-            {/* { showPopUp && (
-                <>
-                    { showPopUp === 'auth' && (
-                        <Auth handlerPopUp={ setShowPopUp } />
-                    ) }
-                    { showPopUp === 'mail' && (
-                        <Mail handlerPopUp={ setShowPopUp } />
-                    ) }
-                    { showPopUp === 'online' && (
-                        <Online handlerPopUp={ setShowPopUp } />
-                    ) }
-                </>
-            ) } */}
+            { system.popup === 'auth' && (
+                <Auth />
+            ) }
+            { system.popup === 'mail' && (
+                <AuthMail />
+            ) }
+            { system.popup === 'online' && (
+                <Online />
+            ) }
         </>
     )
 }

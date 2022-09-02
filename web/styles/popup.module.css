@@ -66,23 +66,3 @@
     opacity: 0.9;
     color: #fff;
 }
-
-.btn_vk {
-    background-color: #517299 !important;
-}
-
-.btn_g {
-    background-color: #db4437 !important;
-}
-
-.btn_tg {
-    background: #0088cc !important;
-}
-
-.btn_vk, .btn_g, .btn_tg {
-    display: block;
-}
-
-.btn_vk:hover, .btn_g:hover, .btn_tg:hover {
-    opacity: 0.95;
-}

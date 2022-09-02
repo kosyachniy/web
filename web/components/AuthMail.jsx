@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 
+import { popupSet } from '../store'
 import api from '../functions/api'
-
 import styles from '../../../styles/mail.module.css'
 import Popup from './Popup'
 
@@ -11,15 +12,16 @@ const checkPassword = password => {
     return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
 }
 
-export default ({ system, profileIn, handlerPopUp }) => {
+export default ({ system, profileIn }) => {
     const { t } = useTranslation('common')
+    const dispatch = useDispatch()
     const [mail, setMail] = useState('')
     const [password, setPassword] = useState('')
 
     const signIn = (event) => {
         api('account.auth', {login: mail, password}).then(res => {
             profileIn(res)
-            handlerPopUp(false)
+            dispatch(popupSet(null))
         })
 
         event.preventDefault();
@@ -27,7 +29,7 @@ export default ({ system, profileIn, handlerPopUp }) => {
 
     return (
         <div id="mail">
-            <Popup handlerPopUp={handlerPopUp} theme={system.theme} >
+            <Popup>
                 <form onSubmit={signIn}>
                     <div className="input-group mb-3">
                         <input

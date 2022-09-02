@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { profileOut, searching } from '../../../store'
+import { popupSet, profileOut, searching } from '../../../store'
 import api from '../../functions/api'
 // import styles from '../../styles/header.module.css'
 import Hexagon from '../../components/Hexagon'
@@ -17,7 +17,8 @@ import Hexagon from '../../components/Hexagon'
 // ]
 
 
-export default ({ handlerPopUp }) => {
+export default () => {
+    const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const online = useSelector((state) => state.online)
     const profile = useSelector((state) => state.profile)
@@ -105,7 +106,7 @@ export default ({ handlerPopUp }) => {
                                     <div className="online"></div>
                                     <div
                                         className="badge bg-secondary"
-                                        onClick={ ()=>{handlerPopUp('online')} }
+                                        onClick={ () => dispatch(popupSet('online')) }
                                     >{ online.count } </div>
                                 </div>
                             ) : (
@@ -146,7 +147,7 @@ export default ({ handlerPopUp }) => {
                                     <button
                                         type="button"
                                         className="btn btn-success"
-                                        onClick={ ()=>{handlerPopUp('auth')} }
+                                        onClick={ () => dispatch(popupSet('auth')) }
                                     >{ t('system.sign_in') }</button>
                                 </div>
                             ) : (<></>)}

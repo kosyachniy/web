@@ -1,19 +1,21 @@
 import { useTranslation } from 'next-i18next'
+import { useSelector } from 'react-redux'
 
-import styles from '../../../styles/online.module.css'
-import Popup from './Popup';
-import Hexagon from './Hexagon';
+import styles from '../styles/online.module.css'
+import Popup from './Popup'
+import Hexagon from './Hexagon'
 
 
-export default ({ system, online, handlerPopUp }) => {
+export default () => {
     const { t } = useTranslation()
+    const online = useSelector((state) => state.online)
 
     return (
-        <div id="online">
-            <Popup handlerPopUp={handlerPopUp} theme={system.theme} >
-                <h3>{t('system.online')}</h3>
+        <div>
+            <Popup>
+                <h3>{ t('system.online') }</h3>
                 { online.users.map(user => (
-                    <div className="user" key={ user.id }>
+                    <div className={ styles.user } key={ user.id }>
                         <Hexagon url={ user.avatar || '/user.png' } />
                         <div>
                             {
