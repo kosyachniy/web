@@ -1,6 +1,7 @@
 .pass_info {
     display: flex;
     flex-direction: column;
+    margin-bottom: 10px;
 }
 
 .pass_info {
@@ -11,7 +12,7 @@
 
 .pass_info span {
     text-align: left;
-    margin: 5px 10px;
+    margin: 0 0 5px 10px;
 }
 
 .pass_info span i {

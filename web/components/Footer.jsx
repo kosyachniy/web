@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux'
 // import { useTranslation } from 'next-i18next'
 
-import { changeLang, changeTheme } from '../../../store'
+import { changeLang, changeTheme } from '../store'
 
 
 export default () => {

@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { popupSet, profileOut, searching } from '../../../store'
-import api from '../../functions/api'
-// import styles from '../../styles/header.module.css'
-import Hexagon from '../../components/Hexagon'
+import { popupSet, profileOut, searching } from '../store'
+import api from '../functions/api'
+// import styles from '../styles/header.module.css'
+import Hexagon from './Hexagon'
 
 
 // const sciences = [

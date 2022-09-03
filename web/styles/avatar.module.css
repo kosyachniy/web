@@ -1,11 +1,11 @@
-#avatar-preview {
+.avatar {
     width: 100%;
     height: 100%;
     text-align: center;
     padding: 40px 0;
 }
 
-#avatar-preview label {
+.avatar label {
     width: calc(50vw - 4px);
     height: calc(50vw - 4px);
     max-width: 246px;
@@ -15,7 +15,7 @@
     cursor: pointer;
 }
 
-#avatar-preview div {
+.avatar div {
     width: 100%;
     height: 100%;
     text-align: center;
@@ -26,11 +26,11 @@
     background: none !important;
 }
 
-#avatar-preview input {
+.avatar input {
     display: none;
 }
 
-#avatar-preview img {
+.avatar img {
     object-fit: cover;
     width: 100%;
     height: 100%;

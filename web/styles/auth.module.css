@@ -1,8 +1,3 @@
-.btn {
-    margin: 10px;
-    width: calc(100% - 20px);
-}
-
 .btn_mail {
     background: #2ecc71 !important;
     display: block;

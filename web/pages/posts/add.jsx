@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import api from '../../functions/api'
 // import { getPost } from './[id]'
-// import Editor from '../../../components/Editor'
+// import Editor from '../../components/Editor'
 
 
 export default ({ post }) => {

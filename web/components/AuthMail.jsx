@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next'
 
 import { popupSet } from '../store'
 import api from '../functions/api'
-import styles from '../../../styles/mail.module.css'
+import styles from '../styles/mail.module.css'
 import Popup from './Popup'
 
 
@@ -28,7 +28,7 @@ export default ({ system, profileIn }) => {
     }
 
     return (
-        <div id="mail">
+        <div>
             <Popup>
                 <form onSubmit={signIn}>
                     <div className="input-group mb-3">
@@ -54,12 +54,12 @@ export default ({ system, profileIn }) => {
                             required
                         />
                     </div>
-                    <div className="pass_info">
-                        <span style={password.length >= 6 ? {} : { color: '#e74c3c' }}>
+                    <div className={ styles.pass_info }>
+                        <span style={ password.length >= 6 ? {} : { color: '#e74c3c' } }>
                             <i className="fas fa-genderless" />
                             { t('profile.passwordTip1') }
                         </span>
-                        <span style={checkPassword(password) ? {} : { color: '#e74c3c' }}>
+                        <span style={ checkPassword(password) ? {} : { color: '#e74c3c' } }>
                             <i className="fas fa-genderless" />
                             { t('profile.passwordTip2') }
                         </span>

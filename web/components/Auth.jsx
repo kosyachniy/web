@@ -12,35 +12,35 @@ export default () => {
     return (
         <div className={ styles.auth }>
             <Popup theme={ system.theme } >
-                <div
-                    className={ `${styles.btn} ${styles.btn_mail}` }
+                <button
+                    className={ styles.btn_mail }
                     onClick={ () => dispatch(popupSet('mail')) }
                 >
                     <i className="bi bi-envelope-fill" />
-                </div>
-                <a
+                </button>
+                <button
                     href={ `https://oauth.vk.com/authorize?client_id=${process.env.NEXT_PUBLIC_VK_ID}&display=popup&redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&scope=4194304&response_type=code&v=5.103` }
-                    className={ `${styles.btn} ${styles.btn_vk}` }
+                    className={ styles.btn_vk }
                     onClick={() => localStorage.setItem('previousPath', document.location.href)}
                 >
                     <i className="fab fa-vk" />
-                </a>
-                <a
+                </button>
+                <button
                     href={ `https://accounts.google.com/o/oauth2/auth?redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_ID}&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile` }
-                    className={ `${styles.btn} ${styles.btn_g}` }
+                    className={ styles.btn_g }
                     onClick={ () => localStorage.setItem('previousPath', document.location.href) }
                 >
                     <i className="fab fa-google" />
-                </a>
-                <a
+                </button>
+                <button
                     href={`https://t.me/retestme?start=<token>`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={ `${styles.btn} ${styles.btn_tg}` }
+                    className={ styles.btn_tg }
                     onClick={ () => localStorage.setItem('previousPath', document.location.href) }
                 >
                     <i className="fab fa-telegram-plane" />
-                </a>
+                </button>
             </Popup>
         </div>
     )

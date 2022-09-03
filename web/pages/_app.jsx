@@ -13,8 +13,8 @@ import {
     useStore,
     systemLoaded, onlineAdd, onlineDelete, onlineReset,
 } from '../store'
-import { socketIO } from '../../functions/sockets'
-import Loader from '../../components/Loader'
+import { socketIO } from '../functions/sockets'
+import Loader from '../components/Loader'
 
 // Structure
 import Header from '../components/Header'

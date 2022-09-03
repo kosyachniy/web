@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 
 import uploadImage from '../functions/upload'
+import styles from '../styles/avatar.module.css'
 
 
 export default ({ avatar }) => {
@@ -17,7 +18,7 @@ export default ({ avatar }) => {
     }
 
     return (
-        <div id="avatar-preview">
+        <div className={ styles.avatar }>
             <label htmlFor="avatar-loader">
                 { img ? (
                     <img

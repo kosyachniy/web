@@ -45,7 +45,7 @@
 
 /* Buttons */
 
-.popup .btn {
+.popup button {
     color: #fff;
     padding: 10px 20px;
     margin: 10px 0;
@@ -62,7 +62,7 @@
     width: 100%;
 }
 
-.popup .btn:hover {
+.popup button:hover {
     opacity: 0.9;
     color: #fff;
 }
