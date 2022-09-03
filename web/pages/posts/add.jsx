@@ -37,7 +37,7 @@ export default ({ post }) => {
 
     // if (redirect) {
     //     return (
-    //         <Navigate to={`/posts/${redirect}`} />
+    //         <Navigate to={ `/posts/${redirect}` } />
     //     )
     // }
 
@@ -62,7 +62,7 @@ export default ({ post }) => {
                 <br />
                 <button
                     className="btn btn-success"
-                    style={ {width: '100%'} }
+                    style={{ width: '100%' }}
                     onClick={ editPost }
                 >
                     <i className="far fa-save" />

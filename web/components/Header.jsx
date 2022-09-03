@@ -18,24 +18,22 @@ import Hexagon from './Hexagon'
 
 
 export default () => {
+    const { t } = useTranslation()
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const online = useSelector((state) => state.online)
     const profile = useSelector((state) => state.profile)
-    // const dispatch = useDispatch()
-
-    const { t } = useTranslation()
 
     const signOut = () => {
-        api('account.exit', {}).then(res => {
-            // () => dispatch(profileOut(res))
+        api(system.token, system.locale, 'account.exit', {}).then(res => {
+            dispatch(profileOut(res))
         })
     }
 
     return (
-        <nav className={`navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}`}>
+        <nav className={ `navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}` }>
             <div className="container">
-                <Link href="/"><a className="navbar-brand"><img src={`/brand/logo_${system.color}.svg`} alt={ process.env.NEXT_PUBLIC_NAME } /></a></Link>
+                <Link href="/"><a className="navbar-brand"><img src={ `/brand/logo_${system.color}.svg` } alt={ process.env.NEXT_PUBLIC_NAME } /></a></Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -117,7 +115,7 @@ export default () => {
                             ) }
                         </li>
                         <li className="nav-item dropdown">
-                            {profile.id ? (
+                            { profile.id ? (
                                 <>
                                     <div
                                         id="navbarDropdown"
@@ -125,32 +123,32 @@ export default () => {
                                         data-bs-toggle="dropdown"
                                         aria-haspopup="true"
                                         aria-expanded="false"
-                                        style={ {padding: 0} }
+                                        style={{ padding: 0 }}
                                     >
                                         <Hexagon url={ profile.avatar_optimize } />
                                     </div>
                                     <div
                                         id="menu"
-                                        className={`dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}`}
+                                        className={ `dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}` }
                                         aria-labelledby="navbarDropdown"
                                     >
-                                        <Link href="/profile/"><a className="dropdown-item">{t('system.profile')}</a></Link>
+                                        <Link href="/profile/"><a className="dropdown-item">{ t('system.profile') }</a></Link>
                                         {/* <Link href="/settings/"><a className="dropdown-item">{t('system.settings')}</a></Link> */}
                                         {/* <Link href="/analytics/"><a className="dropdown-item">{t('system.analytics')}</a></Link> */}
                                         {/* <Link href="/admin/"><a className="dropdown-item">{t('system.admin')}</a></Link> */}
-                                        <div className="dropdown-item" onClick={ signOut }>{t('system.sign_out')}</div>
+                                        <div className="dropdown-item" onClick={ signOut }>{ t('system.sign_out') }</div>
                                     </div>
                                 </>
-                            ) : (<></>)}
-                            {!profile.id ? (
-                                <div style={ {paddingRight: 0, paddingBottom: 0} }>
+                            ) : (<></>) }
+                            { !profile.id ? (
+                                <div style={{ paddingRight: 0, paddingBottom: 0 }}>
                                     <button
                                         type="button"
                                         className="btn btn-success"
                                         onClick={ () => dispatch(popupSet('auth')) }
                                     >{ t('system.sign_in') }</button>
                                 </div>
-                            ) : (<></>)}
+                            ) : (<></>) }
                         </li>
                     </ul>
                 </div>

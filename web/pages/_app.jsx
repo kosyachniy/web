@@ -63,7 +63,7 @@ const Body = ({ Component, pageProps }) => {
         <>
             <Loader />
 
-            <div className={`bg-${system.theme}`}>
+            <div className={ `bg-${system.theme}` }>
                 <div className="container" id="main">
                     <Component { ...pageProps } />
                 </div>

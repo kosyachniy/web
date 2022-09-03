@@ -21,7 +21,7 @@ export default () => {
                 <button
                     href={ `https://oauth.vk.com/authorize?client_id=${process.env.NEXT_PUBLIC_VK_ID}&display=popup&redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&scope=4194304&response_type=code&v=5.103` }
                     className={ styles.btn_vk }
-                    onClick={() => localStorage.setItem('previousPath', document.location.href)}
+                    onClick={ () => localStorage.setItem('previousPath', document.location.href) }
                 >
                     <i className="fab fa-vk" />
                 </button>
@@ -33,7 +33,7 @@ export default () => {
                     <i className="fab fa-google" />
                 </button>
                 <button
-                    href={`https://t.me/retestme?start=<token>`}
+                    href={ `https://t.me/retestme?start=<token>` }
                     target="_blank"
                     rel="noopener noreferrer"
                     className={ styles.btn_tg }

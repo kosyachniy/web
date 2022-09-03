@@ -1,6 +1,6 @@
 import S3 from 'react-aws-s3'
 
-import { generete } from './token'
+import { generete } from './generate'
 
 
 const ReactS3Client = new S3({

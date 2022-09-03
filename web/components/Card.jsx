@@ -9,7 +9,7 @@ export default ({ post }) => {
 
     return (
         <div className="col-md-4">
-            <Link href={`/posts/${post.id}`} key={ post.id }>
+            <Link href={ `/posts/${post.id}` } key={ post.id }>
                 <div className={ `card ${styles.card} ${styles[system.theme]} mb-4 shadow-sm` }>
                     { post.cover && <img className="card-img-top" src={ post.cover } alt={ post.title } /> }
                     <div className="card-body">

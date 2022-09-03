@@ -33,7 +33,7 @@ export default ({ avatar }) => {
                     id="avatar-loader"
                     type="file"
                     accept="image/jpeg, image/png"
-                    onChange={(_e) => { this.handleAvatar(_e) }}
+                    onChange={ (_e) => { this.handleAvatar(_e) } }
                 />
             </label>
         </div>

@@ -14,19 +14,19 @@ export default ({ posts }) => {
                     <div className="btn-group" role="group" >
                         <button
                             type="button"
-                            className={`btn btn-${system.theme}`}
+                            className={ `btn btn-${system.theme}` }
                         >
                             <i className="fas fa-th-large"></i>
                         </button>
                         <button
                             type="button"
-                            className={`btn btn-${system.theme}`}
+                            className={ `btn btn-${system.theme}` }
                         >
                             <i className="fas fa-th-list"></i>
                         </button>
                         <button
                             type="button"
-                            className={`btn btn-${system.theme}`}
+                            className={ `btn btn-${system.theme}` }
                         >
                             <i className="fas fa-image"></i>
                         </button>
@@ -38,7 +38,7 @@ export default ({ posts }) => {
                             <button
                                 type="button"
                                 className="btn btn-success"
-                                style={ {width: '100%'} }
+                                style={{ width: '100%' }}
                             >
                                 <i className="fas fa-plus" />
                             </button>

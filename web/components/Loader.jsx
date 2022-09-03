@@ -33,7 +33,7 @@ export default () => {
     return (
         <div id="loader" className={ styles.loader }> {/* `bg-${system.theme}` */}
             <div>
-                <img src={`/brand/logo_${system.color}.svg`} alt="loader" />
+                <img src={ `/brand/logo_${system.color}.svg` } alt="loader" />
             </div>
         </div>
     )

@@ -40,7 +40,7 @@ export default ({ posts }) => {
                     <button
                         type="button"
                         className="btn btn-success"
-                        style={ {width: '100%'} }
+                        style={{ width: '100%' }}
                     >
                         <i className="fas fa-plus" />
                     </button>

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+// import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
 
+import { profileUpdate } from '../../store'
 import api from '../../functions/api'
 import Avatar from '../../components/Avatar'
 
@@ -10,8 +12,11 @@ import Avatar from '../../components/Avatar'
 //     return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1);
 // }
 
-export default ({ profile, profileUpdate }) => {
+export default () => {
     const { t } = useTranslation()
+    const dispatch = useDispatch()
+    const system = useSelector((state) => state.system)
+    const profile = useSelector((state) => state.profile)
     const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
     const [avatar, setAvatar] = useState(profile.avatar)
@@ -23,8 +28,8 @@ export default ({ profile, profileUpdate }) => {
     // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
-        api('users.get', {id: +profile.id}).then(res => {
-            profileUpdate({
+        api(system.token, system.locale, 'users.get', { id: +profile.id }).then(res => {
+            dispatch(profileUpdate({
                 login: res.users.login,
                 avatar: res.users.avatar,
                 name: res.users.name,
@@ -33,7 +38,7 @@ export default ({ profile, profileUpdate }) => {
                 mail: res.users.mail,
                 social: res.users.social,
                 status: res.users.status,
-            })
+            }))
         })
     }, [])
 
@@ -74,26 +79,26 @@ export default ({ profile, profileUpdate }) => {
             data['avatar'] = avatar
         }
 
-        api('account.save', data).then(res => {
-            profileUpdate({login, avatar, name, surname, phone, mail})
+        api(system.token, system.locale, 'account.save', data).then(res => {
+            dispatch(profileUpdate({login, avatar, name, surname, phone, mail}))
         })
     }
 
     return (
         <div className="container">
-            <Avatar avatar={avatar} setAvatar={setAvatar} />
+            <Avatar avatar={ avatar } setAvatar={setAvatar} />
             <div className="input-group mb-3">
                 <input
-                    value={name}
-                    onChange={(event) => { setName(event.target.value) }}
+                    value={ name }
+                    onChange={ (event) => { setName(event.target.value) } }
                     placeholder={t('profile.name')}
                     type="text"
                     aria-label="First name"
                     className="form-control"
                 />
                 <input
-                    value={surname}
-                    onChange={(event) => { setSurname(event.target.value) }}
+                    value={ surname }
+                    onChange={ (event) => { setSurname(event.target.value) } }
                     placeholder={t('profile.surname')}
                     type="text"
                     aria-label="Last name"
@@ -103,8 +108,8 @@ export default ({ profile, profileUpdate }) => {
             <div className="input-group flex-nowrap mb-3">
                 <span className="input-group-text" id="addon-wrapping">+</span>
                 <input
-                    value={phone}
-                    onChange={(event) => { setPhone(event.target.value) }}
+                    value={ phone }
+                    onChange={ (event) => { setPhone(event.target.value) } }
                     placeholder={t('profile.phone')}
                     type="text"
                     className="form-control"
@@ -115,8 +120,8 @@ export default ({ profile, profileUpdate }) => {
             <div className="input-group flex-nowrap mb-3">
                 <span className="input-group-text" id="addon-wrapping">@</span>
                 <input
-                    value={login}
-                    onChange={(event) => { setLogin(event.target.value) }}
+                    value={ login }
+                    onChange={ (event) => { setLogin(event.target.value) } }
                     placeholder={t('profile.login')}
                     type="text"
                     className="form-control"
@@ -126,8 +131,8 @@ export default ({ profile, profileUpdate }) => {
             </div>
             <div className="input-group mb-3">
                 <input
-                    value={mail}
-                    onChange={(event) => { setMail(event.target.value) }}
+                    value={ mail }
+                    onChange={ (event) => { setMail(event.target.value) } }
                     placeholder={t('profile.mail')}
                     type="email"
                     className="form-control"
@@ -136,8 +141,8 @@ export default ({ profile, profileUpdate }) => {
             </div>
             <div className="input-group mb-3">
                 <input
-                    value={password}
-                    onChange={(event) => { setPassword(event.target.value) }}
+                    value={ password }
+                    onChange={ (event) => { setPassword(event.target.value) } }
                     placeholder={t('profile.password')}
                     type="password"
                     className="form-control"
@@ -147,8 +152,8 @@ export default ({ profile, profileUpdate }) => {
             <input
                 type="button"
                 className="btn btn-success"
-                value={t('system.save')}
-                onClick={accountEdit}
+                value={ t('system.save') }
+                onClick={ accountEdit }
             />
         </div>
     )

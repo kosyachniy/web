@@ -1,10 +1,5 @@
-/* Avatar */
-
-#avatar {
-    cursor: pointer;
-}
-
 .hexagon {
+    cursor: pointer;
     display: inline-block;
     position: relative;
     z-index: 1;
