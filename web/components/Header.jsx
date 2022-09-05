@@ -91,7 +91,7 @@ export default () => {
                                 className="form-control"
                                 type="search"
                                 placeholder={ t('system.search') }
-                                value={ system.search }
+                                // value={ system.search }
                                 // onChange={ (event) => dispatch(searching(event.target.value)) }
                             />
                         </li>

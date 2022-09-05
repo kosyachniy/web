@@ -1,13 +1,11 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { changeLang, changeTheme } from '../store'
+import { changeTheme } from '../store'
 
 
 export default () => {
     const dispatch = useDispatch()
-    const router = useRouter()
     const system = useSelector((state) => state.system)
 
     return (
@@ -31,17 +29,22 @@ export default () => {
                     >
                         <i className={ `bi ${system.theme === 'dark' ? "bi-sun-fill" : "bi-moon-fill"}` } />
                     </li>
-                    <li
-                        id="lang"
-                        className="ms-3 d-flex u-cursor"
-                        onClick={ () => dispatch(changeLang(system.locale === 'ru' ? 'en' : 'ru')) }
+                    <Link
+                        href='/'
+                        locale={ system.locale === 'ru' ? 'en' : 'ru' }
                     >
-                        <img
-                            src={ `/lang/${system.locale === 'ru' ? 'en' : 'ru'}.svg` }
-                            alt={ system.locale === 'ru' ? 'en' : 'ru' }
-                            style={{ height: '24px' }}
-                        />
-                    </li>
+                        <li
+                            id="lang"
+                            className="ms-3 d-flex u-cursor"
+                            // onClick={ () => dispatch(changeLang(system.locale === 'ru' ? 'en' : 'ru')) }
+                        >
+                            <img
+                                src={ `/lang/${system.locale === 'ru' ? 'en' : 'ru'}.svg` }
+                                alt={ system.locale === 'ru' ? 'en' : 'ru' }
+                                style={{ height: '24px' }}
+                            />
+                        </li>
+                    </Link>
                 </ul>
             </div>
         </footer>

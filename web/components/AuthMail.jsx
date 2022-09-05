@@ -69,11 +69,11 @@ export default () => {
                             { t('profile.passwordTip2') }
                         </span>
                     </div>
-                    <input
+                    {/* <input
                         type="submit"
                         className="btn btn-success"
                         value={t('system.sign_in')}
-                    />
+                    /> */}
                 </form>
             </Popup>
         </div>

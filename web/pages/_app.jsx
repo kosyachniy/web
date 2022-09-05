@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
 import { Provider } from 'react-redux'
 import { persistStore } from 'redux-persist'
@@ -13,6 +14,7 @@ import '../styles/body.css'
 import {
     useStore,
     systemLoaded, onlineAdd, onlineDelete, onlineReset,
+    changeLang,
 } from '../store'
 import { socketIO } from '../functions/sockets'
 import Loader from '../components/Loader'
@@ -28,11 +30,15 @@ import Online from '../components/Online'
 
 
 const Body = ({ Component, pageProps }) => {
+    const router = useRouter()
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const online = useSelector((state) => state.online)
 
     useEffect(() => {
+        // Locale
+        dispatch(changeLang(router.locale))
+
         // Online
 
         socketIO.on('connect', () => {
@@ -55,6 +61,7 @@ const Body = ({ Component, pageProps }) => {
     }, [])
 
     useEffect(() => {
+        // Loaded
         if (online.count && !system.loaded) {
             dispatch(systemLoaded())
         }
@@ -62,8 +69,6 @@ const Body = ({ Component, pageProps }) => {
 
     return (
         <>
-            <Header />
-
             {/* <Loader /> */}
 
             <div className={ `bg-${system.theme}` }>
@@ -81,15 +86,11 @@ const Body = ({ Component, pageProps }) => {
             { system.popup === 'online' && (
                 <Online />
             ) }
-
-            <Footer />
         </>
     )
 }
 
-const App = appWithTranslation(Body)
-
-export default (pageProps) => {
+const App = (pageProps) => {
     const store = useStore(pageProps.initialReduxState)
     const persistor = persistStore(store, {}, () => { persistor.persist() })
 
@@ -104,8 +105,13 @@ export default (pageProps) => {
                         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
                     />
                 </Head>
-                <App { ...pageProps } />
+                <Header />
+                <Body { ...pageProps } />
+                <Footer />
             </PersistGate>
         </Provider>
     )
 }
+
+
+export default appWithTranslation(App)
