@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { appWithTranslation } from 'next-i18next'
 import { Provider } from 'react-redux'
 import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -61,7 +62,9 @@ const Body = ({ Component, pageProps }) => {
 
     return (
         <>
-            <Loader />
+            <Header />
+
+            {/* <Loader /> */}
 
             <div className={ `bg-${system.theme}` }>
                 <div className="container" id="main">
@@ -78,15 +81,17 @@ const Body = ({ Component, pageProps }) => {
             { system.popup === 'online' && (
                 <Online />
             ) }
+
+            <Footer />
         </>
     )
 }
 
+const App = appWithTranslation(Body)
+
 export default (pageProps) => {
     const store = useStore(pageProps.initialReduxState)
-    const persistor = persistStore(store, {}, function () {
-      persistor.persist()
-    })
+    const persistor = persistStore(store, {}, () => { persistor.persist() })
 
     return (
         <Provider store={store}>
@@ -99,9 +104,7 @@ export default (pageProps) => {
                         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
                     />
                 </Head>
-                <Header />
-                <Body { ...pageProps } />
-                <Footer />
+                <App { ...pageProps } />
             </PersistGate>
         </Provider>
     )

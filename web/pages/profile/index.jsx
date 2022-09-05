@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 // import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import { profileUpdate } from '../../store'
 import api from '../../functions/api'
@@ -13,7 +14,7 @@ import Avatar from '../../components/Avatar'
 // }
 
 export default () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('common')
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const profile = useSelector((state) => state.profile)
@@ -158,3 +159,9 @@ export default () => {
         </div>
     )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common']),
+    },
+})

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import { postsGet } from '../../store'
 import api from '../../functions/api'
@@ -35,3 +36,9 @@ export default () => {
         <PostsGrid posts={ posts } />
     )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common']),
+    },
+})

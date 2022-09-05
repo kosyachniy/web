@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useSelector } from 'react-redux'
 import Link from 'next/link'
 // import MathJax from 'react-mathjax-preview'
@@ -119,3 +120,9 @@ export default ({ id }) => {
         </div>
     )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common']),
+    },
+})

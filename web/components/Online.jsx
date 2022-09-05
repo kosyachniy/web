@@ -7,7 +7,7 @@ import Hexagon from './Hexagon'
 
 
 export default () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('common')
     const online = useSelector((state) => state.online)
 
     return (

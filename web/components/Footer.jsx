@@ -1,14 +1,14 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-// import { useTranslation } from 'next-i18next'
 
 import { changeLang, changeTheme } from '../store'
 
 
 export default () => {
-    const system = useSelector((state) => state.system)
     const dispatch = useDispatch()
-    // const { t } = useTranslation()
+    const router = useRouter()
+    const system = useSelector((state) => state.system)
 
     return (
         <footer className={ `bg-${system.theme} ${system.theme === 'dark' ? "" : "text-muted"} pt-3` }>
@@ -37,8 +37,8 @@ export default () => {
                         onClick={ () => dispatch(changeLang(system.locale === 'ru' ? 'en' : 'ru')) }
                     >
                         <img
-                            src={ `/lang/${system.locale === 'ru' ? "en" : "ru"}.svg` }
-                            alt={system.locale === 'ru' ? "en" : "ru"}
+                            src={ `/lang/${system.locale === 'ru' ? 'en' : 'ru'}.svg` }
+                            alt={ system.locale === 'ru' ? 'en' : 'ru' }
                             style={{ height: '24px' }}
                         />
                     </li>

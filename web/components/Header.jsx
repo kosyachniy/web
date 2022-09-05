@@ -18,7 +18,7 @@ import Hexagon from './Hexagon'
 
 
 export default () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('common')
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const online = useSelector((state) => state.online)
