@@ -1,5 +1,6 @@
-import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../styles/feed.module.css'
 
@@ -44,7 +45,7 @@ export default ({ posts }) => {
                         className="btn btn-success"
                         style={{ width: '100%' }}
                     >
-                        <i className="fas fa-plus" />
+                        <FontAwesomeIcon icon="fa-solid fa-plus" />
                     </button>
                 </Link>
 
@@ -58,7 +59,7 @@ export default ({ posts }) => {
                             <>
                                 <div className="cards-content">
                                     <h3 className={ styles.title }>{ post.title }</h3>
-                                    <div className={ styles.additional }><i className="fas fa-ellipsis-v" /></div>
+                                    <div className={ styles.additional }><FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" /></div>
                                     <div className={ styles.time }>{ getTime(post.created) }</div>
                                 </div>
                                 { post.cover && (
@@ -70,10 +71,10 @@ export default ({ posts }) => {
                             </>
                         </Link>
                         <div className={ `cards-content ${styles.reactions}` }>
-                            <div><i className="far fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
-                            {/* <i className="fas fa-heart" /> */}
-                            <div><i className="far fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
-                            <div><i className="far fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
+                            <div><FontAwesomeIcon icon="fa-regular fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
+                            {/* <FontAwesomeIcon icon="fa-solid fa-heart" /> */}
+                            <div><FontAwesomeIcon icon="fa-regular fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
+                            <div><FontAwesomeIcon icon="fa-solid fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
                         </div>
                     </div>
                 )) }

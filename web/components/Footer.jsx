@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { changeTheme } from '../store'
 
@@ -27,7 +28,12 @@ export default () => {
                         style={{ cursor: 'pointer' }}
                         onClick={ () => dispatch(changeTheme(system.theme === 'dark' ? 'light' : 'dark')) }
                     >
-                        <i className={ `bi ${system.theme === 'dark' ? "bi-sun-fill" : "bi-moon-fill"}` } />
+                        { system.theme === 'dark' ? (
+                            <FontAwesomeIcon icon="fa-solid fa-sun" />
+                            // fa-sun-bright
+                        ) : (
+                            <FontAwesomeIcon icon="fa-solid fa-moon" />
+                        ) }
                     </li>
                     <Link
                         href='/'

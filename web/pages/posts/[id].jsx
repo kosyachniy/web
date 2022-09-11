@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useSelector } from 'react-redux'
 // import MathJax from 'react-mathjax-preview'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
 import api from '../../functions/api'
@@ -58,21 +59,21 @@ export default ({ id }) => {
                         className="btn btn-outline-secondary"
                         onClick={ () => {setEdit(false)} }
                     >
-                        <i className="far fa-eye" />
+                        <FontAwesomeIcon icon="fa-regular fa-eye" />
                     </button>
                 ) : (
                     <button
                         className="btn btn-outline-secondary"
                         onClick={ () => {setEdit(true)} }
                     >
-                        <i className="bi bi-pencil-fill" />
+                        <FontAwesomeIcon icon="fa-solid fa-pencil" />
                     </button>
                 ) }
                 <button
                     className="btn btn-danger"
                     onClick={ deletePost }
                 >
-                    <i className="far fa-trash-alt" />
+                    <FontAwesomeIcon icon="fa-solid fa-trash" />
                 </button>
 
                 { edit ? (

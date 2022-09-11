@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { popupSet, profileIn } from '../store'
 import api from '../functions/api'
@@ -61,12 +62,12 @@ export default () => {
                     </div>
                     <div className={ styles.pass_info }>
                         <span style={ password.length >= 6 ? {} : { color: '#e74c3c' } }>
-                            <i className="fas fa-genderless" />
-                            { t('profile.passwordTip1') }
+                            <FontAwesomeIcon icon="fa-solid fa-genderless" />
+                            &nbsp; { t('profile.passwordTip1') }
                         </span>
                         <span style={ checkPassword(password) ? {} : { color: '#e74c3c' } }>
-                            <i className="fas fa-genderless" />
-                            { t('profile.passwordTip2') }
+                            <FontAwesomeIcon icon="fa-solid fa-genderless" />
+                            &nbsp; { t('profile.passwordTip2') }
                         </span>
                     </div>
                     {/* <input

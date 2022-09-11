@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/edit.module.css'
 import api from '../../functions/api'
@@ -67,7 +68,7 @@ export default ({ post }) => {
                     style={{ width: '100%' }}
                     onClick={ editPost }
                 >
-                    <i className="far fa-save" />
+                    <FontAwesomeIcon icon="fa-regular fa-floppy-disk" />
                 </button>
             </div>
         </div>

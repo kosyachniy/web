@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { postsGet, displaySet } from '../../store'
 import api from '../../functions/api'
@@ -44,20 +45,20 @@ export default () => {
                             className={ `btn btn-${system.theme}` }
                             onClick={ () => {dispatch(displaySet('grid'))}}
                         >
-                            <i className="fas fa-th-large"></i>
+                            <FontAwesomeIcon icon="fa-solid fa-table-cells-large" />
                         </button>
                         <button
                             type="button"
                             className={ `btn btn-${system.theme}` }
                         >
-                            <i className="fas fa-th-list"></i>
+                            <FontAwesomeIcon icon="fa-solid fa-list-ul" />
                         </button>
                         <button
                             type="button"
                             className={ `btn btn-${system.theme}` }
                             onClick={ () => {dispatch(displaySet('feed'))}}
                         >
-                            <i className="fas fa-image"></i>
+                            <FontAwesomeIcon icon="fa-regular fa-image" />
                         </button>
                     </div>
                 </div>
@@ -69,7 +70,7 @@ export default () => {
                                 className="btn btn-success"
                                 style={{ width: '100%' }}
                             >
-                                <i className="fas fa-plus" />
+                                <FontAwesomeIcon icon="fa-solid fa-plus" />
                             </button>
                         </Link>
                     </div>
