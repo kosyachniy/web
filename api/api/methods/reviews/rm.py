@@ -1,11 +1,11 @@
 """
-The removal method of the post object of the API
+The removal method of the review object of the API
 """
 
 from consys.errors import ErrorAccess
 
 from api.lib import BaseType, validate
-from api.models.post import Post
+from api.models.review import Review
 
 
 class Type(BaseType):
@@ -16,11 +16,11 @@ async def handle(request, data):
     """ Delete """
 
     # No access
-    if request.user.status < 7:
-        raise ErrorAccess('delete')
+    if request.user.status < 5:
+        raise ErrorAccess('rm')
 
     # Get
-    post = Post.get(ids=data.id)
+    review = Review.get(ids=data.id)
 
     # Delete
-    post.rm()
+    review.rm()

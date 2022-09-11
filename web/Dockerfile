@@ -10,6 +10,3 @@ RUN npm install
 
 # Copy project
 COPY . .
-
-# Run
-CMD npm run dev

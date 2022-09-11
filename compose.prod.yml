@@ -130,7 +130,6 @@ services:
   web:
     image: ${PROJECT_NAME}/web
     build:
-      dockerfile: Dockerfile.prod
       context: ./web
     env_file: .env
     environment:
@@ -152,3 +151,4 @@ services:
     ports:
       - ${WEB_PORT}:3000
     restart: unless-stopped
+    command: bash -c "npm run build && npm start"

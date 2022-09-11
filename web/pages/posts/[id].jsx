@@ -28,7 +28,7 @@ export default ({ id }) => {
             id: post.id,
         }
 
-        api(system.token, system.locale, 'posts.delete', data).then(res => {
+        api(system.token, system.locale, 'posts.rm', data).then(res => {
             setDeleted(true)
         })
     }

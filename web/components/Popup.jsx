@@ -10,7 +10,10 @@ export default ({ children }) => {
 
     return (
         <div className={ styles.popup }>
-            <div className={ styles.popup_back } onClick={ () => dispatch(popupSet(null)) } />
+            <div
+                className={ styles.popup_back }
+                onClick={ () => dispatch(popupSet(null)) }
+            />
             <div className={ `${styles.popup_cont} bg-${system.theme}` }>
                 { children }
             </div>

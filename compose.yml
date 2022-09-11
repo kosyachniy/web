@@ -80,9 +80,6 @@ services:
     image: ${PROJECT_NAME}/web
     build:
       context: ./web
-      args:
-        - PROTOCOL=${PROTOCOL}
-        - HOST=${EXTERNAL_HOST}
     env_file: .env
     environment:
       NEXT_PUBLIC_API: http://localhost/api/
@@ -106,6 +103,7 @@ services:
       - ./web/components:/components
       - ./web/functions:/functions
       - ./web/styles:/styles
+    command: npm run dev
 
   server:
     image: nginx

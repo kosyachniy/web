@@ -43,26 +43,6 @@
     text-align: center;
 }
 
-/* Buttons */
-
 .popup button {
-    color: #fff;
-    padding: 10px 20px;
-    margin: 10px 0;
-    cursor: pointer;
-    font-size: 18px;
-    outline: 0px;
-    text-align: center;
-    border: 0px;
-    font-weight: bold;
-    border-radius: 4px;
-    position: relative;
-    height: 42px;
-    line-height: 22px;
     width: 100%;
-}
-
-.popup button:hover {
-    opacity: 0.9;
-    color: #fff;
 }
