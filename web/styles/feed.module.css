@@ -1,0 +1,98 @@
+.feed {
+    padding: 15px 0 30px 0;
+}
+
+@media (min-width: 950px) {
+    .feed {
+        max-width: 75%;
+    }
+}
+
+.feed p:not(.feed .cards p) {
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-left: 50px;
+}
+
+.feed .cards {
+    margin-top: 15px;
+    border-radius: 8px;
+    padding: 10px 0 5px 0;
+}
+
+.feed .cards-content {
+    padding: 0 15px;
+}
+
+.bg-light .feed .cards {
+    background-color: #f0f2f5;
+}
+
+.bg-dark .feed .cards {
+    background-color: #242526; /* #18191a; */
+}
+
+.feed h3 {
+    width: calc(100% - 70px);
+    display: inline-block;
+}
+
+.feed .additional {
+    width: 40px;
+    margin: 0 15px;
+    text-align: right;
+    display: inline-block;
+}
+
+.feed .cards img {
+    width: 100%;
+}
+
+.feed .time {
+    position: relative;
+    top: -8px;
+    color: var(--bs-secondary);
+    font-size: 0.9em;
+    display: inline-block;
+}
+
+.feed .title {
+    color: inherit;
+}
+
+.feed .content {
+    color: var(--bs-secondary);
+}
+
+.feed .short {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.feed .reactions {
+    margin: 15px 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.feed .reactions i {
+    cursor: pointer;
+}
+
+.reactions div {
+    display: inline-block;
+    width: 33%;
+}
+
+.reactions div:first-child {
+    text-align: left;
+}
+
+.reactions div:nth-child(2) {
+    text-align: center;
+}
+
+.reactions div:last-child {
+    text-align: right;
+}

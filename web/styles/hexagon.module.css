@@ -1,0 +1,39 @@
+.hexagon {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: .5rem 0;
+    padding: 0;
+}
+
+.hexagon rect {
+    width: 2px;
+    height: 2px;
+    fill: #96afc8;
+}
+
+.hexagon .number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+}
+
+.navbar .hexagon::before {
+    content: '';
+    width: 5px;
+    height: 100%;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}

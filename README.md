@@ -56,6 +56,11 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center">6.0</td>
         </tr>
         <tr>
+            <td align="center">Redis</td>
+            <td></td>
+            <td align="center"></td>
+        </tr>
+        <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_logo.png?raw=true" alt="Socket.IO" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_name.png?raw=true" alt="Socket.IO" height="50" /></td>
             <td align="center"></td>
@@ -70,6 +75,11 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_logo.png?raw=true" alt="ReactJS" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_name.png?raw=true" alt="ReactJS" height="50" /></td>
             <td align="center">18.2</td>
+        </tr>
+        <tr>
+            <td align="center">NextJS</td>
+            <td></td>
+            <td align="center"></td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_logo.png?raw=true" alt="Redux" height="50" /></td>
@@ -102,7 +112,7 @@ Android | Front-end | React Native | JavaScript | planned
     <tbody>
         <tr>
             <td valign="top">
-                1. Configure ` .env `
+                1. Configure <code> .env </code> from <code> base.env </code> and add:
                 <pre>
 # Type
 # LOCAL / TEST / DEV / PRE / PROD
@@ -115,7 +125,7 @@ EXTERNAL_PORT=80
                 </pre>
             </td>
             <td valign="top">
-                1. Configure ` .env `
+                1. Configure <code> .env </code> from <code> base.env </code> and add:
                 <pre>
 \# Type
 \# LOCAL / TEST / DEV / PRE / PROD
@@ -129,108 +139,6 @@ API_PORT=8202
 TG_PORT=8203
 DB_PORT=8204
 REDIS_PORT=8205
-                </pre>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <pre>
-\# NOTE: The names HOST, PORT, MAIL are reserved
-
-\# Base info
-NAME=Web app
-PROJECT_NAME=web
-
-\# Contacts
-EMAIL=
-PHONE=
-SOCIAL=[{"title": "in", "data": "https://www.linkedin.com/in/alexeypoloz/"}]
-
-\# Data
-PATH_TO_DATA=./data
-SIDE_OPTIMIZED=250
-
-\# Default
-LOCALE=en
-TIMEZONE=3
-
-\# Payments
-SUBSCRIPTION_DAY=
-SUBSCRIPTION_WEEK=
-SUBSCRIPTION_MONTH=
-SUBSCRIPTION_SEASON=
-SUBSCRIPTION_ACADEMIC_YEAR=
-SUBSCRIPTION_YEAR=
-
-\# Inner
-DISCOUNT=1
-
-\# Grafana
-GRAFANA_PASS=
-
-\# MongoDB
-MONGO_USER=
-MONGO_PASS=
-
-\# Redis
-REDIS_HOST=redis
-REDIS_PASS=
-
-\# YooKassa
-YOOKASSA_ID=
-YOOKASSA_SECRET=
-
-\# Google
-GOOGLE_ID=
-GOOGLE_SECRET=
-
-\# Telegram
-TG_TOKEN=
-TG_BOT=
-BUG_CHAT=-1001223126154
-
-\# VK
-VK_ID=
-VK_SECRET=
-
-\# SMSC
-SMSC_USER=
-SMSC_PASS=
-
-\# Google Maps
-GOOGLE_MAPS_KEY=
-GOOGLE_MAPS_LAT=59.9392
-GOOGLE_MAPS_LNG=30.3165
-GOOGLE_MAPS_ZOOM=12
-
-\# Google Docs
-GOOGLE_DOCS_ID=
-GOOGLE_DOCS_SECRET=
-GOOGLE_DOCS_TYPE=service_account
-GOOGLE_DOCS_PROJECT=
-GOOGLE_DOCS_EMAIL=
-GOOGLE_DOCS_CLIENT=
-GOOGLE_DOCS_AUTH_URI=https://accounts.google.com/o/oauth2/auth
-GOOGLE_DOCS_TOKEN_URI=https://oauth2.googleapis.com/token
-GOOGLE_DOCS_AUTH_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
-GOOGLE_DOCS_CLIENT_CERT_URL=
-GOOGLE_SHEET=
-
-\# Agora
-AGORA_APP_ID=
-AGORA_CUSTOMER_ID=
-AGORA_CUSTOMER_CERTIFICATE=
-
-\# Amazon
-AMAZON_ID=
-AMAZON_SECRET=
-AMAZON_BUCKET=
-AMAZON_DIR=local
-AMAZON_REGION=
-
-\# Redis
-REDIS_HOST=redis
-REDIS_PASS=
                 </pre>
             </td>
         </tr>

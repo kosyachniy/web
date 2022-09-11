@@ -1,0 +1,29 @@
+.btn_mail {
+    background: #2ecc71 !important;
+    display: block;
+}
+
+.btm_mail:hover {
+    background: #2ecc71 !important;
+    opacity: 0.95;
+}
+
+.btn_vk {
+    background-color: #517299 !important;
+}
+
+.btn_g {
+    background-color: #db4437 !important;
+}
+
+.btn_tg {
+    background: #0088cc !important;
+}
+
+.btn_vk, .btn_g, .btn_tg {
+    display: block;
+}
+
+.btn_vk:hover, .btn_g:hover, .btn_tg:hover {
+    opacity: 0.95;
+}

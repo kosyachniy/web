@@ -1,13 +1,13 @@
 language: python
 
 python:
-  - "3.10"
+  - "3.10-dev"
 
 services:
   - mongodb
 
 install:
-  # - cp local.env .env
+  - cp base.env .env
   - make setup-tests
 
 script:

@@ -1,0 +1,10 @@
+.editor .ck-sticky-panel__content_sticky {
+    display: fixed !important;
+    top: 56px !important;
+}
+
+.editor .ck-content {
+    background-color: inherit !important;
+    color: inherit !important;
+    min-height: 400px;
+}
