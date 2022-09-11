@@ -2,19 +2,12 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useSelector } from 'react-redux'
-import Link from 'next/link'
 // import MathJax from 'react-mathjax-preview'
 
+import styles from '../../styles/post.module.css'
 import api from '../../functions/api'
+import Edit from './add'
 
-
-export const getServerSideProps = async ({ query }) => {
-    return {
-        props: {
-            id: query['id'],
-        }
-    }
-}
 
 export default ({ id }) => {
     const { t } = useTranslation('common')
@@ -56,7 +49,7 @@ export default ({ id }) => {
     }
 
     return (
-        <div id="post">
+        <div className={ styles.post }>
             <div className="album py-2">
                 <h1>{ post.title }</h1>
 
@@ -83,10 +76,7 @@ export default ({ id }) => {
                 </button>
 
                 { edit ? (
-                    <Edit
-                        post={ post }
-                        handlerSave={ savePost }
-                    />
+                    <Edit post={ post } />
                 ) : (
                     <>
                         { post.cover ? (
@@ -121,8 +111,11 @@ export default ({ id }) => {
     )
 }
 
-export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale, ['common']),
-    },
-})
+export const getServerSideProps = async ({ query, locale }) => {
+    return {
+        props: {
+            id: query.id,
+            ...await serverSideTranslations(locale, ['common']),
+        },
+    }
+}

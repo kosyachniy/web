@@ -86,6 +86,11 @@ export const popupSet = popup => ({
     popup,
 })
 
+export const displaySet = display => ({
+    type: 'SYSTEM_DISPLAY',
+    display,
+})
+
 // reducers.js
 
 export const system = (state = {
@@ -96,6 +101,7 @@ export const system = (state = {
     search: null,
     loaded: false,
     popup: null,
+    display: 'grid',
 }, action) => {
     switch (action.type) {
         case 'CHANGE_THEME':
@@ -123,6 +129,12 @@ export const system = (state = {
                 popup: action.popup,
             };
 
+        case 'SYSTEM_DISPLAY':
+            return {
+                ...state,
+                display: action.display,
+            };
+
         case 'SEARCH':
             return {
                 ...state,
@@ -138,6 +150,7 @@ export const system = (state = {
                 search: state.search || '',
                 loaded: state.loaded,
                 popup: state.popup,
+                display: state.display || 'grid',
             };
     }
 }

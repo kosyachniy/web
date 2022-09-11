@@ -92,7 +92,7 @@ export default () => {
                 <input
                     value={ name }
                     onChange={ (event) => { setName(event.target.value) } }
-                    placeholder={t('profile.name')}
+                    placeholder={ t('profile.name') }
                     type="text"
                     aria-label="First name"
                     className="form-control"
@@ -100,7 +100,7 @@ export default () => {
                 <input
                     value={ surname }
                     onChange={ (event) => { setSurname(event.target.value) } }
-                    placeholder={t('profile.surname')}
+                    placeholder={ t('profile.surname') }
                     type="text"
                     aria-label="Last name"
                     className="form-control"
@@ -111,7 +111,7 @@ export default () => {
                 <input
                     value={ phone }
                     onChange={ (event) => { setPhone(event.target.value) } }
-                    placeholder={t('profile.phone')}
+                    placeholder={ t('profile.phone') }
                     type="text"
                     className="form-control"
                     aria-label="Phone number"
@@ -123,7 +123,7 @@ export default () => {
                 <input
                     value={ login }
                     onChange={ (event) => { setLogin(event.target.value) } }
-                    placeholder={t('profile.login')}
+                    placeholder={ t('profile.login') }
                     type="text"
                     className="form-control"
                     aria-label="Username"
@@ -134,7 +134,7 @@ export default () => {
                 <input
                     value={ mail }
                     onChange={ (event) => { setMail(event.target.value) } }
-                    placeholder={t('profile.mail')}
+                    placeholder={ t('profile.mail') }
                     type="email"
                     className="form-control"
                     autoComplete="false"
@@ -144,7 +144,7 @@ export default () => {
                 <input
                     value={ password }
                     onChange={ (event) => { setPassword(event.target.value) } }
-                    placeholder={t('profile.password')}
+                    placeholder={ t('profile.password') }
                     type="password"
                     className="form-control"
                     autoComplete="false"

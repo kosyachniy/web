@@ -14,7 +14,7 @@ export default ({ post }) => {
                     { post.cover && <img className="card-img-top" src={ post.cover } alt={ post.title } /> }
                     <div className="card-body">
                         <p className="card-text">
-                            {/* <span className="badge badge-success" style={ marginRight: '10px', fontSize: '15px' }>
+                            {/* <span className={ `badge ${styles.badge} badge-success` } style={ marginRight: '10px', fontSize: '15px' }>
                                 <img src="/static/icon/{{ icon }}.svg">
                             </span> */}
                             { post.title }

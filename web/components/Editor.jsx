@@ -1,10 +1,13 @@
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@kosyachniy/ckeditor'
 
+import styles from '../styles/editor.module.css'
+
 
 export default () => {
     return (
         <CKEditor
+            className={ styles.editor }
             editor={ ClassicEditor }
             data={ this.props.data }
             // onReady={ editor => {

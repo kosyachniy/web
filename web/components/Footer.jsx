@@ -23,8 +23,8 @@ export default () => {
                 </Link>
                 <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
                     <li
-                        id="theme"
-                        className="ms-3 u-cursor"
+                        className="ms-3"
+                        style={{ cursor: 'pointer' }}
                         onClick={ () => dispatch(changeTheme(system.theme === 'dark' ? 'light' : 'dark')) }
                     >
                         <i className={ `bi ${system.theme === 'dark' ? "bi-sun-fill" : "bi-moon-fill"}` } />
@@ -34,8 +34,8 @@ export default () => {
                         locale={ system.locale === 'ru' ? 'en' : 'ru' }
                     >
                         <li
-                            id="lang"
-                            className="ms-3 d-flex u-cursor"
+                            className="ms-3 d-flex"
+                            style={{ cursor: 'pointer' }}
                             // onClick={ () => dispatch(changeLang(system.locale === 'ru' ? 'en' : 'ru')) }
                         >
                             <img

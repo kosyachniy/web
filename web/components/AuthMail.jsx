@@ -40,7 +40,7 @@ export default () => {
                         <input
                             className="form-control"
                             type="text"
-                            placeholder={t('profile.mail')}
+                            placeholder={ t('profile.mail') }
                             value={mail}
                             onChange={ (event) => { setMail(event.target.value) } }
                             autoComplete="off"
@@ -72,7 +72,7 @@ export default () => {
                     {/* <input
                         type="submit"
                         className="btn btn-success"
-                        value={t('system.sign_in')}
+                        value={ t('system.sign_in') }
                     /> */}
                 </form>
             </Popup>

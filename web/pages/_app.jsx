@@ -7,10 +7,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-// import '../styles/main.css'
-import '../styles/header.css'
-import '../styles/body.css'
-// import styles from '../styles/base.module.css'
+import '../styles/main.css'
+import styles from '../styles/body.module.css'
 import {
     useStore,
     systemLoaded, onlineAdd, onlineDelete, onlineReset,
@@ -42,7 +40,7 @@ const Body = ({ Component, pageProps }) => {
         // Online
 
         socketIO.on('connect', () => {
-            socketIO.emit('online', {token: system.token})
+            socketIO.emit('online', { token: system.token })
         })
 
         socketIO.on('online_add', (x) => {
@@ -69,10 +67,10 @@ const Body = ({ Component, pageProps }) => {
 
     return (
         <>
-            {/* <Loader /> */}
+            <Loader />
 
             <div className={ `bg-${system.theme}` }>
-                <div className="container" id="main">
+                <div className={ `container ${styles.main}` }>
                     <Component { ...pageProps } />
                 </div>
             </div>

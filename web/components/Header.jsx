@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { popupSet, profileOut, searching } from '../store'
 import api from '../functions/api'
-// import styles from '../styles/header.module.css'
+import styles from '../styles/header.module.css'
 import Hexagon from './Hexagon'
 
 
@@ -87,8 +87,7 @@ export default () => {
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item dropdown">
                             <input
-                                id="search"
-                                className="form-control"
+                                className={ `${styles.search} form-control` }
                                 type="search"
                                 placeholder={ t('system.search') }
                                 // value={ system.search }
@@ -100,8 +99,8 @@ export default () => {
                         <li className="nav-item">
                             { online.count ? (
                                 <div>
-                                    {t('system.online')}
-                                    <div className="online"></div>
+                                    { t('system.online') }
+                                    <div className={ styles.online }></div>
                                     <div
                                         className="badge bg-secondary"
                                         onClick={ () => dispatch(popupSet('online')) }
@@ -109,8 +108,8 @@ export default () => {
                                 </div>
                             ) : (
                                 <div>
-                                    {t('system.offline')}
-                                    <div className="offline"></div>
+                                    { t('system.offline') }
+                                    <div className={ styles.offline }></div>
                                 </div>
                             ) }
                         </li>
@@ -128,14 +127,13 @@ export default () => {
                                         <Hexagon url={ profile.avatar_optimize } />
                                     </div>
                                     <div
-                                        id="menu"
-                                        className={ `dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}` }
+                                        className={ `${styles.menu} dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}` }
                                         aria-labelledby="navbarDropdown"
                                     >
                                         <Link href="/profile/"><a className="dropdown-item">{ t('system.profile') }</a></Link>
-                                        {/* <Link href="/settings/"><a className="dropdown-item">{t('system.settings')}</a></Link> */}
-                                        {/* <Link href="/analytics/"><a className="dropdown-item">{t('system.analytics')}</a></Link> */}
-                                        {/* <Link href="/admin/"><a className="dropdown-item">{t('system.admin')}</a></Link> */}
+                                        {/* <Link href="/settings/"><a className="dropdown-item">{ t('system.settings') }</a></Link> */}
+                                        {/* <Link href="/analytics/"><a className="dropdown-item">{ t('system.analytics') }</a></Link> */}
+                                        {/* <Link href="/admin/"><a className="dropdown-item">{ t('system.admin') }</a></Link> */}
                                         <div className="dropdown-item" onClick={ signOut }>{ t('system.sign_out') }</div>
                                     </div>
                                 </>

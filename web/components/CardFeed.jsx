@@ -1,6 +1,8 @@
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 
+import styles from '../styles/feed.module.css'
+
 
 export default ({ posts }) => {
     const { t } = useTranslation('common')
@@ -35,7 +37,7 @@ export default ({ posts }) => {
 
     return (
         <>
-            <div className="container" id="feed">
+            <div className={ `container ${styles.feed}` }>
                 <Link href="/posts/add">
                     <button
                         type="button"
@@ -46,30 +48,32 @@ export default ({ posts }) => {
                     </button>
                 </Link>
 
-                { !props.posts.length && (
+                { !posts.length && (
                     <p>{ t('posts.empty') }!</p>
                 ) }
 
-                { props.posts.map(post => (
-                    <div className="cards" key={ post.id }>
-                        <Link to={ `/posts/${post.id}` } >
-                            <div className="cards-content">
-                                <h3 className="title">{ post.title }</h3>
-                                <div className="additional"><i className="fas fa-ellipsis-v" /></div>
-                                <div className="time">{ getTime(post.time) }</div>
-                            </div>
-                            { post.cover && (
-                                <img src={ post.cover } alt={ post.title } />
-                            ) }
-                            <div className="cards-content">
-                                <div className="content short">{ post.data }</div>
-                            </div>
+                { posts.map(post => (
+                    <div className={ styles.cards } key={ post.id }>
+                        <Link href={ `/posts/${post.id}` } >
+                            <>
+                                <div className="cards-content">
+                                    <h3 className={ styles.title }>{ post.title }</h3>
+                                    <div className={ styles.additional }><i className="fas fa-ellipsis-v" /></div>
+                                    <div className={ styles.time }>{ getTime(post.created) }</div>
+                                </div>
+                                { post.cover && (
+                                    <img src={ post.cover } alt={ post.title } />
+                                ) }
+                                <div className="cards-content">
+                                    <div className={ `${styles.content} ${styles.short}` }>{ post.data }</div>
+                                </div>
+                            </>
                         </Link>
-                        <div className="cards-content reactions">
+                        <div className={ `cards-content ${styles.reactions}` }>
                             <div><i className="far fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
                             {/* <i className="fas fa-heart" /> */}
                             <div><i className="far fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
-                            <div><i className="fas fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
+                            <div><i className="far fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
                         </div>
                     </div>
                 )) }
