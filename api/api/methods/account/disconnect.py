@@ -24,7 +24,7 @@ async def online_stop(sio, socket_id):
         # NOTE: method "exit" -> socket "disconnect"
         return
 
-    user = get_user(socket.token)
+    user, _ = get_user(socket.token)
 
     # Update user online info
     now = time.time()
@@ -37,7 +37,8 @@ async def online_stop(sio, socket_id):
         title='online',
         created=socket.created,
         expired=now,
-        user=user.id or socket.token,
+        user=user.id,
+        token=socket.token,
     ).save()
 
     # Delete online session info

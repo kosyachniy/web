@@ -9,7 +9,7 @@ from consys.errors import ErrorAccess
 
 from api.lib import BaseType, validate
 from api.models.user import User
-from api.models.action import Action
+from api.models.track import Track
 
 
 class Type(BaseType):
@@ -31,7 +31,7 @@ async def handle(request, data):
 
     # No access
     if request.user.status < 3:
-        raise ErrorAccess('edit')
+        raise ErrorAccess('save')
 
     # Get
     user = User.get(ids=request.user.id)
@@ -58,10 +58,12 @@ async def handle(request, data):
     user.mailing = data.mailing
 
     # Action tracking
-    action = Action(
+    Track(
         title='acc_save',
-    )
-    user.actions.append(action.json(default=False))
+        data={'fields': [k for k, v in data.dict().items() if v is not None]},
+        user=user.id,
+        token=request.token,
+    ).save()
 
     # Save
     user.save()

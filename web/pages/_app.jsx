@@ -88,9 +88,9 @@ const Body = ({ Component, pageProps }) => {
 
         // Online
 
-        socketIO.on('connect', () => {
-            socketIO.emit('online', { token: system.token })
-        })
+        // socketIO.on('online', () => {
+        socketIO.emit('online', { token: system.token })
+        // })
 
         socketIO.on('online_add', (x) => {
             // console.log('ADD', x)

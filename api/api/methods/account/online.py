@@ -61,7 +61,7 @@ def get_user(token_id, socket_id=None, jwt=None):
             token.save()
         else:
             if token.user:
-                return User.get(token.user)
+                return User.get(token.user), token_id
 
     elif socket_id is not None:
         try:
@@ -69,8 +69,9 @@ def get_user(token_id, socket_id=None, jwt=None):
         except ErrorWrong:
             pass
         else:
+            token_id = socket.token
             if socket.user:
-                return User.get(ids=socket.user)
+                return User.get(ids=socket.user), token_id
 
     elif jwt is not None:
         users = User.get(social={'$elemMatch': {
@@ -79,16 +80,16 @@ def get_user(token_id, socket_id=None, jwt=None):
         }})
 
         if users:
-            return users[0]
+            return users[0], token_id
 
-    return User()
+    return User(), token_id
 
 async def online_start(sio, token_id, socket_id=None):
     """ Start / update online session of the user """
 
     # TODO: save user data cache in db.sockets
 
-    user = get_user(token_id)
+    user, _ = get_user(token_id)
 
     # Send socket about all online users to the user
     # TODO: Full info for all / auth / only for admins
@@ -117,7 +118,7 @@ async def online_start(sio, token_id, socket_id=None):
         changed = False
 
         try:
-            socket = Socket.get(ids=socket_id, fields={'user'})
+            socket = Socket.get(ids=socket_id, fields={'user', 'token'})
         except ErrorWrong:
             socket = Socket(
                 id=socket_id,
@@ -128,20 +129,20 @@ async def online_start(sio, token_id, socket_id=None):
 
         else:
             if socket.token != token_id:
+                await report.warning("Wrong socket.token", {
+                    'from': socket.token,
+                    'to': token_id,
+                })
                 socket.token = token_id
                 changed = True
-                await report.warning(
-                    "Wrong socket.token",
-                    {'from': socket.token, 'to': token_id},
-                )
 
             if socket.user != user.id:
-                socket.user = user.id
-                changed = True
                 await report.warning("Wrong socket.user", {
                     'from': socket.user,
                     'to': user.id,
                 })
+                socket.user = user.id
+                changed = True
 
         if changed:
             socket.save()

@@ -43,11 +43,11 @@ export default () => {
         })
     }, [])
 
-    if (profile.id === 0) {
-        return (
-            <Navigate to="/" />
-        )
-    }
+    // if (profile.id === 0) {
+    //     return (
+    //         <Navigate to="/" />
+    //     )
+    // }
 
     const accountEdit = () => {
         const data = {}

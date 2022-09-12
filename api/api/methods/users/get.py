@@ -66,16 +66,14 @@ async def handle(request, data):
         'surname',
         'title',
         'status',
+        # 'subscription',
         # 'balance',
         'rating',
         'description',
-        # 'channels',
-        # 'global_channel',
         'discount',
     }
 
     process_self = data.id == request.user.id
-    # process_moderator = request.user.status'>= 5
     process_admin = request.user.status >= 7
 
     if process_self:
@@ -86,11 +84,6 @@ async def handle(request, data):
             'subscription',
             'pay',
         }
-
-    # if process_moderator:
-    #     fields |= {
-    #         'transactions',
-    #     }
 
     if process_admin:
         fields |= {

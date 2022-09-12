@@ -25,7 +25,6 @@ class User(Base):
         'phone',
         'mail',
         'description',
-        # 'actions',
     }
 
     # status:
@@ -87,10 +86,7 @@ class User(Base):
         pre_processing=get_language,
     )
     status = Attribute(types=int, default=default_status)
-    actions = Attribute(types=list) # TODO: list[dict]
     rating = Attribute(types=float)
-    # global_channel = Attribute(types=int, default=1)
-    # channels = Attribute(types=list)
     discount = Attribute(types=float)
     balance = Attribute(types=int, default=0)
     subscription = Attribute(types=int, default=0)

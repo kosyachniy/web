@@ -60,7 +60,7 @@ from consys.errors import BaseError
 from api import API
 from api.lib import cfg, report
 from api.models.user import User
-from api.models.action import Action
+from api.models.track import Track
 from api.models.socket import Socket
 from api.models.payment import Payment
 
@@ -270,14 +270,14 @@ async def pay(data: InputPayment, request: Request):
             user.subscription = max(user.subscription, timestamp) + 86400 * day
 
         # Action tracking
-        action = Action(
+        Track(
             title='pay_ok',
             data={
                 'value': value_real,
                 'days': day,
             },
-        )
-        user.actions.append(action.json(default=False))
+            user=user.id,
+        ).save()
 
         # Update
         user.save()

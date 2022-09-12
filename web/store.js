@@ -219,6 +219,7 @@ export const profile = (state = {
     login: null,
     name: null,
     surname: null,
+    phone: null,
     mail: null,
     avatar: null,
     avatar_optimize: null,
@@ -231,6 +232,7 @@ export const profile = (state = {
                 login: action.login,
                 name: action.name,
                 surname: action.surname,
+                phone: action.phone,
                 mail: action.mail,
                 avatar: action.avatar || '/user.png',
                 avatar_optimize: action.avatar || '/user.png',
@@ -243,6 +245,7 @@ export const profile = (state = {
                 login: null,
                 name: null,
                 surname: null,
+                phone: null,
                 mail: null,
                 avatar: null,
                 avatar_optimize: null,
@@ -258,6 +261,9 @@ export const profile = (state = {
             }
             if (action.profile.surname) {
                 state.surname = action.profile.surname
+            }
+            if (action.profile.phone) {
+                state.phone = action.profile.phone
             }
             if (action.profile.mail) {
                 state.mail = action.profile.mail

@@ -170,6 +170,7 @@ async def handle(request, data):
                 'social': data.social,
             },
             user=user.id,
+            token=request.token,
         ).save()
 
     # Register

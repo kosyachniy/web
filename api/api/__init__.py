@@ -16,10 +16,9 @@ class Request():
         self.timestamp = time.time()
         self.ip = ip
         self.socket = socket
-        self.token = token
         self.network = get_network(network)
         self.locale = get_language(locale)
-        self.user = get_user(token, socket, jwt)
+        self.user, self.token = get_user(token, socket, jwt)
         self.sio = sio
 
 
@@ -64,7 +63,8 @@ class API():
         #     title=name,
         #     data=data,
         #     context=request,
-        #     user=request.user,
+        #     user=request.user.id,
+        #     token=request.token,
         # }.save()
 
         # API method

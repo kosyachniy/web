@@ -5,11 +5,11 @@ import uploadImage from '../functions/upload'
 import styles from '../styles/avatar.module.css'
 
 
-export default ({ avatar }) => {
+export default ({ avatar, setAvatar }) => {
     const { t } = useTranslation('common')
     const [img, setImg] = useState(avatar)
 
-    handleAvatar = (_e) => {
+    const handleAvatar = (_e) => {
         const image = _e.target.files[0]
         uploadImage(image).then((link) => {
             setImg({ link })
@@ -33,7 +33,7 @@ export default ({ avatar }) => {
                     id="avatar-loader"
                     type="file"
                     accept="image/jpeg, image/png"
-                    onChange={ (_e) => { this.handleAvatar(_e) } }
+                    onChange={ (_e) => {handleAvatar(_e)} }
                 />
             </label>
         </div>

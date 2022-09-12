@@ -10,7 +10,6 @@ from consys.errors import ErrorWrong, ErrorAccess
 from api.lib import BaseType, validate, report
 from api.models.user import User
 from api.models.token import Token
-from api.models.action import Action
 from api.models.track import Track
 from api.methods.account.online import online_start
 
@@ -55,11 +54,6 @@ async def reg(request, data, by, method=None):
 
     if method is not None:
         details['type'] = method
-
-    action = Action(
-        title='acc_reg',
-        data=details,
-    )
 
     # Create user
 
@@ -121,13 +115,20 @@ async def reg(request, data, by, method=None):
         }
 
     user = User(
-        actions=[action.json(default=False)], # TODO: without `.json()`
         **req,
     )
 
     # TODO: Preauth data
 
     user.save()
+
+    # Action tracking
+    Track(
+        title='acc_reg',
+        data=details,
+        user=user.id,
+        token=request.token,
+    ).save()
 
     # Report
 
@@ -228,6 +229,7 @@ async def auth(request, method, data, by):
                 'ip': request.ip,
             },
             user=user.id,
+            token=request.token,
         ).save()
 
     # Assignment of the token to the user

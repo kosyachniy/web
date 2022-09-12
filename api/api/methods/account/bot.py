@@ -67,6 +67,7 @@ async def handle(request, data):
                 'network': request.network,
             },
             user=user.id,
+            token=request.token,
         ).save()
 
     # Register
