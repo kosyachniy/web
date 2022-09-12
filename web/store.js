@@ -63,9 +63,9 @@ export const changeLang = locale => ({
     locale,  // i18n.changeLanguage(locale)
 })
 
-export const profileIn = ({ id, login, avatar, name, surname, phone, mail, social, status }) => ({
+export const profileIn = ({ id, login, image, name, surname, phone, mail, social, status }) => ({
     type: 'PROFILE_IN',
-    id, login, avatar, name, surname, phone, mail, social, status,
+    id, login, image, name, surname, phone, mail, social, status,
 })
 
 export const profileOut = () => ({
@@ -221,8 +221,8 @@ export const profile = (state = {
     surname: null,
     phone: null,
     mail: null,
-    avatar: null,
-    avatar_optimize: null,
+    image: null,
+    image_optimize: null,
     admin: 2,
 }, action) => {
     switch (action.type) {
@@ -234,8 +234,8 @@ export const profile = (state = {
                 surname: action.surname,
                 phone: action.phone,
                 mail: action.mail,
-                avatar: action.avatar || '/user.png',
-                avatar_optimize: action.avatar || '/user.png',
+                image: action.image || '/user.png',
+                image_optimize: action.image || '/user.png',
                 admin: action.admin,
             };
 
@@ -247,8 +247,8 @@ export const profile = (state = {
                 surname: null,
                 phone: null,
                 mail: null,
-                avatar: null,
-                avatar_optimize: null,
+                image: null,
+                image_optimize: null,
                 admin: 2,
             };
 
@@ -268,13 +268,13 @@ export const profile = (state = {
             if (action.profile.mail) {
                 state.mail = action.profile.mail
             }
-            if (action.profile.avatar) {
-                if (action.profile.avatar.indexOf('.')<1) {
-                    state.avatar = action.profile.avatar
-                    state.avatar_optimize = action.profile.avatar
+            if (action.profile.image) {
+                if (action.profile.image.indexOf('.')<1) {
+                    state.image = action.profile.v
+                    state.image_optimize = action.profile.image
                 } else {
-                    state.avatar = action.profile.avatar
-                    state.avatar_optimize = action.profile.avatar
+                    state.image = action.profile.image
+                    state.image_optimize = action.profile.image
                 }
             }
 
@@ -284,8 +284,8 @@ export const profile = (state = {
             return {
                 id: state.id || 0,
                 login: state.login,
-                avatar: state.avatar || '/user.png',
-                avatar_optimize: state.avatar || '/user.png',
+                image: state.image || '/user.png',
+                image_optimize: state.image || '/user.png',
                 name: state.name,
                 surname: state.surname,
                 phone: state.phone,

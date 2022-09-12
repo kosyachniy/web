@@ -42,7 +42,7 @@ async def handle(request, data):
         'title',
         'data',
         'reactions',
-        'cover',
+        'image',
         'created',
         # 'geo',
     }
@@ -56,14 +56,14 @@ async def handle(request, data):
     else:
         def handler(post):
             # Cover from the first image
-            if not post.get('cover'):
+            if not post.get('image'):
                 res = re.search(
                     r'<img src="[^"]*">',
                     post['data']
                 )
 
                 if res is not None:
-                    post['cover'] = res[0].split('"')[1].split('/')[-1]
+                    post['image'] = res[0].split('"')[1].split('/')[-1]
 
             # Content
             post['data'] = re.sub(

@@ -61,7 +61,7 @@ async def handle(request, data):
     fields = {
         'id',
         'login',
-        'avatar',
+        'image',
         'name',
         'surname',
         'title',

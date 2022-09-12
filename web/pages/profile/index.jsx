@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 // import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import Button from 'react-bootstrap/Button'
 
+import styles from '../../styles/profile.module.css'
 import { profileUpdate } from '../../store'
 import api from '../../functions/api'
 import Avatar from '../../components/Avatar'
@@ -20,7 +22,7 @@ export default () => {
     const profile = useSelector((state) => state.profile)
     const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
-    const [avatar, setAvatar] = useState(profile.avatar)
+    const [image, setImage] = useState(profile.image)
     const [name, setName] = useState(profile.name || '')
     const [surname, setSurname] = useState(profile.surname || '')
     const [phone, setPhone] = useState(profile.phone || '')
@@ -32,7 +34,7 @@ export default () => {
         api(system.token, system.locale, 'users.get', { id: +profile.id }).then(res => {
             dispatch(profileUpdate({
                 login: res.users.login,
-                avatar: res.users.avatar,
+                image: res.users.image,
                 name: res.users.name,
                 surname: res.users.surname,
                 phone: res.users.phone,
@@ -76,18 +78,18 @@ export default () => {
             data['password'] = password
         }
 
-        if (avatar !== profile.avatar) {
-            data['avatar'] = avatar
+        if (image !== profile.image) {
+            data['image'] = image
         }
 
         api(system.token, system.locale, 'account.save', data).then(res => {
-            dispatch(profileUpdate({login, avatar, name, surname, phone, mail}))
+            dispatch(profileUpdate({login, image, name, surname, phone, mail}))
         })
     }
 
     return (
         <div className="container">
-            <Avatar avatar={ avatar } setAvatar={setAvatar} />
+            <Avatar image={ image } setImage={ setImage } />
             <div className="input-group mb-3">
                 <input
                     value={ name }
@@ -150,12 +152,12 @@ export default () => {
                     autoComplete="false"
                 />
             </div>
-            <input
-                type="button"
-                className="btn btn-success"
-                value={ t('system.save') }
+            <Button
+                className={ `${styles.btn} btn btn-success` }
                 onClick={ accountEdit }
-            />
+            >
+                { t('system.save') }
+            </Button>
         </div>
     )
 }

@@ -21,7 +21,7 @@ class Type(BaseType):
 async def handle(request, data):
     """ By bot """
 
-    # TODO: avatar
+    # TODO: image
     # TODO: the same token
 
     # No access
@@ -31,7 +31,7 @@ async def handle(request, data):
     fields = {
         'id',
         'login',
-        'avatar',
+        'image',
         'name',
         'surname',
         'title',

@@ -175,7 +175,7 @@ async def auth(request, method, data, by):
     fields = {
         'id',
         'login',
-        'avatar',
+        'image',
         'name',
         'surname',
         'title',

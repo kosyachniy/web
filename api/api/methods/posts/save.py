@@ -12,7 +12,7 @@ class Type(BaseType):
     id: int = None
     title: str = None
     data: str = None
-    cover: str = None
+    image: str = None
     tags: list[str] = None
     # category: int = None
 
@@ -40,7 +40,7 @@ async def handle(request, data):
     post.title = data.title # TODO: checking if add
     post.tags = data.tags
     post.data = data.data # TODO: checking if add
-    post.cover = data.cover
+    post.image = data.image
     # TODO: category
 
     # Save

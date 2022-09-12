@@ -25,7 +25,7 @@ class Type(BaseType):
     # NOTE: For general authorization method fields
     user: Union[str, int] = None
     login: str = None
-    avatar: str = None
+    image: str = None
     mail: str = None
     name: str = None
     surname: str = None
@@ -36,7 +36,7 @@ async def handle(request, data):
     """ Via social network """
 
     # TODO: actions
-    # TODO: avatar
+    # TODO: image
     # TODO: the same token
     # TODO: Сшивать профили, если уже есть с такой почтой / ...
 
@@ -46,7 +46,7 @@ async def handle(request, data):
     fields = {
         'id',
         'login',
-        'avatar',
+        'image',
         'name',
         'surname',
         'title',
@@ -97,7 +97,7 @@ async def handle(request, data):
         data.name = response.get('first_name')
         data.surname = response.get('last_name')
         data.login = response.get('nickname')
-        data.avatar = str(base64.b64encode(
+        data.image = str(base64.b64encode(
             requests.get(response['photo_max_orig']).content
         ))[2:-1] if 'photo_max_orig' in response else None
 
@@ -135,7 +135,7 @@ async def handle(request, data):
         data.name = response.get('given_name')
         data.surname = response.get('family_name')
         data.mail = response.get('email')
-        data.avatar = str(base64.b64encode(
+        data.image = str(base64.b64encode(
             requests.get(response['picture']).content
         ))[2:-1] if 'picture' in response else None
 

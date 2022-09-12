@@ -16,7 +16,7 @@ export default () => {
                 <h3>{ t('system.online') }</h3>
                 { online.users.map(user => (
                     <div className={ styles.user } key={ user.id }>
-                        <Hexagon url={ user.avatar || '/user.png' } />
+                        <Hexagon url={ user.image || '/user.png' } />
                         <div>
                             {
                                 user.name && user.surname ? (

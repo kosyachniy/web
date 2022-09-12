@@ -80,9 +80,9 @@ export default ({ id }) => {
                     <Edit post={ post } />
                 ) : (
                     <>
-                        { post.cover ? (
+                        { post.image ? (
                             <img
-                                src={ post.cover }
+                                src={ post.image }
                                 alt={ post.title }
                             />
                         ) : (<></>) }

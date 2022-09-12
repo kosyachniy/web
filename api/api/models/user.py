@@ -50,7 +50,6 @@ class User(Base):
         processing=process_password,
     )
     # Personal info
-    avatar = Attribute(types=str)
     name = Attribute(
         types=str,
         checking=check_name,

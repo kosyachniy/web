@@ -124,7 +124,7 @@ export default () => {
                                         aria-expanded="false"
                                         style={{ padding: 0 }}
                                     >
-                                        <Hexagon url={ profile.avatar_optimize } />
+                                        <Hexagon url={ profile.image_optimize } />
                                     </div>
                                     <div
                                         className={ `${styles.menu} dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}` }

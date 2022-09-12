@@ -96,7 +96,7 @@ async def online_start(sio, token_id, socket_id=None):
 
     if socket_id:
         sockets_auth = Socket.get(user={'$exists': True}, fields={'user'})
-        fields = {'id', 'login', 'avatar', 'name', 'surname', 'status'}
+        fields = {'id', 'login', 'image', 'name', 'surname', 'status'}
         users_uniq = [
             User.get(ids=socket.user, fields=fields).json(fields=fields)
             for socket in sockets_auth
@@ -170,7 +170,7 @@ async def online_start(sio, token_id, socket_id=None):
 
     if user.id:
         data = [user.json(
-            fields={'id', 'login', 'avatar', 'name', 'surname', 'status'}
+            fields={'id', 'login', 'image', 'name', 'surname', 'status'}
         )]
     else:
         data = []

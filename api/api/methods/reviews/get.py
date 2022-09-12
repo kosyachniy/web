@@ -47,7 +47,7 @@ async def handle(request, data):
                     'login',
                     'name',
                     'surname',
-                    'avatar',
+                    'image',
                 },
                 handler=lambda el: el,
             )

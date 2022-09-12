@@ -32,7 +32,7 @@ def test_none_fields():
         id=None,
         login=None,
         password=None,
-        avatar=None,
+        image=None,
         name=None,
         surname=None,
         phone=None,

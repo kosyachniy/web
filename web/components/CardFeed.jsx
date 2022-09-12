@@ -62,8 +62,8 @@ export default ({ posts }) => {
                                     <div className={ styles.additional }><FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" /></div>
                                     <div className={ styles.time }>{ getTime(post.created) }</div>
                                 </div>
-                                { post.cover && (
-                                    <img src={ post.cover } alt={ post.title } />
+                                { post.image && (
+                                    <img src={ post.image } alt={ post.title } />
                                 ) }
                                 <div className="cards-content">
                                     <div className={ `${styles.content} ${styles.short}` }>{ post.data }</div>

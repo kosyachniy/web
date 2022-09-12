@@ -15,7 +15,7 @@ from api.models.track import Track
 class Type(BaseType):
     login: str = None
     password: str = None
-    avatar: str = None
+    image: str = None
     name: str = None
     surname: str = None
     phone: str = None
@@ -41,7 +41,7 @@ async def handle(request, data):
 
     user.login = data.login
     user.password = data.password
-    user.avatar = data.avatar
+    user.image = data.image
     user.name = data.name
     user.surname = data.surname
 
@@ -70,9 +70,9 @@ async def handle(request, data):
 
     # Processing
     ## Avatar
-    avatar = None
-    if data.avatar != user.avatar:
-        avatar = user.avatar
+    image = None
+    if data.image != user.image:
+        image = user.image
 
     ## Phone
     phone = None
@@ -81,6 +81,6 @@ async def handle(request, data):
 
     # Response
     return {
-        'avatar':  avatar,
+        'image':  image,
         'phone':  phone,
     }
