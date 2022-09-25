@@ -33,7 +33,9 @@ async def background(sio):
 
         if not hasattr(module, 'handle'):
             continue
-        handlers.append(getattr(module, 'handle')(sio))
+        count = getattr(module, 'WORKERS', 1)
+        for _ in range(count):
+            handlers.append(getattr(module, 'handle')(sio))
 
     if not handlers:
         return

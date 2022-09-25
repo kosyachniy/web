@@ -24,36 +24,28 @@ class Queue:
         return pickle.loads(self.broker.blpop(self.name)[1])
 
     def length(self):
-        """ Length of queue """
         return self.broker.llen(self.name)
 
 
 redis = Redis(
     host=cfg('redis.host'),
-    db=0,
+    db=1,
     password=cfg('redis.pass'),
 )
 queue = lambda name: Queue(redis, name)
 
 def save(key, data):
-    """ Save value """
-
     data = pickle.dumps(data)
 
     try:
         redis.set(key, data)
-    # pylint: disable=broad-except
-    except Exception as e:
-        print("Redis save error", e)
+    except:
+        pass
 
 def get(key, default=None):
-    """ Get value """
-
     try:
         data = redis.get(key)
-    # pylint: disable=broad-except
-    except Exception as e:
-        print("Redis get error", e)
+    except:
         return default
 
     if data is None:

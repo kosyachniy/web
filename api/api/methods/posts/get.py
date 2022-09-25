@@ -16,6 +16,7 @@ class Type(BaseType):
     count: int = None
     offset: int = None
     search: str = None
+    my: bool = None
     # TODO: category: int = None
     # TODO: language: Union[str, int] = None
     # TODO: fields: list[str] = None
@@ -23,6 +24,9 @@ class Type(BaseType):
 @validate(Type)
 async def handle(request, data):
     """ Get """
+
+    # TODO: data.my for unauth
+    # TODO: access only to your posts
 
     # No access
     # TODO: -> middleware
@@ -44,6 +48,7 @@ async def handle(request, data):
         'reactions',
         'image',
         'created',
+        'updated',
         # 'geo',
     }
 
@@ -75,16 +80,28 @@ async def handle(request, data):
             return post
 
     # Get
+
+    cond_user = None
+    if data.my:
+        cond_user = request.user.id
+    elif data.my is not None:
+        cond_user = {'$ne': request.user.id}
+
     posts = Post.complex(
         ids=data.id,
+        user=cond_user,
         count=data.count,
         offset=data.offset,
         search=data.search,
-        fields=fields,
+        fields=fields,  # None if data.id else fields,
         # category=data.category,
         # language=data.language,
         handler=handler,
     )
+
+    # Sort
+    if isinstance(posts, list):
+        posts = sorted(posts, key=lambda x: x['updated'], reverse=True)
 
     # Response
     return {

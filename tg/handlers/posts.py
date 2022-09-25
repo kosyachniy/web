@@ -59,7 +59,7 @@ async def send_post(chat, post):
 
 async def send_posts(chat, posts=None):
     if posts is None:
-        error, data = await api(chat, 'posts.get')
+        error, data = await api(chat, 'posts.get', {'my': True})
         if error:
             return None
         posts = data['posts']

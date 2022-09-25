@@ -38,7 +38,7 @@ async def start(message):
         return
 
     # List
-    error, data = await api(chat, 'posts.get')
+    error, data = await api(chat, 'posts.get', {'my': True})
     if len(data['posts']):
         message_id = await send_posts(chat, data['posts'])
         cache['m'] = message_id

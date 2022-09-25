@@ -2,14 +2,8 @@
 Reports functionality for the Telegram bot
 """
 
+from libdev.cfg import cfg
 from tgreports import Report
 
-from lib import cfg
 
-
-MODE = cfg('mode')
-TG_TOKEN = cfg('tg.token')
-BUG_CHAT = cfg('bug_chat')
-
-
-report = Report(MODE, TG_TOKEN, BUG_CHAT)
+report = Report(cfg('mode'), cfg('tg.token'), cfg('bug_chat'))

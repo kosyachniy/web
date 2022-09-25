@@ -20,16 +20,16 @@ class Type(BaseType):
 async def handle(request, data):
     """ Save """
 
+    # TODO: for unauth by token
+
     # No access
     if request.user.status < 2:
         raise ErrorAccess('save')
 
     # Get
-
     new = False
-
     if data.id:
-        post = Post.get(ids=data.id, fields={})
+        post = Post.get(ids=data.id, user=request.user.id)
     else:
         post = Post(
             user=request.user.id,
@@ -47,12 +47,12 @@ async def handle(request, data):
     post.save()
 
     # Report
-    await report.important("Save post", {
-        'post': post.id,
-        'title': post.title,
-        'user': request.user.id,
-        'new': new,
-    })
+    if new:
+        await report.important("Save post", {
+            'post': post.id,
+            'title': post.title,
+            'user': request.user.id,
+        })
 
     # Response
     return {
