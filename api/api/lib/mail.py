@@ -2,10 +2,9 @@
 Managing address books, sending mail
 """
 
+from libdev.cfg import cfg
 # pylint: disable=import-error
 from pysendpulse.pysendpulse import PySendPulse
-
-from api.lib import cfg
 
 
 MEMCACHED_HOST = '127.0.0.1:11211'

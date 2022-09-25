@@ -2,10 +2,9 @@
 Payments functionality for the API
 """
 
+from libdev.cfg import cfg
 # pylint: disable=import-error
 from yookassa import Configuration, Payment
-
-from api.lib import cfg
 
 
 Configuration.account_id = cfg('yookassa.id')

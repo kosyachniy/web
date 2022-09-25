@@ -15,12 +15,13 @@ from libdev.gen import generate
 ## Local
 from lib._variables import (
     languages, languages_chosen, tokens,
-    user_ids, user_logins, user_statuses, user_names, user_titles
+    user_ids, user_logins, user_statuses, user_names, user_titles,
 )
 from lib.reports import report
 
 
 # Params
+SERVER_LINK = cfg('server')
 LOG_LIMIT = 330
 
 
@@ -52,7 +53,7 @@ async def api(chat, method, data=None):
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
-        res = requests.post(cfg('api'), json=req)
+        res = requests.post(SERVER_LINK, json=req)
 
         if res.status_code != 502:
             break
@@ -79,7 +80,7 @@ async def api(chat, method, data=None):
 
     return res['error'], res.get('data', {})
 
-async def auth(chat) -> bool:
+async def auth(chat, utm=None) -> bool:
     """ User authentication """
 
     if chat.id in user_ids:
@@ -99,6 +100,7 @@ async def auth(chat) -> bool:
         'name': chat.first_name or chat.title or None,
         'surname': chat.last_name or None,
         'login': chat.username or None,
+        'utm': utm,
     })
 
     # Errors
