@@ -1,12 +1,61 @@
-import { useMemo } from 'react'
-import { combineReducers, createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from '@redux-devtools/extension'
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import {
+    configureStore,
+    combineReducers,
+  } from "@reduxjs/toolkit";
+
+  import {
+    persistStore,
+    persistReducer,
+    // FLUSH,
+    // REHYDRATE,
+    // PAUSE,
+    // PERSIST,
+    // PURGE,
+    // REGISTER,
+  } from "redux-persist";
+  import storage from "redux-persist/lib/storage";
+//   import { createOffline } from "@redux-offline/redux-offline";
+//   import offlineConfig from "@redux-offline/redux-offline/lib/defaults";
+//   import customOfflineConfig from "config/offline";
+
+//   import counterReducer from "features/counter/counterSlice"
 
 import { generate } from './functions/generate'
 
-let store
+
+
+
+// const {
+//     middleware: offlineMiddleware,
+//     enhanceReducer: offlineEnhanceReducer,
+//     enhanceStore: offlineEnhanceStore,
+//   } = createOffline({
+//     ...offlineConfig,
+//     persist: undefined,
+//     // ...customOfflineConfig,
+//   });
+
+
+
+// import { api } from "service/http";
+
+
+// const effect = (effect, action) => {
+//     let draft = effect;
+//     if (action?.payload !== undefined && action?.payload !== null) {
+//       draft = {
+//         data: action.payload,
+//         ...draft,
+//       };
+//     }
+//     return api.request(draft);
+// };
+// const discard = (error, _action, _retries) => {
+//     const status = error?.status || error?.response?.status || 503;
+//     return 400 <= status && status < 500;
+// };
+// const customOfflineConfig = { effect, discard };
+
 
 
 // actions.js
@@ -296,51 +345,87 @@ export const profile = (state = {
     }
 }
 
-export const reducers = combineReducers({
-    system, online, profile, posts,
-})
-
-// store.js
 
 const persistConfig = {
-    key: 'primary',
+    key: "root",
+    version: 1,
     storage,
-    // whitelist: ['exampleData'],
+    whitelist: ['system'],
 }
 
-const persistedReducer = persistReducer(persistConfig, reducers)
-
-function makeStore(initialState = {}) {
-    return createStore(
-        persistedReducer,
-        initialState,
-        composeWithDevTools(applyMiddleware())
-    )
+export function makeStore() {
+    //   return configureStore({
+    //     reducer: { counter: counterReducer },
+    //   });
+    const rootReducer = combineReducers({
+        system, online, profile, posts,
+        // counter: counterReducer,
+    });
+    const persistedReducer = persistReducer(persistConfig, rootReducer);
+    // const persistedReducer = persistReducer(persistConfig, offlineEnhanceReducer(rootReducer));
+    const store = configureStore({
+        reducer: persistedReducer,
+        // enhancers: [offlineEnhanceStore],
+        // middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        //     serializableCheck: {
+        //         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        //     },
+        // }).concat(offlineMiddleware),
+    });
+    return store;
 }
 
-export const initializeStore = (preloadedState) => {
-    let _store = store ?? makeStore(preloadedState)
+const store = makeStore();
+export const persistor = persistStore(store);
 
-    // After navigating to a page with an initial Redux state, merge that state
-    // with the current state in the store, and create a new store
-    if (preloadedState && store) {
-        _store = makeStore({
-            ...store.getState(),
-            ...preloadedState,
-        })
-        // Reset the current store
-        store = undefined
-    }
+export default store;
 
-    // For SSG and SSR always create a new store
-    if (typeof window === 'undefined') return _store
-    // Create the store once in the client
-    if (!store) store = _store
 
-    return _store
-}
+// export const reducers = combineReducers({
+//     system, online, profile, posts,
+// })
 
-export function useStore(initialState) {
-    const store = useMemo(() => initializeStore(initialState), [initialState])
-    return store
-}
+// // store.js
+
+// const persistConfig = {
+//     key: 'primary',
+//     storage,
+//     // whitelist: ['exampleData'],
+// }
+
+// const persistedReducer = persistReducer(persistConfig, reducers)
+
+// function makeStore(initialState = {}) {
+//     return createStore(
+//         persistedReducer,
+//         initialState,
+//         composeWithDevTools(applyMiddleware())
+//     )
+// }
+
+// export const initializeStore = (preloadedState) => {
+//     let _store = store ?? makeStore(preloadedState)
+
+//     // After navigating to a page with an initial Redux state, merge that state
+//     // with the current state in the store, and create a new store
+//     if (preloadedState && store) {
+//         _store = makeStore({
+//             ...store.getState(),
+//             ...preloadedState,
+//         })
+//         // Reset the current store
+//         store = undefined
+//     }
+
+//     // For SSG and SSR always create a new store
+//     if (typeof window === 'undefined') return _store
+//     // Create the store once in the client
+//     if (!store) store = _store
+
+//     return _store
+// }
+
+// export function useStore(initialState) {
+//     const store = useMemo(() => initializeStore(initialState), [initialState])
+//     return store
+// }

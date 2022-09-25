@@ -35,11 +35,16 @@ import {
 
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
-import {
-    useStore,
+import store, {
+    persistor,
     systemLoaded, onlineAdd, onlineDelete, onlineReset,
     changeLang,
 } from '../store'
+// import {
+//     useStore,
+//     systemLoaded, onlineAdd, onlineDelete, onlineReset,
+//     changeLang,
+// } from '../store'
 import { socketIO } from '../functions/sockets'
 import Loader from '../components/Loader'
 
@@ -138,12 +143,12 @@ const Body = ({ Component, pageProps }) => {
 }
 
 const App = (pageProps) => {
-    const store = useStore(pageProps.initialReduxState)
-    const persistor = persistStore(store, {}, () => { persistor.persist() })
+    // const store = useStore(pageProps.initialReduxState)
+    // const persistor = persistStore(store, {}, () => { persistor.persist() })
 
     return (
         <Provider store={store}>
-            <PersistGate loading={<div>loading</div>} persistor={persistor}>
+            <PersistGate persistor={persistor}>
                 <Head>
                     <title>{ process.env.NEXT_PUBLIC_NAME }</title>
                     {/* Zoom */}
