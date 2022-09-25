@@ -12,29 +12,20 @@ async def send_post(chat, post):
         text += post.get('title', '') + "\n\n"
     text += (
         "Выбери блок, который хочешь заполнить"
-        ", или жми «💾 Сохранить пост 💾»"
+        ", или жми «💾 Опубликовать 💾»"
     )
 
-    img = ['☑️', '✅'][bool(post.get('img'))]
-    fio = ['☑️', '✅'][bool(post.get('fio'))]
-    pos = ['☑️', '✅'][bool(post.get('pos'))]
-    age = ['☑️', '✅'][bool(post.get('birth'))]
-    geo = ['☑️', '✅'][bool(post.get('geo'))]
-    cont = ['☑️', '✅'][bool(post.get('phone') or post.get('mail'))]
-    job = ['☑️', '✅'][bool(post.get('job'))]
-    edu = ['☑️', '✅'][bool(post.get('edu'))]
-    cours = ['☑️', '✅'][bool(post.get('cours'))]
-    skill = ['☑️', '✅'][bool(post.get('skill'))]
-    lang = ['☑️', '✅'][bool(post.get('lang'))]
-    conf = ['☑️', '✅'][bool(post.get('conf'))]
-    comp = ['☑️', '✅'][bool(post.get('comp'))]
-    proj = ['☑️', '✅'][bool(post.get('proj'))]
+    img = ['☑️', '✅'][bool(post.get('image'))]
+    nam = ['☑️', '✅'][bool(post.get('title'))]
+    dat = ['☑️', '✅'][bool(post.get('data'))]
 
     return await tg.send(chat.id, text, buttons=[[
-        {'name': f'{pos} Название {pos}', 'data': 'pos'},
-        {'name': f'{fio} Содержимое {fio}', 'data': 'fio'},
+        {'name': f'{nam} Название {nam}', 'data': 'nam'},
+        {'name': f'{dat} Содержимое {dat}', 'data': 'dat'},
     ], [
-        {'name': '💾 Сохранить пост 💾', 'data': 'finish'},
+        {'name': f'{img} Изображение {img}', 'data': 'img'},
+    ], [
+        {'name': '💾 Опубликовать 💾', 'data': 'finish'},
     ], [
         {'name': '🗑 Удалить 🗑', 'data': 'rm'},
     ]], inline=True)
@@ -57,7 +48,7 @@ async def send_posts(chat, posts=None):
 
 @tg.dp.callback_query_handler(lambda mes: mes.data[:3] == 'res')
 async def post(callback):
-    """ Get post """
+    """ Get """
 
     chat, text, cache = await prepare_message(callback)
     if chat is None:
@@ -77,20 +68,45 @@ async def post(callback):
         'm': message_id,
     })
 
-@tg.dp.callback_query_handler(lambda mes: mes.data == 'pos')
-async def position(callback):
-    """ Edit position """
+@tg.dp.callback_query_handler(lambda mes: mes.data == 'nam')
+async def edit_title(callback):
+    """ Edit title """
 
     chat, text, cache = await prepare_message(callback)
     if chat is None:
         return
 
-    message_id = await tg.send(chat.id, (
-        "Желаемая позиция"
-        "\n\n_например: «контент-менеджер», «графический дизайнер»_"
-    ))
+    message_id = await tg.send(chat.id, "Заголовок")
 
-    cache['s'] = 'pos'
+    cache['s'] = 'nam'
+    cache['m'] = message_id
+    save(chat.id, cache)
+
+@tg.dp.callback_query_handler(lambda mes: mes.data == 'dat')
+async def edit_data(callback):
+    """ Edit data """
+
+    chat, text, cache = await prepare_message(callback)
+    if chat is None:
+        return
+
+    message_id = await tg.send(chat.id, "Содержимое")
+
+    cache['s'] = 'dat'
+    cache['m'] = message_id
+    save(chat.id, cache)
+
+@tg.dp.callback_query_handler(lambda mes: mes.data == 'img')
+async def edit_image(callback):
+    """ Edit image """
+
+    chat, text, cache = await prepare_message(callback)
+    if chat is None:
+        return
+
+    message_id = await tg.send(chat.id, "Загрузи изображение")
+
+    cache['s'] = 'img'
     cache['m'] = message_id
     save(chat.id, cache)
 
@@ -113,7 +129,7 @@ async def create(callback):
 
 @tg.dp.callback_query_handler(lambda mes: mes.data == 'rm')
 async def delete(callback):
-    """ Delete post """
+    """ Delete """
 
     chat, text, cache = await prepare_message(callback)
     if chat is None:
@@ -138,7 +154,7 @@ async def delete(callback):
 
 @tg.dp.callback_query_handler(lambda mes: mes.data == 'rmy')
 async def deletey(callback):
-    """ Approve delete post """
+    """ Approve delete """
 
     chat, text, cache = await prepare_message(callback)
     if chat is None:
@@ -159,61 +175,37 @@ async def finish(callback):
         return
 
     post_id = cache.get('p')
-    # error, data = await api(chat, 'posts.get', {'id': post_id})
-    # post = data['posts']
+    error, data = await api(chat, 'posts.get', {'id': post_id})
+    post = data['posts']
 
-    error, data = await api(chat, 'posts.make', {'id': post_id})
-    if error:
-        message_id = await tg.send(chat.id, "Бесплатная версия истекла", buttons=[{
-            'name': 'Создать ещё',
-            'data': 'create',
-        }, {
-            'name': 'Редактировать',
-            'data': f'res{post_id}',
-        }])
+    # error, data = await api(chat, 'posts.make', {'id': post_id})
+    # if error:
+    #     message_id = await tg.send(chat.id, "Бесплатная версия истекла", buttons=[{
+    #         'name': 'Создать ещё',
+    #         'data': 'create',
+    #     }, {
+    #         'name': 'Редактировать',
+    #         'data': f'res{post_id}',
+    #     }])
 
-        cache['s'] = 'limit'
-        cache['m'] = message_id
-        save(chat.id, cache)
-        return
+    #     cache['s'] = 'limit'
+    #     cache['m'] = message_id
+    #     save(chat.id, cache)
+    #     return
 
-    text = "✨ происходит магия ✨"
+    text = f"Пост #{post['id']} {post['title']}"
+    if post['data']:
+        text += f"\n\n{post['data']}"
+    text += (
+        f"\n\nСоздано: {get_time(post['created'], tz=cfg('timezone'))}"
+        f"\nИзменено: {get_time(post['updated'], tz=cfg('timezone'))}"
+    )
 
-    # text = f"Пост #{post['id']} {post['title']}"
-    # if post['fio']:
-    #     text += f"\n{post['fio']}"
-    # if post.get('birth'):
-    #     if not post['fio']:
-    #         text += "\n"
-    #     else:
-    #         text += " ("
-    #     text += f"{get_time(post['birth'], '%d.%m.%Y', cfg('timezone'))}"
-    #     if post['fio']:
-    #         text += ")"
-    # if post.get('pos'):
-    #     text += f"\n{post['pos']}"
-    # if post.get('geo'):
-    #     if not post['pos']:
-    #         text += "\n"
-    #     else:
-    #         text += " ("
-    #     text += f"{post['geo']}"
-    #     if post['pos']:
-    #         text += ")"
-    # if post.get('phone') or post.get('mail'):
-    #     text += "\n"
-    #     if post.get('phone'):
-    #         text += f"{post['phone']}"
-    #         if post.get('mail'):
-    #             text += " / "
-    #     if post.get('mail'):
-    #         text += f"{post['mail']}"
+    image = None
+    if post.get('image'):
+        image = f"{cfg('web')}load/{post['image']}"
 
-    # img = None
-    # if post.get('img'):
-    #     img = f"http://cv.chill.services/load/{post['img']}"
-
-    message_id = await tg.send(chat.id, text, buttons=[{ # files=img,
+    message_id = await tg.send(chat.id, text, files=image, buttons=[{
         'name': 'Создать ещё',
         'data': 'create',
     }, {

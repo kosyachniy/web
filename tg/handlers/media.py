@@ -13,7 +13,7 @@ async def handle_photo(message):
     """ Photo handler """
 
     chat = message.chat
-    photo = await tg.bot.download_file(
+    image = await tg.bot.download_file(
         (await tg.bot.get_file(
             message.photo[-1].file_id
         )).file_path
@@ -28,10 +28,10 @@ async def handle_photo(message):
         return
 
     if cache.get('s') == 'img':
-        photo = 'data:image/jpg;base64,' + base64.b64encode(photo.read()).decode('utf-8')
+        image = 'data:image/jpg;base64,' + base64.b64encode(image.read()).decode('utf-8')
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
-            'img': photo,
+            'image': image,
         })
         if error:
             message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
@@ -66,14 +66,14 @@ async def handle_doc(message):
     chat = message.chat
     try:
         mime = message.document.mime_type
-        photo = await tg.bot.download_file(
+        image = await tg.bot.download_file(
             (await tg.bot.get_file(
                 message.document.file_id
             )).file_path
         )
     except:
         mime = None
-        photo = None
+        image = None
     text = message.caption or ''
     cache = get(chat.id, {})
 
@@ -83,9 +83,9 @@ async def handle_doc(message):
     if await check_user(chat, True):
         return
 
-    if mime and photo and cache.get('s') == 'img':
+    if mime and image and cache.get('s') == 'img':
         try:
-            photo = f"data:{mime};base64,{base64.b64encode(photo.read()).decode('utf-8')}"
+            image = f"data:{mime};base64,{base64.b64encode(image.read()).decode('utf-8')}"
         except Exception as e:
             await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
                 'name': 'К посту', 'data': 'res',
@@ -94,7 +94,7 @@ async def handle_doc(message):
 
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
-            'img': photo,
+            'image': image,
         })
         if error:
             message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{

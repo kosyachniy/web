@@ -86,10 +86,25 @@ async def echo(message):
     if chat is None:
         return
 
-    if cache.get('s') == 'pos':
+    if cache.get('s') == 'nam':
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
-            'pos': text,
+            'title': text,
+        })
+        if error:
+            message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
+                'name': 'К посту', 'data': 'res',
+            }])
+        else:
+            message_id = await send_post(chat, data['post'])
+            cache['s'] = 'res'
+        cache['m'] = message_id
+        save(chat.id, cache)
+
+    if cache.get('s') == 'dat':
+        error, data = await api(chat, 'posts.save', {
+            'id': cache.get('p'),
+            'data': text,
         })
         if error:
             message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{

@@ -2,7 +2,17 @@
 Post model of DB object
 """
 
-from api.models import Base, Attribute
+import time
+
+from libdev.time import get_time
+
+from api.lib import cfg
+from api.models import Base, Attribute, uploader
+
+
+def default_title(instance):
+    """ Default resume title """
+    return f"Черновик от {get_time(instance.created or time.time(), '%d.%m.%Y', cfg('timezone'))}"
 
 
 class Post(Base):
@@ -11,6 +21,9 @@ class Post(Base):
     _name = 'posts'
     _search_fields = {'title', 'data', 'tags'}
 
+    image = Attribute(types=str, processing=uploader.image)
+    title = Attribute(types=str, default=default_title)
+    data = Attribute(types=str, default='', processing=uploader.reimg)
     reactions = Attribute(types=dict, default={
         'views': [], # TODO: + UTM
         'likes': [],

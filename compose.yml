@@ -7,7 +7,7 @@ services:
     environment:
       REDIS_PASS: ${REDIS_PASS}
     volumes:
-      - ${PATH_TO_DATA}/redis:/data
+      - ${DATA_PATH}/redis:/data
     ports:
       - 6379:6379
     command: bash -c "redis-server --requirepass ${REDIS_PASS}"
@@ -23,8 +23,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
     volumes:
-      - ${PATH_TO_DATA}/db:/data/db
-      - ${PATH_TO_DATA}/logs/mongodb.log:/data/logs/mongodb.log
+      - ${DATA_PATH}/db:/data/db
+      - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
       - ./configs/mongod.conf:/etc/mongod.conf
     command: --config /etc/mongod.conf
 
@@ -40,12 +40,12 @@ services:
     environment:
       WEB: http://localhost/
     volumes:
-      - ${PATH_TO_DATA}/load:/data/load
-      - ${PATH_TO_DATA}/backup:/backup
+      - ${DATA_PATH}/load:/data/load
+      - ${DATA_PATH}/backup:/backup
       - ./scripts:/scripts
       # For logs
-      - ${PATH_TO_DATA}/logs/api.err:/app.err
-      - ${PATH_TO_DATA}/logs/api.log:/app.log
+      - ${DATA_PATH}/logs/api.err:/app.err
+      - ${DATA_PATH}/logs/api.log:/app.log
       # For hot reload
       - ./api/api:/api
       - ./api/app.py:/app.py
@@ -65,15 +65,15 @@ services:
       WEB: http://localhost/
     volumes:
       # For logs
-      - ${PATH_TO_DATA}/logs/jobs.err:/app.err
-      - ${PATH_TO_DATA}/logs/jobs.log:/app.log
+      - ${DATA_PATH}/logs/jobs.err:/app.err
+      - ${DATA_PATH}/logs/jobs.log:/app.log
       # For hot reload
       - ./api/api:/api
       - ./api/jobs:/jobs
       - ./api/job.py:/job.py
       # For sitemap
-      - ${PATH_TO_DATA}/sitemaps:/data/sitemaps
-      - ${PATH_TO_DATA}/sitemap.xml:/data/sitemap.xml
+      - ${DATA_PATH}/sitemaps:/data/sitemaps
+      - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
     command: python job.py
 
   web:
@@ -110,8 +110,8 @@ services:
     env_file: .env
     volumes:
       - ./configs/nginx.conf:/etc/nginx/nginx.conf
-      - ${PATH_TO_DATA}/load:/load
-      - ${PATH_TO_DATA}/logs:/data/logs
+      - ${DATA_PATH}/load:/load
+      - ${DATA_PATH}/logs:/data/logs
     depends_on:
       - api
       - jobs

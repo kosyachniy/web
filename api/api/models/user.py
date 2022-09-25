@@ -10,7 +10,7 @@ from consys.handlers import (
 )
 
 from api.lib import get_language
-from api.models import Base, Attribute
+from api.models import Base, Attribute, uploader
 
 
 class User(Base):
@@ -50,6 +50,7 @@ class User(Base):
         processing=process_password,
     )
     # Personal info
+    image = Attribute(types=str, processing=uploader.image)
     name = Attribute(
         types=str,
         checking=check_name,
