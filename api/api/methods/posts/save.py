@@ -58,5 +58,5 @@ async def handle(request, data):
     return {
         'id': post.id,
         'new': new,
-        'resume': post.json(),
+        'post': post.json(),
     }

@@ -12,7 +12,7 @@ async def send_post(chat, post):
         text += post.get('title', '') + "\n\n"
     text += (
         "Выбери блок, который хочешь заполнить"
-        ", или жми «Сохранить пост»"
+        ", или жми «💾 Сохранить пост 💾»"
     )
 
     img = ['☑️', '✅'][bool(post.get('img'))]
@@ -31,28 +31,10 @@ async def send_post(chat, post):
     proj = ['☑️', '✅'][bool(post.get('proj'))]
 
     return await tg.send(chat.id, text, buttons=[[
-        {'name': f'{pos} Должность {pos}', 'data': 'pos'},
-        {'name': f'{fio} ФИО {fio}', 'data': 'fio'},
+        {'name': f'{pos} Название {pos}', 'data': 'pos'},
+        {'name': f'{fio} Содержимое {fio}', 'data': 'fio'},
     ], [
-        {'name': f'{img} Фото {img}', 'data': 'img'},
-        {'name': f'{age} Возраст {age}', 'data': 'age'},
-    ], [
-        {'name': f'{geo} Город {geo}', 'data': 'geo'},
-        {'name': f'{cont} Контакты {cont}', 'data': 'cont'},
-    ], [
-        {'name': f'{job} Опыт работы {job}', 'data': 'job'},
-        {'name': f'{proj} Проекты {proj}', 'data': 'proj'},
-    ], [
-        {'name': f'{edu} Образование {edu}', 'data': 'edu'},
-        {'name': f'{cours} Курсы {cours}', 'data': 'cour'},
-    ], [
-        {'name': f'{skill} Навыки {skill}', 'data': 'skill'},
-        {'name': f'{lang} Языки {lang}', 'data': 'lang'},
-    ], [
-        {'name': f'{conf} Конференции {conf}', 'data': 'conf'},
-        {'name': f'{comp} Соревнования {comp}', 'data': 'comp'},
-    ], [
-        {'name': 'Сгенерировать PDF', 'data': 'finish'},
+        {'name': '💾 Сохранить пост 💾', 'data': 'finish'},
     ], [
         {'name': '🗑 Удалить 🗑', 'data': 'rm'},
     ]], inline=True)

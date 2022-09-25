@@ -14,11 +14,6 @@ from handlers.main import *
 from handlers.media import *
 
 
-WEBHOOK_URL = cfg('tg.server')
-WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = 80
-
-
 @tg.dp.errors_handler()
 async def handle_errors(update, error):
     if 'callback_query' in update:
@@ -45,7 +40,7 @@ async def handle_errors(update, error):
 
 async def on_start(_):
     """ Handler on the bot start """
-    await tg.set(WEBHOOK_URL)
+    await tg.set(cfg('tg'))
     await tg.dp.bot.set_my_commands([
         BotCommand(command='start', description="Перезапустить бота"),
         BotCommand(command='menu', description="Мои посты"),
@@ -74,6 +69,6 @@ if __name__ == '__main__':
         on_startup=on_start,
         # on_shutdown=on_stop,
         skip_updates=True,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
+        host='0.0.0.0',
+        port=80,
     )

@@ -2,17 +2,13 @@
 API functionality for the Telegram bot
 """
 
-# Libraries
-## System
 import json
 import time
 
-## External
 import requests
 from libdev.cfg import cfg
 from libdev.gen import generate
 
-## Local
 from lib._variables import (
     languages, languages_chosen, tokens,
     user_ids, user_logins, user_statuses, user_names, user_titles,
@@ -20,12 +16,9 @@ from lib._variables import (
 from lib.reports import report
 
 
-# Params
-SERVER_LINK = cfg('server')
 LOG_LIMIT = 330
 
 
-# Funcs
 async def api(chat, method, data=None):
     """ API request """
 
@@ -53,7 +46,7 @@ async def api(chat, method, data=None):
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
-        res = requests.post(SERVER_LINK, json=req)
+        res = requests.post(cfg('api'), json=req)
 
         if res.status_code != 502:
             break
@@ -118,13 +111,11 @@ async def auth(chat, utm=None) -> bool:
         return
 
     ## Update global variables
-
     user_ids[chat.id] = data['id']
     user_logins[chat.id] = data.get('login')
     user_names[chat.id] = data.get('name', '')
     user_titles[chat.id] = data.get('title', '')
     user_statuses[chat.id] = data.get('status', 3)
-
     if 'language' in data['social']:
         languages[chat.id] = data['social']['language']
         languages_chosen[chat.id] = True

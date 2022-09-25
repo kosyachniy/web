@@ -24,6 +24,9 @@ check:
 stop:
 	docker-compose -f compose.prod.yml stop
 
+log:
+	docker-compose -f compose.prod.yml logs
+
 log-api:
 	tail -f data/logs/api.log
 
@@ -32,6 +35,9 @@ log-jobs:
 
 log-web:
 	docker service logs -f ${PROJECT_NAME}_web
+
+log-tg:
+	tail -f data/logs/tg.log
 
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}/api | cut -d ' ' -f 1` bash

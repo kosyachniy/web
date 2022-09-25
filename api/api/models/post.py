@@ -18,6 +18,7 @@ class Post(Base):
         'comments': [],
     }) # TODO: attributes
     tags = Attribute(types=list)
+    status = Attribute(types=int, default=1)
     # TODO: language
     # TODO: category
     # TODO: source
