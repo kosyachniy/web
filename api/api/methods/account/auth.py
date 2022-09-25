@@ -37,6 +37,9 @@ async def reg(request, data, by, method=None):
         'ip': request.ip,
     }
 
+    if data.utm:
+        details['utm'] = data.utm
+
     if by == 'bot':
         details['social_user'] = data.user
         details['social_login'] = data.login
@@ -115,10 +118,12 @@ async def reg(request, data, by, method=None):
         }
 
     user = User(
+        utm=data.utm,
         **req,
     )
 
     # TODO: Preauth data
+    # TODO: Subscription
 
     user.save()
 
@@ -136,6 +141,7 @@ async def reg(request, data, by, method=None):
         'user': user.id,
         'network': NETWORKS[request.network].upper(),
         'type': method,
+        'utm': data.utm,
         # TODO: ip, geo
     }
 
@@ -271,6 +277,7 @@ class Type(BaseType):
     # NOTE: For general authorization method fields
     name: str = None
     surname: str = None
+    utm: str = None
 
 @validate(Type)
 async def handle(request, data):

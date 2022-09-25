@@ -29,6 +29,7 @@ class Type(BaseType):
     mail: str = None
     name: str = None
     surname: str = None
+    utm: str = None
 
 # pylint: disable=too-many-branches,too-many-statements
 @validate(Type)

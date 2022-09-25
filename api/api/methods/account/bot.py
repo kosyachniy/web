@@ -16,6 +16,7 @@ class Type(BaseType):
     login: str = None
     name: str = None
     surname: str = None
+    utm: str = None
 
 @validate(Type)
 async def handle(request, data):

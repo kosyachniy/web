@@ -87,6 +87,8 @@ class User(Base):
     )
     status = Attribute(types=int, default=default_status)
     rating = Attribute(types=float)
+    # global_channel = Attribute(types=int, default=1)
+    # channels = Attribute(types=list)
     discount = Attribute(types=float)
     balance = Attribute(types=int, default=0)
     subscription = Attribute(types=int, default=0)

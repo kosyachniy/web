@@ -46,6 +46,7 @@ class Type(BaseType):
     password: str = None
     name: str = None
     surname: str = None
+    utm: str = None
 
 @validate(Type)
 async def handle(request, data):
@@ -117,6 +118,7 @@ async def handle(request, data):
                 'network': request.network,
             },
             user=user.id,
+            token=request.token,
         ).save()
 
     # Register
