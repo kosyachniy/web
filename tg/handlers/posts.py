@@ -1,3 +1,4 @@
+import requests
 from libdev.time import get_time
 
 from lib import api, cfg
@@ -193,7 +194,7 @@ async def finish(callback):
     #     save(chat.id, cache)
     #     return
 
-    text = f"Пост #{post['id']} {post['title']}"
+    text = f"Пост #{post['id']} «{post['title']}»"
     if post['data']:
         text += f"\n\n{post['data']}"
     text += (
@@ -203,7 +204,8 @@ async def finish(callback):
 
     image = None
     if post.get('image'):
-        image = f"{cfg('web')}load/{post['image']}"
+        # NOTE: There may be "aiogram.utils.exceptions.WrongFileIdentifier: Wrong file identifier/http url specified"
+        image = requests.get(f"{cfg('web')}load/{post['image']}").content
 
     message_id = await tg.send(chat.id, text, files=image, buttons=[{
         'name': 'Создать ещё',
