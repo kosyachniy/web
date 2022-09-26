@@ -1,3 +1,7 @@
+"""
+Posts handler
+"""
+
 import requests
 from libdev.time import get_time
 
@@ -8,6 +12,8 @@ from middlewares.prepare_message import prepare_message
 
 
 async def send_post(chat, post):
+    """ Send formatted post """
+
     text = ''
     if post.get('pos'):
         text += post.get('title', '') + "\n\n"
@@ -32,6 +38,8 @@ async def send_post(chat, post):
     ]], inline=True)
 
 async def send_posts(chat, posts=None):
+    """ Send formatted list of posts """
+
     if posts is None:
         error, data = await api(chat, 'posts.get', {'my': True})
         if error:
@@ -48,7 +56,7 @@ async def send_posts(chat, posts=None):
 
 
 @tg.dp.callback_query_handler(lambda mes: mes.data[:3] == 'res')
-async def post(callback):
+async def get_post(callback):
     """ Get """
 
     chat, text, cache = await prepare_message(callback)
@@ -60,7 +68,7 @@ async def post(callback):
     else:
         post_id = int(text[3:])
 
-    error, data = await api(chat, 'posts.get', {'id': post_id})
+    _, data = await api(chat, 'posts.get', {'id': post_id})
     message_id = await send_post(chat, data['posts'])
 
     save(chat.id, {
@@ -73,7 +81,7 @@ async def post(callback):
 async def edit_title(callback):
     """ Edit title """
 
-    chat, text, cache = await prepare_message(callback)
+    chat, _, cache = await prepare_message(callback)
     if chat is None:
         return
 
@@ -87,7 +95,7 @@ async def edit_title(callback):
 async def edit_data(callback):
     """ Edit data """
 
-    chat, text, cache = await prepare_message(callback)
+    chat, _, cache = await prepare_message(callback)
     if chat is None:
         return
 
@@ -101,7 +109,7 @@ async def edit_data(callback):
 async def edit_image(callback):
     """ Edit image """
 
-    chat, text, cache = await prepare_message(callback)
+    chat, _, cache = await prepare_message(callback)
     if chat is None:
         return
 
@@ -115,11 +123,11 @@ async def edit_image(callback):
 async def create(callback):
     """ Create post """
 
-    chat, text, cache = await prepare_message(callback)
+    chat, _, _ = await prepare_message(callback)
     if chat is None:
         return
 
-    error, data = await api(chat, 'posts.save')
+    _, data = await api(chat, 'posts.save')
 
     message_id = await send_post(chat, data['post'])
     save(chat.id, {
@@ -132,13 +140,13 @@ async def create(callback):
 async def delete(callback):
     """ Delete """
 
-    chat, text, cache = await prepare_message(callback)
+    chat, _, cache = await prepare_message(callback)
     if chat is None:
         return
 
     post_id = cache.get('p')
 
-    error, data = await api(chat, 'posts.get', {'id': post_id})
+    _, data = await api(chat, 'posts.get', {'id': post_id})
     message_id = await tg.send(
         chat.id,
         f"Уверен, что хочешь удалить {data['posts']['title']}",
@@ -157,12 +165,12 @@ async def delete(callback):
 async def deletey(callback):
     """ Approve delete """
 
-    chat, text, cache = await prepare_message(callback)
+    chat, _, cache = await prepare_message(callback)
     if chat is None:
         return
 
     post_id = cache.get('p')
-    error, data = await api(chat, 'posts.rm', {'id': post_id})
+    await api(chat, 'posts.rm', {'id': post_id})
 
     cache['m'] = await send_posts(chat)
     save(chat.id, cache)
@@ -176,18 +184,22 @@ async def finish(callback):
         return
 
     post_id = cache.get('p')
-    error, data = await api(chat, 'posts.get', {'id': post_id})
+    _, data = await api(chat, 'posts.get', {'id': post_id})
     post = data['posts']
 
     # error, data = await api(chat, 'posts.make', {'id': post_id})
     # if error:
-    #     message_id = await tg.send(chat.id, "Бесплатная версия истекла", buttons=[{
-    #         'name': 'Создать ещё',
-    #         'data': 'create',
-    #     }, {
-    #         'name': 'Редактировать',
-    #         'data': f'res{post_id}',
-    #     }])
+    #     message_id = await tg.send(
+    #         chat.id,
+    #         "Бесплатная версия истекла",
+    #         buttons=[{
+    #             'name': 'Создать ещё',
+    #             'data': 'create',
+    #         }, {
+    #             'name': 'Редактировать',
+    #             'data': f'res{post_id}',
+    #         }],
+    #     )
 
     #     cache['s'] = 'limit'
     #     cache['m'] = message_id
@@ -204,8 +216,12 @@ async def finish(callback):
 
     image = None
     if post.get('image'):
-        # NOTE: There may be "aiogram.utils.exceptions.WrongFileIdentifier: Wrong file identifier/http url specified"
-        image = requests.get(f"{cfg('web')}load/{post['image']}").content
+        # NOTE: There may be "aiogram.utils.exceptions.WrongFileIdentifier:
+        # Wrong file identifier/http url specified"
+        image = requests.get(
+            f"{cfg('web')}load/{post['image']}",
+            timeout=60,
+        ).content
 
     message_id = await tg.send(chat.id, text, files=image, buttons=[{
         'name': 'Создать ещё',

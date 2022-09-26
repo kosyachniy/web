@@ -46,7 +46,7 @@ async def api(chat, method, data=None):
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
-        res = requests.post(cfg('api'), json=req)
+        res = requests.post(cfg('api'), json=req, timeout=60)
 
         if res.status_code != 502:
             break

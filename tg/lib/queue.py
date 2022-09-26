@@ -16,9 +16,11 @@ class Queue:
         self.name = name
 
     def push(self, data):
+        """ Push data to queue """
         self.broker.rpush(self.name, pickle.dumps(data))
 
     def pop(self):
+        """ Pop data from queue """
         if not self.length():
             return None
         return pickle.loads(self.broker.blpop(self.name)[1])
@@ -33,7 +35,11 @@ redis = Redis(
     db=0,
     password=cfg('redis.pass'),
 )
-queue = lambda name: Queue(redis, name)
+
+
+def queue(name):
+    """ Create queue object """
+    return Queue(redis, name)
 
 def save(key, data):
     """ Save value """

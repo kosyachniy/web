@@ -8,6 +8,7 @@ from lib import cfg, report
 from lib.tg import tg
 from lib.queue import get
 # from middlewares.get_variables import VariablesMiddleware
+# pylint: disable=wildcard-import,unused-wildcard-import
 from handlers.menu import *
 from handlers.posts import *
 from handlers.main import *
@@ -16,6 +17,8 @@ from handlers.media import *
 
 @tg.dp.errors_handler()
 async def handle_errors(update, error):
+    """ Exception handler """
+
     if 'callback_query' in update:
         chat_id = update['callback_query']['message']['chat']['id']
     else:

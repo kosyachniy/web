@@ -1,3 +1,7 @@
+"""
+Media handler
+"""
+
 import base64
 
 from lib import api, cfg, report
@@ -28,15 +32,22 @@ async def handle_photo(message):
         return
 
     if cache.get('s') == 'img':
-        image = 'data:image/jpg;base64,' + base64.b64encode(image.read()).decode('utf-8')
+        image = (
+            'data:image/jpg;base64,'
+            + base64.b64encode(image.read()).decode('utf-8')
+        )
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
             'image': image,
         })
         if error:
-            message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
-                'name': 'К посту', 'data': 'res',
-            }])
+            message_id = await tg.send(
+                chat.id,
+                "Неверный формат, попробуй ещё раз",
+                buttons=[{
+                    'name': 'К посту', 'data': 'res',
+                }],
+            )
         else:
             message_id = await send_post(chat, data['post'])
             cache['s'] = 'res'
@@ -71,6 +82,7 @@ async def handle_doc(message):
                 message.document.file_id
             )).file_path
         )
+    # pylint: disable=bare-except
     except:
         mime = None
         image = None
@@ -85,11 +97,17 @@ async def handle_doc(message):
 
     if mime and image and cache.get('s') == 'img':
         try:
-            image = f"data:{mime};base64,{base64.b64encode(image.read()).decode('utf-8')}"
+            image = base64.b64encode(image.read()).decode('utf-8')
+            image = f"data:{mime};base64,{image}"
+        # pylint: disable=broad-except
         except Exception as e:
-            await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
-                'name': 'К посту', 'data': 'res',
-            }])
+            await tg.send(
+                chat.id,
+                "Неверный формат, попробуй ещё раз",
+                buttons=[{
+                    'name': 'К посту', 'data': 'res',
+                }],
+            )
             await report.error(e, error=e)
 
         error, data = await api(chat, 'posts.save', {
@@ -97,9 +115,13 @@ async def handle_doc(message):
             'image': image,
         })
         if error:
-            message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
-                'name': 'К посту', 'data': 'res',
-            }])
+            message_id = await tg.send(
+                chat.id,
+                "Неверный формат, попробуй ещё раз",
+                buttons=[{
+                    'name': 'К посту', 'data': 'res',
+                }],
+            )
         else:
             message_id = await send_post(chat, data['post'])
             cache['s'] = 'res'

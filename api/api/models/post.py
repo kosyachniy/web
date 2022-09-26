@@ -12,7 +12,12 @@ from api.models import Base, Attribute, uploader
 
 def default_title(instance):
     """ Default resume title """
-    return f"Черновик от {get_time(instance.created or time.time(), '%d.%m.%Y', cfg('timezone'))}"
+    text_time = get_time(
+        instance.created or time.time(),
+        '%d.%m.%Y',
+        cfg('timezone'),
+    )
+    return f"Черновик от {text_time}"
 
 
 class Post(Base):

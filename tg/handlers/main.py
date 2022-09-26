@@ -1,3 +1,7 @@
+"""
+Main commands handler
+"""
+
 from libdev.codes import get_flag
 
 from lib import api, cfg, report, languages, user_logins, user_titles
@@ -12,7 +16,7 @@ def get_user(chat_id):
 
     text = f"{get_flag(languages[chat_id])} {user_titles[chat_id]}"
     if user_logins[chat_id]:
-        login = user_logins[chat_id].replace('_', '\_')
+        login = user_logins[chat_id].replace('_', '\\_')
         text += f" (@{login})"
 
     return text
@@ -30,7 +34,7 @@ async def start(message):
 
     # Unfinished
     if post_id:
-        error, data = await api(chat, 'posts.get', {'id': post_id})
+        _, data = await api(chat, 'posts.get', {'id': post_id})
         message_id = await send_post(chat, data['posts'])
         cache['m'] = message_id
         cache['s'] = 'res'
@@ -38,7 +42,7 @@ async def start(message):
         return
 
     # List
-    error, data = await api(chat, 'posts.get', {'my': True})
+    _, data = await api(chat, 'posts.get', {'my': True})
     if len(data['posts']):
         message_id = await send_posts(chat, data['posts'])
         cache['m'] = message_id
@@ -52,7 +56,7 @@ async def start(message):
     text = "Хай! Я помогу тебе 🌴"
     messages.extend(await tg.send(chat.id, text))
 
-    error, data = await api(chat, 'posts.save')
+    _, data = await api(chat, 'posts.save')
 
     messages.extend(await send_post(chat, data['post']))
     save(chat.id, {
@@ -66,7 +70,7 @@ async def start(message):
 async def info(message):
     """ Info handler """
 
-    chat, text, cache = await prepare_message(message)
+    chat, _, cache = await prepare_message(message)
     if chat is None:
         return
 
@@ -92,9 +96,13 @@ async def echo(message):
             'title': text,
         })
         if error:
-            message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
-                'name': 'К посту', 'data': 'res',
-            }])
+            message_id = await tg.send(
+                chat.id,
+                "Неверный формат, попробуй ещё раз",
+                buttons=[{
+                    'name': 'К посту', 'data': 'res',
+                }],
+            )
         else:
             message_id = await send_post(chat, data['post'])
             cache['s'] = 'res'
@@ -107,9 +115,13 @@ async def echo(message):
             'data': text,
         })
         if error:
-            message_id = await tg.send(chat.id, "Неверный формат, попробуй ещё раз", buttons=[{
-                'name': 'К посту', 'data': 'res',
-            }])
+            message_id = await tg.send(
+                chat.id,
+                "Неверный формат, попробуй ещё раз",
+                buttons=[{
+                    'name': 'К посту', 'data': 'res',
+                }],
+            )
         else:
             message_id = await send_post(chat, data['post'])
             cache['s'] = 'res'

@@ -70,7 +70,7 @@ async def handle(request, data):
                     cfg('vk.secret'),
                     cfg('web'),
                     data.code,
-                )
+                ), timeout=10
             ).text
         )
 
@@ -88,9 +88,7 @@ async def handle(request, data):
 
         try:
             response = json.loads(
-                requests.get(
-                    link.format(data.user, token)
-                ).text
+                requests.get(link.format(data.user, token), timeout=10).text
             )['response'][0]
         except Exception as e:
             raise ErrorAccess('vk') from e
@@ -99,7 +97,7 @@ async def handle(request, data):
         data.surname = response.get('last_name')
         data.login = response.get('nickname')
         data.image = str(base64.b64encode(
-            requests.get(response['photo_max_orig']).content
+            requests.get(response['photo_max_orig'], timeout=30).content
         ))[2:-1] if 'photo_max_orig' in response else None
 
     # Google
@@ -112,16 +110,14 @@ async def handle(request, data):
             'grant_type': 'authorization_code',
             'code': urllib.parse.unquote(data.code),
         }
-        response = json.loads(requests.post(link, json=cont).text)
+        response = json.loads(requests.post(link, json=cont, timeout=10).text)
 
         if 'access_token' not in response:
             raise ErrorAccess('code')
 
         link = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token={}'
         response = json.loads(
-            requests.get(
-                link.format(response['access_token'])
-            ).text
+            requests.get(link.format(response['access_token']), timeout=10).text
         )
 
         if 'id' not in response:
@@ -137,7 +133,7 @@ async def handle(request, data):
         data.surname = response.get('family_name')
         data.mail = response.get('email')
         data.image = str(base64.b64encode(
-            requests.get(response['picture']).content
+            requests.get(response['picture'], timeout=30).content
         ))[2:-1] if 'picture' in response else None
 
     # Wrong ID

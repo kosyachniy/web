@@ -25,8 +25,8 @@ async def handle(request, data):
             ids=data.id,
             user=(request.user.id or None) if request.user.status < 7 else None,
         )
-    except ErrorWrong:
-        raise ErrorAccess('rm')
+    except ErrorWrong as e:
+        raise ErrorAccess('rm') from e
 
     # Delete
     post.rm()
