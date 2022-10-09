@@ -30,8 +30,7 @@ services:
 
   api:
     image: ${PROJECT_NAME}/api
-    build:
-      context: ./api
+    build: ./api
     depends_on:
       - db
       - redis
@@ -53,8 +52,7 @@ services:
 
   jobs:
     image: ${PROJECT_NAME}/jobs
-    build:
-      context: ./api
+    build: ./api
     depends_on:
       - db
       - redis
@@ -78,8 +76,7 @@ services:
 
   web:
     image: ${PROJECT_NAME}/web
-    build:
-      context: ./web
+    build: ./web
     env_file: .env
     environment:
       NEXT_PUBLIC_API: http://localhost/api/

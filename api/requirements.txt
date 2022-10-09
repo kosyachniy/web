@@ -1,7 +1,7 @@
 # env/bin/python -m pip install -U --force-reinstall pip
 
 requests==2.28.1
-fastapi==0.83.0
+fastapi==0.85.0
 libdev==0.38
 consys==0.23
 prometheus_fastapi_instrumentator==5.9.1

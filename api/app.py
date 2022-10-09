@@ -10,7 +10,9 @@ app = FastAPI(title='Web app API')
 
 # Prometheus
 from prometheus_fastapi_instrumentator import Instrumentator
-Instrumentator().instrument(app).expose(app)
+@app.on_event('startup')
+async def startup():
+    Instrumentator().instrument(app).expose(app)
 
 # CORS
 from fastapi.middleware.cors import CORSMiddleware
@@ -336,4 +338,4 @@ async def disconnect(sid):
     )
 
 
-app.mount('/', asgi) # TODO: check it
+app.mount('/ws', asgi)

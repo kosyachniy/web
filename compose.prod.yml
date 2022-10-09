@@ -29,45 +29,9 @@ services:
       - ./configs/mongod.conf:/etc/mongod.conf
     command: --config /etc/mongod.conf
 
-  prometheus:
-    image: prom/prometheus
-    ports:
-      - ${PROMETHEUS_PORT}:9090
-    volumes:
-      - ./configs/prometheus.yml:/prometheus.yml
-    command:
-      - --config.file=/prometheus.yml
-      - --web.external-url=${PROTOCOL}://${EXTERNAL_HOST}/prometheus/
-      - --web.route-prefix=/
-    depends_on:
-      - api
-
-  grafana:
-    image: grafana/grafana
-    ports:
-      - ${GRAFANA_PORT}:3000
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
-      - GF_SERVER_ROOT_URL=${PROTOCOL}://${EXTERNAL_HOST}/grafana/
-    depends_on:
-      - prometheus
-
-  cadvisor:
-    image: google/cadvisor
-    ports:
-      - ${CADVISOR_PORT}:8080
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    depends_on:
-      - grafana
-
   api:
     image: ${PROJECT_NAME}/api
-    build:
-      context: ./api
+    build: ./api
     depends_on:
       - db
       - redis
@@ -88,8 +52,7 @@ services:
 
   jobs:
     image: ${PROJECT_NAME}/jobs
-    build:
-      context: ./api
+    build: ./api
     depends_on:
       - db
       - redis
@@ -107,10 +70,43 @@ services:
       - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
     command: python job.py
 
+  cadvisor:
+    image: google/cadvisor
+    ports:
+      - ${CADVISOR_PORT}:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    volumes:
+      - ./configs/prometheus.yml:/prometheus.yml
+    command:
+      - --config.file=/prometheus.yml
+      - --web.external-url=${PROTOCOL}://${EXTERNAL_HOST}/prometheus/
+      - --web.route-prefix=/
+    depends_on:
+      - api
+      - cadvisor
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - ${GRAFANA_PORT}:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
+      - GF_SERVER_ROOT_URL=${PROTOCOL}://${EXTERNAL_HOST}/grafana/
+    depends_on:
+      - prometheus
+
   tg:
     image: ${PROJECT_NAME}/tg
-    build:
-      context: ./tg
+    build: ./tg
     env_file: .env
     environment:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
@@ -129,8 +125,7 @@ services:
 
   web:
     image: ${PROJECT_NAME}/web
-    build:
-      context: ./web
+    build: ./web
     env_file: .env
     environment:
       NEXT_PUBLIC_API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
