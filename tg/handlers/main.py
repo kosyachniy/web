@@ -108,8 +108,9 @@ async def echo(message):
             cache['s'] = 'res'
         cache['m'] = message_id
         save(chat.id, cache)
+        return
 
-    elif cache.get('s') == 'dat':
+    if cache.get('s') == 'dat':
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
             'data': text,
@@ -127,19 +128,19 @@ async def echo(message):
             cache['s'] = 'res'
         cache['m'] = message_id
         save(chat.id, cache)
+        return
 
-    else:
-        await report.important("Feedback", {
-            'text': text,
-            **cache,
-        })
-        await tg.forward(cfg('bug_chat'), chat.id, message.message_id)
+    await report.important("Feedback", {
+        'text': text,
+        **cache,
+    })
+    await tg.forward(cfg('bug_chat'), chat.id, message.message_id)
 
-        text = "Передал твой фидбек!"
-        message_id = await tg.send(
-            chat.id,
-            text,
-            buttons=[{'name': 'Мои посты', 'data': 'menu'}],
-        )
-        cache['m'] = message_id
-        save(chat.id, cache)
+    text = "Передал твой фидбек!"
+    message_id = await tg.send(
+        chat.id,
+        text,
+        buttons=[{'name': 'Мои посты', 'data': 'menu'}],
+    )
+    cache['m'] = message_id
+    save(chat.id, cache)

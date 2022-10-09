@@ -179,7 +179,7 @@ async def deletey(callback):
 async def finish(callback):
     """ Finish """
 
-    # FIXME: upload_document
+    # TODO: upload_document, typing
     chat, text, cache = await prepare_message(callback, 'upload_document')
     if chat is None:
         return
