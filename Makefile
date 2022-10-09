@@ -22,7 +22,7 @@ check:
 	docker ps --filter name=${PROJECT_NAME} --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
 stop:
-	docker-compose -f compose.prod.yml stop
+	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} stop
 
 log:
 	docker-compose -f compose.prod.yml logs

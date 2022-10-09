@@ -11,7 +11,7 @@ from api.models import Base, Attribute, uploader
 
 
 def default_title(instance):
-    """ Default resume title """
+    """ Default title """
     text_time = get_time(
         instance.created or time.time(),
         '%d.%m.%Y',

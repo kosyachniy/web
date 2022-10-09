@@ -122,6 +122,7 @@ MODE=LOCAL<br />
 PROTOCOL=http
 EXTERNAL_HOST=localhost
 EXTERNAL_PORT=80
+DATA_PATH=./data
                 </pre>
             </td>
             <td valign="top">
@@ -139,6 +140,7 @@ API_PORT=8202
 TG_PORT=8203
 DB_PORT=8204
 REDIS_PORT=8205
+DATA_PATH=/root/web/data
                 </pre>
             </td>
         </tr>

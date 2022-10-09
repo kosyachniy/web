@@ -15,8 +15,8 @@ async def send_post(chat, post):
     """ Send formatted post """
 
     text = ''
-    if post.get('pos'):
-        text += post.get('title', '') + "\n\n"
+    if post.get('title'):
+        text += post['title'] + "\n\n"
     text += (
         "Выбери блок, который хочешь заполнить"
         ", или жми «💾 Опубликовать 💾»"
@@ -179,6 +179,7 @@ async def deletey(callback):
 async def finish(callback):
     """ Finish """
 
+    # FIXME: upload_document
     chat, text, cache = await prepare_message(callback, 'upload_document')
     if chat is None:
         return

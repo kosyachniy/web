@@ -109,7 +109,7 @@ async def echo(message):
         cache['m'] = message_id
         save(chat.id, cache)
 
-    if cache.get('s') == 'dat':
+    elif cache.get('s') == 'dat':
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
             'data': text,
