@@ -71,7 +71,8 @@ services:
     command: python job.py
 
   cadvisor:
-    image: google/cadvisor
+    # NOTE: google/cadvisor exit 255
+    image: gcr.io/cadvisor/cadvisor
     ports:
       - ${CADVISOR_PORT}:8080
     volumes:
@@ -79,6 +80,7 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
 
   prometheus:
     image: prom/prometheus
