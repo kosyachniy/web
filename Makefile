@@ -19,7 +19,7 @@ run:
 	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
 
 check:
-	docker ps --filter name=${PROJECT_NAME} --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+	docker ps --filter name="^${PROJECT_NAME}_" --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
 stop:
 	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} stop
@@ -90,27 +90,12 @@ clear-all:
 	rm -rf **/*.log
 
 clear-logs:
-	rm -f data/logs/jobs.log
-	touch data/logs/jobs.log
-	rm -f data/logs/jobs.err
-	touch data/logs/jobs.err
-	rm -f data/logs/api.log
-	touch data/logs/api.log
-	rm -f data/logs/api.err
-	touch data/logs/api.err
-	rm -f data/logs/tg.err
-	touch data/logs/tg.err
-	rm -f data/logs/tg.log
-	touch data/logs/tg.log
-	rm -f data/logs/nginx.log
-	touch data/logs/nginx.log
-	rm -f data/logs/nginx.err
-	touch data/logs/nginx.err
-	rm -f data/logs/mongodb.log
-	touch data/logs/mongodb.log
+	rm -rf ${DATA_PATH}/logs/
+	mkdir ${DATA_PATH}/logs/
+	touch ${DATA_PATH}/logs/jobs.log ${DATA_PATH}/logs/jobs.err ${DATA_PATH}/logs/api.log ${DATA_PATH}/logs/api.err ${DATA_PATH}/logs/tg.err ${DATA_PATH}/logs/tg.log ${DATA_PATH}/logs/nginx.log ${DATA_PATH}/logs/nginx.err ${DATA_PATH}/logs/mongodb.log
 
 set:
-	sudo chown -R :www-data /root
+	sudo chmod -R 777 /root
 	export EXTERNAL_HOST=${EXTERNAL_HOST} WEB_PORT=${WEB_PORT} API_PORT=${API_PORT} TG_PORT=${TG_PORT} DATA_PATH=${DATA_PATH} PROMETHEUS_PORT=${PROMETHEUS_PORT} GRAFANA_PORT=${GRAFANA_PORT} CADVISOR_PORT=${CADVISOR_PORT}; \
 	envsubst '$${EXTERNAL_HOST} $${WEB_PORT} $${API_PORT} $${TG_PORT} $${DATA_PATH} $${PROMETHEUS_PORT} $${GRAFANA_PORT} $${CADVISOR_PORT}' < configs/nginx.prod.conf > /etc/nginx/sites-enabled/${PROJECT_NAME}.conf
 	sudo systemctl restart nginx

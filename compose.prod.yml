@@ -88,6 +88,7 @@ services:
       - ${PROMETHEUS_PORT}:9090
     volumes:
       - ./configs/prometheus.yml:/prometheus.yml
+      - ${DATA_PATH}/prometheus:/prometheus
     command:
       - --config.file=/prometheus.yml
       - --web.external-url=${PROTOCOL}://${EXTERNAL_HOST}/prometheus/
@@ -103,6 +104,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
       - GF_SERVER_ROOT_URL=${PROTOCOL}://${EXTERNAL_HOST}/grafana/
+    volumes:
+      - ${DATA_PATH}/grafana:/var/lib/grafana
     depends_on:
       - prometheus
 

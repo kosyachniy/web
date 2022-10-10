@@ -12,6 +12,7 @@ app = FastAPI(title='Web app API')
 from prometheus_fastapi_instrumentator import Instrumentator
 @app.on_event('startup')
 async def startup():
+    """ Application startup event """
     Instrumentator().instrument(app).expose(app)
 
 # CORS
