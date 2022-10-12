@@ -46,6 +46,8 @@ services:
       # For logs
       - ${DATA_PATH}/logs/api.err:/app.err
       - ${DATA_PATH}/logs/api.log:/app.log
+      # For monitoring
+      - /proc/cpuinfo:/proc/cpuinfo:ro
     ports:
       - ${API_PORT}:5000
     command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers
