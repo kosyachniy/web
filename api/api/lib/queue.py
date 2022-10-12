@@ -41,7 +41,13 @@ def queue(name):
     """ Create queue object """
     return Queue(redis, name)
 
-def save(key, data):
+def expire(key, ttl):
+    try:
+        redis.expire(key, ttl)
+    except:
+        pass
+
+def save(key, data, ttl=None):
     """ Save value """
 
     data = pickle.dumps(data)
@@ -51,6 +57,10 @@ def save(key, data):
     # pylint: disable=broad-except
     except Exception as e:
         print("Redis save error", e)
+        return None
+
+    if ttl is not None:
+        expire(key, ttl)
 
 def get(key, default=None):
     """ Get value """

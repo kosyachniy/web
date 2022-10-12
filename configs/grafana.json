@@ -1,22 +1,23 @@
 {
+  "__inputs": [
+    {
+    "name": "DS_PROMETHEUS",
+    "label": "Prometheus",
+    "description": "",
+    "type": "datasource",
+    "pluginId": "prometheus",
+    "pluginName": "Prometheus"
+    }
+  ],
   "annotations": {
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafana"
-        },
+        "datasource": "-- Grafana --",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "target": {
-          "limit": 100,
-          "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
-        },
         "type": "dashboard"
       }
     ]
@@ -44,10 +45,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -112,10 +110,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "count(count(node_cpu_seconds_total{instance=~\"$node\", mode='system'}) by (cpu))",
           "format": "time_series",
           "instant": true,
@@ -129,10 +124,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -197,10 +189,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "cpu_frequency",
           "format": "time_series",
@@ -215,10 +204,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -284,10 +270,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "100 - (avg(irate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[1m])) * 100)",
           "format": "time_series",
@@ -304,10 +287,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -364,10 +344,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "(1 - (node_memory_MemAvailable_bytes{instance=~\"$node\"} / (node_memory_MemTotal_bytes{instance=~\"$node\"})))* 100",
           "format": "time_series",
           "hide": false,
@@ -381,10 +358,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -450,10 +424,7 @@
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "100 - ((node_filesystem_avail_bytes{instance=~\"$node\",mountpoint=\"/\",fstype=~\"ext4|xfs\"} * 100) / node_filesystem_size_bytes {instance=~\"$node\",mountpoint=\"/\",fstype=~\"ext4|xfs\"})",
           "format": "time_series",
           "interval": "10s",
@@ -466,10 +437,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -535,10 +503,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "avg(irate(node_cpu_seconds_total{instance=~\"$node\",mode=\"iowait\"}[1m])) * 100",
           "format": "time_series",
@@ -555,10 +520,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -623,10 +585,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_memory_MemTotal_bytes{instance=~\"$node\"}",
           "format": "time_series",
           "instant": true,
@@ -640,10 +599,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -695,10 +651,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "node_filesystem_size_bytes{instance=~'$node',mountpoint=\"/\"}",
           "legendFormat": "__auto",
@@ -723,10 +676,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -771,10 +721,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "posts",
           "legendFormat": "__auto",
@@ -786,10 +733,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -834,10 +778,7 @@
       "pluginVersion": "9.1.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "users",
           "legendFormat": "__auto",
@@ -862,10 +803,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -939,10 +877,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "rate(http_request_duration_seconds_sum{handler=\"/\"}[1m])",
           "legendFormat": "__auto",
@@ -954,10 +889,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "OpOyYGIVz"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1030,10 +962,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "OpOyYGIVz"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "increase(http_requests_total{job=\"api\", handler=\"/\"}[1m])",
           "legendFormat": "__auto",
@@ -1138,10 +1067,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "OpOyYGIVz"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "",
         "hide": 0,
         "includeAll": true,
@@ -1171,10 +1097,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "OpOyYGIVz"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(node_exporter_build_info{env=~'$env'},name)",
         "hide": 0,
         "includeAll": true,
@@ -1202,10 +1125,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "OpOyYGIVz"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(node_exporter_build_info{name=~'$name'},instance)",
         "hide": 0,
         "includeAll": true,
@@ -1233,10 +1153,7 @@
           "text": "/",
           "value": "/"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "OpOyYGIVz"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -1258,10 +1175,7 @@
         "useTags": false
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "OpOyYGIVz"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "filters": [],
         "hide": 0,
         "label": "",
@@ -1303,7 +1217,7 @@
   },
   "timezone": "browser",
   "title": "Main",
-  "uid": "QxwO1vI4k",
+  "uid": "main",
   "version": 10,
   "weekStart": "monday"
 }

@@ -142,7 +142,6 @@ DB_PORT=8204
 REDIS_PORT=8205
 PROMETHEUS_PORT=8206
 GRAFANA_PORT=8207
-CADVISOR_PORT=8208
 DATA_PATH=/root/web/data
                 </pre>
             </td>
