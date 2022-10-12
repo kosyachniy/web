@@ -3,7 +3,7 @@
 requests==2.28.1
 fastapi==0.85.0
 libdev==0.38
-consys==0.23
+consys==0.24
 prometheus_fastapi_instrumentator==5.9.1
 uvicorn==0.18.3
 websockets==10.3 # NOTE: for Socket.IO
