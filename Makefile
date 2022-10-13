@@ -13,31 +13,31 @@ setup-tests:
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
 dev:
-	docker-compose -p ${PROJECT_NAME} up --build
+	docker compose -p ${PROJECT_NAME} up --build
 
 run:
-	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
+	docker compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
+
+stop:
+	docker compose -f compose.prod.yml -p ${PROJECT_NAME} stop
 
 check:
 	docker ps --filter name="^${PROJECT_NAME}_" --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
-stop:
-	docker-compose -f compose.prod.yml -p ${PROJECT_NAME} stop
-
 log:
-	docker-compose -f compose.prod.yml logs
+	docker compose -f compose.prod.yml logs
 
 log-api:
-	tail -f data/logs/api.log
+	tail -f ${DATA_PATH}/logs/api.log
 
 log-jobs:
-	tail -f data/logs/jobs.log
+	tail -f ${DATA_PATH}/logs/jobs.log
 
 log-web:
 	docker service logs -f ${PROJECT_NAME}_web
 
 log-tg:
-	tail -f data/logs/tg.log
+	tail -f ${DATA_PATH}/logs/tg.log
 
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}/api | cut -d ' ' -f 1` bash
