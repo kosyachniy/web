@@ -49,7 +49,7 @@ class User(Base):
         checking=check_password,
         processing=process_password,
     )
-    # Personal info
+    # Personal
     image = Attribute(types=str, processing=uploader.image)
     name = Attribute(
         types=str,
@@ -65,6 +65,9 @@ class User(Base):
         types=str,
         default=default_title,
     )
+    birth = Attribute(types=int) # TODO: datetime
+    sex = Attribute(types=str) # TODO: enum: male / female
+    # Contacts
     phone = Attribute(
         types=int,
         checking=check_phone_uniq,

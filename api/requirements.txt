@@ -3,12 +3,16 @@
 # App
 requests==2.28.1
 libdev==0.38
-consys==0.24
 fastapi==0.85.0
 httptools==0.4.0 # NOTE: for routing
 uvicorn==0.18.3
-redis==4.3.4
 # PyJWT==2.4.0
+
+# DB
+consys==0.24
+
+# MQ
+redis==4.3.4
 
 # Sockets
 python-socketio==5.7.1

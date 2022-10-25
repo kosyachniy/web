@@ -138,7 +138,7 @@ async def handle(request, data):
 
     # Wrong ID
     if not data.user:
-        await report.warning("Wrong ID", {
+        await report.error("Wrong ID", {
             'social': data.social,
             'social_user': data.user,
         })

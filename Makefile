@@ -22,7 +22,7 @@ stop:
 	docker compose -f compose.prod.yml -p ${PROJECT_NAME} stop
 
 check:
-	docker ps --filter name="^${PROJECT_NAME}_" --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+	docker ps --filter name="^${PROJECT_NAME}" --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
 log:
 	docker compose -f compose.prod.yml logs
