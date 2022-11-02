@@ -27,6 +27,9 @@ def get_cpu():
             executable='/bin/bash',
             stdout=subprocess.PIPE,
         ).stdout.decode('utf-8').strip().split('\n')
+
+        if res == "":
+            return None
         return sum(map(float, res)) * 1000000
 
     # pylint: disable=broad-except
@@ -42,9 +45,12 @@ async def monitoring():
 async def handle(_):
     """ Monitoring """
 
-    cpu = get_cpu()
-    if cpu:
-        f.set(cpu)
+    try:
+        cpu = get_cpu()
+        if cpu:
+            f.set(cpu)
+    except Exception as e:
+        await report.critical(str(e), error=e)
 
     while True:
         try:
