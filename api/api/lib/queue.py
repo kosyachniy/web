@@ -42,10 +42,12 @@ def queue(name):
     return Queue(redis, name)
 
 def expire(key, ttl):
+    """ Change expiration time """
     try:
         redis.expire(key, ttl)
-    except:
-        pass
+    # pylint: disable=broad-except
+    except Exception as e:
+        print("Redis expire error", e)
 
 def save(key, data, ttl=None):
     """ Save value """
@@ -57,7 +59,7 @@ def save(key, data, ttl=None):
     # pylint: disable=broad-except
     except Exception as e:
         print("Redis save error", e)
-        return None
+        return
 
     if ttl is not None:
         expire(key, ttl)

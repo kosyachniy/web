@@ -340,8 +340,3 @@ async def disconnect(sid):
 
 
 app.mount('/ws', asgi)
-
-
-import asyncio
-from monitoring import handlex
-asyncio.create_task(handlex(None))
