@@ -59,6 +59,7 @@ import time
 # import jwt
 from pydantic import BaseModel
 from consys.errors import BaseError
+from prometheus_client import Histogram
 
 from api import API
 from api.lib import cfg, report
@@ -70,6 +71,11 @@ from api.models.payment import Payment
 
 api = API(
     sio=sio,
+)
+metric_endpoints = Histogram(
+    'endpoints',
+    'Endpoint requests',
+    ['method', 'error'],
 )
 
 # ## JWT
@@ -129,6 +135,7 @@ async def index(data: Input, request: Request):
     # Call API
 
     req = {}
+    start = time.time()
 
     try:
         res = await api.method(
@@ -157,6 +164,11 @@ async def index(data: Input, request: Request):
 
         if res is not None:
             req['data'] = res
+
+    # Monitoring
+    metric_endpoints.labels(data.method, req['error']).observe(
+        time.time() - start
+    )
 
     # Response
     return req

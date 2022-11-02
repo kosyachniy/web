@@ -12,9 +12,9 @@ from api.models.user import User
 from api.models.post import Post
 
 
-p = Gauge('posts', 'Posts')
-u = Gauge('users', 'Users')
-f = Gauge('cpu_frequency', 'CPU frequency')
+metric_posts = Gauge('posts', 'Posts')
+metric_users = Gauge('users', 'Users')
+metric_cpu = Gauge('cpu_frequency', 'CPU frequency')
 
 
 def get_cpu():
@@ -39,8 +39,8 @@ def get_cpu():
 
 async def monitoring():
     """ Monitoring """
-    p.set(Post.count())
-    u.set(User.count())
+    metric_posts.set(Post.count())
+    metric_users.set(User.count())
 
 async def handle(_):
     """ Monitoring """
@@ -48,7 +48,7 @@ async def handle(_):
     try:
         cpu = get_cpu()
         if cpu:
-            f.set(cpu)
+            metric_cpu.set(cpu)
     except Exception as e:
         await report.critical(str(e), error=e)
 
