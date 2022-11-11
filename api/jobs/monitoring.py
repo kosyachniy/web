@@ -49,6 +49,7 @@ async def handle(_):
         cpu = get_cpu()
         if cpu:
             metric_cpu.set(cpu)
+    # pylint: disable=broad-except
     except Exception as e:
         await report.critical(str(e), error=e)
 
