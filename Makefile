@@ -1,17 +1,5 @@
 include .env
 
-PYTHON := env/bin/python
-
-setup:
-	python3 -m venv env
-	$(PYTHON) -m pip install -U --force-reinstall pip
-	$(PYTHON) -m pip install -r api/requirements.txt
-
-setup-tests:
-	make setup
-	$(PYTHON) -m pip install -r tg/requirements.txt
-	$(PYTHON) -m pip install -r tests/requirements.txt
-
 dev:
 	docker compose -p ${PROJECT_NAME} up --build
 
@@ -46,7 +34,9 @@ test-linter-all:
 	find . -type f -name '*.py' \
 	| grep -vE 'env/' \
 	| grep -vE 'tests/' \
-	| xargs $(PYTHON) -m pylint -f text \
+	| grep -vE 'usr/' \
+	| grep -vE 'etc/' \
+	| xargs pylint -f text \
 		--rcfile=tests/.pylintrc \
 		--msg-template='{path}:{line}:{column}: [{symbol}] {msg}'
 
@@ -57,12 +47,12 @@ test-linter:
 	| awk '{print $$1,$$2}' \
 	| grep -i '^[ma]' \
 	| awk '{print $$2}' \
-	| xargs $(PYTHON) -m pylint -f text \
+	| xargs pylint -f text \
 		--rcfile=tests/.pylintrc \
 		--msg-template='{path}:{line}:{column}: [{symbol}] {msg}'
 
 test-unit-all:
-	$(PYTHON) -m pytest -s tests/
+	pytest -s tests/
 
 test-unit:
 	git status -s \
@@ -70,7 +60,7 @@ test-unit:
 	| awk '{print $$1,$$2}' \
 	| grep -i '^[ma]' \
 	| awk '{print $$2}' \
-	| xargs $(PYTHON) -m pytest -s
+	| xargs pytest -s
 
 test:
 	make test-linter-all

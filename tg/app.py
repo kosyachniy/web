@@ -4,15 +4,15 @@ Telegram bot (Transport level)
 
 from aiogram.types import BotCommand
 
-from lib import cfg, report
-from lib.tg import tg
-from lib.queue import get
-# from middlewares.get_variables import VariablesMiddleware
 # pylint: disable=wildcard-import,unused-wildcard-import
 from handlers.menu import *
 from handlers.posts import *
 from handlers.main import *
 from handlers.media import *
+from lib import cfg, report
+from lib.tg import tg
+from lib.queue import get
+# from middlewares.get_variables import VariablesMiddleware
 
 
 @tg.dp.errors_handler()

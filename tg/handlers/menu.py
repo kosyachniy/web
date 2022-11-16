@@ -2,10 +2,10 @@
 Bot commands handler
 """
 
-from lib.tg import tg
-from lib.queue import save
 from middlewares.prepare_message import prepare_message
 from handlers.posts import send_posts
+from lib.tg import tg
+from lib.queue import save
 
 
 @tg.dp.message_handler(commands=['menu'])

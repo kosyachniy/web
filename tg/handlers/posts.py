@@ -5,10 +5,10 @@ Posts handler
 import requests
 from libdev.time import get_time
 
+from middlewares.prepare_message import prepare_message
 from lib import api, cfg
 from lib.tg import tg
 from lib.queue import save
-from middlewares.prepare_message import prepare_message
 
 
 async def send_post(chat, post):

@@ -2,10 +2,10 @@
 Prepare message middleware
 """
 
+from middlewares.check_user import check_user
 from lib import report
 from lib.tg import tg
 from lib.queue import get
-from middlewares.check_user import check_user
 
 
 async def rm_last(chat, cache):

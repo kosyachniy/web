@@ -10,7 +10,14 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Output print to the Docker console
 ENV PYTHONUNBUFFERED 1
 
+COPY base.env .env
+RUN echo "MODE=TEST" >> .env
+RUN echo "DATA_PATH=./data" >> .env
+
 # Copy project
 COPY . .
 
-RUN make setup-tests
+# RUN make setup-tests
+RUN pip install -r api/requirements.txt
+RUN pip install -r tg/requirements.txt
+RUN pip install -r tests/requirements.txt
