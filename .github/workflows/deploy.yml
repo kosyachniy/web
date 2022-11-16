@@ -14,7 +14,9 @@ jobs:
         uses: supercharge/mongodb-github-action@1.8.0
         with:
           mongodb-version: latest
-          mongodb-port: 27017
+          mongodb-username: test
+          mongodb-password: test
+          mongodb-db: test
 
       - name: Building Docker image
         run: docker build -t tests . --file tests/Dockerfile
