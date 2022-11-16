@@ -13,11 +13,11 @@ jobs:
       - name: Creating MongoDB Docker container
         uses: supercharge/mongodb-github-action@1.8.0
         with:
-          mongodb-version: 5.0
-          mongodb-db: test
+          mongodb-version: 4.0
+          mongodb-replica-set: test
 
       - name: Checking MongoDB
-        run: sudo mongo localhost:27017
+        run: mongosh localhost:27017
 
       - name: Building Docker image
         run: docker build -t tests . --file tests/Dockerfile
