@@ -18,6 +18,9 @@ jobs:
 
       - name: Running tests inside the container
         run: docker run tests make test-unit-all
+        with:
+          image-version: latest
+          port: 27017
 
       - name: Running tests inside the container
         run: docker run tests make test-linter-all
