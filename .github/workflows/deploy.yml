@@ -14,7 +14,7 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.PASS }}
           script: |
             echo "Stoping old version"
             if [ -d /root/web ];
