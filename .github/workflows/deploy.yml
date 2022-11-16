@@ -5,9 +5,28 @@ on:
     branches: [ "main" ]
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Creating MongoDB Docker container
+        uses: DigiPie/mongo-action@v1.0.1
+
+      - name: Building Docker image
+        run: docker build -t tests . --file tests/Dockerfile
+
+      - name: Running tests inside the container
+        run: docker run tests make test-unit-all
+
+      - name: Running tests inside the container
+        run: docker run tests make test-linter-all
+
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - name: Executing remote ssh command
         uses: appleboy/ssh-action@master
         with:
@@ -19,13 +38,13 @@ jobs:
             echo "Stoping old version"
             if [ -d /root/web ];
             then
-                cd web
+                cd /root/web
                 make stop
-                cd ..
             fi
 
             echo "Pulling new version"
-            rm -rf /root/web
+            cd /root
+            rm -rf web
             git clone git@github.com:kosyachniy/web.git
             if [ -d /root/data/web ];
             then
@@ -38,5 +57,5 @@ jobs:
             cp /root/.secrets/web.env /root/web/.env
 
             echo "Starting new version"
-            cd web
+            cd /root/web
             make run
