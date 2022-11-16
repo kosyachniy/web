@@ -38,4 +38,5 @@ jobs:
             cp /root/.secrets/web.env /root/web/.env
 
             echo "Starting new version"
+            cd web
             make run
