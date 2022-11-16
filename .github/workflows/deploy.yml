@@ -12,15 +12,15 @@ jobs:
 
       - name: Creating MongoDB Docker container
         uses: DigiPie/mongo-action@v1.0.1
+        with:
+          image-version: latest
+          port: 27017
 
       - name: Building Docker image
         run: docker build -t tests . --file tests/Dockerfile
 
       - name: Running tests inside the container
         run: docker run tests make test-unit-all
-        with:
-          image-version: latest
-          port: 27017
 
       - name: Running tests inside the container
         run: docker run tests make test-linter-all
