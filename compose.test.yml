@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  db:
+    image: mongo
+    ports:
+      - 27017:27017
+    env_file: .env
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test
+    volumes:
+      - ./configs/mongod.conf:/etc/mongod.conf
+    command: --config /etc/mongod.conf
+
+  test:
+    image: test/test
+    build: ./tests
+    depends_on:
+      - db
+    env_file: .env
+    environment:
+      WEB: http://localhost/
+    volumes:
+      - ./scripts:/scripts
+    command: make test

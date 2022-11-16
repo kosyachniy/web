@@ -10,23 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Creating MongoDB Docker container
-        uses: supercharge/mongodb-github-action@1.8.0
-        with:
-          mongodb-version: 4.0
-          mongodb-replica-set: test
-
-      - name: Checking MongoDB
-        run: mongosh localhost:27017
-
-      - name: Building Docker image
-        run: docker build -t tests . --file tests/Dockerfile
+      - name: Setting up environment variables
+        run: |
+          cp base.env .env
+          echo "MODE=TEST" >> .env
+          echo "DATA_PATH=./data" >> .env
 
       - name: Running tests inside the container
-        run: docker run tests make test-unit-all
-
-      - name: Running tests inside the container
-        run: docker run tests make test-linter-all
+        run: docker compose -f compose.test.yml -p test up --build
 
   deploy:
     runs-on: ubuntu-latest
