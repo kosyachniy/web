@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   redis:
-    image: redis
+    image: redis:7.0
     restart: on-failure
     env_file:
       - .env
@@ -14,7 +14,7 @@ services:
     command: bash -c "redis-server --requirepass ${REDIS_PASS}"
 
   db:
-    image: mongo
+    image: mongo:6.0
     ports:
       - ${DB_PORT}:27017
     restart: unless-stopped
@@ -73,7 +73,7 @@ services:
     command: python job.py
 
   node_exporter:
-    image: quay.io/prometheus/node-exporter
+    image: quay.io/prometheus/node-exporter:1.4.0
     restart: unless-stopped
     volumes:
       - /:/host:ro,rslave
@@ -81,8 +81,7 @@ services:
       - --path.rootfs=/host
 
   cadvisor:
-    # NOTE: google/cadvisor exit 255
-    image: gcr.io/cadvisor/cadvisor
+    image: gcr.io/cadvisor/cadvisor:0.46.0  # NOTE: google/cadvisor exit 255
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -94,7 +93,7 @@ services:
       - '--docker_only=true'
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:2.40.1
     ports:
       - ${PROMETHEUS_PORT}:9090
     volumes:
@@ -110,7 +109,7 @@ services:
       - cadvisor
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:9.2.5
     ports:
       - ${GRAFANA_PORT}:3000
     environment:

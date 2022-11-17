@@ -1,5 +1,5 @@
 # Template full stack application
-[![Build Status](https://app.travis-ci.com/kosyachniy/web.svg?branch=main)](https://app.travis-ci.com/kosyachniy/web)
+[![.github/workflows/deploy.yml](https://github.com/kosyachniy/web/actions/workflows/deploy.yml/badge.svg)](https://github.com/kosyachniy/web/actions/workflows/deploy.yml)
 
 ## Description
 Web-app on JS with Python JSON-RPC API
@@ -24,10 +24,10 @@ Android | Front-end | React Native | JavaScript | planned
     </thead>
     <tbody>
         <tr>
-            <td rowspan="3" align="center">DevOps</td>
+            <td rowspan="5" align="center">DevOps</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/docker_logo.png?raw=true" alt="Docker" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/docker_name.png?raw=true" alt="Docker" height="50" /></td>
-            <td align="center">20.10.17</td>
+            <td align="center">20.10.21</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nginx_logo.png?raw=true" alt="NGINX" height="50" /></td>
@@ -40,7 +40,17 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center"></td>
         </tr>
         <tr>
-            <td rowspan="4" align="center">Back-end</td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/grafana_logo.png?raw=true" alt="Grafana" height="50" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/grafana_name.png?raw=true" alt="Grafana" height="50" /></td>
+            <td align="center">9.2.5</td>
+        </tr>
+        <tr>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/prometheus_logo.png?raw=true" alt="Prometheus" height="50" /></td>
+            <td></td>
+            <td align="center">2.40.1</td>
+        </tr>
+        <tr>
+            <td rowspan="5" align="center">Back-end</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/python_logo.png?raw=true" alt="Python" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/python_name.png?raw=true" alt="Python" height="50" /></td>
             <td align="center">3.10</td>
@@ -48,7 +58,7 @@ Android | Front-end | React Native | JavaScript | planned
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_logo.png?raw=true" alt="FastAPI" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/fastapi_name.png?raw=true" alt="FastAPI" height="50" /></td>
-            <td align="center">0.81</td>
+            <td align="center">0.87</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/mongodb_logo.png?raw=true" alt="MongoDB" height="50" /></td>
@@ -56,9 +66,9 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center">6.0</td>
         </tr>
         <tr>
-            <td align="center">Redis</td>
-            <td></td>
-            <td align="center"></td>
+            <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redis_logo.png?raw=true" alt="Redis" height="50" /></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redis_name.png?raw=true" alt="Redis" height="50" /></td>
+            <td align="center">7.0</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/socketio_logo.png?raw=true" alt="Socket.IO" height="50" /></td>
@@ -66,10 +76,10 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center"></td>
         </tr>
         <tr>
-            <td rowspan="5" align="center">Front-end</td>
+            <td rowspan="6" align="center">Front-end</td>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/javascript_logo.png?raw=true" alt="JavaScript" height="50" /></td>
             <td></td>
-            <td align="center">node 18.8</td>
+            <td align="center">node 19.1</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/reactjs_logo.png?raw=true" alt="ReactJS" height="50" /></td>
@@ -77,9 +87,9 @@ Android | Front-end | React Native | JavaScript | planned
             <td align="center">18.2</td>
         </tr>
         <tr>
-            <td align="center">NextJS</td>
             <td></td>
-            <td align="center"></td>
+            <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/nextjs_name.png?raw=true" alt="Next.js" height="50" /></td>
+            <td align="center">13.0.3</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/redux_logo.png?raw=true" alt="Redux" height="50" /></td>
@@ -89,7 +99,7 @@ Android | Front-end | React Native | JavaScript | planned
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/bootstrap_logo.png?raw=true" alt="Bootstrap" height="50" /></td>
             <td><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/bootstrap_name.png?raw=true" alt="Bootstrap" height="50" /></td>
-            <td align="center">5.1.3</td>
+            <td align="center">5.2.1</td>
         </tr>
         <tr>
             <td align="center"><img src="https://github.com/kosyachniy/dev/blob/master/media/logos/png/ckeditor_logo.png?raw=true" alt="CKEditor" height="50" /></td>

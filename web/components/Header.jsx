@@ -33,7 +33,7 @@ export default () => {
     return (
         <nav className={ `navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}` }>
             <div className="container">
-                <Link href="/"><a className="navbar-brand"><img src={ `/brand/logo_${system.color}.svg` } alt={ process.env.NEXT_PUBLIC_NAME } /></a></Link>
+                <Link href="/" className="navbar-brand"><img src={ `/brand/logo_${system.color}.svg` } alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -48,10 +48,10 @@ export default () => {
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         {/* <li className="nav-item">
-                            <Link href="/feed/"><a className="nav-link">{ t('structure.feed') }</a></Link>
+                            <Link href="/feed/" className="nav-link">{ t('structure.feed') }</Link>
                         </li> */}
                         <li className="nav-item dropdown">
-                            <Link href="/posts/"><a className="nav-link">{ t('structure.posts') }</a></Link>
+                            <Link href="/posts/" className="nav-link">{ t('structure.posts') }</Link>
                             {/* <Link href="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
                             {/* <div className="dropdown-content">
                                 {
@@ -62,26 +62,27 @@ export default () => {
                             </div> */}
                         </li>
                         {/* <li className="nav-item">
-                            <Link href="/"><a className="nav-link">{ t('structure.space') }</a></Link>
+                            <Link href="/" className="nav-link">{ t('structure.space') }</Link>
                         </li> */}
                         <li className="nav-item">
-                            <Link href="/room/"><a className="nav-link">{ t('structure.room') }</a></Link>
+                            <Link href="/room/" className="nav-link">{ t('structure.room') }</Link>
                         </li>
                         {/* <li className="nav-item dropdown">
-                            <Link href="/events/"><a className="nav-link">{ t('structure.events') }</a></Link>
+                            <Link href="/events/" className="nav-link">{ t('structure.events') }</Link>
                             <div className="dropdown-content">
                                 {
                                     events.map((event, ind) => (
-                                        <Link href={ `/events/${event}/` }><a
+                                        <Link
+                                            href={ `/events/${event}/` }
                                             data-toggle="tooltip"
                                             key={ ind }
-                                        >{ t(`events.${event}`) }</a></Link>
+                                        >{ t(`events.${event}`) }</Link>
                                     ))
                                 }
                             </div>
                         </li> */}
                         {/* <li className="nav-item">
-                            <Link href="/map/"><a className="nav-link">{ t('structure.map') }</a></Link>
+                            <Link href="/map/" className="nav-link">{ t('structure.map') }</Link>
                         </li> */}
                     </ul>
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -130,10 +131,10 @@ export default () => {
                                         className={ `${styles.menu} dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}` }
                                         aria-labelledby="navbarDropdown"
                                     >
-                                        <Link href="/profile/"><a className="dropdown-item">{ t('system.profile') }</a></Link>
-                                        {/* <Link href="/settings/"><a className="dropdown-item">{ t('system.settings') }</a></Link> */}
-                                        {/* <Link href="/analytics/"><a className="dropdown-item">{ t('system.analytics') }</a></Link> */}
-                                        {/* <Link href="/admin/"><a className="dropdown-item">{ t('system.admin') }</a></Link> */}
+                                        <Link href="/profile/" className="dropdown-item">{ t('system.profile') }</Link>
+                                        {/* <Link href="/settings/" className="dropdown-item">{ t('system.settings') }</Link> */}
+                                        {/* <Link href="/analytics/" className="dropdown-item">{ t('system.analytics') }</Link> */}
+                                        {/* <Link href="/admin/" className="dropdown-item">{ t('system.admin') }</Link> */}
                                         <div className="dropdown-item" onClick={ signOut }>{ t('system.sign_out') }</div>
                                     </div>
                                 </>
