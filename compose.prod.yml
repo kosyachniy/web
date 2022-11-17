@@ -73,7 +73,7 @@ services:
     command: python job.py
 
   node_exporter:
-    image: quay.io/prometheus/node-exporter:1.4.0
+    image: quay.io/prometheus/node-exporter:v1.4.0
     restart: unless-stopped
     volumes:
       - /:/host:ro,rslave
@@ -81,7 +81,7 @@ services:
       - --path.rootfs=/host
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:0.46.0  # NOTE: google/cadvisor exit 255
+    image: gcr.io/cadvisor/cadvisor:v0.46.0  # NOTE: google/cadvisor exit 255
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -93,7 +93,7 @@ services:
       - '--docker_only=true'
 
   prometheus:
-    image: prom/prometheus:2.40.1
+    image: prom/prometheus:v2.40.1
     ports:
       - ${PROMETHEUS_PORT}:9090
     volumes:
