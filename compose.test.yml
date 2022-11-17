@@ -4,12 +4,6 @@ services:
     image: mongo
     ports:
       - 27017:27017
-    env_file: .env
-    environment:
-      MONGO_INITDB_DATABASE: admin
-    volumes:
-      - ./configs/mongod.conf:/etc/mongod.conf
-    command: --config /etc/mongod.conf
 
   test:
     image: test/test
