@@ -7,15 +7,15 @@ services:
     env_file: .env
     environment:
       MONGO_INITDB_DATABASE: admin
-      MONGO_INITDB_ROOT_USERNAME: test
-      MONGO_INITDB_ROOT_PASSWORD: test
     volumes:
       - ./configs/mongod.conf:/etc/mongod.conf
     command: --config /etc/mongod.conf
 
   test:
     image: test/test
-    build: ./tests
+    build:
+      context: .
+      dockerfile: ./tests/Dockerfile
     depends_on:
       - db
     env_file: .env

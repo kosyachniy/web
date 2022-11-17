@@ -6,6 +6,7 @@ on:
 
 jobs:
   tests:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,9 +18,11 @@ jobs:
           echo "DATA_PATH=./data" >> .env
 
       - name: Running tests inside the container
-        run: docker compose -f compose.test.yml -p test up --build
+        run: make run-test
 
   deploy:
+    needs: tests
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

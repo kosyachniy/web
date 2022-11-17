@@ -84,6 +84,7 @@ def get_user(token_id, socket_id=None, jwt=None):
 
     return User(), token_id
 
+# pylint: disable=too-many-branches
 async def online_start(sio, token_id, socket_id=None):
     """ Start / update online session of the user """
 
@@ -175,10 +176,11 @@ async def online_start(sio, token_id, socket_id=None):
     else:
         data = []
 
-    await sio.emit('online_add', {
-        'count': count,
-        'users': data,
-    })
+    if sio is not None:
+        await sio.emit('online_add', {
+            'count': count,
+            'users': data,
+        })
 
     # # Redirect to active space
     # # TODO: cache

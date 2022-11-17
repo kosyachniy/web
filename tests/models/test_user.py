@@ -35,6 +35,9 @@ def test_none_fields():
         image=None,
         name=None,
         surname=None,
+        title=None,
+        birth=None,
+        sex=None,
         phone=None,
         phone_verified=None,
         mail=None,
@@ -42,12 +45,18 @@ def test_none_fields():
         social=None,
         description=None,
         language=None,
-        actions=None,
+        status=None,
+        rating=None,
+        discount=None,
+        balance=None,
+        subscription=None,
+        utm=None,
+        pay=None,
+        mailing=None,
+        last_online=None,
         user=None,
         created=None,
         updated=None,
-        status=None,
-        last_online=None,
     )
 
     assert user
@@ -59,17 +68,17 @@ def test_none_fields():
     assert user.id
     assert user.login != 'id0'
 
-# def test_phone_processing():
-#     assert User(phone='+7 (969) 736-67-30').phone == 79697366730
-#     assert User(phone='79697366730').phone == 79697366730
-#     assert User(phone=89697366730).phone == 79697366730
-#     assert User(phone='8 9697366730').phone == 79697366730
+def test_phone_processing():
+    assert User(phone='+7 (969) 736-67-30').phone == 79697366730
+    assert User(phone='79697366730').phone == 79697366730
+    assert User(phone=89697366730).phone == 79697366730
+    assert User(phone='8 9697366730').phone == 79697366730
 
-#     with pytest.raises(ErrorInvalid):
-#         User(phone='(969) 7366730')
+    with pytest.raises(ErrorInvalid):
+        User(phone='(969) 7366730')
 
-#     with pytest.raises(ErrorInvalid):
-#         User(phone='abcdefghijklmn')
+    with pytest.raises(ErrorInvalid):
+        User(phone='abcdefghijklmn')
 
-#     with pytest.raises(ErrorInvalid):
-#         User(phone='')
+    with pytest.raises(ErrorInvalid):
+        User(phone='')

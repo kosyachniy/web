@@ -12,6 +12,9 @@ stop:
 check:
 	docker ps --filter name="^${PROJECT_NAME}" --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
+run-test:
+	docker compose -f compose.test.yml -p ${PROJECT_NAME} up --build --exit-code-from test
+
 log:
 	docker compose -f compose.prod.yml logs
 
