@@ -18,7 +18,7 @@ class Type(BaseType):
     search: str = None
     my: bool = None
     # TODO: category: int = None
-    # TODO: language: Union[str, int] = None
+    # TODO: locale: Union[str, int] = None
     # TODO: fields: list[str] = None
 
 @validate(Type)
@@ -35,10 +35,10 @@ async def handle(request, data):
 
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
-    # if data.language:
-    #     data.language = get_language(data.language) # TODO: case if None
+    # if data.locale:
+    #     data.locale = get_locale(data.locale) # TODO: case if None
     # else:
-    #     data.language = request.language
+    #     data.locale = request.locale
 
     # Fields
     fields = {
@@ -95,7 +95,7 @@ async def handle(request, data):
         search=data.search,
         fields=fields,  # None if data.id else fields,
         # category=data.category,
-        # language=data.language,
+        # locale=data.locale,
         handler=handler,
     )
 

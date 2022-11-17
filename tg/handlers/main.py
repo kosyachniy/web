@@ -6,7 +6,7 @@ from libdev.codes import get_flag
 
 from middlewares.prepare_message import prepare_message
 from handlers.posts import send_post, send_posts
-from lib import api, cfg, report, languages, user_logins, user_titles
+from lib import api, cfg, report, locales, user_logins, user_titles
 from lib.tg import tg
 from lib.queue import save
 
@@ -14,7 +14,7 @@ from lib.queue import save
 def get_user(chat_id):
     """ Get user info """
 
-    text = f"{get_flag(languages[chat_id])} {user_titles[chat_id]}"
+    text = f"{get_flag(locales[chat_id])} {user_titles[chat_id]}"
     if user_logins[chat_id]:
         login = user_logins[chat_id].replace('_', '\\_')
         text += f" (@{login})"

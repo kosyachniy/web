@@ -86,7 +86,7 @@ async def reg(request, data, by, method=None):
                 'login': data.login,
                 'name': data.name,
                 'surname': data.surname,
-                'language': request.locale,
+                'locale': request.locale,
             }],
         }
     elif by == 'social':

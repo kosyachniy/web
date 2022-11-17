@@ -3,8 +3,8 @@ Global variables
 """
 
 # General
-languages = {} # language of an user
-languages_chosen = {} # did an user choose a language or not
+locales = {} # language of an user
+locales_chosen = {} # did an user choose a language or not
 tokens = {} # token of an user
 
 # Users

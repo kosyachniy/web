@@ -31,7 +31,7 @@ export default (token, locale, method, params={}) => {
             method,
             params,
             network: 'web',
-            language: locale,
+            locale,
             token,
         };
 

@@ -9,7 +9,7 @@ from consys.handlers import (
     default_title,
 )
 
-from api.lib import get_language
+from api.lib import get_locale
 from api.models import Base, Attribute, uploader
 
 
@@ -83,10 +83,10 @@ class User(Base):
     social = Attribute(types=list) # TODO: list[{}] # TODO: checking
     #
     description = Attribute(types=str)
-    language = Attribute(
+    locale = Attribute(
         types=int,
         default=0,
-        pre_processing=get_language,
+        pre_processing=get_locale,
     )
     status = Attribute(types=int, default=default_status)
     rating = Attribute(types=float)
@@ -114,5 +114,5 @@ class User(Base):
         """ Get user social info by social ID """
         for i in self.social:
             if i['id'] == social:
-                return i['user'], i.get('language') or 1 # TODO: default
+                return i['user'], i.get('locale') or 1 # TODO: default
         return None, None

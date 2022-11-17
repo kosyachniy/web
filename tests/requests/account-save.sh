@@ -20,10 +20,10 @@ curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"meth
 curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"description": "Статус"}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
 # Language via name
-curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"language": "ru"}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"locale": "ru"}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
 # Language via code
-curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"language": 1}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"locale": 1}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
 
 # Social
-curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"social": [{"id": 2, "user": 136563129, "language": 1}]}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/
+curl -w "%{time_total}\n" -X POST -H "Content-Type: application/json" -d '{"method": "account.save", "params": {"social": [{"id": 2, "user": 136563129, "locale": 1}]}, "token": "authorized"}' http://localhost/api/ https://web.kosyachniy.com/api/

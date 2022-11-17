@@ -22,7 +22,7 @@ class Type(BaseType):
     mail: str = None
     social: list[dict] = None
     description: str = None
-    language: Union[str, int] = None
+    locale: Union[str, int] = None
     mailing: dict = None
 
 @validate(Type)
@@ -53,7 +53,7 @@ async def handle(request, data):
     user.mail = data.mail
     user.social = data.social # TODO: checking
     user.description = data.description
-    user.language = data.language
+    user.locale = data.locale
 
     user.mailing = data.mailing
 

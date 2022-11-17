@@ -37,7 +37,7 @@ class Post(Base):
     }) # TODO: attributes
     tags = Attribute(types=list)
     status = Attribute(types=int, default=1)
-    # TODO: language
+    # TODO: locale
     # TODO: category
     # TODO: source
     # TODO: actions

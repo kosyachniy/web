@@ -44,7 +44,7 @@ def test_none_fields():
         mail_verified=None,
         social=None,
         description=None,
-        language=None,
+        locale=None,
         status=None,
         rating=None,
         discount=None,

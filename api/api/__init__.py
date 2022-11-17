@@ -4,7 +4,7 @@ The API
 
 import time
 
-from api.lib import get_network, get_language, report
+from api.lib import get_network, get_locale, report
 from api.methods import call
 from api.methods.account.online import get_user
 
@@ -17,7 +17,7 @@ class Request():
         self.ip = ip
         self.socket = socket
         self.network = get_network(network)
-        self.locale = get_language(locale)
+        self.locale = get_locale(locale)
         self.user, self.token = get_user(token, socket, jwt)
         self.sio = sio
 

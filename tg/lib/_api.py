@@ -10,7 +10,7 @@ from libdev.cfg import cfg
 from libdev.gen import generate
 
 from lib._variables import (
-    languages, languages_chosen, tokens,
+    locales, locales_chosen, tokens,
     user_ids, user_logins, user_statuses, user_names, user_titles,
 )
 from lib.reports import report
@@ -36,7 +36,7 @@ async def api(chat, method, data=None):
         'params': data,
         'token': tokens[chat.id],
         'network': 'tg',
-        'locale': languages[chat.id],
+        'locale': locales[chat.id],
     }
 
     await report.debug("API request", {
@@ -59,7 +59,7 @@ async def api(chat, method, data=None):
             'method': method,
             'params': data,
             'token': tokens[chat.id],
-            'locale': languages[chat.id],
+            'locale': locales[chat.id],
             'error': res.status_code,
         })
         return 1, None
@@ -80,8 +80,8 @@ async def auth(chat, utm=None) -> bool:
         return False
 
     # Default settings
-    if chat.id not in languages:
-        languages[chat.id] = 1 # TODO: 0
+    if chat.id not in locales:
+        locales[chat.id] = 1 # TODO: 0
 
     ## Token
     token = generate()
@@ -116,8 +116,8 @@ async def auth(chat, utm=None) -> bool:
     user_names[chat.id] = data.get('name', '')
     user_titles[chat.id] = data.get('title', '')
     user_statuses[chat.id] = data.get('status', 3)
-    if 'language' in data['social']:
-        languages[chat.id] = data['social']['language']
-        languages_chosen[chat.id] = True
+    if 'locale' in data['social']:
+        locales[chat.id] = data['social']['locale']
+        locales_chosen[chat.id] = True
 
     return True
