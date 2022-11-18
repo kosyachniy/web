@@ -2,7 +2,7 @@
 
 # App
 requests==2.28.1
-libdev==0.38
+libdev==0.39
 fastapi==0.87.0
 httptools==0.5.0  # NOTE: for routing
 uvicorn==0.19.0
@@ -30,13 +30,9 @@ tgreports==0.13
 # # Payments
 # yookassa==2.3.2
 
-# # Google Docs
-# google-api-python-client==2.58.0
-# google-auth-httplib2==0.1.0
-# oauth2client==4.1.3
-
-# # Mail
-# pysendpulse==0.1.4
+# Google Docs
+gspread==5.6.2
+oauth2client==4.1.3
 
 # # SMS
 # smsc==0.1.1
