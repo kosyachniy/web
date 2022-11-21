@@ -6,7 +6,7 @@ import time
 import datetime
 import asyncio
 
-from api.lib import report
+from lib import report
 
 
 FILE_LIMIT = 2500

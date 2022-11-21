@@ -4,8 +4,6 @@ services:
     image: redis:7.0
     restart: on-failure
     env_file: .env
-    environment:
-      REDIS_PASS: ${REDIS_PASS}
     volumes:
       - ${DATA_PATH}/redis:/data
     ports:
@@ -46,9 +44,8 @@ services:
       - ${DATA_PATH}/logs/api.err:/app.err
       - ${DATA_PATH}/logs/api.log:/app.log
       # For hot reload
-      - ./api/api:/api
-      - ./api/app.py:/app.py
-    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
+      - ./api:/app
+    command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   jobs:
     image: ${PROJECT_NAME}/jobs
@@ -66,13 +63,11 @@ services:
       - ${DATA_PATH}/logs/jobs.err:/app.err
       - ${DATA_PATH}/logs/jobs.log:/app.log
       # For hot reload
-      - ./api/api:/api
-      - ./api/jobs:/jobs
-      - ./api/job.py:/job.py
+      - ./api:/app
       # For sitemap
       - ${DATA_PATH}/sitemaps:/data/sitemaps
       - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
-    command: python job.py
+    command: bash -c "cd /app && python job.py"
 
   web:
     image: ${PROJECT_NAME}/web

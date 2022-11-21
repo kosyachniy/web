@@ -2,7 +2,7 @@ import pytest
 from consys.errors import ErrorInvalid
 from libdev.gen import generate
 
-from api.models.user import User
+from models.user import User
 
 
 def test_repeated_login():

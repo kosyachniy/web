@@ -2,8 +2,8 @@ import pytest
 from libdev.gen import generate
 
 from api import Request
-from api.models.user import User, process_lower
-from api.methods.account.auth import handle
+from models.user import User, process_lower
+from routes.account.auth import handle
 
 
 class SIO:

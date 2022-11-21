@@ -2,8 +2,8 @@
 Reset online users process
 """
 
-from api.models.socket import Socket
-from api.methods.account.disconnect import online_stop
+from models.socket import Socket
+from routes.account.disconnect import online_stop
 
 
 async def handle(sio):

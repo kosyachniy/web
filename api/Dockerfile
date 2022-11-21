@@ -2,7 +2,7 @@
 FROM python:3.10
 
 # Set work directory
-WORKDIR .
+WORKDIR /app
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -15,4 +15,4 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy project
-COPY . .
+COPY . /app

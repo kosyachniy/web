@@ -7,7 +7,7 @@ import time
 
 from consys.errors import ErrorWrong
 
-from api.models.system import System
+from models.system import System
 
 
 async def handle(_):

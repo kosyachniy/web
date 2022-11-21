@@ -2,8 +2,8 @@ import pytest
 from libdev.gen import generate, generate_id
 
 from api import Request
-from api.models.user import User, process_lower
-from api.methods.account.bot import handle
+from models.user import User, process_lower
+from routes.account.bot import handle
 
 
 @pytest.mark.asyncio
