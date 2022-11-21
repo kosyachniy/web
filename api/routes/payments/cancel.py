@@ -2,8 +2,7 @@
 The cancel method of the payment object of the API
 """
 
-from fastapi import APIRouter, Body, Depends
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
 from consys.errors import ErrorAccess, ErrorRepeat
 
 from services.request import get_request

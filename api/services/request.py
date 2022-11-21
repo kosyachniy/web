@@ -6,14 +6,13 @@ import time
 
 from fastapi import Body
 from pydantic import BaseModel
-from libdev.codes import get_network as get_network_req
+from libdev.codes import get_network, get_locale
 
-from routes.account.online import get_user
+from services.auth import get_user
 
 
 class Request():
     """ Request container """
-
     def __init__(self, ip, socket, token, network, locale, jwt=None, sio=None):
         self.now = time.time()
         self.ip = ip
@@ -29,34 +28,9 @@ class Type(BaseModel):
     token: str
     network: str
     locale: str
-    jwt: str = None
+    jwt: dict = None
     sio: str = None
 
 async def get_request(data: Type = Body(...)):
+    """ Get request """
     return Request(**data.dict())
-
-
-class Type(BaseModel):
-    network: str
-
-def get_network(data: Type = Body(...)):
-    return get_network_req(data.network)
-
-
-class Type(BaseModel):
-    ip: str
-
-def get_ip(data: Type = Body(...)):
-    return data.ip
-
-
-class Type(BaseModel):
-    token: str
-    locale: str = None
-
-def get_locale(data: Type = Body(...)):
-    if data.locale is not None:
-        return data.locale
-
-    # user, _ = get_user(data.token)
-    # return user.locale

@@ -1,9 +1,9 @@
 import pytest
 from libdev.gen import generate, generate_id
 
-from api import Request
 from models.user import User, process_lower
-from routes.account.bot import handle
+from services.request import Request
+from routes.account.bot import handler, Type
 
 
 @pytest.mark.asyncio
@@ -19,7 +19,7 @@ async def test_repeated_login():
         'login': login.upper(),
     }
 
-    res = await handle(request, data)
+    res = await handler(Type(**data), request)
 
     assert res.get('id')
     assert res.get('new')

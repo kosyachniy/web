@@ -14,11 +14,11 @@ from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorInvalid
 import jwt
 
-from lib import cfg, report
 from models.user import User
 from models.track import Track
 from services.request import get_request
 from routes.account.auth import reg
+from lib import cfg, report
 
 
 router = APIRouter()

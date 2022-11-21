@@ -4,8 +4,8 @@ The connect socket of the account object of the API
 
 from fastapi import APIRouter, Depends
 
-from lib import report
 from services.request import get_request
+from lib import report
 
 
 router = APIRouter()

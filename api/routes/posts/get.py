@@ -63,11 +63,11 @@ async def handler(
     # Processing
 
     if isinstance(data.id, int):
-        def handler(post):
+        def handle(post):
             return post
 
     else:
-        def handler(post):
+        def handle(post):
             # Cover from the first image
             if not post.get('image'):
                 res = re.search(
@@ -104,7 +104,7 @@ async def handler(
         fields=fields,  # None if data.id else fields,
         # category=data.category,
         # locale=data.locale,
-        handler=handler,
+        handler=handle,
     )
 
     # Sort

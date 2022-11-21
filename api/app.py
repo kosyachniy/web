@@ -7,9 +7,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from lib import cfg
-
 from routes import router
+from lib import cfg
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path="/api")

@@ -10,12 +10,12 @@ from consys.handlers import (
 )
 from consys.errors import ErrorWrong, ErrorAccess
 
-from lib import report
 from models.user import User
 from models.token import Token
 from models.track import Track
 from services.request import get_request
 from routes.account.online import online_start
+from lib import report
 
 
 router = APIRouter()
@@ -203,12 +203,12 @@ async def auth(request, method, data, by):
     # Authorize
 
     if by == 'phone':
-        handler = pre_process_phone
+        handle = pre_process_phone
     else:
-        handler = process_lower
+        handle = process_lower
 
     new = False
-    login_processed = handler(data.login)
+    login_processed = handle(data.login)
     users = User.get(fields=fields, **{by: login_processed})
 
     if users:

@@ -106,7 +106,7 @@ async def handler(
         fields = fields & set(data.fields) | {'id'}
 
     # Processing
-    def handler(user):
+    def handle(user):
         if data.fields and 'online' in data.fields:
             user['online'] = online_back(user['id'])
 
@@ -118,7 +118,7 @@ async def handler(
         count=data.count,
         offset=data.offset,
         fields=fields,
-        handler=handler,
+        handler=handle,
     )
 
     # Response

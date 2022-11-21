@@ -6,12 +6,12 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorWrong
 
-from lib import report
 from models.user import User
-from models.token import Token
 from models.socket import Socket
 # from models.space import Space
+from services.auth import get_user
 from services.request import get_request
+from lib import report
 
 
 router = APIRouter()
@@ -55,40 +55,6 @@ def _online_count():
     count = len({socket.user or socket.token for socket in sockets})
 
     return count
-
-def get_user(token_id, socket_id=None, jwt=None):
-    """ Get user object by token """
-
-    if token_id is not None:
-        try:
-            token = Token.get(token_id, fields={'user'})
-        except ErrorWrong:
-            token = Token(id=token_id)
-            token.save()
-        else:
-            if token.user:
-                return User.get(token.user), token_id
-
-    elif socket_id is not None:
-        try:
-            socket = Socket.get(socket_id, fields={'user'})
-        except ErrorWrong:
-            pass
-        else:
-            token_id = socket.token
-            if socket.user:
-                return User.get(ids=socket.user), token_id
-
-    elif jwt is not None:
-        users = User.get(social={'$elemMatch': {
-            'id': jwt['network'],
-            'user': jwt['user'],
-        }})
-
-        if users:
-            return users[0], token_id
-
-    return User(), token_id
 
 # pylint: disable=too-many-branches
 async def online_start(sio, token_id, socket_id=None):

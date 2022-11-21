@@ -1,9 +1,9 @@
 import pytest
 from libdev.gen import generate
 
-from api import Request
 from models.user import User, process_lower
-from routes.account.auth import handle
+from services.request import Request
+from routes.account.auth import handler, Type
 
 
 class SIO:
@@ -26,7 +26,7 @@ async def test_repeated_login():
         'password': 'asd123',
     }
 
-    res = await handle(request, data)
+    res = await handler(Type(**data), request)
 
     assert res.get('id')
     assert res.get('new') == False

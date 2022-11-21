@@ -6,12 +6,12 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess
 
-from lib import report
 from models.user import User # process_lower
 from models.token import Token
 from models.track import Track
 from services.request import get_request
 from routes.account.auth import reg
+from lib import report
 
 
 router = APIRouter()

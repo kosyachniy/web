@@ -6,9 +6,9 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess
 
-from lib import generate_password, report
 from models.user import User, process_lower, pre_process_phone
 from services.request import get_request
+from lib import generate_password, report
 
 
 router = APIRouter()

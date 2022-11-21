@@ -5,21 +5,21 @@ The authorization via social networks method of the account object of the API
 import json
 import urllib
 import base64
+from typing import Union
 
 import requests
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
-from typing import Union
 from libdev.codes import get_network
 from consys.errors import ErrorAccess, ErrorWrong
 
-from lib import cfg, report
 from models.user import User
 from models.token import Token
 from models.track import Track
 from services.request import get_request
 from routes.account.auth import reg
 from routes.account.online import online_start
+from lib import cfg, report
 
 
 router = APIRouter()

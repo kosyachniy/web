@@ -1,9 +1,13 @@
+"""
+Attach all routers
+"""
 
 import importlib
 import pkgutil
 
 from fastapi import APIRouter
 
+# pylint: disable=import-self
 import routes
 
 
@@ -16,9 +20,7 @@ for loader, module_name, is_pkg in pkgutil.walk_packages(
     if not names:
         continue
 
-    try:
-        module = importlib.import_module(module_name)
-        name = '/' + '/'.join(names)
-        router.include_router(module.router, prefix=name, tags=names)
-    except:
-        pass
+    module = importlib.import_module(module_name)
+    # pylint: disable=invalid-name
+    name = '/' + '/'.join(names)
+    router.include_router(module.router, prefix=name, tags=names)

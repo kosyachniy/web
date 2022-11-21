@@ -1,6 +1,6 @@
 import pytest
-from consys.errors import ErrorInvalid
 from libdev.gen import generate
+from consys.errors import ErrorInvalid
 
 from models.user import User
 

@@ -2,141 +2,154 @@
 The YooKassa payment recieve method of the payment object of the API
 """
 
-# DISCOUNT = cfg('discount')
+import time
+
+from fastapi import APIRouter, Body
+from pydantic import BaseModel
+
+from models.user import User
+from models.payment import Payment
+from models.track import Track
+from lib import cfg, report
 
 
-# class InputPayment(BaseModel):
-#     """ Payment endpoint model """
+DISCOUNT = cfg('discount')
 
-#     object: dict
 
-# @app.post('/yookassa/')
-# async def pay(data: InputPayment, request: Request):
-#     """ Payments endpoint """
+router = APIRouter()
 
-#     data = data.object
 
-#     count = float(data.get('amount', {}).get('value') or 0)
-#     user_id = data.get('metadata', {}).get('user')
+class Type(BaseModel):
+    object: dict
 
-#     if not user_id:
-#         await report.warning("Wrong user", {
-#             'metadata': data.get('metadata'),
-#         })
-#         return '', 200
+# pylint: disable=too-many-branches
+@router.post('/yookassa/')
+async def pay(data: Type = Body(...)):
+    """ Payments endpoint """
 
-#     user_id = int(user_id)
-#     user = User.get(user_id)
-#     timestamp = int(time.time())
+    data = data.object
 
-#     # Initial balance
-#     value_real = count + 0
+    count = float(data.get('amount', {}).get('value') or 0)
+    user_id = data.get('metadata', {}).get('user')
 
-#     try:
-#         # if user.preprice:
-#         #     discount_real = None
-#         #     day = 1
-#         #     user.limit = 1
-#         #     del user.preprice
+    if not user_id:
+        await report.warning("Wrong user", {
+            'metadata': data.get('metadata'),
+        })
+        return '', 200
 
-#         # elif user.price:
-#         #     discount_real = None
-#         #     day = 30 if count == user.price else 90
-#         #     del user.limit
-#         #     del user.price
+    user_id = int(user_id)
+    user = User.get(user_id)
+    timestamp = int(time.time())
 
-#         discount_real = user.discount + 0 if user.discount else DISCOUNT
-#         if discount_real:
-#             count /= discount_real
+    # Initial balance
+    value_real = count + 0
 
-#             if user.discount: # TODO: Fix in consys.model
-#                 del user.discount
+    try:
+        # if user.preprice:
+        #     discount_real = None
+        #     day = 1
+        #     user.limit = 1
+        #     del user.preprice
 
-#         # Crediting funds
-#         if count >= cfg('subscription.year'):
-#             day = 365
-#         elif count >= cfg('subscription.ay'):
-#             day = 270
-#         elif count >= cfg('subscription.season'):
-#             day = 90
-#         elif count >= cfg('subscription.month'):
-#             day = 30
-#         elif count >= cfg('subscription.week'):
-#             day = 7
-#         elif count >= cfg('subscription.day'):
-#             day = 1
-#         else:
-#             day = 0
-#             await report.warning("Too little to pay for a subscription", {
-#                 'value': count,
-#                 'user': user_id,
-#             })
+        # elif user.price:
+        #     discount_real = None
+        #     day = 30 if count == user.price else 90
+        #     del user.limit
+        #     del user.price
 
-#         # del user.limit
+        discount_real = user.discount + 0 if user.discount else DISCOUNT
+        if discount_real:
+            count /= discount_real
 
-#         # Save payment data
+            if user.discount: # TODO: Fix in consys.model
+                del user.discount
 
-#         payment = Payment(
-#             id=data['payment_method']['id'],
-#             type=data['payment_method']['type'],
-#             card={
-#                 'type': data['payment_method']['card'].get('card_type'),
-#                 'bank': data['payment_method']['card'].get('issuer_name'),
-#                 'country': data['payment_method']['card'].get('issuer_country'),
-#                 'first': data['payment_method']['card'].get('first6'),
-#                 'last': data['payment_method']['card'].get('last4'),
-#                 'expired': {
-#                     'month': data['payment_method']['card'].get('expiry_month'),
-#                     'year': data['payment_method']['card'].get('expiry_year'),
-#                 },
-#             } if data['payment_method'].get('card') else None,
-#             value=int(count),
-#             currency=data['amount']['currency'],
-#             discount=discount_real,
-#         )
+        # Crediting funds
+        if count >= cfg('subscription.year'):
+            day = 365
+        elif count >= cfg('subscription.ay'):
+            day = 270
+        elif count >= cfg('subscription.season'):
+            day = 90
+        elif count >= cfg('subscription.month'):
+            day = 30
+        elif count >= cfg('subscription.week'):
+            day = 7
+        elif count >= cfg('subscription.day'):
+            day = 1
+        else:
+            day = 0
+            await report.warning("Too little to pay for a subscription", {
+                'value': count,
+                'user': user_id,
+            })
 
-#         if data['payment_method']['saved']:
-#             user.pay = [payment.json(default=False)] # TODO: Fix in consys.model
+        # del user.limit
 
-#         # Report
-#         await report.important("Payment", {
-#             'service': 'yandex',
-#             'type': payment.type,
-#             'card': payment.card,
-#             'value': f"{int(value_real)} {payment.currency}",
-#             'user': f"#{user_id} {user.name} {user.surname}",
-#             'discount': user.discount and f"{int((1-user.discount)*100)}%",
-#             'renewal': data['payment_method']['saved'],
-#         }, tags=['payment'])
+        # Save payment data
 
-#         if day:
-#             user.subscription = max(user.subscription, timestamp) + 86400 * day
+        payment = Payment(
+            id=data['payment_method']['id'],
+            type=data['payment_method']['type'],
+            card={
+                'type': data['payment_method']['card'].get('card_type'),
+                'bank': data['payment_method']['card'].get('issuer_name'),
+                'country': data['payment_method']['card'].get('issuer_country'),
+                'first': data['payment_method']['card'].get('first6'),
+                'last': data['payment_method']['card'].get('last4'),
+                'expired': {
+                    'month': data['payment_method']['card'].get('expiry_month'),
+                    'year': data['payment_method']['card'].get('expiry_year'),
+                },
+            } if data['payment_method'].get('card') else None,
+            value=int(count),
+            currency=data['amount']['currency'],
+            discount=discount_real,
+        )
 
-#         # Action tracking
-#         Track(
-#             title='pay_ok',
-#             data={
-#                 'value': value_real,
-#                 'days': day,
-#             },
-#             user=user.id,
-#         ).save()
+        if data['payment_method']['saved']:
+            user.pay = [payment.json(default=False)] # TODO: Fix in consys.model
 
-#         # Update
-#         user.save()
+        # Report
+        await report.important("Payment", {
+            'service': 'yandex',
+            'type': payment.type,
+            'card': payment.card,
+            'value': f"{int(value_real)} {payment.currency}",
+            'user': f"#{user_id} {user.name} {user.surname}",
+            'discount': user.discount and f"{int((1-user.discount)*100)}%",
+            'renewal': data['payment_method']['saved'],
+        }, tags=['payment'])
 
-#         # TODO: TG notification
+        if day:
+            user.subscription = max(user.subscription, timestamp) + 86400 * day
 
-#         # Send sockets for real-time update
-#         for socket in Socket.get(user=user_id, fields={}):
-#             await sio.emit('money_recieve', {
-#                 'add': count,
-#                 'balance': user.balance,
-#                 'subscription': user.subscription,
-#             }, room=socket.id)
+        # Action tracking
+        Track(
+            title='pay_ok',
+            data={
+                'value': value_real,
+                'days': day,
+            },
+            user=user.id,
+        ).save()
 
-#     # pylint: disable=broad-except
-#     except Exception as e:
-#         await report.critical(str(e), error=e)
+        # Update
+        user.save()
 
-#     return '', 200
+        # TODO: TG notification
+
+        # # Send sockets for real-time update
+        # for socket in Socket.get(user=user_id, fields={}):
+        #     await sio.emit('money_recieve', {
+        #         'add': count,
+        #         'balance': user.balance,
+        #         'subscription': user.subscription,
+        #     }, room=socket.id)
+
+    # pylint: disable=broad-except
+    except Exception as e:
+        await report.critical(str(e), error=e)
+
+    return '', 200

@@ -7,9 +7,9 @@ import subprocess
 
 from prometheus_client import Gauge
 
-from lib import report
 from models.user import User
 from models.post import Post
+from lib import report
 
 
 metric_posts = Gauge('posts', 'Posts')

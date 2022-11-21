@@ -2,6 +2,7 @@
 User model of DB object
 """
 
+from libdev.codes import get_locale
 from consys.handlers import (
     default_login, check_login_uniq, check_password, process_password,
     check_name, check_surname, check_phone_uniq, pre_process_phone,
@@ -9,7 +10,6 @@ from consys.handlers import (
     default_title,
 )
 
-from lib import get_locale
 from models import Base, Attribute, uploader
 
 

@@ -4,7 +4,7 @@ Payments functionality for the API
 
 from libdev.cfg import cfg
 # pylint: disable=import-error
-from yookassa import Configuration, Payment
+from yookassa import Configuration # , Payment
 
 
 Configuration.account_id = cfg('yookassa.id')
@@ -32,4 +32,4 @@ def create(amount, description, data=None, renewal=None):
         req['capture'] = True
         req['save_payment_method'] = True
 
-    return Payment.create(req).id
+    # return Payment.create(req).id

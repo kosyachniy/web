@@ -45,7 +45,7 @@ async def handler(
     }
 
     # Processing
-    def handler(review):
+    def handle(review):
         # User info
         if review.get('user'):
             review['user'] = User.complex(
@@ -69,7 +69,7 @@ async def handler(
         offset=data.offset,
         search=data.search,
         fields=fields,
-        handler=handler,
+        handler=handle,
     )
 
     # Response
