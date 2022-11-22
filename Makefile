@@ -33,6 +33,9 @@ log-tg:
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}/api | cut -d ' ' -f 1` bash
 
+db:
+	docker exec -it `docker ps -a | grep ${PROJECT_NAME}-db | cut -d ' ' -f 1` mongosh -u ${MONGO_USER} -p ${MONGO_PASS}
+
 test-linter-all:
 	find . -type f -name '*.py' \
 	| grep -vE 'env/' \
