@@ -6,8 +6,8 @@ import time
 
 from libdev.time import get_time
 
-from models import Base, Attribute, uploader
 from lib import cfg
+from models import Base, Attribute, uploader
 
 
 def default_title(instance):

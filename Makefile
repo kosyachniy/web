@@ -80,15 +80,14 @@ clear:
 	rm -rf .pytest_cache/
 	rm -rf **/.pytest_cache/
 
-clear-all:
-	make clear
-	rm -rf **/*.err
-	rm -rf **/*.log
-
 clear-logs:
 	rm -rf ${DATA_PATH}/logs/
 	mkdir ${DATA_PATH}/logs/
 	touch ${DATA_PATH}/logs/jobs.log ${DATA_PATH}/logs/jobs.err ${DATA_PATH}/logs/api.log ${DATA_PATH}/logs/api.err ${DATA_PATH}/logs/tg.err ${DATA_PATH}/logs/tg.log ${DATA_PATH}/logs/nginx.log ${DATA_PATH}/logs/nginx.err ${DATA_PATH}/logs/mongodb.log
+
+clear-all:
+	make clear
+	make clear-logs
 
 set:
 	sudo chmod -R 777 /root

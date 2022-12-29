@@ -86,6 +86,8 @@ async def info(message):
 async def echo(message):
     """ Main handler """
 
+    # TODO: move sub functions to individual handlers
+
     chat, text, cache = await prepare_message(message)
     if chat is None:
         return

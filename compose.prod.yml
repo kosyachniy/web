@@ -2,7 +2,7 @@ version: "3.9"
 services:
   redis:
     image: redis:7.0
-    restart: on-failure
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
@@ -80,6 +80,7 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.46.0  # NOTE: google/cadvisor exit 255
+    restart: unless-stopped
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -94,6 +95,7 @@ services:
     image: prom/prometheus:v2.40.1
     ports:
       - ${PROMETHEUS_PORT}:9090
+    restart: unless-stopped
     volumes:
       - ./configs/prometheus.yml:/prometheus.yml
       - ${DATA_PATH}/prometheus:/prometheus
@@ -110,6 +112,7 @@ services:
     image: grafana/grafana:9.2.5
     ports:
       - ${GRAFANA_PORT}:3000
+    restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
       - GF_SERVER_ROOT_URL=${PROTOCOL}://${EXTERNAL_HOST}/grafana/

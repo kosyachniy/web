@@ -14,7 +14,7 @@ services:
     image: mongo:6.0
     ports:
       - 27017:27017
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     environment:
       MONGO_INITDB_DATABASE: admin
@@ -32,7 +32,7 @@ services:
     depends_on:
       - db
       - redis
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     environment:
       WEB: http://localhost/
@@ -53,7 +53,7 @@ services:
     depends_on:
       - db
       - redis
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     environment:
       API: http://api:5000/

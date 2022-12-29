@@ -50,7 +50,7 @@ async def send_posts(chat, posts=None):
         'name': post['title'],
         'data': f"res{post['id']}",
     } for post in posts] + [{
-        'name': "Создать пост",
+        'name': "➕ Создать пост ➕",
         'data': 'create',
     }])
 
@@ -121,7 +121,7 @@ async def edit_image(callback):
 
 @tg.dp.callback_query_handler(lambda mes: mes.data == 'create')
 async def create(callback):
-    """ Create post """
+    """ Create """
 
     chat, _, _ = await prepare_message(callback)
     if chat is None:
