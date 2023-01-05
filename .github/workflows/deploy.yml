@@ -31,29 +31,38 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASS }}
+          key: ${{ secrets.SSH }}
           script: |
             echo "Stoping old version"
-            if [ -d /root/web ];
+            if [ -d ~/web ];
             then
-                cd /root/web
+                cd ~/web
                 make stop
             fi
 
-            echo "Pulling new version"
-            cd /root
+            echo "Removing old version"
+            cd ~
             rm -rf web
+            # yes | sudo docker system prune -a
+
+            echo "Pulling new version"
             git clone git@github.com:kosyachniy/web.git
-            if [ -d /root/data/web ];
+            if [ -d ~/data ];
             then
                 echo ""
             else
-                cp -r /root/web/data /root/data/web
+                mkdir data
+            fi
+            if [ -d ~/data/web ];
+            then
+                echo ""
+            else
+                cp -r ~/web/data ~/data/web
             fi
 
             echo "Copying keys"
-            cp /root/.secrets/web.env /root/web/.env
+            cp ~/.secrets/web.env ~/web/.env
 
             echo "Starting new version"
-            cd /root/web
+            cd ~/web
             make run
