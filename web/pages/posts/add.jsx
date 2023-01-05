@@ -12,7 +12,7 @@ import api from '../../functions/api'
 
 export default ({ post }) => {
     const { t } = useTranslation('common')
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
     const [title, setName] = useState(post ? post.title : '')
     const [data, setData] = useState(post ? post.data : '')
     const [redirect, setRedirect] = useState(null)
@@ -29,7 +29,7 @@ export default ({ post }) => {
             req['id'] = post.id
         }
 
-        api(system.token, system.locale, 'posts.save', req).then(res => {
+        api(main.token, main.locale, 'posts.save', req).then(res => {
             if (post) {
                 savePost()
             } else {

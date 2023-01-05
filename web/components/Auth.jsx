@@ -1,18 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { popupSet } from '../store'
+import { popupSet } from '../redux/actions/system'
 import styles from '../styles/auth.module.css'
 import Popup from './Popup'
 
 
 export default () => {
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
 
     return (
         <div className={ styles.auth }>
-            <Popup theme={ system.theme } >
+            <Popup theme={ main.theme } >
                 <button
                     className={ styles.btn_mail }
                     onClick={ () => dispatch(popupSet('mail')) }

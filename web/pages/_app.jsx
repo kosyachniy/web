@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
 import { Provider } from 'react-redux'
-import { persistStore } from 'redux-persist'
+// import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -35,16 +35,10 @@ import {
 
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
-import store, {
-    persistor,
-    systemLoaded, onlineAdd, onlineDelete, onlineReset,
-    changeLang,
-} from '../store'
-// import {
-//     useStore,
-//     systemLoaded, onlineAdd, onlineDelete, onlineReset,
-//     changeLang,
-// } from '../store'
+import { systemLoaded } from '../redux/actions/system'
+import { changeLang } from '../redux/actions/main'
+import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
+import store, { persistor } from '../redux/store'
 import { socketIO } from '../functions/sockets'
 import Loader from '../components/Loader'
 
@@ -85,16 +79,14 @@ const Body = ({ Component, pageProps }) => {
     const router = useRouter()
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
     const online = useSelector((state) => state.online)
 
     useEffect(() => {
-        // Locale
-        dispatch(changeLang(router.locale))
-
         // Online
 
         // socketIO.on('online', () => {
-        socketIO.emit('online', { token: system.token })
+        socketIO.emit('online', { token: main.token })
         // })
 
         socketIO.on('online_add', (x) => {
@@ -113,6 +105,11 @@ const Body = ({ Component, pageProps }) => {
     }, [])
 
     useEffect(() => {
+        // Locale
+        if (main.locale !== router.locale) {
+            dispatch(changeLang(router.locale))
+        }
+
         // Loaded
         if (online.count && !system.loaded) {
             dispatch(systemLoaded())
@@ -123,7 +120,7 @@ const Body = ({ Component, pageProps }) => {
         <>
             {/* <Loader /> */}
 
-            <div className={ `bg-${system.theme}` }>
+            <div className={ `bg-${main.theme}` }>
                 <div className={ `container ${styles.main}` }>
                     <Component { ...pageProps } />
                 </div>

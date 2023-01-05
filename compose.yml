@@ -91,10 +91,11 @@ services:
       NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
     volumes:
       - ./web/public:/public
-      - ./web/pages:/pages
-      - ./web/components:/components
-      - ./web/functions:/functions
       - ./web/styles:/styles
+      - ./web/functions:/functions
+      - ./web/redux:/redux
+      - ./web/components:/components
+      - ./web/pages:/pages
     command: npm run dev
 
   server:

@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { postsGet, displaySet } from '../../store'
+import { displaySet } from '../../redux/actions/main'
+import { postsGet } from '../../redux/actions/posts'
 import api from '../../functions/api'
 import PostsGrid from '../../components/CardGrid'
 import PostsFeed from '../../components/CardFeed'
@@ -13,11 +14,12 @@ import PostsFeed from '../../components/CardFeed'
 export default () => {
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
     const posts = useSelector((state) => state.posts)
     const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => {
-        api(system.token, system.locale, 'posts.get', data).then(res => {
+        api(main.token, main.locale, 'posts.get', data).then(res => {
             dispatch(postsGet(res.posts))
         })
     }
@@ -42,20 +44,20 @@ export default () => {
                     <div className="btn-group" role="group" >
                         <button
                             type="button"
-                            className={ `btn btn-${system.theme}` }
+                            className={ `btn btn-${main.theme}` }
                             onClick={ () => {dispatch(displaySet('grid'))}}
                         >
                             <FontAwesomeIcon icon="fa-solid fa-table-cells-large" />
                         </button>
                         <button
                             type="button"
-                            className={ `btn btn-${system.theme}` }
+                            className={ `btn btn-${main.theme}` }
                         >
                             <FontAwesomeIcon icon="fa-solid fa-list-ul" />
                         </button>
                         <button
                             type="button"
-                            className={ `btn btn-${system.theme}` }
+                            className={ `btn btn-${main.theme}` }
                             onClick={ () => {dispatch(displaySet('feed'))}}
                         >
                             <FontAwesomeIcon icon="fa-regular fa-image" />
@@ -77,7 +79,7 @@ export default () => {
                 </div>
             </div>
             {
-                system.display == 'feed' ? (
+                main.display == 'feed' ? (
                     <PostsFeed posts={ posts } />
                 ) : (
                     <PostsGrid posts={ posts } />
