@@ -1,5 +1,5 @@
 export default (state = {
-    search: null,
+    search: '',
     loaded: false,
     popup: null,
 }, action) => {
@@ -8,13 +8,13 @@ export default (state = {
             return {
                 ...state,
                 loaded: true,
-            };
+            }
 
         case 'SYSTEM_POPUP':
             return {
                 ...state,
                 popup: action.popup,
-            };
+            }
 
         case 'SEARCH':
             return {
@@ -23,10 +23,6 @@ export default (state = {
             }
 
         default:
-            return {
-                search: state.search || '',
-                loaded: state.loaded,
-                popup: state.popup,
-            };
+            return state
     }
 }

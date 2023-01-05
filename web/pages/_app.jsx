@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
 import { Provider } from 'react-redux'
-// import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -38,9 +37,9 @@ import styles from '../styles/body.module.css'
 import { systemLoaded } from '../redux/actions/system'
 import { changeLang } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
-import store, { persistor } from '../redux/store'
+import makeStore from '../redux/store'
 import { socketIO } from '../functions/sockets'
-import Loader from '../components/Loader'
+// import Loader from '../components/Loader'
 
 // Structure
 import Header from '../components/Header'
@@ -139,10 +138,9 @@ const Body = ({ Component, pageProps }) => {
     )
 }
 
-const App = (pageProps) => {
-    // const store = useStore(pageProps.initialReduxState)
-    // const persistor = persistStore(store, {}, () => { persistor.persist() })
+const { store, persistor } = makeStore()
 
+const App = (pageProps) => {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor}>

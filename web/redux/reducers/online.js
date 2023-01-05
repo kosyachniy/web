@@ -1,4 +1,7 @@
-export default (state = {count: null, users: []}, action) => {
+export default (state = {
+    count: null,
+    users: [],
+}, action) => {
     switch (action.type) {
         case 'ONLINE_ADD':
             return {
@@ -7,18 +10,21 @@ export default (state = {count: null, users: []}, action) => {
                     ...action.users,
                     ...state.users
                 ]
-            };
+            }
 
         case 'ONLINE_DELETE':
             return {
                 count: action.count,
                 users: state.users.filter(user => action.ids.indexOf(user.id) === -1),
-            };
+            }
 
         case 'ONLINE_RESET':
-            return {count: null, users: []};
+            return {
+                count: null,
+                users: [],
+            }
 
         default:
-            return state;
+            return state
     }
 }

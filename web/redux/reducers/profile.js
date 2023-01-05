@@ -5,8 +5,9 @@ export default (state = {
     surname: null,
     phone: null,
     mail: null,
-    image: null,
-    image_optimize: null,
+    image: '/user.png',
+    image_optimize: '/user.png',
+    social: [],
     admin: 2,
 }, action) => {
     switch (action.type) {
@@ -21,7 +22,7 @@ export default (state = {
                 image: action.image || '/user.png',
                 image_optimize: action.image || '/user.png',
                 admin: action.admin,
-            };
+            }
 
         case 'PROFILE_OUT':
             return {
@@ -34,7 +35,7 @@ export default (state = {
                 image: null,
                 image_optimize: null,
                 admin: 2,
-            };
+            }
 
         case 'PROFILE_UPDATE':
             if (action.profile.login) {
@@ -65,17 +66,6 @@ export default (state = {
             return state
 
         default:
-            return {
-                id: state.id || 0,
-                login: state.login,
-                image: state.image || '/user.png',
-                image_optimize: state.image || '/user.png',
-                name: state.name,
-                surname: state.surname,
-                phone: state.phone,
-                mail: state.mail,
-                social: state.social || [],
-                admin: state.admin || 2,
-            };
+            return state
     }
 }

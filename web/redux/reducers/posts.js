@@ -1,13 +1,13 @@
 export default (state = [], action) => {
     switch (action.type) {
         case 'POSTS_GET':
-            return action.posts;
+            return action.posts
 
         case 'POSTS_ADD':
             return [
                 action.post,
                 ...state
-            ];
+            ]
 
         case 'POSTS_EDIT':
             return state.map(post => {
@@ -17,17 +17,17 @@ export default (state = [], action) => {
                             post[el] = action.post[el]
                         }
 
-                        return null;
+                        return null
                     })
                 }
 
-                return post;
+                return post
             })
 
         case 'POSTS_DELETE':
-            return state.filter(note => note.id !== action.id);
+            return state.filter(note => note.id !== action.id)
 
         default:
-            return state;
+            return state
     }
 }
