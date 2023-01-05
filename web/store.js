@@ -1,47 +1,29 @@
 import {
-    configureStore,
-    ThunkAction,
-    Action,
-    combineReducers,
-    StoreEnhancer,
-  } from "@reduxjs/toolkit";
-
-  import {
-    persistStore,
-    persistReducer,
-    FLUSH,
-    REHYDRATE,
-    PAUSE,
-    PERSIST,
-    PURGE,
-    REGISTER,
-  } from "redux-persist";
-  import storage from "redux-persist/lib/storage";
-  import { createOffline } from "@redux-offline/redux-offline";
-  import offlineConfig from "@redux-offline/redux-offline/lib/defaults";
-//   import customOfflineConfig from "config/offline";
-
-//   import counterReducer from "features/counter/counterSlice"
+    configureStore, combineReducers,
+} from "@reduxjs/toolkit";
+import {
+    persistStore, persistReducer,
+    FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { createOffline } from "@redux-offline/redux-offline";
+import offlineConfig from "@redux-offline/redux-offline/lib/defaults";
 
 import { generate } from './functions/generate'
-
-
 
 
 const {
     middleware: offlineMiddleware,
     enhanceReducer: offlineEnhanceReducer,
     enhanceStore: offlineEnhanceStore,
-  } = createOffline({
+} = createOffline({
     ...offlineConfig,
     persist: undefined,
     // ...customOfflineConfig,
-  });
-
+});
 
 
 // import { api } from "service/http";
-
 
 // const effect = (effect, action) => {
 //     let draft = effect;
@@ -58,7 +40,6 @@ const {
 //     return 400 <= status && status < 500;
 // };
 // const customOfflineConfig = { effect, discard };
-
 
 
 // actions.js
@@ -357,15 +338,15 @@ const persistConfig = {
 }
 
 export function makeStore() {
-    //   return configureStore({
-    //     reducer: { counter: counterReducer },
-    //   });
     const rootReducer = combineReducers({
         system, online, profile, posts,
-        // counter: counterReducer,
     });
-    const persistedReducer = persistReducer(persistConfig, offlineEnhanceReducer(rootReducer));
-    const store = configureStore({
+    const persistedReducer = persistReducer(
+        persistConfig,
+        offlineEnhanceReducer(rootReducer),
+    );
+
+    return configureStore({
         reducer: persistedReducer,
         enhancers: [offlineEnhanceStore],
         middleware: (getDefaultMiddleware) => getDefaultMiddleware({
@@ -374,60 +355,8 @@ export function makeStore() {
             },
         }).concat(offlineMiddleware),
     });
-    return store;
 }
 
 const store = makeStore();
 export const persistor = persistStore(store);
-
 export default store;
-
-
-// export const reducers = combineReducers({
-//     system, online, profile, posts,
-// })
-
-// // store.js
-
-// const persistConfig = {
-//     key: 'primary',
-//     storage,
-//     // whitelist: ['exampleData'],
-// }
-
-// const persistedReducer = persistReducer(persistConfig, reducers)
-
-// function makeStore(initialState = {}) {
-//     return createStore(
-//         persistedReducer,
-//         initialState,
-//         composeWithDevTools(applyMiddleware())
-//     )
-// }
-
-// export const initializeStore = (preloadedState) => {
-//     let _store = store ?? makeStore(preloadedState)
-
-//     // After navigating to a page with an initial Redux state, merge that state
-//     // with the current state in the store, and create a new store
-//     if (preloadedState && store) {
-//         _store = makeStore({
-//             ...store.getState(),
-//             ...preloadedState,
-//         })
-//         // Reset the current store
-//         store = undefined
-//     }
-
-//     // For SSG and SSR always create a new store
-//     if (typeof window === 'undefined') return _store
-//     // Create the store once in the client
-//     if (!store) store = _store
-
-//     return _store
-// }
-
-// export function useStore(initialState) {
-//     const store = useMemo(() => initializeStore(initialState), [initialState])
-//     return store
-// }

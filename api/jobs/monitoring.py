@@ -32,9 +32,7 @@ def get_cpu():
             return None
         return sum(map(float, res)) * 1000000
 
-    # pylint: disable=broad-except
-    except Exception as e:
-        print(e)
+    except ValueError:
         return None
 
 async def monitoring():
@@ -45,13 +43,9 @@ async def monitoring():
 async def handle(_):
     """ Monitoring """
 
-    try:
-        cpu = get_cpu()
-        if cpu:
-            metric_cpu.set(cpu)
-    # pylint: disable=broad-except
-    except Exception as e:
-        await report.critical(str(e), error=e)
+    cpu = get_cpu()
+    if cpu:
+        metric_cpu.set(cpu)
 
     while True:
         try:
