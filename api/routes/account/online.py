@@ -167,18 +167,18 @@ async def online(sid, data):
 
     await report.debug('ON', sid)
 
-    if not data.token:
+    if not data['token']:
         await report.warning("Invalid token")
         return
 
     # Send sockets
-    await online_start(sio, data.token, sid)
+    await online_start(sio, data['token'], sid)
 
     # TODO: UTM parameters
     # TODO: Promos
 
     # user_id = user_current['id'] if user_current else 0
-    # utms = Mark.get(token=data.token, user=user_id)
+    # utms = Mark.get(token=data['token'], user=user_id)
 
     # if utms:
     #     for utm in utms:
@@ -187,7 +187,7 @@ async def online(sid, data):
 
     # else:
     #     utm = Mark(
-    #         token=data.token,
+    #         token=data['token'],
     #         user=user_id,
     #         title=utm_mark,
     #     )

@@ -52,7 +52,7 @@ export default () => {
                     <div className="input-group mb-3">
                         <input
                             className="form-control"
-                            // className={ (responce !== null && responce.data === 'password') ? 'error' : '' }
+                            // className={ (response !== null && response.data === 'password') ? 'error' : '' }
                             type="password"
                             placeholder={ t('profile.password') }
                             value={ password }

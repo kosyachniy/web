@@ -36,16 +36,13 @@ export default (token, locale, method, data={}) => {
         data.locale = locale
         data.token = token
 
-        serverRequest(method, data).then(async (responce) => {
-            const res = await responce.json();
+        serverRequest(method, data).then(async (response) => {
+            const res = await response.json();
 
-            if (res.error !== 0) {
-                console.log(res.data);
-                reject(res.error, res.data);
-            } else if (res.data === undefined) {
+            if (res === undefined) {
                 resolve({});
             } else {
-                resolve(res.data);
+                resolve(res);
             }
         });
     });
