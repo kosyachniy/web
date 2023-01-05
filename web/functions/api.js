@@ -1,10 +1,15 @@
-async function serverRequest(json={}) {
-    return fetch(process.env.NEXT_PUBLIC_API, {
+async function serverRequest(method='', data={}) {
+    const url = (
+        process.env.NEXT_PUBLIC_API
+        + method.replace('.', '/')
+        + (method ? '/' : '')
+    )
+    return fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(json),
+        body: JSON.stringify(data),
     })
     .catch((error) => {
         let errCode;
@@ -25,17 +30,13 @@ async function serverRequest(json={}) {
     });
 }
 
-export default (token, locale, method, params={}) => {
+export default (token, locale, method, data={}) => {
     return new Promise((resolve, reject) => {
-        const json = {
-            method,
-            params,
-            network: 'web',
-            locale,
-            token,
-        };
+        data.network = 'web'
+        data.locale = locale
+        data.token = token
 
-        serverRequest(json).then(async (responce) => {
+        serverRequest(method, data).then(async (responce) => {
             const res = await responce.json();
 
             if (res.error !== 0) {

@@ -15,7 +15,7 @@ class Request():
     """ Request container """
     def __init__(self, ip, socket, token, network, locale, jwt=None, sio=None):
         self.now = time.time()
-        self.ip = ip
+        self.ip = ip # TODO: request.client.host,
         self.socket = socket
         self.network = get_network(network)
         self.locale = get_locale(locale)
@@ -23,11 +23,11 @@ class Request():
         self.sio = sio
 
 class Type(BaseModel):
-    ip: str
-    socket: str
-    token: str
-    network: str
-    locale: str
+    ip: str = None
+    socket: str = None
+    token: str = None
+    network: str = None
+    locale: str = None
     jwt: dict = None
     sio: str = None
 

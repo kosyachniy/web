@@ -7,12 +7,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
-# from routes import router
 from lib import cfg
 
 
-app = FastAPI(title=cfg('NAME', 'API'))
-# app.include_router(router)
+app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
+
 
 # Prometheus
 @app.on_event('startup')
@@ -89,9 +88,6 @@ asgi = socketio.ASGIApp(sio)
 
 #     return decorated
 
-# from fastapi import APIRouter
-
-# router = APIRouter()
 
 @app.post("/")
 async def handler():

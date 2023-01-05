@@ -5,13 +5,10 @@ Attach all routers
 import importlib
 import pkgutil
 
-from fastapi import APIRouter
-
 # pylint: disable=import-self
 import routes
+from app import app
 
-
-router = APIRouter()
 
 for loader, module_name, is_pkg in pkgutil.walk_packages(
     routes.__path__, routes.__name__ + '.'
@@ -26,6 +23,6 @@ for loader, module_name, is_pkg in pkgutil.walk_packages(
             continue
         # pylint: disable=invalid-name
         name = '/' + '/'.join(names)
-        router.include_router(module.router, prefix=name, tags=names)
+        app.include_router(module.router, prefix=name, tags=names)
     except Exception as e:
         print(e)
