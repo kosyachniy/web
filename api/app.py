@@ -7,12 +7,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from routes import router
+# from routes import router
 from lib import cfg
 
 
-app = FastAPI(title=cfg('NAME', 'API'), root_path="/api")
-app.include_router(router)
+app = FastAPI(title=cfg('NAME', 'API'))
+# app.include_router(router)
 
 # Prometheus
 @app.on_event('startup')
@@ -89,35 +89,15 @@ asgi = socketio.ASGIApp(sio)
 
 #     return decorated
 
+# from fastapi import APIRouter
 
+# router = APIRouter()
 
-# Online users
-
-@sio.on('connect')
-async def connect(sid, request, data):
-    """ Connect socket """
-    # await api.method(
-    #     'account.connect',
-    #     ip=request['asgi.scope']['client'][0],
-    #     socket=sid,
-    # )
-
-@sio.on('online')
-async def online(sid, data):
-    """ Socket about online user """
-    # await api.method(
-    #     'account.online',
-    #     data,
-    #     socket=sid,
-    # )
-
-@sio.on('disconnect')
-async def disconnect(sid):
-    """ Disconnect socket """
-    # await api.method(
-    #     'account.disconnect',
-    #     socket=sid,
-    # )
+@app.post("/")
+async def handler():
+    return 'OK'
 
 
 app.mount('/ws', asgi)
+
+import routes

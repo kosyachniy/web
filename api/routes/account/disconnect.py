@@ -4,17 +4,13 @@ The disconnect socket of the account object of the API
 
 import time
 
-from fastapi import APIRouter, Depends
 from consys.errors import ErrorWrong
 
+from lib import report
 from models.socket import Socket
 from models.track import Track
-from services.request import get_request
 from routes.account.online import _other_sessions, _online_count, get_user
-from lib import report
-
-
-router = APIRouter()
+from app import sio
 
 
 async def online_stop(sio, socket_id):
@@ -67,8 +63,8 @@ async def online_stop(sio, socket_id):
             'users': [{'id': user.id}], # TODO: Админам
         })
 
-@router.post("/disconnect/")
-async def handler(request = Depends(get_request)):
+@sio.on('disconnect')
+async def disconnect(sid):
     """ Disconnect """
-    await report.debug('OUT', request.socket)
-    await online_stop(request.sio, request.socket)
+    await report.debug('OUT', sid)
+    await online_stop(sio, sid)

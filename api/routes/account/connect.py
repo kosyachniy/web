@@ -2,16 +2,14 @@
 The connect socket of the account object of the API
 """
 
-from fastapi import APIRouter, Depends
-
-from services.request import get_request
 from lib import report
+from app import sio
 
 
-router = APIRouter()
-
-
-@router.post("/connect/")
-async def handler(request = Depends(get_request)):
+@sio.on('connect')
+async def connect(sid, request, data):
     """ Connect """
-    await report.debug('IN', request.socket)
+
+    # TODO: ip = request['asgi.scope']['client'][0]
+
+    await report.debug('IN', sid)

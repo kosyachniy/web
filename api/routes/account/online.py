@@ -2,19 +2,14 @@
 The online socket of the account object of the API
 """
 
-from fastapi import APIRouter, Body, Depends
-from pydantic import BaseModel
 from consys.errors import ErrorWrong
 
+from lib import report
 from models.user import User
 from models.socket import Socket
 # from models.space import Space
 from services.auth import get_user
-from services.request import get_request
-from lib import report
-
-
-router = APIRouter()
+from app import sio
 
 
 # async def _get_active_space(user_id):
@@ -163,28 +158,21 @@ async def online_start(sio, token_id, socket_id=None):
     #             'id': space,
     #         }, room=socket.id)
 
-
-class Type(BaseModel):
-    token: str
-
-@router.post("/online/")
-async def handler(
-    data: Type = Body(...),
-    request = Depends(get_request),
-):
+@sio.on('online')
+async def online(sid, data):
     """ Update online status """
 
     # TODO: Проверка, что токен не скомпрометирован - по ip?
     # TODO: Определить вкладку (tab - sid)
 
-    await report.debug('ON', request.socket)
+    await report.debug('ON', sid)
 
     if not data.token:
         await report.warning("Invalid token")
         return
 
     # Send sockets
-    await online_start(request.sio, data.token, request.socket)
+    await online_start(sio, data.token, sid)
 
     # TODO: UTM parameters
     # TODO: Promos
