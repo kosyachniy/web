@@ -71,7 +71,7 @@ services:
     command: bash -c "cd /app && python job.py"
 
   node_exporter:
-    image: quay.io/prometheus/node-exporter:v1.4.0
+    image: quay.io/prometheus/node-exporter:v1.5.0
     restart: unless-stopped
     volumes:
       - /:/host:ro,rslave
@@ -92,7 +92,7 @@ services:
       - '--docker_only=true'
 
   prometheus:
-    image: prom/prometheus:v2.40.1
+    image: prom/prometheus:v2.41.0
     ports:
       - ${PROMETHEUS_PORT}:9090
     restart: unless-stopped
@@ -109,7 +109,7 @@ services:
       - cadvisor
 
   grafana:
-    image: grafana/grafana:9.2.5
+    image: grafana/grafana:9.3.2
     ports:
       - ${GRAFANA_PORT}:3000
     restart: unless-stopped
