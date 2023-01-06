@@ -46,8 +46,6 @@ async def handler(
 ):
     """ Get """
 
-    print('!!!', user)
-
     # TODO: cursor
 
     # Checks
