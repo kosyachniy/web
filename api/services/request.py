@@ -13,13 +13,13 @@ from services.auth import get_user
 
 class Request():
     """ Request container """
-    def __init__(self, ip, socket, token, network, locale, jwt=None, sio=None):
+    def __init__(self, ip, socket, token, network, locale, sio=None):
         self.now = time.time()
         self.ip = ip # TODO: request.client.host,
         self.socket = socket
         self.network = get_network(network)
         self.locale = get_locale(locale)
-        self.user, self.token = get_user(token, socket, jwt)
+        self.user, self.token = get_user(token, socket)
         self.sio = sio
 
 class Type(BaseModel):
@@ -28,7 +28,6 @@ class Type(BaseModel):
     token: str = None
     network: str = None
     locale: str = None
-    jwt: dict = None
     sio: str = None
 
 async def get_request(data: Type = Body(...)):

@@ -2,8 +2,7 @@
 User authorization
 """
 
-from fastapi import Body
-from pydantic import BaseModel
+from fastapi import Request
 from consys.errors import ErrorWrong
 
 from models.user import User
@@ -11,8 +10,8 @@ from models.token import Token
 from models.socket import Socket
 
 
-def get_user(token_id, socket_id=None, jwt=None):
-    """ Get user object by token """
+def get_user(token_id=None, socket_id=None, user_id=None):
+    """ Get user object by token / socket / id """
 
     if token_id is not None:
         try:
@@ -32,29 +31,24 @@ def get_user(token_id, socket_id=None, jwt=None):
         else:
             token_id = socket.token
             if socket.user:
-                return User.get(ids=socket.user), token_id
+                return User.get(socket.user), token_id
 
-    elif jwt is not None:
-        users = User.get(social={'$elemMatch': {
-            'id': jwt['network'],
-            'user': jwt['user'],
-        }})
-
-        if users:
-            return users[0], token_id
+    elif user_id:
+        try:
+            user = User.get(user_id)
+        except ErrorWrong:
+            pass
+        else:
+            return user, None
 
     return User(), token_id
 
 
-class Type(BaseModel):
-    token: str
-
-def auth(data: Type = Body(...)):
-    """ User authorization """
-    user, _ = get_user(data.token)
+def auth(request: Request):
+    """ Get user """
+    user, _ = get_user(user_id=request.state.user)
     return user
 
-def get_token(data: Type = Body(...)):
+def get_token(request: Request):
     """ Get token """
-    _, token = get_user(data.token)
-    return token
+    return request.state.token

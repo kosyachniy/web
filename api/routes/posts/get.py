@@ -11,6 +11,7 @@ from consys.errors import ErrorAccess
 
 from models.post import Post
 from services.request import get_request
+from services.auth import get_token
 
 
 router = APIRouter()
@@ -30,6 +31,7 @@ class Type(BaseModel):
 async def handler(
     data: Type = Body(...),
     request = Depends(get_request),
+    token = Depends(get_token),
 ):
     """ Get """
 

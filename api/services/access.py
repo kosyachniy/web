@@ -50,4 +50,10 @@ class AccessMiddleware(BaseHTTPMiddleware):
                 })
                 return Response(content="Invalid token", status_code=401)
 
+            request.state.token = token['token']
+            request.state.user = token['user']
+        else:
+            request.state.token = None
+            request.state.user = 0
+
         return await call_next(request)
