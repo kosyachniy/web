@@ -21,16 +21,21 @@ async def format_response(request: Request, call_next):
 
     # JWT
     if request.method == 'POST' and url not in WHITELIST:
-        header = request.headers.get('Authorization')
-        if not header:
-            # await report.error("No token", {
+        token = (
+            request.cookies.get('Authorization')
+            or request.headers.get('Authorization')
+        )
+
+        if not token:
+            # await report.warning("No token", {
             #     'url': url,
             # })
             return Response(content="Invalid token", status_code=401)
 
-        token = header.split(' ')[1]
+        if ' ' in token:
+            token = token.split(' ')[1]
         if not token or token == 'null':
-            await report.error("Invalid token", {
+            await report.warning("Invalid token", {
                 'url': url,
                 'token': token,
             })
@@ -39,12 +44,11 @@ async def format_response(request: Request, call_next):
         try:
             token = jwt.decode(token, cfg('jwt'), algorithms='HS256')
         except Exception as e:
-            await report.error("Invalid token", {
+            await report.warning("Invalid token", {
                 'url': url,
                 'token': token,
                 'error': e,
             })
             return Response(content="Invalid token", status_code=401)
 
-        print(token)
     return await call_next(request)

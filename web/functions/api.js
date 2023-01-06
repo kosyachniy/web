@@ -8,53 +8,33 @@ async function serverRequest(method='', data={}) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            // TODO: ssr get cookie
         },
         body: JSON.stringify(data),
     })
-    .catch((error) => {
-        let errCode;
-        const errText = error.toString();
-
-        if (errText === 'Error: Request failed with status code 429') {
-            errCode = 429;
-        } else if (errText === 'Error: Network Error') {
-            errCode = 'network';
-        } else {
-            errCode = 400;
-        }
-
-        return {
-            error: errCode,
-            data: errText,
-        };
-    });
 }
 
-export default (token, locale, method, data={}) => {
+const api = (token, locale, method, data={}, setted=false) => {
     return new Promise((resolve, reject) => {
-        data.network = 'web'
-        data.locale = locale
-        data.token = token
+        // data.locale = locale
 
         serverRequest(method, data).then(async (response) => {
-            if (response.status === 401) {
-                serverRequest('account.token', {
+            if (response.status >= 200 && response.status < 300) {
+                const res = await response.json();
+                resolve(res === undefined ? {} : res);
+            };
+
+            if (response.status === 401 && !setted) {
+                await api(token, locale, 'account.token', {
                     token,
                     network: 'web',
-                }).then(async (response) => {
-                    console.log(response)
-                })
+                }, setted=true);
+                resolve(await api(token, locale, method, data, true));
             }
 
-            const res = await response.json();
-
-            if (res === undefined) {
-                resolve({});
-            } else {
-                resolve(res);
-            }
+            console.log(response);
         });
     });
 }
 
-// TODO: Socket.IO
+export default api;

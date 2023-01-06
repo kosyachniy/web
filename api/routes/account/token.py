@@ -55,5 +55,5 @@ async def handler(
     response = JSONResponse(content={
         'token': token,
     })
-    response.set_cookie(key="Authorization", value=token)
+    response.set_cookie(key="Authorization", value=f"Bearer {token}")
     return response
