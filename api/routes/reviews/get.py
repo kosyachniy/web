@@ -30,6 +30,8 @@ async def handler(
 ):
     """ Get """
 
+    # TODO: get by your token when you unauth
+
     # No access
     if user.status < 4:
         raise ErrorAccess('get')
