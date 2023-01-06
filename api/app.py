@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from lib import cfg
+from services.response import ResponseMiddleware
+from services.access import AccessMiddleware
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
@@ -28,9 +30,23 @@ app.add_middleware(
     allow_headers=['Content-Type'],
 )
 
+# Monitoring
+app.add_middleware(ResponseMiddleware)
+
+# JWT
+app.add_middleware(
+    AccessMiddleware,
+    jwt=cfg('jwt'),
+    whitelist={
+        '/',
+        '/account/token/'
+    },
+)
+
 # Socket.IO
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 asgi = socketio.ASGIApp(sio)
+app.mount('/ws', asgi)
 
 # # Limiter
 
@@ -54,13 +70,11 @@ asgi = socketio.ASGIApp(sio)
 # )
 
 
+# Ping
+@app.get("/")
 @app.post("/")
 async def handler():
     return 'OK'
 
 
-app.mount('/ws', asgi)
-
 import routes
-import services.access
-import services.response

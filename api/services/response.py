@@ -5,11 +5,11 @@ Format response object
 import time
 
 from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 from consys.errors import BaseError
 from prometheus_client import Histogram
 
 from lib import report
-from app import app
 
 
 metric_endpoints = Histogram(
@@ -19,35 +19,38 @@ metric_endpoints = Histogram(
 )
 
 
-@app.middleware('http')
-async def format_response(request: Request, call_next):
-    start = time.time()
+class ResponseMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app):
+        super().__init__(app)
 
-    try:
-        response = await call_next(request)
+    async def dispatch(self, request: Request, call_next):
+        start = time.time()
 
-    except BaseError as e:
-        response = Response(content=str(e.txt), status_code=400)
-        status = 400
+        try:
+            response = await call_next(request)
 
-    # pylint: disable=broad-except
-    except Exception as e:
-        response = Response(content=str(e.txt), status_code=500)
-        await report.critical(str(e), error=e)
-        status = 500
+        except BaseError as e:
+            response = Response(content=str(e.txt), status_code=400)
+            status = 400
 
-    else:
-        status = response.status_code
+        # pylint: disable=broad-except
+        except Exception as e:
+            response = Response(content=str(e.txt), status_code=500)
+            await report.critical(str(e), error=e)
+            status = 500
 
-    if request.method == 'POST':
-        url = request.url.path[4:]
-        process_time = time.time() - start
+        else:
+            status = response.status_code
 
-        # Monitoring
-        # TODO: native methods
-        metric_endpoints.labels(url, status).observe(process_time)
+        if request.method == 'POST':
+            url = request.url.path[4:]
+            process_time = time.time() - start
 
-        # Timing
-        response.headers['X-Process-Time'] = f"{process_time:.3f}"
+            # Monitoring
+            # TODO: native methods
+            metric_endpoints.labels(url, status).observe(process_time)
 
-    return response
+            # Timing
+            response.headers['X-Process-Time'] = f"{process_time:.3f}"
+
+        return response

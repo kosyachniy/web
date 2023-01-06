@@ -25,6 +25,7 @@ const api = (token, locale, method, data={}, setted=false) => {
             };
 
             if (response.status === 401 && !setted) {
+                // TODO: auto request on token creation
                 await api(token, locale, 'account.token', {
                     token,
                     network: 'web',

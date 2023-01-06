@@ -49,6 +49,12 @@ services:
     ports:
       - ${API_PORT}:5000
     command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers"
+    healthcheck:
+      test: "curl --fail http://0.0.0.0:5000/"
+      interval: 1s
+      timeout: 1s
+      start_period: 180s
+      retries: 180
 
   jobs:
     image: ${PROJECT_NAME}/jobs
