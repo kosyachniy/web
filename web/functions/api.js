@@ -37,6 +37,15 @@ export default (token, locale, method, data={}) => {
         data.token = token
 
         serverRequest(method, data).then(async (response) => {
+            if (response.status === 401) {
+                serverRequest('account.token', {
+                    token,
+                    network: 'web',
+                }).then(async (response) => {
+                    console.log(response)
+                })
+            }
+
             const res = await response.json();
 
             if (res === undefined) {

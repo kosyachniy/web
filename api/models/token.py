@@ -11,3 +11,6 @@ class Token(Base):
     _name = 'tokens'
 
     id = Attribute(types=str)
+    network = Attribute(types=int)
+    ip = Attribute(types=str)
+    utm = Attribute(types=str)

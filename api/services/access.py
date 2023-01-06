@@ -2,8 +2,6 @@
 Check access by token
 """
 
-import json
-
 import jwt
 from fastapi import Request, Response
 
@@ -11,17 +9,23 @@ from lib import cfg, report
 from app import app
 
 
+WHITELIST = {
+    '/',
+    '/account/token/'
+}
+
+
 @app.middleware('http')
 async def format_response(request: Request, call_next):
     url = request.url.path[4:]
 
     # JWT
-    if request.method == 'POST' and url != '/':
+    if request.method == 'POST' and url not in WHITELIST:
         header = request.headers.get('Authorization')
         if not header:
-            await report.error("No token", {
-                'url': url,
-            })
+            # await report.error("No token", {
+            #     'url': url,
+            # })
             return Response(content="Invalid token", status_code=401)
 
         token = header.split(' ')[1]
