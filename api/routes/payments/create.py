@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 # from models.user import User
 # from services.request import get_request
+# from services.auth import get_token
 # from routes.account.auth import reg
 # from routes.promos.invite import get_promo
 # from lib.pay import create
@@ -31,6 +32,7 @@ class Type(BaseModel):
 async def handler(
     # data: Type = Body(...),
     # request = Depends(get_request),
+    # token = Depends(get_token),
 ):
     """ Create a payment request """
 
@@ -39,7 +41,7 @@ async def handler(
     #     users = User.get(phone=phone, fields={})
 
     #     if not users:
-    #         user = await reg(request, data, 'phone', 'payment')
+    #         user = await reg(request, token, data, 'phone', 'payment')
     #     else:
     #         user = users[0]
 

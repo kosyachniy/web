@@ -11,7 +11,7 @@ from consys.errors import ErrorAccess, ErrorInvalid
 
 from models.user import User
 from models.socket import Socket
-from services.request import get_request
+from services.auth import auth
 
 
 router = APIRouter()
@@ -42,26 +42,25 @@ class Type(BaseModel):
 @router.post("/get/")
 async def handler(
     data: Type = Body(...),
-    request = Depends(get_request),
+    user = Depends(auth),
 ):
     """ Get """
+
+    print('!!!', user)
 
     # TODO: cursor
 
     # Checks
 
-    if (
-        request.user.status < 4 # TODO: 5
-        and data.id != request.user.id
-    ):
+    if user.status < 4 and data.id != user.id: # TODO: 5
         raise ErrorAccess('get')
 
-    if request.user.id == 0:
+    if user.id == 0:
         raise ErrorInvalid('id')
 
     # TODO: Get myself
-    # if not data.id and request.user.id:
-    #     data.id = request.user.id
+    # if not data.id and user.id:
+    #     data.id = user.id
 
     # Fields
     # TODO: right to roles
@@ -81,8 +80,8 @@ async def handler(
         'discount',
     }
 
-    process_self = data.id == request.user.id
-    process_admin = request.user.status >= 7
+    process_self = data.id == user.id
+    process_admin = user.status >= 7
 
     if process_self:
         fields |= {

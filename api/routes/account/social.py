@@ -7,19 +7,22 @@ import urllib
 import base64
 from typing import Union
 
+import jwt
 import requests
 from fastapi import APIRouter, Body, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import get_network
 from consys.errors import ErrorAccess, ErrorWrong
 
+from lib import cfg, report
 from models.user import User
 from models.token import Token
 from models.track import Track
 from services.request import get_request
+from services.auth import get_token
 from routes.account.auth import reg
 from routes.account.online import online_start
-from lib import cfg, report
 
 
 router = APIRouter()
@@ -42,6 +45,7 @@ class Type(BaseModel):
 async def handler(
     data: Type = Body(...),
     request = Depends(get_request),
+    token = Depends(get_token),
 ):
     """ Via social network """
 
@@ -88,7 +92,7 @@ async def handler(
 
         data.user = response['user_id']
         data.mail = response.get('email')
-        token = response['access_token']
+        access_token = response['access_token']
 
         # link = 'https://api.vk.com/method/account.getProfileInfo' \
         #        '?access_token={}&v=5.103'
@@ -97,7 +101,7 @@ async def handler(
 
         try:
             response = json.loads(
-                requests.get(link.format(data.user, token), timeout=10).text
+                requests.get(link.format(data.user, access_token), timeout=10).text
             )['response'][0]
         except Exception as e:
             raise ErrorAccess('vk') from e
@@ -176,39 +180,49 @@ async def handler(
                 'social': data.social,
             },
             user=user.id,
-            token=request.token,
+            token=token,
         ).save()
 
     # Register
     else:
         new = True
-        user = await reg(request, data, 'social')
+        user = await reg(request, token, data, 'social')
 
     # Assignment of the token to the user
 
-    if not request.token:
+    if not token:
         raise ErrorAccess('auth')
 
     try:
-        token = Token.get(ids=request.token, fields={'user'})
+        token = Token.get(token, fields={'user'})
     except ErrorWrong:
-        token = Token(id=request.token)
+        token = Token(id=token)
 
     if token.user and token.user != user.id:
         await report.warning("Reauth", {
             'from': token.user,
             'to': user.id,
-            'token': request.token,
+            'token': token.id,
         })
 
     token.user = user.id
     token.save()
 
     # Update online users
-    await online_start(request.sio, request.token)
+    await online_start(request.sio, token.id)
+
+    # JWT
+    token = jwt.encode({
+        'token': token.id,
+        'user': user.id,
+        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+    }, cfg('jwt'), algorithm='HS256')
 
     # Response
-    return {
+    response = JSONResponse(content={
         **user.json(fields=fields),
         'new': new,
-    }
+        'token': token,
+    })
+    response.set_cookie(key="Authorization", value=f"Bearer {token}")
+    return response

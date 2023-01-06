@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.review import Review
-from services.request import get_request
+from services.auth import auth
 
 
 router = APIRouter()
@@ -19,12 +19,12 @@ class Type(BaseModel):
 @router.post("/rm/")
 async def handler(
     data: Type = Body(...),
-    request = Depends(get_request),
+    user = Depends(auth),
 ):
     """ Delete """
 
     # No access
-    if request.user.status < 5:
+    if user.status < 5:
         raise ErrorAccess('rm')
 
     # Get

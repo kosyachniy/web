@@ -6,7 +6,7 @@ import jwt
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from lib import cfg, report
+from lib import report
 
 
 class AccessMiddleware(BaseHTTPMiddleware):

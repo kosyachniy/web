@@ -10,8 +10,8 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.post import Post
-from services.request import get_request
-from services.auth import get_token
+# from services.request import get_request
+from services.auth import auth
 
 
 router = APIRouter()
@@ -30,8 +30,8 @@ class Type(BaseModel):
 @router.post("/get/")
 async def handler(
     data: Type = Body(...),
-    request = Depends(get_request),
-    token = Depends(get_token),
+    # request = Depends(get_request),
+    user = Depends(auth),
 ):
     """ Get """
 
@@ -40,7 +40,7 @@ async def handler(
 
     # No access
     # TODO: -> middleware
-    if request.user.status < 2:
+    if user.status < 2:
         raise ErrorAccess('get')
 
     # # Language
@@ -93,9 +93,9 @@ async def handler(
 
     cond_user = None
     if data.my:
-        cond_user = request.user.id
+        cond_user = user.id
     elif data.my is not None:
-        cond_user = {'$ne': request.user.id}
+        cond_user = {'$ne': user.id}
 
     posts = Post.complex(
         ids=data.id,

@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.user import User
-from services.request import get_request
+from services.auth import auth
 
 
 router = APIRouter()
@@ -19,22 +19,22 @@ class Type(BaseModel):
 @router.post("/block/")
 async def handler(
     data: Type = Body(...),
-    request = Depends(get_request),
+    user = Depends(auth),
 ):
     """ Block """
 
     # Get user
-    user = User.get(ids=data.id, fields={'status'})
+    subuser = User.get(ids=data.id, fields={'status'})
 
     # No access
-    if request.user.status < 6 or user.status > request.user.status:
+    if user.status < 6 or user.status > user.status:
         raise ErrorAccess('block')
 
     # Save
-    user.status = 1
-    user.save()
+    subuser.status = 1
+    subuser.save()
 
     # Response
     return {
-        'status': user.status,
+        'status': subuser.status,
     }

@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends
 # from models.token import Token
 # from models.socket import Socket
 from services.request import get_request
+from services.auth import auth
 # from routes.account.disconnect import online_stop
 
 
@@ -16,7 +17,10 @@ router = APIRouter()
 
 
 @router.post("/exit/")
-async def handler(request = Depends(get_request)):
+async def handler(
+    # request = Depends(get_request),
+    # user = Depends(auth),
+):
     """ Log out """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -24,10 +28,10 @@ async def handler(request = Depends(get_request)):
     # TODO: Отправлять сокет всем сессиям этого браузера на выход
 
     # # Not authorized
-    # if request.user.status < 3:
+    # if user.status < 3:
     #     await report.error("Wrong token", {
     #         'token': request.token,
-    #         'user': request.user.id,
+    #         'user': user.id,
     #     })
 
     #     raise ErrorAccess('exit')

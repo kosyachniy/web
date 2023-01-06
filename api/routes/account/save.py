@@ -12,6 +12,7 @@ from consys.errors import ErrorAccess
 from models.user import User
 from models.track import Track
 from services.request import get_request
+from services.auth import auth
 
 
 router = APIRouter()
@@ -34,15 +35,13 @@ class Type(BaseModel):
 async def handler(
     data: Type = Body(...),
     request = Depends(get_request),
+    user = Depends(auth),
 ):
     """ Save personal information """
 
     # No access
-    if request.user.status < 3:
+    if user.status < 3:
         raise ErrorAccess('save')
-
-    # Get
-    user = User.get(ids=request.user.id)
 
     # Change fields
     # TODO: Fix exceptions on bad fields

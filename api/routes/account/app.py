@@ -2,7 +2,6 @@
 The authorization via mini app method of the account object of the API
 """
 
-import datetime
 import hashlib
 from collections import OrderedDict
 from base64 import b64encode
@@ -10,6 +9,7 @@ from hmac import HMAC
 from urllib.parse import urlparse, parse_qsl, urlencode
 
 from fastapi import APIRouter, Body, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorInvalid
 import jwt
@@ -17,6 +17,7 @@ import jwt
 from models.user import User
 from models.track import Track
 from services.request import get_request
+from services.auth import auth, get_token
 from routes.account.auth import reg
 from lib import cfg, report
 
@@ -56,6 +57,8 @@ class Type(BaseModel):
 async def handler(
     data: Type = Body(...),
     request = Depends(get_request),
+    user = Depends(auth),
+    token = Depends(get_token),
 ):
     """ Mini app auth """
 
@@ -69,7 +72,7 @@ async def handler(
     except Exception as e:
         await report.warning("Failed authorization attempt in the app", {
             'url': data.url,
-            'user': request.user.id,
+            'user': user.id,
             'network': request.network,
             'error': e,
         })
@@ -77,13 +80,6 @@ async def handler(
 
     if not status:
         raise ErrorWrong('url')
-
-    # JWT
-    token = jwt.encode({
-        'user': data.user,
-        'network': request.network,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt'), algorithm='HS256')
 
     #
 
@@ -131,7 +127,14 @@ async def handler(
     # Register
     else:
         new = True
-        user = await reg(request, data, 'app')
+        user = await reg(request, token, data, 'app')
+
+    # JWT
+    token = jwt.encode({
+        'token': token,
+        'user': user.id,
+        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+    }, cfg('jwt'), algorithm='HS256')
 
     # # Referral
     # if data.referral:
@@ -139,8 +142,10 @@ async def handler(
     #     user.save()
 
     # Response
-    return {
+    response = JSONResponse(content={
         **user.json(fields=fields),
         'new': new,
         'token': token,
-    }
+    })
+    response.set_cookie(key="Authorization", value=f"Bearer {token}")
+    return response

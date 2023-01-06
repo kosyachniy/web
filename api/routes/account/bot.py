@@ -2,16 +2,19 @@
 The authorization via social networks method of the account object of the API
 """
 
+import jwt
 from fastapi import APIRouter, Body, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess
 
+from lib import cfg, report
 from models.user import User # process_lower
 from models.token import Token
 from models.track import Track
 from services.request import get_request
+from services.auth import get_token
 from routes.account.auth import reg
-from lib import report
 
 
 router = APIRouter()
@@ -28,15 +31,13 @@ class Type(BaseModel):
 async def handler(
     data: Type = Body(...),
     request = Depends(get_request),
+    token = Depends(get_token),
 ):
     """ By bot """
 
     # TODO: image
     # TODO: the same token
-
-    # No access
-    if request.user.status < 2:
-        raise ErrorAccess('social')
+    # TODO: block by token
 
     fields = {
         'id',
@@ -77,36 +78,46 @@ async def handler(
                 'network': request.network,
             },
             user=user.id,
-            token=request.token,
+            token=token,
         ).save()
 
     # Register
     else:
         new = True
-        user = await reg(request, data, 'bot')
+        user = await reg(request, token, data, 'bot')
 
     # Assignment of the token to the user
 
-    if not request.token:
+    if not token:
         raise ErrorAccess('auth')
 
     try:
-        token = Token.get(ids=request.token, fields={'user'})
+        token = Token.get(token, fields={'user'})
     except ErrorWrong:
-        token = Token(id=request.token)
+        token = Token(id=token)
 
     if token.user and token.user != user.id:
         await report.warning("Reauth", {
             'from': token.user,
             'to': user.id,
-            'token': request.token,
+            'token': token.id,
         })
 
     token.user = user.id
     token.save()
 
+    # JWT
+    token = jwt.encode({
+        'token': token.id,
+        'user': user.id,
+        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+    }, cfg('jwt'), algorithm='HS256')
+
     # Response
-    return {
+    response = JSONResponse(content={
         **user.json(fields=fields),
         'new': new,
-    }
+        'token': token,
+    })
+    response.set_cookie(key="Authorization", value=f"Bearer {token}")
+    return response

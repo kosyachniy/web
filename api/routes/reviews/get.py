@@ -10,7 +10,7 @@ from consys.errors import ErrorAccess
 
 from models.user import User
 from models.review import Review
-from services.request import get_request
+from services.auth import auth
 
 
 router = APIRouter()
@@ -26,12 +26,12 @@ class Type(BaseModel):
 @router.post("/get/")
 async def handler(
     data: Type = Body(...),
-    request = Depends(get_request),
+    user = Depends(auth),
 ):
     """ Get """
 
     # No access
-    if request.user.status < 4:
+    if user.status < 4:
         raise ErrorAccess('get')
 
     # Fields

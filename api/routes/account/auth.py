@@ -2,7 +2,9 @@
 The authorization method of the account object of the API
 """
 
+import jwt
 from fastapi import APIRouter, Body, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import NETWORKS
 from consys.handlers import (
@@ -10,12 +12,13 @@ from consys.handlers import (
 )
 from consys.errors import ErrorWrong, ErrorAccess
 
+from lib import cfg, report
 from models.user import User
 from models.token import Token
 from models.track import Track
 from services.request import get_request
+from services.auth import get_token
 from routes.account.online import online_start
-from lib import report
 
 
 router = APIRouter()
@@ -33,7 +36,7 @@ def detect_type(login):
     return 'login'
 
 # pylint: disable=too-many-branches
-async def reg(request, data, by, method=None):
+async def reg(request, token, data, by, method=None):
     """ Register an account """
 
     # Action tracking
@@ -139,7 +142,7 @@ async def reg(request, data, by, method=None):
         title='acc_reg',
         data=details,
         user=user.id,
-        token=request.token,
+        token=token,
     ).save()
 
     # Report
@@ -170,7 +173,7 @@ async def reg(request, data, by, method=None):
 
     return user
 
-async def auth(request, method, data, by):
+async def auth(request, token, method, data, by):
     """ Authorization / registration in different ways """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -178,10 +181,7 @@ async def auth(request, method, data, by):
     # TODO: Pre-registration data (promos, actions, posts)
     # TODO: the same token
     # TODO: Only by token (automaticaly, without any info)
-
-    # No access
-    if request.user.status < 2:
-        raise ErrorAccess(method)
+    # TODO: block by token
 
     # Data preparation
     # TODO: optimize
@@ -224,7 +224,7 @@ async def auth(request, method, data, by):
 
     if new:
         # Register
-        user = await reg(request, data, by)
+        user = await reg(request, token, data, by)
 
     else:
         # NOTE: Remove this if no password verification is required
@@ -242,24 +242,24 @@ async def auth(request, method, data, by):
                 'ip': request.ip,
             },
             user=user.id,
-            token=request.token,
+            token=token,
         ).save()
 
     # Assignment of the token to the user
 
-    if not request.token:
+    if not token:
         raise ErrorAccess(method)
 
     try:
-        token = Token.get(ids=request.token, fields={'user'})
+        token = Token.get(token, fields={'user'})
     except ErrorWrong:
-        token = Token(id=request.token)
+        token = Token(id=token)
 
     if token.user and token.user != user.id:
         await report.warning("Reauth", {
             'from': token.user,
             'to': user.id,
-            'token': request.token,
+            'token': token.id,
         })
 
     token.user = user.id
@@ -268,7 +268,7 @@ async def auth(request, method, data, by):
     # TODO: Pre-registration data (promos, actions, posts)
 
     # Update online users
-    await online_start(request.sio, request.token)
+    await online_start(request.sio, token.id)
 
     # Response
     return {
@@ -290,8 +290,24 @@ class Type(BaseModel):
 async def handler(
     data: Type = Body(...),
     request = Depends(get_request),
+    token = Depends(get_token),
 ):
     """ Sign in / Sign up """
 
     by = detect_type(data.login)
-    return await auth(request, 'auth', data, by)
+    data = await auth(request, token, 'auth', data, by)
+
+    # JWT
+    token = jwt.encode({
+        'token': token,
+        'user': data['id'],
+        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+    }, cfg('jwt'), algorithm='HS256')
+
+    # Response
+    response = JSONResponse(content={
+        **data,
+        'token': token,
+    })
+    response.set_cookie(key="Authorization", value=f"Bearer {token}")
+    return response
