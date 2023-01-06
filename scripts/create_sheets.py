@@ -4,6 +4,7 @@ Create a spreadsheet in Google Sheets
 
 import argparse
 
+# pylint: disable=import-error
 from lib.docs import create_sheets
 
 
