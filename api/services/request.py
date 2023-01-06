@@ -21,7 +21,6 @@ class Request():
 class Type(BaseModel):
     ip: str = None
     socket: str = None
-    token: str = None
     network: str = None
     locale: str = None
 

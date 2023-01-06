@@ -19,7 +19,8 @@ app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
 @app.on_event('startup')
 async def startup():
     """ Application startup event """
-    Instrumentator().instrument(app).expose(app)
+    if cfg('mode') in {'PRE', 'PROD'}:
+        Instrumentator().instrument(app).expose(app)
 
 # CORS
 app.add_middleware(
