@@ -1,12 +1,12 @@
 # Pull base image
-FROM node:19.1
+FROM node:19.3
 
 # Set work directory
 WORKDIR .
 
 # Install dependencies
 COPY ./package.json .
-RUN npm install
+RUN npm i
 
 # Copy project
 COPY . .

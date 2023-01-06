@@ -5,12 +5,12 @@ import styles from '../styles/card.module.css'
 
 
 export default ({ post }) => {
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
 
     return (
         <div className="col-md-4">
             <Link href={ `/posts/${post.id}` } key={ post.id }>
-                <div className={ `card ${styles.card} ${styles[system.theme]} mb-4 shadow-sm` }>
+                <div className={ `card ${styles.card} ${styles[main.theme]} mb-4 shadow-sm` }>
                     { post.image && <img className="card-img-top" src={ post.image } alt={ post.title } /> }
                     <div className="card-body">
                         <p className="card-text">

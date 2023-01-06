@@ -4,7 +4,8 @@ import { useTranslation } from 'next-i18next'
 import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { popupSet, profileIn } from '../store'
+import { popupSet } from '../redux/actions/system'
+import { profileIn } from '../redux/actions/profile'
 import api from '../functions/api'
 import styles from '../styles/mail.module.css'
 import Popup from './Popup'
@@ -17,13 +18,13 @@ const checkPassword = password => {
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
     const [mail, setMail] = useState('')
     const [password, setPassword] = useState('')
 
     const signIn = (event) => {
         api(
-            system.token, system.locale,
+            main.token, main.locale,
             'account.auth',
             {login: mail, password}
         ).then(res => {
@@ -52,7 +53,7 @@ export default () => {
                     <div className="input-group mb-3">
                         <input
                             className="form-control"
-                            // className={ (responce !== null && responce.data === 'password') ? 'error' : '' }
+                            // className={ (response !== null && response.data === 'password') ? 'error' : '' }
                             type="password"
                             placeholder={ t('profile.password') }
                             value={ password }

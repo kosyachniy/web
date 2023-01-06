@@ -20,6 +20,8 @@ db = get_db(
 dbs = [f[:-4] for f in os.listdir('/backup/') if f[-4:] == '.txt']
 
 for db_name in dbs:
+    db[db_name].drop()
+
     with open(f'/backup/{db_name}.txt', 'r', encoding='utf-8') as file:
         for row in file:
             try:

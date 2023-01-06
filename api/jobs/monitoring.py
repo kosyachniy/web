@@ -7,9 +7,9 @@ import subprocess
 
 from prometheus_client import Gauge
 
-from api.lib import report
-from api.models.user import User
-from api.models.post import Post
+from models.user import User
+from models.post import Post
+from lib import report
 
 
 metric_posts = Gauge('posts', 'Posts')
@@ -32,9 +32,7 @@ def get_cpu():
             return None
         return sum(map(float, res)) * 1000000
 
-    # pylint: disable=broad-except
-    except Exception as e:
-        print(e)
+    except ValueError:
         return None
 
 async def monitoring():
@@ -45,13 +43,9 @@ async def monitoring():
 async def handle(_):
     """ Monitoring """
 
-    try:
-        cpu = get_cpu()
-        if cpu:
-            metric_cpu.set(cpu)
-    # pylint: disable=broad-except
-    except Exception as e:
-        await report.critical(str(e), error=e)
+    cpu = get_cpu()
+    if cpu:
+        metric_cpu.set(cpu)
 
     while True:
         try:

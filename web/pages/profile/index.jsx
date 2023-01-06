@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Button from 'react-bootstrap/Button'
 
 import styles from '../../styles/profile.module.css'
-import { profileUpdate } from '../../store'
+import { profileUpdate } from '../../redux/actions/profile'
 import api from '../../functions/api'
 import Avatar from '../../components/Avatar'
 
@@ -18,7 +18,7 @@ import Avatar from '../../components/Avatar'
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
     const profile = useSelector((state) => state.profile)
     const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
@@ -31,7 +31,7 @@ export default () => {
     // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
-        api(system.token, system.locale, 'users.get', { id: +profile.id }).then(res => {
+        api(main.token, main.locale, 'users.get', { id: +profile.id }).then(res => {
             dispatch(profileUpdate({
                 login: res.users.login,
                 image: res.users.image,
@@ -82,7 +82,7 @@ export default () => {
             data['image'] = image
         }
 
-        api(system.token, system.locale, 'account.save', data).then(res => {
+        api(main.token, main.locale, 'account.save', data).then(res => {
             dispatch(profileUpdate({login, image, name, surname, phone, mail}))
         })
     }

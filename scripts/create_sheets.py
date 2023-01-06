@@ -4,7 +4,7 @@ Create a spreadsheet in Google Sheets
 
 import argparse
 
-from api.lib.docs import create_sheets
+from lib.docs import create_sheets
 
 
 def _args():

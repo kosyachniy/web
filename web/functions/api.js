@@ -1,53 +1,41 @@
-async function serverRequest(json={}) {
-    return fetch(process.env.NEXT_PUBLIC_API, {
+async function serverRequest(method='', data={}) {
+    const url = (
+        process.env.NEXT_PUBLIC_API
+        + method.replace('.', '/')
+        + (method ? '/' : '')
+    )
+    return fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            // TODO: ssr get cookie
         },
-        body: JSON.stringify(json),
+        body: JSON.stringify(data),
     })
-    .catch((error) => {
-        let errCode;
-        const errText = error.toString();
-
-        if (errText === 'Error: Request failed with status code 429') {
-            errCode = 429;
-        } else if (errText === 'Error: Network Error') {
-            errCode = 'network';
-        } else {
-            errCode = 400;
-        }
-
-        return {
-            error: errCode,
-            data: errText,
-        };
-    });
 }
 
-export default (token, locale, method, params={}) => {
+const api = (token, locale, method, data={}, setted=false) => {
     return new Promise((resolve, reject) => {
-        const json = {
-            method,
-            params,
-            network: 'web',
-            locale,
-            token,
-        };
+        // data.locale = locale
 
-        serverRequest(json).then(async (responce) => {
-            const res = await responce.json();
+        serverRequest(method, data).then(async (response) => {
+            if (response.status >= 200 && response.status < 300) {
+                const res = await response.json();
+                resolve(res === undefined ? {} : res);
+            };
 
-            if (res.error !== 0) {
-                console.log(res.data);
-                reject(res.error, res.data);
-            } else if (res.data === undefined) {
-                resolve({});
-            } else {
-                resolve(res.data);
+            if (response.status === 401 && !setted) {
+                // TODO: auto request on token creation
+                await api(token, locale, 'account.token', {
+                    token,
+                    network: 'web',
+                }, setted=true);
+                resolve(await api(token, locale, method, data, true));
             }
+
+            console.log(response);
         });
     });
 }
 
-// TODO: Socket.IO
+export default api;

@@ -6,7 +6,7 @@ libdev==0.39
 fastapi==0.87.0
 httptools==0.5.0  # NOTE: for routing
 uvicorn==0.19.0
-# PyJWT==2.6.0
+PyJWT==2.6.0
 
 # DB
 consys==0.24

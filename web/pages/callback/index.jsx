@@ -5,10 +5,10 @@ import Loader from '../../components/Loader'
 
 
 export default ({ user, onPopup, onRedirect, onUpdateUserProperties }) => {
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
 
     const onSocial = (type, code) => {
-        api(system.token, system.locale, 'account.social', {
+        api(main.token, main.locale, 'account.social', {
             social: type,
             code,
         }).then((_eventAuthSocialAccount) => {

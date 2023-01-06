@@ -5,8 +5,18 @@ services:
     ports:
       - 27017:27017
 
+  # api:
+  #   image: ${PROJECT_NAME}/api
+  #   build: ./api
+  #   depends_on:
+  #     - db
+  #   env_file: .env
+  #   environment:
+  #     WEB: http://localhost/
+  #   command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers"
+
   test:
-    image: test/test
+    image: ${PROJECT_NAME}/test
     build:
       context: .
       dockerfile: ./tests/Dockerfile

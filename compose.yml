@@ -4,8 +4,6 @@ services:
     image: redis:7.0
     restart: on-failure
     env_file: .env
-    environment:
-      REDIS_PASS: ${REDIS_PASS}
     volumes:
       - ${DATA_PATH}/redis:/data
     ports:
@@ -16,7 +14,7 @@ services:
     image: mongo:6.0
     ports:
       - 27017:27017
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     environment:
       MONGO_INITDB_DATABASE: admin
@@ -34,7 +32,7 @@ services:
     depends_on:
       - db
       - redis
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     environment:
       WEB: http://localhost/
@@ -46,9 +44,14 @@ services:
       - ${DATA_PATH}/logs/api.err:/app.err
       - ${DATA_PATH}/logs/api.log:/app.log
       # For hot reload
-      - ./api/api:/api
-      - ./api/app.py:/app.py
-    command: uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload
+      - ./api:/app
+    command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
+    healthcheck:
+      test: "curl --fail http://0.0.0.0:5000/"
+      interval: 1s
+      timeout: 1s
+      start_period: 180s
+      retries: 180
 
   jobs:
     image: ${PROJECT_NAME}/jobs
@@ -56,7 +59,7 @@ services:
     depends_on:
       - db
       - redis
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     environment:
       API: http://api:5000/
@@ -66,13 +69,11 @@ services:
       - ${DATA_PATH}/logs/jobs.err:/app.err
       - ${DATA_PATH}/logs/jobs.log:/app.log
       # For hot reload
-      - ./api/api:/api
-      - ./api/jobs:/jobs
-      - ./api/job.py:/job.py
+      - ./api:/app
       # For sitemap
       - ${DATA_PATH}/sitemaps:/data/sitemaps
       - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
-    command: python job.py
+    command: bash -c "cd /app && python job.py"
 
   web:
     image: ${PROJECT_NAME}/web
@@ -96,10 +97,11 @@ services:
       NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
     volumes:
       - ./web/public:/public
-      - ./web/pages:/pages
-      - ./web/components:/components
-      - ./web/functions:/functions
       - ./web/styles:/styles
+      - ./web/functions:/functions
+      - ./web/redux:/redux
+      - ./web/components:/components
+      - ./web/pages:/pages
     command: npm run dev
 
   server:

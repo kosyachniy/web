@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { popupSet, profileOut, searching } from '../store'
+import { popupSet, searching } from '../redux/actions/system'
+import { profileOut } from '../redux/actions/profile'
 import api from '../functions/api'
 import styles from '../styles/header.module.css'
 import Hexagon from './Hexagon'
@@ -20,20 +21,20 @@ import Hexagon from './Hexagon'
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
     const online = useSelector((state) => state.online)
     const profile = useSelector((state) => state.profile)
 
     const signOut = () => {
-        api(system.token, system.locale, 'account.exit', {}).then(res => {
+        api(main.token, main.locale, 'account.exit', {}).then(res => {
             dispatch(profileOut(res))
         })
     }
 
     return (
-        <nav className={ `navbar sticky-top navbar-expand-lg navbar-${system.theme} bg-${system.theme}` }>
+        <nav className={ `navbar sticky-top navbar-expand-lg navbar-${main.theme} bg-${main.theme}` }>
             <div className="container">
-                <Link href="/" className="navbar-brand"><img src={ `/brand/logo_${system.color}.svg` } alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
+                <Link href="/" className="navbar-brand"><img src={ `/brand/logo_${main.color}.svg` } alt={ process.env.NEXT_PUBLIC_NAME } /></Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -128,7 +129,7 @@ export default () => {
                                         <Hexagon url={ profile.image_optimize } />
                                     </div>
                                     <div
-                                        className={ `${styles.menu} dropdown-menu dropdown-menu-end dropdown-menu-${system.theme}` }
+                                        className={ `${styles.menu} dropdown-menu dropdown-menu-end dropdown-menu-${main.theme}` }
                                         aria-labelledby="navbarDropdown"
                                     >
                                         <Link href="/profile/" className="dropdown-item">{ t('system.profile') }</Link>

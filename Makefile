@@ -33,6 +33,9 @@ log-tg:
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}/api | cut -d ' ' -f 1` bash
 
+db:
+	docker exec -it `docker ps -a | grep ${PROJECT_NAME}-db | cut -d ' ' -f 1` mongosh -u ${MONGO_USER} -p ${MONGO_PASS}
+
 test-linter-all:
 	find . -type f -name '*.py' \
 	| grep -vE 'env/' \
@@ -77,19 +80,17 @@ clear:
 	rm -rf .pytest_cache/
 	rm -rf **/.pytest_cache/
 
-clear-all:
-	make clear
-	rm -rf **/*.err
-	rm -rf **/*.log
-
 clear-logs:
 	rm -rf ${DATA_PATH}/logs/
 	mkdir ${DATA_PATH}/logs/
 	touch ${DATA_PATH}/logs/jobs.log ${DATA_PATH}/logs/jobs.err ${DATA_PATH}/logs/api.log ${DATA_PATH}/logs/api.err ${DATA_PATH}/logs/tg.err ${DATA_PATH}/logs/tg.log ${DATA_PATH}/logs/nginx.log ${DATA_PATH}/logs/nginx.err ${DATA_PATH}/logs/mongodb.log
 
+clear-all:
+	make clear
+	make clear-logs
+
 set:
-	sudo chmod -R 777 /root
-	sudo chmod 600 ~/.ssh/id_rsa
+	sudo chmod o+x ~
 	export EXTERNAL_HOST=${EXTERNAL_HOST} WEB_PORT=${WEB_PORT} API_PORT=${API_PORT} TG_PORT=${TG_PORT} DATA_PATH=${DATA_PATH} PROMETHEUS_PORT=${PROMETHEUS_PORT} GRAFANA_PORT=${GRAFANA_PORT}; \
 	envsubst '$${EXTERNAL_HOST} $${WEB_PORT} $${API_PORT} $${TG_PORT} $${DATA_PATH} $${PROMETHEUS_PORT} $${GRAFANA_PORT}' < configs/nginx.prod.conf > /etc/nginx/sites-enabled/${PROJECT_NAME}.conf
 	sudo systemctl restart nginx

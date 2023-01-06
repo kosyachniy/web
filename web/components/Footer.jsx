@@ -2,22 +2,22 @@ import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { changeTheme } from '../store'
+import { changeTheme } from '../redux/actions/main'
 
 
 export default () => {
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
+    const main = useSelector((state) => state.main)
 
     return (
-        <footer className={ `bg-${system.theme} ${system.theme === 'dark' ? "" : "text-muted"} pt-3` }>
+        <footer className={ `bg-${main.theme} ${main.theme === 'dark' ? "" : "text-muted"} pt-3` }>
             <div className="container d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
                 <p className="col-md-4 mb-0">
                     { process.env.NEXT_PUBLIC_NAME } &copy; 2018-{ new Date().getFullYear() }
                 </p>
                 <Link href="/" className="col-md-4 d-flex align-items-center justify-content-center mb-md-0 me-md-auto link-dark text-decoration-none">
                     <img
-                        src={ `/brand/logo_${system.color}.svg` }
+                        src={ `/brand/logo_${main.color}.svg` }
                         alt={ process.env.NEXT_PUBLIC_NAME }
                         style={{ height: '24px' }}
                     />
@@ -26,9 +26,9 @@ export default () => {
                     <li
                         className="ms-3"
                         style={{ cursor: 'pointer' }}
-                        onClick={ () => dispatch(changeTheme(system.theme === 'dark' ? 'light' : 'dark')) }
+                        onClick={ () => dispatch(changeTheme(main.theme === 'dark' ? 'light' : 'dark')) }
                     >
-                        { system.theme === 'dark' ? (
+                        { main.theme === 'dark' ? (
                             <FontAwesomeIcon icon="fa-solid fa-sun" />
                             // fa-sun-bright
                         ) : (
@@ -37,16 +37,16 @@ export default () => {
                     </li>
                     <Link
                         href='/'
-                        locale={ system.locale === 'ru' ? 'en' : 'ru' }
+                        locale={ main.locale === 'ru' ? 'en' : 'ru' }
                     >
                         <li
                             className="ms-3 d-flex"
                             style={{ cursor: 'pointer' }}
-                            // onClick={ () => dispatch(changeLang(system.locale === 'ru' ? 'en' : 'ru')) }
+                            // onClick={ () => dispatch(changeLang(main.locale === 'ru' ? 'en' : 'ru')) }
                         >
                             <img
-                                src={ `/lang/${system.locale === 'ru' ? 'en' : 'ru'}.svg` }
-                                alt={ system.locale === 'ru' ? 'en' : 'ru' }
+                                src={ `/lang/${main.locale === 'ru' ? 'en' : 'ru'}.svg` }
+                                alt={ main.locale === 'ru' ? 'en' : 'ru' }
                                 style={{ height: '24px' }}
                             />
                         </li>

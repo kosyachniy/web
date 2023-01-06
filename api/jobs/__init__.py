@@ -7,7 +7,7 @@ from pathlib import Path
 import pkgutil
 import importlib
 
-from api.lib import report
+from lib import report
 
 
 CURRENT_PATH = str(Path(__file__).parent) + '/'
@@ -29,6 +29,8 @@ async def background(sio):
     ):
         if module_name[0] == '.':
             module_name = module_name[1:]
+        if module_name[:4] == 'app.':
+            module_name = module_name[4:]
         module = importlib.import_module(module_name)
 
         if not hasattr(module, 'handle'):
