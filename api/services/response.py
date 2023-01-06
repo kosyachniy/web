@@ -20,6 +20,8 @@ metric_endpoints = Histogram(
 
 
 class ResponseMiddleware(BaseHTTPMiddleware):
+    """ Response formatting middleware """
+
     def __init__(self, app):
         super().__init__(app)
 
@@ -35,8 +37,8 @@ class ResponseMiddleware(BaseHTTPMiddleware):
 
         # pylint: disable=broad-except
         except Exception as e:
-            response = Response(content=str(e.txt), status_code=500)
             await report.critical(str(e), error=e)
+            response = Response(content=str(e), status_code=500)
             status = 500
 
         else:

@@ -6,7 +6,7 @@ services:
       - 27017:27017
 
   test:
-    image: test/test
+    image: ${PROJECT_NAME}/test
     build:
       context: .
       dockerfile: ./tests/Dockerfile

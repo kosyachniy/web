@@ -8,13 +8,13 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess
 
-from lib import cfg, report
 from models.user import User # process_lower
 from models.token import Token
 from models.track import Track
 from services.request import get_request
 from services.auth import get_token
 from routes.account.auth import reg
+from lib import cfg, report
 
 
 router = APIRouter()

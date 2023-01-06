@@ -15,7 +15,6 @@ from pydantic import BaseModel
 from libdev.codes import get_network
 from consys.errors import ErrorAccess, ErrorWrong
 
-from lib import cfg, report
 from models.user import User
 from models.token import Token
 from models.track import Track
@@ -23,6 +22,7 @@ from services.request import get_request
 from services.auth import get_token
 from routes.account.auth import reg
 from routes.account.online import online_start
+from lib import cfg, report
 
 
 router = APIRouter()
@@ -101,7 +101,9 @@ async def handler(
 
         try:
             response = json.loads(
-                requests.get(link.format(data.user, access_token), timeout=10).text
+                requests.get(
+                    link.format(data.user, access_token), timeout=10
+                ).text
             )['response'][0]
         except Exception as e:
             raise ErrorAccess('vk') from e
@@ -209,7 +211,7 @@ async def handler(
     token.save()
 
     # Update online users
-    await online_start(request.sio, token.id)
+    await online_start(token.id)
 
     # JWT
     token = jwt.encode({

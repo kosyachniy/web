@@ -4,12 +4,12 @@ The online socket of the account object of the API
 
 from consys.errors import ErrorWrong
 
-from lib import report
 from models.user import User
 from models.socket import Socket
 # from models.space import Space
 from services.auth import get_user
 from app import sio
+from lib import report
 
 
 # async def _get_active_space(user_id):
@@ -52,7 +52,7 @@ def _online_count():
     return count
 
 # pylint: disable=too-many-branches
-async def online_start(sio, token_id, socket_id=None):
+async def online_start(token_id, socket_id=None):
     """ Start / update online session of the user """
 
     # TODO: save user data cache in db.sockets
@@ -172,7 +172,7 @@ async def online(sid, data):
         return
 
     # Send sockets
-    await online_start(sio, data['token'], sid)
+    await online_start(data['token'], sid)
 
     # TODO: UTM parameters
     # TODO: Promos

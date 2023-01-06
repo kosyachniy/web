@@ -12,13 +12,13 @@ from consys.handlers import (
 )
 from consys.errors import ErrorWrong, ErrorAccess
 
-from lib import cfg, report
 from models.user import User
 from models.token import Token
 from models.track import Track
 from services.request import get_request
 from services.auth import get_token
 from routes.account.online import online_start
+from lib import cfg, report
 
 
 router = APIRouter()
@@ -268,7 +268,7 @@ async def auth(request, token, method, data, by):
     # TODO: Pre-registration data (promos, actions, posts)
 
     # Update online users
-    await online_start(request.sio, token.id)
+    await online_start(token.id)
 
     # Response
     return {

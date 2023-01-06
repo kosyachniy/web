@@ -10,9 +10,11 @@ from lib import report
 
 
 class AccessMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app, jwt, whitelist):
+    """ Access checking middleware """
+
+    def __init__(self, app, jwt_secret, whitelist):
         super().__init__(app)
-        self.jwt = jwt
+        self.jwt = jwt_secret
         self.whitelist = whitelist
 
     async def dispatch(self, request: Request, call_next):
@@ -42,6 +44,7 @@ class AccessMiddleware(BaseHTTPMiddleware):
 
             try:
                 token = jwt.decode(token, self.jwt, algorithms='HS256')
+            # pylint: disable=broad-except
             except Exception as e:
                 await report.warning("Invalid token", {
                     'url': url,

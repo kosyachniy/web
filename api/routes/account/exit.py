@@ -2,15 +2,15 @@
 The logout method of the account object of the API
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter # , Depends
 # from consys.errors import ErrorAccess
 
-# from lib import report
 # from models.token import Token
 # from models.socket import Socket
-from services.request import get_request
-from services.auth import auth
+# from services.request import get_request
+# from services.auth import auth
 # from routes.account.disconnect import online_stop
+# from lib import report
 
 
 router = APIRouter()
@@ -48,4 +48,4 @@ async def handler(
     # sockets = Socket.get(token=request.token, fields={})
 
     # for socket in sockets:
-    #     await online_stop(request.sio, socket.id)
+    #     await online_stop(socket.id)

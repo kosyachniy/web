@@ -10,8 +10,8 @@ from pydantic import BaseModel
 from libdev.codes import get_network
 from consys.errors import ErrorWrong
 
-from lib import cfg
 from models.token import Token
+from lib import cfg
 
 
 router = APIRouter()

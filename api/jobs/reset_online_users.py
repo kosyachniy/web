@@ -6,10 +6,10 @@ from models.socket import Socket
 from routes.account.disconnect import online_stop
 
 
-async def handle(sio):
+async def handle(_):
     """ Reset online users """
 
     sockets = Socket.get(fields={})
 
     for socket in sockets:
-        await online_stop(sio, socket.id)
+        await online_stop(socket.id)

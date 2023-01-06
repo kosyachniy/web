@@ -7,9 +7,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from lib import cfg
 from services.response import ResponseMiddleware
 from services.access import AccessMiddleware
+from lib import cfg
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
@@ -36,7 +36,7 @@ app.add_middleware(ResponseMiddleware)
 # JWT
 app.add_middleware(
     AccessMiddleware,
-    jwt=cfg('jwt'),
+    jwt_secret=cfg('jwt'),
     whitelist={
         '/',
         '/account/token/'
@@ -70,11 +70,12 @@ app.mount('/ws', asgi)
 # )
 
 
-# Ping
 @app.get("/")
 @app.post("/")
 async def handler():
+    """ Ping """
     return 'OK'
 
 
+# pylint: disable=wrong-import-order,unused-import,wrong-import-position
 import routes

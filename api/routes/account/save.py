@@ -9,7 +9,6 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
-from models.user import User
 from models.track import Track
 from services.request import get_request
 from services.auth import auth

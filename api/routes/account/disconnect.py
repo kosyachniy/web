@@ -6,14 +6,14 @@ import time
 
 from consys.errors import ErrorWrong
 
-from lib import report
 from models.socket import Socket
 from models.track import Track
 from routes.account.online import _other_sessions, _online_count, get_user
 from app import sio
+from lib import report
 
 
-async def online_stop(sio, socket_id):
+async def online_stop(socket_id):
     """ Stop online session of the user """
 
     # TODO: Объединять сессии в онлайн по пользователю
@@ -67,4 +67,4 @@ async def online_stop(sio, socket_id):
 async def disconnect(sid):
     """ Disconnect """
     await report.debug('OUT', sid)
-    await online_stop(sio, sid)
+    await online_stop(sid)
