@@ -53,41 +53,6 @@ asgi = socketio.ASGIApp(sio)
 #     default_limits=['1000/day', '500/hour', '20/minute']
 # )
 
-# ## JWT
-# def token_required(f):
-#     @wraps(f)
-#     async def decorated(data, request):
-#         try:
-#             header = request.headers.get('Authorization')
-
-#             if not header:
-#                 return await f(data, request)
-
-#             token = header.split(' ')[1]
-
-#             if not token or token == 'null':
-#                 return await f(data, request)
-
-#             try:
-#                 data.jwt = jwt.decode(token, cfg('jwt'), algorithms='HS256')
-#             except Exception as e:
-#                 await report.error("Invalid token", {
-#                     'token': token,
-#                     'error': e,
-#                 })
-#                 return json.dumps({'message': 'Token is invalid!'}), 403
-
-#             return await f(data, request)
-
-#         except Exception as e:
-#             await report.error("JWT handler", {
-#                 'data': data,
-#                 'error': e,
-#             })
-#             return await f(data, request)
-
-#     return decorated
-
 
 @app.post("/")
 async def handler():
@@ -97,4 +62,5 @@ async def handler():
 app.mount('/ws', asgi)
 
 import routes
+import services.access
 import services.response

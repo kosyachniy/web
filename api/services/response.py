@@ -37,12 +37,17 @@ async def format_response(request: Request, call_next):
         status = 500
 
     else:
-        status = 200
+        status = response.status_code
 
-    # Monitoring
-    # TODO: native methods
-    process_time = time.time() - start
-    metric_endpoints.labels(request.url.path[4:], status).observe(process_time)
+    if request.method == 'POST':
+        url = request.url.path[4:]
+        process_time = time.time() - start
 
-    response.headers['X-Process-Time'] = f"{process_time:.3f}"
+        # Monitoring
+        # TODO: native methods
+        metric_endpoints.labels(url, status).observe(process_time)
+
+        # Timing
+        response.headers['X-Process-Time'] = f"{process_time:.3f}"
+
     return response

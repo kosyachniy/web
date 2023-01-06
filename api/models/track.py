@@ -13,3 +13,4 @@ class Track(Base):
     data = Attribute(types=dict)
     context = Attribute(default=dict)
     token = Attribute(types=str)
+    ip = Attribute(types=str)
