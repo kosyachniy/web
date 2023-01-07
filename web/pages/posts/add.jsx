@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from '../../styles/edit.module.css'
 import api from '../../functions/api'
 // import { getPost } from './[id]'
-// import Editor from '../../components/Editor'
+import Editor from '../../components/Editor'
 
 
 export default ({ post }) => {
@@ -15,6 +15,7 @@ export default ({ post }) => {
     const main = useSelector((state) => state.main)
     const [title, setName] = useState(post ? post.title : '')
     const [data, setData] = useState(post ? post.data : '')
+    const [editorLoaded, setEditorLoaded] = useState(false)
     const [redirect, setRedirect] = useState(null)
 
     const savePost = () => {
@@ -38,6 +39,10 @@ export default ({ post }) => {
         })
     }
 
+    useEffect(() => {
+        setEditorLoaded(true)
+    }, [])
+
     // if (redirect) {
     //     return (
     //         <Navigate to={ `/posts/${redirect}` } />
@@ -57,10 +62,11 @@ export default ({ post }) => {
                     />
                 </div>
 
-                {/* <Editor
+                <Editor
+                    editorLoaded={ editorLoaded }
                     data={ data }
                     updatePost={ (text) => {setData(text)} }
-                /> */}
+                />
 
                 <br />
                 <button

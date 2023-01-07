@@ -14,6 +14,7 @@ export default ({ id }) => {
     const { t } = useTranslation('common')
     const main = useSelector((state) => state.main)
     const [post, setPost] = useState(null)
+    const [editorLoaded, setEditorLoaded] = useState(false)
     const [edit, setEdit] = useState(false)
     const [deleted, setDeleted] = useState(false)
 
@@ -35,6 +36,7 @@ export default ({ id }) => {
 
     useEffect(() => {
         getPost({ id })
+        setEditorLoaded(true)
     }, [])
 
     // if (deleted) {
@@ -77,7 +79,10 @@ export default ({ id }) => {
                 </button>
 
                 { edit ? (
-                    <Edit post={ post } />
+                    <Edit
+                        editorLoaded={ editorLoaded }
+                        post={ post }
+                    />
                 ) : (
                     <>
                         { post.image ? (
