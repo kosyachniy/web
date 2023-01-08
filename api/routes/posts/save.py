@@ -40,7 +40,11 @@ async def handler(
     if data.id:
         post = Post.get(ids=data.id)
 
-        if (not post.user or post.user != user.id) and post.token != token:
+        if (
+            user.status < 6
+            and (not post.user or post.user != user.id)
+            and post.token != token
+        ):
             raise ErrorAccess('save')
 
     else:

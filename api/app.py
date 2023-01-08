@@ -8,7 +8,6 @@ import socketio
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
-from libdev.aws import upload_file
 
 from services.response import ResponseMiddleware
 from services.access import AccessMiddleware
@@ -84,6 +83,9 @@ async def ping():
 async def uploader(upload: bytes = File()):
     """ Upload files to file server """
 
+    # pylint: disable=wrong-import-order,wrong-import-position
+    from libdev.aws import upload_file
+
     try:
         url = upload_file(io.BytesIO(upload))
     # pylint: disable=broad-except
@@ -95,5 +97,5 @@ async def uploader(upload: bytes = File()):
     }
 
 
-# pylint: disable=wrong-import-order,unused-import,wrong-import-position
+# pylint: disable=wrong-import-order,wrong-import-position,unused-import
 import routes

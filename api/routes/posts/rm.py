@@ -4,10 +4,11 @@ The removal method of the post object of the API
 
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
-from consys.errors import ErrorAccess, ErrorWrong
+from consys.errors import ErrorAccess
 
 from models.post import Post
-from services.auth import auth
+from models.track import Track
+from services.auth import get_token, auth
 
 
 router = APIRouter()
@@ -19,22 +20,34 @@ class Type(BaseModel):
 @router.post("/rm/")
 async def handler(
     data: Type = Body(...),
+    token = Depends(get_token),
     user = Depends(auth),
 ):
     """ Delete """
 
     # No access
-    if user.status < 3:
+    if user.status < 2:
         raise ErrorAccess('rm')
 
     # Get
-    try:
-        post = Post.get(
-            ids=data.id,
-            user=(user.id or None) if user.status < 7 else None,
-        )
-    except ErrorWrong as e:
-        raise ErrorAccess('rm') from e
+    post = Post.get(data.id)
+
+    if (
+        user.status < 7
+        and (not post.user or post.user != user.id)
+        and post.token != token
+    ):
+        raise ErrorAccess('rm')
 
     # Delete
     post.rm()
+
+    # Track
+    Track(
+        title='post_rm',
+        data={
+            'id': data.id,
+        },
+        user=user.id,
+        token=token,
+    ).save()

@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react"
+import { useSelector } from 'react-redux'
 
 
 export default ({ editorLoaded, data, updatePost }) => {
     const editorRef = useRef()
+    const main = useSelector((state) => state.main)
     const { CKEditor, ClassicEditor } = editorRef.current || {}
 
     useEffect(() => {
@@ -33,6 +35,11 @@ export default ({ editorLoaded, data, updatePost }) => {
                             writer.setStyle(
                                 'min-height',
                                 '400px',
+                                editor.editing.view.document.getRoot()
+                            )
+                            writer.setStyle(
+                                'background-color',
+                                `rgba(var(--bs-${main.theme}-rgb), var(--bs-bg-opacity))!important;`,
                                 editor.editing.view.document.getRoot()
                             )
                         })
