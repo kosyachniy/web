@@ -22,6 +22,7 @@ const api = (token, locale, method, data={}, setted=false) => {
             if (response.status >= 200 && response.status < 300) {
                 const res = await response.json();
                 resolve(res === undefined ? {} : res);
+                return;
             };
 
             if (response.status === 401 && !setted) {
@@ -31,6 +32,7 @@ const api = (token, locale, method, data={}, setted=false) => {
                     network: 'web',
                 }, setted=true);
                 resolve(await api(token, locale, method, data, true));
+                return;
             }
 
             console.log(response);

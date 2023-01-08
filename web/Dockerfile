@@ -6,7 +6,7 @@ WORKDIR .
 
 # Install dependencies
 COPY ./package.json .
-RUN npm i
+RUN npm i --force
 
 # Copy project
 COPY . .

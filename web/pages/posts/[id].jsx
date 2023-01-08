@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 // import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useSelector } from 'react-redux'
-// import MathJax from 'react-mathjax-preview'
+import MathJax from 'react-mathjax-preview'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
@@ -54,7 +54,7 @@ export default ({ id }) => {
     return (
         <div className={ styles.post }>
             <div className="album py-2">
-                <div class="row">
+                <div className="row">
                     <div className="col-md-8">
                         <h1>{ post.title }</h1>
                     </div>
@@ -98,8 +98,7 @@ export default ({ id }) => {
                             />
                         ) : (<></>) }
                         <br /><br />
-                        <div dangerouslySetInnerHTML={{ __html: post.data }} />
-                        {/* <MathJax
+                        <MathJax
                             math={ post.data }
                             sanitizeOptions={{
                                 USE_PROFILES: {
@@ -107,7 +106,7 @@ export default ({ id }) => {
                                     mathMl: true,
                                 }
                             }}
-                        /> */}
+                        />
 
                         {/* <div style={{ marginTop: '50px', height: '250px' }}>
                             { post.geo ? (

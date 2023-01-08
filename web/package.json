@@ -2,7 +2,7 @@
     "name": "web",
     "dependencies": {
         "@ckeditor/ckeditor5-react": "^5.0.5",
-        "@ckeditor/ckeditor5-build-classic": "^35.4.0",
+        "@kosyachniy/ckeditor": "^2.0.1",
         "@fortawesome/fontawesome-svg-core": "^6.2.1",
         "@fortawesome/free-brands-svg-icons": "^6.2.1",
         "@fortawesome/free-regular-svg-icons": "^6.2.1",
@@ -15,6 +15,7 @@
         "react": "^18.2.0",
         "react-aws-s3": "^1.5.0",
         "react-bootstrap": "^2.7.0",
+        "react-mathjax-preview": "^2.2.6",
         "react-redux": "^8.0.5",
         "react-scripts": "^5.0.1",
         "redux": "^4.2.0",
