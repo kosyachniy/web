@@ -6,7 +6,7 @@ import time
 
 from libdev.time import get_time
 
-from models import Base, Attribute, uploader
+from models import Base, Attribute
 from lib import cfg
 
 
@@ -26,9 +26,9 @@ class Post(Base):
     _name = 'posts'
     _search_fields = {'title', 'data', 'tags'}
 
-    image = Attribute(types=str, processing=uploader.image)
+    image = Attribute(types=str)
     title = Attribute(types=str, default=default_title)
-    data = Attribute(types=str, default='', processing=uploader.reimg)
+    data = Attribute(types=str, default='')
     reactions = Attribute(types=dict, default={
         'views': [], # TODO: + UTM
         'likes': [],

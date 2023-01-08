@@ -10,7 +10,7 @@ from consys.handlers import (
     default_title,
 )
 
-from models import Base, Attribute, uploader
+from models import Base, Attribute
 
 
 class User(Base):
@@ -50,7 +50,7 @@ class User(Base):
         processing=process_password,
     )
     # Personal
-    image = Attribute(types=str, processing=uploader.image)
+    image = Attribute(types=str)
     name = Attribute(
         types=str,
         checking=check_name,

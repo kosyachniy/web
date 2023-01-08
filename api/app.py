@@ -2,14 +2,17 @@
 API Endpoints (Transport level)
 """
 
+import io
+
 import socketio
-from fastapi import FastAPI
+from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+from libdev.aws import upload_file
 
 from services.response import ResponseMiddleware
 from services.access import AccessMiddleware
-from lib import cfg
+from lib import cfg, report
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
@@ -73,9 +76,22 @@ app.mount('/ws', asgi)
 
 @app.get("/")
 @app.post("/")
-async def handler():
+async def ping():
     """ Ping """
     return 'OK'
+
+@app.post("/upload/")
+async def upload(upload: bytes = File()):
+    """ Upload files to file server """
+
+    try:
+        url = upload_file(io.BytesIO(upload))
+    except Exception as e:
+        await report.critical("Upload", error=e)
+
+    return {
+        'url': url,
+    }
 
 
 # pylint: disable=wrong-import-order,unused-import,wrong-import-position
