@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
+// import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useSelector } from 'react-redux'
 // import MathJax from 'react-mathjax-preview'
@@ -11,10 +12,10 @@ import Edit from './add'
 
 
 export default ({ id }) => {
-    const { t } = useTranslation('common')
+    const router = useRouter()
+    // const { t } = useTranslation('common')
     const main = useSelector((state) => state.main)
     const [post, setPost] = useState(null)
-    const [editorLoaded, setEditorLoaded] = useState(false)
     const [edit, setEdit] = useState(false)
     const [deleted, setDeleted] = useState(false)
 
@@ -35,15 +36,14 @@ export default ({ id }) => {
     }
 
     useEffect(() => {
-        getPost({ id })
-        setEditorLoaded(true)
-    }, [])
+        if (!post) {
+            getPost({ id })
+        }
+    })
 
-    // if (deleted) {
-    //     return (
-    //         <Navigate to="/" />
-    //     )
-    // }
+    if (deleted) {
+        router.push(`/`)
+    }
 
     if (!post) {
         return (
@@ -54,34 +54,40 @@ export default ({ id }) => {
     return (
         <div className={ styles.post }>
             <div className="album py-2">
-                <h1>{ post.title }</h1>
-
-                { edit ? (
-                    <button
-                        className="btn btn-outline-secondary"
-                        onClick={ () => {setEdit(false)} }
-                    >
-                        <FontAwesomeIcon icon="fa-regular fa-eye" />
-                    </button>
-                ) : (
-                    <button
-                        className="btn btn-outline-secondary"
-                        onClick={ () => {setEdit(true)} }
-                    >
-                        <FontAwesomeIcon icon="fa-solid fa-pencil" />
-                    </button>
-                ) }
-                <button
-                    className="btn btn-danger"
-                    onClick={ deletePost }
-                >
-                    <FontAwesomeIcon icon="fa-solid fa-trash" />
-                </button>
+                <div class="row">
+                    <div className="col-md-8">
+                        <h1>{ post.title }</h1>
+                    </div>
+                    <div className="col-md-4" style={{ textAlign: 'right' }}>
+                        { edit ? (
+                            <button
+                                className="btn btn-outline-secondary"
+                                onClick={ () => {setEdit(false)} }
+                            >
+                                <FontAwesomeIcon icon="fa-regular fa-eye" />
+                            </button>
+                        ) : (
+                            <button
+                                className="btn btn-outline-secondary"
+                                onClick={ () => {setEdit(true)} }
+                            >
+                                <FontAwesomeIcon icon="fa-solid fa-pencil" />
+                            </button>
+                        ) }
+                        <button
+                            className="btn btn-danger"
+                            onClick={ deletePost }
+                        >
+                            <FontAwesomeIcon icon="fa-solid fa-trash" />
+                        </button>
+                    </div>
+                </div>
 
                 { edit ? (
                     <Edit
-                        editorLoaded={ editorLoaded }
                         post={ post }
+                        setEdit={ setEdit }
+                        setPost={ setPost }
                     />
                 ) : (
                     <>
@@ -92,7 +98,7 @@ export default ({ id }) => {
                             />
                         ) : (<></>) }
                         <br /><br />
-                        { post.data }
+                        <div dangerouslySetInnerHTML={{ __html: post.data }} />
                         {/* <MathJax
                             math={ post.data }
                             sanitizeOptions={{

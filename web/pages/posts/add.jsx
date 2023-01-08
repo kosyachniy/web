@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/edit.module.css'
 import api from '../../functions/api'
-// import { getPost } from './[id]'
 import Editor from '../../components/Editor'
 
 
-export default ({ post }) => {
+export default ({ post, setEdit, setPost }) => {
+    const router = useRouter()
     const { t } = useTranslation('common')
     const main = useSelector((state) => state.main)
     const [title, setName] = useState(post ? post.title : '')
@@ -19,7 +20,7 @@ export default ({ post }) => {
     const [redirect, setRedirect] = useState(null)
 
     const savePost = () => {
-        getPost({ id: post.id })
+        setPost(null)
         setEdit(false)
     }
 
@@ -43,11 +44,9 @@ export default ({ post }) => {
         setEditorLoaded(true)
     }, [])
 
-    // if (redirect) {
-    //     return (
-    //         <Navigate to={ `/posts/${redirect}` } />
-    //     )
-    // }
+    if (redirect) {
+        router.push(`/posts/${redirect}`)
+    }
 
     return (
         <div>

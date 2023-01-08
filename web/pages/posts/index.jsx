@@ -40,7 +40,7 @@ export default () => {
     return (
         <>
             <div className="row">
-                <div className="col-xs-10 col-sm-10 col-md-10">
+                <div className="col-8">
                     <div className="btn-group" role="group" >
                         <button
                             type="button"
@@ -64,7 +64,7 @@ export default () => {
                         </button>
                     </div>
                 </div>
-                <div className="col-xs-2 col-sm-2 col-md-2" style={{ textAlign: 'right' }}>
+                <div className="col-4" style={{ textAlign: 'right' }}>
                     <div className="btn-group">
                         <Link href="/posts/add">
                             <button

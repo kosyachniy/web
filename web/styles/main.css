@@ -1,5 +1,6 @@
 body {
     background-color: var(--bs-success);
+    min-width: 250px;
 }
 
 .bg-dark {
