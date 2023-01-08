@@ -35,6 +35,7 @@ const api = (token, locale, method, data={}, setted=false) => {
                 return;
             }
 
+            resolve(await response.text());
             console.log(response);
         });
     });

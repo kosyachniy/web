@@ -7,7 +7,8 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.post import Post
-from services.auth import auth
+from models.track import Track
+from services.auth import get_token, auth
 from lib import report
 
 
@@ -25,11 +26,10 @@ class Type(BaseModel):
 @router.post("/save/")
 async def handler(
     data: Type = Body(...),
+    token = Depends(get_token),
     user = Depends(auth),
 ):
     """ Save """
-
-    # TODO: for unauth by token
 
     # No access
     if user.status < 2:
@@ -38,22 +38,41 @@ async def handler(
     # Get
     new = False
     if data.id:
-        post = Post.get(ids=data.id, user=user.id)
+        post = Post.get(ids=data.id)
+
+        if (not post.user or post.user != user.id) and post.token != token:
+            raise ErrorAccess('save')
+
     else:
         post = Post(
             user=user.id,
+            token=None if user.id else token,
         )
         new = True
 
     # Change fields
     post.title = data.title # TODO: checking if add
-    post.tags = data.tags
     post.data = data.data # TODO: checking if add
     post.image = data.image
+    post.tags = data.tags
     # TODO: category
 
     # Save
     post.save()
+
+    # Track
+    Track(
+        title='post_save',
+        data={
+            'id': post.id,
+            'title': post.title,
+            'data': post.data,
+            'image': post.image,
+            'tags': post.tags,
+        },
+        user=user.id,
+        token=token,
+    ).save()
 
     # Report
     if new:

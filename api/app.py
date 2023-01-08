@@ -81,11 +81,12 @@ async def ping():
     return 'OK'
 
 @app.post("/upload/")
-async def upload(upload: bytes = File()):
+async def uploader(upload: bytes = File()):
     """ Upload files to file server """
 
     try:
         url = upload_file(io.BytesIO(upload))
+    # pylint: disable=broad-except
     except Exception as e:
         await report.critical("Upload", error=e)
 

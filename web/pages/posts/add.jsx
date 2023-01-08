@@ -19,11 +19,6 @@ export default ({ post, setEdit, setPost }) => {
     const [editorLoaded, setEditorLoaded] = useState(false)
     const [redirect, setRedirect] = useState(null)
 
-    const savePost = () => {
-        setPost(null)
-        setEdit(false)
-    }
-
     const editPost = () => {
         let req = { title, data }
 
@@ -32,8 +27,12 @@ export default ({ post, setEdit, setPost }) => {
         }
 
         api(main.token, main.locale, 'posts.save', req).then(res => {
-            if (post) {
-                savePost()
+            if (res === 'save') {
+                // TODO: notify about no access
+                setEdit(false)
+            } else if (post) {
+                setPost(null)
+                setEdit(false)
             } else {
                 setRedirect(res.id)
             }
