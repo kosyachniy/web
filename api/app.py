@@ -83,7 +83,7 @@ async def ping():
 async def uploader(upload: bytes = File()):
     """ Upload files to file server """
 
-    # pylint: disable=wrong-import-order,wrong-import-position
+    # pylint: disable=wrong-import-order,import-outside-toplevel
     from libdev.aws import upload_file
 
     try:
