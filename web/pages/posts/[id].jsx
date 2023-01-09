@@ -21,7 +21,9 @@ export default ({ id }) => {
 
     const getPost = (data={}) => {
         api(main.token, main.locale, 'posts.get', data).then(res => {
-            setPost(res['posts'])
+            if (res.posts) {
+                setPost(res.posts)
+            }
         })
     }
 

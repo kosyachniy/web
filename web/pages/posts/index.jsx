@@ -20,7 +20,9 @@ export default () => {
 
     const getPost = (data={}) => {
         api(main.token, main.locale, 'posts.get', data).then(res => {
-            dispatch(postsGet(res.posts))
+            if (res.posts) {
+                dispatch(postsGet(res.posts))
+            }
         })
     }
 

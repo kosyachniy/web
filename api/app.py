@@ -87,7 +87,7 @@ async def uploader(upload: bytes = File()):
     from libdev.aws import upload_file
 
     try:
-        url = upload_file(io.BytesIO(upload))
+        url = upload_file(io.BytesIO(upload), file_type='png')
     # pylint: disable=broad-except
     except Exception as e:
         await report.critical("Upload", error=e)

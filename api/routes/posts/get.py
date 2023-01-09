@@ -73,12 +73,11 @@ async def handler(
             # Cover from the first image
             if not post.get('image'):
                 res = re.search(
-                    r'<img src="[^"]*">',
+                    r'<img src="([^"]*)">',
                     post['data']
                 )
-
                 if res is not None:
-                    post['image'] = res[0].split('"')[1].split('/')[-1]
+                    post['image'] = res.groups()[0]
 
             # Content
             post['data'] = re.sub(
