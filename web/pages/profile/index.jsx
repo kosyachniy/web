@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button'
 
 import styles from '../../styles/profile.module.css'
 import { profileUpdate } from '../../redux/actions/profile'
-import api from '../../functions/api'
+import api from '../../lib/api'
 import Avatar from '../../components/Avatar'
 
 

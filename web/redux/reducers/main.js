@@ -1,4 +1,4 @@
-import { generate } from '../../functions/generate'
+import { generate } from '../../lib/generate'
 
 
 export default (state = {

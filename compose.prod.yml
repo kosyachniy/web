@@ -40,10 +40,10 @@ services:
     volumes:
       - ${DATA_PATH}/load:/data/load
       - ${DATA_PATH}/backup:/backup
-      - ./scripts:/scripts
+      - ./scripts:/app/scripts
       # For logs
-      - ${DATA_PATH}/logs/api.err:/app.err
-      - ${DATA_PATH}/logs/api.log:/app.log
+      - ${DATA_PATH}/logs/api.err:/app/app.err
+      - ${DATA_PATH}/logs/api.log:/app/app.log
       # For monitoring
       - /proc/cpuinfo:/proc/cpuinfo:ro
     ports:
@@ -69,8 +69,8 @@ services:
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
     volumes:
       # For logs
-      - ${DATA_PATH}/logs/jobs.err:/app.err
-      - ${DATA_PATH}/logs/jobs.log:/app.log
+      - ${DATA_PATH}/logs/jobs.err:/app/app.err
+      - ${DATA_PATH}/logs/jobs.log:/app/app.log
       # For sitemap
       - ${DATA_PATH}/sitemaps:/data/sitemaps
       - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
@@ -137,8 +137,8 @@ services:
       TG: ${PROTOCOL}://${EXTERNAL_HOST}/tg/
     volumes:
       # For logs
-      - ${DATA_PATH}/logs/tg.err:/app.err
-      - ${DATA_PATH}/logs/tg.log:/app.log
+      - ${DATA_PATH}/logs/tg.err:/app/app.err
+      - ${DATA_PATH}/logs/tg.log:/app/app.log
     depends_on:
       - api
       - redis

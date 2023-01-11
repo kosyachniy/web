@@ -38,7 +38,7 @@ import { systemLoaded } from '../redux/actions/system'
 import { changeLang } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
 import makeStore from '../redux/store'
-import { socketIO } from '../functions/sockets'
+import { socketIO } from '../lib/sockets'
 // import Loader from '../components/Loader'
 
 // Structure

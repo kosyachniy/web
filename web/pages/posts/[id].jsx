@@ -7,7 +7,7 @@ import MathJax from 'react-mathjax-preview'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
-import api from '../../functions/api'
+import api from '../../lib/api'
 import Edit from './add'
 
 

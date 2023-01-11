@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/edit.module.css'
-import api from '../../functions/api'
+import api from '../../lib/api'
 import Editor from '../../components/Editor'
 
 

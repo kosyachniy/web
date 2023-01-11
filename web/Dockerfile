@@ -2,11 +2,10 @@
 FROM node:19.3
 
 # Set work directory
-WORKDIR .
-
-# Install dependencies
-COPY ./package.json .
-RUN npm i --production --force
+WORKDIR /app
 
 # Copy project
-COPY . .
+COPY . /app
+
+# Install dependencies
+RUN npm i --production --force

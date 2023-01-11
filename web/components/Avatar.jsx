@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next'
 
 import styles from '../styles/avatar.module.css'
-import uploadImage from '../functions/upload'
+import uploadImage from '../lib/upload'
 
 
 export default ({ image, setImage }) => {

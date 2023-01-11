@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { popupSet, searching } from '../redux/actions/system'
 import { profileOut } from '../redux/actions/profile'
-import api from '../functions/api'
+import api from '../lib/api'
 import styles from '../styles/header.module.css'
 import Hexagon from './Hexagon'
 

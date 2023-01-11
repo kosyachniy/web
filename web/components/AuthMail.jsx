@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { popupSet } from '../redux/actions/system'
 import { profileIn } from '../redux/actions/profile'
-import api from '../functions/api'
+import api from '../lib/api'
 import styles from '../styles/mail.module.css'
 import Popup from './Popup'
 

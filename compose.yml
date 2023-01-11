@@ -39,10 +39,10 @@ services:
     volumes:
       - ${DATA_PATH}/load:/data/load
       - ${DATA_PATH}/backup:/backup
-      - ./scripts:/scripts
+      - ./scripts:/app/scripts
       # For logs
-      - ${DATA_PATH}/logs/api.err:/app.err
-      - ${DATA_PATH}/logs/api.log:/app.log
+      - ${DATA_PATH}/logs/api.err:/app/app.err
+      - ${DATA_PATH}/logs/api.log:/app/app.log
       # For hot reload
       - ./api:/app
     command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
@@ -66,8 +66,8 @@ services:
       WEB: http://localhost/
     volumes:
       # For logs
-      - ${DATA_PATH}/logs/jobs.err:/app.err
-      - ${DATA_PATH}/logs/jobs.log:/app.log
+      - ${DATA_PATH}/logs/jobs.err:/app/app.err
+      - ${DATA_PATH}/logs/jobs.log:/app/app.log
       # For hot reload
       - ./api:/app
       # For sitemap
@@ -91,12 +91,12 @@ services:
       NEXT_PUBLIC_GOOGLE_MAPS_LNG: ${GOOGLE_MAPS_LNG}
       NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
     volumes:
-      - ./web/public:/public
-      - ./web/styles:/styles
-      - ./web/functions:/functions
-      - ./web/redux:/redux
-      - ./web/components:/components
-      - ./web/pages:/pages
+      - ./web/public:/app/public
+      - ./web/styles:/app/styles
+      - ./web/lib:/app/lib
+      - ./web/redux:/app/redux
+      - ./web/components:/app/components
+      - ./web/pages:/app/pages
     command: npm run dev
 
   server:

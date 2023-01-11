@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-import api from '../../functions/api'
+import api from '../../lib/api'
 import Loader from '../../components/Loader'
 
 
