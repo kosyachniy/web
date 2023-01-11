@@ -40,7 +40,7 @@ async def handle_photo(message):
             'id': cache.get('p'),
             'image': image,
         })
-        if error:
+        if error != 200:
             message_id = await tg.send(
                 chat.id,
                 "Неверный формат, попробуй ещё раз",
@@ -114,7 +114,7 @@ async def handle_doc(message):
             'id': cache.get('p'),
             'image': image,
         })
-        if error:
+        if error != 200:
             message_id = await tg.send(
                 chat.id,
                 "Неверный формат, попробуй ещё раз",

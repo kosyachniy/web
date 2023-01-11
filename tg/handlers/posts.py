@@ -42,7 +42,7 @@ async def send_posts(chat, posts=None):
 
     if posts is None:
         error, data = await api(chat, 'posts.get', {'my': True})
-        if error:
+        if error != 200:
             return None
         posts = data['posts']
 
@@ -189,7 +189,7 @@ async def finish(callback):
     post = data['posts']
 
     # error, data = await api(chat, 'posts.make', {'id': post_id})
-    # if error:
+    # if error != 200:
     #     message_id = await tg.send(
     #         chat.id,
     #         "Бесплатная версия истекла",

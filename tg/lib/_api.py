@@ -7,7 +7,6 @@ import time
 
 import requests
 from libdev.cfg import cfg
-from libdev.gen import generate
 
 # pylint: disable=import-error
 from lib._variables import (
@@ -20,41 +19,40 @@ from lib.reports import report
 LOG_LIMIT = 330
 
 
-async def api(chat, method, data=None):
+async def api(chat, method, data=None, force=False):
     """ API request """
 
-    if data is None:
-        data = {}
-
-    if chat.id not in tokens:
+    if not force and chat.id not in tokens:
         res = await auth(chat)
 
         if res is None:
             return 1, None
 
-    req = {
-        'method': method,
-        'params': data,
-        'token': tokens[chat.id],
-        'network': 'tg',
-        'locale': locales[chat.id],
-    }
+    if data is None:
+        data = {}
+
+    # 'locale': locales.get(chat.id, cfg('locale')),
 
     await report.debug("API request", {
         'user': chat.id,
-        'data': json.dumps(req, ensure_ascii=False)[:LOG_LIMIT],
+        'data': json.dumps(data, ensure_ascii=False)[:LOG_LIMIT],
     })
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
-        res = requests.post(cfg('api'), json=req, timeout=60)
+        res = requests.post(
+            cfg('api') + method.replace('.', '/') + ('/' if method else ''),
+            json=data,
+            headers={'Authorization': f'Bearer {tokens[chat.id]}'} if chat.id in tokens else None,
+            timeout=60,
+        )
 
         if res.status_code != 502:
             break
 
         time.sleep(5)
 
-    if res.status_code != 200:
+    if res.status_code >= 500:
         await report.error("API response", {
             'user': chat.id,
             'method': method,
@@ -65,30 +63,38 @@ async def api(chat, method, data=None):
         })
         return 1, None
 
-    res = res.json()
-
+    # TODO: rm
     await report.debug("API response", {
         'user': chat.id,
-        'data': res,
+        'status': res.status_code,
+        'data': res.text,
     })
 
-    return res['error'], res.get('data', {})
+    return res.status_code, res.json()
 
 async def auth(chat, utm=None) -> bool:
     """ User authentication """
+
+    # Get token
+    error, data = await api(chat, 'account.token', {
+        'token': f'tg{chat.id}',
+        'network': 'tg',
+        'utm': utm,
+    }, force=True)
+
+    if error != 200:
+        return
+
+    tokens[chat.id] = data['token']
 
     if chat.id in user_ids:
         return False
 
     # Default settings
     if chat.id not in locales:
-        locales[chat.id] = 1 # TODO: 0
+        locales[chat.id] = cfg('locale')
 
-    ## Token
-    token = generate()
-    tokens[chat.id] = token
-
-    ## Call the API
+    # Auth
     error, data = await api(chat, 'account.bot', {
         'user': chat.id,
         'name': chat.first_name or chat.title or None,
@@ -97,8 +103,7 @@ async def auth(chat, utm=None) -> bool:
         'utm': utm,
     })
 
-    # Errors
-    if error:
+    if error != 200:
         await report.error("Authorization", {
             'user': chat.id,
             'name': chat.first_name or chat.title or None,

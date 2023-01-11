@@ -97,7 +97,7 @@ async def echo(message):
             'id': cache.get('p'),
             'title': text,
         })
-        if error:
+        if error != 200:
             message_id = await tg.send(
                 chat.id,
                 "Неверный формат, попробуй ещё раз",
@@ -117,7 +117,7 @@ async def echo(message):
             'id': cache.get('p'),
             'data': text,
         })
-        if error:
+        if error != 200:
             message_id = await tg.send(
                 chat.id,
                 "Неверный формат, попробуй ещё раз",
