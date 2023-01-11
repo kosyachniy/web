@@ -34,7 +34,7 @@ def test_repeated_login(client):
     assert data.get('id')
     assert data.get('new') == False
 
-    user_new = User.get(ids=data['id'], fields={'login'})
+    user_new = User.get(data['id'], fields={'login'})
 
     assert user_new.login == process_lower(login)
     assert user_new.id == user_old.id

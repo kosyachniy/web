@@ -31,7 +31,7 @@ async def handler(
     new = False
 
     if data.id:
-        review = Review.get(ids=data.id, fields={})
+        review = Review.get(data.id, fields={})
     else:
         review = Review(
             user=user.id,

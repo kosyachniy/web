@@ -24,7 +24,7 @@ async def handler(
     """ Block """
 
     # Get user
-    subuser = User.get(ids=data.id, fields={'status'})
+    subuser = User.get(data.id, fields={'status'})
 
     # No access
     if user.status < 6 or user.status > user.status:

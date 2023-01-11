@@ -37,7 +37,7 @@ async def handler(
     #     raise ErrorAccess('exit')
 
     # # Check
-    # token = Token.get(ids=request.token, fields={})
+    # token = Token.get(request.token, fields={})
 
     # # Remove
     # # TODO: не удалять токены (выданные ботам)

@@ -38,7 +38,7 @@ async def handler(
     # Get
     new = False
     if data.id:
-        post = Post.get(ids=data.id)
+        post = Post.get(data.id)
 
         if (
             user.status < 6

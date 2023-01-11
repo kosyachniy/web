@@ -20,7 +20,7 @@ async def online_stop(socket_id):
     # TODO: Если сервер был остановлен, отслеживать сессию
 
     try:
-        socket = Socket.get(ids=socket_id)
+        socket = Socket.get(socket_id)
     except ErrorWrong:
         # NOTE: method "exit" -> socket "disconnect"
         return
@@ -43,7 +43,7 @@ async def online_stop(socket_id):
     ).save()
 
     # Delete online session info
-    socket = Socket.get(ids=socket_id)
+    socket = Socket.get(socket_id)
     socket.rm()
 
     # Other sessions of this user

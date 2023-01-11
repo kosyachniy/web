@@ -28,7 +28,7 @@ async def handler(
         raise ErrorAccess('rm')
 
     # Get
-    review = Review.get(ids=data.id)
+    review = Review.get(data.id)
 
     # Delete
     review.rm()

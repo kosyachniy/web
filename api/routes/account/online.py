@@ -66,7 +66,7 @@ async def online_start(token_id, socket_id=None):
         sockets_auth = Socket.get(user={'$exists': True}, fields={'user'})
         fields = {'id', 'login', 'image', 'name', 'surname', 'status'}
         users_uniq = [
-            User.get(ids=socket.user, fields=fields).json(fields=fields)
+            User.get(socket.user, fields=fields).json(fields=fields)
             for socket in sockets_auth
             if socket.user not in {0, None}
         ]
@@ -86,7 +86,7 @@ async def online_start(token_id, socket_id=None):
         changed = False
 
         try:
-            socket = Socket.get(ids=socket_id, fields={'user', 'token'})
+            socket = Socket.get(socket_id, fields={'user', 'token'})
         except ErrorWrong:
             socket = Socket(
                 id=socket_id,

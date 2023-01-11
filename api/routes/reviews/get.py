@@ -50,17 +50,13 @@ async def handler(
     def handle(review):
         # User info
         if review.get('user'):
-            review['user'] = User.complex(
-                ids=review['user'],
-                fields={
-                    'id',
-                    'login',
-                    'name',
-                    'surname',
-                    'image',
-                },
-                handler=lambda el: el,
-            )
+            review['user'] = User.complex(review['user'], fields={
+                'id',
+                'login',
+                'name',
+                'surname',
+                'image',
+            })
 
         return review
 
