@@ -40,12 +40,16 @@ async def api(chat, method, data=None, force=False):
         'data': json.dumps(data, ensure_ascii=False)[:LOG_LIMIT],
     })
 
+    headers = {
+        'Authorization': f'Bearer {tokens[chat.id]}',
+    } if chat.id in tokens else None
+
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
         res = requests.post(
             cfg('api') + method.replace('.', '/') + ('/' if method else ''),
             json=data,
-            headers={'Authorization': f'Bearer {tokens[chat.id]}'} if chat.id in tokens else None,
+            headers=headers,
             timeout=60,
         )
 

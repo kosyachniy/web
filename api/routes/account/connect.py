@@ -2,8 +2,8 @@
 The connect socket of the account object of the API
 """
 
-from app import sio
 from lib import report
+from app import sio
 
 
 @sio.on('connect')

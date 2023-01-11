@@ -10,7 +10,7 @@ from libdev.codes import NETWORKS
 from consys.handlers import (
     process_lower, pre_process_phone, check_phone, check_mail, process_password,
 )
-from consys.errors import ErrorWrong, ErrorAccess
+from consys.errors import ErrorWrong
 
 from models.user import User
 from models.token import Token
