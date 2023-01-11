@@ -4,13 +4,11 @@ The creating method of the payment object of the API
 
 from typing import Union
 
-from fastapi import APIRouter # , Body, Depends
+from fastapi import APIRouter # Body, Request, Depends
 from pydantic import BaseModel
 # from consys.handlers import pre_process_phone
 
 # from models.user import User
-# from services.request import get_request
-# from services.auth import get_token
 # from routes.account.auth import reg
 # from routes.promos.invite import get_promo
 # from lib.pay import create
@@ -30,9 +28,8 @@ class Type(BaseModel):
 
 @router.post("/create/")
 async def handler(
+    # request: Request,
     # data: Type = Body(...),
-    # request = Depends(get_request),
-    # token = Depends(get_token),
 ):
     """ Create a payment request """
 
@@ -41,7 +38,15 @@ async def handler(
     #     users = User.get(phone=phone, fields={})
 
     #     if not users:
-    #         user = await reg(request, token, data, 'phone', 'payment')
+    #         user = await reg(
+    #             request.state.network,
+    #             request.state.ip,
+    #             request.state.locale,
+    #             request.state.token,
+    #             data,
+    #             'phone',
+    #             'payment',
+    #         )
     #     else:
     #         user = users[0]
 

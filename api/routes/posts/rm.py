@@ -2,13 +2,13 @@
 The removal method of the post object of the API
 """
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.post import Post
 from models.track import Track
-from services.auth import get_token, auth
+from services.auth import auth
 
 
 router = APIRouter()
@@ -19,8 +19,8 @@ class Type(BaseModel):
 
 @router.post("/rm/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    token = Depends(get_token),
     user = Depends(auth),
 ):
     """ Delete """
@@ -35,7 +35,7 @@ async def handler(
     if (
         user.status < 7
         and (not post.user or post.user != user.id)
-        and post.token != token
+        and post.token != request.state.token
     ):
         raise ErrorAccess('rm')
 
@@ -49,5 +49,5 @@ async def handler(
             'id': data.id,
         },
         user=user.id,
-        token=token,
+        token=request.state.token,
     ).save()

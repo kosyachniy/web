@@ -8,7 +8,7 @@ from base64 import b64encode
 from hmac import HMAC
 from urllib.parse import urlparse, parse_qsl, urlencode
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorInvalid
@@ -16,8 +16,7 @@ import jwt
 
 from models.user import User
 from models.track import Track
-from services.request import get_request
-from services.auth import auth, get_token
+from services.auth import auth
 from routes.account.auth import reg
 from lib import cfg, report
 
@@ -55,10 +54,9 @@ class Type(BaseModel):
 
 @router.post("/app/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    request = Depends(get_request),
     user = Depends(auth),
-    token = Depends(get_token),
 ):
     """ Mini app auth """
 
@@ -73,7 +71,7 @@ async def handler(
         await report.warning("Failed authorization attempt in the app", {
             'url': data.url,
             'user': user.id,
-            'network': request.network,
+            'network': request.state.network,
             'error': e,
         })
         raise ErrorInvalid('url') from e
@@ -99,13 +97,13 @@ async def handler(
     }
 
     users = User.get(social={'$elemMatch': {
-        'id': request.network,
+        'id': request.state.network,
         'user': data.user,
     }}, fields=fields)
 
     if len(users) > 1:
         await report.warning("More than 1 user", {
-            'network': request.network,
+            'network': request.state.network,
             'social_user': data.user,
         })
 
@@ -118,20 +116,27 @@ async def handler(
             title='acc_auth',
             data={
                 'type': 'app',
-                'network': request.network,
+                'network': request.state.network,
             },
             user=user.id,
-            token=request.token,
+            token=request.state.token,
         ).save()
 
     # Register
     else:
         new = True
-        user = await reg(request, token, data, 'app')
+        user = await reg(
+            request.state.network,
+            request.state.ip,
+            request.state.locale,
+            request.state.token,
+            data,
+            'app',
+        )
 
     # JWT
     token = jwt.encode({
-        'token': token,
+        'token': request.state.token,
         'user': user.id,
         # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
     }, cfg('jwt'), algorithm='HS256')

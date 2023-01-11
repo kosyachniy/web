@@ -3,16 +3,14 @@ The authorization via social networks method of the account object of the API
 """
 
 import jwt
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from consys.errors import ErrorWrong, ErrorAccess
+from consys.errors import ErrorWrong
 
 from models.user import User # process_lower
 from models.token import Token
 from models.track import Track
-from services.request import get_request
-from services.auth import get_token
 from routes.account.auth import reg
 from lib import cfg, report
 
@@ -29,9 +27,8 @@ class Type(BaseModel):
 
 @router.post("/bot/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    request = Depends(get_request),
-    token = Depends(get_token),
 ):
     """ By bot """
 
@@ -55,13 +52,13 @@ async def handler(
     }
 
     users = User.get(social={'$elemMatch': {
-        'id': request.network,
+        'id': request.state.network,
         'user': data.user,
     }}, fields=fields)
 
     if len(users) > 1:
         await report.warning("More than 1 user", {
-            'network': request.network,
+            'network': request.state.network,
             'social_user': data.user,
             'social_login': data.login,
         })
@@ -75,26 +72,30 @@ async def handler(
             title='acc_auth',
             data={
                 'type': 'bot',
-                'network': request.network,
+                'network': request.state.network,
             },
             user=user.id,
-            token=token,
+            token=request.state.token,
         ).save()
 
     # Register
     else:
         new = True
-        user = await reg(request, token, data, 'bot')
+        user = await reg(
+            request.state.network,
+            request.state.ip,
+            request.state.locale,
+            request.state.token,
+            data,
+            'bot',
+        )
 
     # Assignment of the token to the user
 
-    if not token:
-        raise ErrorAccess('auth')
-
     try:
-        token = Token.get(token, fields={'user'})
+        token = Token.get(request.state.token, fields={'user'})
     except ErrorWrong:
-        token = Token(id=token)
+        token = Token(id=request.state.token)
 
     if token.user and token.user != user.id:
         await report.warning("Reauth", {

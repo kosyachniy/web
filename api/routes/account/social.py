@@ -9,7 +9,7 @@ from typing import Union
 
 import jwt
 import requests
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import get_network
@@ -18,8 +18,6 @@ from consys.errors import ErrorAccess, ErrorWrong
 from models.user import User
 from models.token import Token
 from models.track import Track
-from services.request import get_request
-from services.auth import get_token
 from routes.account.auth import reg
 from routes.account.online import online_start
 from lib import cfg, report
@@ -43,9 +41,8 @@ class Type(BaseModel):
 # pylint: disable=too-many-branches,too-many-statements
 @router.post("/social/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    request = Depends(get_request),
-    token = Depends(get_token),
 ):
     """ Via social network """
 
@@ -182,23 +179,30 @@ async def handler(
                 'social': data.social,
             },
             user=user.id,
-            token=token,
+            token=request.state.token,
         ).save()
 
     # Register
     else:
         new = True
-        user = await reg(request, token, data, 'social')
+        user = await reg(
+            request.state.network,
+            request.state.ip,
+            request.state.locale,
+            request.state.token,
+            data,
+            'social',
+        )
 
     # Assignment of the token to the user
 
-    if not token:
+    if not request.state.token:
         raise ErrorAccess('auth')
 
     try:
-        token = Token.get(token, fields={'user'})
+        token = Token.get(request.state.token, fields={'user'})
     except ErrorWrong:
-        token = Token(id=token)
+        token = Token(id=request.state.token)
 
     if token.user and token.user != user.id:
         await report.warning("Reauth", {

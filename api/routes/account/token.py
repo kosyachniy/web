@@ -3,10 +3,9 @@ The token creating method of the account object of the API
 """
 
 import jwt
-from fastapi import APIRouter, Body #, Depends
+from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-# from libdev.gen import generate
 from libdev.codes import get_network
 from consys.errors import ErrorWrong
 
@@ -25,9 +24,10 @@ class Type(BaseModel):
 @router.post("/token/")
 async def handler(
     data: Type = Body(...),
-    # ip = Depends(get_ip),
 ):
     """ Create token """
+
+    # TODO: ip
 
     network = get_network(data.network)
 
@@ -48,6 +48,7 @@ async def handler(
     token = jwt.encode({
         'token': token.id,
         'user': token.user,
+        'network': network,
         # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
     }, cfg('jwt'), algorithm='HS256')
 

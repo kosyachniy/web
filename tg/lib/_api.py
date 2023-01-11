@@ -33,8 +33,10 @@ async def api(chat, method, data=None, force=False):
 
     # 'locale': locales.get(chat.id, cfg('locale')),
 
+    # TODO: rm
     await report.debug("API request", {
         'user': chat.id,
+        'method': method,
         'data': json.dumps(data, ensure_ascii=False)[:LOG_LIMIT],
     })
 
@@ -47,12 +49,12 @@ async def api(chat, method, data=None, force=False):
             timeout=60,
         )
 
-        if res.status_code != 502:
+        if int(res.status_code) != 502:
             break
 
         time.sleep(5)
 
-    if res.status_code >= 500:
+    if int(res.status_code) >= 500:
         await report.error("API response", {
             'user': chat.id,
             'method': method,
@@ -70,7 +72,7 @@ async def api(chat, method, data=None, force=False):
         'data': res.text,
     })
 
-    return res.status_code, res.json()
+    return int(res.status_code), res.json()
 
 async def auth(chat, utm=None) -> bool:
     """ User authentication """

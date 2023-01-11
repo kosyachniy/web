@@ -48,7 +48,3 @@ def auth(request: Request):
     """ Get user """
     user, _ = get_user(user_id=request.state.user)
     return user
-
-def get_token(request: Request):
-    """ Get token """
-    return request.state.token

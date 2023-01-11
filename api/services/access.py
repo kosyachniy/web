@@ -20,6 +20,9 @@ class AccessMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         url = request.url.path[4:]
 
+        request.state.ip = '127.0.0.1' # TODO: ip
+        # TODO: check current ip with token ip
+
         # JWT
         if request.method == 'POST' and url not in self.whitelist:
             token = (
@@ -55,8 +58,11 @@ class AccessMiddleware(BaseHTTPMiddleware):
 
             request.state.token = token['token']
             request.state.user = token['user']
+            request.state.network = token['network']
         else:
             request.state.token = None
             request.state.user = 0
+            request.state.network = 0
 
+        # print(request.url, await request.json())
         return await call_next(request)

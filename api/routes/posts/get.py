@@ -5,12 +5,11 @@ The getting method of the post object of the API
 import re
 from typing import Union
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends # Request
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.post import Post
-# from services.request import get_request
 from services.auth import auth
 
 
@@ -29,8 +28,8 @@ class Type(BaseModel):
 
 @router.post("/get/")
 async def handler(
+    # request: Request,
     data: Type = Body(...),
-    # request = Depends(get_request),
     user = Depends(auth),
 ):
     """ Get """
@@ -48,7 +47,7 @@ async def handler(
     # if data.locale:
     #     data.locale = get_locale(data.locale) # TODO: case if None
     # else:
-    #     data.locale = request.locale
+    #     data.locale = request.state.locale
 
     # Fields
     fields = {

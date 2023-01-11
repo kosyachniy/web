@@ -5,12 +5,11 @@ The editing method of the account object of the API
 from typing import Union
 from copy import deepcopy
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.track import Track
-from services.request import get_request
 from services.auth import auth
 
 
@@ -32,8 +31,8 @@ class Type(BaseModel):
 
 @router.post("/save/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    request = Depends(get_request),
     user = Depends(auth),
 ):
     """ Save personal information """
@@ -68,7 +67,7 @@ async def handler(
         title='acc_save',
         data={'fields': [k for k, v in data.dict().items() if v is not None]},
         user=user.id,
-        token=request.token,
+        token=request.state.token,
     ).save()
 
     # Save

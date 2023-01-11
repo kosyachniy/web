@@ -2,12 +2,11 @@
 The logout method of the account object of the API
 """
 
-from fastapi import APIRouter # , Depends
+from fastapi import APIRouter # Request, Depends
 # from consys.errors import ErrorAccess
 
 # from models.token import Token
 # from models.socket import Socket
-# from services.request import get_request
 # from services.auth import auth
 # from routes.account.disconnect import online_stop
 # from lib import report
@@ -18,7 +17,7 @@ router = APIRouter()
 
 @router.post("/exit/")
 async def handler(
-    # request = Depends(get_request),
+    # request: Request,
     # user = Depends(auth),
 ):
     """ Log out """
@@ -30,14 +29,14 @@ async def handler(
     # # Not authorized
     # if user.status < 3:
     #     await report.error("Wrong token", {
-    #         'token': request.token,
+    #         'token': request.state.token,
     #         'user': user.id,
     #     })
 
     #     raise ErrorAccess('exit')
 
     # # Check
-    # token = Token.get(request.token, fields={})
+    # token = Token.get(request.state.token, fields={})
 
     # # Remove
     # # TODO: не удалять токены (выданные ботам)
@@ -45,7 +44,7 @@ async def handler(
 
     # # Close session
 
-    # sockets = Socket.get(token=request.token, fields={})
+    # sockets = Socket.get(token=request.state.token, fields={})
 
     # for socket in sockets:
     #     await online_stop(socket.id)

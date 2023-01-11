@@ -3,7 +3,7 @@ The authorization method of the account object of the API
 """
 
 import jwt
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import NETWORKS
@@ -15,8 +15,6 @@ from consys.errors import ErrorWrong, ErrorAccess
 from models.user import User
 from models.token import Token
 from models.track import Track
-from services.request import get_request
-from services.auth import get_token
 from routes.account.online import online_start
 from lib import cfg, report
 
@@ -36,15 +34,15 @@ def detect_type(login):
     return 'login'
 
 # pylint: disable=too-many-branches
-async def reg(request, token, data, by, method=None):
+async def reg(network, ip, locale, token, data, by, method=None):
     """ Register an account """
 
     # Action tracking
 
     details = {
         'type': by,
-        'network': request.network,
-        'ip': request.ip,
+        'network': network,
+        'ip': ip,
     }
 
     if data.utm:
@@ -91,12 +89,12 @@ async def reg(request, token, data, by, method=None):
             'name': data.name or None,
             'surname': data.surname or None,
             'social': [{
-                'id': request.network, # TODO: Several accounts in one network
+                'id': network, # TODO: Several accounts in one network
                 'user': data.user,
                 'login': data.login,
                 'name': data.name,
                 'surname': data.surname,
-                'locale': request.locale,
+                'locale': locale,
             }],
         }
     elif by == 'social':
@@ -118,7 +116,7 @@ async def reg(request, token, data, by, method=None):
     elif by == 'app':
         req = {
             'social': [{
-                'id': request.network, # TODO: Several accounts in one network
+                'id': network, # TODO: Several accounts in one network
                 'user': data.user,
             }],
         }
@@ -149,7 +147,7 @@ async def reg(request, token, data, by, method=None):
 
     req = {
         'user': user.id,
-        'network': NETWORKS[request.network].upper(),
+        'network': NETWORKS[network].upper(),
         'type': method,
         'utm': data.utm,
         # TODO: ip, geo
@@ -173,7 +171,7 @@ async def reg(request, token, data, by, method=None):
 
     return user
 
-async def auth(request, token, method, data, by):
+async def auth(network, ip, locale, token, method, data, by):
     """ Authorization / registration in different ways """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -224,7 +222,7 @@ async def auth(request, token, method, data, by):
 
     if new:
         # Register
-        user = await reg(request, token, data, by)
+        user = await reg(network, ip, locale, token, data, by)
 
     else:
         # NOTE: Remove this if no password verification is required
@@ -239,16 +237,13 @@ async def auth(request, token, method, data, by):
             title='acc_auth',
             data={
                 'type': by,
-                'ip': request.ip,
+                'ip': ip,
             },
             user=user.id,
             token=token,
         ).save()
 
     # Assignment of the token to the user
-
-    if not token:
-        raise ErrorAccess(method)
 
     try:
         token = Token.get(token, fields={'user'})
@@ -288,18 +283,25 @@ class Type(BaseModel):
 
 @router.post("/auth/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    request = Depends(get_request),
-    token = Depends(get_token),
 ):
     """ Sign in / Sign up """
 
     by = detect_type(data.login)
-    data = await auth(request, token, 'auth', data, by)
+    data = await auth(
+        request.state.network,
+        request.state.ip,
+        request.state.locale,
+        request.state.token,
+        'auth',
+        data,
+        by,
+    )
 
     # JWT
     token = jwt.encode({
-        'token': token,
+        'token': request.state.token,
         'user': data['id'],
         # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
     }, cfg('jwt'), algorithm='HS256')

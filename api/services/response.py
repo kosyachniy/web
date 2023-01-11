@@ -28,6 +28,8 @@ class ResponseMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         start = time.time()
 
+        request.state.locale = 'en' # TODO: locale
+
         try:
             response = await call_next(request)
 

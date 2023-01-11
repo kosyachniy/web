@@ -2,13 +2,13 @@
 The creating and editing method of the post object of the API
 """
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.post import Post
 from models.track import Track
-from services.auth import get_token, auth
+from services.auth import auth
 from lib import report
 
 
@@ -25,8 +25,8 @@ class Type(BaseModel):
 
 @router.post("/save/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
-    token = Depends(get_token),
     user = Depends(auth),
 ):
     """ Save """
@@ -43,14 +43,14 @@ async def handler(
         if (
             user.status < 6
             and (not post.user or post.user != user.id)
-            and post.token != token
+            and post.token != request.state.token
         ):
             raise ErrorAccess('save')
 
     else:
         post = Post(
             user=user.id,
-            token=None if user.id else token,
+            token=None if user.id else request.state.token,
         )
         new = True
 
@@ -75,7 +75,7 @@ async def handler(
             'tags': post.tags,
         },
         user=user.id,
-        token=token,
+        token=request.state.token,
     ).save()
 
     # Report
