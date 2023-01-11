@@ -35,7 +35,7 @@ def online_back(user_id):
 
 class Type(BaseModel):
     id: Union[int, list[int]] = None
-    count: int = None
+    limit: int = None
     offset: int = None
     fields: list[str] = None
 
@@ -112,7 +112,7 @@ async def handler(
     # Get
     users = User.complex(
         ids=data.id,
-        count=data.count,
+        limit=data.limit,
         offset=data.offset,
         fields=fields,
         handler=handle,

@@ -19,7 +19,7 @@ router = APIRouter()
 
 class Type(BaseModel):
     id: Union[int, list[int]] = None
-    count: int = None
+    limit: int = None
     offset: int = None
     search: str = None
     my: bool = None
@@ -99,7 +99,7 @@ async def handler(
     posts = Post.complex(
         ids=data.id,
         user=cond_user,
-        count=data.count,
+        limit=data.limit,
         offset=data.offset,
         search=data.search,
         fields=fields,  # None if data.id else fields,

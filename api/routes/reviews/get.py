@@ -18,7 +18,7 @@ router = APIRouter()
 
 class Type(BaseModel):
     id: Union[int, list[int]] = None
-    count: int = None
+    limit: int = None
     offset: int = None
     search: str = None
     # TODO: fields: list[str] = None
@@ -67,7 +67,7 @@ async def handler(
     # Get
     reviews = Review.complex(
         ids=data.id,
-        count=data.count,
+        limit=data.limit,
         offset=data.offset,
         search=data.search,
         fields=fields,
