@@ -1,3 +1,7 @@
+export const systemPrepared = () => ({
+    type: 'SYSTEM_PREPARED',
+})
+
 export const systemLoaded = () => ({
     type: 'SYSTEM_LOADED',
 })

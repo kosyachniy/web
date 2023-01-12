@@ -23,11 +23,11 @@ export default () => {
     const [password, setPassword] = useState('')
 
     const signIn = (event) => {
-        api(
-            main.token, main.locale,
-            'account.auth',
-            {login: mail, password}
-        ).then(res => {
+        api(main, 'account.auth', {
+            login: mail,
+            password,
+            utm: main.utm,
+        }).then(res => {
             dispatch(profileIn(res))
             dispatch(popupSet(null))
         })

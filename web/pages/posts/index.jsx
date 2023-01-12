@@ -19,7 +19,7 @@ export default () => {
     const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => {
-        api(main.token, main.locale, 'posts.get', data).then(res => {
+        api(main, 'posts.get', data).then(res => {
             if (res.posts) {
                 dispatch(postsGet(res.posts))
             }
@@ -27,17 +27,19 @@ export default () => {
     }
 
     useEffect(() => {
-        if (
-            system.search !== loaded
-            && (
-                system.search === ''
-                || system.search.length >= 3
-            )
-        ) {
-            setLoaded(system.search)
-            getPost({ search: system.search })
+        if (system.prepared) {
+            if (
+                system.search !== loaded
+                && (
+                    system.search === ''
+                    || system.search.length >= 3
+                )
+            ) {
+                setLoaded(system.search)
+                getPost({ search: system.search })
+            }
         }
-    })
+    }, [system.prepared])
 
     return (
         <>

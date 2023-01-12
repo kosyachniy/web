@@ -14,13 +14,14 @@ import Edit from './add'
 export default ({ id }) => {
     const router = useRouter()
     // const { t } = useTranslation('common')
+    const system = useSelector((state) => state.system)
     const main = useSelector((state) => state.main)
     const [post, setPost] = useState(null)
     const [edit, setEdit] = useState(false)
     const [deleted, setDeleted] = useState(false)
 
     const getPost = (data={}) => {
-        api(main.token, main.locale, 'posts.get', data).then(res => {
+        api(main, 'posts.get', data).then(res => {
             if (res.posts) {
                 setPost(res.posts)
             }
@@ -32,16 +33,16 @@ export default ({ id }) => {
             id: post.id,
         }
 
-        api(main.token, main.locale, 'posts.rm', data).then(res => {
+        api(main, 'posts.rm', data).then(res => {
             setDeleted(true)
         })
     }
 
     useEffect(() => {
-        if (!post) {
+        if (system.prepared && !post) {
             getPost({ id })
         }
-    })
+    }, [system.prepared])
 
     if (deleted) {
         router.push(`/`)

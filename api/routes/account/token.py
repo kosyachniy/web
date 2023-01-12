@@ -40,7 +40,7 @@ async def handler(
         token = Token(
             id=data.token, # generate(),
             network=network,
-            utm=data.utm,
+            utm=data.utm or None,
         )
         token.save()
 

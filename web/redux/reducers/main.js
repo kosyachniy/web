@@ -7,6 +7,7 @@ export default (state = {
     theme: 'light',
     color: 'dark',
     display: 'grid',
+    utm: null,
 }, action) => {
     switch (action.type) {
         case 'CHANGE_THEME':
@@ -26,6 +27,12 @@ export default (state = {
             return {
                 ...state,
                 display: action.display,
+            }
+
+        case 'SET_UTM':
+            return {
+                ...state,
+                utm: action.utm,
             }
 
         default:

@@ -34,8 +34,8 @@ import {
 
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
-import { systemLoaded } from '../redux/actions/system'
-import { changeLang } from '../redux/actions/main'
+import { systemPrepared, systemLoaded } from '../redux/actions/system'
+import { changeLang, setUtm } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
 import makeStore from '../redux/store'
 import { socketIO } from '../lib/sockets'
@@ -102,6 +102,16 @@ const Body = ({ Component, pageProps }) => {
             dispatch(onlineReset())
         })
     }, [])
+
+    useEffect(() => {
+        // UTM
+        if (router.isReady) {
+            if (router.query['utm'] && !main.utm) {
+                dispatch(setUtm(router.query['utm']))
+            }
+            dispatch(systemPrepared())
+        }
+    }, [router.query])
 
     useEffect(() => {
         // Locale

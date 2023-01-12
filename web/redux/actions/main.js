@@ -13,3 +13,8 @@ export const displaySet = display => ({
     type: 'SYSTEM_DISPLAY',
     display,
 })
+
+export const setUtm = utm => ({
+    type: 'SET_UTM',
+    utm,
+})

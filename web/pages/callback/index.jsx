@@ -8,9 +8,10 @@ export default ({ user, onPopup, onRedirect, onUpdateUserProperties }) => {
     const main = useSelector((state) => state.main)
 
     const onSocial = (type, code) => {
-        api(main.token, main.locale, 'account.social', {
+        api(main, 'account.social', {
             social: type,
             code,
+            // TODO: utm
         }).then((_eventAuthSocialAccount) => {
             if (_eventAuthSocialAccount.id !== undefined) {
                 onPopup(false)

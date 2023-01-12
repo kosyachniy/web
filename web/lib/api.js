@@ -14,9 +14,9 @@ async function serverRequest(method='', data={}) {
     })
 }
 
-const api = (token, locale, method, data={}, setted=false) => {
+const api = (main, method, data={}, setted=false) => {
     return new Promise((resolve, reject) => {
-        // data.locale = locale
+        // data.locale = main.locale
 
         serverRequest(method, data).then(async (response) => {
             if (response.status >= 200 && response.status < 300) {
@@ -27,11 +27,12 @@ const api = (token, locale, method, data={}, setted=false) => {
 
             if (response.status === 401 && !setted) {
                 // TODO: auto request on token creation
-                await api(token, locale, 'account.token', {
-                    token,
+                await api(main, 'account.token', {
+                    token: main.token,
                     network: 'web',
+                    utm: main.utm,
                 }, setted=true);
-                resolve(await api(token, locale, method, data, true));
+                resolve(await api(main, method, data, true));
                 return;
             }
 

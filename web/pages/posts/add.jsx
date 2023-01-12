@@ -26,7 +26,7 @@ export default ({ post, setEdit, setPost }) => {
             req['id'] = post.id
         }
 
-        api(main.token, main.locale, 'posts.save', req).then(res => {
+        api(main, 'posts.save', req).then(res => {
             if (res === 'save') {
                 // TODO: notify about no access
                 setEdit(false)

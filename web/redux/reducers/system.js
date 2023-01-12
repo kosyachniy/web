@@ -1,9 +1,16 @@
 export default (state = {
     search: '',
+    prepared: false,
     loaded: false,
     popup: null,
 }, action) => {
     switch (action.type) {
+        case 'SYSTEM_PREPARED':
+            return {
+                ...state,
+                prepared: true,
+            }
+
         case 'SYSTEM_LOADED':
             return {
                 ...state,

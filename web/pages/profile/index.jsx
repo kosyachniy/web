@@ -31,7 +31,7 @@ export default () => {
     // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
-        api(main.token, main.locale, 'users.get', { id: +profile.id }).then(res => {
+        api(main, 'users.get', { id: +profile.id }).then(res => {
             dispatch(profileUpdate({
                 login: res.users.login,
                 image: res.users.image,
@@ -82,7 +82,7 @@ export default () => {
             data['image'] = image
         }
 
-        api(main.token, main.locale, 'account.save', data).then(res => {
+        api(main, 'account.save', data).then(res => {
             dispatch(profileUpdate({login, image, name, surname, phone, mail}))
         })
     }

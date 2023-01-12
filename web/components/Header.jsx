@@ -26,7 +26,7 @@ export default () => {
     const profile = useSelector((state) => state.profile)
 
     const signOut = () => {
-        api(main.token, main.locale, 'account.exit', {}).then(res => {
+        api(main, 'account.exit', {}).then(res => {
             dispatch(profileOut(res))
         })
     }

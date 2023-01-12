@@ -34,7 +34,7 @@ def detect_type(login):
     return 'login'
 
 # pylint: disable=too-many-branches
-async def reg(network, ip, locale, token, data, by, method=None):
+async def reg(network, ip, locale, token_id, data, by, method=None):
     """ Register an account """
 
     # Action tracking
@@ -47,6 +47,10 @@ async def reg(network, ip, locale, token, data, by, method=None):
 
     if data.utm:
         details['utm'] = data.utm
+    else:
+        token = Token.get(token_id, fields={'utm'})
+        if token.utm:
+            details['utm'] = token.utm
 
     if by == 'bot':
         details['social_user'] = data.user
@@ -140,7 +144,7 @@ async def reg(network, ip, locale, token, data, by, method=None):
         title='acc_reg',
         data=details,
         user=user.id,
-        token=token,
+        token=token_id,
     ).save()
 
     # Report
