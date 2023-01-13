@@ -13,7 +13,7 @@ export default () => {
         reducer: persistReducer({
             key: 'root',
             storage,
-            whitelist: ['main'],
+            whitelist: ['main', 'profile'],
         }, reducer),
         middleware: (getDefaultMiddleware) => getDefaultMiddleware({
             serializableCheck: {

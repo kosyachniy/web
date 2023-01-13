@@ -196,9 +196,6 @@ async def handler(
 
     # Assignment of the token to the user
 
-    if not request.state.token:
-        raise ErrorAccess('auth')
-
     try:
         token = Token.get(request.state.token, fields={'user'})
     except ErrorWrong:
@@ -221,6 +218,7 @@ async def handler(
     token = jwt.encode({
         'token': token.id,
         'user': user.id,
+        'network': request.state.network,
         # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
     }, cfg('jwt'), algorithm='HS256')
 

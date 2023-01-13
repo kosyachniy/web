@@ -19,25 +19,23 @@ const api = (main, method, data={}, setted=false) => {
         // data.locale = main.locale
 
         serverRequest(method, data).then(async (response) => {
-            if (response.status >= 200 && response.status < 300) {
-                const res = await response.json();
-                resolve(res === undefined ? {} : res);
-                return;
-            };
-
-            if (response.status === 401 && !setted) {
-                // TODO: auto request on token creation
-                await api(main, 'account.token', {
-                    token: main.token,
-                    network: 'web',
-                    utm: main.utm,
-                }, setted=true);
-                resolve(await api(main, method, data, true));
-                return;
+            if (!response.ok) {
+                if (response.status === 401 && !setted) {
+                    // TODO: auto request on token creation
+                    await api(main, 'account.token', {
+                        token: main.token,
+                        network: 'web',
+                        // utm: main.utm,
+                    }, setted=true);
+                    resolve(await api(main, method, data, true));
+                } else {
+                    const text = await response.text();
+                    console.log('Error', response.status, text)
+                    resolve(text);
+                }
+            } else {
+                resolve(await response.json());
             }
-
-            resolve(await response.text());
-            console.log(response);
         });
     });
 }

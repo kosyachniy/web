@@ -24,26 +24,29 @@ async def startup():
     if cfg('mode') in {'PRE', 'PROD'}:
         Instrumentator().instrument(app).expose(app)
 
+# JWT
+# NOTE: 3rd middleware
+app.add_middleware(
+    AccessMiddleware,
+    jwt_secret=cfg('jwt'),
+    whitelist={
+        '/',
+        '/account/token/',
+    },
+)
+
+# Monitoring
+# NOTE: 2nd middleware
+app.add_middleware(ResponseMiddleware)
+
 # CORS
+# NOTE: 1st middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['GET', 'POST'],
     allow_headers=['Content-Type'],
-)
-
-# Monitoring
-app.add_middleware(ResponseMiddleware)
-
-# JWT
-app.add_middleware(
-    AccessMiddleware,
-    jwt_secret=cfg('jwt'),
-    whitelist={
-        '/',
-        '/account/token/'
-    },
 )
 
 # Socket.IO

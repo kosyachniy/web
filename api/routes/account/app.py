@@ -138,6 +138,7 @@ async def handler(
     token = jwt.encode({
         'token': request.state.token,
         'user': user.id,
+        'network': request.state.network,
         # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
     }, cfg('jwt'), algorithm='HS256')
 

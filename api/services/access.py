@@ -64,5 +64,4 @@ class AccessMiddleware(BaseHTTPMiddleware):
             request.state.user = 0
             request.state.network = 0
 
-        # print(request.url, await request.json())
         return await call_next(request)

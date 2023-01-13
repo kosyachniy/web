@@ -165,6 +165,8 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
         req['mail'] = data.mail
     elif by == 'phone':
         req['phone'] = f"+{user.phone}"
+    elif by == 'mail':
+        req['mail'] = user.mail
     else:
         req[by] = user.login
 
@@ -175,7 +177,7 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
 
     return user
 
-async def auth(network, ip, locale, token, method, data, by):
+async def auth(network, ip, locale, token, data, by):
     """ Authorization / registration in different ways """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
@@ -298,7 +300,6 @@ async def handler(
         request.state.ip,
         request.state.locale,
         request.state.token,
-        'auth',
         data,
         by,
     )
@@ -307,6 +308,7 @@ async def handler(
     token = jwt.encode({
         'token': request.state.token,
         'user': data['id'],
+        'network': request.state.network,
         # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
     }, cfg('jwt'), algorithm='HS256')
 

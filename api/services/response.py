@@ -26,8 +26,9 @@ class ResponseMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
 
     async def dispatch(self, request: Request, call_next):
-        start = time.time()
+        url = request.url.path[4:]
 
+        start = time.time()
         request.state.locale = 'en' # TODO: locale
 
         try:
@@ -46,8 +47,14 @@ class ResponseMiddleware(BaseHTTPMiddleware):
         else:
             status = response.status_code
 
+            # Report
+            if status not in {200, 401}:
+                await report.warning("Non-success response", {
+                    'url': url,
+                    'status': status,
+                })
+
         if request.method == 'POST':
-            url = request.url.path[4:]
             process_time = time.time() - start
 
             # Monitoring
