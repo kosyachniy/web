@@ -9,15 +9,13 @@ from hmac import HMAC
 from urllib.parse import urlparse, parse_qsl, urlencode
 
 from fastapi import APIRouter, Body, Depends, Request
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorInvalid
-import jwt
 
 from models.user import User
 from models.track import Track
 from services.auth import auth
-from routes.account.auth import reg
+from routes.account.auth import reg, postauth
 from lib import cfg, report
 
 
@@ -134,24 +132,4 @@ async def handler(
             'app',
         )
 
-    # JWT
-    token = jwt.encode({
-        'token': request.state.token,
-        'user': user.id,
-        'network': request.state.network,
-        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt'), algorithm='HS256')
-
-    # # Referral
-    # if data.referral:
-    #     user.referral = data.referral
-    #     user.save()
-
-    # Response
-    response = JSONResponse(content={
-        **user.json(fields=fields),
-        'new': new,
-        'token': token,
-    })
-    response.set_cookie(key="Authorization", value=f"Bearer {token}")
-    return response
+    return postauth(request, user, new, fields)

@@ -7,19 +7,15 @@ import urllib
 import base64
 from typing import Union
 
-import jwt
 import requests
 from fastapi import APIRouter, Body, Request
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import get_network
 from consys.errors import ErrorAccess, ErrorWrong
 
 from models.user import User
-from models.token import Token
 from models.track import Track
-from routes.account.auth import reg
-from routes.account.online import online_start
+from routes.account.auth import reg, postauth
 from lib import cfg, report
 
 
@@ -194,39 +190,4 @@ async def handler(
             'social',
         )
 
-    # Assignment of the token to the user
-
-    try:
-        token = Token.get(request.state.token, fields={'user'})
-    except ErrorWrong:
-        token = Token(id=request.state.token)
-
-    if token.user and token.user != user.id:
-        await report.warning("Reauth", {
-            'from': token.user,
-            'to': user.id,
-            'token': token.id,
-        })
-
-    token.user = user.id
-    token.save()
-
-    # Update online users
-    await online_start(token.id)
-
-    # JWT
-    token = jwt.encode({
-        'token': token.id,
-        'user': user.id,
-        'network': request.state.network,
-        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt'), algorithm='HS256')
-
-    # Response
-    response = JSONResponse(content={
-        **user.json(fields=fields),
-        'new': new,
-        'token': token,
-    })
-    response.set_cookie(key="Authorization", value=f"Bearer {token}")
-    return response
+    return postauth(request, user, new, fields, online=True)

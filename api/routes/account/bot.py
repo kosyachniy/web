@@ -2,17 +2,13 @@
 The authorization via social networks method of the account object of the API
 """
 
-import jwt
 from fastapi import APIRouter, Body, Request
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from consys.errors import ErrorWrong
 
-from models.user import User # process_lower
-from models.token import Token
+from models.user import User
 from models.track import Track
-from routes.account.auth import reg
-from lib import cfg, report
+from routes.account.auth import reg, postauth
+from lib import report
 
 
 router = APIRouter()
@@ -90,36 +86,4 @@ async def handler(
             'bot',
         )
 
-    # Assignment of the token to the user
-
-    try:
-        token = Token.get(request.state.token, fields={'user'})
-    except ErrorWrong:
-        token = Token(id=request.state.token)
-
-    if token.user and token.user != user.id:
-        await report.warning("Reauth", {
-            'from': token.user,
-            'to': user.id,
-            'token': token.id,
-        })
-
-    token.user = user.id
-    token.save()
-
-    # JWT
-    token = jwt.encode({
-        'token': token.id,
-        'user': user.id,
-        'network': request.state.network,
-        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt'), algorithm='HS256')
-
-    # Response
-    response = JSONResponse(content={
-        **user.json(fields=fields),
-        'new': new,
-        'token': token,
-    })
-    response.set_cookie(key="Authorization", value=f"Bearer {token}")
-    return response
+    return postauth(request, user, new, fields)

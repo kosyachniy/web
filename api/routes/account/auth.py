@@ -33,7 +33,7 @@ def detect_type(login):
 
     return 'login'
 
-# pylint: disable=too-many-branches
+# pylint: disable=too-many-branches,too-many-statements
 async def reg(network, ip, locale, token_id, data, by, method=None):
     """ Register an account """
 
@@ -177,8 +177,67 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
 
     return user
 
-async def auth(network, ip, locale, token, data, by):
-    """ Authorization / registration in different ways """
+async def postauth(request, user, new, fields, online=False):
+    # Assignment of the token to the user
+    try:
+        token = Token.get(request.state.token, fields={'user'})
+    except ErrorWrong:
+        token = Token(id=request.state.token)
+
+    if token.user and token.user != user.id:
+        await report.warning("Reauth", {
+            'from': token.user,
+            'to': user.id,
+            'token': token.id,
+        })
+
+    token.user = user.id
+    token.save()
+
+    # TODO: Pre-registration data (promos, actions, posts)
+
+    # Update online users
+    if online:
+        await online_start(token.id)
+
+    # JWT
+    token = jwt.encode({
+        'token': token.id,
+        'user': user.id,
+        'network': request.state.network,
+        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+    }, cfg('jwt'), algorithm='HS256')
+
+    # # Referral
+    # if data.referral:
+    #     user.referral = data.referral
+    #     user.save()
+
+    # Response
+    response = JSONResponse(content={
+        **user.json(fields=fields),
+        'new': new,
+        'token': token,
+    })
+    response.set_cookie(key="Authorization", value=f"Bearer {token}")
+    return response
+
+
+class Type(BaseModel):
+    login: str # login / mail / phone
+    # NOTE: Remove this if no password verification is required
+    password: str
+    # NOTE: For general authorization method fields
+    name: str = None
+    surname: str = None
+    utm: str = None
+
+@router.post("/auth/")
+async def handler(
+    request: Request,
+    data: Type = Body(...),
+):
+    """ Sign in / Sign up """
 
     # TODO: Сокет на авторизацию на всех вкладках токена
     # TODO: Перезапись информации этого токена уже в онлайне
@@ -186,6 +245,8 @@ async def auth(network, ip, locale, token, data, by):
     # TODO: the same token
     # TODO: Only by token (automaticaly, without any info)
     # TODO: block by token
+
+    by = detect_type(data.login)
 
     # Data preparation
     # TODO: optimize
@@ -228,7 +289,14 @@ async def auth(network, ip, locale, token, data, by):
 
     if new:
         # Register
-        user = await reg(network, ip, locale, token, data, by)
+        user = await reg(
+            request.state.network,
+            request.state.ip,
+            request.state.locale,
+            request.state.token,
+            data,
+            by,
+        )
 
     else:
         # NOTE: Remove this if no password verification is required
@@ -243,79 +311,10 @@ async def auth(network, ip, locale, token, data, by):
             title='acc_auth',
             data={
                 'type': by,
-                'ip': ip,
+                'ip': request.state.ip,
             },
             user=user.id,
-            token=token,
+            token=request.state.token,
         ).save()
 
-    # Assignment of the token to the user
-
-    try:
-        token = Token.get(token, fields={'user'})
-    except ErrorWrong:
-        token = Token(id=token)
-
-    if token.user and token.user != user.id:
-        await report.warning("Reauth", {
-            'from': token.user,
-            'to': user.id,
-            'token': token.id,
-        })
-
-    token.user = user.id
-    token.save()
-
-    # TODO: Pre-registration data (promos, actions, posts)
-
-    # Update online users
-    await online_start(token.id)
-
-    # Response
-    return {
-        **user.json(fields=fields),
-        'new': new,
-    }
-
-
-class Type(BaseModel):
-    login: str # login / mail / phone
-    # NOTE: Remove this if no password verification is required
-    password: str
-    # NOTE: For general authorization method fields
-    name: str = None
-    surname: str = None
-    utm: str = None
-
-@router.post("/auth/")
-async def handler(
-    request: Request,
-    data: Type = Body(...),
-):
-    """ Sign in / Sign up """
-
-    by = detect_type(data.login)
-    data = await auth(
-        request.state.network,
-        request.state.ip,
-        request.state.locale,
-        request.state.token,
-        data,
-        by,
-    )
-
-    # JWT
-    token = jwt.encode({
-        'token': request.state.token,
-        'user': data['id'],
-        'network': request.state.network,
-        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt'), algorithm='HS256')
-
-    # Response
-    response = JSONResponse(content={
-        **data,
-        'token': token,
-    })
-    response.set_cookie(key="Authorization", value=f"Bearer {token}")
-    return response
+    return await postauth(request, user, new, fields, online=True)
