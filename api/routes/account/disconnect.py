@@ -42,21 +42,17 @@ async def online_stop(socket_id):
         token=socket.token,
     ).save()
 
-    # Delete online session info
-    socket = Socket.get(socket_id)
-    socket.rm()
+    # Reset user
+    del socket.user
+    socket.save()
 
     # Other sessions of this user
-
     other = _other_sessions(user.id, socket.token)
-
     if other:
         return
 
     # Send sockets about the user to all online users
-
     count = _online_count()
-
     if count:
         await sio.emit('online_del', {
             'count': count,

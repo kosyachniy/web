@@ -2,18 +2,30 @@
 User authorization
 """
 
+import jwt
 from fastapi import Request
 from consys.errors import ErrorWrong
 
 from models.user import User
 from models.token import Token
 from models.socket import Socket
+from lib import cfg
 
 
-def get_user(token_id=None, socket_id=None, user_id=None):
+# pylint: disable=too-many-branches
+def get_user(token_id=None, socket_id=None, token_jwt=None, user_id=None):
     """ Get user object by token / socket / id """
 
-    if token_id is not None:
+    if token_jwt is not None:
+        try:
+            token = jwt.decode(token_jwt, cfg('jwt'), algorithms='HS256')
+        # pylint: disable=broad-except
+        except Exception:
+            pass
+        else:
+            return User.get(token['user']), token['token']
+
+    elif token_id is not None:
         try:
             token = Token.get(token_id, fields={'user'})
         except ErrorWrong:

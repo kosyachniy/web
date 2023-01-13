@@ -38,32 +38,16 @@ export default (state = {
             }
 
         case 'PROFILE_UPDATE':
-            if (action.profile.login) {
-                state.login = action.profile.login
+            return {
+                ...state,
+                login: action.profile.login || state.login,
+                name: action.profile.name || state.name,
+                surname: action.profile.surname || state.surname,
+                phone: action.profile.phone || state.phone,
+                mail: action.profile.mail || state.mail,
+                image:  action.profile.image || state.image,
+                image_optimize: action.profile.image || state.image_optimize,
             }
-            if (action.profile.name) {
-                state.name = action.profile.name
-            }
-            if (action.profile.surname) {
-                state.surname = action.profile.surname
-            }
-            if (action.profile.phone) {
-                state.phone = action.profile.phone
-            }
-            if (action.profile.mail) {
-                state.mail = action.profile.mail
-            }
-            if (action.profile.image) {
-                if (action.profile.image.indexOf('.')<1) {
-                    state.image = action.profile.v
-                    state.image_optimize = action.profile.image
-                } else {
-                    state.image = action.profile.image
-                    state.image_optimize = action.profile.image
-                }
-            }
-
-            return state
 
         default:
             return state

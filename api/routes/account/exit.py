@@ -2,14 +2,14 @@
 The logout method of the account object of the API
 """
 
-from fastapi import APIRouter # Request, Depends
-# from consys.errors import ErrorAccess
+from fastapi import APIRouter, Request, Depends
+from consys.errors import ErrorAccess
 
-# from models.token import Token
-# from models.socket import Socket
-# from services.auth import sign
-# from routes.account.disconnect import online_stop
-# from lib import report
+from models.token import Token
+from models.socket import Socket
+from services.auth import sign
+from routes.account.disconnect import online_stop
+from lib import report
 
 
 router = APIRouter()
@@ -17,8 +17,8 @@ router = APIRouter()
 
 @router.post("/exit/")
 async def handler(
-    # request: Request,
-    # user = Depends(sign),
+    request: Request,
+    user = Depends(sign),
 ):
     """ Log out """
 
@@ -26,25 +26,21 @@ async def handler(
     # TODO: Перезапись информации этого токена уже в онлайне
     # TODO: Отправлять сокет всем сессиям этого браузера на выход
 
-    # # Not authorized
-    # if user.status < 3:
-    #     await report.error("Wrong token", {
-    #         'token': request.state.token,
-    #         'user': user.id,
-    #     })
+    # Not authorized
+    if user.status == 2:
+        await report.warning("Already unauth", {
+            'token': request.state.token,
+            'user': user.id,
+        })
 
-    #     raise ErrorAccess('exit')
+        raise ErrorAccess('exit')
 
-    # # Check
-    # token = Token.get(request.state.token, fields={})
+    # Close session
+    sockets = Socket.get(token=request.state.token, fields={})
+    for socket in sockets:
+        await online_stop(socket.id)
 
-    # # Remove
-    # # TODO: не удалять токены (выданные ботам)
-    # token.rm()
-
-    # # Close session
-
-    # sockets = Socket.get(token=request.state.token, fields={})
-
-    # for socket in sockets:
-    #     await online_stop(socket.id)
+    # Reset
+    token = Token.get(request.state.token, fields={'user'})
+    del token.user
+    token.save()
