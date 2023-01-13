@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess
 
 from models.user import User, process_lower, pre_process_phone
-from services.auth import auth
+from services.auth import sign
 from lib import generate_password, report
 
 
@@ -20,7 +20,7 @@ class Type(BaseModel):
 @router.post("/recover/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(auth),
+    user = Depends(sign),
 ):
     """ Recover password """
 

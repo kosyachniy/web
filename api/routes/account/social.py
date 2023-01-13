@@ -13,9 +13,7 @@ from pydantic import BaseModel
 from libdev.codes import get_network
 from consys.errors import ErrorAccess, ErrorWrong
 
-from models.user import User
-from models.track import Track
-from routes.account.auth import reg, postauth
+from routes.account.auth import auth
 from lib import cfg, report
 
 
@@ -49,21 +47,6 @@ async def handler(
 
     # Preparing params
     data.social = get_network(data.social)
-
-    fields = {
-        'id',
-        'login',
-        'image',
-        'name',
-        'surname',
-        'title',
-        'phone',
-        'mail',
-        'social',
-        'status',
-        # 'subscription',
-        # 'balance',
-    }
 
     # VK
     if data.social == 3:
@@ -152,42 +135,11 @@ async def handler(
         })
         raise ErrorWrong('id')
 
-    users = User.get(social={'$elemMatch': {
-        'id': data.social,
-        'user': data.user,
-    }}, fields=fields)
-
-    if len(users) > 1:
-        await report.warning("More than 1 user", {
-            'social': data.social,
-            'social_user': data.user,
-        })
-
-    elif len(users):
-        new = False
-        user = users[0]
-
-        # Action tracking
-        Track(
-            title='acc_auth',
-            data={
-                'type': 'social',
-                'social': data.social,
+    return await auth(request, data, 'social', {
+        'social': {
+            '$elemMatch': {
+                'id': data.social,
+                'user': data.user,
             },
-            user=user.id,
-            token=request.state.token,
-        ).save()
-
-    # Register
-    else:
-        new = True
-        user = await reg(
-            request.state.network,
-            request.state.ip,
-            request.state.locale,
-            request.state.token,
-            data,
-            'social',
-        )
-
-    return postauth(request, user, new, fields, online=True)
+        },
+    }, online=True)

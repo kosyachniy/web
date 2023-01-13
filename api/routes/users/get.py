@@ -11,7 +11,7 @@ from consys.errors import ErrorAccess, ErrorInvalid
 
 from models.user import User
 from models.socket import Socket
-from services.auth import auth
+from services.auth import sign
 
 
 router = APIRouter()
@@ -42,7 +42,7 @@ class Type(BaseModel):
 @router.post("/get/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(auth),
+    user = Depends(sign),
 ):
     """ Get """
 

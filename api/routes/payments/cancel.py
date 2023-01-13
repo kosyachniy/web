@@ -5,7 +5,7 @@ The cancel method of the payment object of the API
 from fastapi import APIRouter, Depends
 from consys.errors import ErrorAccess, ErrorRepeat
 
-from services.auth import auth
+from services.auth import sign
 
 
 router = APIRouter()
@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.post("/cancel/")
 async def handler(
-    user = Depends(auth),
+    user = Depends(sign),
 ):
     """ Delete payments data """
 

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 
 from models.review import Review
-from services.auth import auth
+from services.auth import sign
 from lib import report
 
 
@@ -22,7 +22,7 @@ class Type(BaseModel):
 async def handler(
     request: Request,
     data: Type = Body(...),
-    user = Depends(auth),
+    user = Depends(sign),
 ):
     """ Save """
 

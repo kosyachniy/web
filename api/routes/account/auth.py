@@ -177,7 +177,106 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
 
     return user
 
-async def postauth(request, user, new, fields, online=False):
+async def auth(request, data, by, conditions, online=False, password=False):
+    """ Authorization / registration in different ways """
+
+    # TODO: Сокет на авторизацию на всех вкладках токена
+    # TODO: Перезапись информации этого токена уже в онлайне
+    # TODO: Pre-registration data (promos, actions, posts)
+    # TODO: the same token
+    # TODO: Only by token (automaticaly, without any info)
+    # TODO: block by token
+
+    # Data preparation
+    # TODO: optimize
+    fields = {
+        'id',
+        'login',
+        'image',
+        'name',
+        'surname',
+        'title',
+        'phone',
+        'mail',
+        'social',
+        'status',
+        # 'subscription',
+        # 'balance',
+    }
+
+    # Authorize
+
+    users = User.get(fields=fields, **conditions)
+
+    if len(users) > 1:
+        if by == 'social':
+            req = {
+                'social': data.social,
+                'social_user': data.user,
+            }
+        elif by == 'bot':
+            req = {
+                'network': request.state.network,
+                'social_user': data.user,
+                'social_login': data.login,
+            }
+        elif by == 'app':
+            req = {
+                'network': request.state.network,
+                'social_user': data.user,
+            }
+        elif by == 'mail':
+            req = {
+                by: data.mail,
+            }
+        else:
+            req = {
+                by: data.login,
+            }
+
+        await report.warning("More than 1 user", req)
+
+    elif len(users):
+        new = False
+        user = users[0]
+
+        # Check password
+        if password:
+            password = process_password(data.password)
+            users = User.get(id=user.id, password=password, fields={})
+            if not users:
+                raise ErrorWrong('password')
+
+        req = {
+            'type': by,
+        }
+        if by == 'social':
+            req['social'] = data.social
+        elif by in {'bot', 'app'}:
+            req['network'] = request.state.network
+        else:
+            req['ip'] = request.state.ip
+
+        # Action tracking
+        Track(
+            title='acc_auth',
+            data=req,
+            user=user.id,
+            token=request.state.token,
+        ).save()
+
+    # Register
+    else:
+        new = True
+        user = await reg(
+            request.state.network,
+            request.state.ip,
+            request.state.locale,
+            request.state.token,
+            data,
+            by,
+        )
+
     # Assignment of the token to the user
     try:
         token = Token.get(request.state.token, fields={'user'})
@@ -239,82 +338,13 @@ async def handler(
 ):
     """ Sign in / Sign up """
 
-    # TODO: Сокет на авторизацию на всех вкладках токена
-    # TODO: Перезапись информации этого токена уже в онлайне
-    # TODO: Pre-registration data (promos, actions, posts)
-    # TODO: the same token
-    # TODO: Only by token (automaticaly, without any info)
-    # TODO: block by token
-
     by = detect_type(data.login)
-
-    # Data preparation
-    # TODO: optimize
-    fields = {
-        'id',
-        'login',
-        'image',
-        'name',
-        'surname',
-        'title',
-        'phone',
-        'mail',
-        'social',
-        'status',
-        # 'subscription',
-        # 'balance',
-    }
-
-    # Authorize
-
     if by == 'phone':
         handle = pre_process_phone
     else:
         handle = process_lower
 
-    new = False
     login_processed = handle(data.login)
-    users = User.get(fields=fields, **{by: login_processed})
-
-    if users:
-        if len(users) > 1:
-            await report.warning("More than 1 user", {
-                by: data.login,
-            })
-
-        user = users[0]
-
-    else:
-        new = True
-
-    if new:
-        # Register
-        user = await reg(
-            request.state.network,
-            request.state.ip,
-            request.state.locale,
-            request.state.token,
-            data,
-            by,
-        )
-
-    else:
-        # NOTE: Remove this if no password verification is required
-        # Check password
-        password = process_password(data.password)
-        users = User.get(id=user.id, password=password, fields={})
-        if not users:
-            raise ErrorWrong('password')
-
-        # Action tracking
-        Track(
-            title='acc_auth',
-            data={
-                'type': by,
-                'ip': request.state.ip,
-            },
-            user=user.id,
-            token=request.state.token,
-        ).save()
-
-    return await postauth(request, user, new, fields, online=True)
+    return await auth(request, data, by, {
+        by: login_processed,
+    }, online=True, password=True)

@@ -7,7 +7,7 @@ from fastapi import APIRouter # Request, Depends
 
 # from models.token import Token
 # from models.socket import Socket
-# from services.auth import auth
+# from services.auth import sign
 # from routes.account.disconnect import online_stop
 # from lib import report
 
@@ -18,7 +18,7 @@ router = APIRouter()
 @router.post("/exit/")
 async def handler(
     # request: Request,
-    # user = Depends(auth),
+    # user = Depends(sign),
 ):
     """ Log out """
 

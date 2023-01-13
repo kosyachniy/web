@@ -12,10 +12,8 @@ from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorInvalid
 
-from models.user import User
-from models.track import Track
-from services.auth import auth
-from routes.account.auth import reg, postauth
+from services.auth import sign
+from routes.account.auth import auth
 from lib import cfg, report
 
 
@@ -54,7 +52,7 @@ class Type(BaseModel):
 async def handler(
     request: Request,
     data: Type = Body(...),
-    user = Depends(auth),
+    user = Depends(sign),
 ):
     """ Mini app auth """
 
@@ -77,59 +75,11 @@ async def handler(
     if not status:
         raise ErrorWrong('url')
 
-    #
-
-    fields = {
-        'id',
-        'login',
-        'image',
-        'name',
-        'surname',
-        'title',
-        'phone',
-        'mail',
-        'social',
-        'status',
-        # 'subscription',
-        # 'balance',
-    }
-
-    users = User.get(social={'$elemMatch': {
-        'id': request.state.network,
-        'user': data.user,
-    }}, fields=fields)
-
-    if len(users) > 1:
-        await report.warning("More than 1 user", {
-            'network': request.state.network,
-            'social_user': data.user,
-        })
-
-    elif len(users):
-        new = False
-        user = users[0]
-
-        # Action tracking
-        Track(
-            title='acc_auth',
-            data={
-                'type': 'app',
-                'network': request.state.network,
+    return await auth(request, data, 'app', {
+        'social': {
+            '$elemMatch': {
+                'id': request.state.network,
+                'user': data.user,
             },
-            user=user.id,
-            token=request.state.token,
-        ).save()
-
-    # Register
-    else:
-        new = True
-        user = await reg(
-            request.state.network,
-            request.state.ip,
-            request.state.locale,
-            request.state.token,
-            data,
-            'app',
-        )
-
-    return postauth(request, user, new, fields)
+        },
+    })

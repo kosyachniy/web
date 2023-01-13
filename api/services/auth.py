@@ -43,8 +43,7 @@ def get_user(token_id=None, socket_id=None, user_id=None):
 
     return User(), token_id
 
-
-def auth(request: Request):
+def sign(request: Request):
     """ Get user """
     user, _ = get_user(user_id=request.state.user)
     return user

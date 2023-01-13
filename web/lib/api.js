@@ -25,7 +25,7 @@ const api = (main, method, data={}, setted=false) => {
                     await api(main, 'account.token', {
                         token: main.token,
                         network: 'web',
-                        // utm: main.utm,
+                        utm: main.utm,
                     }, setted=true);
                     resolve(await api(main, method, data, true));
                 } else {

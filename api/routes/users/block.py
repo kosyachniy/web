@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.user import User
-from services.auth import auth
+from services.auth import sign
 
 
 router = APIRouter()
@@ -19,7 +19,7 @@ class Type(BaseModel):
 @router.post("/block/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(auth),
+    user = Depends(sign),
 ):
     """ Block """
 
