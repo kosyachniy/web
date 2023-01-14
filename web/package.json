@@ -14,7 +14,6 @@
         "next-i18next": "^13.0.3",
         "react": "^18.2.0",
         "react-bootstrap": "^2.7.0",
-        "react-mathjax-preview": "^2.2.6",
         "react-redux": "^8.0.5",
         "react-scripts": "^5.0.1",
         "redux": "^4.2.0",

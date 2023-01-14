@@ -13,7 +13,7 @@ from lib import report
 from app import sio
 
 
-async def online_stop(socket_id):
+async def online_stop(socket_id, close=True):
     """ Stop online session of the user """
 
     # TODO: Объединять сессии в онлайн по пользователю
@@ -42,9 +42,12 @@ async def online_stop(socket_id):
         token=socket.token,
     ).save()
 
-    # Reset user
-    del socket.user
-    socket.save()
+    # Remove token / Reset user
+    if close:
+        socket.rm()
+    else:
+        del socket.user
+        socket.save()
 
     # Other sessions of this user
     other = _other_sessions(user.id, socket.token)

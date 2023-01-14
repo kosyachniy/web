@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-// import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useSelector } from 'react-redux'
-import MathJax from 'react-mathjax-preview'
+// import MathJax from 'react-mathjax-preview'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
@@ -13,7 +12,6 @@ import Edit from './add'
 
 export default ({ id }) => {
     const router = useRouter()
-    // const { t } = useTranslation('common')
     const system = useSelector((state) => state.system)
     const main = useSelector((state) => state.main)
     const [post, setPost] = useState(null)
@@ -101,6 +99,8 @@ export default ({ id }) => {
                             />
                         ) : (<></>) }
                         <br /><br />
+                        <div dangerouslySetInnerHTML={{ __html: post.data }} />
+                        {/*
                         <MathJax
                             math={ post.data }
                             sanitizeOptions={{
@@ -110,6 +110,7 @@ export default ({ id }) => {
                                 }
                             }}
                         />
+                        */}
 
                         {/* <div style={{ marginTop: '50px', height: '250px' }}>
                             { post.geo ? (

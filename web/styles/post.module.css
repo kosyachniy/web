@@ -2,3 +2,24 @@
     width: 3rem;
     margin: 0 0 0 10px;
 }
+
+.post [class*="image-style-side"] {
+    float: right;
+    margin-left: 1.5em;
+    max-width: 50%;
+}
+
+.post [class*="image-style-align-left"] {
+    float: left;
+    margin-right: 1.5em;
+}
+
+.post [class*="image-style-align-center"] {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post [class*="image-style-align-right"] {
+    float: right;
+    margin-left: 1.5em;
+}

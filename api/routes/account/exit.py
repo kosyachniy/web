@@ -38,7 +38,7 @@ async def handler(
     # Close session
     sockets = Socket.get(token=request.state.token, fields={})
     for socket in sockets:
-        await online_stop(socket.id)
+        await online_stop(socket.id, close=False)
 
     # Reset
     token = Token.get(request.state.token, fields={'user'})
