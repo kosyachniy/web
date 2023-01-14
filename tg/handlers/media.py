@@ -2,12 +2,10 @@
 Media handler
 """
 
-import base64
-
 from middlewares.prepare_message import rm_last
 from middlewares.check_user import check_user
 from handlers.posts import send_post
-from lib import api, cfg, report
+from lib import api, upload, cfg, report
 from lib.tg import tg
 from lib.queue import save, get
 
@@ -32,10 +30,7 @@ async def handle_photo(message):
         return
 
     if cache.get('s') == 'img':
-        image = (
-            'data:image/jpg;base64,'
-            + base64.b64encode(image.read()).decode('utf-8')
-        )
+        image = await upload(chat, image.read())
         error, data = await api(chat, 'posts.save', {
             'id': cache.get('p'),
             'image': image,
@@ -97,8 +92,7 @@ async def handle_doc(message):
 
     if mime and image and cache.get('s') == 'img':
         try:
-            image = base64.b64encode(image.read()).decode('utf-8')
-            image = f"data:{mime};base64,{image}"
+            image = await upload(chat, image.read())
         # pylint: disable=broad-except
         except Exception as e:
             await tg.send(

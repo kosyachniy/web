@@ -113,7 +113,7 @@ async def edit_image(callback):
     if chat is None:
         return
 
-    message_id = await tg.send(chat.id, "Загрузи изображение")
+    message_id = await tg.send(chat.id, "Отправь изображение")
 
     cache['s'] = 'img'
     cache['m'] = message_id

@@ -133,3 +133,12 @@ async def auth(chat, utm=None) -> bool:
         locales_chosen[chat.id] = True
 
     return True
+
+async def upload(chat, data):
+    """ Upload image """
+    return requests.post(
+        f"{cfg('api')}upload/",
+        files={'upload': data},
+        headers={'Authorization': f'Bearer {tokens[chat.id]}'},
+        timeout=30,
+    ).json()['url']

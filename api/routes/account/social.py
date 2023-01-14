@@ -4,13 +4,13 @@ The authorization via social networks method of the account object of the API
 
 import json
 import urllib
-import base64
 from typing import Union
 
 import requests
 from fastapi import APIRouter, Body, Request
 from pydantic import BaseModel
 from libdev.codes import get_network
+from libdev.aws import upload_file
 from consys.errors import ErrorAccess, ErrorWrong
 
 from routes.account.auth import auth
@@ -87,9 +87,10 @@ async def handler(
         data.name = response.get('first_name')
         data.surname = response.get('last_name')
         data.login = response.get('nickname')
-        data.image = str(base64.b64encode(
-            requests.get(response['photo_max_orig'], timeout=30).content
-        ))[2:-1] if 'photo_max_orig' in response else None
+        data.image = upload_file(
+            requests.get(response['photo_max_orig'], timeout=30).content,
+            file_type='png',
+        ) if 'photo_max_orig' in response else None
 
     # Google
     elif data.social == 4:
@@ -123,9 +124,10 @@ async def handler(
         data.name = response.get('given_name')
         data.surname = response.get('family_name')
         data.mail = response.get('email')
-        data.image = str(base64.b64encode(
-            requests.get(response['picture'], timeout=30).content
-        ))[2:-1] if 'picture' in response else None
+        data.image = upload_file(
+            requests.get(response['picture'], timeout=30).content,
+            file_type='png',
+        ) if 'picture' in response else None
 
     # Wrong ID
     if not data.user:
