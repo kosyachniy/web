@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next'
 
 import styles from '../styles/avatar.module.css'
-import uploadImage from '../lib/upload'
+import upload from '../lib/upload'
 
 
 export default ({ image, setImage }) => {
@@ -9,7 +9,7 @@ export default ({ image, setImage }) => {
 
     const handleAvatar = (_e) => {
         const image = _e.target.files[0]
-        uploadImage(image).then((link) => {
+        upload(image).then((link) => {
             setImage(link)
         })
     }
