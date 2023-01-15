@@ -26,7 +26,7 @@ class Type(BaseModel):
     mail: str = None
     social: list[dict] = None
     description: str = None
-    locale: Union[str, int] = None
+    locale: str = None
     mailing: dict = None
 
 @router.post("/save/")
@@ -68,6 +68,7 @@ async def handler(
         data={'fields': [k for k, v in data.dict().items() if v is not None]},
         user=user.id,
         token=request.state.token,
+        ip=request.state.ip,
     ).save()
 
     # Save

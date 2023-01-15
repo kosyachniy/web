@@ -28,8 +28,18 @@ class ResponseMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         url = request.url.path[4:]
 
+        # Whitelist
+        if request.method != 'POST':
+            return await call_next(request)
+
         start = time.time()
-        request.state.locale = 'en' # TODO: locale
+        request.state.locale = (
+            'ru'
+            if 'ru' in request.headers.get('accept-language')
+            else 'en'
+        ) # FIXME
+        request.state.ip = request.headers.get('x-real-ip')
+        request.state.user_agent = request.headers.get('user-agent')
 
         try:
             response = await call_next(request)

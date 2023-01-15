@@ -6,7 +6,7 @@ import jwt
 from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from libdev.codes import NETWORKS
+from libdev.codes import NETWORKS, LOCALES
 from consys.handlers import (
     process_lower, pre_process_phone, check_phone, check_mail, process_password,
 )
@@ -42,7 +42,7 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
     details = {
         'type': by,
         'network': network,
-        'ip': ip,
+        'locale': locale,
     }
 
     if data.utm:
@@ -131,6 +131,7 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
 
     user = User(
         utm=data.utm,
+        locale=locale,
         **req,
     )
 
@@ -145,6 +146,7 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
         data=details,
         user=user.id,
         token=token_id,
+        ip=ip,
     ).save()
 
     # Report
@@ -154,7 +156,9 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
         'network': NETWORKS[network].upper(),
         'type': method,
         'utm': data.utm,
-        # TODO: ip, geo
+        'ip': ip,
+        # TODO: geo by ip
+        'locale': locale,
     }
 
     if by == 'bot':
@@ -263,6 +267,7 @@ async def auth(request, data, by, conditions, online=False, password=False):
             data=req,
             user=user.id,
             token=request.state.token,
+            ip=request.state.ip,
         ).save()
 
     # Register

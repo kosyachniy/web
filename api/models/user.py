@@ -2,7 +2,6 @@
 User model of DB object
 """
 
-from libdev.codes import get_locale
 from consys.handlers import (
     default_login, check_login_uniq, check_password, process_password,
     check_name, check_surname, check_phone_uniq, pre_process_phone,
@@ -11,6 +10,7 @@ from consys.handlers import (
 )
 
 from models import Base, Attribute
+from lib import cfg
 
 
 class User(Base):
@@ -83,11 +83,7 @@ class User(Base):
     social = Attribute(types=list) # TODO: list[{}] # TODO: checking
     #
     description = Attribute(types=str)
-    locale = Attribute(
-        types=int,
-        default=0,
-        pre_processing=get_locale,
-    )
+    locale = Attribute(types=str, default='en')
     status = Attribute(types=int, default=default_status)
     rating = Attribute(types=float)
     # global_channel = Attribute(types=int, default=1)
@@ -114,5 +110,5 @@ class User(Base):
         """ Get user social info by social ID """
         for i in self.social:
             if i['id'] == social:
-                return i['user'], i.get('locale') or 1 # TODO: default
+                return i['user'], i.get('locale') or cfg('locale')
         return None, None

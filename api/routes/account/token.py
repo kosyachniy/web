@@ -3,7 +3,7 @@ The token creating method of the account object of the API
 """
 
 import jwt
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import get_network
@@ -23,6 +23,7 @@ class Type(BaseModel):
 
 @router.post("/token/")
 async def handler(
+    request: Request,
     data: Type = Body(...),
 ):
     """ Create token """
@@ -44,11 +45,20 @@ async def handler(
         save = True
 
     # Attach data
-    if not token.network:
+    if not token.network and network:
         token.network = network
         save = True
-    if not token.utm:
-        token.utm = data.utm or None
+    if not token.utm and data.utm:
+        token.utm = data.utm
+        save = True
+    if not token.ip and request.state.ip:
+        token.ip = request.state.ip
+        save = True
+    if not token.locale and request.state.locale:
+        token.locale = request.state.locale
+        save = True
+    if not token.user_agent and request.state.user_agent:
+        token.user_agent = request.state.user_agent
         save = True
     if save:
         token.save()

@@ -50,4 +50,5 @@ async def handler(
         },
         user=user.id,
         token=request.state.token,
+        ip=request.state.ip,
     ).save()

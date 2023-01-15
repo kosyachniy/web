@@ -23,7 +23,7 @@ class Type(BaseModel):
     search: str = None
     my: bool = None
     # TODO: category: int = None
-    # TODO: locale: Union[str, int] = None
+    # TODO: locale: str = None
     # TODO: fields: list[str] = None
 
 @router.post("/get/")
@@ -45,7 +45,7 @@ async def handler(
     # # Language
     # # TODO: pre-processing params (None, strip(), value -> code)
     # if data.locale:
-    #     data.locale = get_locale(data.locale) # TODO: case if None
+    #     data.locale = data.locale # TODO: case if None
     # else:
     #     data.locale = request.state.locale
 
