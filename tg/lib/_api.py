@@ -19,7 +19,7 @@ from lib.reports import report
 LOG_LIMIT = 330
 
 
-async def api(chat, method, data=None, force=False):
+async def api(chat, method, data=None, locale=None, force=False):
     """ API request """
 
     if not force and chat.id not in tokens:
@@ -40,9 +40,11 @@ async def api(chat, method, data=None, force=False):
         'data': json.dumps(data, ensure_ascii=False)[:LOG_LIMIT],
     })
 
-    headers = {
-        'Authorization': f'Bearer {tokens[chat.id]}',
-    } if chat.id in tokens else None
+    headers = {}
+    if chat.id in tokens:
+        headers['Authorization'] = f'Bearer {tokens[chat.id]}'
+    if locale:
+        headers['accept-language'] = locale
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
@@ -78,15 +80,18 @@ async def api(chat, method, data=None, force=False):
 
     return int(res.status_code), res.json()
 
-async def auth(chat, utm=None) -> bool:
+async def auth(chat, utm=None, locale=None) -> bool:
     """ User authentication """
+
+    if chat.id in tokens:
+        return False
 
     # Get token
     error, data = await api(chat, 'account.token', {
         'token': f'tg{chat.id}',
         'network': 'tg',
         'utm': utm,
-    }, force=True)
+    }, locale=locale, force=True)
 
     if error != 200:
         return
@@ -107,7 +112,7 @@ async def auth(chat, utm=None) -> bool:
         'surname': chat.last_name or None,
         'login': chat.username or None,
         'utm': utm,
-    })
+    }, locale=locale)
 
     if error != 200:
         await report.error("Authorization", {

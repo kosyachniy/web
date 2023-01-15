@@ -6,7 +6,7 @@ import jwt
 from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from libdev.codes import NETWORKS, LOCALES
+from libdev.codes import NETWORKS
 from consys.handlers import (
     process_lower, pre_process_phone, check_phone, check_mail, process_password,
 )

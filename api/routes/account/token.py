@@ -35,7 +35,7 @@ async def handler(
 
     # Get
     try:
-        token = Token.get(data.token, fields={'user'})
+        token = Token.get(data.token)
 
     # Create
     except ErrorWrong:

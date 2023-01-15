@@ -2,7 +2,6 @@
 The editing method of the account object of the API
 """
 
-from typing import Union
 from copy import deepcopy
 
 from fastapi import APIRouter, Body, Request, Depends

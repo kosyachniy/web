@@ -214,13 +214,19 @@ async def finish(callback):
         f"\nИзменено: {get_time(post['updated'], tz=cfg('timezone'))}"
     )
 
-    message_id = await tg.send(chat.id, text, files=post.get('image'), buttons=[{
-        'name': 'Создать ещё',
-        'data': 'create',
-    }, {
-        'name': 'Редактировать',
-        'data': f'res{post_id}',
-    }], markup=None)
+    message_id = await tg.send(
+        chat.id,
+        text,
+        files=post.get('image'),
+        buttons=[{
+            'name': 'Создать ещё',
+            'data': 'create',
+        }, {
+            'name': 'Редактировать',
+            'data': f'res{post_id}',
+        }],
+        markup=None,
+    )
 
     cache['s'] = 'finish'
     cache['m'] = message_id

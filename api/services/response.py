@@ -33,11 +33,12 @@ class ResponseMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         start = time.time()
+        locale = request.headers.get('accept-language')
         request.state.locale = (
             'ru'
-            if 'ru' in request.headers.get('accept-language')
+            if locale and 'ru' in locale.lower()
             else 'en'
-        ) # FIXME
+        ) # TODO: all locales, detect by browser
         request.state.ip = request.headers.get('x-real-ip')
         request.state.user_agent = request.headers.get('user-agent')
 

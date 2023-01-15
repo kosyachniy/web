@@ -7,17 +7,17 @@ from lib.tg import tg
 from lib.queue import get, save
 
 
-async def check_user(chat, public=False, utm=None):
+async def check_user(chat, public=False, text=None, locale=None):
     """ Authorize user and check access """
 
     if chat.id < 0:
         return True
 
-    promo = None
-    if utm and ' ' in utm:
-        promo = utm.split()[1]
+    utm = None
+    if text and ' ' in text:
+        utm = text.split()[1]
 
-    res = await auth(chat, promo)
+    res = await auth(chat, utm, locale)
 
     if res is None:
         cache = get(chat.id, {})
@@ -43,6 +43,6 @@ async def check_user(chat, public=False, utm=None):
             'social_user': chat.id,
             'social_login': user_logins[chat.id],
             'status': user_statuses[chat.id],
-            'utm': utm,
+            'utm': text,
         })
         return True

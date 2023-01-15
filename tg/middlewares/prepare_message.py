@@ -40,7 +40,8 @@ async def prepare_message(data, action='typing'):
     except Exception as e:
         await report.error("prepare_message", error=e)
 
-    if await check_user(chat, True, text):
+    locale = message.from_user.language_code
+    if await check_user(chat, public=True, text=text, locale=locale):
         return None, None, None
 
     return chat, text, cache
