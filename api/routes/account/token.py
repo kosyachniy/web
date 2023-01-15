@@ -30,6 +30,7 @@ async def handler(
     # TODO: ip
 
     network = get_network(data.network)
+    save = False
 
     # Get
     try:
@@ -39,9 +40,17 @@ async def handler(
     except ErrorWrong:
         token = Token(
             id=data.token, # generate(),
-            network=network,
-            utm=data.utm or None,
         )
+        save = True
+
+    # Attach data
+    if not token.network:
+        token.network = network
+        save = True
+    if not token.utm:
+        token.utm = data.utm or None
+        save = True
+    if save:
         token.save()
 
     # JWT

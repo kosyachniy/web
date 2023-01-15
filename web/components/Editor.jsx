@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react"
 import { useSelector } from 'react-redux'
 
+import Loader from './Loader'
+
 
 export default ({ editorLoaded, data, updatePost }) => {
     const editorRef = useRef()
@@ -54,7 +56,7 @@ export default ({ editorLoaded, data, updatePost }) => {
                     //     console.log( 'Focus.', editor )
                     // } }
                 />
-            ) : (<>Editor loading</>) }
+            ) : (<Loader />) }
         </>
     )
 }

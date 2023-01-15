@@ -28,7 +28,7 @@ export default () => {
 
     if (system.loaded && displayed) {
         setDisplayed(false)
-        fadeOut()
+        // fadeOut()
     }
 
     return (

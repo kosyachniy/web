@@ -2,7 +2,6 @@
 Posts handler
 """
 
-import requests
 from libdev.time import get_time
 
 from middlewares.prepare_message import prepare_message
@@ -215,16 +214,7 @@ async def finish(callback):
         f"\nИзменено: {get_time(post['updated'], tz=cfg('timezone'))}"
     )
 
-    image = None
-    if post.get('image'):
-        # NOTE: There may be "aiogram.utils.exceptions.WrongFileIdentifier:
-        # Wrong file identifier/http url specified"
-        image = requests.get(
-            f"{cfg('web')}load/{post['image']}",
-            timeout=60,
-        ).content
-
-    message_id = await tg.send(chat.id, text, files=image, buttons=[{
+    message_id = await tg.send(chat.id, text, files=post.get('image'), buttons=[{
         'name': 'Создать ещё',
         'data': 'create',
     }, {

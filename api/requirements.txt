@@ -26,7 +26,7 @@ prometheus_fastapi_instrumentator==5.9.1
 tgio==0.8
 
 # Reports
-tgreports==0.13
+tgreports==0.14
 
 # # Payments
 # yookassa==2.3.2
