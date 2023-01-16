@@ -53,7 +53,7 @@ export default () => {
                         </li> */}
                         <li className="nav-item dropdown">
                             <Link href="/posts/" className="nav-link">{ t('structure.posts') }</Link>
-                            {/* <Link href="/admin/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
+                            {/* <Link href="/eye/add/ladder/"><span className="badge badge-dark">+</span></Link> */}
                             {/* <div className="dropdown-content">
                                 {
                                     sciences.map((science) => (
@@ -135,7 +135,7 @@ export default () => {
                                         <Link href="/profile/" className="dropdown-item">{ t('system.profile') }</Link>
                                         {/* <Link href="/settings/" className="dropdown-item">{ t('system.settings') }</Link> */}
                                         {/* <Link href="/analytics/" className="dropdown-item">{ t('system.analytics') }</Link> */}
-                                        {/* <Link href="/admin/" className="dropdown-item">{ t('system.admin') }</Link> */}
+                                        {/* <Link href="/eye/" className="dropdown-item">{ t('system.admin') }</Link> */}
                                         <div className="dropdown-item" onClick={ signOut }>{ t('system.sign_out') }</div>
                                     </div>
                                 </>

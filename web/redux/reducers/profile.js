@@ -8,7 +8,7 @@ export default (state = {
     image: '/user.png',
     image_optimize: '/user.png',
     social: [],
-    admin: 2,
+    status: 2,
 }, action) => {
     switch (action.type) {
         case 'PROFILE_IN':
@@ -21,7 +21,7 @@ export default (state = {
                 mail: action.mail,
                 image: action.image || '/user.png',
                 image_optimize: action.image || '/user.png',
-                admin: action.admin,
+                status: action.status,
             }
 
         case 'PROFILE_OUT':
@@ -34,7 +34,7 @@ export default (state = {
                 mail: null,
                 image: null,
                 image_optimize: null,
-                admin: 2,
+                status: 2,
             }
 
         case 'PROFILE_UPDATE':
