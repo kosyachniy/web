@@ -1,6 +1,13 @@
 .card {
+    height: 240px;
     cursor: pointer;
     background-color: auto;
+}
+
+.card [class*="card-img-top"] {
+    height: 184px;
+    background-size: cover;
+    background-position: center center;
 }
 
 .card .badge {

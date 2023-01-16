@@ -2,8 +2,6 @@
 The getting method of the review object of the API
 """
 
-from typing import Union
-
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
@@ -17,7 +15,7 @@ router = APIRouter()
 
 
 class Type(BaseModel):
-    id: Union[int, list[int]] = None
+    id: int | list[int] = None
     limit: int = None
     offset: int = None
     search: str = None

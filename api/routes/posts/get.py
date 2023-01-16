@@ -3,7 +3,6 @@ The getting method of the post object of the API
 """
 
 import re
-from typing import Union
 
 from fastapi import APIRouter, Body, Depends # Request
 from pydantic import BaseModel
@@ -17,7 +16,7 @@ router = APIRouter()
 
 
 class Type(BaseModel):
-    id: Union[int, list[int]] = None
+    id: int | list[int] = None
     limit: int = None
     offset: int = None
     search: str = None

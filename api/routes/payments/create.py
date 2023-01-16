@@ -2,8 +2,6 @@
 The creating method of the payment object of the API
 """
 
-from typing import Union
-
 from fastapi import APIRouter # Body, Request, Depends
 from pydantic import BaseModel
 # from consys.handlers import pre_process_phone
@@ -19,7 +17,7 @@ router = APIRouter()
 
 class Type(BaseModel):
     user: int = None
-    login: Union[int, str] = None
+    login: str | int = None
     promo: str = None
     value: int
     # NOTE: For general authorization method fields

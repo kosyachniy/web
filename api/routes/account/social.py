@@ -4,7 +4,6 @@ The authorization via social networks method of the account object of the API
 
 import json
 import urllib
-from typing import Union
 
 import requests
 from fastapi import APIRouter, Body, Request
@@ -21,10 +20,10 @@ router = APIRouter()
 
 
 class Type(BaseModel):
-    social: Union[str, int]
+    social: str | int
     code: str
     # NOTE: For general authorization method fields
-    user: Union[str, int] = None
+    user: str | int = None
     login: str = None
     image: str = None
     mail: str = None

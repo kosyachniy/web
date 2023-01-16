@@ -40,7 +40,7 @@ export default ({ id }) => {
         if (system.prepared && !post) {
             getPost({ id })
         }
-    }, [system.prepared])
+    }, [system.prepared, post])
 
     if (deleted) {
         router.push(`/`)

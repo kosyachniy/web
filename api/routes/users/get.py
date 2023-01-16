@@ -3,7 +3,6 @@ The getting method of the user object of the API
 """
 
 import time
-from typing import Union
 
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
@@ -34,7 +33,7 @@ def online_back(user_id):
 
 
 class Type(BaseModel):
-    id: Union[int, list[int]] = None
+    id: int | list[int] = None
     limit: int = None
     offset: int = None
     fields: list[str] = None
