@@ -1,5 +1,5 @@
 .card {
-    height: 240px;
+    max-height: 240px;
     cursor: pointer;
     background-color: auto;
 }
