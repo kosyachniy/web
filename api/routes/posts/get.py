@@ -4,7 +4,7 @@ The getting method of the post object of the API
 
 import re
 
-from fastapi import APIRouter, Body, Depends # Request
+from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
@@ -21,32 +21,22 @@ class Type(BaseModel):
     offset: int = None
     search: str = None
     my: bool = None
-    # TODO: category: int = None
-    # TODO: locale: str = None
+    category: int = None
+    locale: str = None
     # TODO: fields: list[str] = None
 
 @router.post("/get/")
 async def handler(
-    # request: Request,
+    request: Request,
     data: Type = Body(...),
     user = Depends(sign),
 ):
     """ Get """
 
-    # TODO: data.my for unauth
-    # TODO: access only to your posts
-
     # No access
     # TODO: -> middleware
     if user.status < 2:
         raise ErrorAccess('get')
-
-    # # Language
-    # # TODO: pre-processing params (None, strip(), value -> code)
-    # if data.locale:
-    #     data.locale = data.locale # TODO: case if None
-    # else:
-    #     data.locale = request.state.locale
 
     # Fields
     fields = {
@@ -88,21 +78,21 @@ async def handler(
 
     # Get
 
-    cond_user = None
+    cond = None
     if data.my:
-        cond_user = user.id
+        cond = {'$or': [{'user': user.id}, {'token': request.state.token}]}
     elif data.my is not None:
-        cond_user = {'$ne': user.id}
+        cond = {'user': {'$ne': user.id}, 'token': {'$ne': request.state.token}}
 
     posts = Post.complex(
         ids=data.id,
-        user=cond_user,
         limit=data.limit,
         offset=data.offset,
         search=data.search,
         fields=fields,  # None if data.id else fields,
-        # category=data.category,
-        # locale=data.locale,
+        category=data.category,  # TODO: or childs
+        locale=data.locale,  # NOTE: None → all locales
+        extra=cond,
         handler=handle,
     )
 

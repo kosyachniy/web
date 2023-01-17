@@ -41,7 +41,7 @@ async def handler(
         post = Post.get(data.id)
 
         if (
-            user.status < 6
+            user.status < 5
             and (not post.user or post.user != user.id)
             and post.token != request.state.token
         ):
@@ -55,8 +55,8 @@ async def handler(
         new = True
 
     # Change fields
-    post.title = data.title # TODO: checking if add
-    post.data = data.data # TODO: checking if add
+    post.title = data.title
+    post.data = data.data
     post.image = data.image
     post.tags = data.tags
     # TODO: category

@@ -33,7 +33,7 @@ async def handler(
     post = Post.get(data.id)
 
     if (
-        user.status < 7
+        user.status < 6
         and (not post.user or post.user != user.id)
         and post.token != request.state.token
     ):
