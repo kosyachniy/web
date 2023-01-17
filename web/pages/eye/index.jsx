@@ -40,16 +40,18 @@ export default () => {
     return (
         <>
             <h1>{ t('system.categories') }</h1>
-            { categories.map(category => (
-                <Category
-                    category={ category }
-                    edit={ edit === category.id }
-                    setEdit={ setEdit }
-                    categories={ categories }
-                    setCategories={ setCategories }
-                    key={ category.id }
-                />
-            )) }
+            <div className="accordion" id="accordionCategories">
+                { categories.map(category => (
+                    <Category
+                        category={ category }
+                        edit={ edit === category.id }
+                        setEdit={ setEdit }
+                        categories={ categories }
+                        setCategories={ setCategories }
+                        key={ category.id }
+                    />
+                )) }
+            </div>
             { edit !== 0 && (
                 <button
                     type="button"
