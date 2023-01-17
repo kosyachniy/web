@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { displaySet } from '../../redux/actions/main'
 import { postsGet } from '../../redux/actions/posts'
 import api from '../../lib/api'
-import PostsGrid from '../../components/CardGrid'
-import PostsFeed from '../../components/CardFeed'
+import PostsGrid from '../../components/Post/Grid'
+import PostsFeed from '../../components/Post/Feed'
 
 
 export default () => {

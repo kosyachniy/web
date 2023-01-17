@@ -49,7 +49,7 @@ import Footer from '../components/Footer'
 
 // Users
 import Auth from '../components/Auth'
-import AuthMail from '../components/AuthMail'
+import AuthMail from '../components/Auth/Mail'
 import Online from '../components/Online'
 
 

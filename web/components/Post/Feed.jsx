@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import styles from '../styles/feed.module.css'
+import styles from '../../styles/feed.module.css'
 
 
 export default ({ posts }) => {
@@ -16,8 +16,10 @@ export default ({ posts }) => {
         let hours = `${newTime.getHours()}`
         let minutes = `${newTime.getUTCMinutes()}`
         let month = [
-            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
+            t('months.january'), t('months.february'), t('months.march'),
+            t('months.april'), t('months.may'), t('months.june'),
+            t('months.july'), t('months.august'), t('months.september'),
+            t('months.october'), t('months.november'), t('months.december'),
         ][newTime.getMonth()]
 
         if (day.length < 2) {

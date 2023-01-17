@@ -1,7 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Link from 'next/link'
 
-import styles from '../styles/card.module.css'
+import styles from '../../styles/card.module.css'
 
 
 export default ({ post }) => {

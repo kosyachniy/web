@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
@@ -39,6 +38,7 @@ const Navigation = () => {
                         <Link
                             href={ `/posts/${category.id}/` }
                             className="dropdown-item"
+                            key={ category.id }
                         >
                             { category.title }
                         </Link>

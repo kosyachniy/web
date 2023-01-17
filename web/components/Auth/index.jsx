@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { popupSet } from '../redux/actions/system'
-import styles from '../styles/auth.module.css'
-import Popup from './Popup'
+import { popupSet } from '../../redux/actions/system'
+import styles from '../../styles/auth.module.css'
+import Popup from '../Popup'
 
 
 export default () => {

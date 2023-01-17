@@ -4,11 +4,11 @@ import { useTranslation } from 'next-i18next'
 import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { popupSet } from '../redux/actions/system'
-import { profileIn } from '../redux/actions/profile'
-import api from '../lib/api'
-import styles from '../styles/mail.module.css'
-import Popup from './Popup'
+import { popupSet } from '../../redux/actions/system'
+import { profileIn } from '../../redux/actions/profile'
+import api from '../../lib/api'
+import styles from '../../styles/mail.module.css'
+import Popup from '../Popup'
 
 
 const checkPassword = password => (
