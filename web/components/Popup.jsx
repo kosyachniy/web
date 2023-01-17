@@ -6,7 +6,7 @@ import styles from '../styles/popup.module.css'
 
 export default ({ children }) => {
     const dispatch = useDispatch()
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
 
     return (
         <div className={ styles.popup }>

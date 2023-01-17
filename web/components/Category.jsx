@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../styles/card.module.css'
+import { categoriesClear } from '../redux/actions/categories'
 import api from '../lib/api'
 import Editor from './Editor'
 
@@ -11,11 +12,11 @@ import Editor from './Editor'
 const Edit = ({
     category,
     setEdit=null,
-    categories=[],
-    setCategories=null,
 }) => {
     const { t } = useTranslation('common')
-    const main = useSelector((state) => state.main)
+    const dispatch = useDispatch()
+    const main = useSelector(state => state.main)
+    const categories = useSelector(state => state.categories)
     const [title, setTitle] = useState(category ? category.title : '')
     const [data, setData] = useState(category ? category.data : '')
     const [parent, setParent] = useState(category ? category.parent : null)
@@ -37,7 +38,7 @@ const Edit = ({
                 // TODO: notify about no access
             }
             setEdit(null)
-            setCategories([])
+            dispatch(categoriesClear())
         })
     }
 
@@ -66,7 +67,7 @@ const Edit = ({
                     onChange={ event => setParent(event.target.value)}
                 >
                     <option defaultValue>{ t('categories.top') }</option>
-                    { categories.map(cat => cat.id && (
+                    { categories && categories.map(cat => cat.id && (
                         <option value={ cat.id } key={ cat.id }>
                             { cat.title }
                         </option>
@@ -76,7 +77,7 @@ const Edit = ({
             <Editor
                 editorLoaded={ editorLoaded }
                 data={ data }
-                updatePost={ (text) => {setData(text)} }
+                updatePost={ text => setData(text) }
             />
             <br />
             <button
@@ -94,41 +95,35 @@ export default ({
     category,
     edit=false,
     setEdit=null,
-    categories=[],
-    setCategories=null,
-}) => {
-    return (
-        <div className="accordion-item">
-            <h2 className="accordion-header" id={ `heading${category.id}` }>
-                <button
-                    className={ `accordion-button ${ !edit && "collapsed" }` }
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target={ `#collapse${category.id}` }
-                    aria-expanded={ edit ? "true" : "false" }
-                    aria-controls={ `collapse${category.id}` }
-                    onClick={ () => setEdit(category.id) }
-                >
-                    { category.title }
-                </button>
-            </h2>
-            <div
-                id={ `collapse${category.id}` }
-                className={ `accordion-collapse collapse ${ edit && "show" }` }
-                aria-labelledby={ `heading${category.id}` }
-                data-bs-parent="#accordionCategories"
+}) => (
+    <div className="accordion-item">
+        <h2 className="accordion-header" id={ `heading${category.id}` }>
+            <button
+                className={ `accordion-button ${ !edit && "collapsed" }` }
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={ `#collapse${category.id}` }
+                aria-expanded={ edit ? "true" : "false" }
+                aria-controls={ `collapse${category.id}` }
+                onClick={ () => setEdit(category.id) }
             >
-                <div className="accordion-body">
-                    { edit &&
-                        <Edit
-                            category={category}
-                            setEdit={setEdit}
-                            categories={categories}
-                            setCategories={setCategories}
-                        />
-                    }
-                </div>
+                { category.title }
+            </button>
+        </h2>
+        <div
+            id={ `collapse${category.id}` }
+            className={ `accordion-collapse collapse ${ edit && "show" }` }
+            aria-labelledby={ `heading${category.id}` }
+            data-bs-parent="#accordionCategories"
+        >
+            <div className="accordion-body">
+                { edit &&
+                    <Edit
+                        category={category}
+                        setEdit={setEdit}
+                    />
+                }
             </div>
         </div>
-    )
-}
+    </div>
+)

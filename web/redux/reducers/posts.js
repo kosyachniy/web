@@ -16,7 +16,6 @@ export default (state = [], action) => {
                         if (el in action.post) {
                             post[el] = action.post[el]
                         }
-
                         return null
                     })
                 }

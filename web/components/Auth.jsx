@@ -8,7 +8,7 @@ import Popup from './Popup'
 
 export default () => {
     const dispatch = useDispatch()
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
 
     return (
         <div className={ styles.auth }>

@@ -15,19 +15,17 @@ import PostsFeed from '../../components/CardFeed'
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
-    const main = useSelector((state) => state.main)
-    const profile = useSelector((state) => state.profile)
-    const posts = useSelector((state) => state.posts)
+    const system = useSelector(state => state.system)
+    const main = useSelector(state => state.main)
+    const profile = useSelector(state => state.profile)
+    const posts = useSelector(state => state.posts)
     const [loaded, setLoaded] = useState(null)
 
-    const getPost = (data={}) => {
-        api(main, 'posts.get', data).then(res => {
-            if (res.posts) {
-                dispatch(postsGet(res.posts))
-            }
-        })
-    }
+    const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
+        if (res.posts) {
+            dispatch(postsGet(res.posts))
+        }
+    })
 
     useEffect(() => {
         if (system.prepared) {
@@ -55,7 +53,7 @@ export default () => {
                         <button
                             type="button"
                             className={ `btn btn-${main.theme}` }
-                            onClick={ () => {dispatch(displaySet('grid'))}}
+                            onClick={ () => dispatch(displaySet('grid')) }
                         >
                             <FontAwesomeIcon icon="fa-solid fa-table-cells-large" />
                         </button>
@@ -68,7 +66,7 @@ export default () => {
                         <button
                             type="button"
                             className={ `btn btn-${main.theme}` }
-                            onClick={ () => {dispatch(displaySet('feed'))}}
+                            onClick={ () => dispatch(displaySet('feed')) }
                         >
                             <FontAwesomeIcon icon="fa-regular fa-image" />
                         </button>

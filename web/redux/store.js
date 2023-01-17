@@ -15,7 +15,7 @@ export default () => {
             storage,
             whitelist: ['main', 'profile'],
         }, reducer),
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        middleware: getDefaultMiddleware => getDefaultMiddleware({
             serializableCheck: {
                 ignoredActions: [
                     FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,

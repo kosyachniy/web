@@ -8,7 +8,7 @@ import styles from '../styles/feed.module.css'
 export default ({ posts }) => {
     const { t } = useTranslation('common')
 
-    const getTime = (time) => {
+    const getTime = time => {
         const newTime = new Date(time * 1000);
 
         const year = newTime.getFullYear();

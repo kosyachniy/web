@@ -1,5 +1,5 @@
 export default function upload(re) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
 		const xhr = new XMLHttpRequest()
 		xhr.open('POST', `${process.env.NEXT_PUBLIC_API}upload/`, true)
 		xhr.responseType = 'json'

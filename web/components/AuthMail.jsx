@@ -11,18 +11,18 @@ import styles from '../styles/mail.module.css'
 import Popup from './Popup'
 
 
-const checkPassword = password => {
-    return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
-}
+const checkPassword = password => (
+    (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
+)
 
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
     const [mail, setMail] = useState('')
     const [password, setPassword] = useState('')
 
-    const signIn = (event) => {
+    const signIn = event => {
         api(main, 'account.auth', {
             login: mail,
             password,
@@ -32,7 +32,7 @@ export default () => {
             dispatch(popupSet(null))
         })
 
-        event.preventDefault();
+        event.preventDefault()
     }
 
     return (
@@ -45,7 +45,7 @@ export default () => {
                             type="text"
                             placeholder={ t('profile.mail') }
                             value={mail}
-                            onChange={ (event) => { setMail(event.target.value) } }
+                            onChange={ event => setMail(event.target.value) }
                             autoComplete="off"
                             required
                         />
@@ -57,7 +57,7 @@ export default () => {
                             type="password"
                             placeholder={ t('profile.password') }
                             value={ password }
-                            onChange={ (event) => { setPassword(event.target.value) } }
+                            onChange={ event => setPassword(event.target.value) }
                             autoComplete="off"
                             required
                         />

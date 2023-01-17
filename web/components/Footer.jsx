@@ -7,7 +7,7 @@ import { changeTheme } from '../redux/actions/main'
 
 export default () => {
     const dispatch = useDispatch()
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
 
     return (
         <footer className={ `bg-${main.theme} ${main.theme === 'dark' ? "" : "text-muted"} pt-3` }>

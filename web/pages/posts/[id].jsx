@@ -12,30 +12,22 @@ import Edit from './add'
 
 export default ({ id }) => {
     const router = useRouter()
-    const system = useSelector((state) => state.system)
-    const main = useSelector((state) => state.main)
-    const profile = useSelector((state) => state.profile)
+    const system = useSelector(state => state.system)
+    const main = useSelector(state => state.main)
+    const profile = useSelector(state => state.profile)
     const [post, setPost] = useState(null)
     const [edit, setEdit] = useState(false)
     const [deleted, setDeleted] = useState(false)
 
-    const getPost = (data={}) => {
-        api(main, 'posts.get', data).then(res => {
-            if (res.posts) {
-                setPost(res.posts)
-            }
-        })
-    }
-
-    const deletePost = () => {
-        const data = {
-            id: post.id,
+    const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
+        if (res.posts) {
+            setPost(res.posts)
         }
+    })
 
-        api(main, 'posts.rm', data).then(res => {
-            setDeleted(true)
-        })
-    }
+    const deletePost = () => api(main, 'posts.rm', {id: post.id}).then(
+        res => setDeleted(true)
+    )
 
     useEffect(() => {
         if (system.prepared && !post) {
@@ -65,14 +57,14 @@ export default ({ id }) => {
                             { edit ? (
                                 <button
                                     className="btn btn-outline-secondary"
-                                    onClick={ () => {setEdit(false)} }
+                                    onClick={ () => setEdit(false) }
                                 >
                                     <FontAwesomeIcon icon="fa-regular fa-eye" />
                                 </button>
                             ) : (
                                 <button
                                     className="btn btn-outline-secondary"
-                                    onClick={ () => {setEdit(true)} }
+                                    onClick={ () => setEdit(true) }
                                 >
                                     <FontAwesomeIcon icon="fa-solid fa-pencil" />
                                 </button>
@@ -129,11 +121,9 @@ export default ({ id }) => {
     )
 }
 
-export const getServerSideProps = async ({ query, locale }) => {
-    return {
-        props: {
-            id: query.id,
-            ...await serverSideTranslations(locale, ['common']),
-        },
-    }
-}
+export const getServerSideProps = async ({ query, locale }) => ({
+    props: {
+        id: query.id,
+        ...await serverSideTranslations(locale, ['common']),
+    },
+})

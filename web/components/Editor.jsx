@@ -6,7 +6,7 @@ import Loader from './Loader'
 
 export default ({ editorLoaded, data, updatePost }) => {
     const editorRef = useRef()
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
     const { CKEditor, ClassicEditor } = editorRef.current || {}
 
     useEffect(() => {
@@ -32,8 +32,8 @@ export default ({ editorLoaded, data, updatePost }) => {
                         }
                     }}
                     data={ data }
-                    onReady={ (editor) => {
-                        editor.editing.view.change((writer) => {
+                    onReady={ editor => {
+                        editor.editing.view.change(writer => {
                             writer.setStyle(
                                 'min-height',
                                 '400px',
@@ -46,9 +46,7 @@ export default ({ editorLoaded, data, updatePost }) => {
                             )
                         })
                     } }
-                    onChange={ (event, editor) => {
-                        updatePost(editor.getData())
-                    } }
+                    onChange={ (event, editor) => updatePost(editor.getData()) }
                     // onBlur={ (event, editor) => {
                     //     console.log( 'Blur.', editor )
                     // } }

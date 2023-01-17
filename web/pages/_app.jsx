@@ -77,30 +77,16 @@ library.add(
 const Body = ({ Component, pageProps }) => {
     const router = useRouter()
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
-    const main = useSelector((state) => state.main)
-    const online = useSelector((state) => state.online)
+    const system = useSelector(state => state.system)
+    const main = useSelector(state => state.main)
+    const online = useSelector(state => state.online)
 
     useEffect(() => {
         // Online
-
-        // socketIO.on('online', () => {
         socketIO.emit('online', { token: main.token })
-        // })
-
-        socketIO.on('online_add', (x) => {
-            // console.log('ADD', x)
-            dispatch(onlineAdd(x))
-        })
-
-        socketIO.on('online_del', (x) => {
-            // console.log('DEL', x)
-            dispatch(onlineDelete(x))
-        })
-
-        socketIO.on('disconnect', () => {
-            dispatch(onlineReset())
-        })
+        socketIO.on('online_add', x => dispatch(onlineAdd(x)))
+        socketIO.on('online_del', x => dispatch(onlineDelete(x)))
+        socketIO.on('disconnect', () => dispatch(onlineReset()))
     }, [])
 
     useEffect(() => {
@@ -150,25 +136,23 @@ const Body = ({ Component, pageProps }) => {
 
 const { store, persistor } = makeStore()
 
-const App = (pageProps) => {
-    return (
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <Head>
-                    <title>{ process.env.NEXT_PUBLIC_NAME }</title>
-                    {/* Zoom */}
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                    />
-                </Head>
-                <Header />
-                <Body { ...pageProps } />
-                <Footer />
-            </PersistGate>
-        </Provider>
-    )
-}
+const App = pageProps => (
+    <Provider store={store}>
+        <PersistGate persistor={persistor}>
+            <Head>
+                <title>{ process.env.NEXT_PUBLIC_NAME }</title>
+                {/* Zoom */}
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                />
+            </Head>
+            <Header />
+            <Body { ...pageProps } />
+            <Footer />
+        </PersistGate>
+    </Provider>
+)
 
 
 export default appWithTranslation(App)

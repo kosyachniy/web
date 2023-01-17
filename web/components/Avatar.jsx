@@ -7,11 +7,9 @@ import upload from '../lib/upload'
 export default ({ image, setImage }) => {
     const { t } = useTranslation('common')
 
-    const handleAvatar = (_e) => {
+    const handleAvatar = _e => {
         const image = _e.target.files[0]
-        upload(image).then((link) => {
-            setImage(link)
-        })
+        upload(image).then(link => setImage(link))
     }
 
     return (
@@ -30,7 +28,7 @@ export default ({ image, setImage }) => {
                     id="avatar-loader"
                     type="file"
                     accept="image/jpeg, image/png"
-                    onChange={ (_e) => {handleAvatar(_e)} }
+                    onChange={ _e => handleAvatar(_e) }
                 />
             </label>
         </div>

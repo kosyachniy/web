@@ -11,15 +11,15 @@ import api from '../../lib/api'
 import Avatar from '../../components/Avatar'
 
 
-// const checkPassword = password => {
-//     return (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1);
-// }
+// const checkPassword = password => (
+//     (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
+// )
 
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const main = useSelector((state) => state.main)
-    const profile = useSelector((state) => state.profile)
+    const main = useSelector(state => state.main)
+    const profile = useSelector(state => state.profile)
     const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
     const [image, setImage] = useState(profile.image)
@@ -31,8 +31,8 @@ export default () => {
     // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
-        api(main, 'users.get', { id: +profile.id }).then(res => {
-            dispatch(profileUpdate({
+        api(main, 'users.get', { id: +profile.id }).then(
+            res => dispatch(profileUpdate({
                 login: res.users.login,
                 image: res.users.image,
                 name: res.users.name,
@@ -42,7 +42,7 @@ export default () => {
                 social: res.users.social,
                 status: res.users.status,
             }))
-        })
+        )
     }, [])
 
     // if (profile.id === 0) {
@@ -53,38 +53,33 @@ export default () => {
 
     const accountEdit = () => {
         const data = {}
-
         if (login && login !== profile.login) {
             data['login'] = login
         }
-
         if (name && name !== profile.name) {
             data['name'] = name
         }
-
         if (surname && surname !== profile.surname) {
             data['surname'] = surname
         }
-
         if (phone && phone !== profile.phone) {
             data['phone'] = phone
         }
-
         if (mail && mail !== profile.mail) {
             data['mail'] = mail
         }
-
         if (password.length) {
             data['password'] = password
         }
-
         if (image !== profile.image) {
             data['image'] = image
         }
 
-        api(main, 'account.save', data).then(res => {
-            dispatch(profileUpdate({login, image, name, surname, phone, mail}))
-        })
+        api(main, 'account.save', data).then(
+            res => dispatch(profileUpdate({
+                login, image, name, surname, phone, mail,
+            }))
+        )
     }
 
     return (
@@ -93,7 +88,7 @@ export default () => {
             <div className="input-group mb-3">
                 <input
                     value={ name }
-                    onChange={ (event) => { setName(event.target.value) } }
+                    onChange={ event => setName(event.target.value) }
                     placeholder={ t('profile.name') }
                     type="text"
                     aria-label="First name"
@@ -101,7 +96,7 @@ export default () => {
                 />
                 <input
                     value={ surname }
-                    onChange={ (event) => { setSurname(event.target.value) } }
+                    onChange={ event => setSurname(event.target.value) }
                     placeholder={ t('profile.surname') }
                     type="text"
                     aria-label="Last name"
@@ -112,7 +107,7 @@ export default () => {
                 <span className="input-group-text" id="addon-wrapping">+</span>
                 <input
                     value={ phone }
-                    onChange={ (event) => { setPhone(event.target.value) } }
+                    onChange={ event => setPhone(event.target.value) }
                     placeholder={ t('profile.phone') }
                     type="text"
                     className="form-control"
@@ -124,7 +119,7 @@ export default () => {
                 <span className="input-group-text" id="addon-wrapping">@</span>
                 <input
                     value={ login }
-                    onChange={ (event) => { setLogin(event.target.value) } }
+                    onChange={ event => setLogin(event.target.value) }
                     placeholder={ t('profile.login') }
                     type="text"
                     className="form-control"
@@ -135,7 +130,7 @@ export default () => {
             <div className="input-group mb-3">
                 <input
                     value={ mail }
-                    onChange={ (event) => { setMail(event.target.value) } }
+                    onChange={ event => setMail(event.target.value) }
                     placeholder={ t('profile.mail') }
                     type="email"
                     className="form-control"
@@ -145,7 +140,7 @@ export default () => {
             <div className="input-group mb-3">
                 <input
                     value={ password }
-                    onChange={ (event) => { setPassword(event.target.value) } }
+                    onChange={ event => setPassword(event.target.value) }
                     placeholder={ t('profile.password') }
                     type="password"
                     className="form-control"

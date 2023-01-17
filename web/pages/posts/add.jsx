@@ -13,7 +13,7 @@ import Editor from '../../components/Editor'
 export default ({ post, setEdit, setPost }) => {
     const router = useRouter()
     const { t } = useTranslation('common')
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
     const [title, setTitle] = useState(post ? post.title : '')
     const [data, setData] = useState(post ? post.data : '')
     const [editorLoaded, setEditorLoaded] = useState(false)
@@ -56,13 +56,13 @@ export default ({ post, setEdit, setPost }) => {
                         className={ `form-control ${styles.title}` }
                         placeholder={ t('posts.title') }
                         value={ title }
-                        onChange={ (event) => {setTitle(event.target.value)} }
+                        onChange={ event => setTitle(event.target.value) }
                     />
                 </div>
                 <Editor
                     editorLoaded={ editorLoaded }
                     data={ data }
-                    updatePost={ (text) => {setData(text)} }
+                    updatePost={ text => setData(text) }
                 />
                 <br />
                 <button

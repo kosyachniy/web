@@ -5,7 +5,7 @@ import styles from '../styles/card.module.css'
 
 
 export default ({ post }) => {
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
 
     return (
         <div className="col-md-4">

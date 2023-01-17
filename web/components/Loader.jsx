@@ -5,8 +5,8 @@ import styles from '../styles/loader.module.css'
 
 
 export default () => {
-    const system = useSelector((state) => state.system)
-    const main = useSelector((state) => state.main)
+    const system = useSelector(state => state.system)
+    const main = useSelector(state => state.main)
     const [displayed, setDisplayed] = useState(true)
 
     const fadeOut = () => {

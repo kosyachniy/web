@@ -5,31 +5,29 @@ import Loader from '../../components/Loader'
 
 
 export default ({ user, onPopup, onRedirect, onUpdateUserProperties }) => {
-    const main = useSelector((state) => state.main)
+    const main = useSelector(state => state.main)
 
-    const onSocial = (type, code) => {
-        api(main, 'account.social', {
-            social: type,
-            code,
-            // TODO: utm
-        }).then((_eventAuthSocialAccount) => {
-            if (_eventAuthSocialAccount.id !== undefined) {
-                onPopup(false)
+    const onSocial = (type, code) => api(main, 'account.social', {
+        social: type,
+        code,
+        // TODO: utm
+    }).then(_eventAuthSocialAccount => {
+        if (_eventAuthSocialAccount.id !== undefined) {
+            onPopup(false)
 
-                onUpdateUserProperties(_eventAuthSocialAccount, _eventAuthSocialAccount.new)
+            onUpdateUserProperties(_eventAuthSocialAccount, _eventAuthSocialAccount.new)
 
-                if (!_eventAuthSocialAccount.new) {
-                    localStorage.setItem('auth', true)
-                }
-
-                onRedirect(localStorage.getItem('previousPath').split('tensy.org')[1])
-            } else {
-                onRedirect(localStorage.getItem('previousPath').split('tensy.org')[1])
+            if (!_eventAuthSocialAccount.new) {
+                localStorage.setItem('auth', true)
             }
-        }).catch(() => {
+
             onRedirect(localStorage.getItem('previousPath').split('tensy.org')[1])
-        })
-    }
+        } else {
+            onRedirect(localStorage.getItem('previousPath').split('tensy.org')[1])
+        }
+    }).catch(
+        () => onRedirect(localStorage.getItem('previousPath').split('tensy.org')[1])
+    )
 
     useEffect(() => {
 		if (user.id === undefined || (user.id !== undefined && user.id === 0)) {

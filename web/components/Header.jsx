@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { popupSet, searching } from '../redux/actions/system'
 import { profileOut } from '../redux/actions/profile'
+import { categoriesGet } from '../redux/actions/categories'
 import api from '../lib/api'
 import styles from '../styles/header.module.css'
 import Hexagon from './Hexagon'
@@ -13,25 +14,21 @@ import Hexagon from './Hexagon'
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
-    const system = useSelector((state) => state.system)
-    const main = useSelector((state) => state.main)
-    const online = useSelector((state) => state.online)
-    const profile = useSelector((state) => state.profile)
-    const [categories, setCategories] = useState([])
+    const system = useSelector(state => state.system)
+    const main = useSelector(state => state.main)
+    const online = useSelector(state => state.online)
+    const profile = useSelector(state => state.profile)
+    const categories = useSelector(state => state.categories)
 
-    const signOut = () => {
-        api(main, 'account.exit', {}).then(res => {
-            dispatch(profileOut(res))
-        })
-    }
+    const signOut = () => api(main, 'account.exit', {}).then(
+        res => dispatch(profileOut(res))
+    )
 
     useEffect(() => {
-        if (system.prepared && !categories.length) {
-            api(main, 'categories.get').then(res => {
-                if (res.categories) {
-                    setCategories(res.categories)
-                }
-            })
+        if (system.prepared && categories === null) {
+            api(main, 'categories.get').then(
+                res => dispatch(categoriesGet(res.categories))
+            )
         }
     }, [system.prepared, categories])
 
@@ -57,7 +54,7 @@ export default () => {
                                 { t('structure.posts') }
                             </Link>
                             <ul className="dropdown-menu">
-                                { categories.map((category, i) => (
+                                { categories && categories.map((category, i) => (
                                     <li key={ i }>
                                         <Link
                                             href={ `/posts/${category.id}/` }
@@ -95,7 +92,7 @@ export default () => {
                                 type="search"
                                 placeholder={ t('system.search') }
                                 // value={ system.search }
-                                // onChange={ (event) => dispatch(searching(event.target.value)) }
+                                // onChange={ event => dispatch(searching(event.target.value)) }
                             />
                         </li>
                     </ul>

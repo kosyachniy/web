@@ -1,42 +1,31 @@
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import api from '../../lib/api'
+import { categoriesAdd } from '../../redux/actions/categories'
 import Category from '../../components/Category'
 
 
 export default () => {
     const { t } = useTranslation('common')
+    const dispatch = useDispatch()
     const router = useRouter()
-    const system = useSelector((state) => state.system)
-    const main = useSelector((state) => state.main)
-    const profile = useSelector((state) => state.profile)
-    const [categories, setCategories] = useState([])
+    const profile = useSelector(state => state.profile)
+    const categories = useSelector(state => state.categories)
     const [edit, setEdit] = useState(null)
 
     const addCategory = () => {
-        setCategories([...categories, {
+        dispatch(categoriesAdd({
             id: 0,
             title: '',
             data: null,
             parent: null,
-        }])
+        }))
         setEdit(0)
     }
-
-    useEffect(() => {
-        if (system.prepared && !categories.length) {
-            api(main, 'categories.get').then(res => {
-                if (res.categories) {
-                    setCategories(res.categories)
-                }
-            })
-        }
-    }, [system.prepared, categories])
 
     if (profile.status < 6) {
         router.push(`/`)
@@ -46,13 +35,11 @@ export default () => {
         <>
             <h1>{ t('system.categories') }</h1>
             <div className="accordion" id="accordionCategories">
-                { categories.map(category => (
+                { categories && categories.map(category => (
                     <Category
                         category={ category }
                         edit={ edit === category.id }
                         setEdit={ setEdit }
-                        categories={ categories }
-                        setCategories={ setCategories }
                         key={ category.id }
                     />
                 )) }
