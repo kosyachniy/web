@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -12,9 +13,11 @@ import PostsFeed from '../../components/CardFeed'
 
 
 export default () => {
+    const { t } = useTranslation('common')
     const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const main = useSelector((state) => state.main)
+    const profile = useSelector((state) => state.profile)
     const posts = useSelector((state) => state.posts)
     const [loaded, setLoaded] = useState(null)
 
@@ -45,7 +48,10 @@ export default () => {
         <>
             <div className="row">
                 <div className="col-8">
-                    <div className="btn-group" role="group" >
+                    <h1>{ t('structure.posts') }</h1>
+                </div>
+                <div className="col-4" style={{ textAlign: 'right' }}>
+                    <div className="btn-group" role="group">
                         <button
                             type="button"
                             className={ `btn btn-${main.theme}` }
@@ -67,16 +73,16 @@ export default () => {
                             <FontAwesomeIcon icon="fa-regular fa-image" />
                         </button>
                     </div>
-                </div>
-                <div className="col-4" style={{ textAlign: 'right' }}>
-                    <Link href="/posts/add">
-                        <button
-                            type="button"
-                            className="btn btn-success"
-                        >
-                            <FontAwesomeIcon icon="fa-solid fa-plus" />
-                        </button>
-                    </Link>
+                    { profile.status >= 2 && (
+                        <Link href="/posts/add">
+                            <button
+                                type="button"
+                                className="btn btn-success ms-2"
+                            >
+                                <FontAwesomeIcon icon="fa-solid fa-plus" />
+                            </button>
+                        </Link>
+                    ) }
                 </div>
             </div>
             {

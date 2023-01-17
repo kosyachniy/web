@@ -11,7 +11,7 @@ export default ({ post }) => {
         <div className="col-md-4">
             <Link href={ `/posts/${post.id}` } key={ post.id }>
                 <div className={ `card ${styles.card} ${styles[main.theme]} mb-4 shadow-sm` }>
-                    { post.image && <div className="card-img-top" style={{ 'background-image': `url(${post.image})` }} /> }
+                    { post.image && <div className="card-img-top" style={{ backgroundImage: `url(${post.image})` }} /> }
                     <div className="card-body">
                         <p className="card-text">
                             {/* <span className={ `badge ${styles.badge} badge-success` } style={ marginRight: '10px', fontSize: '15px' }>

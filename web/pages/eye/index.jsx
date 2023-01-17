@@ -19,7 +19,12 @@ export default () => {
     const [edit, setEdit] = useState(null)
 
     const addCategory = () => {
-        setCategories([...categories, { id: 0, title: '', data: null, parent: null }])
+        setCategories([...categories, {
+            id: 0,
+            title: '',
+            data: null,
+            parent: null,
+        }])
         setEdit(0)
     }
 
@@ -55,7 +60,7 @@ export default () => {
             { edit !== 0 && (
                 <button
                     type="button"
-                    className="btn btn-success"
+                    className="btn btn-success mt-3"
                     style={{ width: '100%' }}
                     onClick={ addCategory }
                 >

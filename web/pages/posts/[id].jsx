@@ -14,6 +14,7 @@ export default ({ id }) => {
     const router = useRouter()
     const system = useSelector((state) => state.system)
     const main = useSelector((state) => state.main)
+    const profile = useSelector((state) => state.profile)
     const [post, setPost] = useState(null)
     const [edit, setEdit] = useState(false)
     const [deleted, setDeleted] = useState(false)
@@ -60,27 +61,29 @@ export default ({ id }) => {
                         <h1>{ post.title }</h1>
                     </div>
                     <div className="col-md-4" style={{ textAlign: 'right' }}>
-                        { edit ? (
+                        { profile.status >= 2 && (<>
+                            { edit ? (
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    onClick={ () => {setEdit(false)} }
+                                >
+                                    <FontAwesomeIcon icon="fa-regular fa-eye" />
+                                </button>
+                            ) : (
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    onClick={ () => {setEdit(true)} }
+                                >
+                                    <FontAwesomeIcon icon="fa-solid fa-pencil" />
+                                </button>
+                            ) }
                             <button
-                                className="btn btn-outline-secondary"
-                                onClick={ () => {setEdit(false)} }
+                                className="btn btn-danger"
+                                onClick={ deletePost }
                             >
-                                <FontAwesomeIcon icon="fa-regular fa-eye" />
+                                <FontAwesomeIcon icon="fa-solid fa-trash" />
                             </button>
-                        ) : (
-                            <button
-                                className="btn btn-outline-secondary"
-                                onClick={ () => {setEdit(true)} }
-                            >
-                                <FontAwesomeIcon icon="fa-solid fa-pencil" />
-                            </button>
-                        ) }
-                        <button
-                            className="btn btn-danger"
-                            onClick={ deletePost }
-                        >
-                            <FontAwesomeIcon icon="fa-solid fa-trash" />
-                        </button>
+                        </>) }
                     </div>
                 </div>
 
