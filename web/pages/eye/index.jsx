@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -10,7 +10,6 @@ import api from '../../lib/api'
 export default () => {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const dispatch = useDispatch()
     const system = useSelector((state) => state.system)
     const main = useSelector((state) => state.main)
     const profile = useSelector((state) => state.profile)
@@ -18,7 +17,11 @@ export default () => {
 
     useEffect(() => {
         if (system.prepared) {
-            // TODO: categories
+            api(main, 'categories.get').then(res => {
+                if (res.categories) {
+                    setCategories(res.categories)
+                }
+            })
         }
     }, [system.prepared])
 
@@ -31,7 +34,7 @@ export default () => {
             <h1>{ t('system.admin') }</h1>
             { categories.map(category => (
                 <div>
-                    { category }
+                    { JSON.stringify(category) }
                 </div>
             )) }
         </>
