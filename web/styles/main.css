@@ -86,6 +86,6 @@ img {
     color: #6c757d !important;
 }
 
-.dropdown:hover .dropdown-menu {
+.dropdown:hover .dropdown-menu:not(#profile) {
     display: block;
 }

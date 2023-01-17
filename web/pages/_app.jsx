@@ -34,10 +34,12 @@ import {
 
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
+import makeStore from '../redux/store'
 import { systemPrepared, systemLoaded } from '../redux/actions/system'
 import { changeLang, setUtm } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
-import makeStore from '../redux/store'
+import { categoriesGet } from '../redux/actions/categories'
+import api from '../lib/api'
 import { socketIO } from '../lib/sockets'
 // import Loader from '../components/Loader'
 
@@ -80,6 +82,7 @@ const Body = ({ Component, pageProps }) => {
     const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
     const online = useSelector(state => state.online)
+    const categories = useSelector(state => state.categories)
 
     useEffect(() => {
         // Online
@@ -98,6 +101,14 @@ const Body = ({ Component, pageProps }) => {
             dispatch(systemPrepared())
         }
     }, [router.query])
+
+    useEffect(() => {
+        if (system.prepared && categories === null) {
+            api(main, 'categories.get').then(
+                res => dispatch(categoriesGet(res.categories))
+            )
+        }
+    }, [system.prepared, categories])
 
     useEffect(() => {
         // Locale

@@ -21,11 +21,9 @@ export default () => {
     const posts = useSelector(state => state.posts)
     const [loaded, setLoaded] = useState(null)
 
-    const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
-        if (res.posts) {
-            dispatch(postsGet(res.posts))
-        }
-    })
+    const getPost = (data={}) => api(main, 'posts.get', data).then(
+        res => dispatch(postsGet(res.posts))
+    )
 
     useEffect(() => {
         if (system.prepared) {

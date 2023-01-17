@@ -9,17 +9,16 @@ export default ({ posts }) => {
     const { t } = useTranslation('common')
 
     const getTime = time => {
-        const newTime = new Date(time * 1000);
+        const newTime = new Date(time * 1000)
 
-        const year = newTime.getFullYear();
-        let day = `${newTime.getDate()}`;
-        let hours = `${newTime.getHours()}`;
-        let minutes = `${newTime.getUTCMinutes()}`;
-
+        const year = newTime.getFullYear()
+        let day = `${newTime.getDate()}`
+        let hours = `${newTime.getHours()}`
+        let minutes = `${newTime.getUTCMinutes()}`
         let month = [
             'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
             'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
-        ][newTime.getMonth()];
+        ][newTime.getMonth()]
 
         if (day.length < 2) {
             day = `0${day}`
@@ -33,7 +32,7 @@ export default ({ posts }) => {
             minutes = `0${minutes}`
         }
 
-        return `${day} ${month} ${year} в ${hours}:${minutes}`;
+        return `${day} ${month} ${year} в ${hours}:${minutes}`
     }
 
     return (

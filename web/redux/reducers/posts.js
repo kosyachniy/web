@@ -1,7 +1,11 @@
 export default (state = [], action) => {
     switch (action.type) {
         case 'POSTS_GET':
-            return action.posts
+            if (action.posts) {
+                return action.posts
+            } else {
+                return state
+            }
 
         case 'POSTS_ADD':
             return [

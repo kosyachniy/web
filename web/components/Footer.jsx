@@ -45,8 +45,8 @@ export default () => {
                             // onClick={ () => dispatch(changeLang(main.locale === 'ru' ? 'en' : 'ru')) }
                         >
                             <img
-                                src={ `/lang/${main.locale === 'ru' ? 'en' : 'ru'}.svg` }
-                                alt={ main.locale === 'ru' ? 'en' : 'ru' }
+                                src={ `/lang/${main.locale}.svg` }
+                                alt={ main.locale }
                                 style={{ height: '24px' }}
                             />
                         </li>

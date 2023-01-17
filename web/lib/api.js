@@ -23,17 +23,17 @@ const api = (main, method, data={}, setted=false) => new Promise((resolve, rejec
                     token: main.token,
                     network: 'web',
                     utm: main.utm,
-                }, setted=true);
-                resolve(await api(main, method, data, true));
+                }, setted=true)
+                resolve(await api(main, method, data, true))
             } else {
-                const text = await response.text();
+                const text = await response.text()
                 console.log('Error', response.status, text)
-                resolve(text);
+                resolve(text)
             }
         } else {
-            resolve(await response.json());
+            resolve(await response.json())
         }
-    });
-});
+    })
+})
 
-export default api;
+export default api
