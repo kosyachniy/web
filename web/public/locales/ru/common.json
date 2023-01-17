@@ -19,7 +19,8 @@
         "profile": "Профиль",
         "settings": "Настройки",
         "admin": "Админка",
-        "analytics": "Аналитика"
+        "analytics": "Аналитика",
+        "categories": "Категории"
     },
     "brand": {
         "description": "Шаблонное веб приложение",
@@ -74,5 +75,10 @@
     "posts": {
         "title": "Заголовок",
         "empty": "Пусто"
+    },
+    "categories": {
+        "title": "Название",
+        "parent": "Родитель",
+        "top": "Верхний уровень"
     }
 }

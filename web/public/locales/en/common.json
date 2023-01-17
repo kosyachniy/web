@@ -19,7 +19,8 @@
         "profile": "Profile",
         "settings": "Settings",
         "admin": "Admin",
-        "analytics": "Analytics"
+        "analytics": "Analytics",
+        "categories": "Categories"
     },
     "brand": {
         "description": "Template web app",
@@ -74,5 +75,10 @@
     "posts": {
         "title": "Title",
         "empty": "Empty"
+    },
+    "categories": {
+        "title": "Title",
+        "parent": "Parent",
+        "top": "Top level"
     }
 }

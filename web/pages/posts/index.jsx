@@ -69,17 +69,14 @@ export default () => {
                     </div>
                 </div>
                 <div className="col-4" style={{ textAlign: 'right' }}>
-                    <div className="btn-group">
-                        <Link href="/posts/add">
-                            <button
-                                type="button"
-                                className="btn btn-success"
-                                style={{ width: '100%' }}
-                            >
-                                <FontAwesomeIcon icon="fa-solid fa-plus" />
-                            </button>
-                        </Link>
-                    </div>
+                    <Link href="/posts/add">
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                        >
+                            <FontAwesomeIcon icon="fa-solid fa-plus" />
+                        </button>
+                    </Link>
                 </div>
             </div>
             {
