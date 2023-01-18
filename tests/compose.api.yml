@@ -6,15 +6,13 @@ services:
       - 27017:27017
 
   test:
-    image: ${PROJECT_NAME}/test
+    image: test
     build:
-      context: .
+      context: ../
       dockerfile: ./tests/Dockerfile
     depends_on:
       - db
-    env_file: .env
-    environment:
-      WEB: http://localhost/
+    env_file: ../.env
     volumes:
-      - ./scripts:/scripts
+      - ../scripts:/app/scripts
     command: make test

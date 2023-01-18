@@ -13,7 +13,8 @@ check:
 	docker ps --filter name="^${PROJECT_NAME}" --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
 run-test:
-	docker compose -f compose.test.yml -p ${PROJECT_NAME} up --build --exit-code-from test
+	docker compose -f tests/compose.api.yml -p ${PROJECT_NAME} up --build --exit-code-from test
+	docker compose -f tests/compose.web.yml -p ${PROJECT_NAME} up --build --exit-code-from test
 
 log:
 	docker compose -f compose.prod.yml logs

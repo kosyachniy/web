@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  test:
+    image: node:19.3
+    build: ../web
+    volumes:
+      - ../web:/app
+    working_dir: /app
+    command: bash -c "npm i && node_modules/.bin/eslint ."
