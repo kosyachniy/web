@@ -9,6 +9,24 @@ import api from '../lib/api'
 import Editor from './Editor'
 
 
+const List = ({ categories, indent=0 }) => (
+    <>
+        { categories && categories.map(category => category.id && (
+            <>
+                <option value={ category.id } key={ category.id }>
+                    <div dangerouslySetInnerHTML={{ __html: `&nbsp;&nbsp;&nbsp;`.repeat(indent) }} />
+                    #{ category.id }&nbsp;&nbsp;
+                    { category.title }
+                </option>
+                <List
+                    categories={ category.categories }
+                    indent={ indent + 1 }
+                />
+            </>
+        )) }
+    </>
+)
+
 const Edit = ({
     category,
     setEdit=null,
@@ -67,11 +85,7 @@ const Edit = ({
                     onChange={ event => setParent(event.target.value)}
                 >
                     <option defaultValue>{ t('categories.top') }</option>
-                    { categories && categories.map(cat => cat.id && (
-                        <option value={ cat.id } key={ cat.id }>
-                            { cat.title }
-                        </option>
-                    )) }
+                    <List categories={ categories } />
                 </select>
             </div>
             <Editor
@@ -95,6 +109,7 @@ export default ({
     category,
     edit=false,
     setEdit=null,
+    indent=0,
 }) => (
     <div className="accordion-item">
         <h2 className="accordion-header" id={ `heading${category.id}` }>
@@ -107,6 +122,13 @@ export default ({
                 aria-controls={ `collapse${category.id}` }
                 onClick={ () => setEdit(category.id) }
             >
+                { indent ? (
+                    <>
+                        <div dangerouslySetInnerHTML={{ __html: `<div class="px-3 d-inline"></div>`.repeat(indent - 1) }} />
+                        <div class="px-3 d-inline text-secondary">↳</div>
+                    </>
+                ) : (<></>) }
+                <div className="text-secondary me-2">#{ category.id }</div>
                 { category.title }
             </button>
         </h2>

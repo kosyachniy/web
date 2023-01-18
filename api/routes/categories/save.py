@@ -20,6 +20,7 @@ class Type(BaseModel):
     title: str = None
     data: str = None
     image: str = None
+    parent: int = None
 
 @router.post("/save/")
 async def handler(
@@ -51,6 +52,7 @@ async def handler(
     category.title = data.title
     category.data = data.data
     category.image = data.image
+    category.parent = data.parent
 
     # Save
     category.save()

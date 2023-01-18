@@ -35,19 +35,18 @@ async def handler(
         'title',
         'data',
         'image',
+        'parent',
         'created',
         'updated',
     }
 
     # Get
-    # TODO: parent
-    categories = Category.complex(
+    categories = Category.get_tree(
         ids=data.id,
+        parent=data.parent,
         fields=fields,
         locale=data.locale,  # NOTE: None → all locales
     )
-
-    # TODO: create tree
 
     # Response
     return {

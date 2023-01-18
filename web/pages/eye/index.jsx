@@ -9,6 +9,28 @@ import { categoriesAdd } from '../../redux/actions/categories'
 import Category from '../../components/Category'
 
 
+const List = ({ categories, edit, setEdit, indent=0 }) => (
+    <>
+        { categories && categories.map(category => (
+            <>
+                <Category
+                    category={ category }
+                    edit={ edit === category.id }
+                    setEdit={ setEdit }
+                    indent={ indent }
+                    key={ category.id }
+                />
+                <List
+                    categories={ category.categories }
+                    edit={ edit }
+                    setEdit={ setEdit }
+                    indent={ indent + 1 }
+                />
+            </>
+        )) }
+    </>
+)
+
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
@@ -35,14 +57,11 @@ export default () => {
         <>
             <h1>{ t('system.categories') }</h1>
             <div className="accordion" id="accordionCategories">
-                { categories && categories.map(category => (
-                    <Category
-                        category={ category }
-                        edit={ edit === category.id }
-                        setEdit={ setEdit }
-                        key={ category.id }
-                    />
-                )) }
+                <List
+                    categories={ categories }
+                    edit={ edit }
+                    setEdit={ setEdit }
+                />
             </div>
             { edit !== 0 && (
                 <button
