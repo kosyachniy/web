@@ -40,7 +40,7 @@ import { changeLang, setUtm } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
 import { categoriesGet } from '../redux/actions/categories'
 import api from '../lib/api'
-import { socketIO } from '../lib/sockets'
+import socketIO from '../lib/sockets'
 // import Loader from '../components/Loader'
 
 // Structure
