@@ -30,6 +30,8 @@ async def handler(
 ):
     """ Save """
 
+    # TODO: Checking for set as a parent of yourself or children
+
     # No access
     if user.status < 5:
         raise ErrorAccess('save')

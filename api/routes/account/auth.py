@@ -184,11 +184,9 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
 async def auth(request, data, by, conditions, online=False, password=False):
     """ Authorization / registration in different ways """
 
-    # TODO: Сокет на авторизацию на всех вкладках токена
-    # TODO: Перезапись информации этого токена уже в онлайне
-    # TODO: Pre-registration data (promos, actions, posts)
-    # TODO: the same token
-    # TODO: Only by token (automaticaly, without any info)
+    # TODO: auth all tabs with this token via web sockets
+    # TODO: pre-registration data: promo, tracking, posts
+    # TODO: uniq token
     # TODO: block by token
 
     # Data preparation

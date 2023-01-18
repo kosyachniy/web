@@ -9,17 +9,22 @@ import api from '../lib/api'
 import Editor from './Editor'
 
 
-const List = ({ categories, indent=0 }) => (
+const List = ({ categories, current, indent=0 }) => (
     <>
-        { categories && categories.map(category => category.id && (
+        { categories && categories.map(category => category.id && category.id != current.id && (
             <>
-                <option value={ category.id } key={ category.id }>
+                <option
+                    value={ category.id }
+                    key={ category.id }
+                    selected={ category.id === current.parent ? true : false }
+                >
                     <div dangerouslySetInnerHTML={{ __html: `&nbsp;&nbsp;&nbsp;`.repeat(indent) }} />
                     #{ category.id }&nbsp;&nbsp;
                     { category.title }
                 </option>
                 <List
                     categories={ category.categories }
+                    current={ current }
                     indent={ indent + 1 }
                 />
             </>
@@ -84,8 +89,8 @@ const Edit = ({
                     id="categoryParent"
                     onChange={ event => setParent(event.target.value)}
                 >
-                    <option defaultValue>{ t('categories.top') }</option>
-                    <List categories={ categories } />
+                    <option value="0" defaultValue>{ t('categories.top') }</option>
+                    <List categories={ categories } current={ category } />
                 </select>
             </div>
             <Editor

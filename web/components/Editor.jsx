@@ -44,6 +44,11 @@ export default ({ editorLoaded, data, updatePost }) => {
                                 `rgba(var(--bs-${main.theme}-rgb), var(--bs-bg-opacity))!important;`,
                                 editor.editing.view.document.getRoot()
                             )
+                            writer.setStyle(
+                                'color',
+                                `rgba(var(--bs-${main.color}-rgb));`,
+                                editor.editing.view.document.getRoot()
+                            )
                         })
                     } }
                     onChange={ (event, editor) => updatePost(editor.getData()) }

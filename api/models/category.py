@@ -11,15 +11,20 @@ class Category(Base):
     _name = 'categories'
     _search_fields = {'title', 'data'}
 
-    parent = Attribute(types=int)
+    parent = Attribute(types=int, default=0)
     locale = Attribute(types=str)
     status = Attribute(types=int, default=1)
     token = Attribute(types=str)
 
     @classmethod
-    def get_tree(cls, categories=None, parent=None, **kwargs):
+    def get_tree(cls, categories=None, parent=0, **kwargs):
+        """ Get tree of categories """
+
         if categories is None:
             categories = cls.get(**kwargs)
+
+        if parent is None:
+            parent = 0
 
         tree = []
 
