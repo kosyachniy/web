@@ -77,34 +77,15 @@ export const Edit = ({ post, setEdit, setPost }) => {
     )
 }
 
-export default ({ id }) => {
+export default ({ post, setPost }) => {
     const router = useRouter()
-    const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
-    const [post, setPost] = useState(null)
     const [edit, setEdit] = useState(false)
-    const [deleted, setDeleted] = useState(false)
-
-    const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
-        if (res.posts) {
-            setPost(res.posts)
-        }
-    })
 
     const deletePost = () => api(main, 'posts.rm', {id: post.id}).then(
-        res => setDeleted(true)
-    )
-
-    useEffect(() => {
-        if (system.prepared && !post) {
-            getPost({ id })
-        }
-    }, [system.prepared, post])
-
-    if (deleted) {
         router.push(`/`)
-    }
+    )
 
     if (!post) {
         return (

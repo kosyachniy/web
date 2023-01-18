@@ -6,7 +6,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { displaySet } from '../../redux/actions/main'
-import { postsGet } from '../../redux/actions/posts'
 import api from '../../lib/api'
 import PostsGrid from '../../components/Post/Grid'
 import PostsFeed from '../../components/Post/Feed'
@@ -18,27 +17,21 @@ export default () => {
     const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
-    const posts = useSelector(state => state.posts)
+    const [posts, setPosts] = useState([])
     const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => api(main, 'posts.get', data).then(
-        res => dispatch(postsGet(res.posts))
+        res => res.posts && setPosts(res.posts)
     )
 
     useEffect(() => {
-        if (system.prepared) {
-            if (
-                system.search !== loaded
-                && (
-                    system.search === ''
-                    || system.search.length >= 3
-                )
-            ) {
-                setLoaded(system.search)
-                getPost({ search: system.search })
-            }
+        if (system.prepared && system.search !== undefined && system.search !== loaded && (
+            system.search === '' || system.search.length >= 3
+        )) {
+            setLoaded(system.search)
+            getPost({ search: system.search })
         }
-    }, [system.prepared])
+    }, [system.prepared, system.search])
 
     return (
         <>

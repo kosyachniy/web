@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 import { popupSet, searching } from '../redux/actions/system'
@@ -61,14 +62,22 @@ const Navigation = () => {
 
 const Search = () => {
     const { t } = useTranslation('common')
+    const dispatch = useDispatch()
+    const router = useRouter()
+    const system = useSelector(state => state.system)
+
+    const search = value => {
+        dispatch(searching(value))
+        router.push("/posts/")
+    }
 
     return (
         <input
             className={ `${styles.search} form-control` }
             type="search"
             placeholder={ t('system.search') }
-            // value={ system.search }
-            // onChange={ event => dispatch(searching(event.target.value)) }
+            value={ system.search }
+            onChange={ event => search(event.target.value) }
         />
     )
 }
