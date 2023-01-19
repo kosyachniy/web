@@ -18,20 +18,18 @@ export default () => {
     const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
     const [posts, setPosts] = useState([])
-    const [loaded, setLoaded] = useState(null)
 
     const getPost = (data={}) => api(main, 'posts.get', data).then(
         res => res.posts && setPosts(res.posts)
     )
 
     useEffect(() => {
-        if (system.prepared && system.search !== undefined && system.search !== loaded && (
-            system.search === '' || system.search.length >= 3
-        )) {
-            setLoaded(system.search)
-            getPost({ search: system.search })
-        }
-    }, [system.prepared, system.search])
+        system.prepared && getPost({ locale: main.locale, search: system.search })
+    }, [
+        system.prepared,
+        system.search && system.search.length >= 3 ? system.search : false,
+        main.locale,
+    ])
 
     return (
         <>

@@ -77,14 +77,19 @@ async def handler(
 
             return post
 
-    # Get
+    cond = {}
 
-    cond = None
+    # Personal
     if data.my:
-        cond = {'$or': [{'user': user.id}, {'token': request.state.token}]}
+        cond['$or'] = [
+            {'user': user.id},
+            {'token': request.state.token},
+        ]
     elif data.my is not None:
-        cond = {'user': {'$ne': user.id}, 'token': {'$ne': request.state.token}}
+        cond['user'] = {'$ne': user.id}
+        cond['token'] = {'$ne': request.state.token}
 
+    # Get
     posts = Post.complex(
         ids=data.id,
         limit=data.limit,
@@ -92,8 +97,10 @@ async def handler(
         search=data.search,
         fields=fields,  # None if data.id else fields,
         category=data.category,  # TODO: or childs
-        locale=data.locale,  # NOTE: None → all locales
-        extra=cond,
+        locale=data.locale and {
+            '$in': [None, data.locale],
+        },  # NOTE: None → all locales
+        extra=cond or None,
         handler=handle,
     )
 

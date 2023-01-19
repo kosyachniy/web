@@ -1,9 +1,5 @@
 async function serverRequest(method = '', data = {}) {
-  const url = (
-    process.env.NEXT_PUBLIC_API
-        + method.replace('.', '/')
-        + (method ? '/' : '')
-  );
+  const url = process.env.NEXT_PUBLIC_API + method.replace('.', '/') + (method ? '/' : '');
   return fetch(url, {
     method: 'POST',
     headers: {

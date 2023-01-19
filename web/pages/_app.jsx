@@ -35,10 +35,10 @@ import {
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
 import makeStore from '../redux/store'
-import { systemPrepared, systemLoaded, systemLoadedLocale } from '../redux/actions/system'
+import { systemPrepared } from '../redux/actions/system'
 import { changeLang, setUtm } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
-import { categoriesGet } from '../redux/actions/categories'
+import { categoriesGet, categoriesClear } from '../redux/actions/categories'
 import api from '../lib/api'
 import socketIO from '../lib/sockets'
 // import Loader from '../components/Loader'
@@ -81,7 +81,6 @@ const Body = ({ Component, pageProps }) => {
     const dispatch = useDispatch()
     const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
-    const online = useSelector(state => state.online)
     const categories = useSelector(state => state.categories)
 
     useEffect(() => {
@@ -103,31 +102,18 @@ const Body = ({ Component, pageProps }) => {
     }, [router.query])
 
     useEffect(() => {
-        if (system.prepared && (categories === null || main.locale !== system.loaded_locale)) {
-            api(main, 'categories.get', {locale: main.locale}).then(res => {
-                dispatch(categoriesGet(res.categories))
-                dispatch(systemLoadedLocale(main.locale))
-            })
-        }
-    }, [system.prepared, categories, main.locale])
-
-    useEffect(() => {
-        if (system.loaded_locale === null) {
-            dispatch(systemLoadedLocale(main.locale))
-        }
+        dispatch(categoriesClear())
     }, [main.locale])
 
     useEffect(() => {
-        // Locale
-        if (main.locale !== router.locale) {
-            dispatch(changeLang(router.locale))
-        }
+        system.prepared && categories === null && api(main, 'categories.get', {locale: main.locale}).then(
+            res => dispatch(categoriesGet(res.categories))
+        )
+    }, [system.prepared, categories])
 
-        // Loaded
-        if (online.count && !system.loaded) {
-            dispatch(systemLoaded())
-        }
-    })
+    useEffect(() => {
+        dispatch(changeLang(router.locale))
+    }, [router.locale])
 
     return (
         <>

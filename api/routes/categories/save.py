@@ -56,7 +56,10 @@ async def handler(
     category.data = data.data
     category.image = data.image
     category.parent = data.parent
-    category.locale = data.locale
+    if data.locale:
+        category.locale = data.locale
+    else:
+        del category.locale
 
     # Save
     category.save()

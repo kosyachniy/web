@@ -1,5 +1,5 @@
 requests==2.28.1
 tgio==0.8
-tgreports==0.14
+tgreports==0.15
 libdev==0.44
 redis==4.4.1

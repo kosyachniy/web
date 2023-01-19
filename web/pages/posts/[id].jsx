@@ -16,10 +16,8 @@ export default ({ id }) => {
     )
 
     useEffect(() => {
-        if (system.prepared && (!post || +id !== post.id)) {
-            getPost({ id })
-        }
-    }, [system.prepared, post])
+        system.prepared && (!post || +id !== post.id) && getPost({ id })
+    }, [system.prepared, post, id])
 
     return (
         <Post post={ post } setPost={ setPost } />

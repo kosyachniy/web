@@ -60,7 +60,10 @@ async def handler(
     post.data = data.data
     post.image = data.image
     post.tags = data.tags
-    post.locale = data.locale
+    if data.locale:
+        post.locale = data.locale
+    else:
+        del post.locale
     # TODO: category
 
     # Save

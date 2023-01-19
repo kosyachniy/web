@@ -7,7 +7,7 @@
         "@fortawesome/free-regular-svg-icons": "^6.2.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.1",
         "@fortawesome/react-fontawesome": "^0.2.0",
-        "@kosyachniy/ckeditor": "^2.0.1",
+        "@kosyachniy/ckeditor": "^2.0.2",
         "@reduxjs/toolkit": "^1.9.1",
         "bootstrap": "^5.2.3",
         "next": "^13.1.1",

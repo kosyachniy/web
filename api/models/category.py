@@ -28,6 +28,8 @@ class Category(Base):
         tree = []
 
         for category in categories:
+            if category.parent is None:
+                category.parent = 0
             if category.parent != parent:
                 continue
 

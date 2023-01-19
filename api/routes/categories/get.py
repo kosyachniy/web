@@ -46,7 +46,9 @@ async def handler(
         ids=data.id,
         parent=data.parent,
         fields=fields,
-        locale=data.locale,  # NOTE: None → all locales
+        locale=data.locale and {
+            '$in': [None, data.locale],
+        },  # NOTE: None → all locales
     )
 
     # Response

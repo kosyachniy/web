@@ -16,11 +16,12 @@ export const Edit = ({ post, setEdit, setPost }) => {
     const main = useSelector(state => state.main)
     const [title, setTitle] = useState(post ? post.title : '')
     const [data, setData] = useState(post ? post.data : '')
+    const [locale, setLocale] = useState(post ? post.locale : main.locale)
     const [editorLoaded, setEditorLoaded] = useState(false)
     const [redirect, setRedirect] = useState(null)
 
     const editPost = () => {
-        let req = { title, data }
+        let req = { title, data, locale }
 
         if (post) {
             req['id'] = post.id
@@ -58,6 +59,21 @@ export const Edit = ({ post, setEdit, setPost }) => {
                         value={ title }
                         onChange={ event => setTitle(event.target.value) }
                     />
+                </div>
+                <div className="input-group mb-3">
+                    <label className="input-group-text" htmlFor="categoryLocale">
+                        { t('system.locale') }
+                    </label>
+                    <select
+                        className="form-select"
+                        id="categoryLocale"
+                        value={ locale }
+                        onChange={ event => setLocale(event.target.value) }
+                    >
+                        <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="ru">🇷🇺 Русский</option>
+                    </select>
                 </div>
                 <Editor
                     editorLoaded={ editorLoaded }

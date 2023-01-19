@@ -18,7 +18,6 @@ const List = ({ categories, edit, setEdit, indent=0 }) => (
                     edit={ edit === category.id }
                     setEdit={ setEdit }
                     indent={ indent }
-                    key={ category.id }
                 />
                 <List
                     categories={ category.categories }

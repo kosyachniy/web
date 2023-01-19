@@ -1,5 +1,13 @@
 export const profileIn = ({
-  id, login, image, name, surname, phone, mail, social, status,
+  id,
+  login,
+  image,
+  name,
+  surname,
+  phone,
+  mail,
+  social,
+  status,
 }) => ({
   type: 'PROFILE_IN',
   id,

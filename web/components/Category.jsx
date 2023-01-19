@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,12 +12,8 @@ import Editor from './Editor'
 const List = ({ categories, current, indent=0 }) => (
     <>
         { categories && categories.map(category => category.id && category.id != current.id && (
-            <>
-                <option
-                    value={ category.id }
-                    key={ category.id }
-                    selected={ category.id === current.parent ? true : false }
-                >
+            <React.Fragment key={ category.id }>
+                <option value={ category.id }>
                     <div dangerouslySetInnerHTML={{ __html: `&nbsp;&nbsp;&nbsp;`.repeat(indent) }} />
                     #{ category.id }&nbsp;&nbsp;
                     { category.title }
@@ -27,7 +23,7 @@ const List = ({ categories, current, indent=0 }) => (
                     current={ current }
                     indent={ indent + 1 }
                 />
-            </>
+            </React.Fragment>
         )) }
     </>
 )
@@ -88,6 +84,7 @@ const Edit = ({
                 <select
                     className="form-select"
                     id="categoryParent"
+                    value={ category.parent }
                     onChange={ event => setParent(event.target.value) }
                 >
                     <option value="0" defaultValue>{ t('categories.top') }</option>
@@ -101,11 +98,12 @@ const Edit = ({
                 <select
                     className="form-select"
                     id="categoryLocale"
+                    value={ locale }
                     onChange={ event => setLocale(event.target.value) }
                 >
                     <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
-                    <option value="en" selected={ locale == 'en' }>🇬🇧 English</option>
-                    <option value="ru" selected={ locale == 'ru' }>🇷🇺 Русский</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="ru">🇷🇺 Русский</option>
                 </select>
             </div>
             <Editor
