@@ -22,7 +22,7 @@ class Type(BaseModel):
     image: str = None
     tags: list[str] = None
     locale: str = None
-    # category: int = None
+    category: int = None
 
 @router.post("/save/")
 async def handler(
@@ -60,11 +60,12 @@ async def handler(
     post.data = data.data
     post.image = data.image
     post.tags = data.tags
+    post.category = data.category
+    post.category = data.category
     if data.locale:
         post.locale = data.locale
     else:
         del post.locale
-    # TODO: category
 
     # Save
     post.save()

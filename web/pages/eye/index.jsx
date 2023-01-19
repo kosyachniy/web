@@ -51,7 +51,7 @@ export default () => {
     }
 
     if (profile.status < 6) {
-        router.push(`/`)
+        router.push("/")
     }
 
     return (

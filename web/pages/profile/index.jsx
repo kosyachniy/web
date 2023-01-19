@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 import styles from '../../styles/profile.module.css'
 import { profileUpdate } from '../../redux/actions/profile'
 import api from '../../lib/api'
-import Upload from '../../components/Upload'
+import Upload from '../../components/Forms/Upload'
 
 
 // const checkPassword = password => (
@@ -45,11 +45,9 @@ export default () => {
         )
     }, [])
 
-    // if (profile.id === 0) {
-    //     return (
-    //         <Navigate to="/" />
-    //     )
-    // }
+    if (!profile.id) {
+        router.push("/")
+    }
 
     const accountEdit = () => {
         const data = {}
@@ -85,8 +83,11 @@ export default () => {
     return (
         <div className="container">
             <div className="row py-3">
-                <div className="col-12 col-md-6 px-4">
-                    <Upload image={ image } setImage={ setImage } />
+                <div className="col-12 col-md-6">
+                    <Upload
+                        image={ image === '/user.png' ? null : image }
+                        setImage={ setImage }
+                    />
                 </div>
                 <div className="col-12 col-md-6">
                     <div className="input-group mb-3">

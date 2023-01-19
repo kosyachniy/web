@@ -1,5 +1,5 @@
-import styles from '../styles/upload.module.css'
-import upload from '../lib/upload'
+import styles from '../../styles/upload.module.css'
+import upload from '../../lib/upload'
 
 
 export default ({ image, setImage }) => {

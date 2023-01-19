@@ -45,6 +45,7 @@ async def handler(
         'data',
         'reactions',
         'image',
+        'category',
         'locale',
         'created',
         'updated',
@@ -95,7 +96,7 @@ async def handler(
         limit=data.limit,
         offset=data.offset,
         search=data.search,
-        fields=fields,  # None if data.id else fields,
+        fields=fields,  # TODO: None if data.id else fields,
         category=data.category,  # TODO: or childs
         locale=data.locale and {
             '$in': [None, data.locale],

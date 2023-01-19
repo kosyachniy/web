@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,27 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from '../styles/card.module.css'
 import { categoriesClear } from '../redux/actions/categories'
 import api from '../lib/api'
-import Editor from './Editor'
+import Upload from './Forms/Upload'
+import Locale from './Forms/Locale'
+import Category from './Forms/Category'
+import Editor from './Forms/Editor'
 
-
-const List = ({ categories, current, indent=0 }) => (
-    <>
-        { categories && categories.map(category => category.id && category.id != current.id && (
-            <React.Fragment key={ category.id }>
-                <option value={ category.id }>
-                    <div dangerouslySetInnerHTML={{ __html: `&nbsp;&nbsp;&nbsp;`.repeat(indent) }} />
-                    #{ category.id }&nbsp;&nbsp;
-                    { category.title }
-                </option>
-                <List
-                    categories={ category.categories }
-                    current={ current }
-                    indent={ indent + 1 }
-                />
-            </React.Fragment>
-        )) }
-    </>
-)
 
 const Edit = ({
     category,
@@ -38,6 +22,7 @@ const Edit = ({
     const categories = useSelector(state => state.categories)
     const [title, setTitle] = useState(category ? category.title : '')
     const [data, setData] = useState(category ? category.data : '')
+    const [image, setImage] = useState(category ? category.image : null)
     const [parent, setParent] = useState(category ? category.parent : null)
     const [locale, setLocale] = useState(category ? category.locale : main.locale)
     const [editorLoaded, setEditorLoaded] = useState(false)
@@ -48,7 +33,7 @@ const Edit = ({
             return
         }
 
-        let req = { title, data, parent, locale }
+        let req = { title, data, image, parent, locale }
         if (category) {
             req['id'] = category.id
         }
@@ -77,34 +62,19 @@ const Edit = ({
                     onChange={ event => setTitle(event.target.value) }
                 />
             </div>
-            <div className="input-group mb-3">
-                <label className="input-group-text" htmlFor="categoryParent">
-                    { t('categories.parent') }
-                </label>
-                <select
-                    className="form-select"
-                    id="categoryParent"
-                    value={ category.parent }
-                    onChange={ event => setParent(event.target.value) }
-                >
-                    <option value="0" defaultValue>{ t('categories.top') }</option>
-                    <List categories={ categories } current={ category } />
-                </select>
-            </div>
-            <div className="input-group mb-3">
-                <label className="input-group-text" htmlFor="categoryLocale">
-                    { t('system.locale') }
-                </label>
-                <select
-                    className="form-select"
-                    id="categoryLocale"
-                    value={ locale }
-                    onChange={ event => setLocale(event.target.value) }
-                >
-                    <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
-                    <option value="en">🇬🇧 English</option>
-                    <option value="ru">🇷🇺 Русский</option>
-                </select>
+            <div className="row py-3">
+                <div className="col-12 col-md-6 pb-3">
+                    <Upload image={ image } setImage={ setImage } />
+                </div>
+                <div className="col-12 col-md-6">
+                    <Locale locale={ locale } setLocale={ setLocale } />
+                    <Category
+                        category={ parent }
+                        setCategory={ setParent }
+                        exclude={ category.id }
+                        custom={ t('categories.parent') }
+                    />
+                </div>
             </div>
             <Editor
                 editorLoaded={ editorLoaded }

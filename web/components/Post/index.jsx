@@ -7,8 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
 import api from '../../lib/api'
-import Upload from '../Upload'
-import Editor from '../Editor'
+import Upload from '../Forms/Upload'
+import Locale from '../Forms/Locale'
+import Category from '../Forms/Category'
+import Editor from '../Forms/Editor'
 
 
 export const Edit = ({ post, setEdit, setPost }) => {
@@ -19,11 +21,12 @@ export const Edit = ({ post, setEdit, setPost }) => {
     const [data, setData] = useState(post ? post.data : '')
     const [image, setImage] = useState(post ? post.image : null)
     const [locale, setLocale] = useState(post ? post.locale : main.locale)
+    const [category, setCategory] = useState(post ? post.category : null)
     const [editorLoaded, setEditorLoaded] = useState(false)
     const [redirect, setRedirect] = useState(null)
 
     const editPost = () => {
-        let req = { title, data, image, locale }
+        let req = { title, data, image, locale, category }
 
         if (post) {
             req['id'] = post.id
@@ -63,25 +66,15 @@ export const Edit = ({ post, setEdit, setPost }) => {
                     />
                 </div>
                 <div className="row py-3">
-                    <div className="col-12 col-md-6 px-4">
+                    <div className="col-12 col-md-6 pb-3">
                         <Upload image={ image } setImage={ setImage } />
                     </div>
                     <div className="col-12 col-md-6">
-                        <div className="input-group mb-3">
-                            <label className="input-group-text" htmlFor="categoryLocale">
-                                { t('system.locale') }
-                            </label>
-                            <select
-                                className="form-select"
-                                id="categoryLocale"
-                                value={ locale }
-                                onChange={ event => setLocale(event.target.value) }
-                            >
-                                <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
-                                <option value="en">🇬🇧 English</option>
-                                <option value="ru">🇷🇺 Русский</option>
-                            </select>
-                        </div>
+                        <Locale locale={ locale } setLocale={ setLocale } />
+                        <Category
+                            category={ category }
+                            setCategory={ setCategory }
+                        />
                     </div>
                 </div>
 
@@ -110,7 +103,7 @@ export default ({ post, setPost }) => {
     const [edit, setEdit] = useState(false)
 
     const deletePost = () => api(main, 'posts.rm', {id: post.id}).then(
-        router.push(`/`)
+        router.push("/")
     )
 
     if (!post) {

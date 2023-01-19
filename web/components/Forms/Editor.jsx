@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
-import Loader from './Loader'
+import Loader from '../Loader'
 
 
 export default ({ editorLoaded, data, updatePost }) => {

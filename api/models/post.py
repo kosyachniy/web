@@ -29,7 +29,7 @@ class Post(Base):
     image = Attribute(types=str)
     title = Attribute(types=str, default=default_title)
     data = Attribute(types=str, default='')
-    category = Attribute(types=int)
+    category = Attribute(types=int, default=0)
     reactions = Attribute(types=dict, default={
         'views': [], # TODO: + UTM
         'likes': [],

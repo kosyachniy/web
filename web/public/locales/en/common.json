@@ -93,6 +93,7 @@
         "empty": "Empty"
     },
     "categories": {
+        "category": "Category",
         "title": "Title",
         "parent": "Parent",
         "top": "Top level"
