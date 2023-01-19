@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { displaySet } from '../../redux/actions/main'
 import api from '../../lib/api'
-import PostsGrid from '../../components/Post/Grid'
-import PostsFeed from '../../components/Post/Feed'
+import Grid from '../../components/Post/Grid'
+import Feed from '../../components/Post/Feed'
 
 
 export default () => {
@@ -76,9 +76,9 @@ export default () => {
             </div>
             {
                 main.display == 'feed' ? (
-                    <PostsFeed posts={ posts } />
+                    <Feed posts={ posts } />
                 ) : (
-                    <PostsGrid posts={ posts } />
+                    <Grid posts={ posts } />
                 )
             }
         </>

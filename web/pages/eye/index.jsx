@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -12,7 +12,7 @@ import Category from '../../components/Category'
 const List = ({ categories, edit, setEdit, indent=0 }) => (
     <>
         { categories && categories.map(category => (
-            <>
+            <React.Fragment key={ category.id }>
                 <Category
                     category={ category }
                     edit={ edit === category.id }
@@ -26,7 +26,7 @@ const List = ({ categories, edit, setEdit, indent=0 }) => (
                     setEdit={ setEdit }
                     indent={ indent + 1 }
                 />
-            </>
+            </React.Fragment>
         )) }
     </>
 )
@@ -35,6 +35,7 @@ export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
     const router = useRouter()
+    const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
     const categories = useSelector(state => state.categories)
     const [edit, setEdit] = useState(null)
@@ -45,6 +46,7 @@ export default () => {
             title: '',
             data: null,
             parent: null,
+            locale: main.locale,
         }))
         setEdit(0)
     }

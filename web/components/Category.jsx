@@ -43,6 +43,7 @@ const Edit = ({
     const [title, setTitle] = useState(category ? category.title : '')
     const [data, setData] = useState(category ? category.data : '')
     const [parent, setParent] = useState(category ? category.parent : null)
+    const [locale, setLocale] = useState(category ? category.locale : main.locale)
     const [editorLoaded, setEditorLoaded] = useState(false)
 
     const editCategory = () => {
@@ -51,7 +52,7 @@ const Edit = ({
             return
         }
 
-        let req = { title, data, parent }
+        let req = { title, data, parent, locale }
         if (category) {
             req['id'] = category.id
         }
@@ -87,10 +88,24 @@ const Edit = ({
                 <select
                     className="form-select"
                     id="categoryParent"
-                    onChange={ event => setParent(event.target.value)}
+                    onChange={ event => setParent(event.target.value) }
                 >
                     <option value="0" defaultValue>{ t('categories.top') }</option>
                     <List categories={ categories } current={ category } />
+                </select>
+            </div>
+            <div className="input-group mb-3">
+                <label className="input-group-text" htmlFor="categoryLocale">
+                    { t('system.locale') }
+                </label>
+                <select
+                    className="form-select"
+                    id="categoryLocale"
+                    onChange={ event => setLocale(event.target.value) }
+                >
+                    <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
+                    <option value="en" selected={ locale == 'en' }>🇬🇧 English</option>
+                    <option value="ru" selected={ locale == 'ru' }>🇷🇺 Русский</option>
                 </select>
             </div>
             <Editor
@@ -130,7 +145,7 @@ export default ({
                 { indent ? (
                     <>
                         <div dangerouslySetInnerHTML={{ __html: `<div class="px-3 d-inline"></div>`.repeat(indent - 1) }} />
-                        <div class="px-3 d-inline text-secondary">↳</div>
+                        <div className="px-3 d-inline text-secondary">↳</div>
                     </>
                 ) : (<></>) }
                 <div className="text-secondary me-2">#{ category.id }</div>

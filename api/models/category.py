@@ -12,7 +12,6 @@ class Category(Base):
     _search_fields = {'title', 'data'}
 
     parent = Attribute(types=int, default=0)
-    locale = Attribute(types=str)
     status = Attribute(types=int, default=1)
     token = Attribute(types=str)
 

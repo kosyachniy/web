@@ -37,7 +37,6 @@ class Post(Base):
         'comments': [],
     }) # TODO: attributes
     tags = Attribute(types=list)
-    locale = Attribute(types=str, default=cfg('locale'))
     source = Attribute(types=str)
     status = Attribute(types=int, default=1)
     token = Attribute(types=str)

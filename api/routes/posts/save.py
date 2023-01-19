@@ -21,6 +21,7 @@ class Type(BaseModel):
     data: str = None
     image: str = None
     tags: list[str] = None
+    locale: str = None
     # category: int = None
 
 @router.post("/save/")
@@ -59,6 +60,7 @@ async def handler(
     post.data = data.data
     post.image = data.image
     post.tags = data.tags
+    post.locale = data.locale
     # TODO: category
 
     # Save
@@ -84,6 +86,7 @@ async def handler(
         await report.important("Save post", {
             'post': post.id,
             'title': post.title,
+            'locale': post.locale,
             'user': user.id,
         })
 

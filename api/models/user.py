@@ -83,7 +83,6 @@ class User(Base):
     social = Attribute(types=list) # TODO: list[{}] # TODO: checking
     #
     description = Attribute(types=str)
-    locale = Attribute(types=str, default='en')
     status = Attribute(types=int, default=default_status)
     rating = Attribute(types=float)
     # global_channel = Attribute(types=int, default=1)

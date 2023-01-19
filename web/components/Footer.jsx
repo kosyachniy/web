@@ -36,7 +36,7 @@ export default () => {
                         ) }
                     </li>
                     <Link
-                        href='/'
+                        href=""
                         locale={ main.locale === 'ru' ? 'en' : 'ru' }
                     >
                         <li

@@ -36,6 +36,7 @@ async def handler(
         'data',
         'image',
         'parent',
+        'locale',
         'created',
         'updated',
     }

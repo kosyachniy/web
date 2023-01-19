@@ -11,14 +11,12 @@ export default ({ id }) => {
     const main = useSelector(state => state.main)
     const [post, setPost] = useState(null)
 
-    const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
-        if (res.posts) {
-            setPost(res.posts)
-        }
-    })
+    const getPost = (data={}) => api(main, 'posts.get', data).then(
+        res => res.posts && setPost(res.posts)
+    )
 
     useEffect(() => {
-        if (system.prepared && (!post || id !== post.id)) {
+        if (system.prepared && (!post || +id !== post.id)) {
             getPost({ id })
         }
     }, [system.prepared, post])

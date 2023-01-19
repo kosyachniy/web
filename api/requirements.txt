@@ -10,7 +10,7 @@ PyJWT==2.6.0
 python-multipart==0.0.5  # NOTE: for file upload
 
 # DB
-consys==0.26
+consys==0.27
 
 # MQ
 redis==4.4.1

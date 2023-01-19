@@ -35,7 +35,7 @@ import {
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
 import makeStore from '../redux/store'
-import { systemPrepared, systemLoaded } from '../redux/actions/system'
+import { systemPrepared, systemLoaded, systemLoadedLocale } from '../redux/actions/system'
 import { changeLang, setUtm } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
 import { categoriesGet } from '../redux/actions/categories'
@@ -103,12 +103,19 @@ const Body = ({ Component, pageProps }) => {
     }, [router.query])
 
     useEffect(() => {
-        if (system.prepared && categories === null) {
-            api(main, 'categories.get').then(
-                res => dispatch(categoriesGet(res.categories))
-            )
+        if (system.prepared && (categories === null || main.locale !== system.loaded_locale)) {
+            api(main, 'categories.get', {locale: main.locale}).then(res => {
+                dispatch(categoriesGet(res.categories))
+                dispatch(systemLoadedLocale(main.locale))
+            })
         }
-    }, [system.prepared, categories])
+    }, [system.prepared, categories, main.locale])
+
+    useEffect(() => {
+        if (system.loaded_locale === null) {
+            dispatch(systemLoadedLocale(main.locale))
+        }
+    }, [main.locale])
 
     useEffect(() => {
         // Locale

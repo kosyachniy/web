@@ -22,6 +22,8 @@
         "map": "Map"
     },
     "system": {
+        "locale": "Locale",
+        "worldwide": "Worldwide",
         "sign_out": "Log Out",
         "sign_in": "Log In",
         "sign_up": "Sign Up",

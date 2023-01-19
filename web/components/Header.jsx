@@ -35,7 +35,7 @@ const Navigation = () => {
                     { t('structure.posts') }
                 </Link>
                 <ul className={ `${styles.menu} dropdown-menu dropdown-menu-${main.theme}` }>
-                    { categories && categories.map((category, i) => (
+                    { categories && categories.map(category => category.id ? (
                         <Link
                             href={ `/posts/${category.id}/` }
                             className="dropdown-item"
@@ -43,7 +43,7 @@ const Navigation = () => {
                         >
                             { category.title }
                         </Link>
-                    )) }
+                    ) : (<></>)) }
                 </ul>
             </li>
             {/* <li className="nav-item">

@@ -21,6 +21,7 @@ class Type(BaseModel):
     data: str = None
     image: str = None
     parent: int = None
+    locale: str = None
 
 @router.post("/save/")
 async def handler(
@@ -55,6 +56,7 @@ async def handler(
     category.data = data.data
     category.image = data.image
     category.parent = data.parent
+    category.locale = data.locale
 
     # Save
     category.save()
@@ -78,6 +80,7 @@ async def handler(
         await report.important("Save category", {
             'category': category.id,
             'title': category.title,
+            'locale': category.locale,
             'user': user.id,
         })
 

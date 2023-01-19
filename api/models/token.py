@@ -14,5 +14,4 @@ class Token(Base):
     network = Attribute(types=int)
     ip = Attribute(types=str)
     utm = Attribute(types=str)
-    locale = Attribute(types=str)
     user_agent = Attribute(types=str)

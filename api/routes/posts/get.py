@@ -45,6 +45,7 @@ async def handler(
         'data',
         'reactions',
         'image',
+        'locale',
         'created',
         'updated',
         # 'geo',
