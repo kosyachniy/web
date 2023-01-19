@@ -1,0 +1,23 @@
+.upload {
+    width: 100vw;
+    height: 250px;
+    border: 2px dashed var(--bs-gray);
+    border-radius: 10px;
+    cursor: pointer;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 2.5em;
+}
+
+.upload div {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.upload input {
+    display: none;
+}

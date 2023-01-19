@@ -89,3 +89,7 @@ img {
 .dropdown:hover .dropdown-menu:not(#profile) {
     display: block;
 }
+
+select {
+    cursor: pointer;
+}

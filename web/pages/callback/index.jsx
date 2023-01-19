@@ -11,13 +11,13 @@ export default ({ user, onPopup, onRedirect, onUpdateUserProperties }) => {
         social: type,
         code,
         // TODO: utm
-    }).then(_eventAuthSocialAccount => {
-        if (_eventAuthSocialAccount.id !== undefined) {
+    }).then(event => {
+        if (event.id !== undefined) {
             onPopup(false)
 
-            onUpdateUserProperties(_eventAuthSocialAccount, _eventAuthSocialAccount.new)
+            onUpdateUserProperties(event, event.new)
 
-            if (!_eventAuthSocialAccount.new) {
+            if (!event.new) {
                 localStorage.setItem('auth', true)
             }
 

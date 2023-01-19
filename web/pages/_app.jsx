@@ -94,9 +94,7 @@ const Body = ({ Component, pageProps }) => {
     useEffect(() => {
         // UTM
         if (router.isReady) {
-            if (router.query['utm'] && !main.utm) {
-                dispatch(setUtm(router.query['utm']))
-            }
+            router.query['utm'] && !main.utm && dispatch(setUtm(router.query['utm']))
             dispatch(systemPrepared())
         }
     }, [router.query])

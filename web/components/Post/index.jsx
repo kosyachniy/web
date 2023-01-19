@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
 import api from '../../lib/api'
+import Upload from '../Upload'
 import Editor from '../Editor'
 
 
@@ -16,12 +17,13 @@ export const Edit = ({ post, setEdit, setPost }) => {
     const main = useSelector(state => state.main)
     const [title, setTitle] = useState(post ? post.title : '')
     const [data, setData] = useState(post ? post.data : '')
+    const [image, setImage] = useState(post ? post.image : null)
     const [locale, setLocale] = useState(post ? post.locale : main.locale)
     const [editorLoaded, setEditorLoaded] = useState(false)
     const [redirect, setRedirect] = useState(null)
 
     const editPost = () => {
-        let req = { title, data, locale }
+        let req = { title, data, image, locale }
 
         if (post) {
             req['id'] = post.id
@@ -60,21 +62,29 @@ export const Edit = ({ post, setEdit, setPost }) => {
                         onChange={ event => setTitle(event.target.value) }
                     />
                 </div>
-                <div className="input-group mb-3">
-                    <label className="input-group-text" htmlFor="categoryLocale">
-                        { t('system.locale') }
-                    </label>
-                    <select
-                        className="form-select"
-                        id="categoryLocale"
-                        value={ locale }
-                        onChange={ event => setLocale(event.target.value) }
-                    >
-                        <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
-                        <option value="en">🇬🇧 English</option>
-                        <option value="ru">🇷🇺 Русский</option>
-                    </select>
+                <div className="row py-3">
+                    <div className="col-12 col-md-6 px-4">
+                        <Upload image={ image } setImage={ setImage } />
+                    </div>
+                    <div className="col-12 col-md-6">
+                        <div className="input-group mb-3">
+                            <label className="input-group-text" htmlFor="categoryLocale">
+                                { t('system.locale') }
+                            </label>
+                            <select
+                                className="form-select"
+                                id="categoryLocale"
+                                value={ locale }
+                                onChange={ event => setLocale(event.target.value) }
+                            >
+                                <option value="" defaultValue>🌎 { t('system.worldwide') }</option>
+                                <option value="en">🇬🇧 English</option>
+                                <option value="ru">🇷🇺 Русский</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+
                 <Editor
                     editorLoaded={ editorLoaded }
                     data={ data }
@@ -150,7 +160,7 @@ export default ({ post, setPost }) => {
                 />
             ) : (
                 <>
-                    { post.image && <img src={ post.image } alt={ post.title } /> }
+                    { post.image && <img src={ post.image } alt={ post.title } className={ styles.image } /> }
 
                     <div dangerouslySetInnerHTML={{ __html: post.data }} />
                     {/*
