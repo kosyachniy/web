@@ -12,11 +12,12 @@ class Category(Base):
     _search_fields = {'title', 'data'}
 
     parent = Attribute(types=int, default=0)
+    url = Attribute(types=str)
     status = Attribute(types=int, default=1)
     token = Attribute(types=str)
 
     @classmethod
-    def get_tree(cls, categories=None, parent=0, **kwargs):
+    def get_tree(cls, categories=None, parent=0, ids=None, **kwargs):
         """ Get tree of categories """
 
         if categories is None:
@@ -28,6 +29,8 @@ class Category(Base):
         tree = []
 
         for category in categories:
+            if ids and ids != category.id:
+                continue
             if category.parent is None:
                 category.parent = 0
             if category.parent != parent:

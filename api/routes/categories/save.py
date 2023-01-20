@@ -4,6 +4,8 @@ The creating and editing method of the category object of the API
 
 from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
+from libdev.lang import to_url
+from libdev.gen import generate
 from consys.errors import ErrorAccess
 
 from models.category import Category
@@ -56,10 +58,15 @@ async def handler(
     category.data = data.data
     category.image = data.image
     category.parent = data.parent
+    category.url = to_url(data.title)
     if data.locale:
         category.locale = data.locale
     else:
         del category.locale
+
+    # Check uniq url
+    if Category.get(id={'$ne': category.id}, url=category.url, fields={}):
+        category.url = str(category.created)[-6:] + '-' + category.url
 
     # Save
     category.save()

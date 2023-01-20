@@ -10,7 +10,7 @@ import Grid from '../../components/Post/Grid'
 import Feed from '../../components/Post/Feed'
 
 
-export default () => {
+export const Posts = ({ category=null }) => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
     const system = useSelector(state => state.system)
@@ -23,18 +23,23 @@ export default () => {
     )
 
     useEffect(() => {
-        system.prepared && getPost({ locale: main.locale, search: system.search })
+        system.prepared && getPost({
+            category: category && category.id,
+            locale: main.locale,
+            search: system.search,
+        })
     }, [
         system.prepared,
         system.search && system.search.length >= 3 ? system.search : false,
         main.locale,
+        category,
     ])
 
     return (
         <>
             <div className="row">
                 <div className="col-8">
-                    <h1>{ t('structure.posts') }</h1>
+                    <h1>{ category ? category.title : t('structure.posts') }</h1>
                 </div>
                 <div className="col-4" style={{ textAlign: 'right' }}>
                     <div className="btn-group" role="group">
@@ -81,6 +86,8 @@ export default () => {
         </>
     )
 }
+
+export default () => <Posts />
 
 export const getStaticProps = async ({ locale }) => ({
     props: {

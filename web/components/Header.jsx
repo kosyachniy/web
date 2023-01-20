@@ -37,7 +37,7 @@ const Navigation = () => {
                 <ul className={ `${styles.menu} dropdown-menu dropdown-menu-${main.theme}` }>
                     { categories && categories.map(category => category.id ? (
                         <Link
-                            href={ `/posts/${category.id}/` }
+                            href={ `/posts/${category.url}/` }
                             className="dropdown-item"
                             key={ category.id }
                         >
