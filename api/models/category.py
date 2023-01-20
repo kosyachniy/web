@@ -3,6 +3,7 @@ Category model of DB object
 """
 
 from models import Base, Attribute
+from lib.queue import get
 
 
 class Category(Base):
@@ -42,3 +43,8 @@ class Category(Base):
             tree.append(data)
 
         return tree
+
+    @classmethod
+    def get_childs(cls, parent):
+        """ Get childs of category """
+        return get('category_childs').get(parent, []) + [parent]

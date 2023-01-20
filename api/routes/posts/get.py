@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.post import Post
+from models.category import Category
 from services.auth import sign
 
 
@@ -97,7 +98,9 @@ async def handler(
         offset=data.offset,
         search=data.search,
         fields=fields,  # TODO: None if data.id else fields,
-        category=data.category,  # TODO: or childs
+        category=data.category and {
+            '$in': Category.get_childs(data.category),
+        },
         locale=data.locale and {
             '$in': [None, data.locale],
         },  # NOTE: None → all locales

@@ -9,6 +9,7 @@ from consys.errors import ErrorAccess
 from models.category import Category
 from models.track import Track
 from services.auth import sign
+from services.cache import cache_categories
 
 
 router = APIRouter()
@@ -37,6 +38,9 @@ async def handler(
 
     # Delete
     category.rm()
+
+    # Cache renewal
+    cache_categories()
 
     # Track
     Track(

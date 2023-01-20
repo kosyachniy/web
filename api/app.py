@@ -11,18 +11,23 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from services.response import ResponseMiddleware
 from services.access import AccessMiddleware
+from services.on_startup import on_startup
 from lib import cfg, report
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
 
 
-# Prometheus
 @app.on_event('startup')
 async def startup():
     """ Application startup event """
+
+    # Prometheus
     if cfg('mode') in {'PRE', 'PROD'}:
         Instrumentator().instrument(app).expose(app)
+
+    # Tasks on start
+    on_startup()
 
 # JWT
 # NOTE: 3rd middleware

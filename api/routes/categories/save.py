@@ -5,12 +5,12 @@ The creating and editing method of the category object of the API
 from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from libdev.lang import to_url
-from libdev.gen import generate
 from consys.errors import ErrorAccess
 
 from models.category import Category
 from models.track import Track
 from services.auth import sign
+from services.cache import cache_categories
 from lib import report
 
 
@@ -70,6 +70,9 @@ async def handler(
 
     # Save
     category.save()
+
+    # Cache renewal
+    cache_categories()
 
     # Track
     Track(

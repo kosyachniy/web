@@ -8,6 +8,7 @@ from consys.errors import ErrorAccess, ErrorWrong
 
 from models.category import Category
 from services.auth import sign
+from lib.queue import get
 
 
 router = APIRouter()
@@ -44,11 +45,10 @@ async def handler(
 
     # Get by url
     if data.url:
-        categories = Category.get(url=data.url, fields={})
-        if not categories:
+        category = get('category_urls').get(data.url)
+        if not category:
             raise ErrorWrong('url')
-        data.id = categories[0].id
-
+        data.id = category.id
 
     # Get
     categories = Category.get_tree(
