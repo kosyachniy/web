@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 // import MathJax from 'react-mathjax-preview'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/post.module.css'
 import api from '../../lib/api'
@@ -89,7 +88,7 @@ export const Edit = ({ post, setEdit, setPost }) => {
                     style={{ width: '100%' }}
                     onClick={ editPost }
                 >
-                    <FontAwesomeIcon icon="fa-regular fa-floppy-disk" />
+                    <i className="fa-regular fa-floppy-disk" />
                 </button>
             </div>
         </div>
@@ -120,26 +119,17 @@ export default ({ post, setPost }) => {
                 </div>
                 <div className="col-md-4" style={{ textAlign: 'right' }}>
                     { profile.status >= 2 && (<>
-                        { edit ? (
-                            <button
-                                className="btn btn-outline-secondary"
-                                onClick={ () => setEdit(false) }
-                            >
-                                <FontAwesomeIcon icon="fa-regular fa-eye" />
-                            </button>
-                        ) : (
-                            <button
-                                className="btn btn-outline-secondary"
-                                onClick={ () => setEdit(true) }
-                            >
-                                <FontAwesomeIcon icon="fa-solid fa-pencil" />
-                            </button>
-                        ) }
+                        <button
+                            className="btn btn-outline-secondary"
+                            onClick={ () => setEdit(!edit) }
+                        >
+                            <i class={ edit ? "fa-regular fa-eye" : "fa-solid fa-pencil" } />
+                        </button>
                         <button
                             className="btn btn-danger"
                             onClick={ deletePost }
                         >
-                            <FontAwesomeIcon icon="fa-solid fa-trash" />
+                            <i className="fa-solid fa-trash" />
                         </button>
                     </>) }
                 </div>

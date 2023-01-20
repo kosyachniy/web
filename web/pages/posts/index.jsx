@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { displaySet } from '../../redux/actions/main'
 import api from '../../lib/api'
@@ -44,20 +43,20 @@ export default () => {
                             className={ `btn btn-${main.theme}` }
                             onClick={ () => dispatch(displaySet('grid')) }
                         >
-                            <FontAwesomeIcon icon="fa-solid fa-table-cells-large" />
+                            <i className="fa-solid fa-table-cells-large" />
                         </button>
                         <button
                             type="button"
                             className={ `btn btn-${main.theme}` }
                         >
-                            <FontAwesomeIcon icon="fa-solid fa-list-ul" />
+                            <i className="fa-solid fa-list-ul" />
                         </button>
                         <button
                             type="button"
                             className={ `btn btn-${main.theme}` }
                             onClick={ () => dispatch(displaySet('feed')) }
                         >
-                            <FontAwesomeIcon icon="fa-regular fa-image" />
+                            <i className="fa-regular fa-image" />
                         </button>
                     </div>
                     { profile.status >= 2 && (
@@ -66,7 +65,7 @@ export default () => {
                                 type="button"
                                 className="btn btn-success ms-2"
                             >
-                                <FontAwesomeIcon icon="fa-solid fa-plus" />
+                                <i className="fa-solid fa-plus" />
                             </button>
                         </Link>
                     ) }

@@ -5,32 +5,6 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-    faEnvelope,
-    faGenderless,
-    faPlus,
-    faShare,
-    faPencil,
-    faTrash,
-    faEllipsisVertical,
-    faSun,
-    faMoon,
-    faTableCellsLarge,
-    faListUl,
-} from '@fortawesome/free-solid-svg-icons'
-import {
-    faHeart,
-    faComment,
-    faEye,
-    faFloppyDisk,
-    faImage,
-} from '@fortawesome/free-regular-svg-icons'
-import {
-    faVk,
-    faGoogle,
-    faTelegram,
-} from '@fortawesome/free-brands-svg-icons'
 
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
@@ -51,29 +25,6 @@ import Footer from '../components/Footer'
 import Auth from '../components/Auth'
 import AuthMail from '../components/Auth/Mail'
 import Online from '../components/Online'
-
-
-library.add(
-    faEnvelope,
-    faGenderless,
-    faPlus,
-    faHeart,
-    faComment,
-    faShare,
-    faEye,
-    faPencil,
-    faTrash,
-    faEllipsisVertical,
-    faSun,
-    faMoon,
-    faFloppyDisk,
-    faTableCellsLarge,
-    faListUl,
-    faImage,
-    faVk,
-    faGoogle,
-    faTelegram,
-)
 
 
 const Body = ({ Component, pageProps }) => {

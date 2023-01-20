@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { categoriesAdd } from '../../redux/actions/categories'
 import Category from '../../components/Category'
@@ -71,7 +70,7 @@ export default () => {
                     style={{ width: '100%' }}
                     onClick={ addCategory }
                 >
-                    <FontAwesomeIcon icon="fa-solid fa-plus" />
+                    <i className="fa-solid fa-plus" />
                 </button>
             ) }
         </>

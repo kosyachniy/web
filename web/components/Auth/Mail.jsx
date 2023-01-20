@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import Button from 'react-bootstrap/Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { popupSet } from '../../redux/actions/system'
 import { profileIn } from '../../redux/actions/profile'
@@ -63,12 +62,12 @@ export default () => {
                         />
                     </div>
                     <div className={ styles.pass_info }>
-                        <span style={ password.length >= 6 ? {} : { color: '#e74c3c' } }>
-                            <FontAwesomeIcon icon="fa-solid fa-genderless" />
+                        <span style={ password.length >= 6 ? { color: 'var(--bs-green)' } : { color: '#e74c3c' } }>
+                            <i class={ password.length >= 6 ? "bi bi-check-circle" : "bi bi-x-circle" } />
                             &nbsp; { t('profile.passwordTip1') }
                         </span>
-                        <span style={ checkPassword(password) ? {} : { color: '#e74c3c' } }>
-                            <FontAwesomeIcon icon="fa-solid fa-genderless" />
+                        <span style={ checkPassword(password) ? { color: 'var(--bs-green)' } : { color: '#e74c3c' } }>
+                            <i class={ checkPassword(password) ? "bi bi-check-circle" : "bi bi-x-circle" } />
                             &nbsp; { t('profile.passwordTip2') }
                         </span>
                     </div>

@@ -148,24 +148,29 @@ const Profile = () => {
                 aria-labelledby="navbarDropdown"
             >
                 <Link href="/profile/" className="dropdown-item">
-                    { t('system.profile') }
+                    <i className="bi bi-person-bounding-box" />
+                    &nbsp; { t('system.profile') }
                 </Link>
                 {/* <Link href="/settings/" className="dropdown-item">
-                    { t('system.settings') }
+                    <i className="fa-solid fa-gear" />
+                    &nbsp; { t('system.settings') }
                 </Link> */}
                 {/* <Link href="/analytics/" className="dropdown-item">
-                    { t('system.analytics') }
+                    <i className="bi bi-funnel" />
+                    &nbsp; { t('system.analytics') }
                 </Link> */}
                 {/* <Link href="/billing/" className="dropdown-item">
                     { t('system.billing') }
                 </Link> */}
                 { profile.status >= 6 && (
                     <Link href="/eye/" className="dropdown-item">
-                        { t('system.admin') }
+                        <i className="bi bi-cone-striped" />
+                        &nbsp; { t('system.admin') }
                     </Link>
                 ) }
                 <div className="dropdown-item" onClick={ signOut }>
-                    { t('system.sign_out') }
+                    <i className="bi bi-door-open-fill" />
+                    &nbsp; { t('system.sign_out') }
                 </div>
             </ul>
         </>

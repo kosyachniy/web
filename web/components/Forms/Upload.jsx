@@ -14,7 +14,7 @@ export default ({ image, setImage }) => {
             { image ? (
                 <div style={{ backgroundImage: `url(${image})` }} />
             ) : (
-                <i className="bi bi-file-earmark-arrow-up"></i>
+                <i className="bi bi-file-earmark-arrow-up" />
             ) }
 
             <input

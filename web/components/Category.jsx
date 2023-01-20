@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../styles/card.module.css'
 import { categoriesClear } from '../redux/actions/categories'
@@ -87,7 +86,7 @@ const Edit = ({
                 style={{ width: '100%' }}
                 onClick={ editCategory }
             >
-                <FontAwesomeIcon icon="fa-regular fa-floppy-disk" />
+                <i className="fa-regular fa-floppy-disk" />
             </button>
         </div>
     )

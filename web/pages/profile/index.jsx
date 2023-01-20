@@ -158,7 +158,7 @@ export default () => {
                 className={ `${styles.btn} btn btn-success` }
                 onClick={ accountEdit }
             >
-                { t('system.save') }
+                <i className="fa-regular fa-floppy-disk" />
             </Button>
         </div>
     )
