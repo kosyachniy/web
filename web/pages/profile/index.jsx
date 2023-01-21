@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 // import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Button from 'react-bootstrap/Button'
 
 import styles from '../../styles/profile.module.css'
 import { toastAdd } from '../../redux/actions/system'
@@ -165,12 +164,12 @@ export default () => {
                     </div>
                 </div>
             </div>
-            <Button
+            <button
                 className={ `${styles.btn} btn btn-success` }
                 onClick={ accountEdit }
             >
                 <i className="fa-regular fa-floppy-disk" />
-            </Button>
+            </button>
         </div>
     )
 }

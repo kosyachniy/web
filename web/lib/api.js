@@ -20,6 +20,10 @@ const api = (main, method, data = {}, setted = false) => new Promise((resolve, r
           token: main.token,
           network: 'web',
           utm: main.utm,
+          extra: {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            languages: navigator.languages,
+          },
         }, true);
         resolve(await api(main, method, data, true));
       } else {

@@ -20,6 +20,7 @@ class Type(BaseModel):
     token: str
     network: str
     utm: str = None
+    extra: dict = None
 
 @router.post("/token/")
 async def handler(
@@ -59,6 +60,9 @@ async def handler(
         save = True
     if not token.user_agent and request.state.user_agent:
         token.user_agent = request.state.user_agent
+        save = True
+    if not token.extra and data.extra:
+        token.extra = data.extra
         save = True
     if save:
         token.save()

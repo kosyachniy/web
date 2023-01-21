@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { changeTheme } from '../redux/actions/main'
+import { changeTheme } from '../../redux/actions/main'
 
 
 export default () => {

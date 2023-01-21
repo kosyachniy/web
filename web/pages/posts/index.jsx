@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+import styles from '../../styles/post.module.css'
 import { toastAdd } from '../../redux/actions/system'
 import { displaySet } from '../../redux/actions/main'
 import api from '../../lib/api'
@@ -82,6 +83,12 @@ export const Posts = ({ category=null }) => {
                     ) }
                 </div>
             </div>
+            { category && (
+                <>
+                    { category.image && <img src={ category.image } alt={ category.title } className={ styles.image } /> }
+                    <div dangerouslySetInnerHTML={{ __html: category.data }} />
+                </>
+            ) }
             {
                 main.display == 'feed' ? (
                     <Feed posts={ posts } />

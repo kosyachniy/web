@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
-import Button from 'react-bootstrap/Button'
 
 import { popupSet, toastAdd } from '../../redux/actions/system'
 import { profileIn } from '../../redux/actions/profile'
@@ -76,12 +75,11 @@ export default () => {
                             &nbsp; { t('profile.passwordTip2') }
                         </span>
                     </div>
-                    <Button
-                        type="submit"
-                        variant="success"
+                    <button
+                        className="btn btn-success"
                     >
                         { t('system.sign_in') }
-                    </Button>
+                    </button>
                 </form>
             </Popup>
         </div>

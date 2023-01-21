@@ -15,3 +15,4 @@ class Token(Base):
     ip = Attribute(types=str)
     utm = Attribute(types=str)
     user_agent = Attribute(types=str)
+    extra = Attribute(types=dict)

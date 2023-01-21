@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { popupSet, toastAdd, searching } from '../redux/actions/system'
-import { profileOut } from '../redux/actions/profile'
-import api from '../lib/api'
-import styles from '../styles/header.module.css'
-import Hexagon from './Hexagon'
+import styles from '../../styles/header.module.css'
+import { popupSet, toastAdd, searching } from '../../redux/actions/system'
+import { profileOut } from '../../redux/actions/profile'
+import api from '../../lib/api'
+import Hexagon from '../Hexagon'
 
 
 const Logo = () => {
