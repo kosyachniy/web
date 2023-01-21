@@ -42,7 +42,9 @@
         "now": "сейчас",
         "no_access": "Нет прав",
         "saved": "Сохранено",
-        "deleted": "Удалено"
+        "deleted": "Удалено",
+        "blocked": "Скрыто",
+        "unblocked": "Открыто"
     },
     "brand": {
         "description": "Шаблонное веб приложение",

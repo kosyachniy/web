@@ -26,6 +26,38 @@ const Edit = ({
     const [locale, setLocale] = useState(category ? category.locale : main.locale)
     const [editorLoaded, setEditorLoaded] = useState(false)
 
+    const blockCategory = ({ status }) => api(main, 'categories.save', { id: category.id, status }).then(res => {
+        setEdit(null)
+        dispatch(categoriesClear())
+        dispatch(toastAdd({
+            header: t('system.success'),
+            text: status ? t('system.unblocked') : t('system.blocked'),
+            color: 'white',
+            background: 'success',
+        }))
+    }).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+    })))
+
+    const rmCategory = () => api(main, 'categories.rm', { id: category.id }).then(res => {
+        setEdit(null)
+        dispatch(categoriesClear())
+        dispatch(toastAdd({
+            header: t('system.success'),
+            text: t('system.deleted'),
+            color: 'white',
+            background: 'success',
+        }))
+    }).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+    })))
+
     const editCategory = () => {
         if (!title) {
             // TODO: notify
@@ -60,6 +92,36 @@ const Edit = ({
 
     return (
         <div className="album">
+            <div className="row py-3">
+                <div className="col-6">
+                    { category.status ? (
+                        <button
+                            className="btn btn-danger"
+                            style={{ width: '100%' }}
+                            onClick={ () => blockCategory({ status: 0 }) }
+                        >
+                            <i className="fa-solid fa-lock" />
+                        </button>
+                    ) : (
+                        <button
+                            className="btn btn-success"
+                            style={{ width: '100%' }}
+                            onClick={ () => blockCategory({ status: 1 }) }
+                        >
+                            <i className="fa-solid fa-lock-open" />
+                        </button>
+                    )}
+                </div>
+                <div className="col-6">
+                    <button
+                        className="btn btn-danger"
+                        style={{ width: '100%' }}
+                        onClick={ () => rmCategory() }
+                    >
+                        <i className="fa-solid fa-trash" />
+                    </button>
+                </div>
+            </div>
             <div className="input-group mb-3">
                 <input
                     type="text"
@@ -123,7 +185,10 @@ export default ({
                         <div className="px-3 d-inline text-secondary">↳</div>
                     </>
                 ) : (<></>) }
-                <div className="text-secondary me-2">#{ category.id }</div>
+                <div className="text-secondary me-2">
+                    #{ category.id }
+                    { !category.status && <i className="fa-solid fa-lock ms-2" /> }
+                </div>
                 { category.title }
             </button>
         </h2>

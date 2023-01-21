@@ -23,6 +23,7 @@ class Type(BaseModel):
     tags: list[str] = None
     locale: str = None
     category: int = None
+    status: int = None
 
 @router.post("/save/")
 async def handler(
@@ -62,6 +63,7 @@ async def handler(
     post.tags = data.tags
     post.category = data.category
     post.category = data.category
+    post.status = data.status
     if data.locale:
         post.locale = data.locale
     else:

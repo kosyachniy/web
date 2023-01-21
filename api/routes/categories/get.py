@@ -39,6 +39,7 @@ async def handler(
         'parent',
         'locale',
         'url',
+        'status',
         'created',
         'updated',
     }

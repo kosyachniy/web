@@ -61,6 +61,7 @@ async def handler(
         'locale',
         'created',
         'updated',
+        'status',
         # 'geo',
     }
 
@@ -109,6 +110,7 @@ async def handler(
         offset=data.offset,
         search=data.search,
         fields=fields,  # TODO: None if data.id else fields,
+        status={'$exists': False} if user.status < 5 else None,
         category=data.category and {
             '$in': Category.get_childs(data.category),
         },

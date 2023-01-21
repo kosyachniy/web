@@ -42,7 +42,9 @@
         "now": "just now",
         "no_access": "No access",
         "saved": "Saved",
-        "deleted": "Deleted"
+        "deleted": "Deleted",
+        "blocked": "Hidden",
+        "unblocked": "Opened"
     },
     "brand": {
         "description": "Template web app",

@@ -24,6 +24,7 @@ class Type(BaseModel):
     image: str = None
     parent: int = None
     locale: str = None
+    status: int = None
 
 @router.post("/save/")
 async def handler(
@@ -59,6 +60,7 @@ async def handler(
     category.image = data.image
     category.parent = data.parent
     category.url = to_url(data.title)
+    category.status = data.status
     if data.locale:
         category.locale = data.locale
     else:

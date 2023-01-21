@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next'
 
 import styles from '../../styles/post.module.css'
 import { toastAdd } from '../../redux/actions/system'
+import { categoriesClear } from '../../redux/actions/categories'
 import api from '../../lib/api'
 import Upload from '../Forms/Upload'
 import Locale from '../Forms/Locale'
@@ -24,7 +25,6 @@ export const Edit = ({ post, setEdit, setPost }) => {
     const [locale, setLocale] = useState(post ? post.locale : main.locale)
     const [category, setCategory] = useState(post ? post.category : null)
     const [editorLoaded, setEditorLoaded] = useState(false)
-    const [redirect, setRedirect] = useState(null)
 
     const editPost = () => {
         let req = { title, data, image, locale, category }
@@ -38,7 +38,7 @@ export const Edit = ({ post, setEdit, setPost }) => {
                 setPost(null)
                 setEdit(false)
             } else {
-                setRedirect(res.id)
+                router.push(`/posts/${res.id}`)
             }
             dispatch(toastAdd({
                 header: t('system.success'),
@@ -47,7 +47,9 @@ export const Edit = ({ post, setEdit, setPost }) => {
                 background: 'success',
             }))
         }).catch(err => {
-            setEdit(false)
+            if (post) {
+                setEdit(false)
+            }
             dispatch(toastAdd({
                 header: t('system.error'),
                 text: err,
@@ -60,10 +62,6 @@ export const Edit = ({ post, setEdit, setPost }) => {
     useEffect(() => {
         setEditorLoaded(true)
     }, [])
-
-    if (redirect) {
-        router.push(`/posts/${redirect}`)
-    }
 
     return (
         <div>
@@ -117,7 +115,7 @@ export default ({ post, setPost }) => {
     const [edit, setEdit] = useState(false)
     const [toasts, setToasts] = useState([])
 
-    const deletePost = () => api(main, 'posts.rm', {id: post.id}).then(res => {
+    const rmPost = () => api(main, 'posts.rm', { id: post.id }).then(res => {
         router.push("/")
         dispatch(toastAdd({
             header: t('system.success'),
@@ -128,6 +126,23 @@ export default ({ post, setPost }) => {
     }).catch(err => dispatch(toastAdd({
         header: t('system.error'),
         text: t('system.no_access'),
+        color: 'white',
+        background: 'danger',
+    })))
+
+    const blockPost = ({ status }) => api(main, 'posts.save', { id: post.id, status }).then(res => {
+        setPost(null)
+        setEdit(null)
+        dispatch(categoriesClear())
+        dispatch(toastAdd({
+            header: t('system.success'),
+            text: status ? t('system.unblocked') : t('system.blocked'),
+            color: 'white',
+            background: 'success',
+        }))
+    }).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
         color: 'white',
         background: 'danger',
     })))
@@ -145,20 +160,37 @@ export default ({ post, setPost }) => {
                     <h1>{ post.title }</h1>
                 </div>
                 <div className="col-md-4 mb-3" style={{ textAlign: 'right' }}>
-                    { profile.status >= 2 && (<>
-                        <button
-                            className="btn btn-outline-secondary"
-                            onClick={ () => setEdit(!edit) }
-                        >
-                            <i className={ edit ? "fa-regular fa-eye" : "fa-solid fa-pencil" } />
-                        </button>
-                        <button
-                            className="btn btn-danger"
-                            onClick={ deletePost }
-                        >
-                            <i className="fa-solid fa-trash" />
-                        </button>
-                    </>) }
+                    { profile.status >= 2 && (
+                        <>
+                            <button
+                                className="btn btn-outline-secondary"
+                                onClick={ () => setEdit(!edit) }
+                            >
+                                <i className={ edit ? "fa-regular fa-eye" : "fa-solid fa-pencil" } />
+                            </button>
+                            { post.status ? (
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={ () => blockPost({ status: 0 }) }
+                                >
+                                    <i className="fa-solid fa-lock" />
+                                </button>
+                            ) : (
+                                <button
+                                    className="btn btn-success"
+                                    onClick={ () => blockPost({ status: 1 }) }
+                                >
+                                    <i className="fa-solid fa-lock-open" />
+                                </button>
+                            ) }
+                            <button
+                                className="btn btn-danger"
+                                onClick={ rmPost }
+                            >
+                                <i className="fa-solid fa-trash" />
+                            </button>
+                        </>
+                    ) }
                 </div>
             </div>
 

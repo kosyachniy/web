@@ -17,6 +17,7 @@ export default ({ post }) => {
                             {/* <span className={ `badge ${styles.badge} badge-success` } style={ marginRight: '10px', fontSize: '15px' }>
                                 <img src="/static/icon/{{ icon }}.svg">
                             </span> */}
+                            { !post.status && <i className="fa-solid fa-lock me-2" /> }
                             { post.title }
                         </p>
 
