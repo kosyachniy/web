@@ -17,14 +17,12 @@ import api from '../lib/api'
 import socketIO from '../lib/sockets'
 // import Loader from '../components/Loader'
 
-// Structure
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-
-// Users
 import Auth from '../components/Auth'
 import AuthMail from '../components/Auth/Mail'
 import Online from '../components/Online'
+import Toasts from '../components/Toast'
 
 
 const Body = ({ Component, pageProps }) => {
@@ -34,16 +32,18 @@ const Body = ({ Component, pageProps }) => {
     const main = useSelector(state => state.main)
     const categories = useSelector(state => state.categories)
 
+    // Online
     useEffect(() => {
-        // Online
-        socketIO.emit('online', { token: main.token })
-        socketIO.on('online_add', x => dispatch(onlineAdd(x)))
-        socketIO.on('online_del', x => dispatch(onlineDelete(x)))
-        socketIO.on('disconnect', () => dispatch(onlineReset()))
-    }, [])
+        if (system.prepared) {
+            socketIO.emit('online', { token: main.token })
+            socketIO.on('online_add', x => dispatch(onlineAdd(x)))
+            socketIO.on('online_del', x => dispatch(onlineDelete(x)))
+            socketIO.on('disconnect', () => dispatch(onlineReset()))
+        }
+    }, [system.prepared])
 
+    // UTM
     useEffect(() => {
-        // UTM
         if (router.isReady) {
             router.query['utm'] && !main.utm && dispatch(setUtm(router.query['utm']))
             dispatch(systemPrepared())
@@ -83,6 +83,8 @@ const Body = ({ Component, pageProps }) => {
             { system.popup === 'online' && (
                 <Online />
             ) }
+
+            <Toasts toasts={ system.toasts } />
         </>
     )
 }

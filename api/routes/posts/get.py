@@ -10,6 +10,7 @@ from consys.errors import ErrorAccess
 
 from models.post import Post
 from models.category import Category
+from models.track import Track
 from services.auth import sign
 
 
@@ -38,6 +39,16 @@ async def handler(
     # TODO: -> middleware
     if user.status < 2:
         raise ErrorAccess('get')
+
+    # Action tracking
+    if data.search:
+        Track(
+            title='post_search',
+            data={'search': data.search},
+            user=user.id,
+            token=request.state.token,
+            ip=request.state.ip,
+        ).save()
 
     # Fields
     fields = {

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 import Button from 'react-bootstrap/Button'
 
-import { popupSet } from '../../redux/actions/system'
+import { popupSet, toastAdd } from '../../redux/actions/system'
 import { profileIn } from '../../redux/actions/profile'
 import api from '../../lib/api'
 import styles from '../../styles/mail.module.css'
@@ -29,7 +29,12 @@ export default () => {
         }).then(res => {
             dispatch(profileIn(res))
             dispatch(popupSet(null))
-        })
+        }).catch(err => dispatch(toastAdd({
+            header: t('system.error'),
+            text: err,
+            color: 'white',
+            background: 'danger',
+        })))
 
         event.preventDefault()
     }
@@ -63,11 +68,11 @@ export default () => {
                     </div>
                     <div className={ styles.pass_info }>
                         <span style={ password.length >= 6 ? { color: 'var(--bs-green)' } : { color: '#e74c3c' } }>
-                            <i class={ password.length >= 6 ? "bi bi-check-circle" : "bi bi-x-circle" } />
+                            <i className={ password.length >= 6 ? "bi bi-check-circle" : "bi bi-x-circle" } />
                             &nbsp; { t('profile.passwordTip1') }
                         </span>
                         <span style={ checkPassword(password) ? { color: 'var(--bs-green)' } : { color: '#e74c3c' } }>
-                            <i class={ checkPassword(password) ? "bi bi-check-circle" : "bi bi-x-circle" } />
+                            <i className={ checkPassword(password) ? "bi bi-check-circle" : "bi bi-x-circle" } />
                             &nbsp; { t('profile.passwordTip2') }
                         </span>
                     </div>

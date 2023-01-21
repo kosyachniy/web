@@ -4,6 +4,7 @@ export default (state = {
   search: '',
   prepared: false,
   popup: null,
+  toasts: [],
 }, action: AnyAction) => {
   switch (action.type) {
     case 'SYSTEM_PREPARED':
@@ -16,6 +17,12 @@ export default (state = {
       return {
         ...state,
         popup: action.popup,
+      };
+
+    case 'SYSTEM_TOAST':
+      return {
+        ...state,
+        toasts: [ ...state.toasts, action.toast ],
       };
 
     case 'SEARCH':

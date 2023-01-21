@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Button from 'react-bootstrap/Button'
 
 import styles from '../../styles/profile.module.css'
+import { toastAdd } from '../../redux/actions/system'
 import { profileUpdate } from '../../redux/actions/profile'
 import api from '../../lib/api'
 import Upload from '../../components/Forms/Upload'
@@ -42,7 +43,12 @@ export default () => {
                 social: res.users.social,
                 status: res.users.status,
             }))
-        )
+        ).catch(err => dispatch(toastAdd({
+            header: t('system.error'),
+            text: err,
+            color: 'white',
+            background: 'danger',
+        })))
     }, [])
 
     if (!profile.id) {
@@ -77,7 +83,12 @@ export default () => {
             res => dispatch(profileUpdate({
                 login, image, name, surname, phone, mail,
             }))
-        )
+        ).catch(err => dispatch(toastAdd({
+            header: t('system.error'),
+            text: err,
+            color: 'white',
+            background: 'danger',
+        })))
     }
 
     return (

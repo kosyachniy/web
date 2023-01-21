@@ -36,7 +36,13 @@
         "settings": "Настройки",
         "admin": "Админка",
         "analytics": "Аналитика",
-        "categories": "Категории"
+        "categories": "Категории",
+        "success": "Успешно",
+        "error": "Ошибка",
+        "now": "сейчас",
+        "no_access": "Нет прав",
+        "saved": "Сохранено",
+        "deleted": "Удалено"
     },
     "brand": {
         "description": "Шаблонное веб приложение",

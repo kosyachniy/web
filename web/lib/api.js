@@ -10,7 +10,7 @@ async function serverRequest(method = '', data = {}) {
   });
 }
 
-const api = (main, method, data = {}, setted = false) => new Promise((resolve) => {
+const api = (main, method, data = {}, setted = false) => new Promise((resolve, reject) => {
   // TODO: reject errors
   serverRequest(method, data).then(async (response) => {
     if (!response.ok) {
@@ -25,7 +25,7 @@ const api = (main, method, data = {}, setted = false) => new Promise((resolve) =
       } else {
         const text = await response.text();
         console.log('Error', response.status, text);
-        resolve(text);
+        reject(text);
       }
     } else {
       resolve(await response.json());

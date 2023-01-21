@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'next-i18next'
 
 import styles from '../styles/card.module.css'
+import { toastAdd } from '../redux/actions/system'
 import { categoriesClear } from '../redux/actions/categories'
 import api from '../lib/api'
 import Upload from './Forms/Upload'
@@ -18,7 +19,6 @@ const Edit = ({
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
     const main = useSelector(state => state.main)
-    const categories = useSelector(state => state.categories)
     const [title, setTitle] = useState(category ? category.title : '')
     const [data, setData] = useState(category ? category.data : '')
     const [image, setImage] = useState(category ? category.image : null)
@@ -38,12 +38,20 @@ const Edit = ({
         }
 
         api(main, 'categories.save', req).then(res => {
-            if (res === 'save') {
-                // TODO: notify about no access
-            }
             setEdit(null)
             dispatch(categoriesClear())
-        })
+            dispatch(toastAdd({
+                header: t('system.success'),
+                text: t('system.saved'),
+                color: 'white',
+                background: 'success',
+            }))
+        }).catch(err => dispatch(toastAdd({
+            header: t('system.error'),
+            text: err,
+            color: 'white',
+            background: 'danger',
+        })))
     }
 
     useEffect(() => {

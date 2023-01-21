@@ -36,7 +36,13 @@
         "settings": "Settings",
         "admin": "Admin",
         "analytics": "Analytics",
-        "categories": "Categories"
+        "categories": "Categories",
+        "success": "Success",
+        "error": "Error",
+        "now": "just now",
+        "no_access": "No access",
+        "saved": "Saved",
+        "deleted": "Deleted"
     },
     "brand": {
         "description": "Template web app",

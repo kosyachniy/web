@@ -12,7 +12,7 @@ export default ({ locale, setLocale }) => {
             <select
                 className="form-select"
                 id="categoryLocale"
-                value={ locale }
+                value={ locale || "" }
                 onChange={ event => setLocale(event.target.value) }
             >
                 <option value="" defaultValue>🌎 { t('system.worldwide') }</option>

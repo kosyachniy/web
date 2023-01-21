@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+import { toastAdd } from '../../redux/actions/system'
 import api from '../../lib/api'
 import Post from '../../components/Post'
 import { Posts } from './'
 
 
 export default ({ id }) => {
+    const dispatch = useDispatch()
     const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
     const isPost = !isNaN(id.split('-').pop())
@@ -20,11 +22,21 @@ export default ({ id }) => {
 
     const getCategory = (data={}) => api(main, 'categories.get', data).then(
         res => res.categories && setCategory(res.categories)
-    )
+    ).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+    })))
 
     const getPost = (data={}) => api(main, 'posts.get', data).then(
         res => res.posts && setPost(res.posts)
-    )
+    ).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+    })))
 
     if (isPost) {
         useEffect(() => {
@@ -41,9 +53,7 @@ export default ({ id }) => {
 
         if (!category) {
             return (
-                <>
-                    404 Not Found
-                </>
+                <></>
             )
         }
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { popupSet, searching } from '../redux/actions/system'
+import { popupSet, toastAdd, searching } from '../redux/actions/system'
 import { profileOut } from '../redux/actions/profile'
 import api from '../lib/api'
 import styles from '../styles/header.module.css'
@@ -116,7 +116,12 @@ const Profile = () => {
 
     const signOut = () => api(main, 'account.exit', {}).then(
         res => dispatch(profileOut(res))
-    )
+    ).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+    })))
 
     if (!profile.id) {
         return (

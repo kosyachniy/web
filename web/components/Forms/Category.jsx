@@ -34,7 +34,7 @@ export default ({ category, setCategory, exclude=null, custom=null }) => {
             <select
                 className="form-select"
                 id="category"
-                value={ category }
+                value={ category || "0" }
                 onChange={ event => setCategory(event.target.value) }
             >
                 <option value="0" defaultValue>{ t('categories.top') }</option>

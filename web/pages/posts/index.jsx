@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+import { toastAdd } from '../../redux/actions/system'
 import { displaySet } from '../../redux/actions/main'
 import api from '../../lib/api'
 import Grid from '../../components/Post/Grid'
@@ -20,13 +21,18 @@ export const Posts = ({ category=null }) => {
 
     const getPost = (data={}) => api(main, 'posts.get', data).then(
         res => res.posts && setPosts(res.posts)
-    )
+    ).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+    })))
 
     useEffect(() => {
         system.prepared && getPost({
             category: category && category.id,
             locale: main.locale,
-            search: system.search,
+            search: system.search && system.search.length >= 3 ? system.search : '',
         })
     }, [
         system.prepared,

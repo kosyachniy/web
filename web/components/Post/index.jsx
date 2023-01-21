@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 // import MathJax from 'react-mathjax-preview'
 
 import styles from '../../styles/post.module.css'
+import { toastAdd } from '../../redux/actions/system'
 import api from '../../lib/api'
 import Upload from '../Forms/Upload'
 import Locale from '../Forms/Locale'
@@ -14,6 +15,7 @@ import Editor from '../Forms/Editor'
 
 export const Edit = ({ post, setEdit, setPost }) => {
     const { t } = useTranslation('common')
+    const dispatch = useDispatch()
     const router = useRouter()
     const main = useSelector(state => state.main)
     const [title, setTitle] = useState(post ? post.title : '')
@@ -32,15 +34,26 @@ export const Edit = ({ post, setEdit, setPost }) => {
         }
 
         api(main, 'posts.save', req).then(res => {
-            if (res === 'save') {
-                // TODO: notify about no access
-                setEdit(false)
-            } else if (post) {
+            if (post) {
                 setPost(null)
                 setEdit(false)
             } else {
                 setRedirect(res.id)
             }
+            dispatch(toastAdd({
+                header: t('system.success'),
+                text: t('system.saved'),
+                color: 'white',
+                background: 'success',
+            }))
+        }).catch(err => {
+            setEdit(false)
+            dispatch(toastAdd({
+                header: t('system.error'),
+                text: err,
+                color: 'white',
+                background: 'danger',
+            }))
         })
     }
 
@@ -96,14 +109,28 @@ export const Edit = ({ post, setEdit, setPost }) => {
 }
 
 export default ({ post, setPost }) => {
+    const { t } = useTranslation('common')
+    const dispatch = useDispatch()
     const router = useRouter()
     const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
     const [edit, setEdit] = useState(false)
+    const [toasts, setToasts] = useState([])
 
-    const deletePost = () => api(main, 'posts.rm', {id: post.id}).then(
+    const deletePost = () => api(main, 'posts.rm', {id: post.id}).then(res => {
         router.push("/")
-    )
+        dispatch(toastAdd({
+            header: t('system.success'),
+            text: t('system.deleted'),
+            color: 'white',
+            background: 'success',
+        }))
+    }).catch(err => dispatch(toastAdd({
+        header: t('system.error'),
+        text: t('system.no_access'),
+        color: 'white',
+        background: 'danger',
+    })))
 
     if (!post) {
         return (
@@ -117,13 +144,13 @@ export default ({ post, setPost }) => {
                 <div className="col-md-8">
                     <h1>{ post.title }</h1>
                 </div>
-                <div className="col-md-4" style={{ textAlign: 'right' }}>
+                <div className="col-md-4 mb-3" style={{ textAlign: 'right' }}>
                     { profile.status >= 2 && (<>
                         <button
                             className="btn btn-outline-secondary"
                             onClick={ () => setEdit(!edit) }
                         >
-                            <i class={ edit ? "fa-regular fa-eye" : "fa-solid fa-pencil" } />
+                            <i className={ edit ? "fa-regular fa-eye" : "fa-solid fa-pencil" } />
                         </button>
                         <button
                             className="btn btn-danger"
@@ -140,6 +167,8 @@ export default ({ post, setPost }) => {
                     post={ post }
                     setEdit={ setEdit }
                     setPost={ setPost }
+                    toasts={ toasts }
+                    setToasts={ setToasts }
                 />
             ) : (
                 <>

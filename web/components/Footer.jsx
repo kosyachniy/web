@@ -30,7 +30,7 @@ export default () => {
                         <i className={ main.theme === 'dark' ? "bi bi-sun-fill" : "fa-solid fa-moon"} />
                     </li>
                     <Link
-                        href=""
+                        href="#"
                         locale={ main.locale === 'ru' ? 'en' : 'ru' }
                     >
                         <li
