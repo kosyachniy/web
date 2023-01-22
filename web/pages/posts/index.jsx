@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -10,19 +11,26 @@ import { displaySet } from '../../redux/actions/main'
 import api from '../../lib/api'
 import Grid from '../../components/Post/Grid'
 import Feed from '../../components/Post/Feed'
+import Paginator from '../../components/Paginator'
 
 
 export const Posts = ({ category=null }) => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
+    const router = useRouter()
     const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
+    const page = !isNaN(router.query.page) ? (+router.query.page || 1) : 1
     const [posts, setPosts] = useState([])
+    const [lastPage, setLastPage] = useState(page)
 
-    const getPost = (data={}) => api(main, 'posts.get', data).then(
-        res => res.posts && setPosts(res.posts)
-    ).catch(err => dispatch(toastAdd({
+    const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
+        if (res.posts) {
+            setPosts(res.posts)
+            res.count && setLastPage(Math.floor(res.count / 18) + Boolean(res.count % 18))
+        }
+    }).catch(err => dispatch(toastAdd({
         header: t('system.error'),
         text: err,
         color: 'white',
@@ -34,12 +42,15 @@ export const Posts = ({ category=null }) => {
             category: category && category.id,
             locale: main.locale,
             search: system.search && system.search.length >= 3 ? system.search : '',
+            limit: 18,
+            offset: (page - 1) * 18,
         })
     }, [
         system.prepared,
         system.search && system.search.length >= 3 ? system.search : false,
         main.locale,
         category,
+        page,
     ])
 
     return (
@@ -96,6 +107,7 @@ export const Posts = ({ category=null }) => {
                     <Grid posts={ posts } />
                 )
             }
+            <Paginator page={ page } lastPage={ lastPage } />
         </>
     )
 }

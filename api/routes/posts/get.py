@@ -19,7 +19,7 @@ router = APIRouter()
 
 class Type(BaseModel):
     id: int | list[int] = None
-    limit: int = None
+    limit: int = 12  # 24 ?
     offset: int = None
     search: str = None
     my: bool = None
@@ -121,6 +121,40 @@ async def handler(
         handler=handle,
     )
 
+    # Count
+    # TODO: with search
+    count = None
+    if not data.id:
+        if data.search:
+            more = Post.get(
+                limit=1,
+                offset=(data.offset or 0) + data.limit,
+                search=data.search,
+                fields={},
+                status={'$exists': False} if user.status < 5 else None,
+                category=data.category and {
+                    '$in': Category.get_childs(data.category),
+                },
+                locale=data.locale and {
+                    '$in': [None, data.locale],
+                },  # NOTE: None → all locales
+                extra=cond or None,
+            )
+            if more:
+                count = data.limit + 1
+
+        else:
+            count = Post.count(
+                status={'$exists': False} if user.status < 5 else None,
+                category=data.category and {
+                    '$in': Category.get_childs(data.category),
+                },
+                locale=data.locale and {
+                    '$in': [None, data.locale],
+                },  # NOTE: None → all locales
+                extra=cond or None,
+            )
+
     # Sort
     if isinstance(posts, list):
         posts = sorted(posts, key=lambda x: x['updated'], reverse=True)
@@ -128,4 +162,5 @@ async def handler(
     # Response
     return {
         'posts': posts,
+        'count': count,
     }
