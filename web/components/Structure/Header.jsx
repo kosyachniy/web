@@ -1,3 +1,4 @@
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -43,7 +44,9 @@ const Navigation = () => {
                         >
                             { category.title }
                         </Link>
-                    ) : (<></>)) }
+                    ) : (
+                        <React.Fragment key={ category.id }></React.Fragment>
+                    )) }
                 </ul>
             </li>
             {/* <li className="nav-item">

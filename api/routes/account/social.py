@@ -86,10 +86,11 @@ async def handler(
         data.name = response.get('first_name')
         data.surname = response.get('last_name')
         data.login = response.get('nickname')
-        data.image = upload_file(
-            requests.get(response['photo_max_orig'], timeout=30).content,
-            file_type='png',
-        ) if 'photo_max_orig' in response else None
+        data.image = (
+            upload_file(response['photo_max_orig'])
+            if response.get('photo_max_orig')
+            else None
+        )
 
     # Google
     elif data.social == 4:

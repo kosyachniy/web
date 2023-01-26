@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
+import Link from 'next/link'
 
 import { popupSet } from '../../redux/actions/system'
 import styles from '../../styles/auth.module.css'
@@ -18,20 +19,21 @@ export default () => {
                 >
                     <i className="bi bi-envelope-fill" />
                 </button>
-                <button
+                <Link href={ `https://accounts.google.com/o/oauth2/auth?redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_ID}&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile` }>
+                    <button
+                        className={ styles.btn_g }
+                        onClick={ () => localStorage.setItem('previousPath', document.location.href) }
+                    >
+                        <i className="fa-brands fa-google" />
+                    </button>
+                </Link>
+                {/* <button
                     href={ `https://oauth.vk.com/authorize?client_id=${process.env.NEXT_PUBLIC_VK_ID}&display=popup&redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&scope=4194304&response_type=code&v=5.103` }
                     className={ styles.btn_vk }
                     onClick={ () => localStorage.setItem('previousPath', document.location.href) }
                 >
                     <i className="fa-brands fa-vk" />
-                </button>
-                <button
-                    href={ `https://accounts.google.com/o/oauth2/auth?redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_ID}&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile` }
-                    className={ styles.btn_g }
-                    onClick={ () => localStorage.setItem('previousPath', document.location.href) }
-                >
-                    <i className="fa-brands fa-google" />
-                </button>
+                </button> */}
                 <button
                     href={ `https://t.me/retestme?start=<token>` }
                     target="_blank"

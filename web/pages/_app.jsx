@@ -30,17 +30,18 @@ const Body = ({ Component, pageProps }) => {
     const dispatch = useDispatch()
     const system = useSelector(state => state.system)
     const main = useSelector(state => state.main)
+    const online = useSelector(state => state.online)
     const categories = useSelector(state => state.categories)
 
     // Online
     useEffect(() => {
-        if (system.prepared) {
+        if (system.prepared && !online.count) {
             socketIO.emit('online', { token: main.token })
             socketIO.on('online_add', x => dispatch(onlineAdd(x)))
             socketIO.on('online_del', x => dispatch(onlineDelete(x)))
             socketIO.on('disconnect', () => dispatch(onlineReset()))
         }
-    }, [system.prepared])
+    }, [router.asPath, system.prepared])
 
     // UTM
     useEffect(() => {

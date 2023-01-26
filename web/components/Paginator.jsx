@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import Link from 'next/link'
 
 
 export default ({ page, lastPage }) => {
@@ -10,45 +11,45 @@ export default ({ page, lastPage }) => {
                 <ul className="pagination mb-0">
                     { page > 1 && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href="?page=1">«</a>
+                            <Link className={ `page-link bg-${main.theme}` } href="?page=1">«</Link>
                         </li>
                     ) }
                     { page > 1 && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${page-1}` }>‹</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${page-1}` }>‹</Link>
                         </li>
                     ) }
                     { page > 2 && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${page-2}` }>{ page - 2 }</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${page-2}` }>{ page - 2 }</Link>
                         </li>
                     ) }
                     { page > 1 && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${page-1}` }>{ page - 1 }</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${page-1}` }>{ page - 1 }</Link>
                         </li>
                     ) }
                     <li className="page-item">
-                        <a className={ `page-link bg-${main.theme} disabled` } href={ `?page=${page}` }>{ page }</a>
+                        <Link className={ `page-link bg-${main.theme} disabled` } href={ `?page=${page}` }>{ page }</Link>
                     </li>
                     { page < lastPage && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${page+1}` }>{ page + 1 }</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${page+1}` }>{ page + 1 }</Link>
                         </li>
                     ) }
                     { page < lastPage -1 && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${page+2}` }>{ page + 2 }</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${page+2}` }>{ page + 2 }</Link>
                         </li>
                     ) }
                     { page < lastPage && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${page+1}` }>›</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${page+1}` }>›</Link>
                         </li>
                     ) }
                     { page < lastPage && (
                         <li className="page-item">
-                            <a className={ `page-link bg-${main.theme}` } href={ `?page=${lastPage}` }>»</a>
+                            <Link className={ `page-link bg-${main.theme}` } href={ `?page=${lastPage}` }>»</Link>
                         </li>
                     ) }
                 </ul>
