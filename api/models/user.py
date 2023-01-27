@@ -109,5 +109,9 @@ class User(Base):
         """ Get user social info by social ID """
         for i in self.social:
             if i['id'] == social:
-                return i['user'], i.get('locale') or cfg('locale')
-        return None, None
+                return {
+                    'id': i['user'],
+                    'login': i.get('login'),
+                    'locale': i.get('locale') or cfg('locale'),
+                }
+        return None

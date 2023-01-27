@@ -75,10 +75,12 @@ async def analytics():
         users_reg[user.id] = user.utm
 
         social = user.get_social(2)
-        if social[1]:
-            contact = f"https://t.me/{social[1]}"
+        if social is None:
+            contact = ""
+        elif social['login']:
+            contact = f"https://t.me/{social['login']}"
         else:
-            contact = f"tg://user?id={social[0]}"
+            contact = f"tg://user?id={social['id']}"
 
         users[user.id] = {
             'id': user.id,

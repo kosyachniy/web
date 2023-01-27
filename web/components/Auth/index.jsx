@@ -27,7 +27,7 @@ export default () => {
                         <i className="fa-brands fa-google" />
                     </button>
                 </Link>
-                <Link href={ `https://t.me/retestme?start=auth` }>
+                <Link href={ `https://t.me/${process.env.NEXT_PUBLIC_TG_BOT}?start=auth` }>
                     <button
                         target="_blank"
                         rel="noopener noreferrer"

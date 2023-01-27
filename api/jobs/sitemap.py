@@ -90,7 +90,7 @@ async def generate_file(links, locale=None, kind=None, ind=None):
     with open(f'/data/{sitemap_name}', 'w', encoding='utf-8') as file:
         print(BODY_SUB.format(data), file=file)
 
-    with open(f'/data/{sitemap_name}', 'rb', encoding='utf-8') as f_in:
+    with open(f'/data/{sitemap_name}', 'rb') as f_in:
         sitemap_name += '.gz'
         with gzip.open(f'/data/{sitemap_name}', 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)

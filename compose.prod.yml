@@ -162,6 +162,7 @@ services:
       NEXT_PUBLIC_GOOGLE_MAPS_LAT: ${GOOGLE_MAPS_LAT}
       NEXT_PUBLIC_GOOGLE_MAPS_LNG: ${GOOGLE_MAPS_LNG}
       NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
+      NEXT_PUBLIC_TG_BOT: ${TG_BOT}
     ports:
       - ${WEB_PORT}:3000
     restart: unless-stopped
