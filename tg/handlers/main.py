@@ -2,6 +2,7 @@
 Main commands handler
 """
 
+import jwt
 from libdev.codes import get_flag
 
 from middlewares.prepare_message import prepare_message
@@ -28,6 +29,22 @@ async def start(message):
 
     chat, text, cache = await prepare_message(message)
     if chat is None:
+        return
+
+    if text and ' ' in text and text.split()[1] == 'auth':
+        code = jwt.encode({
+            'user': chat.id,
+        }, cfg('jwt'), algorithm='HS256')
+
+        text = (
+            f"Для авторизации на сайте, жми:"
+            f"\n{cfg('web')}callback/telegram?code={code}"
+        )
+
+        await tg.send(chat.id, text, buttons=[{
+            'name': 'Открыть',
+            'data': f"{cfg('web')}callback/telegram?code={code}",
+        }])
         return
 
     post_id = cache.get('p')
@@ -75,11 +92,16 @@ async def info(message):
         return
 
     cache['m'] = await tg.send(chat.id, (
-        f"Ты авторизован как {get_user(chat.id)}"
-        f"\n\nWeb — это проект экосистемы Chill.Services"
-        f"\nСделано [Алексей Полоз](https://t.me/kosyachniy)"
+        f"Ты авторизован как {get_user(chat.id)}" # TODO: link to profile
+        f"\n\n{cfg('name')} — это проект экосистемы"
+        f" [chill](https://chill.services/)"
+        f"\nСделано [Алексей Полоз](https://t.me/kosyachniy)" # TODO: to .env
         f"\n\n🛟 Пиши по любым вопросам, проблемам и предложениям"
-    ), buttons=[{'name': 'Меню', 'data': 'menu'}])
+    ), buttons=[{
+        'name': 'Меню', 'data': 'menu',
+    }, {
+        'name': 'Профиль', 'data': 'profile',
+    }])
     save(chat.id, cache)
 
 @tg.dp.message_handler()

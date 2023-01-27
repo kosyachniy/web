@@ -42,6 +42,8 @@ export default () => {
             let type
             if (document.location.search.indexOf('google') !== -1) {
                 type = 'g'
+            } else if (document.location.search.indexOf('telegram') !== -1) {
+                type = 'tg'
             } else if (document.location.search.indexOf('state=fb') !== -1) {
                 type = 'fb'
             } else {

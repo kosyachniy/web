@@ -47,6 +47,7 @@ async def on_start(_):
     await tg.dp.bot.set_my_commands([
         BotCommand(command='start', description="Перезапустить бота"),
         BotCommand(command='menu', description="Мои посты"),
+        BotCommand(command='profile', description="Профиль"),
         BotCommand(command='help', description="Об экосистеме"),
     ])
 
