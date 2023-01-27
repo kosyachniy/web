@@ -74,6 +74,7 @@ services:
       # For sitemap
       - ${DATA_PATH}/sitemaps:/data/sitemaps
       - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
+      - ${DATA_PATH}/robots.txt:/data/robots.txt
     command: bash -c "cd /app && python job.py"
 
   node_exporter:
