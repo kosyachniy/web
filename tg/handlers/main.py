@@ -36,14 +36,9 @@ async def start(message):
             'user': chat.id,
         }, cfg('jwt'), algorithm='HS256')
 
-        text = (
-            f"Для авторизации на сайте, жми:"
-            f"\n{cfg('web')}callback/telegram?code={code}"
-        )
-
-        await tg.send(chat.id, text, buttons=[{
+        await tg.send(chat.id, "Для авторизации на сайте, жми:", buttons=[{
             'name': 'Открыть',
-            'data': f"{cfg('web')}callback/telegram?code={code}",
+            'data': f"{cfg('web')}callback?code={code}&social=telegram",
         }])
         return
 
