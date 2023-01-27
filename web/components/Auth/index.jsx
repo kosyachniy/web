@@ -27,22 +27,24 @@ export default () => {
                         <i className="fa-brands fa-google" />
                     </button>
                 </Link>
-                {/* <button
-                    href={ `https://oauth.vk.com/authorize?client_id=${process.env.NEXT_PUBLIC_VK_ID}&display=popup&redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&scope=4194304&response_type=code&v=5.103` }
-                    className={ styles.btn_vk }
-                    onClick={ () => localStorage.setItem('previousPath', document.location.href) }
-                >
-                    <i className="fa-brands fa-vk" />
-                </button> */}
-                <button
-                    href={ `https://t.me/retestme?start=<token>` }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={ styles.btn_tg }
-                    onClick={ () => localStorage.setItem('previousPath', document.location.href) }
-                >
-                    <i className="fa-brands fa-telegram" />
-                </button>
+                <Link href={ `https://t.me/retestme?start=auth` }>
+                    <button
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={ styles.btn_tg }
+                        onClick={ () => localStorage.setItem('previousPath', document.location.href) }
+                    >
+                        <i className="fa-brands fa-telegram" />
+                    </button>
+                </Link>
+                {/* <Link href={ `https://oauth.vk.com/authorize?client_id=${process.env.NEXT_PUBLIC_VK_ID}&display=popup&redirect_uri=${process.env.NEXT_PUBLIC_WEB}callback&scope=4194304&response_type=code&v=5.103` }>
+                    <button
+                        className={ styles.btn_vk }
+                        onClick={ () => localStorage.setItem('previousPath', document.location.href) }
+                    >
+                        <i className="fa-brands fa-vk" />
+                    </button>
+                </Link> */}
             </Popup>
         </div>
     )

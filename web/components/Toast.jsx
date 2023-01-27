@@ -30,7 +30,7 @@ const Toast = ({ header, text, color='black', background='light' }) => {
 export default ({ toasts }) => (
     <div
         className="position-fixed bottom-0 end-0 p-3"
-        style={{ zIndex: 11 }}
+        style={{ zIndex: 5000 }}
     >
         { toasts.map((toast, i) =>
             <Toast { ...toast } key={ i } />

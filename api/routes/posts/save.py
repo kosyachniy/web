@@ -74,7 +74,7 @@ async def handler(
 
     # Track
     Track(
-        title='post_save',
+        title='post_add' if new else 'post_edit',
         data={
             'id': post.id,
             'title': post.title,
