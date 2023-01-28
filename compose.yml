@@ -91,6 +91,8 @@ services:
       NEXT_PUBLIC_GOOGLE_MAPS_LAT: ${GOOGLE_MAPS_LAT}
       NEXT_PUBLIC_GOOGLE_MAPS_LNG: ${GOOGLE_MAPS_LNG}
       NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
+      NEXT_PUBLIC_TG_BOT: ${TG_BOT}
+      NEXT_PUBLIC_ANALYTICS_SHEET: ${ANALYTICS_SHEET}
     volumes:
       - ./web/public:/app/public
       - ./web/styles:/app/styles

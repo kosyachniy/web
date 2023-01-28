@@ -163,18 +163,20 @@ const Profile = () => {
                     <i className="fa-solid fa-gear" />
                     &nbsp; { t('system.settings') }
                 </Link> */}
-                {/* <Link href="/analytics/" className="dropdown-item">
-                    <i className="bi bi-funnel" />
-                    &nbsp; { t('system.analytics') }
-                </Link> */}
                 {/* <Link href="/billing/" className="dropdown-item">
                     { t('system.billing') }
                 </Link> */}
                 { profile.status >= 6 && (
-                    <Link href="/eye/" className="dropdown-item">
-                        <i className="bi bi-cone-striped" />
-                        &nbsp; { t('system.admin') }
-                    </Link>
+                    <>
+                        <Link href={ `https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_ANALYTICS_SHEET}/` } className="dropdown-item">
+                            <i className="bi bi-funnel-fill" />
+                            &nbsp; { t('system.analytics') }
+                        </Link>
+                        <Link href="/eye/" className="dropdown-item">
+                            <i className="bi bi-cone-striped" />
+                            &nbsp; { t('system.admin') }
+                        </Link>
+                    </>
                 ) }
                 <div className="dropdown-item" onClick={ signOut }>
                     <i className="bi bi-door-open-fill" />
