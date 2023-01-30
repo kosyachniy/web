@@ -2,6 +2,8 @@
 Media handler
 """
 
+import io
+
 from middlewares.prepare_message import rm_last
 from middlewares.check_user import check_user
 from handlers.posts import send_post
@@ -15,11 +17,8 @@ async def handle_photo(message):
     """ Photo handler """
 
     chat = message.chat
-    image = await tg.bot.download_file(
-        (await tg.bot.get_file(
-            message.photo[-1].file_id
-        )).file_path
-    )
+    image = io.BytesIO()
+    await message.photo[-1].download(destination_file=image)
     text = message.caption or ''
     cache = get(chat.id, {})
 
@@ -72,11 +71,8 @@ async def handle_doc(message):
     chat = message.chat
     try:
         mime = message.document.mime_type
-        image = await tg.bot.download_file(
-            (await tg.bot.get_file(
-                message.document.file_id
-            )).file_path
-        )
+        image = io.BytesIO()
+        await message.document.download(destination_file=image)
     # pylint: disable=bare-except
     except:
         mime = None

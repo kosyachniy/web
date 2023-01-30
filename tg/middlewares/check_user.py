@@ -7,7 +7,7 @@ from lib.tg import tg
 from lib.queue import get, save
 
 
-async def check_user(chat, public=False, text=None, locale=None):
+async def check_user(chat, public=False, text=None, locale=None, image=None):
     """ Authorize user and check access """
 
     if chat.id < 0:
@@ -17,7 +17,7 @@ async def check_user(chat, public=False, text=None, locale=None):
     if text and ' ' in text:
         utm = text.split()[1]
 
-    res = await auth(chat, utm, locale)
+    res = await auth(chat, utm, locale, image)
 
     if res is None:
         cache = get(chat.id, {})
@@ -37,7 +37,7 @@ async def check_user(chat, public=False, text=None, locale=None):
             "Нет доступа 😛",
             buttons=[{'name': 'Мои посты', 'data': 'menu'}],
         )
-        await report.important("Несанкционированный доступ", {
+        await report.important("Illegal access", {
             'user': user_ids[chat.id],
             'name': user_titles[chat.id],
             'social_user': chat.id,

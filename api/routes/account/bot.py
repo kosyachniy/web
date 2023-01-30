@@ -16,6 +16,7 @@ class Type(BaseModel):
     login: str = None
     name: str = None
     surname: str = None
+    image: str = None
     utm: str = None
 
 @router.post("/bot/")
@@ -24,9 +25,6 @@ async def handler(
     data: Type = Body(...),
 ):
     """ By bot """
-
-    # TODO: image
-
     return await auth(request, data, 'bot', {
         'social': {
             '$elemMatch': {

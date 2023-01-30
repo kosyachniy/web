@@ -46,6 +46,7 @@ class Type(BaseModel):
     password: str = None
     name: str = None
     surname: str = None
+    image: str = None
     utm: str = None
 
 @router.post("/app/")

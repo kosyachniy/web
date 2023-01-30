@@ -132,6 +132,7 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
     user = User(
         utm=data.utm,
         locale=locale,
+        image=data.image,
         **req,
     )
 
@@ -332,6 +333,7 @@ class Type(BaseModel):
     # NOTE: For general authorization method fields
     name: str = None
     surname: str = None
+    image: str = None
     utm: str = None
 
 @router.post("/auth/")

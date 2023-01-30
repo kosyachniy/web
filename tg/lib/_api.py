@@ -2,6 +2,7 @@
 API functionality for the Telegram bot
 """
 
+import io
 import json
 import time
 
@@ -80,7 +81,7 @@ async def api(chat, method, data=None, locale=None, force=False):
 
     return int(res.status_code), res.json()
 
-async def auth(chat, utm=None, locale=None) -> bool:
+async def auth(chat, utm=None, locale=None, image=None) -> bool:
     """ User authentication """
 
     if chat.id in tokens:
@@ -126,6 +127,16 @@ async def auth(chat, utm=None, locale=None) -> bool:
 
         del tokens[chat.id]
         return
+
+    if data.get('new') and image:
+        image = (await image).photos or None
+        if image:
+            file = io.BytesIO()
+            await image[0][-1].download(destination_file=file)
+            image = await upload(chat, file.read())
+            await api(chat, 'account.save', {
+                'image': image,
+            })
 
     ## Update global variables
     user_ids[chat.id] = data['id']

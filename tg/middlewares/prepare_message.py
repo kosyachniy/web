@@ -41,7 +41,15 @@ async def prepare_message(data, action='typing'):
         await report.error("prepare_message", error=e)
 
     locale = message.from_user.language_code
-    if await check_user(chat, public=True, text=text, locale=locale):
+    image = message.from_user.get_profile_photos()
+
+    if await check_user(
+        chat,
+        public=True,
+        text=text,
+        locale=locale,
+        image=image,
+    ):
         return None, None, None
 
     return chat, text, cache

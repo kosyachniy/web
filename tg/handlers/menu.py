@@ -13,7 +13,7 @@ from lib.queue import save
 
 
 @tg.dp.message_handler(commands=['menu'])
-async def handler_menu(message):
+async def handler_menu_command(message):
     """ Menu handler """
 
     chat, _, cache = await prepare_message(message)
@@ -24,7 +24,7 @@ async def handler_menu(message):
     save(chat.id, cache)
 
 @tg.dp.callback_query_handler(lambda mes: mes.data == 'menu')
-async def handler_menu(message):
+async def handler_menu_callback(message):
     """ Menu handler """
 
     chat, _, cache = await prepare_message(message)
@@ -35,7 +35,7 @@ async def handler_menu(message):
     save(chat.id, cache)
 
 @tg.dp.message_handler(lambda msg: msg.text.lower() == 'мои посты')
-async def handler_menu(message):
+async def handler_menu_text(message):
     """ Menu handler """
 
     chat, _, cache = await prepare_message(message)
@@ -46,7 +46,7 @@ async def handler_menu(message):
     save(chat.id, cache)
 
 @tg.dp.message_handler(commands=['profile'])
-async def handler_profile(message):
+async def handler_profile_command(message):
     """ Profile """
 
     chat, _, _ = await prepare_message(message)
@@ -66,7 +66,7 @@ async def handler_profile(message):
     save(chat.id, {'m': message_id})
 
 @tg.dp.callback_query_handler(lambda mes: mes.data == 'profile')
-async def handler_profile(message):
+async def handler_profile_callback(message):
     """ Profile """
 
     chat, _, _ = await prepare_message(message)
@@ -86,7 +86,7 @@ async def handler_profile(message):
     save(chat.id, {'m': message_id})
 
 @tg.dp.message_handler(lambda msg: msg.text.lower() == 'профиль')
-async def handler_profile(message):
+async def handler_profile_text(message):
     """ Profile """
 
     chat, _, _ = await prepare_message(message)
