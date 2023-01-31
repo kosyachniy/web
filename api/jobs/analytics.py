@@ -172,9 +172,7 @@ async def handle(_):
     while True:
         try:
             count = await analytics()
-
-        # pylint: disable=broad-except
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             count = None
             await report.critical(str(e), error=e)
 

@@ -96,8 +96,7 @@ async def uploader(upload: bytes = File()):
 
     try:
         url = upload_file(io.BytesIO(upload), file_type='png')
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         await report.critical("Upload", error=e)
 
     return {

@@ -19,8 +19,7 @@ def get_user(token_id=None, socket_id=None, token_jwt=None, user_id=None):
     if token_jwt is not None:
         try:
             token = jwt.decode(token_jwt, cfg('jwt'), algorithms='HS256')
-        # pylint: disable=broad-except
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             pass
         else:
             return User.get(token['user']), token['token']

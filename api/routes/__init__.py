@@ -25,6 +25,5 @@ for loader, module_name, is_pkg in pkgutil.walk_packages(
         name = '/' + '/'.join(names)
         app.include_router(module.router, prefix=name, tags=names)
 
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(e)

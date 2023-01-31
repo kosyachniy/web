@@ -36,8 +36,7 @@ async def prepare_message(data, action='typing'):
             await tg.bot.send_chat_action(chat.id, action=action)
         if callback:
             await tg.bot.answer_callback_query(callback.id)
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         await report.error("prepare_message", error=e)
 
     locale = message.from_user.language_code

@@ -148,8 +148,7 @@ async def pay(data: Type = Body(...)):
         #         'subscription': user.subscription,
         #     }, room=socket.id)
 
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         await report.critical(str(e), error=e)
 
     return '', 200

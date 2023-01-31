@@ -45,8 +45,7 @@ def expire(key, ttl):
     """ Change expiration time """
     try:
         redis.expire(key, ttl)
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print("Redis expire error", e)
 
 def save(key, data, ttl=None):
@@ -56,8 +55,7 @@ def save(key, data, ttl=None):
 
     try:
         redis.set(key, data)
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print("Redis save error", e)
         return
 
@@ -69,8 +67,7 @@ def get(key, default=None):
 
     try:
         data = redis.get(key)
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print("Redis get error", e)
         return default
 

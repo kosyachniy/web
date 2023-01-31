@@ -89,8 +89,7 @@ async def handle_doc(message):
     if mime and image and cache.get('s') == 'img':
         try:
             image = await upload(chat, image.read())
-        # pylint: disable=broad-except
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             await tg.send(
                 chat.id,
                 "Неверный формат, попробуй ещё раз",

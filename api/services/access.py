@@ -53,8 +53,7 @@ class AccessMiddleware(BaseHTTPMiddleware):
 
         try:
             token = jwt.decode(token, self.jwt, algorithms='HS256')
-        # pylint: disable=broad-except
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             await report.warning("Invalid token", {
                 'url': url,
                 'token': token,

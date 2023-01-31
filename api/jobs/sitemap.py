@@ -183,8 +183,7 @@ async def handle(_):
     while True:
         try:
             await generate_sitemap()
-        # pylint: disable=broad-except
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             await report.critical(str(e), error=e)
 
         await asyncio.sleep(3600)  # 1 hour
