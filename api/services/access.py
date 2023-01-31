@@ -66,8 +66,4 @@ class AccessMiddleware(BaseHTTPMiddleware):
         request.state.user = token['user']
         request.state.network = token['network']
 
-        # Don't save IP of servers
-        if request.state.network in {'tg'}:
-            request.state.ip = None
-
         return await call_next(request)

@@ -8,9 +8,15 @@ import socketio
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
-from services.response import ResponseMiddleware
+from services.parameters import ParametersMiddleware
+from services.monitoring import MonitoringMiddleware
+from services.errors import ErrorsMiddleware
 from services.access import AccessMiddleware
+from services.limiter import get_uniq
 from services.on_startup import on_startup
 from lib import cfg, report
 
@@ -29,8 +35,15 @@ async def startup():
     # Tasks on start
     on_startup()
 
+# Limiter
+# NOTE: 6st middleware
+limits = ['25/second', '100/minute', '2500/hour', '10000/day']
+app.state.limiter = Limiter(key_func=get_uniq, default_limits=limits)
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+
 # JWT
-# NOTE: 3rd middleware
+# NOTE: 5st middleware
 app.add_middleware(
     AccessMiddleware,
     jwt_secret=cfg('jwt'),
@@ -40,9 +53,17 @@ app.add_middleware(
     },
 )
 
+# Errors
+# NOTE: 4st middleware
+app.add_middleware(ErrorsMiddleware)
+
 # Monitoring
+# NOTE: 3rd middleware
+app.add_middleware(MonitoringMiddleware)
+
+# Parameters
 # NOTE: 2nd middleware
-app.add_middleware(ResponseMiddleware)
+app.add_middleware(ParametersMiddleware)
 
 # CORS
 # NOTE: 1st middleware
@@ -58,27 +79,6 @@ app.add_middleware(
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 asgi = socketio.ASGIApp(sio)
 app.mount('/ws', asgi)
-
-# # Limiter
-
-# from flask import request, jsonify
-# from flask_limiter import Limiter
-
-# def get_ip():
-#     try:
-#         if 'ip' in request.json:
-#             return request.json['ip']
-
-#     except:
-#         pass
-
-#     return request.remote_addr
-
-# limiter = Limiter(
-#     app,
-#     key_func=get_ip,
-#     default_limits=['1000/day', '500/hour', '20/minute']
-# )
 
 
 @app.get("/")

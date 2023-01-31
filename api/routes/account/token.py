@@ -7,6 +7,7 @@ from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from libdev.codes import get_network
+from libdev.dev import check_public_ip
 from consys.errors import ErrorWrong
 
 from models.token import Token
@@ -52,8 +53,9 @@ async def handler(
     if not token.utm and data.utm:
         token.utm = data.utm
         save = True
-    if not token.ip and request.state.ip:
-        token.ip = request.state.ip
+    ip = check_public_ip(request.state.ip)
+    if not token.ip and ip:
+        token.ip = ip
         save = True
     if not token.locale and request.state.locale:
         token.locale = request.state.locale
