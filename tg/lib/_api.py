@@ -32,20 +32,19 @@ async def api(chat, method, data=None, locale=None, force=False):
     if data is None:
         data = {}
 
-    # 'locale': locales.get(chat.id, cfg('locale')),
+    headers = {
+        'accept-language': locale or locales.get(chat.id, cfg('locale')),
+    }
+    if chat.id in tokens:
+        headers['Authorization'] = f'Bearer {tokens[chat.id]}'
 
     # TODO: rm
     await report.debug("API request", {
         'user': chat.id,
         'method': method,
         'data': json.dumps(data, ensure_ascii=False)[:LOG_LIMIT],
+        'headers': headers,
     })
-
-    headers = {}
-    if chat.id in tokens:
-        headers['Authorization'] = f'Bearer {tokens[chat.id]}'
-    if locale:
-        headers['accept-language'] = locale
 
     # TODO: Rewrite `while True` & `time.sleep`
     while True:
@@ -72,14 +71,19 @@ async def api(chat, method, data=None, locale=None, force=False):
         })
         return 1, None
 
+    try:
+        data = res.json()
+    except requests.exceptions.JSONDecodeError:
+        data = res.text
+
     # TODO: rm
     await report.debug("API response", {
         'user': chat.id,
         'status': res.status_code,
-        'data': res.text,
+        'data': data,
     })
 
-    return int(res.status_code), res.json()
+    return int(res.status_code), data
 
 async def auth(chat, utm=None, locale=None, image=None) -> bool:
     """ User authentication """
@@ -104,7 +108,7 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
 
     # Default settings
     if chat.id not in locales:
-        locales[chat.id] = cfg('locale')
+        locales[chat.id] = locale or cfg('locale')
 
     # Auth
     error, data = await api(chat, 'account.bot', {
@@ -128,6 +132,18 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
         del tokens[chat.id]
         return
 
+    # Update global variables
+    tokens[chat.id] = data['token']
+    user_ids[chat.id] = data['id']
+    user_logins[chat.id] = data.get('login')
+    user_names[chat.id] = data.get('name', '')
+    user_titles[chat.id] = data.get('title', '')
+    user_statuses[chat.id] = data.get('status', 3)
+    if 'locale' in data['social']:
+        locales[chat.id] = data['social']['locale']
+        locales_chosen[chat.id] = True
+
+    # Saving the avatar
     if image and (data.get('new') or not data.get('image')):
         image = (await image).photos or None
         if image:
@@ -137,16 +153,6 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
             await api(chat, 'account.save', {
                 'image': image,
             })
-
-    ## Update global variables
-    user_ids[chat.id] = data['id']
-    user_logins[chat.id] = data.get('login')
-    user_names[chat.id] = data.get('name', '')
-    user_titles[chat.id] = data.get('title', '')
-    user_statuses[chat.id] = data.get('status', 3)
-    if 'locale' in data['social']:
-        locales[chat.id] = data['social']['locale']
-        locales_chosen[chat.id] = True
 
     return True
 

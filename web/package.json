@@ -1,15 +1,15 @@
 {
     "name": "web",
     "dependencies": {
-        "@ckeditor/ckeditor5-react": "^5.0.5",
+        "@ckeditor/ckeditor5-react": "^5.0.6",
         "@kosyachniy/ckeditor": "^2.0.2",
-        "@reduxjs/toolkit": "^1.9.1",
-        "next": "^13.1.1",
+        "@reduxjs/toolkit": "^1.9.2",
+        "next": "^13.1.6",
         "next-i18next": "^13.0.3",
         "react": "^18.2.0",
         "react-redux": "^8.0.5",
         "react-scripts": "^5.0.1",
-        "redux": "^4.2.0",
+        "redux": "^4.2.1",
         "redux-persist": "^6.0.0",
         "socket.io-client": "^4.5.4"
     },
