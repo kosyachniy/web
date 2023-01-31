@@ -6,6 +6,7 @@ import re
 
 from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
+from libdev.lang import to_url
 from consys.errors import ErrorAccess
 
 from models.post import Post
@@ -88,6 +89,12 @@ async def handler(
                 '',
                 post['data']
             ).replace('&nbsp;', ' ')
+
+            # URL
+            post['url'] = to_url(post['title']) or ""
+            if post['url']:
+                post['url'] += "-"
+            post['url'] += f"{post['id']}"
 
             return post
 
