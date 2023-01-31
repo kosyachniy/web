@@ -128,7 +128,7 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
         del tokens[chat.id]
         return
 
-    if data.get('new') and image:
+    if image and (data.get('new') or not data.get('image')):
         image = (await image).photos or None
         if image:
             file = io.BytesIO()

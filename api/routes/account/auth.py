@@ -182,7 +182,15 @@ async def reg(network, ip, locale, token_id, data, by, method=None):
 
     return user
 
-async def auth(request, data, by, conditions, online=False, password=False):
+async def auth(
+    request,
+    data,
+    by,
+    conditions,
+    online=False,
+    password=False,
+    loader_image=lambda: None,
+):
     """ Authorization / registration in different ways """
 
     # TODO: auth all tabs with this token via web sockets
@@ -271,6 +279,11 @@ async def auth(request, data, by, conditions, online=False, password=False):
 
     # Register
     else:
+        # Image
+        image = loader_image()
+        if image:
+            data.image = image
+
         new = True
         user = await reg(
             request.state.network,

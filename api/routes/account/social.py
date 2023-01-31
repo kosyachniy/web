@@ -23,7 +23,7 @@ router = APIRouter()
 def auth_telegram(data):
     """ Authorization via Telegram """
     data.user = jwt.decode(data.code, cfg('jwt'), algorithms='HS256')['user']
-    return data
+    return data, lambda: None
 
 def auth_google(data):
     """ Authorization via Google """
@@ -53,12 +53,14 @@ def auth_google(data):
     data.name = response.get('given_name')
     data.surname = response.get('family_name')
     data.mail = response.get('email')
-    data.image = upload_file(
-        requests.get(response['picture'], timeout=30).content,
-        file_type='png',
-    ) if 'picture' in response else None
 
-    return data
+    def loader_image():
+        return upload_file(
+            requests.get(response['picture'], timeout=30).content,
+            file_type='png',
+        ) if response.get('picture') else None
+
+    return data, loader_image
 
 
 class Type(BaseModel):
@@ -90,9 +92,9 @@ async def handler(
 
     # TODO: VK
     if data.social == 2:
-        data = auth_telegram(data)
+        data, loader_image = auth_telegram(data)
     elif data.social == 4:
-        data = auth_google(data)
+        data, loader_image = auth_google(data)
 
     # Wrong ID
     if not data.user:
@@ -109,4 +111,4 @@ async def handler(
                 'user': data.user,
             },
         },
-    }, online=True)
+    }, online=True, loader_image=loader_image)
