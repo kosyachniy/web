@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+import { wrapper } from '../../redux/store';
 import { toastAdd } from '../../redux/actions/system'
 import api from '../../lib/api'
 import Post from '../../components/Post'
@@ -63,9 +64,9 @@ export default ({ id }) => {
     }
 }
 
-export const getServerSideProps = async ({ query, locale }) => ({
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, locale }) => ({
     props: {
         id: query.id,
         ...await serverSideTranslations(locale, ['common']),
     },
-})
+}))

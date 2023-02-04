@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 // import { Navigate } from 'react-router-dom'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -18,6 +19,7 @@ import Upload from '../../components/Forms/Upload'
 export default () => {
     const { t } = useTranslation('common')
     const dispatch = useDispatch()
+    const router = useRouter()
     const main = useSelector(state => state.main)
     const profile = useSelector(state => state.profile)
     const [login, setLogin] = useState(profile.login || '')
@@ -30,75 +32,75 @@ export default () => {
     // const [social, setSocial] = useState(profile.social)
     // const [status, setStatus] = useState(profile.status)
 
-    useEffect(() => {
-        api(main, 'users.get', { id: +profile.id }).then(
-            res => dispatch(profileUpdate({
-                login: res.users.login,
-                image: res.users.image,
-                name: res.users.name,
-                surname: res.users.surname,
-                phone: res.users.phone,
-                mail: res.users.mail,
-                social: res.users.social,
-                status: res.users.status,
-            }))
-        ).catch(err => dispatch(toastAdd({
-            header: t('system.error'),
-            text: err,
-            color: 'white',
-            background: 'danger',
-        })))
-    }, [])
+    // useEffect(() => {
+    //     if (!profile.id) {
+    //         router.push("/")
+    //     }
 
-    if (!profile.id) {
-        router.push("/")
-    }
+    //     api(main, 'users.get', { id: +profile.id }).then(
+    //         res => dispatch(profileUpdate({
+    //             login: res.users.login,
+    //             image: res.users.image,
+    //             name: res.users.name,
+    //             surname: res.users.surname,
+    //             phone: res.users.phone,
+    //             mail: res.users.mail,
+    //             social: res.users.social,
+    //             status: res.users.status,
+    //         }))
+    //     ).catch(err => dispatch(toastAdd({
+    //         header: t('system.error'),
+    //         text: err,
+    //         color: 'white',
+    //         background: 'danger',
+    //     })))
+    // }, [])
 
-    const accountEdit = () => {
-        const data = {}
-        if (login && login !== profile.login) {
-            data['login'] = login
-        }
-        if (name && name !== profile.name) {
-            data['name'] = name
-        }
-        if (surname && surname !== profile.surname) {
-            data['surname'] = surname
-        }
-        if (phone && phone !== profile.phone) {
-            data['phone'] = phone
-        }
-        if (mail && mail !== profile.mail) {
-            data['mail'] = mail
-        }
-        if (password.length) {
-            data['password'] = password
-        }
-        if (image !== profile.image) {
-            data['image'] = image
-        }
+    // const accountEdit = () => {
+    //     const data = {}
+    //     if (login && login !== profile.login) {
+    //         data['login'] = login
+    //     }
+    //     if (name && name !== profile.name) {
+    //         data['name'] = name
+    //     }
+    //     if (surname && surname !== profile.surname) {
+    //         data['surname'] = surname
+    //     }
+    //     if (phone && phone !== profile.phone) {
+    //         data['phone'] = phone
+    //     }
+    //     if (mail && mail !== profile.mail) {
+    //         data['mail'] = mail
+    //     }
+    //     if (password.length) {
+    //         data['password'] = password
+    //     }
+    //     if (image !== profile.image) {
+    //         data['image'] = image
+    //     }
 
-        api(main, 'account.save', data).then(
-            res => dispatch(profileUpdate({
-                login, image, name, surname, phone, mail,
-            }))
-        ).catch(err => dispatch(toastAdd({
-            header: t('system.error'),
-            text: err,
-            color: 'white',
-            background: 'danger',
-        })))
-    }
+    //     api(main, 'account.save', data).then(
+    //         res => dispatch(profileUpdate({
+    //             login, image, name, surname, phone, mail,
+    //         }))
+    //     ).catch(err => dispatch(toastAdd({
+    //         header: t('system.error'),
+    //         text: err,
+    //         color: 'white',
+    //         background: 'danger',
+    //     })))
+    // }
 
     return (
         <div className="container">
             <div className="row py-3">
-                <div className="col-12 col-md-6">
+                {/* <div className="col-12 col-md-6">
                     <Upload
                         image={ image === '/user.png' ? null : image }
                         setImage={ setImage }
                     />
-                </div>
+                </div> */}
                 <div className="col-12 col-md-6">
                     <div className="input-group mb-3">
                         <input
@@ -164,12 +166,12 @@ export default () => {
                     </div>
                 </div>
             </div>
-            <button
+            {/* <button
                 className={ `${styles.btn} btn btn-success` }
                 onClick={ accountEdit }
             >
                 <i className="fa-regular fa-floppy-disk" />
-            </button>
+            </button> */}
         </div>
     )
 }

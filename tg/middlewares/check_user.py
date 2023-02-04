@@ -16,6 +16,8 @@ async def check_user(chat, public=False, text=None, locale=None, image=None):
     utm = None
     if text and ' ' in text:
         utm = text.split()[1]
+    if utm == 'auth':
+        utm = None
 
     res = await auth(chat, utm, locale, image)
 
