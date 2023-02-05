@@ -1,4 +1,4 @@
-async function serverRequest(method = '', data = {}, external=true) {
+const serverRequest = async (method = '', data = {}, external = true) => {
   let url = external ? process.env.NEXT_PUBLIC_API : 'http://api:5000/';
   url += method.replace('.', '/') + (method ? '/' : '');
   return fetch(url, {
@@ -9,9 +9,15 @@ async function serverRequest(method = '', data = {}, external=true) {
     },
     body: JSON.stringify(data),
   });
-}
+};
 
-const api = (main=null, method, data={}, setted=false, external=true) => new Promise((resolve, reject) => {
+const api = (
+  main,
+  method,
+  data = {},
+  external = true,
+  setted = false,
+) => new Promise((resolve, reject) => {
   // TODO: reject errors
   serverRequest(method, data, external).then(async (response) => {
     if (!response.ok) {
@@ -25,8 +31,8 @@ const api = (main=null, method, data={}, setted=false, external=true) => new Pro
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             languages: navigator.languages,
           },
-        }, true, external);
-        resolve(await api(main, method, data, true, external));
+        }, external, true);
+        resolve(await api(main, method, data, external, true));
       } else {
         const text = await response.text();
         console.log('Error', response.status, text);

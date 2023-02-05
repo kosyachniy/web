@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
@@ -22,6 +22,7 @@ export const Posts = ({
     postsLoaded=[], count=null,
 }) => {
     const { t } = useTranslation('common')
+    const mounted = useRef(true)
     const [posts, setPosts] = useState(postsLoaded)
     const [lastPage, setLastPage] = useState(count ? getPage(count) : page)
 
@@ -38,15 +39,17 @@ export const Posts = ({
     }))
 
     useEffect(() => {
-        system.prepared && getPost({
-            category: category && category.id,
-            locale: main.locale,
-            search: system.search && system.search.length >= 3 ? system.search : '',
-            limit: 18,
-            offset: (page - 1) * 18,
-        })
+        if (!mounted.current || !posts) {
+            getPost({
+                category: category && category.id,
+                locale: main.locale,
+                search: system.search && system.search.length >= 3 ? system.search : '',
+                limit: 18,
+                offset: (page - 1) * 18,
+            })
+        }
+        mounted.current = false
     }, [
-        system.prepared,
         system.search && system.search.length >= 3 ? system.search : false,
         main.locale,
         category,
@@ -120,7 +123,7 @@ export const getServerSideProps = async ({ query, locale }) => {
         locale: locale,
         limit: 18,
         offset: (page - 1) * 18,
-    }, false, false)
+    }, false)
 
     return {
         props: {

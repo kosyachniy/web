@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -9,27 +9,28 @@ import { profileIn } from '../../redux/actions/profile'
 import api from '../../lib/api'
 
 
-export default () => {
+const Container = ({
+    main,
+    toastAdd, profileIn, popupSet,
+}) => {
     const { t } = useTranslation('common')
-    const dispatch = useDispatch()
     const router = useRouter()
-    const main = useSelector(state => state.main)
-    const previousPath = localStorage.getItem('previousPath')
 
     const onSocial = (type, code) => api(main, 'account.social', {
         social: type,
         code,
         utm: main.utm,
     }).then(res => {
-        dispatch(profileIn(res))
-        dispatch(popupSet(null))
+        const previousPath = localStorage.getItem('previousPath')
+        profileIn(res)
+        popupSet(null)
         router.push(previousPath)
-    }).catch(err => dispatch(toastAdd({
+    }).catch(err => toastAdd({
         header: t('system.error'),
         text: err,
         color: 'white',
         background: 'danger',
-    })))
+    }))
 
     useEffect(() => {
         const params = Object.fromEntries(new URLSearchParams(document.location.search))
@@ -60,6 +61,8 @@ export default () => {
         <></>
     )
 }
+
+export default connect(state => state, { toastAdd, profileIn, popupSet })(Container)
 
 export const getStaticProps = async ({ locale }) => {
     return {

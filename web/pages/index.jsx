@@ -15,7 +15,7 @@ export const getServerSideProps = async ({ query, locale }) => {
         locale: locale,
         limit: 18,
         offset: (page - 1) * 18,
-    }, false, false)
+    }, false)
 
     return {
         props: {

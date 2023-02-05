@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import { toastAdd } from '../../redux/actions/system'
+import { displaySet } from '../../redux/actions/main'
 import api from '../../lib/api'
 import Post from '../../components/Post'
 import { Posts } from './'
@@ -65,7 +66,7 @@ const Container = ({
 }
 
 
-export default connect(state => state, { toastAdd })(Container)
+export default connect(state => state, { toastAdd, displaySet })(Container)
 
 export const getServerSideProps = async ({ query, locale }) => {
     let id = query.id
@@ -79,10 +80,10 @@ export const getServerSideProps = async ({ query, locale }) => {
 
     if (isPost) {
         id = +id.split('-').pop()
-        const res = await api(null, 'posts.get', { id }, false, false)
+        const res = await api(null, 'posts.get', { id }, false)
         postLoaded = res.posts || null
     } else {
-        const res = await api(null, 'categories.get', { url: id }, false, false)
+        const res = await api(null, 'categories.get', { url: id }, false)
         categoryLoaded = res.categories || null
 
         page = !isNaN(query.page) ? (+query.page || 1) : 1
@@ -91,7 +92,7 @@ export const getServerSideProps = async ({ query, locale }) => {
             locale: locale,
             limit: 18,
             offset: (page - 1) * 18,
-        }, false, false)
+        }, false)
         postsLoaded = subres.posts || null
         count = subres.count
     }
