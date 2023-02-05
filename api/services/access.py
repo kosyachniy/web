@@ -22,19 +22,17 @@ class AccessMiddleware(BaseHTTPMiddleware):
 
         # TODO: check current ip with token ip
 
-        # Whitelist
-        if request.method != 'POST' or url in self.whitelist:
-            request.state.token = None
-            request.state.user = 0
-            request.state.network = 0
-            return await call_next(request)
-
-        # JWT
-
         token = (
             request.cookies.get('Authorization')
             or request.headers.get('Authorization')
         )
+
+        # Whitelist
+        if request.method != 'POST' or (not token and url in self.whitelist):
+            request.state.token = None
+            request.state.user = 0
+            request.state.network = 0
+            return await call_next(request)
 
         if not token:
             # await report.warning("No token", {
@@ -42,6 +40,7 @@ class AccessMiddleware(BaseHTTPMiddleware):
             # })
             return Response(content="Invalid token", status_code=401)
 
+        # JWT
         if ' ' in token:
             token = token.split(' ')[1]
         if not token or token == 'null':

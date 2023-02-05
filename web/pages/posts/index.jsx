@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect, useRef } from 'react'
+import { connect } from 'react-redux'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -14,39 +13,43 @@ import Feed from '../../components/Post/Feed'
 import Paginator from '../../components/Paginator'
 
 
-export const Posts = ({ category=null }) => {
+const getPage = count => Math.floor(count / 18) + Boolean(count % 18)
+
+export const Posts = ({
+    system, main, profile,
+    toastAdd, displaySet,
+    category=null, page=1,
+    postsLoaded=[], count=null,
+}) => {
     const { t } = useTranslation('common')
-    const dispatch = useDispatch()
-    const router = useRouter()
-    const system = useSelector(state => state.system)
-    const main = useSelector(state => state.main)
-    const profile = useSelector(state => state.profile)
-    const page = !isNaN(router.query.page) ? (+router.query.page || 1) : 1
-    const [posts, setPosts] = useState([])
-    const [lastPage, setLastPage] = useState(page)
+    const mounted = useRef(true)
+    const [posts, setPosts] = useState(postsLoaded)
+    const [lastPage, setLastPage] = useState(count ? getPage(count) : page)
 
     const getPost = (data={}) => api(main, 'posts.get', data).then(res => {
         if (res.posts) {
             setPosts(res.posts)
-            res.count && setLastPage(Math.floor(res.count / 18) + Boolean(res.count % 18))
+            res.count && setLastPage(getPage(res.count))
         }
-    }).catch(err => dispatch(toastAdd({
+    }).catch(err => toastAdd({
         header: t('system.error'),
         text: err,
         color: 'white',
         background: 'danger',
-    })))
+    }))
 
     useEffect(() => {
-        system.prepared && getPost({
-            category: category && category.id,
-            locale: main.locale,
-            search: system.search && system.search.length >= 3 ? system.search : '',
-            limit: 18,
-            offset: (page - 1) * 18,
-        })
+        if (!mounted.current || !posts) {
+            getPost({
+                category: category && category.id,
+                locale: main.locale,
+                search: system.search && system.search.length >= 3 ? system.search : '',
+                limit: 18,
+                offset: (page - 1) * 18,
+            })
+        }
+        mounted.current = false
     }, [
-        system.prepared,
         system.search && system.search.length >= 3 ? system.search : false,
         main.locale,
         category,
@@ -64,7 +67,7 @@ export const Posts = ({ category=null }) => {
                         <button
                             type="button"
                             className={ `btn btn-${main.theme}` }
-                            onClick={ () => dispatch(displaySet('grid')) }
+                            onClick={ () => displaySet('grid') }
                         >
                             <i className="fa-solid fa-table-cells-large" />
                         </button>
@@ -112,10 +115,22 @@ export const Posts = ({ category=null }) => {
     )
 }
 
-export default () => <Posts />
+export default connect(state => state, { toastAdd, displaySet })(Posts)
 
-export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale, ['common']),
-    },
-})
+export const getServerSideProps = async ({ query, locale }) => {
+    const page = !isNaN(query.page) ? (+query.page || 1) : 1
+    const res = await api(null, 'posts.get', {
+        locale: locale,
+        limit: 18,
+        offset: (page - 1) * 18,
+    }, false)
+
+    return {
+        props: {
+            ...await serverSideTranslations(locale, ['common']),
+            page,
+            postsLoaded: res.posts || [],
+            count: res.count,
+        },
+    }
+}

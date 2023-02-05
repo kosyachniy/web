@@ -1,5 +1,6 @@
-async function serverRequest(method = '', data = {}) {
-  const url = process.env.NEXT_PUBLIC_API + method.replace('.', '/') + (method ? '/' : '');
+const serverRequest = async (method = '', data = {}, external = true) => {
+  let url = external ? process.env.NEXT_PUBLIC_API : 'http://api:5000/';
+  url += method.replace('.', '/') + (method ? '/' : '');
   return fetch(url, {
     method: 'POST',
     headers: {
@@ -8,11 +9,17 @@ async function serverRequest(method = '', data = {}) {
     },
     body: JSON.stringify(data),
   });
-}
+};
 
-const api = (main, method, data = {}, setted = false) => new Promise((resolve, reject) => {
+const api = (
+  main,
+  method,
+  data = {},
+  external = true,
+  setted = false,
+) => new Promise((resolve, reject) => {
   // TODO: reject errors
-  serverRequest(method, data).then(async (response) => {
+  serverRequest(method, data, external).then(async (response) => {
     if (!response.ok) {
       if (response.status === 401 && !setted) {
         // TODO: auto request on token creation
@@ -24,8 +31,8 @@ const api = (main, method, data = {}, setted = false) => new Promise((resolve, r
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             languages: navigator.languages,
           },
-        }, true);
-        resolve(await api(main, method, data, true));
+        }, external, true);
+        resolve(await api(main, method, data, external, true));
       } else {
         const text = await response.text();
         console.log('Error', response.status, text);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-// import { Navigate } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -15,11 +15,12 @@ import Upload from '../../components/Forms/Upload'
 //     (password.search(/\d/) !== -1) && (password.search(/[A-Za-z]/) !== -1)
 // )
 
-export default () => {
+const Container = ({
+    system, main, profile,
+    toastAdd, profileUpdate,
+}) => {
     const { t } = useTranslation('common')
-    const dispatch = useDispatch()
-    const main = useSelector(state => state.main)
-    const profile = useSelector(state => state.profile)
+    const router = useRouter()
     const [login, setLogin] = useState(profile.login || '')
     const [password, setPassword] = useState('')
     const [image, setImage] = useState(profile.image)
@@ -31,8 +32,10 @@ export default () => {
     // const [status, setStatus] = useState(profile.status)
 
     useEffect(() => {
+        system.prepared && !profile.id && router.push("/")
+
         api(main, 'users.get', { id: +profile.id }).then(
-            res => dispatch(profileUpdate({
+            res => profileUpdate({
                 login: res.users.login,
                 image: res.users.image,
                 name: res.users.name,
@@ -41,18 +44,14 @@ export default () => {
                 mail: res.users.mail,
                 social: res.users.social,
                 status: res.users.status,
-            }))
-        ).catch(err => dispatch(toastAdd({
+            })
+        ).catch(err => toastAdd({
             header: t('system.error'),
             text: err,
             color: 'white',
             background: 'danger',
-        })))
-    }, [])
-
-    if (!profile.id) {
-        router.push("/")
-    }
+        }))
+    }, [system.prepared])
 
     const accountEdit = () => {
         const data = {}
@@ -79,15 +78,15 @@ export default () => {
         }
 
         api(main, 'account.save', data).then(
-            res => dispatch(profileUpdate({
+            res => profileUpdate({
                 login, image, name, surname, phone, mail,
-            }))
-        ).catch(err => dispatch(toastAdd({
+            })
+        ).catch(err => toastAdd({
             header: t('system.error'),
             text: err,
             color: 'white',
             background: 'danger',
-        })))
+        }))
     }
 
     return (
@@ -173,6 +172,8 @@ export default () => {
         </div>
     )
 }
+
+export default connect(state => state, { toastAdd, profileUpdate })(Container)
 
 export const getStaticProps = async ({ locale }) => ({
     props: {

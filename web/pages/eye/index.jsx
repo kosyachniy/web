@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -29,29 +29,28 @@ const List = ({ categories, edit, setEdit, indent=0 }) => (
     </>
 )
 
-export default () => {
+const Container = ({
+    system, main, profile, categories,
+    categoriesAdd,
+}) => {
     const { t } = useTranslation('common')
-    const dispatch = useDispatch()
     const router = useRouter()
-    const main = useSelector(state => state.main)
-    const profile = useSelector(state => state.profile)
-    const categories = useSelector(state => state.categories)
     const [edit, setEdit] = useState(null)
 
     const addCategory = () => {
-        dispatch(categoriesAdd({
+        categoriesAdd({
             id: 0,
             title: '',
             data: null,
             parent: null,
             locale: main.locale,
-        }))
+        })
         setEdit(0)
     }
 
-    if (profile.status < 6) {
-        router.push("/")
-    }
+    useEffect(() => {
+        system.prepared && profile.status < 6 && router.push("/")
+    }, [system.prepared])
 
     return (
         <>
@@ -76,6 +75,8 @@ export default () => {
         </>
     )
 }
+
+export default connect(state => state, { categoriesAdd })(Container)
 
 export const getStaticProps = async ({ locale }) => ({
     props: {
