@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -123,15 +122,12 @@ export const getServerSideProps = async ({ query, locale }) => {
         offset: (page - 1) * 18,
     }, false, false)
 
-    if (res.posts) {
-        return {
-            props: {
-                ...await serverSideTranslations(locale, ['common']),
-                page,
-                postsLoaded: res.posts,
-                count: res.count,
-            },
-        }
-
+    return {
+        props: {
+            ...await serverSideTranslations(locale, ['common']),
+            page,
+            postsLoaded: res.posts || [],
+            count: res.count,
+        },
     }
 }
