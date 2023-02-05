@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { appWithTranslation } from 'next-i18next'
@@ -22,44 +22,46 @@ import Online from '../components/Online'
 import Toasts from '../components/Toast'
 
 
-const App = ({ Component, pageProps }) => {
+const Body = ({
+    system, main, online, categories,
+    systemPrepared,
+    changeLang, setUtm,
+    onlineAdd, onlineDelete, onlineReset,
+    categoriesGet, categoriesClear,
+    Component, pageProps,
+}) => {
     const router = useRouter()
-    const dispatch = useDispatch()
-    const system = useSelector(state => state.system)
-    const main = useSelector(state => state.main)
-    const online = useSelector(state => state.online)
-    const categories = useSelector(state => state.categories)
 
     // Online
     useEffect(() => {
         if (system.prepared && !online.count) {
             socketIO.emit('online', { token: main.token })
-            socketIO.on('online_add', x => dispatch(onlineAdd(x)))
-            socketIO.on('online_del', x => dispatch(onlineDelete(x)))
-            socketIO.on('disconnect', () => dispatch(onlineReset()))
+            socketIO.on('online_add', x => onlineAdd(x))
+            socketIO.on('online_del', x => onlineDelete(x))
+            socketIO.on('disconnect', () => onlineReset())
         }
     }, [router.asPath, system.prepared])
 
     // UTM
     useEffect(() => {
         if (router.isReady) {
-            router.query['utm'] && !main.utm && dispatch(setUtm(router.query['utm']))
-            dispatch(systemPrepared())
+            router.query['utm'] && !main.utm && setUtm(router.query['utm'])
+            systemPrepared()
         }
     }, [router.query])
 
     useEffect(() => {
-        dispatch(categoriesClear())
+        categoriesClear()
     }, [main.locale])
 
     useEffect(() => {
         system.prepared && categories === null && api(main, 'categories.get', {locale: main.locale}).then(
-            res => dispatch(categoriesGet(res.categories))
+            res => categoriesGet(res.categories)
         )
     }, [system.prepared, categories])
 
     useEffect(() => {
-        dispatch(changeLang(router.locale))
+        changeLang(router.locale)
     }, [router.locale])
 
     return (
@@ -98,5 +100,9 @@ const App = ({ Component, pageProps }) => {
     )
 }
 
-
-export default wrapper.withRedux(appWithTranslation(App))
+export default wrapper.withRedux(appWithTranslation(connect(state => state, {
+    systemPrepared,
+    changeLang, setUtm,
+    onlineAdd, onlineDelete, onlineReset,
+    categoriesGet, categoriesClear,
+})(Body)))
