@@ -13,6 +13,7 @@ export const getServerSideProps = async ({ query, locale }) => {
         limit: 18,
         offset: (page - 1) * 18,
     }, false)
+    const subres = await api(null, 'categories.get', { locale }, false)
 
     return {
         props: {
@@ -20,6 +21,7 @@ export const getServerSideProps = async ({ query, locale }) => {
             page,
             postsLoaded: res.posts || [],
             count: res.count,
+            subcategories: subres.categories || [],
         },
     }
 }

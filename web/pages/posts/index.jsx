@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
@@ -19,7 +19,7 @@ export const Posts = ({
     system, main, profile,
     toastAdd, displaySet,
     category=null, page=1,
-    postsLoaded=[], count=null,
+    postsLoaded=[], count=null, subcategories=[],
 }) => {
     const { t } = useTranslation('common')
     const mounted = useRef(true)
@@ -97,6 +97,18 @@ export const Posts = ({
                     ) }
                 </div>
             </div>
+            { subcategories.map(subcategory => subcategory.status ? (
+                <Link
+                    href={ `/posts/${subcategory.url}/` }
+                    className={ `btn btn-outline-${main.color} me-3` }
+                    key={ subcategory.id }
+                >
+                    { subcategory.title }
+                </Link>
+            ) : (
+                <React.Fragment key={ subcategory.id }></React.Fragment>
+            )) }
+            <br /><br />
             { category && (
                 <>
                     { category.image && <img src={ category.image } alt={ category.title } className={ styles.image } /> }
@@ -124,6 +136,7 @@ export const getServerSideProps = async ({ query, locale }) => {
         limit: 18,
         offset: (page - 1) * 18,
     }, false)
+    const subres = await api(null, 'categories.get', { locale }, false)
 
     return {
         props: {
@@ -131,6 +144,7 @@ export const getServerSideProps = async ({ query, locale }) => {
             page,
             postsLoaded: res.posts || [],
             count: res.count,
+            subcategories: subres.categories || [],
         },
     }
 }

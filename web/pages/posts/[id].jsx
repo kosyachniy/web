@@ -60,6 +60,7 @@ const Container = ({
                 toastAdd, displaySet,
                 category, page,
                 postsLoaded, count,
+                subcategories: categoryLoaded ? categoryLoaded.categories : [],
             } } />
         )
     }

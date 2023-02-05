@@ -18,13 +18,13 @@ class Category(Base):
     token = Attribute(types=str)
 
     @classmethod
-    def get_tree(cls, categories=None, parent=0, ids=None, **kwargs):
+    def get_tree(cls, categories=None, parent=None, ids=None, **kwargs):
         """ Get tree of categories """
 
         if categories is None:
             categories = cls.get(**kwargs)
 
-        if parent is None:
+        if ids is None and parent is None:
             parent = 0
 
         tree = []
@@ -34,7 +34,7 @@ class Category(Base):
                 continue
             if category.parent is None:
                 category.parent = 0
-            if category.parent != parent:
+            if parent is not None and category.parent != parent:
                 continue
 
             data = category.json()
