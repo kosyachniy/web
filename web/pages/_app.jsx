@@ -6,7 +6,7 @@ import { appWithTranslation } from 'next-i18next'
 
 import '../styles/main.css'
 import styles from '../styles/body.module.css'
-import { wrapper } from '../redux/store'
+import wrapper from '../redux/store'
 import { systemPrepared } from '../redux/actions/system'
 import { changeLang, setUtm } from '../redux/actions/main'
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online'
@@ -99,6 +99,4 @@ const App = ({ Component, pageProps }) => {
 }
 
 
-export default wrapper.withRedux(appWithTranslation(pageProps => {
-    return <App {...pageProps} />
-}))
+export default wrapper.withRedux(appWithTranslation(App))

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { wrapper } from '../../redux/store';
+import wrapper from '../../redux/store';
 import { toastAdd } from '../../redux/actions/system'
 import api from '../../lib/api'
 import Post from '../../components/Post'

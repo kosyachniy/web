@@ -50,6 +50,8 @@ app.add_middleware(
     whitelist={
         '/',
         '/account/token/',
+        '/posts/get/',
+        '/categories/get/',
     },
 )
 

@@ -27,7 +27,7 @@ const reducer = (state, action) => {
   }
 }
 
-export const wrapper = createWrapper(() => {
+export default createWrapper(() => {
   const store = configureStore({
     reducer: persistReducer(
       {
@@ -43,8 +43,6 @@ export const wrapper = createWrapper(() => {
       },
     }),
   })
-  store.__persistor = persistStore(store, {}, () => {
-    console.log('Hydrated')
-  });
+  store.__persistor = persistStore(store);
   return store;
-})
+});
