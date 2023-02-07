@@ -1,85 +1,88 @@
-import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { categoriesAdd } from '../../redux/actions/categories'
-import Category from '../../components/Category'
+import { categoriesAdd } from '../../redux/actions/categories';
+import Category from '../../components/Category';
 
-
-const List = ({ categories, edit, setEdit, indent=0 }) => (
-    <>
-        { categories && categories.map(category => (
-            <React.Fragment key={ category.id }>
-                <Category
-                    category={ category }
-                    edit={ edit === category.id }
-                    setEdit={ setEdit }
-                    indent={ indent }
-                />
-                <List
-                    categories={ category.categories }
-                    edit={ edit }
-                    setEdit={ setEdit }
-                    indent={ indent + 1 }
-                />
-            </React.Fragment>
-        )) }
-    </>
-)
+const List = ({
+  categories, edit, setEdit, indent = 0,
+}) => (
+  <>
+    { categories && categories.map(category => (
+      <React.Fragment key={category.id}>
+        <Category
+          category={category}
+          edit={edit === category.id}
+          setEdit={setEdit}
+          indent={indent}
+        />
+        <List
+          categories={category.categories}
+          edit={edit}
+          setEdit={setEdit}
+          indent={indent + 1}
+        />
+      </React.Fragment>
+    )) }
+  </>
+);
 
 const Container = ({
-    system, main, profile, categories,
-    categoriesAdd,
+  system, main, profile, categories,
+  categoriesAdd,
 }) => {
-    const { t } = useTranslation('common')
-    const router = useRouter()
-    const [edit, setEdit] = useState(null)
+  const { t } = useTranslation('common');
+  const router = useRouter();
+  const [edit, setEdit] = useState(null);
 
-    const addCategory = () => {
-        categoriesAdd({
-            id: 0,
-            title: '',
-            data: null,
-            parent: null,
-            locale: main.locale,
-        })
-        setEdit(0)
+  const addCategory = () => {
+    categoriesAdd({
+      id: 0,
+      title: '',
+      data: null,
+      parent: null,
+      locale: main.locale,
+    });
+    setEdit(0);
+  };
+
+  useEffect(() => {
+    if (system.prepared && profile.status < 6) {
+      router.push('/');
     }
+  }, [system.prepared]);
 
-    useEffect(() => {
-        system.prepared && profile.status < 6 && router.push("/")
-    }, [system.prepared])
+  return (
+    <>
+      <h1>{ t('system.categories') }</h1>
+      <div className="accordion" id="accordionCategories">
+        <List
+          categories={categories}
+          edit={edit}
+          setEdit={setEdit}
+        />
+      </div>
+      { edit !== 0 && (
+        <button
+          type="button"
+          className="btn btn-success mt-3"
+          style={{ width: '100%' }}
+          onClick={addCategory}
+        >
+          <i className="fa-solid fa-plus" />
+        </button>
+      ) }
+    </>
+  );
+};
 
-    return (
-        <>
-            <h1>{ t('system.categories') }</h1>
-            <div className="accordion" id="accordionCategories">
-                <List
-                    categories={ categories }
-                    edit={ edit }
-                    setEdit={ setEdit }
-                />
-            </div>
-            { edit !== 0 && (
-                <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ width: '100%' }}
-                    onClick={ addCategory }
-                >
-                    <i className="fa-solid fa-plus" />
-                </button>
-            ) }
-        </>
-    )
-}
-
-export default connect(state => state, { categoriesAdd })(Container)
+export default connect(state => state, { categoriesAdd })(Container);
 
 export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale, ['common']),
-    },
-})
+  props: {
+    ...await serverSideTranslations(locale, ['common']),
+  },
+});

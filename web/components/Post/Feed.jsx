@@ -1,84 +1,94 @@
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
+import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
-import styles from '../../styles/feed.module.css'
-
+import styles from '../../styles/feed.module.css';
 
 export default ({ posts }) => {
-    const { t } = useTranslation('common')
+  const { t } = useTranslation('common');
 
-    const getTime = time => {
-        const newTime = new Date(time * 1000)
+  const getTime = time => {
+    const newTime = new Date(time * 1000);
 
-        const year = newTime.getFullYear()
-        let day = `${newTime.getDate()}`
-        let hours = `${newTime.getHours()}`
-        let minutes = `${newTime.getUTCMinutes()}`
-        let month = [
-            t('months.january'), t('months.february'), t('months.march'),
-            t('months.april'), t('months.may'), t('months.june'),
-            t('months.july'), t('months.august'), t('months.september'),
-            t('months.october'), t('months.november'), t('months.december'),
-        ][newTime.getMonth()]
+    const year = newTime.getFullYear();
+    let day = `${newTime.getDate()}`;
+    let hours = `${newTime.getHours()}`;
+    let minutes = `${newTime.getUTCMinutes()}`;
+    const month = [
+      t('months.january'), t('months.february'), t('months.march'),
+      t('months.april'), t('months.may'), t('months.june'),
+      t('months.july'), t('months.august'), t('months.september'),
+      t('months.october'), t('months.november'), t('months.december'),
+    ][newTime.getMonth()];
 
-        if (day.length < 2) {
-            day = `0${day}`
-        }
-
-        if (hours.length < 2) {
-            hours = `0${hours}`
-        }
-
-        if (minutes.length < 2) {
-            minutes = `0${minutes}`
-        }
-
-        return `${day} ${month} ${year} в ${hours}:${minutes}`
+    if (day.length < 2) {
+      day = `0${day}`;
     }
 
-    return (
-        <>
-            <div className={ `container ${styles.feed}` }>
-                <Link href="/posts/add">
-                    <button
-                        type="button"
-                        className="btn btn-success"
-                        style={{ width: '100%' }}
-                    >
-                        <i className="fa-solid fa-plus" />
-                    </button>
-                </Link>
+    if (hours.length < 2) {
+      hours = `0${hours}`;
+    }
 
-                { !posts.length && (
-                    <p>{ t('posts.empty') }!</p>
-                ) }
+    if (minutes.length < 2) {
+      minutes = `0${minutes}`;
+    }
 
-                { posts.map(post => (
-                    <div className={ styles.cards } key={ post.id }>
-                        <Link href={ `/posts/${post.id}` } >
-                            <>
-                                <div className="cards-content">
-                                    <h3 className={ styles.title }>{ post.title }</h3>
-                                    <div className={ styles.additional }><i className="bi bi-three-dots-vertical" /></div>
-                                    <div className={ styles.time }>{ getTime(post.created) }</div>
-                                </div>
-                                { post.image && (
-                                    <img src={ post.image } alt={ post.title } />
-                                ) }
-                                <div className="cards-content">
-                                    <div className={ `${styles.content} ${styles.short}` }>{ post.data }</div>
-                                </div>
-                            </>
-                        </Link>
-                        <div className={ `cards-content ${styles.reactions}` }>
-                            <div><i className="fa-regular fa-heart" />{ post.reactions.likes ? " " + post.reactions.likes : "" }</div>
-                            {/* <i className="fa-solid fa-heart" /> */}
-                            <div><i className="fa-regular fa-comment" /> { post.reactions.comments.length ? " " + post.reactions.comments.length : "" }</div>
-                            <div><i className="fa-solid fa-share" />{ post.reactions.reposts ? " " + post.reactions.reposts : "" }</div>
-                        </div>
-                    </div>
-                )) }
+    return `${day} ${month} ${year} в ${hours}:${minutes}`;
+  };
+
+  return (
+    <div className={`container ${styles.feed}`}>
+      <Link href="/posts/add">
+        <button
+          type="button"
+          className="btn btn-success"
+          style={{ width: '100%' }}
+        >
+          <i className="fa-solid fa-plus" />
+        </button>
+      </Link>
+
+      { !posts.length && (
+      <p>
+        { t('posts.empty') }
+        !
+      </p>
+      ) }
+
+      { posts.map(post => (
+        <div className={styles.cards} key={post.id}>
+          <Link href={`/posts/${post.id}`}>
+            <>
+              <div className="cards-content">
+                <h3 className={styles.title}>{ post.title }</h3>
+                <div className={styles.additional}><i className="bi bi-three-dots-vertical" /></div>
+                <div className={styles.time}>{ getTime(post.created) }</div>
+              </div>
+              { post.image && (
+              <img src={post.image} alt={post.title} />
+              ) }
+              <div className="cards-content">
+                <div className={`${styles.content} ${styles.short}`}>{ post.data }</div>
+              </div>
+            </>
+          </Link>
+          <div className={`cards-content ${styles.reactions}`}>
+            <div>
+              <i className="fa-regular fa-heart" />
+              { post.reactions.likes ? ` ${post.reactions.likes}` : '' }
             </div>
-        </>
-    )
-}
+            {/* <i className="fa-solid fa-heart" /> */}
+            <div>
+              <i className="fa-regular fa-comment" />
+              {' '}
+              { post.reactions.comments.length ? ` ${post.reactions.comments.length}` : '' }
+            </div>
+            <div>
+              <i className="fa-solid fa-share" />
+              { post.reactions.reposts ? ` ${post.reactions.reposts}` : '' }
+            </div>
+          </div>
+        </div>
+      )) }
+    </div>
+  );
+};

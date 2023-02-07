@@ -1,27 +1,26 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import api from '../lib/api'
-import Posts from './posts'
+import api from '../lib/api';
+import Posts from './posts';
 
-
-export default Posts
+export default Posts;
 
 export const getServerSideProps = async ({ query, locale }) => {
-    const page = !isNaN(query.page) ? (+query.page || 1) : 1
-    const res = await api(null, 'posts.get', {
-        locale: locale,
-        limit: 18,
-        offset: (page - 1) * 18,
-    }, false)
-    const subres = await api(null, 'categories.get', { locale }, false)
+  const page = !Number.isNaN(query.page) ? (+query.page || 1) : 1;
+  const res = await api(null, 'posts.get', {
+    locale,
+    limit: 18,
+    offset: (page - 1) * 18,
+  }, false);
+  const subres = await api(null, 'categories.get', { locale }, false);
 
-    return {
-        props: {
-            ...await serverSideTranslations(locale, ['common']),
-            page,
-            postsLoaded: res.posts || [],
-            count: res.count,
-            subcategories: subres.categories || [],
-        },
-    }
-}
+  return {
+    props: {
+      ...await serverSideTranslations(locale, ['common']),
+      page,
+      postsLoaded: res.posts || [],
+      count: res.count,
+      subcategories: subres.categories || [],
+    },
+  };
+};
