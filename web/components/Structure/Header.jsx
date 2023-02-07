@@ -70,7 +70,9 @@ const Search = () => {
 
   const search = value => {
     dispatch(searching(value));
-    router.push('/posts/');
+    if (router.asPath !== '/posts') {
+      router.push('/posts/');
+    }
   };
 
   return (
@@ -161,30 +163,30 @@ const Profile = () => {
         aria-labelledby="navbarDropdown"
       >
         <Link href="/profile/" className="dropdown-item">
-          <i className="bi bi-person-bounding-box" />
+          <i className="bi bi-person-bounding-box me-2" />
           { t('system.profile') }
         </Link>
-        {/* <Link href="/settings/" className="dropdown-item">
+        {/* <Link href="/settings/" className="dropdown-item me-2">
           <i className="fa-solid fa-gear" />
           { t('system.settings') }
         </Link> */}
-        {/* <Link href="/billing/" className="dropdown-item">
+        {/* <Link href="/billing/" className="dropdown-item me-2">
           { t('system.billing') }
         </Link> */}
         { profile.status >= 6 && (
-        <>
-          <Link href={`https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_ANALYTICS_SHEET}/`} className="dropdown-item">
-            <i className="bi bi-funnel-fill" />
-            { t('system.analytics') }
-          </Link>
-          <Link href="/eye/" className="dropdown-item">
-            <i className="bi bi-cone-striped" />
-            { t('system.admin') }
-          </Link>
-        </>
+          <>
+            <Link href={`https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_ANALYTICS_SHEET}/`} className="dropdown-item">
+              <i className="bi bi-funnel-fill me-2" />
+              { t('system.analytics') }
+            </Link>
+            <Link href="/eye/" className="dropdown-item">
+              <i className="bi bi-cone-striped me-2" />
+              { t('system.admin') }
+            </Link>
+          </>
         ) }
         <div className="dropdown-item" onClick={signOut}>
-          <i className="bi bi-door-open-fill" />
+          <i className="bi bi-door-open-fill me-2" />
           { t('system.sign_out') }
         </div>
       </ul>

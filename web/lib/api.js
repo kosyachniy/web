@@ -1,7 +1,6 @@
 const serverRequest = async (method = '', data = {}, external = true) => {
   let url = external ? process.env.NEXT_PUBLIC_API : 'http://api:5000/';
   url += method.replace('.', '/') + (method ? '/' : '');
-  console.log('req', url, data);
   return fetch(url, {
     method: 'POST',
     headers: {

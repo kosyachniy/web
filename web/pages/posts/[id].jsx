@@ -78,7 +78,7 @@ export default connect(state => state, { toastAdd, displaySet })(Container);
 
 export const getServerSideProps = async ({ query, locale }) => {
   let { id } = query;
-  const isPost = !Number.isNaN(id.split('-').pop());
+  const isPost = !Number.isNaN(Number(id.split('-').pop()));
 
   let postLoaded = null;
   let categoryLoaded = null;
@@ -94,7 +94,7 @@ export const getServerSideProps = async ({ query, locale }) => {
     const res = await api(null, 'categories.get', { url: id }, false);
     categoryLoaded = res.categories || null;
 
-    page = !Number.isNaN(query.page) ? (+query.page || 1) : 1;
+    page = !Number.isNaN(Number(query.page)) ? (+query.page || 1) : 1;
     const subres = await api(null, 'posts.get', {
       category: categoryLoaded && categoryLoaded.id,
       locale,

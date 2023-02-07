@@ -75,7 +75,7 @@ export default () => {
             </span>
           </div>
           <button
-            type="button"
+            type="submit"
             className="btn btn-success"
           >
             { t('system.sign_in') }

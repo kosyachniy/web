@@ -138,7 +138,7 @@ export const Posts = ({
 export default connect(state => state, { toastAdd, displaySet })(Posts);
 
 export const getServerSideProps = async ({ query, locale }) => {
-  const page = !Number.isNaN(query.page) ? (+query.page || 1) : 1;
+  const page = !Number.isNaN(Number(query.page)) ? (+query.page || 1) : 1;
   const res = await api(null, 'posts.get', {
     locale,
     limit: 18,
