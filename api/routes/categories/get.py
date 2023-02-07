@@ -63,6 +63,13 @@ async def handler(
     if data.id:
         categories = categories[0]
 
+        category_ids = get('category_ids')
+        categories['parents'] = [
+            category_ids[parent].json(fields={'id', 'url', 'title'})
+            for parent in get('category_parents', {}).get(categories['id'], [])
+            if parent in category_ids
+        ]
+
     # Response
     return {
         'categories': categories,

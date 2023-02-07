@@ -46,8 +46,10 @@ def cache_categories():
     categories_tree = Category.get_tree(categories)
     category_parents = get_parents(categories_tree)
     category_childs = get_childs(category_parents)
+    category_ids = {category.id: category for category in categories}
     category_urls = {category.url: category for category in categories}
 
+    save('category_ids', category_ids)
+    save('category_urls', category_urls)
     save('category_parents', category_parents)
     save('category_childs', category_childs)
-    save('category_urls', category_urls)

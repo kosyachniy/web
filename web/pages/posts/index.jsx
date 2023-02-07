@@ -61,7 +61,20 @@ export const Posts = ({
     <>
       <div className="row">
         <div className="col-8">
-          <h1>{ category ? category.title : t('structure.posts') }</h1>
+          <h1>
+            { category && category.parents && category.parents.map(parent => (
+              <React.Fragment key={parent.id}>
+                <Link
+                  href={`/posts/${parent.url}`}
+                  style={{ textDecoration: 'underline dotted' }}
+                >
+                  {parent.title}
+                </Link>
+                {' / '}
+              </React.Fragment>
+            )) }
+            { category ? category.title : t('structure.posts') }
+          </h1>
         </div>
         <div className="col-4" style={{ textAlign: 'right' }}>
           <div className="btn-group" role="group">

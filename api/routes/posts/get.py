@@ -13,6 +13,7 @@ from models.post import Post
 from models.category import Category
 from models.track import Track
 from services.auth import sign
+from lib.queue import get
 
 
 router = APIRouter()
@@ -70,6 +71,20 @@ async def handler(
 
     if isinstance(data.id, int):
         def handle(post):
+            # Add category info
+            if post.get('category'):
+                category_ids = get('category_ids')
+                post['category_data'] = category_ids.get(post['category']).json(
+                    fields={'id', 'url', 'title'},
+                )
+                post['category_data']['parents'] = [
+                    category_ids[parent].json(fields={'id', 'url', 'title'})
+                    for parent in get('category_parents', {}).get(
+                        post['category'], []
+                    )
+                    if parent in category_ids
+                ]
+
             return post
 
     else:

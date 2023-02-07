@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 // import MathJax from 'react-mathjax-preview'
 
@@ -199,6 +200,30 @@ export default ({ post, setPost }) => {
           ) }
         </div>
       </div>
+
+      { post.category_data && (
+        <>
+          { post.category_data.parents && post.category_data.parents.map(parent => (
+            <React.Fragment key={parent.id}>
+              <Link
+                href={`/posts/${parent.url}`}
+                style={{ textDecoration: 'underline dotted' }}
+              >
+                {parent.title}
+              </Link>
+              {' / '}
+            </React.Fragment>
+          )) }
+          <Link
+            href={`/posts/${post.category_data.url}`}
+            style={{ textDecoration: 'underline dotted' }}
+          >
+            {post.category_data.title}
+          </Link>
+          <br />
+          <br />
+        </>
+      ) }
 
       { edit ? (
         <Edit
