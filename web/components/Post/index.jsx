@@ -40,7 +40,7 @@ export const Edit = ({ post, setEdit, setPost }) => {
         setPost(null);
         setEdit(false);
       } else {
-        router.push(`/posts/${res.id}`);
+        router.push(`/posts/${res.post.url}`);
       }
       dispatch(toastAdd({
         header: t('system.success'),
@@ -157,8 +157,42 @@ export default ({ post, setPost }) => {
   }
 
   return (
-    <div className={`album py-2 ${styles.post}`}>
+    <div className={`album pb-2 ${styles.post}`}>
       <div className="row">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'http://schema.org/',
+              '@type': 'Article',
+              mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': `${process.env.NEXT_PUBLIC_WEB}posts/${post.url}`,
+              },
+              '@id': post.id,
+              headline: post.title,
+              image: post.image || '',
+              datePublished: new Date(post.created * 1000).toISOString().replace(/[.]\d+/, ''),
+              dateModified: new Date(post.updated * 1000).toISOString().replace(/[.]\d+/, ''),
+              text: post.data.replace(/<[^>]*br[^>]*>/g, '\n').replace(/<\/[^>]*p[^>]*>/g, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '')
+                .trimStart()
+                .split('\n')[0],
+              author: [{
+                '@type': 'Person',
+                name: post.author ? `${post.author.title} ${post.author.id}` : '',
+              }],
+              publisher: {
+                '@type': 'Organization',
+                name: process.env.NEXT_PUBLIC_NAME,
+                logo: {
+                  '@type': 'ImageObject',
+                  url: `${process.env.NEXT_PUBLIC_WEB}brand/logo.png`,
+                },
+              },
+              url: `${process.env.NEXT_PUBLIC_WEB}posts/${post.url}`,
+            }),
+          }}
+        />
         <div className="col-md-8">
           <h1>{ post.title }</h1>
         </div>

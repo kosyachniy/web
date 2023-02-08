@@ -4,6 +4,7 @@ The creating and editing method of the post object of the API
 
 from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
+from libdev.lang import to_url
 from consys.errors import ErrorAccess
 
 from models.post import Post
@@ -96,9 +97,17 @@ async def handler(
             'user': user.id,
         })
 
+    data = post.json()
+
+    # URL
+    data['url'] = to_url(post.title) or ""
+    if data['url']:
+        data['url'] += "-"
+    data['url'] += f"{post.id}"
+
     # Response
     return {
         'id': post.id,
         'new': new,
-        'post': post.json(),
+        'post': data,
     }

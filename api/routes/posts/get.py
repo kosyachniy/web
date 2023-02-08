@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from libdev.lang import to_url
 from consys.errors import ErrorAccess
 
+from models.user import User
 from models.post import Post
 from models.category import Category
 from models.track import Track
@@ -64,6 +65,7 @@ async def handler(
         'created',
         'updated',
         'status',
+        'user',
         # 'geo',
     }
 
@@ -84,6 +86,18 @@ async def handler(
                     )
                     if parent in category_ids
                 ]
+
+            # URL
+            post['url'] = to_url(post['title']) or ""
+            if post['url']:
+                post['url'] += "-"
+            post['url'] += f"{post['id']}"
+
+            # Author
+            if post.get('user'):
+                post['author'] = User.get(post['user']).json(fields={
+                    'id', 'login', 'title', 'image',
+                })
 
             return post
 

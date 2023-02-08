@@ -37,6 +37,19 @@ export default class MyDocument extends Document {
           />
         </Head>
         <body>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'http://schema.org/',
+                '@type': 'Organization',
+                url: process.env.NEXT_PUBLIC_WEB,
+                name: process.env.NEXT_PUBLIC_NAME,
+                logo: `${process.env.NEXT_PUBLIC_WEB}brand/logo.png`,
+                // "sameAs": [],
+              }),
+            }}
+          />
           <Main />
           <NextScript />
         </body>
