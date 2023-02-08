@@ -202,27 +202,59 @@ export default ({ post, setPost }) => {
       </div>
 
       { post.category_data && (
-        <>
-          { post.category_data.parents && post.category_data.parents.map(parent => (
-            <React.Fragment key={parent.id}>
+        <ul
+          role="navigation"
+          aria-label="breadcrumb"
+          itemScope="itemscope"
+          itemType="http://schema.org/BreadcrumbList"
+          className={styles.navigation}
+        >
+          { post.category_data.parents && post.category_data.parents.map((parent, i) => (
+            <li
+              itemProp="itemListElement"
+              itemScope="itemscope"
+              itemType="http://schema.org/ListItem"
+              key={parent.id}
+            >
+              <meta content={i + 1} itemProp="position" />
               <Link
                 href={`/posts/${parent.url}`}
                 style={{ textDecoration: 'underline dotted' }}
+                title={parent.title}
+                itemid={`/posts/${parent.url}`}
+                itemscope="itemscope"
+                itemprop="item"
+                itemtype="http://schema.org/Thing"
               >
-                {parent.title}
+                <span itemProp="name">
+                  {parent.title}
+                </span>
               </Link>
-              {' / '}
-            </React.Fragment>
+              <span>&nbsp;/&nbsp;</span>
+            </li>
           )) }
-          <Link
-            href={`/posts/${post.category_data.url}`}
-            style={{ textDecoration: 'underline dotted' }}
+          <li
+            itemProp="itemListElement"
+            itemScope="itemscope"
+            itemType="http://schema.org/ListItem"
+            key={post.category_data.id}
           >
-            {post.category_data.title}
-          </Link>
-          <br />
-          <br />
-        </>
+            <meta content={post.category_data.parents ? post.category_data.parents.length + 1 : 1} itemProp="position" />
+            <Link
+              href={`/posts/${post.category_data.url}`}
+              style={{ textDecoration: 'underline dotted' }}
+              title={post.category_data.title}
+              itemid={`/posts/${post.category_data.url}`}
+              itemscope="itemscope"
+              itemprop="item"
+              itemtype="http://schema.org/Thing"
+            >
+              <span itemProp="name">
+                {post.category_data.title}
+              </span>
+            </Link>
+          </li>
+        </ul>
       ) }
 
       { edit ? (

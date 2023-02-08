@@ -27,3 +27,26 @@
     float: right;
     margin-left: 1.5em;
 }
+
+.navigation {
+    list-style: none;
+    padding: 0;
+    display: flex!important;
+}
+
+.post .navigation {
+    margin: -7px 0 16px 0;
+}
+
+.category .navigation {
+    margin: 0;
+}
+
+.category span,
+.category h1 {
+    font-size: calc(1.325rem + .9vw) !important;
+}
+
+.category h1 {
+    line-height: var(--bs-body-line-height) !important;
+}

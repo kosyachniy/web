@@ -59,22 +59,62 @@ export const Posts = ({
 
   return (
     <>
-      <div className="row">
+      <div className={`row ${styles.category}`}>
         <div className="col-8">
-          <h1>
-            { category && category.parents && category.parents.map(parent => (
-              <React.Fragment key={parent.id}>
-                <Link
-                  href={`/posts/${parent.url}`}
-                  style={{ textDecoration: 'underline dotted' }}
+          { category ? (
+            <ul
+              role="navigation"
+              aria-label="breadcrumb"
+              itemScope="itemscope"
+              itemType="http://schema.org/BreadcrumbList"
+              className={styles.navigation}
+            >
+              { category.parents && category.parents.map((parent, i) => (
+                <li
+                  itemProp="itemListElement"
+                  itemScope="itemscope"
+                  itemType="http://schema.org/ListItem"
+                  key={parent.id}
                 >
-                  {parent.title}
+                  <meta content={i + 1} itemProp="position" />
+                  <Link
+                    href={`/posts/${parent.url}`}
+                    style={{ textDecoration: 'underline dotted' }}
+                    title={parent.title}
+                    itemid={`/posts/${parent.url}`}
+                    itemscope="itemscope"
+                    itemprop="item"
+                    itemtype="http://schema.org/Thing"
+                  >
+                    <span itemProp="name">
+                      {parent.title}
+                    </span>
+                  </Link>
+                  <span>&nbsp;/&nbsp;</span>
+                </li>
+              )) }
+              <li
+                itemProp="itemListElement"
+                itemScope="itemscope"
+                itemType="http://schema.org/ListItem"
+                key={category.id}
+              >
+                <meta content={category.parents ? category.parents.length + 1 : 1} itemProp="position" />
+                <Link
+                  href={`/posts/${category.url}`}
+                  title={category.title}
+                  itemid={`/posts/${category.url}`}
+                  itemscope="itemscope"
+                  itemprop="item"
+                  itemtype="http://schema.org/Thing"
+                >
+                  <h1 itemProp="name">
+                    {category.title}
+                  </h1>
                 </Link>
-                {' / '}
-              </React.Fragment>
-            )) }
-            { category ? category.title : t('structure.posts') }
-          </h1>
+              </li>
+            </ul>
+          ) : (<h1>{ t('structure.posts') }</h1>) }
         </div>
         <div className="col-4" style={{ textAlign: 'right' }}>
           <div className="btn-group" role="group">
