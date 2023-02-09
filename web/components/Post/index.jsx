@@ -9,6 +9,7 @@ import styles from '../../styles/post.module.css';
 import { toastAdd } from '../../redux/actions/system';
 import { categoriesClear } from '../../redux/actions/categories';
 import api from '../../lib/api';
+import { getFirst, getISO } from '../../lib/format';
 import Upload from '../Forms/Upload';
 import Locale from '../Forms/Locale';
 import Category from '../Forms/Category';
@@ -171,11 +172,9 @@ export default ({ post, setPost }) => {
               },
               headline: post.title,
               image: post.image || '',
-              datePublished: new Date(post.created * 1000).toISOString().replace(/[.]\d+/, ''),
-              dateModified: new Date(post.updated * 1000).toISOString().replace(/[.]\d+/, ''),
-              text: post.data.replace(/<[^>]*br[^>]*>/g, '\n').replace(/<\/[^>]*p[^>]*>/g, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '')
-                .trimStart()
-                .split('\n')[0],
+              datePublished: getISO(post.created),
+              dateModified: getISO(post.updated),
+              text: getFirst(post.data),
               author: [{
                 '@type': 'Person',
                 name: post.author ? `${post.author.title} ${post.author.id}` : '',
@@ -300,7 +299,23 @@ export default ({ post, setPost }) => {
         />
       ) : (
         <>
-          { post.image && <img src={post.image} alt={post.title} className={styles.image} /> }
+          { post.image && (
+            <>
+              <img src={post.image} alt={post.title} className={styles.image} />
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    '@context': 'http://schema.org/',
+                    '@type': 'ImageObject',
+                    contentUrl: post.image,
+                    name: post.title,
+                    description: getFirst(post.data),
+                  }),
+                }}
+              />
+            </>
+          ) }
 
           <div dangerouslySetInnerHTML={{ __html: post.data }} />
 

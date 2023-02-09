@@ -66,15 +66,15 @@ async def handler(
     else:
         del category.locale
 
+    # Checking url format
+    if category.url[-1].isdigit():
+        category.url += '-x'
     # Check uniq url
     if (
         not category.url
         or Category.get(id={'$ne': category.id}, url=category.url, fields={})
     ):
         category.url = str(category.created)[-6:] + '-' + category.url
-    # Checking url format
-    if category.url[-1].isdigit():
-        category.url += '-x'
 
     # Save
     category.save()

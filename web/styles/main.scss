@@ -38,3 +38,31 @@ $dropdown-link-active-bg: var(--bs-btn-hover-bg);
     color: inherit;
     background-color: var(--bs-gray-700);
 }
+
+.pagination {
+    --bs-pagination-focus-box-shadow: 0;
+}
+
+.bg-light .page-link {
+    --bs-pagination-color: var(--bs-body-color);
+    --bs-pagination-hover-color: var(--bs-body-color);
+    --bs-pagination-focus-color: var(--bs-body-color);
+    --bs-pagination-bg: var(--bs-gray-200);
+    --bs-pagination-border-color: var(--bs-gray-200);
+    --bs-pagination-hover-bg: var(--bs-gray-400);
+    --bs-pagination-hover-border-color: var(--bs-gray-400);
+    --bs-pagination-disabled-bg: var(--bs-gray-400);
+    --bs-pagination-disabled-border-color: var(--bs-gray-400);
+}
+
+.bg-dark .page-link {
+    --bs-pagination-color: var(--bs-light);
+    --bs-pagination-hover-color: var(--bs-light);
+    --bs-pagination-focus-color: var(--bs-light);
+    --bs-pagination-bg: var(--bs-gray-700);
+    --bs-pagination-border-color: var(--bs-gray-700);
+    --bs-pagination-hover-bg: var(--bs-gray-500);
+    --bs-pagination-hover-border-color: var(--bs-gray-500);
+    --bs-pagination-disabled-bg: var(--bs-gray-500);
+    --bs-pagination-disabled-border-color: var(--bs-gray-500);
+}

@@ -8,6 +8,7 @@ import styles from '../../styles/post.module.css';
 import { toastAdd } from '../../redux/actions/system';
 import { displaySet } from '../../redux/actions/main';
 import api from '../../lib/api';
+import { getFirst } from '../../lib/format'
 import Grid from '../../components/Post/Grid';
 import Feed from '../../components/Post/Feed';
 import Paginator from '../../components/Paginator';
@@ -143,7 +144,7 @@ export const Posts = ({
             <Link href="/posts/add">
               <button
                 type="button"
-                className="btn btn-success ms-2 mb-2"
+                className="btn btn-success ms-3 mb-2"
               >
                 <i className="fa-solid fa-plus" />
               </button>
@@ -167,11 +168,25 @@ export const Posts = ({
       { category && (
         <>
           { category.image && (
-            <img
-              src={category.image}
-              alt={category.title}
-              className={styles.image}
-            />
+            <>
+              <img
+                src={category.image}
+                alt={category.title}
+                className={styles.image}
+              />
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    '@context': 'http://schema.org/',
+                    '@type': 'ImageObject',
+                    contentUrl: category.image,
+                    name: category.title,
+                    description: getFirst(category.data),
+                  }),
+                }}
+              />
+            </>
           ) }
           <div dangerouslySetInnerHTML={{ __html: category.data }} />
         </>

@@ -3,7 +3,8 @@
     margin: 0 0 0 10px;
 }
 
-.post .image {
+.image {
+    border-radius: .75rem;
     width: 100%;
 }
 
