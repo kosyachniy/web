@@ -105,12 +105,10 @@ const Online = () => {
       { t('system.online') }
       <div className={styles.online} />
       <div
-        className="badge bg-secondary"
+        className="badge bg-secondary pe-2"
         onClick={() => dispatch(popupSet('online'))}
       >
         { online.count }
-        {' '}
-
       </div>
     </div>
   );

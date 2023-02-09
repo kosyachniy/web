@@ -16,6 +16,10 @@ img {
     max-width: 100%;
 }
 
+select {
+    cursor: pointer;
+}
+
 .dark {
     background-color: var(--bs-dark);
     color: var(--bs-light);
@@ -63,6 +67,10 @@ img {
 }
 
 @media all and (max-width: 991px) {
+    .navbar {
+        padding-bottom: 15px;
+    }
+
     .navbar .badge {
         margin: 0 0 0 10px;
     }
@@ -88,8 +96,4 @@ img {
 
 .dropdown:hover .dropdown-menu:not(#profile) {
     display: block;
-}
-
-select {
-    cursor: pointer;
 }

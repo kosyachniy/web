@@ -169,7 +169,6 @@ export default ({ post, setPost }) => {
                 '@type': 'WebPage',
                 '@id': `${process.env.NEXT_PUBLIC_WEB}posts/${post.url}`,
               },
-              '@id': post.id,
               headline: post.title,
               image: post.image || '',
               datePublished: new Date(post.created * 1000).toISOString().replace(/[.]\d+/, ''),

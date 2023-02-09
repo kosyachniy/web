@@ -1,5 +1,40 @@
 $body-font-size: 16px;
 $border-radius: .75rem;
 $dropdown-padding-y: 0;
+$input-border-width: 0;
+$input-bg: var(--bs-btn-bg);
+$input-focus-box-shadow: 0;
+$dropdown-link-active-color: inherit;
+$dropdown-link-active-bg: var(--bs-btn-hover-bg);
 
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+.bg-light,
+.btn-light {
+    --bs-btn-bg: var(--bs-gray-200);
+    --bs-btn-border-color: var(--bs-gray-200);
+    --bs-btn-hover-bg: var(--bs-gray-400);
+    --bs-btn-hover-border-color: var(--bs-gray-400);
+}
+
+.bg-dark,
+.btn-dark {
+    --bs-btn-bg: var(--bs-gray-700);
+    --bs-btn-border-color: var(--bs-gray-700);
+    --bs-btn-hover-bg: var(--bs-gray-500);
+    --bs-btn-hover-border-color: var(--bs-gray-500);
+}
+
+.bg-light .input-group-text,
+.bg-light .form-control,
+.bg-light .form-select {
+    color: inherit;
+    background-color: var(--bs-gray-200);
+}
+
+.bg-dark .input-group-text,
+.bg-dark .form-control,
+.bg-dark .form-select {
+    color: inherit;
+    background-color: var(--bs-gray-700);
+}

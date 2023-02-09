@@ -117,7 +117,7 @@ export const Posts = ({
           ) : (<h1>{ t('structure.posts') }</h1>) }
         </div>
         <div className="col-4" style={{ textAlign: 'right' }}>
-          <div className="btn-group" role="group">
+          <div className="btn-group mb-2" role="group">
             <button
               type="button"
               className={`btn btn-${main.theme}`}
@@ -125,12 +125,12 @@ export const Posts = ({
             >
               <i className="fa-solid fa-table-cells-large" />
             </button>
-            <button
+            {/* <button
               type="button"
               className={`btn btn-${main.theme}`}
             >
               <i className="fa-solid fa-list-ul" />
-            </button>
+            </button> */}
             <button
               type="button"
               className={`btn btn-${main.theme}`}
@@ -143,7 +143,7 @@ export const Posts = ({
             <Link href="/posts/add">
               <button
                 type="button"
-                className="btn btn-success ms-2"
+                className="btn btn-success ms-2 mb-2"
               >
                 <i className="fa-solid fa-plus" />
               </button>
@@ -151,19 +151,19 @@ export const Posts = ({
           ) }
         </div>
       </div>
-      { subcategories.map(subcategory => (subcategory.status ? (
-        <Link
-          href={`/posts/${subcategory.url}/`}
-          className={`btn btn-outline-${main.color} me-3`}
-          key={subcategory.id}
-        >
-          { subcategory.title }
-        </Link>
-      ) : (
-        <React.Fragment key={subcategory.id} />
-      ))) }
-      <br />
-      <br />
+      <div className="mb-2">
+        { subcategories.map(subcategory => (subcategory.status ? (
+          <Link
+            href={`/posts/${subcategory.url}/`}
+            className={`btn btn-${main.theme} me-2 mb-2`}
+            key={subcategory.id}
+          >
+            { subcategory.title }
+          </Link>
+        ) : (
+          <React.Fragment key={subcategory.id} />
+        ))) }
+      </div>
       { category && (
         <>
           { category.image && (
