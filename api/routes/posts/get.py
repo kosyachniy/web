@@ -31,6 +31,7 @@ class Type(BaseModel):
     locale: str = None
     # TODO: fields: list[str] = None
 
+# pylint: disable=too-many-statements
 @router.post("/get/")
 async def handler(
     request: Request,

@@ -254,10 +254,10 @@ export default ({ post, setPost }) => {
                 href={`/posts/${parent.url}`}
                 style={{ textDecoration: 'underline dotted' }}
                 title={parent.title}
-                itemid={`/posts/${parent.url}`}
-                itemscope="itemscope"
-                itemprop="item"
-                itemtype="http://schema.org/Thing"
+                itemID={`/posts/${parent.url}`}
+                itemScope="itemscope"
+                itemProp="item"
+                itemType="http://schema.org/Thing"
               >
                 <span itemProp="name">
                   {parent.title}
@@ -277,10 +277,10 @@ export default ({ post, setPost }) => {
               href={`/posts/${post.category_data.url}`}
               style={{ textDecoration: 'underline dotted' }}
               title={post.category_data.title}
-              itemid={`/posts/${post.category_data.url}`}
-              itemscope="itemscope"
-              itemprop="item"
-              itemtype="http://schema.org/Thing"
+              itemID={`/posts/${post.category_data.url}`}
+              itemScope="itemscope"
+              itemProp="item"
+              itemType="http://schema.org/Thing"
             >
               <span itemProp="name">
                 {post.category_data.title}
@@ -338,7 +338,7 @@ export default ({ post, setPost }) => {
             )}
           </div> */}
 
-          <Comments comments={post.comments} />
+          <Comments post={post.id} comments={post.comments} />
         </>
       ) }
     </div>

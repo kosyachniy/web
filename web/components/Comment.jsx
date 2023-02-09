@@ -1,10 +1,21 @@
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'next-i18next';
 
 import styles from '../styles/comment.module.css';
+import { toastAdd } from '../redux/actions/system';
+import api from '../lib/api';
+import { getTime } from '../lib/format';
 import Hexagon from './Hexagon';
 
 export const Comment = ({ comment }) => {
   const { t } = useTranslation('common');
+  const [time, setTime] = useState(null);
+
+  useEffect(() => {
+    setTime(getTime(comment.created));
+  }, []);
+
   return (
     <div className={styles.comment}>
       <div className={styles.header}>
@@ -14,7 +25,7 @@ export const Comment = ({ comment }) => {
             { comment.user ? comment.user.title : t('system.guest') }
           </div>
           <div className={styles.time}>
-            вчера
+            { time }
           </div>
         </div>
       </div>
@@ -23,8 +34,31 @@ export const Comment = ({ comment }) => {
   );
 };
 
-export default ({ comments }) => {
+export default ({ post, comments }) => {
   const { t } = useTranslation('common');
+  const dispatch = useDispatch();
+  const main = useSelector(state => state.main);
+  const profile = useSelector(state => state.profile);
+  const [replies, setReplies] = useState(comments || []);
+  const [data, setData] = useState(post ? post.data : '');
+
+  const saveComment = () => {
+    if (!data) {
+      return;
+    }
+    api(main, 'posts.reply', { post, data }).then(res => {
+      setData('');
+      setReplies([{ ...res.comment, user: profile }, ...replies]);
+    }).catch(err => {
+      dispatch(toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+      }));
+    });
+  };
+
   return (
     <div className={styles.comments}>
       <div className={styles.title}>
@@ -32,22 +66,25 @@ export default ({ comments }) => {
           <h3>{ t('posts.comments') }</h3>
         </div>
         <div className={styles.counter}>
-          { comments.length }
+          { replies.length }
         </div>
       </div>
       <div className="input-group">
         <textarea
           className="form-control"
           placeholder={t('posts.reply')}
+          value={data}
+          onChange={event => setData(event.target.value)}
         />
         <button
           type="button"
           className="btn btn-success"
+          onClick={saveComment}
         >
           { t('system.send') }
         </button>
       </div>
-      { comments && comments.map(
+      { replies && replies.map(
         comment => <Comment comment={comment} key={comment.id} />,
       ) }
     </div>

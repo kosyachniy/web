@@ -82,10 +82,10 @@ export const Posts = ({
                     href={`/posts/${parent.url}`}
                     style={{ textDecoration: 'underline dotted' }}
                     title={parent.title}
-                    itemid={`/posts/${parent.url}`}
-                    itemscope="itemscope"
-                    itemprop="item"
-                    itemtype="http://schema.org/Thing"
+                    itemID={`/posts/${parent.url}`}
+                    itemScope="itemscope"
+                    itemProp="item"
+                    itemType="http://schema.org/Thing"
                   >
                     <span itemProp="name">
                       {parent.title}
@@ -104,10 +104,10 @@ export const Posts = ({
                 <Link
                   href={`/posts/${category.url}`}
                   title={category.title}
-                  itemid={`/posts/${category.url}`}
-                  itemscope="itemscope"
-                  itemprop="item"
-                  itemtype="http://schema.org/Thing"
+                  itemID={`/posts/${category.url}`}
+                  itemScope="itemscope"
+                  itemProp="item"
+                  itemType="http://schema.org/Thing"
                 >
                   <h1 itemProp="name">
                     {category.title}
