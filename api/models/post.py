@@ -34,7 +34,6 @@ class Post(Base):
         'views': [], # TODO: + UTM
         'likes': [],
         'reposts': [],
-        'comments': [],
     }) # TODO: attributes
     tags = Attribute(types=list)
     source = Attribute(types=str)

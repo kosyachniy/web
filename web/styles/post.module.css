@@ -6,6 +6,7 @@
 .image {
     border-radius: .75rem;
     width: 100%;
+    margin-bottom: 16px;
 }
 
 .post figure {

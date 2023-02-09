@@ -34,6 +34,8 @@ async def handler(
 ):
     """ Save """
 
+    # TODO: fix access to unblock yourself post
+
     # No access
     if user.status < 2:
         raise ErrorAccess('save')
@@ -82,6 +84,7 @@ async def handler(
             'data': post.data,
             'image': post.image,
             'tags': post.tags,
+            'status': post.status,
         },
         user=user.id,
         token=request.state.token,

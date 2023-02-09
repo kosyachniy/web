@@ -124,6 +124,7 @@ async def generate_sitemap():
         links_sub = []
         for category in Category.get(
             locale=locale if locale else {'$nin': LOCALES},
+            status={'$exists': False},
         ):
             links_sub.append({
                 'url': f'posts/{category.url}/',
@@ -144,6 +145,7 @@ async def generate_sitemap():
         last_update = 0
         for post in Post.get(
             locale=locale if locale else {'$nin': LOCALES},
+            status={'$exists': False},
         ):
             last_update = max(last_update, post.updated)
             links_sub.append({
