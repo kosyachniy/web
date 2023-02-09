@@ -93,7 +93,7 @@ const Container = ({
   return (
     <div className="container">
       <div className="row py-3">
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 mb-3">
           <Upload
             image={image === '/user.png' ? null : image}
             setImage={setImage}

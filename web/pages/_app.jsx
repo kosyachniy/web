@@ -32,6 +32,11 @@ const Body = ({
 }) => {
   const router = useRouter();
 
+  // Bootstrap
+  useEffect(() => {
+    window.bootstrap = require('bootstrap/dist/js/bootstrap');
+  }, []);
+
   // Online
   useEffect(() => {
     if (system.prepared && !online.count) {

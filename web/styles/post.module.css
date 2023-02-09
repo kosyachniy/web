@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+.post figure {
+    text-align: center;
+}
+
 .post [class*="image-style-side"] {
     float: right;
     margin-left: 1.5em;

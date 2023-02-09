@@ -10,8 +10,8 @@ export default ({ editorLoaded, data, updatePost }) => {
 
   useEffect(() => {
     editorRef.current = {
-      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor, /* eslint-disable-line */
-      ClassicEditor: require('@kosyachniy/ckeditor'), /* eslint-disable-line */
+      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
+      ClassicEditor: require('@kosyachniy/ckeditor'),
     };
   }, []);
 

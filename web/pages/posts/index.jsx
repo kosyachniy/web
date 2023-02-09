@@ -8,7 +8,7 @@ import styles from '../../styles/post.module.css';
 import { toastAdd } from '../../redux/actions/system';
 import { displaySet } from '../../redux/actions/main';
 import api from '../../lib/api';
-import { getFirst } from '../../lib/format'
+import { getFirst } from '../../lib/format';
 import Grid from '../../components/Post/Grid';
 import Feed from '../../components/Post/Feed';
 import Paginator from '../../components/Paginator';
