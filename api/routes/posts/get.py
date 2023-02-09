@@ -11,6 +11,7 @@ from consys.errors import ErrorAccess
 
 from models.user import User
 from models.post import Post
+from models.comment import Comment
 from models.category import Category
 from models.track import Track
 from services.auth import sign
@@ -98,6 +99,25 @@ async def handler(
                 post['author'] = User.get(post['user']).json(fields={
                     'id', 'login', 'title', 'image',
                 })
+
+            # Comments
+            post['comments'] = []
+            users = {}
+            for comment in Comment.complex(
+                post=post['id'],
+                status={'$exists': False},
+                fields={'id', 'data', 'user', 'created'},
+            ):
+                if comment.get('user'):
+                    if comment['user'] not in users:
+                        users[comment['user']] = User.complex(
+                            ids=comment['user'],
+                            fields={'id', 'title', 'image'},
+                        )
+                    comment['user'] = users[comment['user']]
+                else:
+                    del comment['user']
+                post['comments'].append(comment)
 
             return post
 
