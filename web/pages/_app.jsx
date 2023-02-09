@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
 
+import '../styles/main.scss';
 import '../styles/main.css';
 import styles from '../styles/body.module.css';
 import wrapper from '../redux/store';
