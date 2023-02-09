@@ -97,7 +97,7 @@ async def handler(
             # Author
             if post.get('user'):
                 post['author'] = User.get(post['user']).json(fields={
-                    'id', 'login', 'title', 'image',
+                    'id', 'login', 'name', 'surname', 'title', 'image',
                 })
 
             # Comments
@@ -112,7 +112,7 @@ async def handler(
                     if comment['user'] not in users:
                         users[comment['user']] = User.complex(
                             ids=comment['user'],
-                            fields={'id', 'title', 'image'},
+                            fields={'id', 'name', 'surname', 'title', 'image'},
                         )
                     comment['user'] = users[comment['user']]
                 else:

@@ -31,6 +31,7 @@
         "online": "Онлайн",
         "offline": "Офлайн",
         "save": "Сохранить",
+        "send": "Отправить",
         "upload": "Загрузить",
         "profile": "Профиль",
         "settings": "Настройки",
@@ -44,7 +45,8 @@
         "saved": "Сохранено",
         "deleted": "Удалено",
         "blocked": "Скрыто",
-        "unblocked": "Открыто"
+        "unblocked": "Открыто",
+        "guest": "Гость"
     },
     "brand": {
         "description": "Шаблонное веб приложение",
@@ -98,7 +100,9 @@
     },
     "posts": {
         "title": "Заголовок",
-        "empty": "Пусто"
+        "empty": "Пусто",
+        "comments": "Комментарии",
+        "reply": "Ответить"
     },
     "categories": {
         "category": "Категория",

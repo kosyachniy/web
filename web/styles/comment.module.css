@@ -1,0 +1,50 @@
+.comment {
+    margin-top: 12px;
+}
+
+.comment .header {
+    margin-bottom: -5px;
+    vertical-align: middle;
+    display: flex;
+}
+
+.comment .header > div {
+    display: inline-block;
+}
+
+.comment .user {
+    line-height: 1em;
+    margin-top: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.comment .time {
+    font-size: .85em;
+    line-height: .85em;
+    color: var(--bs-gray);
+}
+
+.comments {
+    margin-top: 48px;
+}
+
+.comments .title {
+    display: flex;
+    margin-bottom: 4px;
+}
+
+.comments h3 {
+    line-height: calc(1.3rem + 0.5vw);
+}
+
+.comments .counter {
+    margin-left: 6px;
+    color: var(--bs-gray);
+    font-size: calc(1.3rem + 0.5vw);
+    line-height: calc(1.3rem + 0.5vw);
+}
+
+.comments textarea {
+    height: 5em;
+}

@@ -14,6 +14,7 @@ import Upload from '../Forms/Upload';
 import Locale from '../Forms/Locale';
 import Category from '../Forms/Category';
 import Editor from '../Forms/Editor';
+import Comments from '../Comment';
 
 export const Edit = ({ post, setEdit, setPost }) => {
   const { t } = useTranslation('common');
@@ -196,7 +197,7 @@ export default ({ post, setPost }) => {
         </div>
         <div className="col-md-4 mb-3" style={{ textAlign: 'right' }}>
           { profile.status >= 2 && (
-            <>
+            <div className={styles.tools}>
               <button
                 type="button"
                 className="btn btn-outline-secondary"
@@ -228,7 +229,7 @@ export default ({ post, setPost }) => {
               >
                 <i className="fa-solid fa-trash" />
               </button>
-            </>
+            </div>
           ) }
         </div>
       </div>
@@ -336,6 +337,8 @@ export default ({ post, setPost }) => {
               <Map />
             )}
           </div> */}
+
+          <Comments comments={post.comments} />
         </>
       ) }
     </div>

@@ -31,6 +31,7 @@
         "online": "Online",
         "offline": "Offline",
         "save": "Save",
+        "send": "Send",
         "upload": "Upload",
         "profile": "Profile",
         "settings": "Settings",
@@ -44,7 +45,8 @@
         "saved": "Saved",
         "deleted": "Deleted",
         "blocked": "Hidden",
-        "unblocked": "Opened"
+        "unblocked": "Opened",
+        "guest": "Guest"
     },
     "brand": {
         "description": "Template web app",
@@ -98,7 +100,9 @@
     },
     "posts": {
         "title": "Title",
-        "empty": "Empty"
+        "empty": "Empty",
+        "comments": "Comments",
+        "reply": "Reply"
     },
     "categories": {
         "category": "Category",

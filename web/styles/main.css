@@ -20,6 +20,10 @@ select {
     cursor: pointer;
 }
 
+textarea {
+    resize: none;
+}
+
 .dark {
     background-color: var(--bs-dark);
     color: var(--bs-light);
