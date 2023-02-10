@@ -31,27 +31,28 @@ const Container = ({
   // const [status, setStatus] = useState(profile.status)
 
   useEffect(() => {
-    if (main.token && !profile.id) {
-      router.push('/');
-    }
+    if (main.token) {
+      if (!profile.id) {
+        router.push('/');
+      }
 
-    api(main, 'users.get', { id: +profile.id }).then(
-      res => profileUpdate({
-        login: res.users.login,
-        image: res.users.image,
-        name: res.users.name,
-        surname: res.users.surname,
-        phone: res.users.phone,
-        mail: res.users.mail,
-        social: res.users.social,
-        status: res.users.status,
-      }),
-    ).catch(err => toastAdd({
-      header: t('system.error'),
-      text: err,
-      color: 'white',
-      background: 'danger',
-    }));
+      api(main, 'users.get', { id: +profile.id }).then(
+        res => {
+          profileUpdate(res.users);
+          setLogin(res.users.login);
+          setImage(res.users.image);
+          setName(res.users.name);
+          setSurname(res.users.surname);
+          setPhone(res.users.phone);
+          setMail(res.users.mail);
+        },
+      ).catch(err => toastAdd({
+        header: t('system.error'),
+        text: err,
+        color: 'white',
+        background: 'danger',
+      }));
+    }
   }, [main.token]);
 
   const accountEdit = () => {

@@ -14,10 +14,7 @@ export default ({ locale, setLocale }) => {
         value={locale || ''}
         onChange={event => setLocale(event.target.value)}
       >
-        <option value="" defaultValue>
-          🌎
-          { t('system.worldwide') }
-        </option>
+        <option value="" defaultValue>{ `🌎 ${t('system.worldwide')}` }</option>
         <option value="en">🇬🇧 English</option>
         <option value="ru">🇷🇺 Русский</option>
       </select>

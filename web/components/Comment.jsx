@@ -22,7 +22,7 @@ export const Comment = ({ comment }) => {
         <Hexagon url={(comment.user && comment.user.image) || '/user.png'} />
         <div className="ps-2">
           <div className={styles.user}>
-            { comment.user ? comment.user.title : t('system.guest') }
+            { comment.user && comment.user.title ? comment.user.title : t('system.guest') }
           </div>
           <div className={styles.time}>
             { time }

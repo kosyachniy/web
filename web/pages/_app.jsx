@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
@@ -30,6 +30,7 @@ const Body = ({
   Component, pageProps,
 }) => {
   const router = useRouter();
+  const rehydrated = useSelector(state => state._persist.rehydrated); /* eslint-disable-line */
 
   // Bootstrap
   useEffect(() => {
@@ -47,7 +48,7 @@ const Body = ({
   }, [router.asPath, main.token]);
 
   useEffect(() => {
-    if (router.isReady) {
+    if (rehydrated && router.isReady) {
       // UTM
       let { utm } = main;
       if (router.query.utm && !utm) {
@@ -69,7 +70,7 @@ const Body = ({
         }, true).then(() => setToken(token));
       }
     }
-  }, [router.isReady, router.query]);
+  }, [rehydrated, router.isReady, router.query]);
 
   useEffect(() => {
     categoriesClear();
