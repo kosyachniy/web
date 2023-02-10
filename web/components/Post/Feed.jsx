@@ -37,14 +37,12 @@ export default ({ posts }) => {
 
   return (
     <div className={`container ${styles.feed}`}>
-      <Link href="/posts/add">
-        <button
-          type="button"
-          className="btn btn-success"
-          style={{ width: '100%' }}
-        >
-          <i className="fa-solid fa-plus" />
-        </button>
+      <Link
+        href="/posts/add"
+        className="btn btn-success"
+        style={{ width: '100%' }}
+      >
+        <i className="fa-solid fa-plus" />
       </Link>
 
       { !posts.length && (
@@ -80,7 +78,7 @@ export default ({ posts }) => {
             <div>
               <i className="fa-regular fa-comment" />
               {' '}
-              { post.reactions.comments.length ? ` ${post.reactions.comments.length}` : '' }
+              { post.comments && post.comments.length ? ` ${post.comments.length}` : '' }
             </div>
             <div>
               <i className="fa-solid fa-share" />

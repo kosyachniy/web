@@ -21,7 +21,12 @@ const Toast = ({
       <div className={`toast-header text-${color} bg-${background}`}>
         <strong className="me-auto">{ header }</strong>
         <small>{ t('system.now') }</small>
-        <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close" />
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        />
       </div>
       <div className="toast-body">{ text }</div>
     </div>

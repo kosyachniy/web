@@ -13,7 +13,6 @@ export default class MyDocument extends Document {
           <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
-            integrity="sha512-c0+vSv9tnGS4fzwTIBFPcdCZ0QwP+aTePvZeAJkYpbj67KvQ5+VrJjDh3lil48LILJxhICQf76dQ8t/BJyOo/g=="
             crossOrigin="anonymous"
             referrerPolicy="origin-when-cross-origin"
           />

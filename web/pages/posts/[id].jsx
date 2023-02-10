@@ -88,21 +88,31 @@ export const getServerSideProps = async ({ query, locale }) => {
 
   if (isPost) {
     id = +id.split('-').pop();
-    const res = await api(null, 'posts.get', { id }, false);
-    postLoaded = res.posts || null;
+    try {
+      const res = await api(null, 'posts.get', { id }, false);
+      postLoaded = res.posts || null;
+    } catch {
+      postLoaded = null;
+    }
   } else {
-    const res = await api(null, 'categories.get', { url: id }, false);
-    categoryLoaded = res.categories || null;
+    try {
+      const res = await api(null, 'categories.get', { url: id }, false);
+      categoryLoaded = res.categories || null;
 
-    page = !Number.isNaN(Number(query.page)) ? (+query.page || 1) : 1;
-    const subres = await api(null, 'posts.get', {
-      category: categoryLoaded && categoryLoaded.id,
-      locale,
-      limit: 18,
-      offset: (page - 1) * 18,
-    }, false);
-    postsLoaded = subres.posts || null;
-    count = subres.count;
+      page = !Number.isNaN(Number(query.page)) ? (+query.page || 1) : 1;
+      const subres = await api(null, 'posts.get', {
+        category: categoryLoaded && categoryLoaded.id,
+        locale,
+        limit: 18,
+        offset: (page - 1) * 18,
+      }, false);
+      postsLoaded = subres.posts || null;
+      count = subres.count;
+    } catch {
+      categoryLoaded = null;
+      postsLoaded = null;
+      count = 0;
+    }
   }
 
   return {

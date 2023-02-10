@@ -141,13 +141,8 @@ export const Posts = ({
             </button>
           </div>
           { profile.status >= 2 && (
-            <Link href="/posts/add">
-              <button
-                type="button"
-                className="btn btn-success ms-3 mb-2"
-              >
-                <i className="fa-solid fa-plus" />
-              </button>
+            <Link href="/posts/add" className="btn btn-success ms-3 mb-2">
+              <i className="fa-solid fa-plus" />
             </Link>
           ) }
         </div>
