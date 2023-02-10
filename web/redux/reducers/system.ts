@@ -2,17 +2,10 @@ import { AnyAction } from 'redux';
 
 export default (state = {
   search: '',
-  prepared: false,
   popup: null,
   toasts: [],
 }, action: AnyAction) => {
   switch (action.type) {
-    case 'SYSTEM_PREPARED':
-      return {
-        ...state,
-        prepared: true,
-      };
-
     case 'SYSTEM_POPUP':
       return {
         ...state,

@@ -16,28 +16,13 @@ const api = (
   method,
   data = {},
   external = true,
-  setted = false,
 ) => new Promise((resolve, reject) => {
   // TODO: reject errors
   serverRequest(method, data, external).then(async (response) => {
     if (!response.ok) {
-      if (response.status === 401 && !setted) {
-        // TODO: auto request on token creation
-        await api(main, 'account.token', {
-          token: main.token,
-          network: 'web',
-          utm: main.utm,
-          extra: {
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            languages: navigator.languages,
-          },
-        }, external, true);
-        resolve(await api(main, method, data, external, true));
-      } else {
-        const text = await response.text();
-        console.log('Error', response.status, text);
-        reject(text);
-      }
+      const text = await response.text();
+      console.log('Error', response.status, text);
+      reject(text);
     } else {
       resolve(await response.json());
     }

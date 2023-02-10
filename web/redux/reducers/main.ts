@@ -1,8 +1,7 @@
 import { AnyAction } from 'redux';
-import generate from '../../lib/generate';
 
 export default (state = {
-  token: generate(),
+  token: null,
   locale: process.env.NEXT_PUBLIC_LOCALE,
   theme: 'light',
   color: 'dark',
@@ -27,6 +26,12 @@ export default (state = {
       return {
         ...state,
         display: action.display,
+      };
+
+    case 'SET_TOKEN':
+      return {
+        ...state,
+        token: action.token,
       };
 
     case 'SET_UTM':

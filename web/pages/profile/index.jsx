@@ -15,7 +15,7 @@ import Upload from '../../components/Forms/Upload';
 // )
 
 const Container = ({
-  system, main, profile,
+  main, profile,
   toastAdd, profileUpdate,
 }) => {
   const { t } = useTranslation('common');
@@ -31,7 +31,7 @@ const Container = ({
   // const [status, setStatus] = useState(profile.status)
 
   useEffect(() => {
-    if (system.prepared && !profile.id) {
+    if (main.token && !profile.id) {
       router.push('/');
     }
 
@@ -52,7 +52,7 @@ const Container = ({
       color: 'white',
       background: 'danger',
     }));
-  }, [system.prepared]);
+  }, [main.token]);
 
   const accountEdit = () => {
     const data = {};
@@ -78,11 +78,17 @@ const Container = ({
       data.image = image;
     }
 
-    api(main, 'account.save', data).then(
-      () => profileUpdate({
+    api(main, 'account.save', data).then(() => {
+      profileUpdate({
         login, image, name, surname, phone, mail,
-      }),
-    ).catch(err => toastAdd({
+      });
+      toastAdd({
+        header: t('system.success'),
+        text: t('system.saved'),
+        color: 'white',
+        background: 'success',
+      });
+    }).catch(err => toastAdd({
       header: t('system.error'),
       text: err,
       color: 'white',

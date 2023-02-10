@@ -38,20 +38,20 @@ const Container = ({
 
   if (isPost) {
     useEffect(() => {
-      if (system.prepared && (!post || +id !== post.id)) {
+      if (main.token && (!post || +id !== post.id)) {
         getPost({ id });
       }
-    }, [system.prepared, post, id]);
+    }, [main.token, post, id]);
 
     return (
       <Post post={post} setPost={setPost} />
     );
   }
   useEffect(() => {
-    if (system.prepared && (!category || id !== category.url)) {
+    if (main.token && (!category || id !== category.url)) {
       getCategory({ url: id });
     }
-  }, [system.prepared, category, id]);
+  }, [main.token, category, id]);
 
   if (!category) {
     return null;

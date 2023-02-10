@@ -31,7 +31,7 @@ const List = ({
 );
 
 const Container = ({
-  system, main, profile, categories,
+  main, profile, categories,
   categoriesAdd,
 }) => {
   const { t } = useTranslation('common');
@@ -50,10 +50,10 @@ const Container = ({
   };
 
   useEffect(() => {
-    if (system.prepared && profile.status < 6) {
+    if (main.token && profile.status < 6) {
       router.push('/');
     }
-  }, [system.prepared]);
+  }, [main.token]);
 
   return (
     <>

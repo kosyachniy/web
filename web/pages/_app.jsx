@@ -8,11 +8,11 @@ import '../styles/main.scss';
 import '../styles/main.css';
 import styles from '../styles/body.module.css';
 import wrapper from '../redux/store';
-import { systemPrepared } from '../redux/actions/system';
-import { changeLang, setUtm } from '../redux/actions/main';
+import { changeLang, setToken, setUtm } from '../redux/actions/main';
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online';
 import { categoriesGet, categoriesClear } from '../redux/actions/categories';
 import api from '../lib/api';
+import generate from '../lib/generate';
 import socketIO from '../lib/sockets';
 
 import Header from '../components/Structure/Header';
@@ -24,8 +24,7 @@ import Toasts from '../components/Toast';
 
 const Body = ({
   system, main, online, categories,
-  systemPrepared,
-  changeLang, setUtm,
+  changeLang, setToken, setUtm,
   onlineAdd, onlineDelete, onlineReset,
   categoriesGet, categoriesClear,
   Component, pageProps,
@@ -39,35 +38,50 @@ const Body = ({
 
   // Online
   useEffect(() => {
-    if (system.prepared && !online.count) {
+    if (main.token && !online.count) {
       socketIO.emit('online', { token: main.token });
       socketIO.on('online_add', x => onlineAdd(x));
       socketIO.on('online_del', x => onlineDelete(x));
       socketIO.on('disconnect', () => onlineReset());
     }
-  }, [router.asPath, system.prepared]);
+  }, [router.asPath, main.token]);
 
-  // UTM
   useEffect(() => {
     if (router.isReady) {
-      if (router.query.utm && !main.utm) {
-        setUtm(router.query.utm);
+      // UTM
+      let { utm } = main;
+      if (router.query.utm && !utm) {
+        utm = router.query.utm;
+        setUtm(utm);
       }
-      systemPrepared();
+
+      // Generate token
+      if (!main.token) {
+        const token = generate();
+        api(main, 'account.token', {
+          token,
+          network: 'web',
+          utm,
+          extra: {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            languages: navigator.languages,
+          },
+        }, true).then(() => setToken(token));
+      }
     }
-  }, [router.query]);
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     categoriesClear();
   }, [main.locale]);
 
   useEffect(() => {
-    if (system.prepared && categories === null) {
+    if (main.token && categories === null) {
       api(main, 'categories.get', { locale: main.locale }).then(
         res => categoriesGet(res.categories),
       );
     }
-  }, [system.prepared, categories]);
+  }, [main.token, categories]);
 
   useEffect(() => {
     changeLang(router.locale);
@@ -110,8 +124,8 @@ const Body = ({
 };
 
 export default wrapper.withRedux(appWithTranslation(connect(state => state, {
-  systemPrepared,
   changeLang,
+  setToken,
   setUtm,
   onlineAdd,
   onlineDelete,

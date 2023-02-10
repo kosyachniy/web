@@ -14,6 +14,11 @@ export const displaySet = (display) => ({
   display,
 });
 
+export const setToken = (token) => ({
+  type: 'SET_TOKEN',
+  token,
+});
+
 export const setUtm = (utm) => ({
   type: 'SET_UTM',
   utm,
