@@ -46,7 +46,8 @@
         "deleted": "Удалено",
         "blocked": "Скрыто",
         "unblocked": "Открыто",
-        "guest": "Гость"
+        "guest": "Гость",
+        "popular": "Популярное"
     },
     "brand": {
         "description": "Шаблонное веб приложение",

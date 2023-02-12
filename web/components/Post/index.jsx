@@ -16,6 +16,7 @@ import Locale from '../Forms/Locale';
 import Category from '../Forms/Category';
 import Editor from '../Forms/Editor';
 import Comments from '../Comment';
+import Card from './Card';
 
 export const Edit = ({ post, setEdit, setPost }) => {
   const { t } = useTranslation('common');
@@ -128,6 +129,7 @@ export default ({ post, setPost }) => {
   const [edit, setEdit] = useState(false);
   const [toasts, setToasts] = useState([]);
   const [created, setCreated] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   const rmPost = () => api(main, 'posts.rm', { id: post.id }).then(() => {
     router.push('/');
@@ -161,23 +163,33 @@ export default ({ post, setPost }) => {
     background: 'danger',
   })));
 
+  useEffect(() => {
+    // Formatted time
+    setCreated(getTime(post.created));
+
+    // Recommendations
+    api(main, 'posts.guess', {
+      id: post.id,
+      category: post.category,
+      locale: router.locale,
+    }).then(res => {
+      if (res.posts) {
+        setPosts(res.posts);
+      }
+    });
+  }, [post.id]);
+
   if (!post) {
     return (
       <></>
     );
   }
 
-  useEffect(() => {
-    setCreated(getTime(post.created))
-  }, [])
-
   let canonical = process.env.NEXT_PUBLIC_WEB;
   if (post.locale && post.locale !== process.env.NEXT_PUBLIC_LOCALE) {
     canonical += `${post.locale}/`;
   }
   canonical += `posts/${post.url}`;
-
-  console.log(post)
 
   return (
     <div className={`album pb-2 ${styles.post}`}>
@@ -230,7 +242,7 @@ export default ({ post, setPost }) => {
         <div className="col-md-8">
           <h1>{ post.title }</h1>
         </div>
-        <div className={ `col-md-4 ${styles.tools}` }>
+        <div className={`col-md-4 ${styles.tools}`}>
           { profile.status >= 2 && (
             <>
               <button
@@ -269,7 +281,7 @@ export default ({ post, setPost }) => {
         </div>
       </div>
 
-      <div className={ styles.info }>
+      <div className={styles.info}>
         { post.category_data && (
           <ul
             role="navigation"
@@ -323,13 +335,13 @@ export default ({ post, setPost }) => {
                 </span>
               </Link>
             </li>
-            <div className={ styles.dot }>•</div>
+            <div className={styles.dot}>•</div>
           </ul>
         ) }
         { created }
         { post.author && (
           <>
-            <div className={ styles.dot }>•</div>
+            <div className={styles.dot}>•</div>
             { post.author.title }
           </>
         ) }
@@ -345,43 +357,53 @@ export default ({ post, setPost }) => {
         />
       ) : (
         <>
-          { post.image && (
-            <>
-              <img src={post.image} alt={post.title} className={styles.image} />
-              <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                  __html: JSON.stringify({
-                    '@context': 'http://schema.org/',
-                    '@type': 'ImageObject',
-                    contentUrl: post.image,
-                    name: post.title,
-                    description: post.description,
-                  }),
+          <div className="row">
+            <div className="col-md-8">
+              { post.image && (
+                <>
+                  <img src={post.image} alt={post.title} className={styles.image} />
+                  <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.stringify({
+                        '@context': 'http://schema.org/',
+                        '@type': 'ImageObject',
+                        contentUrl: post.image,
+                        name: post.title,
+                        description: post.description,
+                      }),
+                    }}
+                  />
+                </>
+              ) }
+
+              <div dangerouslySetInnerHTML={{ __html: post.data }} />
+
+              {/* <MathJax
+                math={post.data}
+                sanitizeOptions={{
+                  USE_PROFILES: {
+                    html: true,
+                    mathMl: true,
+                  },
                 }}
-              />
-            </>
-          ) }
+              /> */}
 
-          <div dangerouslySetInnerHTML={{ __html: post.data }} />
-
-          {/* <MathJax
-            math={post.data}
-            sanitizeOptions={{
-              USE_PROFILES: {
-                html: true,
-                mathMl: true,
-              },
-            }}
-          /> */}
-
-          {/* <div style={{ marginTop: '50px', height: '250px' }}>
-            { post.geo ? (
-              <Map center={post.geo} zoom={14} />
-            ) : (
-              <Map />
-            )}
-          </div> */}
+              {/* <div style={{ marginTop: '50px', height: '250px' }}>
+                { post.geo ? (
+                  <Map center={post.geo} zoom={14} />
+                ) : (
+                  <Map />
+                )}
+              </div> */}
+            </div>
+            <div className={`col-md-4 ${styles.side}`}>
+              <div>
+                <div className={styles.header}>{ `${t('system.popular')} 🔥` }</div>
+                { posts.map(post => <Card post={post} key={post.id} />) }
+              </div>
+            </div>
+          </div>
 
           <Comments post={post.id} comments={post.comments} />
         </>

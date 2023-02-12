@@ -226,12 +226,12 @@ export const Posts = ({
         </>
       ) }
       {
-                main.display === 'feed' ? (
-                  <Feed posts={posts} />
-                ) : (
-                  <Grid posts={posts} />
-                )
-            }
+        main.display === 'feed' ? (
+          <Feed posts={posts} />
+        ) : (
+          <Grid posts={posts} />
+        )
+      }
       <Paginator page={page} lastPage={lastPage} />
     </>
   );

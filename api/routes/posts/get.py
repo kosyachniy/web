@@ -169,9 +169,9 @@ async def handler(
         search=data.search,
         fields=fields,  # TODO: None if data.id else fields,
         status={'$exists': False} if user.status < 5 else None,
-        category=data.category and {
+        category={
             '$in': Category.get_childs(data.category),
-        },
+        } if data.category else None,
         locale=data.locale and {
             '$in': [None, data.locale],
         },  # NOTE: None → all locales

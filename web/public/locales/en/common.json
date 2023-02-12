@@ -46,7 +46,8 @@
         "deleted": "Deleted",
         "blocked": "Hidden",
         "unblocked": "Opened",
-        "guest": "Guest"
+        "guest": "Guest",
+        "popular": "Popular"
     },
     "brand": {
         "description": "Template web app",

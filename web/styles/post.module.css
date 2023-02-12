@@ -73,3 +73,15 @@
 .category h1 {
     line-height: var(--bs-body-line-height) !important;
 }
+
+/* .side > div {
+    background-color: #3a4951;
+    border-radius: .75rem;
+    padding: 8px 12px;
+} */
+
+.side .header {
+    font-size: 1.2em;
+    border-bottom: .12em solid rgba(206, 212, 218, .3);
+    margin-bottom: 20px;
+}
