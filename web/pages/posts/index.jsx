@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
@@ -24,12 +25,13 @@ export const Posts = ({
 }) => {
   const { t } = useTranslation('common');
   const mounted = useRef(true);
+  const router = useRouter();
   const [posts, setPosts] = useState(postsLoaded);
   const [lastPage, setLastPage] = useState(count ? getPage(count) : page);
 
   let canonical = process.env.NEXT_PUBLIC_WEB;
-  if (main.locale && main.locale !== 'en') {
-    canonical += `${main.locale}/`;
+  if (router.locale && router.locale !== 'en') {
+    canonical += `${router.locale}/`;
   }
   if (category && category.url) {
     canonical += `posts/${category.url}`;
@@ -73,6 +75,7 @@ export const Posts = ({
     <>
       <Head>
         {/* SEO */}
+        <title>{ `${category ? category.title : t('structure.posts')} | ${process.env.NEXT_PUBLIC_NAME}` }</title>
         <link rel="canonical" href={canonical} />
       </Head>
       <div className={`row ${styles.category}`}>

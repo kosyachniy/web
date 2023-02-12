@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 
 import styles from '../../styles/header.module.css';
