@@ -19,6 +19,7 @@ router = APIRouter()
 class Type(BaseModel):
     id: int = None
     title: str = None
+    description: str = None
     data: str = None
     image: str = None
     tags: list[str] = None
@@ -61,6 +62,7 @@ async def handler(
 
     # Change fields
     post.title = data.title
+    post.description = data.description
     post.data = data.data
     post.image = data.image
     post.tags = data.tags

@@ -19,6 +19,7 @@ const Edit = ({
   const dispatch = useDispatch();
   const main = useSelector(state => state.main);
   const [title, setTitle] = useState(category ? category.title : '');
+  const [description, setDescription] = useState(category ? category.description : '');
   const [data, setData] = useState(category ? category.data : '');
   const [image, setImage] = useState(category ? category.image : null);
   const [parent, setParent] = useState(category ? category.parent : null);
@@ -64,7 +65,7 @@ const Edit = ({
     }
 
     const req = {
-      title, data, image, parent, locale,
+      title, description, data, image, parent, locale,
     };
     if (category) {
       req.id = category.id;
@@ -146,6 +147,13 @@ const Edit = ({
             setCategory={setParent}
             exclude={category.id}
             custom={t('categories.parent')}
+          />
+          <textarea
+            className="form-control"
+            placeholder={`${t('posts.description')} (SEO)`}
+            value={description}
+            onChange={event => setDescription(event.target.value)}
+            style={{ height: '146px' }}
           />
         </div>
       </div>

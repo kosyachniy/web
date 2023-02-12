@@ -23,6 +23,7 @@ export const Edit = ({ post, setEdit, setPost }) => {
   const router = useRouter();
   const main = useSelector(state => state.main);
   const [title, setTitle] = useState(post ? post.title : '');
+  const [description, setDescription] = useState(post ? post.description : '');
   const [data, setData] = useState(post ? post.data : '');
   const [image, setImage] = useState(post ? post.image : null);
   const [locale, setLocale] = useState(post ? post.locale : main.locale);
@@ -31,7 +32,7 @@ export const Edit = ({ post, setEdit, setPost }) => {
 
   const editPost = () => {
     const req = {
-      title, data, image, locale, category,
+      title, description, data, image, locale, category,
     };
 
     if (post) {
@@ -90,9 +91,15 @@ export const Edit = ({ post, setEdit, setPost }) => {
               category={category}
               setCategory={setCategory}
             />
+            <textarea
+              className="form-control"
+              placeholder={`${t('posts.description')} (SEO)`}
+              value={description}
+              onChange={event => setDescription(event.target.value)}
+              style={{ height: '146px' }}
+            />
           </div>
         </div>
-
         <Editor
           editorLoaded={editorLoaded}
           data={data}

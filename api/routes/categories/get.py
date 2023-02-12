@@ -34,6 +34,7 @@ async def handler(
     fields = {
         'id',
         'title',
+        'description',
         'data',
         'image',
         'parent',

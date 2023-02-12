@@ -28,6 +28,7 @@ class Post(Base):
 
     image = Attribute(types=str)
     title = Attribute(types=str, default=default_title)
+    description = Attribute(types=str, default='')
     data = Attribute(types=str, default='')
     category = Attribute(types=int, default=0)
     reactions = Attribute(types=dict, default={

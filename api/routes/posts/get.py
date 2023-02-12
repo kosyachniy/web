@@ -59,6 +59,7 @@ async def handler(
     fields = {
         'id',
         'title',
+        'description',
         'data',
         'reactions',
         'image',

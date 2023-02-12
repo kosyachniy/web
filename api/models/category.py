@@ -12,6 +12,7 @@ class Category(Base):
     _name = 'categories'
     _search_fields = {'title', 'data'}
 
+    description = Attribute(types=str, default='')
     parent = Attribute(types=int, default=0)
     url = Attribute(types=str)
     status = Attribute(types=int, default=1)
