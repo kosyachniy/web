@@ -31,10 +31,10 @@ export const Posts = ({
   const title = `${category ? category.title : t('structure.posts')} | ${process.env.NEXT_PUBLIC_NAME}`;
   let canonical = process.env.NEXT_PUBLIC_WEB;
   if (category) {
-    if (category.locale && category.locale !== 'en') {
+    if (category.locale && category.locale !== process.env.NEXT_PUBLIC_LOCALE) {
       canonical += `${category.locale}/`;
     }
-  } else if (router.locale && router.locale !== 'en') {
+  } else if (router.locale && router.locale !== process.env.NEXT_PUBLIC_LOCALE) {
     canonical += `${router.locale}/`;
   }
   if (category && category.url) {
@@ -156,8 +156,8 @@ export const Posts = ({
             </ul>
           ) : (<h1>{ t('structure.posts') }</h1>) }
         </div>
-        <div className="col-4" style={{ textAlign: 'right' }}>
-          <div className="btn-group mb-2" role="group">
+        <div className={`col-4 ${styles.tools}`}>
+          <div className="btn-group" role="group">
             <button
               type="button"
               className={`btn btn-${main.theme}`}
@@ -180,7 +180,7 @@ export const Posts = ({
             </button>
           </div>
           { profile.status >= 2 && (
-            <Link href="/posts/add" className="btn btn-success ms-3 mb-2">
+            <Link href="/posts/add" className="btn btn-success ms-3">
               <i className="fa-solid fa-plus" />
             </Link>
           ) }

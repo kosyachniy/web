@@ -31,21 +31,21 @@ export default () => {
           >
             <i className={main.theme === 'dark' ? 'bi bi-sun-fill' : 'fa-solid fa-moon'} />
           </li>
-          <li
-            className="ms-3 d-flex"
-            style={{ cursor: 'pointer' }}
+          <Link
+            href="#"
+            locale={main.locale === 'ru' ? 'en' : 'ru'}
           >
-            <Link
-              href="#"
-              locale={main.locale === 'ru' ? 'en' : 'ru'}
+            <li
+              className="ms-3 d-flex"
+              style={{ cursor: 'pointer' }}
             >
               <img
                 src={`/lang/${main.locale}.svg`}
                 alt={main.locale}
                 style={{ height: '24px' }}
               />
-            </Link>
-          </li>
+            </li>
+          </Link>
         </ul>
       </div>
     </footer>

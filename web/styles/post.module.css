@@ -1,3 +1,15 @@
+.tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+@media all and (max-width: 767px) {
+    .tools {
+        margin-bottom: 12px;
+    }
+}
+
 .post .tools button {
     width: 3rem;
     margin: 0 0 0 10px;
@@ -34,14 +46,19 @@
     margin-left: 1.5em;
 }
 
+.info {
+    display: flex;
+    margin: -7px 0 8px 0;
+}
+
+.dot {
+    margin: 0 .45em;
+}
+
 .navigation {
     list-style: none;
     padding: 0;
     display: flex!important;
-}
-
-.post .navigation {
-    margin: -7px 0 16px 0;
 }
 
 .category .navigation {

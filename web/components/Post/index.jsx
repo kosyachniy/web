@@ -10,7 +10,7 @@ import styles from '../../styles/post.module.css';
 import { toastAdd } from '../../redux/actions/system';
 import { categoriesClear } from '../../redux/actions/categories';
 import api from '../../lib/api';
-import { getISO } from '../../lib/format';
+import { getISO, getTime } from '../../lib/format';
 import Upload from '../Forms/Upload';
 import Locale from '../Forms/Locale';
 import Category from '../Forms/Category';
@@ -127,6 +127,7 @@ export default ({ post, setPost }) => {
   const profile = useSelector(state => state.profile);
   const [edit, setEdit] = useState(false);
   const [toasts, setToasts] = useState([]);
+  const [created, setCreated] = useState(null);
 
   const rmPost = () => api(main, 'posts.rm', { id: post.id }).then(() => {
     router.push('/');
@@ -166,11 +167,17 @@ export default ({ post, setPost }) => {
     );
   }
 
+  useEffect(() => {
+    setCreated(getTime(post.created))
+  }, [])
+
   let canonical = process.env.NEXT_PUBLIC_WEB;
-  if (post.locale && post.locale !== 'en') {
+  if (post.locale && post.locale !== process.env.NEXT_PUBLIC_LOCALE) {
     canonical += `${post.locale}/`;
   }
   canonical += `posts/${post.url}`;
+
+  console.log(post)
 
   return (
     <div className={`album pb-2 ${styles.post}`}>
@@ -223,9 +230,9 @@ export default ({ post, setPost }) => {
         <div className="col-md-8">
           <h1>{ post.title }</h1>
         </div>
-        <div className="col-md-4 mb-3" style={{ textAlign: 'right' }}>
+        <div className={ `col-md-4 ${styles.tools}` }>
           { profile.status >= 2 && (
-            <div className={styles.tools}>
+            <>
               <button
                 type="button"
                 className="btn btn-outline-secondary"
@@ -257,66 +264,76 @@ export default ({ post, setPost }) => {
               >
                 <i className="fa-solid fa-trash" />
               </button>
-            </div>
+            </>
           ) }
         </div>
       </div>
 
-      { post.category_data && (
-        <ul
-          role="navigation"
-          aria-label="breadcrumb"
-          itemScope="itemscope"
-          itemType="http://schema.org/BreadcrumbList"
-          className={styles.navigation}
-        >
-          { post.category_data.parents && post.category_data.parents.map((parent, i) => (
+      <div className={ styles.info }>
+        { post.category_data && (
+          <ul
+            role="navigation"
+            aria-label="breadcrumb"
+            itemScope="itemscope"
+            itemType="http://schema.org/BreadcrumbList"
+            className={styles.navigation}
+          >
+            { post.category_data.parents && post.category_data.parents.map((parent, i) => (
+              <li
+                itemProp="itemListElement"
+                itemScope="itemscope"
+                itemType="http://schema.org/ListItem"
+                key={parent.id}
+              >
+                <meta content={i + 1} itemProp="position" />
+                <Link
+                  href={`/posts/${parent.url}`}
+                  style={{ textDecoration: 'underline dotted' }}
+                  title={parent.title}
+                  itemID={`/posts/${parent.url}`}
+                  itemScope="itemscope"
+                  itemProp="item"
+                  itemType="http://schema.org/Thing"
+                >
+                  <span itemProp="name">
+                    {parent.title}
+                  </span>
+                </Link>
+                <span>&nbsp;/&nbsp;</span>
+              </li>
+            )) }
             <li
               itemProp="itemListElement"
               itemScope="itemscope"
               itemType="http://schema.org/ListItem"
-              key={parent.id}
+              key={post.category_data.id}
             >
-              <meta content={i + 1} itemProp="position" />
+              <meta content={post.category_data.parents ? post.category_data.parents.length + 1 : 1} itemProp="position" />
               <Link
-                href={`/posts/${parent.url}`}
+                href={`/posts/${post.category_data.url}`}
                 style={{ textDecoration: 'underline dotted' }}
-                title={parent.title}
-                itemID={`/posts/${parent.url}`}
+                title={post.category_data.title}
+                itemID={`/posts/${post.category_data.url}`}
                 itemScope="itemscope"
                 itemProp="item"
                 itemType="http://schema.org/Thing"
               >
                 <span itemProp="name">
-                  {parent.title}
+                  {post.category_data.title}
                 </span>
               </Link>
-              <span>&nbsp;/&nbsp;</span>
             </li>
-          )) }
-          <li
-            itemProp="itemListElement"
-            itemScope="itemscope"
-            itemType="http://schema.org/ListItem"
-            key={post.category_data.id}
-          >
-            <meta content={post.category_data.parents ? post.category_data.parents.length + 1 : 1} itemProp="position" />
-            <Link
-              href={`/posts/${post.category_data.url}`}
-              style={{ textDecoration: 'underline dotted' }}
-              title={post.category_data.title}
-              itemID={`/posts/${post.category_data.url}`}
-              itemScope="itemscope"
-              itemProp="item"
-              itemType="http://schema.org/Thing"
-            >
-              <span itemProp="name">
-                {post.category_data.title}
-              </span>
-            </Link>
-          </li>
-        </ul>
-      ) }
+            <div className={ styles.dot }>•</div>
+          </ul>
+        ) }
+        { created }
+        { post.author && (
+          <>
+            <div className={ styles.dot }>•</div>
+            { post.author.title }
+          </>
+        ) }
+      </div>
 
       { edit ? (
         <Edit
