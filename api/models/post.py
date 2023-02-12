@@ -5,6 +5,7 @@ Post model of DB object
 import time
 
 from libdev.time import get_time
+from libdev.lang import get_pure
 
 from models import Base, Attribute
 from lib import cfg
@@ -19,6 +20,9 @@ def default_title(instance):
     )
     return f"Черновик от {text_time}"
 
+def default_description(instance):
+    """ Default description """
+    return get_pure(instance.data).split('\n')[0]
 
 class Post(Base):
     """ Post """
@@ -28,7 +32,7 @@ class Post(Base):
 
     image = Attribute(types=str)
     title = Attribute(types=str, default=default_title)
-    description = Attribute(types=str, default='')
+    description = Attribute(types=str, default=default_description)
     data = Attribute(types=str, default='')
     category = Attribute(types=int, default=0)
     reactions = Attribute(types=dict, default={

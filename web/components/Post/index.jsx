@@ -10,7 +10,7 @@ import styles from '../../styles/post.module.css';
 import { toastAdd } from '../../redux/actions/system';
 import { categoriesClear } from '../../redux/actions/categories';
 import api from '../../lib/api';
-import { getFirst, getISO } from '../../lib/format';
+import { getISO } from '../../lib/format';
 import Upload from '../Forms/Upload';
 import Locale from '../Forms/Locale';
 import Category from '../Forms/Category';
@@ -167,8 +167,8 @@ export default ({ post, setPost }) => {
   }
 
   let canonical = process.env.NEXT_PUBLIC_WEB;
-  if (router.locale && router.locale !== 'en') {
-    canonical += `${router.locale}/`;
+  if (post.locale && post.locale !== 'en') {
+    canonical += `${post.locale}/`;
   }
   canonical += `posts/${post.url}`;
 
@@ -177,6 +177,15 @@ export default ({ post, setPost }) => {
       <Head>
         {/* SEO */}
         <title>{ `${post.title} | ${process.env.NEXT_PUBLIC_NAME}` }</title>
+        <meta name="title" content={`${post.title} | ${process.env.NEXT_PUBLIC_NAME}`} />
+        <meta name="og:title" content={`${post.title} | ${process.env.NEXT_PUBLIC_NAME}`} />
+        <meta name="description" content={post.description} />
+        <meta name="og:description" content={post.description} />
+        { post.image && (
+          <meta name="og:image" content={post.image} />
+        ) }
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_WEB}posts/${post.url}`} />
+        <meta property="og:type" content="website" />
         <link rel="canonical" href={canonical} />
       </Head>
       <div className="row">
@@ -194,7 +203,7 @@ export default ({ post, setPost }) => {
               image: post.image || '',
               datePublished: getISO(post.created),
               dateModified: getISO(post.updated),
-              text: getFirst(post.data),
+              text: post.description,
               author: [{
                 '@type': 'Person',
                 name: post.author ? `${post.author.title} ${post.author.id}` : '',
@@ -330,7 +339,7 @@ export default ({ post, setPost }) => {
                     '@type': 'ImageObject',
                     contentUrl: post.image,
                     name: post.title,
-                    description: getFirst(post.data),
+                    description: post.description,
                   }),
                 }}
               />

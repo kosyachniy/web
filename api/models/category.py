@@ -2,9 +2,15 @@
 Category model of DB object
 """
 
+from libdev.lang import get_pure
+
 from models import Base, Attribute
 from lib.queue import get
 
+
+def default_description(instance):
+    """ Default description """
+    return get_pure(instance.data).split('\n')[0]
 
 class Category(Base):
     """ Category """
@@ -12,7 +18,7 @@ class Category(Base):
     _name = 'categories'
     _search_fields = {'title', 'data'}
 
-    description = Attribute(types=str, default='')
+    description = Attribute(types=str, default=default_description)
     parent = Attribute(types=int, default=0)
     url = Attribute(types=str)
     status = Attribute(types=int, default=1)

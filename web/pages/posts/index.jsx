@@ -10,7 +10,6 @@ import styles from '../../styles/post.module.css';
 import { toastAdd } from '../../redux/actions/system';
 import { displaySet } from '../../redux/actions/main';
 import api from '../../lib/api';
-import { getFirst } from '../../lib/format';
 import Grid from '../../components/Post/Grid';
 import Feed from '../../components/Post/Feed';
 import Paginator from '../../components/Paginator';
@@ -29,8 +28,13 @@ export const Posts = ({
   const [posts, setPosts] = useState(postsLoaded);
   const [lastPage, setLastPage] = useState(count ? getPage(count) : page);
 
+  const title = `${category ? category.title : t('structure.posts')} | ${process.env.NEXT_PUBLIC_NAME}`;
   let canonical = process.env.NEXT_PUBLIC_WEB;
-  if (router.locale && router.locale !== 'en') {
+  if (category) {
+    if (category.locale && category.locale !== 'en') {
+      canonical += `${category.locale}/`;
+    }
+  } else if (router.locale && router.locale !== 'en') {
     canonical += `${router.locale}/`;
   }
   if (category && category.url) {
@@ -75,7 +79,24 @@ export const Posts = ({
     <>
       <Head>
         {/* SEO */}
-        <title>{ `${category ? category.title : t('structure.posts')} | ${process.env.NEXT_PUBLIC_NAME}` }</title>
+        <title>{ title }</title>
+        <meta name="title" content={title} />
+        <meta name="og:title" content={title} />
+        { category && (
+          <>
+            { category.description && (
+              <>
+                <meta name="description" content={category.description} />
+                <meta name="og:description" content={category.description} />
+              </>
+            ) }
+            { category.image && (
+              <meta name="og:image" content={category.image} />
+            ) }
+          </>
+        ) }
+        <meta property="og:url" content={canonical} />
+        <meta property="og:type" content="website" />
         <link rel="canonical" href={canonical} />
       </Head>
       <div className={`row ${styles.category}`}>
@@ -195,7 +216,7 @@ export const Posts = ({
                     '@type': 'ImageObject',
                     contentUrl: category.image,
                     name: category.title,
-                    description: getFirst(category.data),
+                    description: category.description,
                   }),
                 }}
               />
