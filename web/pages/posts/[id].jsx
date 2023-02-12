@@ -47,6 +47,7 @@ const Container = ({
       <Post post={post} setPost={setPost} />
     );
   }
+
   useEffect(() => {
     if (main.token && (!category || id !== category.url)) {
       getCategory({ url: id });

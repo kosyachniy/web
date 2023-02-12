@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -25,6 +26,16 @@ export const Posts = ({
   const mounted = useRef(true);
   const [posts, setPosts] = useState(postsLoaded);
   const [lastPage, setLastPage] = useState(count ? getPage(count) : page);
+
+  let canonical = process.env.NEXT_PUBLIC_WEB;
+  if (main.locale && main.locale !== 'en') {
+    canonical += `${main.locale}/`;
+  }
+  if (category && category.url) {
+    canonical += `posts/${category.url}`;
+  } else {
+    canonical = canonical.slice(0, -1);
+  }
 
   const getPost = (data = {}) => api(main, 'posts.get', data).then(res => {
     if (res.posts) {
@@ -60,6 +71,10 @@ export const Posts = ({
 
   return (
     <>
+      <Head>
+        {/* SEO */}
+        <link rel="canonical" href={canonical} />
+      </Head>
       <div className={`row ${styles.category}`}>
         <div className="col-8">
           { category ? (

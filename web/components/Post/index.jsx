@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
@@ -158,8 +159,18 @@ export default ({ post, setPost }) => {
     );
   }
 
+  let canonical = process.env.NEXT_PUBLIC_WEB;
+  if (main.locale && main.locale !== 'en') {
+    canonical += `${main.locale}/`;
+  }
+  canonical += `posts/${post.url}`;
+
   return (
     <div className={`album pb-2 ${styles.post}`}>
+      <Head>
+        {/* SEO */}
+        <link rel="canonical" href={canonical} />
+      </Head>
       <div className="row">
         <script
           type="application/ld+json"
