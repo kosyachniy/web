@@ -20,10 +20,9 @@ const Container = ({
     code,
     utm: main.utm,
   }).then(res => {
-    const previousPath = localStorage.getItem('previousPath');
     profileIn(res);
     popupSet(null);
-    router.push(previousPath);
+    router.push(localStorage.getItem('previousPath') || '/profile');
   }).catch(err => toastAdd({
     header: t('system.error'),
     text: err,
@@ -32,29 +31,31 @@ const Container = ({
   }));
 
   useEffect(() => {
-    const params = Object.fromEntries(new URLSearchParams(document.location.search));
-    if (params.code) {
-      const { code } = params;
-      if (code === undefined) {
+    if (main.token) {
+      const params = Object.fromEntries(new URLSearchParams(document.location.search));
+      if (params.code) {
+        const { code } = params;
+        if (code === undefined) {
+          router.push('/');
+        }
+
+        let type;
+        if (document.location.search.indexOf('google') !== -1) {
+          type = 'g';
+        } else if (document.location.search.indexOf('telegram') !== -1) {
+          type = 'tg';
+        } else if (document.location.search.indexOf('state=fb') !== -1) {
+          type = 'fb';
+        } else {
+          type = 'vk';
+        }
+
+        onSocial(type, code);
+      } else {
         router.push('/');
       }
-
-      let type;
-      if (document.location.search.indexOf('google') !== -1) {
-        type = 'g';
-      } else if (document.location.search.indexOf('telegram') !== -1) {
-        type = 'tg';
-      } else if (document.location.search.indexOf('state=fb') !== -1) {
-        type = 'fb';
-      } else {
-        type = 'vk';
-      }
-
-      onSocial(type, code);
-    } else {
-      router.push('/');
     }
-  }, []);
+  }, [main.token]);
 
   return (
     <></>

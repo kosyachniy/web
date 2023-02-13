@@ -1,3 +1,7 @@
+.post {
+    word-break: break-word;
+}
+
 .tools {
     display: flex;
     align-items: center;

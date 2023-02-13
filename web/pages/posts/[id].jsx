@@ -17,6 +17,7 @@ const Container = ({
   const { t } = useTranslation('common');
   const [category, setCategory] = useState(categoryLoaded);
   const [post, setPost] = useState(postLoaded);
+  const [viewed, setViewed] = useState(false);
 
   const getCategory = (data = {}) => api(main, 'categories.get', data).then(
     res => res.categories && setCategory(res.categories),
@@ -38,14 +39,9 @@ const Container = ({
 
   if (isPost) {
     useEffect(() => {
-      if (main.token) {
+      if (main.token && (!viewed || !post || +id !== post.id)) {
         getPost({ id, utm: main.utm });
-      }
-    }, [main.token]);
-
-    useEffect(() => {
-      if (main.token && (!post || +id !== post.id)) {
-        getPost({ id, utm: main.utm });
+        setViewed(true);
       }
     }, [main.token, post, id]);
 
@@ -96,14 +92,14 @@ export const getServerSideProps = async ({ query, locale }) => {
   if (isPost) {
     id = +id.split('-').pop();
     try {
-      const res = await api(null, 'posts.get', { id }, false);
+      const res = await api(null, 'posts.get', { id }, false, true);
       postLoaded = res.posts || null;
     } catch {
       postLoaded = null;
     }
   } else {
     try {
-      const res = await api(null, 'categories.get', { url: id }, false);
+      const res = await api(null, 'categories.get', { url: id }, false, true);
       categoryLoaded = res.categories || null;
 
       page = !Number.isNaN(Number(query.page)) ? (+query.page || 1) : 1;
@@ -112,7 +108,7 @@ export const getServerSideProps = async ({ query, locale }) => {
         locale,
         limit: 18,
         offset: (page - 1) * 18,
-      }, false);
+      }, false, true);
       postsLoaded = subres.posts || null;
       count = subres.count;
     } catch {

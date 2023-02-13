@@ -11,8 +11,8 @@ export const getServerSideProps = async ({ query, locale }) => {
     locale,
     limit: 18,
     offset: (page - 1) * 18,
-  }, false);
-  const subres = await api(null, 'categories.get', { locale }, false);
+  }, false, true);
+  const subres = await api(null, 'categories.get', { locale }, false, true);
 
   return {
     props: {
