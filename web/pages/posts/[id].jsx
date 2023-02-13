@@ -39,13 +39,13 @@ const Container = ({
   if (isPost) {
     useEffect(() => {
       if (main.token) {
-        getPost({ id });
+        getPost({ id, utm: main.utm });
       }
     }, [main.token]);
 
     useEffect(() => {
       if (main.token && (!post || +id !== post.id)) {
-        getPost({ id });
+        getPost({ id, utm: main.utm });
       }
     }, [main.token, post, id]);
 

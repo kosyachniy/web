@@ -6,7 +6,7 @@ import re
 
 from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
-from libdev.lang import to_url
+from libdev.lang import to_url, get_pure
 from consys.errors import ErrorAccess
 
 from models.user import User
@@ -146,11 +146,7 @@ async def handler(
                     post['image'] = res.groups()[0]
 
             # Content
-            post['data'] = re.sub(
-                r'<[^>]*>',
-                '',
-                post['data']
-            ).replace('&nbsp;', ' ')
+            post['data'] = get_pure(post['data']).split('\n')[0]
 
             # URL
             post['url'] = to_url(post['title']) or ""

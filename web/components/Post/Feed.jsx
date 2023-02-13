@@ -72,7 +72,7 @@ export default ({ posts }) => {
           <div className={`cards-content ${styles.reactions}`}>
             <div>
               <i className="fa-regular fa-heart" />
-              { post.reactions.likes ? ` ${post.reactions.likes}` : '' }
+              { post.reactions ? ` ${post.reactions}` : '' }
             </div>
             {/* <i className="fa-solid fa-heart" /> */}
             <div>
@@ -82,7 +82,7 @@ export default ({ posts }) => {
             </div>
             <div>
               <i className="fa-solid fa-share" />
-              { post.reactions.reposts ? ` ${post.reactions.reposts}` : '' }
+              { post.reposts ? ` ${post.reposts}` : '' }
             </div>
           </div>
         </div>
