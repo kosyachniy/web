@@ -16,6 +16,7 @@ import Locale from '../Forms/Locale';
 import Category from '../Forms/Category';
 import Editor from '../Forms/Editor';
 import Comments from '../Comment';
+import Hexagon from '../Hexagon';
 import Card from './Card';
 
 export const Edit = ({ post, setEdit, setPost }) => {
@@ -297,23 +298,8 @@ export default ({ post, setPost }) => {
                     </span>
                   </Link>
                 </li>
-                <div className={styles.dot}>•</div>
               </ul>
             ) }
-            { created }
-            { post.author ? (
-              <>
-                <div className={styles.dot}>•</div>
-                { post.author.title }
-              </>
-            ) : (<></>) }
-            { post.views ? (
-              <>
-                <div className={styles.dot}>•</div>
-                <i className="fa-regular fa-eye me-2" style={{ lineHeight: '1.5' }} />
-                { post.views }
-              </>
-            ) : (<></>) }
           </div>
         </div>
         <div className={`col-md-4 ${styles.tools}`}>
@@ -406,6 +392,26 @@ export default ({ post, setPost }) => {
               </div> */}
             </div>
             <div className={`col-md-4 ${styles.side}`}>
+              <div className={styles.about}>
+                { post.author ? (
+                  <div className={styles.user}>
+                    <div className="me-2">
+                      <Hexagon url={post.author.image || '/user.png'} />
+                    </div>
+                    {post.author.title ? post.author.title : t('system.guest')}
+                  </div>
+                ) : (<></>) }
+                <div>
+                  <i className="fa-solid fa-pencil me-2" />
+                  { created }
+                </div>
+                { post.views ? (
+                  <div>
+                    <i className="fa-regular fa-eye me-2" />
+                    { post.views }
+                  </div>
+                ) : (<></>) }
+              </div>
               <div>
                 <div className={styles.header}>
                   <i className="bi bi-fire me-2" />

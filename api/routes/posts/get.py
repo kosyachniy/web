@@ -14,6 +14,7 @@ from models.post import Post
 from models.comment import Comment
 from models.category import Category
 from models.track import Track
+from models.reaction import Reaction
 from services.auth import sign
 from lib.queue import get
 
@@ -29,9 +30,10 @@ class Type(BaseModel):
     my: bool = None
     category: int = None
     locale: str = None
+    utm: str = None
     # TODO: fields: list[str] = None
 
-# pylint: disable=too-many-statements
+# pylint: disable=too-many-statements,too-many-branches
 @router.post("/get/")
 async def handler(
     request: Request,
@@ -46,18 +48,6 @@ async def handler(
         raise ErrorAccess('get')
 
     extend = isinstance(data.id, int)
-
-    # Views counter
-    if extend:
-        post = Post.get(data.id, fields={'views'})
-        uniq = user.id or request.state.token
-        if (
-            uniq
-            and user.id not in post.views
-            and request.state.token not in post.views
-        ):
-            post.views.append(uniq)
-            post.save()
 
     # Action tracking
     if data.search:
@@ -82,8 +72,6 @@ async def handler(
     if extend:
         fields |= {
             'description',
-            'reactions',
-            'views',
             'category',
             'locale',
             'user',
@@ -139,7 +127,10 @@ async def handler(
                 post['comments'].append(comment)
 
             # Views counter
-            post['views'] = len(post['views'])
+            post['views'] = len(Reaction.get(
+                type={'$exists': False},
+                post=data.id,
+            ))
 
             return post
 
@@ -187,7 +178,7 @@ async def handler(
         limit=data.limit,
         offset=data.offset,
         search=data.search,
-        fields=fields,  # TODO: None if data.id else fields,
+        fields=fields,
         status={'$exists': False} if user.status < 5 else None,
         category={
             '$in': Category.get_childs(data.category),
@@ -236,6 +227,41 @@ async def handler(
     # Sort
     if isinstance(posts, list):
         posts = sorted(posts, key=lambda x: x['updated'], reverse=True)
+
+    # Views counter
+    # pylint: disable=too-many-nested-blocks
+    if extend and (user.id or request.state.token):
+        reactions = Reaction.get(
+            type={'$exists': False},
+            post=data.id,
+            extra={
+                '$or': [
+                    {'user': user.id},
+                    {'token': request.state.token},
+                ],
+            },
+        )
+        if reactions:
+            if user.id:
+                viewed = False
+                for reaction in reactions[::-1]:
+                    if reaction.user:
+                        if reaction.user == user.id:
+                            viewed = True
+                        continue
+                    if viewed:
+                        reaction.rm()
+                        continue
+                    reaction.user = user.id
+                    reaction.save()
+                    viewed = True
+        else:
+            Reaction(
+               post=data.id,
+               user=user.id,
+               token=request.state.token,
+               utm=data.utm or None,
+            ).save()
 
     # Response
     return {
