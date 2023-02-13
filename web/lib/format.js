@@ -14,7 +14,7 @@ export const getTime = data => {
   const yyyy = d.getFullYear();
   const mm = (`0${d.getMonth() + 1}`).slice(-2);
   const dd = (`0${d.getDate()}`).slice(-2);
-  const hh = d.getHours();
+  const hh = (`0${d.getHours()}`).slice(-2);
   const min = (`0${d.getMinutes()}`).slice(-2);
   return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
 };

@@ -164,20 +164,22 @@ export default ({ post, setPost }) => {
   })));
 
   useEffect(() => {
-    // Formatted time
-    setCreated(getTime(post.created));
+    if (main.token && post) {
+      // Formatted time
+      setCreated(getTime(post.created));
 
-    // Recommendations
-    api(main, 'posts.guess', {
-      id: post.id,
-      category: post.category,
-      locale: router.locale,
-    }).then(res => {
-      if (res.posts) {
-        setPosts(res.posts);
-      }
-    });
-  }, [post.id]);
+      // Recommendations
+      api(main, 'posts.guess', {
+        id: post.id,
+        category: post.category,
+        locale: router.locale,
+      }).then(res => {
+        if (res.posts) {
+          setPosts(res.posts);
+        }
+      });
+    }
+  }, [main.token, post && post.id]);
 
   if (!post) {
     return (
@@ -241,6 +243,78 @@ export default ({ post, setPost }) => {
         />
         <div className="col-md-8">
           <h1>{ post.title }</h1>
+          <div className={styles.info}>
+            { post.category_data && (
+              <ul
+                role="navigation"
+                aria-label="breadcrumb"
+                itemScope="itemscope"
+                itemType="http://schema.org/BreadcrumbList"
+                className={styles.navigation}
+              >
+                { post.category_data.parents && post.category_data.parents.map((parent, i) => (
+                  <li
+                    itemProp="itemListElement"
+                    itemScope="itemscope"
+                    itemType="http://schema.org/ListItem"
+                    key={parent.id}
+                  >
+                    <meta content={i + 1} itemProp="position" />
+                    <Link
+                      href={`/posts/${parent.url}`}
+                      style={{ textDecoration: 'underline dotted' }}
+                      title={parent.title}
+                      itemID={`/posts/${parent.url}`}
+                      itemScope="itemscope"
+                      itemProp="item"
+                      itemType="http://schema.org/Thing"
+                    >
+                      <span itemProp="name">
+                        {parent.title}
+                      </span>
+                    </Link>
+                    <span>&nbsp;/&nbsp;</span>
+                  </li>
+                )) }
+                <li
+                  itemProp="itemListElement"
+                  itemScope="itemscope"
+                  itemType="http://schema.org/ListItem"
+                  key={post.category_data.id}
+                >
+                  <meta content={post.category_data.parents ? post.category_data.parents.length + 1 : 1} itemProp="position" />
+                  <Link
+                    href={`/posts/${post.category_data.url}`}
+                    style={{ textDecoration: 'underline dotted' }}
+                    title={post.category_data.title}
+                    itemID={`/posts/${post.category_data.url}`}
+                    itemScope="itemscope"
+                    itemProp="item"
+                    itemType="http://schema.org/Thing"
+                  >
+                    <span itemProp="name">
+                      {post.category_data.title}
+                    </span>
+                  </Link>
+                </li>
+                <div className={styles.dot}>•</div>
+              </ul>
+            ) }
+            { created }
+            { post.author ? (
+              <>
+                <div className={styles.dot}>•</div>
+                { post.author.title }
+              </>
+            ) : (<></>) }
+            { post.views ? (
+              <>
+                <div className={styles.dot}>•</div>
+                <i className="fa-regular fa-eye me-2" style={{ lineHeight: '1.5' }} />
+                { post.views }
+              </>
+            ) : (<></>) }
+          </div>
         </div>
         <div className={`col-md-4 ${styles.tools}`}>
           { profile.status >= 2 && (
@@ -279,72 +353,6 @@ export default ({ post, setPost }) => {
             </>
           ) }
         </div>
-      </div>
-
-      <div className={styles.info}>
-        { post.category_data && (
-          <ul
-            role="navigation"
-            aria-label="breadcrumb"
-            itemScope="itemscope"
-            itemType="http://schema.org/BreadcrumbList"
-            className={styles.navigation}
-          >
-            { post.category_data.parents && post.category_data.parents.map((parent, i) => (
-              <li
-                itemProp="itemListElement"
-                itemScope="itemscope"
-                itemType="http://schema.org/ListItem"
-                key={parent.id}
-              >
-                <meta content={i + 1} itemProp="position" />
-                <Link
-                  href={`/posts/${parent.url}`}
-                  style={{ textDecoration: 'underline dotted' }}
-                  title={parent.title}
-                  itemID={`/posts/${parent.url}`}
-                  itemScope="itemscope"
-                  itemProp="item"
-                  itemType="http://schema.org/Thing"
-                >
-                  <span itemProp="name">
-                    {parent.title}
-                  </span>
-                </Link>
-                <span>&nbsp;/&nbsp;</span>
-              </li>
-            )) }
-            <li
-              itemProp="itemListElement"
-              itemScope="itemscope"
-              itemType="http://schema.org/ListItem"
-              key={post.category_data.id}
-            >
-              <meta content={post.category_data.parents ? post.category_data.parents.length + 1 : 1} itemProp="position" />
-              <Link
-                href={`/posts/${post.category_data.url}`}
-                style={{ textDecoration: 'underline dotted' }}
-                title={post.category_data.title}
-                itemID={`/posts/${post.category_data.url}`}
-                itemScope="itemscope"
-                itemProp="item"
-                itemType="http://schema.org/Thing"
-              >
-                <span itemProp="name">
-                  {post.category_data.title}
-                </span>
-              </Link>
-            </li>
-            <div className={styles.dot}>•</div>
-          </ul>
-        ) }
-        { created }
-        { post.author && (
-          <>
-            <div className={styles.dot}>•</div>
-            { post.author.title }
-          </>
-        ) }
       </div>
 
       { edit ? (
@@ -399,7 +407,10 @@ export default ({ post, setPost }) => {
             </div>
             <div className={`col-md-4 ${styles.side}`}>
               <div>
-                <div className={styles.header}>{ `${t('system.popular')} 🔥` }</div>
+                <div className={styles.header}>
+                  <i className="bi bi-fire me-2" />
+                  {t('system.popular')}
+                </div>
                 { posts.map(post => <Card post={post} key={post.id} />) }
               </div>
             </div>

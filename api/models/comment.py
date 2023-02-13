@@ -13,10 +13,7 @@ class Comment(Base):
 
     data = Attribute(types=str, default='')
     parent = Attribute(types=int, default=0)
-    reactions = Attribute(types=dict, default={
-        'views': [],
-        'likes': [],
-    }) # TODO: attributes
+    reactions = Attribute(types=dict)
     post = Attribute(types=int)
     status = Attribute(types=int, default=1)
     token = Attribute(types=str)

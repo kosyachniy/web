@@ -35,11 +35,8 @@ class Post(Base):
     description = Attribute(types=str, default=default_description)
     data = Attribute(types=str, default='')
     category = Attribute(types=int, default=0)
-    reactions = Attribute(types=dict, default={
-        'views': [], # TODO: + UTM
-        'likes': [],
-        'reposts': [],
-    }) # TODO: attributes
+    reactions = Attribute(types=dict)
+    views = Attribute(types=list) # TODO: + UTM
     tags = Attribute(types=list)
     source = Attribute(types=str)
     status = Attribute(types=int, default=1)

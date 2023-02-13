@@ -100,7 +100,7 @@ export const Posts = ({
         <link rel="canonical" href={canonical} />
       </Head>
       <div className={`row ${styles.category}`}>
-        <div className="col-8">
+        <div className="col-md-8">
           { category ? (
             <ul
               role="navigation"
@@ -156,7 +156,7 @@ export const Posts = ({
             </ul>
           ) : (<h1>{ t('structure.posts') }</h1>) }
         </div>
-        <div className={`col-4 ${styles.tools}`}>
+        <div className={`col-md-4 ${styles.tools}`}>
           <div className="btn-group" role="group">
             <button
               type="button"

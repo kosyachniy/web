@@ -45,6 +45,20 @@ async def handler(
     if user.status < 2:
         raise ErrorAccess('get')
 
+    extend = isinstance(data.id, int)
+
+    # Views counter
+    if extend:
+        post = Post.get(data.id, fields={'views'})
+        uniq = user.id or request.state.token
+        if (
+            uniq
+            and user.id not in post.views
+            and request.state.token not in post.views
+        ):
+            post.views.append(uniq)
+            post.save()
+
     # Action tracking
     if data.search:
         Track(
@@ -59,22 +73,25 @@ async def handler(
     fields = {
         'id',
         'title',
-        'description',
         'data',
-        'reactions',
         'image',
-        'category',
-        'locale',
         'created',
         'updated',
         'status',
-        'user',
-        # 'geo',
     }
+    if extend:
+        fields |= {
+            'description',
+            'reactions',
+            'views',
+            'category',
+            'locale',
+            'user',
+        }
 
     # Processing
 
-    if isinstance(data.id, int):
+    if extend:
         def handle(post):
             # Add category info
             if post.get('category'):
@@ -120,6 +137,9 @@ async def handler(
                 else:
                     del comment['user']
                 post['comments'].append(comment)
+
+            # Views counter
+            post['views'] = len(post['views'])
 
             return post
 

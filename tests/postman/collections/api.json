@@ -501,6 +501,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "reply",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"post\": 1,\n    \"data\": \"Комментарий\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/posts/reply/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"reply",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

@@ -8,6 +8,10 @@
     .tools {
         margin-bottom: 12px;
     }
+
+    .post .tools {
+        margin: -12px 0 16px 0;
+    }
 }
 
 .post .tools button {

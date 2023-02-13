@@ -91,7 +91,12 @@ const Body = ({
   return (
     <>
       <Head>
+        {/* SEO */}
         <title>{ process.env.NEXT_PUBLIC_NAME }</title>
+        <meta name="title" content={process.env.NEXT_PUBLIC_NAME} />
+        <meta name="og:title" content={process.env.NEXT_PUBLIC_NAME} />
+        <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo_dark.svg`} />
+        <meta property="og:type" content="website" />
 
         {/* Zoom */}
         <meta

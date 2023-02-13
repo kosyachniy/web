@@ -38,6 +38,12 @@ const Container = ({
 
   if (isPost) {
     useEffect(() => {
+      if (main.token) {
+        getPost({ id });
+      }
+    }, [main.token]);
+
+    useEffect(() => {
       if (main.token && (!post || +id !== post.id)) {
         getPost({ id });
       }
