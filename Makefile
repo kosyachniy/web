@@ -91,8 +91,10 @@ clear-all:
 	make clear-logs
 
 set:
-	sudo chmod o+x ~
+	sudo chmod 777 ~
 	sudo chmod -R a+w ~/data/
+	sudo chmod 0700 ~/.ssh
+	sudo chmod -R 0600 ~/.ssh/*
 	export EXTERNAL_HOST=${EXTERNAL_HOST} WEB_PORT=${WEB_PORT} API_PORT=${API_PORT} TG_PORT=${TG_PORT} DATA_PATH=${DATA_PATH} PROMETHEUS_PORT=${PROMETHEUS_PORT} GRAFANA_PORT=${GRAFANA_PORT}; \
 	envsubst '$${EXTERNAL_HOST} $${WEB_PORT} $${API_PORT} $${TG_PORT} $${DATA_PATH} $${PROMETHEUS_PORT} $${GRAFANA_PORT}' < configs/nginx.prod.conf > /etc/nginx/sites-enabled/${PROJECT_NAME}.conf
 	sudo systemctl restart nginx

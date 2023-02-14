@@ -6,7 +6,7 @@ import re
 
 from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel
-from libdev.lang import to_url, get_pure
+from libdev.lang import get_pure
 from consys.errors import ErrorAccess
 
 from models.user import User
@@ -65,6 +65,7 @@ async def handler(
         'title',
         'data',
         'image',
+        'url',
         'created',
         'updated',
         'status',
@@ -94,12 +95,6 @@ async def handler(
                     )
                     if parent in category_ids
                 ]
-
-            # URL
-            post['url'] = to_url(post['title']) or ""
-            if post['url']:
-                post['url'] += "-"
-            post['url'] += f"{post['id']}"
 
             # Author
             if post.get('user'):
@@ -147,12 +142,6 @@ async def handler(
 
             # Content
             post['data'] = get_pure(post['data']).split('\n')[0]
-
-            # URL
-            post['url'] = to_url(post['title']) or ""
-            if post['url']:
-                post['url'] += "-"
-            post['url'] += f"{post['id']}"
 
             return post
 

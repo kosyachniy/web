@@ -149,7 +149,7 @@ async def generate_sitemap():
         ):
             last_update = max(last_update, post.updated)
             links_sub.append({
-                'url': f'posts/{post.id}/',
+                'url': f'posts/{post.url}/',
                 'time': post.updated,
                 'freq': 'daily',
                 'priority': 0.7,
