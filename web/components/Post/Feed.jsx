@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 
@@ -5,6 +6,7 @@ import styles from '../../styles/feed.module.css';
 
 export default ({ posts }) => {
   const { t } = useTranslation('common');
+  const profile = useSelector(state => state.profile);
 
   const getTime = time => {
     const newTime = new Date(time * 1000);
@@ -37,13 +39,15 @@ export default ({ posts }) => {
 
   return (
     <div className={`container ${styles.feed}`}>
-      <Link
-        href="/posts/add"
-        className="btn btn-success"
-        style={{ width: '100%' }}
-      >
-        <i className="fa-solid fa-plus" />
-      </Link>
+      { profile.status >= 2 && (
+        <Link
+          href="/posts/add"
+          className="btn btn-success"
+          style={{ width: '100%' }}
+        >
+          <i className="fa-solid fa-plus" />
+        </Link>
+      ) }
 
       { !posts.length && (
       <p>

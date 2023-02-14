@@ -95,6 +95,8 @@ const Body = ({
         <title>{ process.env.NEXT_PUBLIC_NAME }</title>
         <meta name="title" content={process.env.NEXT_PUBLIC_NAME} />
         <meta name="og:title" content={process.env.NEXT_PUBLIC_NAME} />
+        <meta name="description" content={router.locale === 'en' ? 'Template Web App' : 'Шаблонное веб-приложение'} />
+        <meta name="og:description" content={router.locale === 'en' ? 'Template Web App' : 'Шаблонное веб-приложение'} />
         <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo_dark.svg`} />
         <meta property="og:type" content="website" />
 
