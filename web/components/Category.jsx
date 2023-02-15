@@ -213,13 +213,12 @@ export default ({
       data-bs-parent="#accordionCategories"
     >
       <div className="accordion-body">
-        { edit
-                    && (
-                    <Edit
-                      category={category}
-                      setEdit={setEdit}
-                    />
-                    )}
+        { edit && (
+          <Edit
+            category={category}
+            setEdit={setEdit}
+          />
+        ) }
       </div>
     </div>
   </div>

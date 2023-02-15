@@ -91,7 +91,7 @@ clear-all:
 	make clear-logs
 
 set:
-	sudo chmod 777 ~
+	sudo chmod 0755 ~
 	sudo chmod -R a+w ~/data/
 	sudo chmod 0700 ~/.ssh
 	sudo chmod -R 0600 ~/.ssh/*

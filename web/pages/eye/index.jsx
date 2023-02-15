@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { categoriesAdd } from '../../redux/actions/categories';
+import { Online } from '../../components/Online';
 import Category from '../../components/Category';
 
 const List = ({
@@ -57,6 +58,9 @@ const Container = ({
 
   return (
     <>
+      <br />
+      <Online />
+      <br />
       <h1>{ t('system.categories') }</h1>
       <div className="accordion" id="accordionCategories">
         <List

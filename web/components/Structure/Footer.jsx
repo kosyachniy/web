@@ -1,10 +1,7 @@
 import Link from 'next/link';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { changeTheme } from '../../redux/actions/main';
+import { useSelector } from 'react-redux';
 
 export default () => {
-  const dispatch = useDispatch();
   const main = useSelector(state => state.main);
 
   return (
@@ -24,28 +21,11 @@ export default () => {
           />
         </Link>
         <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li
-            className="ms-3"
-            style={{ cursor: 'pointer' }}
-            onClick={() => dispatch(changeTheme(main.theme === 'dark' ? 'light' : 'dark'))}
-          >
-            <i className={main.theme === 'dark' ? 'bi bi-sun-fill' : 'fa-solid fa-moon'} />
+          <li className="ms-3 d-flex">
+            <Link href="https://t.me/hnklny">
+              { main.locale === 'en' ? 'Channel on Telegram' : 'Канал в Telegram' }
+            </Link>
           </li>
-          <Link
-            href="#"
-            locale={main.locale === 'ru' ? 'en' : 'ru'}
-          >
-            <li
-              className="ms-3 d-flex"
-              style={{ cursor: 'pointer' }}
-            >
-              <img
-                src={`/lang/${main.locale}.svg`}
-                alt={main.locale}
-                style={{ height: '24px' }}
-              />
-            </li>
-          </Link>
         </ul>
       </div>
     </footer>

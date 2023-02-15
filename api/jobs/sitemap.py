@@ -127,7 +127,7 @@ async def generate_sitemap():
             status={'$exists': False},
         ):
             links_sub.append({
-                'url': f'posts/{category.url}/',
+                'url': f'posts/{category.url}',
                 'time': timestamp,
                 'freq': 'daily',
                 'priority': 0.8,
@@ -149,7 +149,7 @@ async def generate_sitemap():
         ):
             last_update = max(last_update, post.updated)
             links_sub.append({
-                'url': f'posts/{post.url}/',
+                'url': f'posts/{post.url}',
                 'time': post.updated,
                 'freq': 'daily',
                 'priority': 0.7,

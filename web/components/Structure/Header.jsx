@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 
 import styles from '../../styles/header.module.css';
 import { popupSet, toastAdd, searching } from '../../redux/actions/system';
+import { changeTheme } from '../../redux/actions/main';
 import { profileOut } from '../../redux/actions/profile';
 import api from '../../lib/api';
 import Hexagon from '../Hexagon';
@@ -48,6 +49,28 @@ const Navigation = () => {
           ))) }
         </ul>
       </li>
+      {/* { categories && categories.map(category => (category.id && category.status ? (
+        <li className="nav-item dropdown">
+          <Link href={`/posts/${category.url}/`} className="nav-link">
+            { category.title }
+          </Link>
+          { category.categories && category.categories.length ? (
+            <ul className={`${styles.menu} dropdown-menu dropdown-menu-${main.theme}`}>
+              { category.categories.map(subcategory => (
+                <Link
+                  href={`/posts/${subcategory.url}/`}
+                  className="dropdown-item"
+                  key={subcategory.id}
+                >
+                  { subcategory.title }
+                </Link>
+              )) }
+            </ul>
+          ) : (<></>) }
+        </li>
+      ) : (
+        <React.Fragment key={category.id} />
+      ))) } */}
       {/* <li className="nav-item">
         <Link href="/" className="nav-link">
           { t('structure.space') }
@@ -86,34 +109,6 @@ const Search = () => {
   );
 };
 
-const Online = () => {
-  const { t } = useTranslation('common');
-  const dispatch = useDispatch();
-  const online = useSelector(state => state.online);
-
-  if (!online.count) {
-    return (
-      <div>
-        { t('system.offline') }
-        <div className={styles.offline} />
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      { t('system.online') }
-      <div className={styles.online} />
-      <div
-        className="badge bg-secondary pe-2"
-        onClick={() => dispatch(popupSet('online'))}
-      >
-        { online.count }
-      </div>
-    </div>
-  );
-};
-
 const Profile = () => {
   const { t } = useTranslation('common');
   const dispatch = useDispatch();
@@ -131,15 +126,13 @@ const Profile = () => {
 
   if (!profile.id) {
     return (
-      <div style={{ paddingRight: 0, paddingBottom: 0 }}>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={() => dispatch(popupSet('auth'))}
-        >
-          { t('system.sign_in') }
-        </button>
-      </div>
+      <button
+        type="button"
+        className="btn btn-success"
+        onClick={() => dispatch(popupSet('auth'))}
+      >
+        { t('system.sign_in') }
+      </button>
     );
   }
 
@@ -193,6 +186,8 @@ const Profile = () => {
 };
 
 export default () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const main = useSelector(state => state.main);
 
   return (
@@ -220,8 +215,21 @@ export default () => {
             </li>
           </ul>
           <ul className="nav navbar-nav navbar-right">
-            <li className="nav-item">
-              <Online />
+            <li className={`me-4 ${styles.custom}`}>
+              <i
+                className={`me-3 ms-1 ${main.theme === 'dark' ? 'bi bi-sun-fill' : 'fa-solid fa-moon'}`}
+                onClick={() => dispatch(changeTheme(main.theme === 'dark' ? 'light' : 'dark'))}
+              />
+              <Link
+                href={router.asPath}
+                locale={main.locale === 'ru' ? 'en' : 'ru'}
+              >
+                <img
+                  src={`/lang/${main.locale}.svg`}
+                  alt={main.locale}
+                  style={{ height: '24px' }}
+                />
+              </Link>
             </li>
             <li className="nav-item dropdown">
               <Profile />

@@ -97,7 +97,7 @@ const Body = ({
         <meta name="og:title" content={process.env.NEXT_PUBLIC_NAME} />
         <meta name="description" content={router.locale === 'en' ? 'Template Web App' : 'Шаблонное веб-приложение'} />
         <meta name="og:description" content={router.locale === 'en' ? 'Template Web App' : 'Шаблонное веб-приложение'} />
-        <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo_dark.svg`} />
+        <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo.png`} />
         <meta property="og:type" content="website" />
 
         {/* Zoom */}

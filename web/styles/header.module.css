@@ -1,38 +1,11 @@
-/* Online indicator */
-
-.online,
-.offline {
-    display: inline-block;
-    width: .7em;
-    height: .7em;
-    font-size: .9em;
-    margin: 0 12px 0 8px;
-}
-
-.online {
-    background: #28b62c;
-    border-radius: 50%;
-    animation-name: pulse-animation;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-}
-
-@keyframes pulse-animation {
-    0% { -webkit-transform: scale(1); }
-    25% { -webkit-transform: scale(1); }
-    50% { -webkit-transform: scale(1.5) }
-    75% { -webkit-transform: scale(1); }
-    100% { -webkit-transform: scale(1); }
-}
-
-.offline {
-    background: #ff4136;
-}
-
-/* Menu */
-
 .menu,
 .menu .dropdown-item {
     cursor: pointer;
+}
+
+.custom {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    line-height: 1.4 !important;
 }
