@@ -40,6 +40,7 @@ const Container = ({
   if (isPost) {
     useEffect(() => {
       if (main.token && (!viewed || !post || +id !== post.id)) {
+        setPost(null);
         getPost({ id, utm: main.utm });
         setViewed(true);
       }

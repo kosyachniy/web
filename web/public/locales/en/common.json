@@ -47,7 +47,14 @@
         "blocked": "Hidden",
         "unblocked": "Opened",
         "guest": "Guest",
-        "popular": "Popular"
+        "popular": "Popular",
+        "privacy": "Privacy policy",
+        "offer": "Offer",
+        "unsubscribe": "Cancel subscription",
+        "permission": "Data Processing Policy",
+        "rates": "Rates",
+        "refund": "Refund",
+        "main": "Main"
     },
     "brand": {
         "description": "Template web app",

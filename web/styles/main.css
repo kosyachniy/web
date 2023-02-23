@@ -24,6 +24,10 @@ textarea {
     resize: none;
 }
 
+ul {
+    list-style-type: disc;
+}
+
 .dark {
     background-color: var(--bs-dark);
     color: var(--bs-light);

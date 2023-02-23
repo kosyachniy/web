@@ -28,6 +28,12 @@ export const Posts = ({
   const [posts, setPosts] = useState(postsLoaded);
   const [lastPage, setLastPage] = useState(count ? getPage(count) : page);
 
+  // useEffect(() => {
+  //   if (main.token && profile.status < 2) {
+  //     router.push('/');
+  //   }
+  // }, [main.token, profile.status]);
+
   const title = `${category ? category.title : t('structure.posts')} | ${process.env.NEXT_PUBLIC_NAME}`;
   let canonical = process.env.NEXT_PUBLIC_WEB;
   if (category) {
@@ -109,6 +115,25 @@ export const Posts = ({
               itemType="http://schema.org/BreadcrumbList"
               className={styles.navigation}
             >
+              <li
+                itemProp="itemListElement"
+                itemScope="itemscope"
+                itemType="http://schema.org/ListItem"
+              >
+                <meta content="0" itemProp="position" />
+                <Link
+                  href="/posts"
+                  style={{ textDecoration: 'underline dotted' }}
+                  title={t('system.main')}
+                  itemID="/posts"
+                  itemScope="itemscope"
+                  itemProp="item"
+                  itemType="http://schema.org/Thing"
+                >
+                  <span itemProp="name">{ t('system.main') }</span>
+                </Link>
+                <span>&nbsp;/&nbsp;</span>
+              </li>
               { category.parents && category.parents.map((parent, i) => (
                 <li
                   itemProp="itemListElement"

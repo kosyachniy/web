@@ -29,6 +29,9 @@ export default ({ editorLoaded, data, updatePost }) => {
               //     Authorization: 'Bearer <JSON Web Token>'
               // }
             },
+            mediaEmbed: {
+              previewsInData: true,
+            },
           }}
           data={data}
           onReady={editor => {

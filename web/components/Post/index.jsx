@@ -253,6 +253,25 @@ export default ({ post, setPost }) => {
                 itemType="http://schema.org/BreadcrumbList"
                 className={styles.navigation}
               >
+                <li
+                  itemProp="itemListElement"
+                  itemScope="itemscope"
+                  itemType="http://schema.org/ListItem"
+                >
+                  <meta content="0" itemProp="position" />
+                  <Link
+                    href="/posts"
+                    style={{ textDecoration: 'underline dotted' }}
+                    title={t('system.main')}
+                    itemID="/posts"
+                    itemScope="itemscope"
+                    itemProp="item"
+                    itemType="http://schema.org/Thing"
+                  >
+                    <span itemProp="name">{ t('system.main') }</span>
+                  </Link>
+                  <span>&nbsp;/&nbsp;</span>
+                </li>
                 { post.category_data.parents && post.category_data.parents.map((parent, i) => (
                   <li
                     itemProp="itemListElement"
@@ -393,7 +412,7 @@ export default ({ post, setPost }) => {
             </div>
             <div className={`col-md-4 ${styles.side}`}>
               <div className={styles.about}>
-                { post.author ? (
+                { post.author && post.author.title ? (
                   <div className={styles.user}>
                     <div className="me-2">
                       <Hexagon url={post.author.image || '/user.png'} />

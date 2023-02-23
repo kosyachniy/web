@@ -133,6 +133,9 @@ async def generate_sitemap():
                 'priority': 0.8,
             })
 
+        if not links_sub:
+            continue
+
         url = await generate_file(links_sub, locale, 'categories')
         links.append({
             'url': url,
@@ -154,6 +157,9 @@ async def generate_sitemap():
                 'freq': 'daily',
                 'priority': 0.7,
             })
+
+        if not links_sub:
+            continue
 
         url = await generate_file(links_sub, locale, 'posts', 1)
         links.append({
