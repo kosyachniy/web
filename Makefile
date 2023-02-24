@@ -34,6 +34,9 @@ log-tg:
 connect:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}-api | cut -d ' ' -f 1` bash
 
+script:
+	docker exec -it `docker ps -a | grep ${PROJECT_NAME}-api | cut -d ' ' -f 1` python -m scripts.$(name)
+
 db:
 	docker exec -it `docker ps -a | grep ${PROJECT_NAME}-db | cut -d ' ' -f 1` mongosh -u ${MONGO_USER} -p ${MONGO_PASS}
 

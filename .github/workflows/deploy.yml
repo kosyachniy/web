@@ -47,7 +47,7 @@ jobs:
             # yes | sudo docker system prune -a
 
             echo "Pulling new version"
-            git clone git@github.com:kosyachniy/web.git
+            yes | git clone git@github.com:kosyachniy/web.git
             if [ -d ~/data ];
             then
                 echo ""

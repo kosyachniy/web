@@ -88,6 +88,11 @@
     padding: 8px 12px;
 } */
 
+.side > div:last-child {
+    position: sticky;
+    top: 56px;
+}
+
 .side .header {
     font-size: 1.2em;
     border-bottom: .12em solid rgba(206, 212, 218, .3);
