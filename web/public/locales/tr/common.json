@@ -1,0 +1,122 @@
+{
+    "months": {
+        "january": "Ocak",
+        "february": "Şubat",
+        "march": "Mart",
+        "april": "Nisan",
+        "may": "Mayıs",
+        "june": "Haziran",
+        "july": "Temmuz",
+        "august": "Ağustos",
+        "september": "Eylül",
+        "october": "Ekim",
+        "november": "Kasım",
+        "december": "Aralık"
+    },
+    "structure": {
+        "space": "Mekan",
+        "feed": "Besleme",
+        "posts": "Gönderiler",
+        "room": "Oda",
+        "events": "Etkinlikler",
+        "map": "Harita"
+    },
+    "system": {
+        "locale": "Yerel",
+        "worldwide": "Dünya çapında",
+        "sign_out": "Çıkış yap",
+        "sign_in": "Giriş yap",
+        "sign_up": "Kayıt ol",
+        "search": "Arama",
+        "online": "Çevrimiçi",
+        "offline": "Çevrimdışı",
+        "save": "Kaydet",
+        "send": "Gönder",
+        "upload": "Yükle",
+        "profile": "Profil",
+        "settings": "Ayarlar",
+        "admin": "Yönetici",
+        "analytics": "Analiz",
+        "categories": "Kategoriler",
+        "success": "Başarılı",
+        "error": "Hata",
+        "now": "şimdi",
+        "no_access": "Erişim yok",
+        "saved": "Kaydedildi",
+        "deleted": "Silindi",
+        "blocked": "Gizli",
+        "unblocked": "Açık",
+        "guest": "Misafir",
+        "popular": "Popüler",
+        "privacy": "Gizlilik politikası",
+        "offer": "Teklif",
+        "unsubscribe": "Aboneliği iptal et",
+        "permission": "Veri İşleme Politikası",
+        "rates": "Tarifeler",
+        "refund": "İade",
+        "main": "Ana"
+    },
+    "brand": {
+        "description": "Şablon web uygulaması",
+        "address": "St. Petersburg, Rusya"
+    },
+    "science": {
+        "math": "Matematik",
+        "prog": "Programlama",
+        "bis": "İşletme ve Ekonomi",
+        "manag": "Yönetim",
+        "lead": "Karizma ve Liderlik",
+        "marketing": "Pazarlama",
+        "life_safety": "Can Güvenliği"
+    },
+    "events": {
+        "hack": "Yarışmalar",
+        "meet": "Toplantılar",
+        "lect": "Dersler",
+        "pres": "Sunumlar"
+    },
+    "footer": {
+        "rights": "Tüm hakları saklıdır",
+        "contacts": "İletişim",
+        "address": "Adres",
+        "mail": "E-posta",
+        "phone": "Telefon",
+        "links": "Bağlantılar",
+        "about": "Hakkında",
+        "feedback": "Geri bildirim ve Sorunlar",
+        "rules": "Kurallar",
+        "news": "Haberler",
+        "codex": "Onur Kuralları",
+        "white_paper": "Beyaz Kağıt",
+        "vk": "VKontakte",
+        "fb": "Facebook",
+        "ig": "Instagram",
+        "twi": "Twitter",
+        "yt": "YouTube",
+        "in": "LinkedIn"
+    },
+    "profile": {
+        "login": "Giriş",
+        "avatar": "Profil resmi",
+        "name": "İsim",
+        "surname": "Soyisim",
+        "phone": "Telefon numarası",
+        "mail": "E-posta",
+        "password": "Şifre",
+        "passwordTip1": "6 karakter veya daha fazla olmalı",
+        "passwordTip2": "Sayı ve harf içermeli"
+    },
+    "posts": {
+        "title": "Başlık",
+        "description": "Açıklama",
+        "empty": "Boş",
+        "comments": "Yorumlar",
+        "reply": "Cevapla"
+    },
+    "categories": {
+        "category": "Kategori",
+        "title": "Başlık",
+        "parent": "Üst kategori",
+        "top": "Üst düzey"
+    }
+}

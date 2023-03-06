@@ -1,0 +1,122 @@
+{
+    "months": {
+        "january": "Januarie",
+        "february": "Februarie",
+        "march": "Maart",
+        "april": "April",
+        "may": "Mei",
+        "june": "Junie",
+        "july": "Julie",
+        "august": "Augustus",
+        "september": "September",
+        "october": "Oktober",
+        "november": "November",
+        "december": "Desember"
+    },
+    "structure": {
+        "space": "Ruimte",
+        "feed": "Nuusstroom",
+        "posts": "Plasings",
+        "room": "Kamer",
+        "events": "Gebeure",
+        "map": "Kaart"
+    },
+    "system": {
+        "locale": "Lokale instelling",
+        "worldwide": "Wêreldwyd",
+        "sign_out": "Teken Uit",
+        "sign_in": "Teken In",
+        "sign_up": "Registreer",
+        "search": "Soek",
+        "online": "Aanlyn",
+        "offline": "Aflyn",
+        "save": "Stoor",
+        "send": "Stuur",
+        "upload": "Laai op",
+        "profile": "Profiel",
+        "settings": "Instellings",
+        "admin": "Admin",
+        "analytics": "Analitika",
+        "categories": "Kategorieë",
+        "success": "Sukses",
+        "error": "Fout",
+        "now": "nou",
+        "no_access": "Geen toegang",
+        "saved": "Gestoor",
+        "deleted": "Verwyder",
+        "blocked": "Versteek",
+        "unblocked": "Oopgemaak",
+        "guest": "Gas",
+        "popular": "Gewild",
+        "privacy": "Privaatheidsbeleid",
+        "offer": "Aanbod",
+        "unsubscribe": "Kanselleer intekening",
+        "permission": "Data verwerkings beleid",
+        "rates": "Tariewe",
+        "refund": "Terugbetaling",
+        "main": "Hoof"
+    },
+    "brand": {
+        "description": "Sjabloon webtoep",
+        "address": "St. Petersburg, Rusland"
+    },
+    "science": {
+        "math": "Wiskunde",
+        "prog": "Programmering",
+        "bis": "Besigheid en Ekonomie",
+        "manag": "Bestuur",
+        "lead": "Charisma en Leierskap",
+        "marketing": "Bemarking",
+        "life_safety": "Lewensveiligheid"
+    },
+    "events": {
+        "hack": "Kompetisies",
+        "meet": "Byeenkomste",
+        "lect": "Lesings",
+        "pres": "Aanbiedings"
+    },
+    "footer": {
+        "rights": "Alle regte voorbehou",
+        "contacts": "Kontakte",
+        "address": "Adres",
+        "mail": "E-pos",
+        "phone": "Telefoon",
+        "links": "Skakels",
+        "about": "Oor",
+        "feedback": "Terugvoer en Probleme",
+        "rules": "Reëls",
+        "news": "Nuus",
+        "codex": "Eer-kode",
+        "white_paper": "Wit papier",
+        "vk": "VKontakte",
+        "fb": "Facebook",
+        "ig": "Instagram",
+        "twi": "Twitter",
+        "yt": "YouTube",
+        "in": "LinkedIn"
+    },
+    "profile": {
+        "login": "Teken aan",
+        "avatar": "Avatar",
+        "name": "Naam",
+        "surname": "Van",
+        "phone": "Telefoonnommer",
+        "mail": "E-pos",
+        "password": "Wagwoord",
+        "passwordTip1": "Lengte moet 6 of meer wees",
+        "passwordTip2": "Moet syfers en letters insluit"
+    },
+    "posts": {
+        "title": "Titel",
+        "description": "Beskrywing",
+        "empty": "Leeg",
+        "comments": "Opmerkings",
+        "reply": "Antwoord"
+    },
+    "categories": {
+        "category": "Kategorie",
+        "title": "Titel",
+        "parent": "Ouer",
+        "top": "Hoë vlak"
+    }
+}

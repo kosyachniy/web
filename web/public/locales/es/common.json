@@ -1,0 +1,122 @@
+{
+    "months": {
+        "january": "Enero",
+        "february": "Febrero",
+        "march": "Marzo",
+        "april": "Abril",
+        "may": "Mayo",
+        "june": "Junio",
+        "july": "Julio",
+        "august": "Agosto",
+        "september": "Septiembre",
+        "october": "Octubre",
+        "november": "Noviembre",
+        "december": "Diciembre"
+    },
+    "structure": {
+        "space": "Espacio",
+        "feed": "Alimentación",
+        "posts": "Publicaciones",
+        "room": "Sala",
+        "events": "Eventos",
+        "map": "Mapa"
+    },
+    "system": {
+        "locale": "Idioma",
+        "worldwide": "En todo el mundo",
+        "sign_out": "Cerrar sesión",
+        "sign_in": "Iniciar sesión",
+        "sign_up": "Registrarse",
+        "search": "Buscar",
+        "online": "En línea",
+        "offline": "Fuera de línea",
+        "save": "Guardar",
+        "send": "Enviar",
+        "upload": "Cargar",
+        "profile": "Perfil",
+        "settings": "Configuraciones",
+        "admin": "Administrador",
+        "analytics": "Analítica",
+        "categories": "Categorías",
+        "success": "Éxito",
+        "error": "Error",
+        "now": "ahora mismo",
+        "no_access": "Sin acceso",
+        "saved": "Guardado",
+        "deleted": "Eliminado",
+        "blocked": "Oculto",
+        "unblocked": "Abierto",
+        "guest": "Invitado",
+        "popular": "Popular",
+        "privacy": "Política de privacidad",
+        "offer": "Oferta",
+        "unsubscribe": "Cancelar suscripción",
+        "permission": "Política de procesamiento de datos",
+        "rates": "Tarifas",
+        "refund": "Reembolso",
+        "main": "Principal"
+    },
+    "brand": {
+        "description": "Aplicación web de plantilla",
+        "address": "San Petersburgo, Rusia"
+    },
+    "science": {
+        "math": "Matemáticas",
+        "prog": "Programación",
+        "bis": "Negocios y Economía",
+        "manag": "Administración",
+        "lead": "Carisma y Liderazgo",
+        "marketing": "Marketing",
+        "life_safety": "Seguridad en la vida"
+    },
+    "events": {
+        "hack": "Competiciones",
+        "meet": "Encuentros",
+        "lect": "Conferencias",
+        "pres": "Presentaciones"
+    },
+    "footer": {
+        "rights": "Todos los derechos reservados",
+        "contacts": "Contactos",
+        "address": "Dirección",
+        "mail": "Correo electrónico",
+        "phone": "Teléfono",
+        "links": "Enlaces",
+        "about": "Acerca de",
+        "feedback": "Comentarios y Problemas",
+        "rules": "Reglas",
+        "news": "Noticias",
+        "codex": "Código de Honor",
+        "white_paper": "Libro Blanco",
+        "vk": "VKontakte",
+        "fb": "Facebook",
+        "ig": "Instagram",
+        "twi": "Twitter",
+        "yt": "YouTube",
+        "in": "LinkedIn"
+    },
+    "profile": {
+        "login": "Inicio de sesión",
+        "avatar": "Avatar",
+        "name": "Nombre",
+        "surname": "Apellido",
+        "phone": "Número de teléfono",
+        "mail": "Correo electrónico",
+        "password": "Contraseña",
+        "passwordTip1": "debe tener una longitud de 6 o más",
+        "passwordTip2": "debe incluir dígitos y letras"
+    },
+    "posts": {
+        "title": "Título",
+        "description": "Descripción",
+        "empty": "Vacío",
+        "comments": "Comentarios",
+        "reply": "Responder"
+    },
+    "categories": {
+        "category": "Categoría",
+        "title": "Título",
+        "parent": "Padre",
+        "top": "Nivel superior"
+    }
+}

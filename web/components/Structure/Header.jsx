@@ -220,7 +220,7 @@ export default () => {
                 className={`me-3 ms-1 ${main.theme === 'dark' ? 'bi bi-sun-fill' : 'fa-solid fa-moon'}`}
                 onClick={() => dispatch(changeTheme(main.theme === 'dark' ? 'light' : 'dark'))}
               />
-              <Link href={`/locale?url=${router.asPath}`}>
+              <Link href={router.query.url || `/locale?url=${router.asPath}`}>
                 <img
                   src={`/lang/${main.locale === 'ru' ? 'ru' : 'en'}.svg`}
                   alt={main.locale === 'ru' ? 'ru' : 'en'}

@@ -121,7 +121,7 @@ async def generate_sitemap():
     })
 
     # Categories
-    for locale in [None] + LOCALES:
+    for locale in [None, *LOCALES]:
         links_sub = []
         for category in Category.get(
             locale=locale if locale else {'$nin': LOCALES},
@@ -144,7 +144,7 @@ async def generate_sitemap():
         })
 
     # Posts
-    for locale in [None] + LOCALES:
+    for locale in [None, *LOCALES]:
         links_sub = []
         last_update = 0
         for post in Post.get(

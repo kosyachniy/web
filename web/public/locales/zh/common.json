@@ -1,0 +1,122 @@
+{
+    "months": {
+        "january": "一月",
+        "february": "二月",
+        "march": "三月",
+        "april": "四月",
+        "may": "五月",
+        "june": "六月",
+        "july": "七月",
+        "august": "八月",
+        "september": "九月",
+        "october": "十月",
+        "november": "十一月",
+        "december": "十二月"
+    },
+    "structure": {
+        "space": "空间",
+        "feed": "动态",
+        "posts": "帖子",
+        "room": "房间",
+        "events": "活动",
+        "map": "地图"
+    },
+    "system": {
+        "locale": "区域设置",
+        "worldwide": "全球",
+        "sign_out": "登出",
+        "sign_in": "登录",
+        "sign_up": "注册",
+        "search": "搜索",
+        "online": "在线",
+        "offline": "离线",
+        "save": "保存",
+        "send": "发送",
+        "upload": "上传",
+        "profile": "个人资料",
+        "settings": "设置",
+        "admin": "管理员",
+        "analytics": "分析",
+        "categories": "分类",
+        "success": "成功",
+        "error": "错误",
+        "now": "刚刚",
+        "no_access": "无权访问",
+        "saved": "已保存",
+        "deleted": "已删除",
+        "blocked": "已隐藏",
+        "unblocked": "已显示",
+        "guest": "访客",
+        "popular": "热门",
+        "privacy": "隐私政策",
+        "offer": "优惠",
+        "unsubscribe": "取消订阅",
+        "permission": "数据处理政策",
+        "rates": "费率",
+        "refund": "退款",
+        "main": "主要"
+    },
+    "brand": {
+        "description": "模板Web应用程序",
+        "address": "俄罗斯圣彼得堡"
+    },
+    "science": {
+        "math": "数学",
+        "prog": "编程",
+        "bis": "商业和经济",
+        "manag": "管理",
+        "lead": "魅力和领导力",
+        "marketing": "市场营销",
+        "life_safety": "生命安全"
+    },
+    "events": {
+        "hack": "比赛",
+        "meet": "聚会",
+        "lect": "讲座",
+        "pres": "演示文稿"
+    },
+    "footer": {
+        "rights": "版权所有",
+        "contacts": "联系方式",
+        "address": "地址",
+        "mail": "电子邮件",
+        "phone": "电话",
+        "links": "链接",
+        "about": "关于我们",
+        "feedback": "反馈和问题",
+        "rules": "规则",
+        "news": "新闻",
+        "codex": "荣誉准则",
+        "white_paper": "白皮书",
+        "vk": "VKontakte",
+        "fb": "Facebook",
+        "ig": "Instagram",
+        "twi": "Twitter",
+        "yt": "YouTube",
+        "in": "LinkedIn"
+    },
+    "profile": {
+        "login": "登录",
+        "avatar": "头像",
+        "name": "名字",
+        "surname": "姓氏",
+        "phone": "电话号码",
+        "mail": "电子邮件",
+        "password": "密码",
+        "passwordTip1": "长度应为6个或更多",
+        "passwordTip2": "包括数字和字母"
+    },
+    "posts": {
+        "title": "标题",
+        "description": "描述",
+        "empty": "空",
+        "comments": "评论",
+        "reply": "回复"
+    },
+    "categories": {
+        "category": "类别",
+        "title": "标题",
+        "parent": "父类",
+        "top": "顶级"
+    }
+}

@@ -1,0 +1,122 @@
+{
+    "months": {
+        "january": "Gennaio",
+        "february": "Febbraio",
+        "march": "Marzo",
+        "april": "Aprile",
+        "may": "Maggio",
+        "june": "Giugno",
+        "july": "Luglio",
+        "august": "Agosto",
+        "september": "Settembre",
+        "october": "Ottobre",
+        "november": "Novembre",
+        "december": "Dicembre"
+    },
+    "structure": {
+        "space": "Spazio",
+        "feed": "Feed",
+        "posts": "Post",
+        "room": "Stanza",
+        "events": "Eventi",
+        "map": "Mappa"
+    },
+    "system": {
+        "locale": "Locale",
+        "worldwide": "In tutto il mondo",
+        "sign_out": "Esci",
+        "sign_in": "Accedi",
+        "sign_up": "Registrati",
+        "search": "Cerca",
+        "online": "Online",
+        "offline": "Offline",
+        "save": "Salva",
+        "send": "Invia",
+        "upload": "Carica",
+        "profile": "Profilo",
+        "settings": "Impostazioni",
+        "admin": "Amministrazione",
+        "analytics": "Analytics",
+        "categories": "Categorie",
+        "success": "Successo",
+        "error": "Errore",
+        "now": "proprio adesso",
+        "no_access": "Nessun accesso",
+        "saved": "Salvato",
+        "deleted": "Eliminato",
+        "blocked": "Nascosto",
+        "unblocked": "Aperto",
+        "guest": "Ospite",
+        "popular": "Popolare",
+        "privacy": "Informativa sulla privacy",
+        "offer": "Offerta",
+        "unsubscribe": "Annulla iscrizione",
+        "permission": "Informativa sul trattamento dei dati",
+        "rates": "Tariffe",
+        "refund": "Rimborso",
+        "main": "Principale"
+    },
+    "brand": {
+        "description": "Applicazione web modello",
+        "address": "San Pietroburgo, Russia"
+    },
+    "science": {
+        "math": "Matematica",
+        "prog": "Programmazione",
+        "bis": "Economia e Business",
+        "manag": "Gestione",
+        "lead": "Carisma e Leadership",
+        "marketing": "Marketing",
+        "life_safety": "Sicurezza della vita"
+    },
+    "events": {
+        "hack": "Concorsi",
+        "meet": "Incontri",
+        "lect": "Conferenze",
+        "pres": "Presentazioni"
+    },
+    "footer": {
+        "rights": "Tutti i diritti riservati",
+        "contacts": "Contatti",
+        "address": "Indirizzo",
+        "mail": "E-mail",
+        "phone": "Telefono",
+        "links": "Link",
+        "about": "Informazioni",
+        "feedback": "Feedback e problemi",
+        "rules": "Regole",
+        "news": "Notizie",
+        "codex": "Codice d'onore",
+        "white_paper": "Libro bianco",
+        "vk": "VKontakte",
+        "fb": "Facebook",
+        "ig": "Instagram",
+        "twi": "Twitter",
+        "yt": "YouTube",
+        "in": "LinkedIn"
+    },
+    "profile": {
+        "login": "Login",
+        "avatar": "Avatar",
+        "name": "Nome",
+        "surname": "Cognome",
+        "phone": "Numero di telefono",
+        "mail": "E-mail",
+        "password": "Password",
+        "passwordTip1": "La lunghezza deve essere di almeno 6 caratteri",
+        "passwordTip2": "Deve includere cifre e lettere"
+    },
+    "posts": {
+        "title": "Titolo",
+        "description": "Descrizione",
+        "empty": "Vuoto",
+        "comments": "Commenti",
+        "reply": "Rispondi"
+    },
+    "categories": {
+        "category": "Categoria",
+        "title": "Titolo",
+        "parent": "Genitore",
+        "top": "Livello superiore"
+    }
+}
