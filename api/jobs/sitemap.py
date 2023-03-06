@@ -8,12 +8,13 @@ import gzip
 import shutil
 import asyncio
 
+from libdev.codes import LOCALES
+
 from lib import cfg, report
 from models.category import Category
 from models.post import Post
 
 
-LOCALES = ['en', 'ru']
 FILE_LINKS_LIMIT = None # 2500
 FILES_LIMIT = None # 1000
 BODY = '''<?xml version="1.0" encoding="utf-8" standalone="no"?>

@@ -1,6 +1,6 @@
 requests==2.28.1
 tgio==0.8
 tgreports==0.15
-libdev==0.50
+libdev==0.52
 redis==4.4.1
 PyJWT==2.6.0

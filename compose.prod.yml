@@ -30,10 +30,10 @@ services:
   api:
     image: ${PROJECT_NAME}/api
     build: ./api
+    restart: unless-stopped
     depends_on:
       - db
       - redis
-    restart: unless-stopped
     env_file: .env
     environment:
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
@@ -59,10 +59,10 @@ services:
   jobs:
     image: ${PROJECT_NAME}/jobs
     build: ./api
+    restart: unless-stopped
     depends_on:
       - db
       - redis
-    restart: unless-stopped
     env_file: .env
     environment:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
@@ -131,6 +131,7 @@ services:
   tg:
     image: ${PROJECT_NAME}/tg
     build: ./tg
+    restart: unless-stopped
     env_file: .env
     environment:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
@@ -145,11 +146,11 @@ services:
       - redis
     ports:
       - ${TG_PORT}:80
-    restart: unless-stopped
 
   web:
     image: ${PROJECT_NAME}/web
     build: ./web
+    restart: unless-stopped
     env_file: .env
     environment:
       NEXT_PUBLIC_API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
@@ -166,5 +167,4 @@ services:
       NEXT_PUBLIC_ANALYTICS_SHEET: ${ANALYTICS_SHEET}
     ports:
       - ${WEB_PORT}:3000
-    restart: unless-stopped
     command: bash -c "npm run build && npm start"
