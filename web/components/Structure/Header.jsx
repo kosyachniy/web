@@ -220,7 +220,14 @@ export default () => {
                 className={`me-3 ms-1 ${main.theme === 'dark' ? 'bi bi-sun-fill' : 'fa-solid fa-moon'}`}
                 onClick={() => dispatch(changeTheme(main.theme === 'dark' ? 'light' : 'dark'))}
               />
-              <Link
+              <Link href={`/locale?url=${router.asPath}`}>
+                <img
+                  src={`/lang/${main.locale === 'ru' ? 'ru' : 'en'}.svg`}
+                  alt={main.locale === 'ru' ? 'ru' : 'en'}
+                  style={{ height: '24px', cursor: 'pointer' }}
+                />
+              </Link>
+              {/* <Link
                 href={router.asPath}
                 locale={main.locale === 'ru' ? 'en' : 'ru'}
               >
@@ -229,7 +236,7 @@ export default () => {
                   alt={main.locale}
                   style={{ height: '24px' }}
                 />
-              </Link>
+              </Link> */}
             </li>
             <li className="nav-item dropdown">
               <Profile />
