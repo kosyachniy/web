@@ -3,6 +3,11 @@
     cursor: pointer;
     border: 0;
     box-shadow: 0 0.25rem 1.5rem rgb(0 0 0 / 12%) !important;
+    transition: all .3s cubic-bezier(0, 0, .5, 1);
+}
+
+.card:hover {
+    transform: scale3d(1.01, 1.01, 1.01);
 }
 
 .card [class*="card-img-top"] {

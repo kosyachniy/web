@@ -23,7 +23,7 @@ export default () => {
         <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
           <li className="ms-3 d-flex">
             <Link href="https://t.me/hnklny">
-              { main.locale === 'en' ? 'Channel on Telegram' : 'Канал в Telegram' }
+              { main.locale === 'ru' ? 'Канал в Telegram' : 'Telegram Channel' }
             </Link>
           </li>
         </ul>

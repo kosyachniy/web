@@ -104,22 +104,6 @@ async def generate_sitemap():
     timestamp = datetime.datetime.utcnow()
     links = []
 
-    # Main pages
-    links_sub = []
-    for locale in LOCALES:
-        links_sub.append({
-            'url': '' if locale == cfg('locale') else locale + '/',
-            'time': timestamp,
-            'freq': 'daily',
-            'priority': 0.9,
-        })
-
-    url = await generate_file(links_sub)
-    links.append({
-        'url': url,
-        'time': timestamp,
-    })
-
     # Categories
     for locale in [None, *LOCALES]:
         links_sub = []
@@ -137,7 +121,14 @@ async def generate_sitemap():
         if not links_sub:
             continue
 
-        url = await generate_file(links_sub, locale, 'categories')
+        links_sub = [{
+            'url': '' if locale == cfg('locale') else locale,
+            'time': timestamp,
+            'freq': 'daily',
+            'priority': 0.9,
+        }] + links_sub
+
+        url = await generate_file(links_sub, locale)
         links.append({
             'url': url,
             'time': timestamp,

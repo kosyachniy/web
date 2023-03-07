@@ -224,7 +224,7 @@ export default () => {
                 <img
                   src={`/lang/${main.locale === 'ru' ? 'ru' : 'en'}.svg`}
                   alt={main.locale === 'ru' ? 'ru' : 'en'}
-                  style={{ height: '24px', cursor: 'pointer' }}
+                  style={{ height: '24px' }}
                 />
               </Link>
               {/* <Link

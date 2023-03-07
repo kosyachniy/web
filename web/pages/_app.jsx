@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { appWithTranslation } from 'next-i18next';
+import { appWithTranslation, useTranslation } from 'next-i18next';
 
 import '../styles/main.scss';
 import '../styles/main.css';
@@ -29,6 +29,7 @@ const Body = ({
   categoriesGet, categoriesClear,
   Component, pageProps,
 }) => {
+  const { t } = useTranslation('common');
   const router = useRouter();
   const rehydrated = useSelector(state => state._persist.rehydrated); /* eslint-disable-line */
 
@@ -95,9 +96,9 @@ const Body = ({
         <title>{ process.env.NEXT_PUBLIC_NAME }</title>
         <meta name="title" content={process.env.NEXT_PUBLIC_NAME} />
         <meta name="og:title" content={process.env.NEXT_PUBLIC_NAME} />
-        <meta name="description" content={router.locale === 'en' ? 'Template Web App' : 'Шаблонное веб-приложение'} />
-        <meta name="og:description" content={router.locale === 'en' ? 'Template Web App' : 'Шаблонное веб-приложение'} />
-        <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo.png`} />
+        <meta name="description" content={t('brand.description')} />
+        <meta name="og:description" content={t('brand.description')} />
+        <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo_min.png`} />
         <meta property="og:type" content="website" />
 
         {/* Zoom */}
