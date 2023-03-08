@@ -99,7 +99,6 @@ const Body = ({
         <meta name="description" content={t('brand.description')} />
         <meta name="og:description" content={t('brand.description')} />
         <meta name="og:image" content={`${process.env.NEXT_PUBLIC_WEB}brand/logo_min.png`} />
-        <meta property="og:type" content="website" />
 
         {/* Zoom */}
         <meta

@@ -207,7 +207,7 @@ export default ({ post, setPost }) => {
           <meta name="og:image" content={post.image} />
         ) }
         <meta property="og:url" content={`${process.env.NEXT_PUBLIC_WEB}posts/${post.url}`} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
         <link rel="canonical" href={canonical} />
       </Head>
       <div className="row">

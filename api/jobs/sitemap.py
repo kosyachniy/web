@@ -66,12 +66,13 @@ async def generate_file(links, locale=None, kind=None, ind=None):
     """ Generate a file of sub sitemap """
 
     data = ""
+
     for link in links:
-        sublink = (
-            cfg('web')
-            + ('' if not locale or locale == cfg('locale') else locale + '/')
-            + link['url']
-        )
+        sublink = cfg('web') + (
+            '' if not locale or locale == cfg('locale')
+            else locale + ('/' if link['url'] else '')
+        ) + link['url']
+
         data += (
             f"<url><loc>{sublink}</loc>"
             f"<lastmod>{to_iso(link['time'])}</lastmod>"
@@ -88,9 +89,9 @@ async def generate_file(links, locale=None, kind=None, ind=None):
         + '-'.join([str(block) for block in blocks if block])
         + '.xml'
     )
+
     with open(f'/data/{sitemap_name}', 'w', encoding='utf-8') as file:
         print(BODY_SUB.format(data), file=file)
-
     with open(f'/data/{sitemap_name}', 'rb') as f_in:
         sitemap_name += '.gz'
         with gzip.open(f'/data/{sitemap_name}', 'wb') as f_out:
@@ -122,7 +123,7 @@ async def generate_sitemap():
             continue
 
         links_sub = [{
-            'url': '' if locale == cfg('locale') else locale,
+            'url': '',
             'time': timestamp,
             'freq': 'daily',
             'priority': 0.9,
