@@ -41,7 +41,7 @@ export default () => {
   return (
     <div>
       <Popup>
-        <h3>{ t('system.online') }</h3>
+        <h2>{ t('system.online') }</h2>
         { online.users.map(user => (
           <div className={styles.user} key={user.id}>
             <Hexagon url={user.image || '/user.png'} />

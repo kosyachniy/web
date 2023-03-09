@@ -34,6 +34,7 @@ def _args():
 def main(args: argparse.Namespace):
     """ Create a spreadsheet by title and email """
     print(create_sheets(args.title, args.mail))
+    print("Don't forget to add a second sheet to the table!")
 
 
 if __name__ == '__main__':

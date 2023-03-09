@@ -152,7 +152,7 @@ DB_PORT=8204
 REDIS_PORT=8205
 PROMETHEUS_PORT=8206
 GRAFANA_PORT=8207
-DATA_PATH=~/web/data
+DATA_PATH=~/web/data # or change to global path, for example: ~/data/web
                 </pre>
             </td>
         </tr>

@@ -2,6 +2,26 @@
     word-break: break-word;
 }
 
+.post h2 {
+    font-size: calc(1.125rem + .9vw);
+    margin-top: 1.6rem;
+}
+
+.post h2:first-child,
+.post h3:first-child {
+    margin-top: 0;
+}
+
+.post h3 {
+    font-size: calc(1.065rem + .6vw);
+    margin-top: 1.3rem;
+}
+
+.post h4 {
+    font-size: calc(1rem + .3vw);
+    margin-top: 0.1rem;
+}
+
 .tools {
     display: flex;
     align-items: center;

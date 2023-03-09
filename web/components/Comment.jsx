@@ -63,10 +63,12 @@ export default ({ post, comments }) => {
     <div className={styles.comments}>
       <div className={styles.title}>
         <div>
-          <h3>{ t('posts.comments') }</h3>
+          <h2>{ t('posts.comments') }</h2>
         </div>
         <div className={styles.counter}>
-          { replies.length }
+          <h2>
+            { replies.length }
+          </h2>
         </div>
       </div>
       <div className="input-group">
