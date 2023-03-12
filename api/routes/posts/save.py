@@ -67,7 +67,6 @@ async def handler(
     post.image = data.image
     post.tags = data.tags
     post.category = data.category
-    post.category = data.category
     post.status = data.status
     if data.locale:
         post.locale = data.locale

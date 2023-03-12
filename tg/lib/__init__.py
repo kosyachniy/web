@@ -5,7 +5,7 @@ The main functionality for the Telegram bot
 from libdev.cfg import cfg
 from libdev.gen import generate
 
-# pylint: disable=import-error
+# pylint: disable=import-error,import-self
 from lib._variables import (
     locales, locales_chosen, tokens,
     user_ids, user_logins, user_statuses, user_names, user_titles,
