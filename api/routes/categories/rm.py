@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
 from models.category import Category
+from models.post import Post
 from models.track import Track
 from services.auth import sign
 from services.cache import cache_categories
@@ -35,6 +36,16 @@ async def handler(
 
     if user.status < 6 and category.user != user.id:
         raise ErrorAccess('rm')
+
+    # Reset subcategories
+    for subcategory in Category.get(parent=category.id):
+        del subcategory.parent
+        subcategory.save()
+
+    # Reset posts
+    for post in Post.get(category=category.id):
+        del post.category
+        post.save()
 
     # Delete
     category.rm()

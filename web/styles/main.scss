@@ -9,6 +9,10 @@ $dropdown-link-active-bg: var(--bs-btn-hover-bg);
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+:root {
+    --bs-body-bg: #198754;
+}
+
 .bg-light,
 .btn-light {
     --bs-btn-bg: var(--bs-gray-200);
