@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 
 import styles from '../../styles/header.module.css';
@@ -221,20 +222,22 @@ export default () => {
                 onClick={() => dispatch(changeTheme(main.theme === 'dark' ? 'light' : 'dark'))}
               />
               <Link href={router.query.url || `/locale?url=${router.asPath}`}>
-                <img
+                <Image
                   src={`/lang/${main.locale === 'ru' ? 'ru' : 'en'}.svg`}
                   alt={main.locale === 'ru' ? 'ru' : 'en'}
-                  style={{ height: '24px' }}
-                />
+                  width={24}
+                  height={24}
+          />
               </Link>
               {/* <Link
                 href={router.asPath}
                 locale={main.locale === 'ru' ? 'en' : 'ru'}
               >
-                <img
+                <Image
                   src={`/lang/${main.locale}.svg`}
                   alt={main.locale}
-                  style={{ height: '24px' }}
+                  width={24}
+                  height={24}
                 />
               </Link> */}
             </li>

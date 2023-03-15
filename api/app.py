@@ -5,6 +5,7 @@ API Endpoints (Transport level)
 import io
 
 import socketio
+from PIL import Image
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -97,7 +98,11 @@ async def uploader(upload: bytes = File()):
     from libdev.aws import upload_file
 
     try:
-        url = upload_file(io.BytesIO(upload), file_type='png')
+        image = Image.open(io.BytesIO(upload))
+        image = image.convert('RGB')
+        data = io.BytesIO()
+        image.save(data, format='webp')
+        url = upload_file(data.getvalue(), file_type='webp')
     except Exception as e:  # pylint: disable=broad-except
         await report.critical("Upload", error=e)
 
