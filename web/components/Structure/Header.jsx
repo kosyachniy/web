@@ -227,7 +227,7 @@ export default () => {
                   alt={main.locale === 'ru' ? 'ru' : 'en'}
                   width={24}
                   height={24}
-          />
+                />
               </Link>
               {/* <Link
                 href={router.asPath}
