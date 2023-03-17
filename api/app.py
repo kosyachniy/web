@@ -2,8 +2,6 @@
 API Endpoints (Transport level)
 """
 
-import io
-
 import socketio
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,8 +19,8 @@ from services.on_startup import on_startup
 from lib import cfg, report
 
 if cfg('amazon.bucket'):
+    from libdev.img import convert
     from libdev.aws import upload_file
-    from PIL import Image, ExifTags
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
@@ -98,28 +96,7 @@ async def uploader(upload: bytes = File()):
     """ Upload files to file server """
 
     try:
-        image = Image.open(io.BytesIO(upload))
-
-        orientation = None
-        for orientation in ExifTags.TAGS.keys():
-            if ExifTags.TAGS[orientation] == 'Orientation':
-                break
-
-        # pylint: disable=protected-access
-        exif = dict(image._getexif().items())
-        if exif[orientation] == 3:
-            image = image.transpose(Image.ROTATE_180)
-        elif exif[orientation] == 6:
-            image = image.transpose(Image.ROTATE_270)
-        elif exif[orientation] == 8:
-            image = image.transpose(Image.ROTATE_90)
-
-        image = image.convert('RGB')
-        data = io.BytesIO()
-        image.save(data, format='webp')
-
-        url = upload_file(data.getvalue(), file_type='webp')
-
+        url = upload_file(convert(upload), file_type='webp')
     except Exception as e:  # pylint: disable=broad-except
         url = None
         await report.critical("Upload", error=e)

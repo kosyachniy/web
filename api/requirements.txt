@@ -2,13 +2,12 @@
 
 # App
 requests==2.28.1
-libdev==0.52
+libdev==0.55
 fastapi==0.89.1
 httptools==0.5.0  # NOTE: for routing
 uvicorn==0.20.0
 PyJWT==2.6.0
 python-multipart==0.0.5  # NOTE: for file upload
-Pillow==9.4.0  # NOTE: for file upload
 slowapi==0.1.7
 
 # DB
