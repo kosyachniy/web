@@ -18,7 +18,8 @@ from services.limiter import get_uniq
 from services.on_startup import on_startup
 from lib import cfg, report
 
-if cfg('amazon.bucket'):
+if cfg('amazon.id'):
+    # pylint: disable=import-error
     from libdev.img import convert
     from libdev.aws import upload_file
 
