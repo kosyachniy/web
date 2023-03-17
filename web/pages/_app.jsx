@@ -8,7 +8,9 @@ import '../styles/main.scss';
 import '../styles/main.css';
 import styles from '../styles/body.module.css';
 import wrapper from '../redux/store';
-import { changeLang, setToken, setUtm } from '../redux/actions/main';
+import {
+  changeLang, setToken, setUtm, changeTheme,
+} from '../redux/actions/main';
 import { onlineAdd, onlineDelete, onlineReset } from '../redux/actions/online';
 import { categoriesGet, categoriesClear } from '../redux/actions/categories';
 import api from '../lib/api';
@@ -24,7 +26,7 @@ import Toasts from '../components/Toast';
 
 const Body = ({
   system, main, online, categories,
-  changeLang, setToken, setUtm,
+  changeLang, setToken, setUtm, changeTheme,
   onlineAdd, onlineDelete, onlineReset,
   categoriesGet, categoriesClear,
   Component, pageProps,
@@ -33,9 +35,17 @@ const Body = ({
   const router = useRouter();
   const rehydrated = useSelector(state => state._persist.rehydrated); /* eslint-disable-line */
 
-  // Bootstrap
   useEffect(() => {
+    // Bootstrap
     window.bootstrap = require('bootstrap/dist/js/bootstrap');
+
+    // Define color theme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      changeTheme('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      changeTheme(e.matches ? 'dark' : 'light');
+    });
   }, []);
 
   // Online
@@ -136,6 +146,7 @@ export default wrapper.withRedux(appWithTranslation(connect(state => state, {
   changeLang,
   setToken,
   setUtm,
+  changeTheme,
   onlineAdd,
   onlineDelete,
   onlineReset,
