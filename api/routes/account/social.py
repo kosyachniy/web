@@ -10,6 +10,8 @@ import requests
 from fastapi import APIRouter, Body, Request
 from pydantic import BaseModel
 from libdev.codes import get_network
+# pylint: disable=import-error
+from libdev.img import convert
 from libdev.aws import upload_file
 from consys.errors import ErrorAccess, ErrorWrong
 
@@ -55,10 +57,7 @@ def auth_google(data):
     data.mail = response.get('email')
 
     def loader_image():
-        return upload_file(
-            requests.get(response['picture'], timeout=30).content,
-            file_type='png',
-        ) if response.get('picture') else None
+        return upload_file(convert(response.get('picture')), file_type='webp')
 
     return data, loader_image
 

@@ -257,7 +257,7 @@ export const Posts = ({
           <Grid posts={posts} />
         )
       }
-      <Paginator page={page} lastPage={lastPage} prefix={`/posts/${category.url}`} />
+      <Paginator page={page} lastPage={lastPage} prefix={category ? `/posts/${category.url}` : ''} />
     </>
   );
 };
