@@ -4,14 +4,14 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { toastAdd } from '../../redux/actions/system';
-import { displaySet, changeTheme } from '../../redux/actions/main';
+import { displaySet } from '../../redux/actions/main';
 import api from '../../lib/api';
 import Post from '../../components/Post';
 import { Posts } from '.';
 
 const Container = ({
   system, main, profile,
-  toastAdd, displaySet, changeTheme,
+  toastAdd, displaySet,
   isPost, id, postLoaded, categoryLoaded, page, postsLoaded, count,
 }) => {
   const { t } = useTranslation('common');
@@ -68,7 +68,6 @@ const Container = ({
       profile,
       toastAdd,
       displaySet,
-      changeTheme,
       category,
       page,
       postsLoaded,
@@ -79,7 +78,7 @@ const Container = ({
   );
 };
 
-export default connect(state => state, { toastAdd, displaySet, changeTheme })(Container);
+export default connect(state => state, { toastAdd, displaySet })(Container);
 
 export const getServerSideProps = async ({ query, locale }) => {
   let { id } = query;

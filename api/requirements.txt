@@ -11,7 +11,7 @@ python-multipart==0.0.5  # NOTE: for file upload
 slowapi==0.1.7
 
 # DB
-consys==0.27
+consys==0.28
 
 # MQ
 redis==4.4.1
