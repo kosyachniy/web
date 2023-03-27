@@ -24,6 +24,9 @@ async def prepare_message(data, action='typing'):
         callback = None
 
     chat = message.chat
+    if chat.id < 0:
+        return None, None, None
+
     if callback:
         text = callback.data
     else:

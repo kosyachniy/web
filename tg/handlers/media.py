@@ -17,6 +17,9 @@ async def handle_photo(message):
     """ Photo handler """
 
     chat = message.chat
+    if chat.id < 0:
+        return
+
     image = io.BytesIO()
     await message.photo[-1].download(destination_file=image)
     text = message.caption or ''
@@ -55,7 +58,7 @@ async def handle_photo(message):
         })
         await tg.forward(cfg('bug_chat'), chat.id, message.message_id)
 
-        text = "Передал твой фидбек!"
+        text = "Передал твой запрос!"
         message_id = await tg.send(
             chat.id,
             text,
@@ -69,6 +72,9 @@ async def handle_doc(message):
     """ Document handler """
 
     chat = message.chat
+    if chat.id < 0:
+        return
+
     try:
         mime = message.document.mime_type
         image = io.BytesIO()
@@ -124,7 +130,7 @@ async def handle_doc(message):
         })
         await tg.forward(cfg('bug_chat'), chat.id, message.message_id)
 
-        text = "Передал твой фидбек!"
+        text = "Передал твой запрос!"
         message_id = await tg.send(
             chat.id,
             text,

@@ -1,7 +1,7 @@
 """
 Create a spreadsheet in Google Sheets
 
-cp scripts/create_sheets.py .; python create_sheets.py --title="" --mail=""
+python -m scripts.create_sheets --title="" --mail=""
 """
 
 import argparse

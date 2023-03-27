@@ -10,9 +10,6 @@ from lib.queue import get, save
 async def check_user(chat, public=False, text=None, locale=None, image=None):
     """ Authorize user and check access """
 
-    if chat.id < 0:
-        return True
-
     utm = None
     if text and ' ' in text:
         utm = text.split()[1]
