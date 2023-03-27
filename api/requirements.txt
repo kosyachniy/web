@@ -14,7 +14,7 @@ slowapi==0.1.7
 consys==0.28
 
 # MQ
-redis==4.4.1
+redis==4.5.3
 
 # Sockets
 python-socketio==5.7.2
