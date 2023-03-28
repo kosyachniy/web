@@ -86,7 +86,7 @@ services:
       - --path.rootfs=/host
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.46.0  # NOTE: google/cadvisor exit 255
+    image: gcr.io/cadvisor/cadvisor:v0.47.1  # NOTE: google/cadvisor exit 255
     restart: unless-stopped
     volumes:
       - /:/rootfs:ro
@@ -99,7 +99,7 @@ services:
       - '--docker_only=true'
 
   prometheus:
-    image: prom/prometheus:v2.41.0
+    image: prom/prometheus:v2.43.0
     ports:
       - ${PROMETHEUS_PORT}:9090
     restart: unless-stopped
@@ -116,7 +116,7 @@ services:
       - cadvisor
 
   grafana:
-    image: grafana/grafana:9.3.2
+    image: grafana/grafana:9.4.7
     ports:
       - ${GRAFANA_PORT}:3000
     restart: unless-stopped

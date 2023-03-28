@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   test:
-    image: node:19.3
+    image: node:19.8
     build: ../web
     volumes:
       - ../web:/app

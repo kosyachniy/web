@@ -1,27 +1,27 @@
 # env/bin/python -m pip install -U --force-reinstall pip
 
 # App
-requests==2.28.1
-libdev==0.55
-fastapi==0.89.1
+requests==2.28.2
+libdev==0.57
+fastapi==0.95.0
 httptools==0.5.0  # NOTE: for routing
-uvicorn==0.20.0
+uvicorn==0.21.1
 PyJWT==2.6.0
-python-multipart==0.0.5  # NOTE: for file upload
+python-multipart==0.0.6  # NOTE: for file upload
 slowapi==0.1.7
 
 # DB
 consys==0.28
 
 # MQ
-redis==4.4.1
+redis==4.5.3
 
 # Sockets
-python-socketio==5.7.2
+python-socketio==5.8.0
 websockets==10.4  # NOTE: for Socket.IO
 
 # Monitoring
-prometheus_fastapi_instrumentator==5.9.1
+prometheus_fastapi_instrumentator==6.0.0
 
 # Telegram
 tgio==0.8
@@ -30,7 +30,7 @@ tgio==0.8
 tgreports==0.15
 
 # # Payments
-# yookassa==2.3.2
+# yookassa==2.3.5
 
 # Google Docs
 gspread==5.7.2
