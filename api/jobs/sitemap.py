@@ -40,11 +40,14 @@ ROBOTS = f'''
 User-agent: *
 
 Disallow: /api
-Disallow: /eye
-Disallow: /grafana
-Disallow: /prometheus
 Disallow: /callback
 Disallow: /profile
+Disallow: /eye
+Disallow: /prometheus
+Disallow: /grafana
+
+Clean-param: utm /
+Clean-param: url /locale
 
 Sitemap: {cfg('web')}sitemap.xml
 '''
