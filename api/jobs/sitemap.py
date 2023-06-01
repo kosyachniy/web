@@ -45,6 +45,7 @@ Disallow: /profile
 Disallow: /eye
 Disallow: /prometheus
 Disallow: /grafana
+Disallow: /*?url=
 
 Clean-param: utm /
 Clean-param: url /locale

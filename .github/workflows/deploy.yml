@@ -31,8 +31,7 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASS }}
-          # key: ${{ secrets.SSH }}
+          key: ${{ secrets.SSH }}
           script: |
             echo "Stoping old version"
             if [ -d ~/web ];
@@ -47,7 +46,7 @@ jobs:
             # yes | sudo docker system prune -a
 
             echo "Pulling new version"
-            yes | git clone git@github.com:kosyachniy/web.git
+            GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git clone git@github.com:kosyachniy/web.git
             if [ -d ~/data ];
             then
                 echo ""
