@@ -23,8 +23,10 @@
 
 .light {
     background-color: #fff;
+    color: #000 !important;
 }
 
 .dark {
     background-color: #3a4951;
+    color: #fff !important;
 }

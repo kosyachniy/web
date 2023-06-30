@@ -65,8 +65,8 @@ async def api(chat, method, data=None, locale=None, force=False):
             'user': chat.id,
             'method': method,
             'params': data,
-            'token': tokens[chat.id],
-            'locale': locales[chat.id],
+            'token': tokens.get(chat.id),
+            'locale': locales.get(chat.id),
             'error': res.status_code,
         })
         return 1, None

@@ -220,6 +220,9 @@ async def auth(
     users = User.get(fields=fields, **conditions)
 
     if len(users) > 1:
+        new = False
+        user = users[0]
+
         if by == 'social':
             req = {
                 'social': data.social,
