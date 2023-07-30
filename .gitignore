@@ -6,6 +6,9 @@
 .idea/
 .vscode/
 
+## JavaScript
+.next/
+
 # Keys & sets
 *.env
 

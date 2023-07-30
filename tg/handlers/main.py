@@ -77,7 +77,6 @@ async def start(message):
         'p': data['id'],
     })
 
-
 @tg.dp.message_handler(commands=['help', 'info', 'about'])
 async def info(message):
     """ Info handler """
