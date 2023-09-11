@@ -32,6 +32,7 @@ async def handler(
     # Get
     post = Post.get(data.id)
 
+    # No access
     if (
         user.status < 6
         and (not post.user or post.user != user.id)

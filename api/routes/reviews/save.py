@@ -35,6 +35,7 @@ async def handler(
     else:
         review = Review(
             user=user.id,
+            token=request.state.token,
         )
         new = True
 

@@ -24,6 +24,7 @@ websockets==11.0.3  # NOTE: for Socket.IO
 prometheus_fastapi_instrumentator==6.1.0
 
 # Telegram
+aiogram==2.25.1
 tgio==0.8
 
 # Reports
