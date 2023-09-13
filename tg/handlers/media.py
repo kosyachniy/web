@@ -67,6 +67,33 @@ async def handle_photo(message):
         cache['m'] = message_id
         save(chat.id, cache)
 
+@tg.dp.message_handler(content_types=['location'])
+async def process_location(message):
+    """ Location handler """
+
+    chat = message.chat
+    if chat.id < 0:
+        return
+
+    lat = message.location.latitude
+    lon = message.location.longitude
+
+    cache = get(chat.id, {})
+
+    await rm_last(chat, cache)
+    await tg.bot.send_chat_action(chat.id, action='typing')
+
+    if await check_user(chat, True):
+        return
+
+    message_id = await tg.send(
+        chat.id,
+        f"Широта: {lat}\nДолгота: {lon}",
+    )
+    # await tg.bot.send_location(chat.id, lat, lon)
+    cache['m'] = message_id
+    save(chat.id, cache)
+
 @tg.dp.message_handler(content_types=['any'])
 async def handle_doc(message):
     """ Document handler """
