@@ -18,7 +18,7 @@ from services.limiter import get_uniq
 from services.on_startup import on_startup
 from lib import cfg, report
 
-if cfg('amazon.id'):
+if cfg('s3.pass'):
     # pylint: disable=import-error
     from libdev.img import convert
     from libdev.s3 import upload_file
