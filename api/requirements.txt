@@ -2,7 +2,7 @@
 
 # App
 requests==2.31.0
-libdev==0.66
+libdev==0.67
 fastapi==0.90.1  # FIXME: higher version not working
 httptools==0.6.0  # NOTE: for routing
 uvicorn==0.20.0  # FIXME: higher version not working

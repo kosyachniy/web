@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from libdev.codes import get_network
 # pylint: disable=import-error
 from libdev.img import convert
-from libdev.aws import upload_file
+from libdev.s3 import upload_file
 from consys.errors import ErrorAccess, ErrorWrong
 
 from routes.account.auth import auth

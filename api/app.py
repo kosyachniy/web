@@ -21,7 +21,7 @@ from lib import cfg, report
 if cfg('amazon.id'):
     # pylint: disable=import-error
     from libdev.img import convert
-    from libdev.aws import upload_file
+    from libdev.s3 import upload_file
 
 
 app = FastAPI(title=cfg('NAME', 'API'), root_path='/api')
