@@ -37,7 +37,6 @@ class Post(Base):
     _name = 'posts'
     _search_fields = {'title', 'data', 'tags'}
 
-    image = Attribute(types=str)
     title = Attribute(types=str, default=default_title)
     description = Attribute(types=str, default=default_description)
     data = Attribute(types=str, default='')
