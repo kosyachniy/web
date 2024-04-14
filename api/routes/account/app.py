@@ -1,7 +1,3 @@
-"""
-The authorization via mini app method of the account object of the API
-"""
-
 import hashlib
 from collections import OrderedDict
 from base64 import b64encode

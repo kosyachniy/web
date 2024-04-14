@@ -1,7 +1,3 @@
-"""
-The recommendation method of the post object of the API
-"""
-
 import re
 
 from fastapi import APIRouter, Body, Depends
@@ -19,62 +15,60 @@ router = APIRouter()
 
 
 def get_posts(ids, limit, category, locale):
-    """ Get posts by category, excluding by ID """
+    """Get posts by category, excluding by ID"""
 
     # Fields
     fields = {
-        'id',
-        'title',
-        'description',
-        'data',
-        'reactions',
-        'image',
-        'category',
-        'locale',
-        'created',
-        'updated',
-        'status',
-        'user',
+        "id",
+        "title",
+        "description",
+        "data",
+        "reactions",
+        "image",
+        "category",
+        "locale",
+        "created",
+        "updated",
+        "status",
+        "user",
         # 'geo',
     }
 
     # Processing
     def handle(post):
         # Cover from the first image
-        if not post.get('image'):
-            res = re.search(
-                r'<img src="([^"]*)">',
-                post['data']
-            )
+        if not post.get("image"):
+            res = re.search(r'<img src="([^"]*)">', post["data"])
             if res is not None:
-                post['image'] = res.groups()[0]
+                post["image"] = res.groups()[0]
 
         # Content
-        post['data'] = re.sub(
-            r'<[^>]*>',
-            '',
-            post['data']
-        ).replace('&nbsp;', ' ')
+        post["data"] = re.sub(r"<[^>]*>", "", post["data"]).replace("&nbsp;", " ")
 
         # URL
-        post['url'] = to_url(post['title']) or ""
-        if post['url']:
-            post['url'] += "-"
-        post['url'] += f"{post['id']}"
+        post["url"] = to_url(post["title"]) or ""
+        if post["url"]:
+            post["url"] += "-"
+        post["url"] += f"{post['id']}"
 
         return post
 
     # Get
     posts = Post.complex(
-        id={'$nin': ids} if ids else None,
+        id={"$nin": ids} if ids else None,
         limit=limit,
         fields=fields,
-        status={'$exists': False},
-        category={
-            '$in': Category.get_childs(category),
-        } if category else None,
-        locale=locale and {
-            '$in': [None, locale],
+        status={"$exists": False},
+        category=(
+            {
+                "$in": Category.get_childs(category),
+            }
+            if category
+            else None
+        ),
+        locale=locale
+        and {
+            "$in": [None, locale],
         },  # NOTE: None → all locales
         handler=handle,
     )
@@ -88,17 +82,18 @@ class Type(BaseModel):
     locale: str = None
     limit: int = 3
 
+
 @router.post("/guess/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Recommend """
+    """Recommend"""
 
     # No access
     # TODO: -> middleware
     if user.status < 2:
-        raise ErrorAccess('get')
+        raise ErrorAccess("get")
 
     if data.id is None:
         ids = []
@@ -109,25 +104,24 @@ async def handler(
 
     posts = []
     if data.category:
-        posts.extend(
-            get_posts(ids, int(data.limit // 3), data.category, data.locale)
-        )
-        ids.extend([post['id'] for post in posts])
+        posts.extend(get_posts(ids, int(data.limit // 3), data.category, data.locale))
+        ids.extend([post["id"] for post in posts])
 
-        posts.extend(get_posts(
-            ids,
-            int(data.limit // 3),
-            (
-                get('category_parents', {}).get(data.category, [])
-                + [data.category]
-            )[0],
-            data.locale,
-        ))
-        ids.extend([post['id'] for post in posts])
+        posts.extend(
+            get_posts(
+                ids,
+                int(data.limit // 3),
+                (get("category_parents", {}).get(data.category, []) + [data.category])[
+                    0
+                ],
+                data.locale,
+            )
+        )
+        ids.extend([post["id"] for post in posts])
 
     posts.extend(get_posts(ids, data.limit - len(posts), None, data.locale))
 
     # Response
     return {
-        'posts': posts,
+        "posts": posts,
     }

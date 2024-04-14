@@ -1,7 +1,3 @@
-"""
-The editing method of the account object of the API
-"""
-
 from copy import deepcopy
 
 from fastapi import APIRouter, Body, Request, Depends
@@ -28,17 +24,18 @@ class Type(BaseModel):
     locale: str = None
     mailing: dict = None
 
+
 @router.post("/save/")
 async def handler(
     request: Request,
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Save personal information """
+    """Save personal information"""
 
     # No access
     if user.status < 3:
-        raise ErrorAccess('save')
+        raise ErrorAccess("save")
 
     # Change fields
     # TODO: Fix exceptions on bad fields
@@ -55,7 +52,7 @@ async def handler(
         user.phone_verified = False
 
     user.mail = data.mail
-    user.social = data.social # TODO: checking
+    user.social = data.social  # TODO: checking
     user.description = data.description
     user.locale = data.locale
 
@@ -63,8 +60,8 @@ async def handler(
 
     # Action tracking
     Track(
-        title='acc_save',
-        data={'fields': [k for k, v in data.dict().items() if v is not None]},
+        title="acc_save",
+        data={"fields": [k for k, v in data.dict().items() if v is not None]},
         user=user.id,
         token=request.state.token,
         ip=request.state.ip,
@@ -86,6 +83,6 @@ async def handler(
 
     # Response
     return {
-        'image':  image,
-        'phone':  phone,
+        "image": image,
+        "phone": phone,
     }

@@ -1,7 +1,3 @@
-"""
-The creating and editing method of the category object of the API
-"""
-
 from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from libdev.lang import to_url

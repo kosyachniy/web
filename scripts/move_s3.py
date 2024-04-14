@@ -1,7 +1,3 @@
-"""
-Move S3 objects
-"""
-
 import re
 
 from libdev.s3 import upload_file
@@ -15,7 +11,7 @@ REPLACE = False
 
 
 def replace_image(entity):
-    """ Replace image of an entity """
+    """Replace image of an entity"""
 
     changed = False
     if not entity.image:
@@ -32,8 +28,9 @@ def replace_image(entity):
     print(entity.image)
     return entity, changed, 1
 
+
 def replace_data(entity):
-    """ Replace all images of data container of an entity """
+    """Replace all images of data container of an entity"""
 
     changed = False
     count = 0
@@ -54,8 +51,9 @@ def replace_data(entity):
 
     return entity, changed, count
 
+
 def main():
-    """ Replace S3 objects in DB """
+    """Replace S3 objects in DB"""
 
     # Users
     count = 0
@@ -99,5 +97,5 @@ def main():
     print(f"✅ {count} posts")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

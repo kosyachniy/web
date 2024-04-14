@@ -1,7 +1,3 @@
-"""
-API Endpoints (Transport level)
-"""
-
 import socketio
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware

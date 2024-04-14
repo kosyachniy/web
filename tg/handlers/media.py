@@ -1,7 +1,3 @@
-"""
-Media handler
-"""
-
 import io
 
 from lib import api, upload, cfg, log

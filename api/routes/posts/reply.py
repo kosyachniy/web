@@ -1,7 +1,3 @@
-"""
-Reply method of the post object of the API
-"""
-
 from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess

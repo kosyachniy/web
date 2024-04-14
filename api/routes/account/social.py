@@ -1,7 +1,3 @@
-"""
-The authorization via social networks method of the account object of the API
-"""
-
 import json
 import urllib
 

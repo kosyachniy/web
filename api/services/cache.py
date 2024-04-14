@@ -1,7 +1,3 @@
-"""
-Cache
-"""
-
 from collections import defaultdict
 
 from models.category import Category
@@ -9,7 +5,7 @@ from lib.queue import save
 
 
 def get_parents(categories_tree):
-    """ Get category parents """
+    """Get category parents"""
 
     if isinstance(categories_tree, (list, tuple)):
         categories = {}
@@ -19,17 +15,18 @@ def get_parents(categories_tree):
         return categories
 
     categories = {
-        categories_tree['id']: [],
+        categories_tree["id"]: [],
     }
 
-    for category in categories_tree['categories']:
+    for category in categories_tree["categories"]:
         for k, v in get_parents(category).items():
-            categories[k] = [categories_tree['id']] + v
+            categories[k] = [categories_tree["id"]] + v
 
     return categories
 
+
 def get_childs(category_parents):
-    """ Get category childs """
+    """Get category childs"""
 
     parents = defaultdict(list)
 
@@ -39,8 +36,9 @@ def get_childs(category_parents):
 
     return parents
 
+
 def cache_categories():
-    """ Cache categories """
+    """Cache categories"""
 
     categories = Category.get()
     categories_tree = Category.get_tree(categories)
@@ -49,7 +47,7 @@ def cache_categories():
     category_ids = {category.id: category for category in categories}
     category_urls = {category.url: category for category in categories}
 
-    save('category_ids', category_ids)
-    save('category_urls', category_urls)
-    save('category_parents', category_parents)
-    save('category_childs', category_childs)
+    save("category_ids", category_ids)
+    save("category_urls", category_urls)
+    save("category_parents", category_parents)
+    save("category_childs", category_childs)

@@ -1,7 +1,3 @@
-"""
-Telegram bot (Transport level)
-"""
-
 from aiogram.types import BotCommand
 
 # pylint: disable=wildcard-import,unused-wildcard-import

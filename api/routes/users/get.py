@@ -1,7 +1,3 @@
-"""
-The getting method of the user object of the API
-"""
-
 import time
 
 from fastapi import APIRouter, Body, Depends
@@ -17,14 +13,14 @@ router = APIRouter()
 
 
 def online_back(user_id):
-    """ Checking how long has been online """
+    """Checking how long has been online"""
 
     sockets = Socket.get(user=user_id, fields={})
 
     if sockets:
         return 0
 
-    user = User.get(user_id, fields={'last_online'})
+    user = User.get(user_id, fields={"last_online"})
 
     if not user.last_online:
         return 0
@@ -38,22 +34,23 @@ class Type(BaseModel):
     offset: int = None
     fields: list[str] = None
 
+
 @router.post("/get/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Get """
+    """Get"""
 
     # TODO: cursor
 
     # Checks
 
-    if user.status < 4 and data.id != user.id: # TODO: 5
-        raise ErrorAccess('get')
+    if user.status < 4 and data.id != user.id:  # TODO: 5
+        raise ErrorAccess("get")
 
     if user.id == 0:
-        raise ErrorInvalid('id')
+        raise ErrorInvalid("id")
 
     # TODO: Get myself
     # if not data.id and user.id:
@@ -63,18 +60,18 @@ async def handler(
     # TODO: right to roles
 
     fields = {
-        'id',
-        'login',
-        'image',
-        'name',
-        'surname',
-        'title',
-        'status',
+        "id",
+        "login",
+        "image",
+        "name",
+        "surname",
+        "title",
+        "status",
         # 'subscription',
         # 'balance',
-        'rating',
-        'description',
-        'discount',
+        "rating",
+        "description",
+        "discount",
     }
 
     process_self = data.id == user.id
@@ -82,29 +79,29 @@ async def handler(
 
     if process_self:
         fields |= {
-            'phone',
-            'mail',
-            'social',
-            'subscription',
-            'pay',
+            "phone",
+            "mail",
+            "social",
+            "subscription",
+            "pay",
         }
 
     if process_admin:
         fields |= {
-            'phone',
-            'mail',
-            'social',
-            'subscription',
-            'pay',
+            "phone",
+            "mail",
+            "social",
+            "subscription",
+            "pay",
         }
 
     if data.fields:
-        fields = fields & set(data.fields) | {'id'}
+        fields = fields & set(data.fields) | {"id"}
 
     # Processing
     def handle(user):
-        if data.fields and 'online' in data.fields:
-            user['online'] = online_back(user['id'])
+        if data.fields and "online" in data.fields:
+            user["online"] = online_back(user["id"])
 
         return user
 
@@ -119,5 +116,5 @@ async def handler(
 
     # Response
     return {
-        'users': users,
+        "users": users,
     }

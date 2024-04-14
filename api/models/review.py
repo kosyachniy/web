@@ -1,15 +1,11 @@
-"""
-Review model of DB object
-"""
-
 from models import Base, Attribute
 
 
 class Review(Base):
-    """ Review """
+    """Review"""
 
-    _name = 'reviews'
-    _search_fields = {'title', 'data'}
+    _name = "reviews"
+    _search_fields = {"title", "data"}
 
     network = Attribute(types=int, default=0)
     # TODO: link

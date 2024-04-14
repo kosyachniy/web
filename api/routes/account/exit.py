@@ -1,7 +1,3 @@
-"""
-The logout method of the account object of the API
-"""
-
 from fastapi import APIRouter, Request, Depends
 from consys.errors import ErrorAccess
 

@@ -1,7 +1,3 @@
-"""
-Prepare message middleware
-"""
-
 from middlewares.check_user import check_user
 from lib import log
 from lib.tg import tg

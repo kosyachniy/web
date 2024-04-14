@@ -1,7 +1,3 @@
-"""
-The password recover method of the account object of the API
-"""
-
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess

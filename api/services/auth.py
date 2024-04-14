@@ -1,7 +1,3 @@
-"""
-User authorization
-"""
-
 import jwt
 from fastapi import Request
 from consys.errors import ErrorWrong
@@ -14,19 +10,19 @@ from lib import cfg
 
 # pylint: disable=too-many-branches
 def get_user(token_id=None, socket_id=None, token_jwt=None, user_id=None):
-    """ Get user object by token / socket / id """
+    """Get user object by token / socket / id"""
 
     if token_jwt is not None:
         try:
-            token = jwt.decode(token_jwt, cfg('jwt'), algorithms='HS256')
+            token = jwt.decode(token_jwt, cfg("jwt"), algorithms="HS256")
         except Exception:  # pylint: disable=broad-except
             pass
         else:
-            return User.get(token['user']), token['token']
+            return User.get(token["user"]), token["token"]
 
     elif token_id is not None:
         try:
-            token = Token.get(token_id, fields={'user'})
+            token = Token.get(token_id, fields={"user"})
         except ErrorWrong:
             token = Token(id=token_id)
             token.save()
@@ -36,7 +32,7 @@ def get_user(token_id=None, socket_id=None, token_jwt=None, user_id=None):
 
     elif socket_id is not None:
         try:
-            socket = Socket.get(socket_id, fields={'user'})
+            socket = Socket.get(socket_id, fields={"user"})
         except ErrorWrong:
             pass
         else:
@@ -54,7 +50,8 @@ def get_user(token_id=None, socket_id=None, token_jwt=None, user_id=None):
 
     return User(), token_id
 
+
 def sign(request: Request):
-    """ Get user """
+    """Get user"""
     user, _ = get_user(user_id=request.state.user)
     return user

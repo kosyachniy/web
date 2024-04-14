@@ -1,7 +1,3 @@
-"""
-User checking middleware
-"""
-
 from lib import auth, log, user_ids, user_logins, user_statuses, user_titles
 from lib.tg import tg
 from lib.queue import get, save

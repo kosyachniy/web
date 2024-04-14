@@ -1,7 +1,3 @@
-"""
-The disconnect socket of the account object of the API
-"""
-
 import time
 
 from consys.errors import ErrorWrong

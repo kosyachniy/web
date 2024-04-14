@@ -1,7 +1,3 @@
-"""
-The authorization method of the account object of the API
-"""
-
 import jwt
 from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse

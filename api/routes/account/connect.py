@@ -1,7 +1,3 @@
-"""
-The connect socket of the account object of the API
-"""
-
 from lib import log
 from app import sio
 

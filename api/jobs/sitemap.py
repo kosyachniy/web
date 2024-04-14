@@ -1,7 +1,3 @@
-"""
-Update sitemaps
-"""
-
 import time
 import datetime
 import gzip

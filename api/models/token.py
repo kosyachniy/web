@@ -1,14 +1,10 @@
-"""
-Token model of DB object
-"""
-
 from models import Base, Attribute
 
 
 class Token(Base):
-    """ Token """
+    """Token"""
 
-    _name = 'tokens'
+    _name = "tokens"
 
     id = Attribute(types=str)
     network = Attribute(types=int)

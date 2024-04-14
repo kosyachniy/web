@@ -1,7 +1,3 @@
-"""
-The getting method of the review object of the API
-"""
-
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
@@ -21,40 +17,44 @@ class Type(BaseModel):
     search: str = None
     # TODO: fields: list[str] = None
 
+
 @router.post("/get/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Get """
+    """Get"""
 
     # TODO: get by your token when you unauth
 
     # No access
     if user.status < 4:
-        raise ErrorAccess('get')
+        raise ErrorAccess("get")
 
     # Fields
     fields = {
-        'id',
-        'title',
-        'data',
-        'user',
-        'created',
-        'network',
+        "id",
+        "title",
+        "data",
+        "user",
+        "created",
+        "network",
     }
 
     # Processing
     def handle(review):
         # User info
-        if review.get('user'):
-            review['user'] = User.complex(review['user'], fields={
-                'id',
-                'login',
-                'name',
-                'surname',
-                'image',
-            })
+        if review.get("user"):
+            review["user"] = User.complex(
+                review["user"],
+                fields={
+                    "id",
+                    "login",
+                    "name",
+                    "surname",
+                    "image",
+                },
+            )
 
         return review
 
@@ -70,5 +70,5 @@ async def handler(
 
     # Response
     return {
-        'reviews': reviews,
+        "reviews": reviews,
     }

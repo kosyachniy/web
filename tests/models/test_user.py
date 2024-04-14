@@ -16,8 +16,9 @@ def test_repeated_login():
     with pytest.raises(ErrorInvalid):
         User(login=login.upper())
 
+
 def test_repeated_mail():
-    mail = f'{generate(10)}@{generate(5)}.{generate(5)}'
+    mail = f"{generate(10)}@{generate(5)}.{generate(5)}"
 
     user = User(mail=mail.title())
     user.save()
@@ -26,6 +27,7 @@ def test_repeated_mail():
 
     with pytest.raises(ErrorInvalid):
         User(mail=mail.upper())
+
 
 def test_none_fields():
     user = User(
@@ -61,24 +63,25 @@ def test_none_fields():
 
     assert user
     assert not user.id
-    assert user.login == 'id0'
+    assert user.login == "id0"
 
     user.save()
 
     assert user.id
-    assert user.login != 'id0'
+    assert user.login != "id0"
+
 
 def test_phone_processing():
-    assert User(phone='+7 (969) 736-67-30').phone == 79697366730
-    assert User(phone='79697366730').phone == 79697366730
+    assert User(phone="+7 (969) 736-67-30").phone == 79697366730
+    assert User(phone="79697366730").phone == 79697366730
     assert User(phone=89697366730).phone == 79697366730
-    assert User(phone='8 9697366730').phone == 79697366730
+    assert User(phone="8 9697366730").phone == 79697366730
 
     with pytest.raises(ErrorInvalid):
-        User(phone='(969) 7366730')
+        User(phone="(969) 7366730")
 
     with pytest.raises(ErrorInvalid):
-        User(phone='abcdefghijklmn')
+        User(phone="abcdefghijklmn")
 
     with pytest.raises(ErrorInvalid):
-        User(phone='')
+        User(phone="")

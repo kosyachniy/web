@@ -1,7 +1,3 @@
-"""
-The removal method of the review object of the API
-"""
-
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
@@ -16,16 +12,17 @@ router = APIRouter()
 class Type(BaseModel):
     id: int
 
+
 @router.post("/rm/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Delete """
+    """Delete"""
 
     # No access
     if user.status < 5:
-        raise ErrorAccess('rm')
+        raise ErrorAccess("rm")
 
     # Get
     review = Review.get(data.id)

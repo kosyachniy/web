@@ -1,7 +1,3 @@
-"""
-Check access by token
-"""
-
 import jwt
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware

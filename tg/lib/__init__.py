@@ -1,7 +1,3 @@
-"""
-The main functionality for the Telegram bot
-"""
-
 from libdev.cfg import cfg
 from libdev.gen import generate
 from loguru import logger as log

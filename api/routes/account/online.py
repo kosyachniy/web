@@ -1,7 +1,3 @@
-"""
-The online socket of the account object of the API
-"""
-
 from consys.errors import ErrorWrong
 
 from lib import log

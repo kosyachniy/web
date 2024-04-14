@@ -1,7 +1,3 @@
-"""
-Monitoring
-"""
-
 import asyncio
 import subprocess
 

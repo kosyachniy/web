@@ -1,7 +1,3 @@
-"""
-The removal method of the category object of the API
-"""
-
 from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
@@ -19,23 +15,24 @@ router = APIRouter()
 class Type(BaseModel):
     id: int
 
+
 @router.post("/rm/")
 async def handler(
     request: Request,
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Delete """
+    """Delete"""
 
     # No access
     if user.status < 2:
-        raise ErrorAccess('rm')
+        raise ErrorAccess("rm")
 
     # Get
     category = Category.get(data.id)
 
     if user.status < 6 and category.user != user.id:
-        raise ErrorAccess('rm')
+        raise ErrorAccess("rm")
 
     # Reset subcategories
     for subcategory in Category.get(parent=category.id):
@@ -55,9 +52,9 @@ async def handler(
 
     # Track
     Track(
-        title='cat_rm',
+        title="cat_rm",
         data={
-            'id': data.id,
+            "id": data.id,
         },
         user=user.id,
         token=request.state.token,

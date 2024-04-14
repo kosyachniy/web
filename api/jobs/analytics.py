@@ -1,13 +1,9 @@
-"""
-Analytics
-"""
-
 import asyncio
 
 from libdev.time import get_time
 
 from lib import cfg, log
-from lib.docs import open_sheets
+from lib.docs import open_sheets  # pylint: disable=import-error
 from models.user import User
 from models.post import Post
 

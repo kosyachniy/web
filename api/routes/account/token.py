@@ -1,7 +1,3 @@
-"""
-The token creating method of the account object of the API
-"""
-
 import jwt
 from fastapi import APIRouter, Body, Request
 from fastapi.responses import JSONResponse
@@ -23,12 +19,13 @@ class Type(BaseModel):
     utm: str = None
     extra: dict = None
 
+
 @router.post("/token/")
 async def handler(
     request: Request,
     data: Type = Body(...),
 ):
-    """ Create token """
+    """Create token"""
 
     # TODO: ip
 
@@ -42,7 +39,7 @@ async def handler(
     # Create
     except ErrorWrong:
         token = Token(
-            id=data.token, # generate(),
+            id=data.token,  # generate(),
         )
         save = True
 
@@ -70,16 +67,22 @@ async def handler(
         token.save()
 
     # JWT
-    token = jwt.encode({
-        'token': token.id,
-        'user': token.user,
-        'network': network,
-        # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-    }, cfg('jwt'), algorithm='HS256')
+    token = jwt.encode(
+        {
+            "token": token.id,
+            "user": token.user,
+            "network": network,
+            # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+        },
+        cfg("jwt"),
+        algorithm="HS256",
+    )
 
     # Response
-    response = JSONResponse(content={
-        'token': token,
-    })
+    response = JSONResponse(
+        content={
+            "token": token,
+        }
+    )
     response.set_cookie(key="Authorization", value=f"Bearer {token}")
     return response

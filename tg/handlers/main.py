@@ -1,7 +1,3 @@
-"""
-Main commands handler
-"""
-
 import jwt
 from libdev.codes import get_flag
 

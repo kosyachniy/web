@@ -1,14 +1,10 @@
-"""
-System parameters model of DB object
-"""
-
 from models import Base, Attribute
 
 
 class System(Base):
-    """ System """
+    """System"""
 
-    _name = 'system'
+    _name = "system"
 
     id = Attribute(types=str)
     data = Attribute()

@@ -1,7 +1,3 @@
-"""
-Category model of DB object
-"""
-
 from libdev.lang import get_pure
 
 from models import Base, Attribute
@@ -9,14 +5,15 @@ from lib.queue import get
 
 
 def default_description(instance):
-    """ Default description """
-    return get_pure(instance.data).split('\n')[0]
+    """Default description"""
+    return get_pure(instance.data).split("\n")[0]
+
 
 class Category(Base):
-    """ Category """
+    """Category"""
 
-    _name = 'categories'
-    _search_fields = {'title', 'data'}
+    _name = "categories"
+    _search_fields = {"title", "data"}
 
     description = Attribute(types=str, default=default_description)
     parent = Attribute(types=int, default=0)
@@ -26,7 +23,7 @@ class Category(Base):
 
     @classmethod
     def get_tree(cls, categories=None, parent=None, ids=None, **kwargs):
-        """ Get tree of categories """
+        """Get tree of categories"""
 
         if categories is None:
             categories = cls.get(**kwargs)
@@ -45,7 +42,7 @@ class Category(Base):
                 continue
 
             data = category.json()
-            data['categories'] = cls.get_tree(categories, category.id)
+            data["categories"] = cls.get_tree(categories, category.id)
 
             tree.append(data)
 
@@ -53,5 +50,5 @@ class Category(Base):
 
     @classmethod
     def get_childs(cls, parent):
-        """ Get childs of category """
-        return get('category_childs').get(parent, []) + [parent]
+        """Get childs of category"""
+        return get("category_childs").get(parent, []) + [parent]

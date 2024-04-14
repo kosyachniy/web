@@ -1,7 +1,3 @@
-"""
-Background processes
-"""
-
 import asyncio
 from pathlib import Path
 import pkgutil
