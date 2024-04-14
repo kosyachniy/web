@@ -6,9 +6,9 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorAccess
 
+from lib import log, generate_password
 from models.user import User, process_lower, pre_process_phone
 from services.auth import sign
-from lib import generate_password, report
 
 
 router = APIRouter()
@@ -17,16 +17,17 @@ router = APIRouter()
 class Type(BaseModel):
     login: str
 
+
 @router.post("/recover/")
 async def handler(
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Recover password """
+    """Recover password"""
 
     # No access
     if user.status < 2:
-        raise ErrorAccess('recover')
+        raise ErrorAccess("recover")
 
     # Get
 
@@ -56,7 +57,7 @@ async def handler(
             new = False
 
     if new:
-        raise ErrorWrong('login')
+        raise ErrorWrong("login")
 
     # Update password
     password = generate_password()
@@ -68,7 +69,10 @@ async def handler(
     # TODO: send by SMS
 
     # Report
-    await report.request("Recover password", {
-        'password': password,
-        'user': user.id,
-    })
+    log.success(
+        "Recover password\n{}",
+        {
+            "password": password,
+            "user": user.id,
+        },
+    )

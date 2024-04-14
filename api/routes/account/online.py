@@ -4,11 +4,12 @@ The online socket of the account object of the API
 
 from consys.errors import ErrorWrong
 
+from lib import log
 from models.user import User
 from models.socket import Socket
+
 # from models.space import Space
 from services.auth import get_user
-from lib import report
 from app import sio
 
 
@@ -22,15 +23,16 @@ from app import sio
 
 #     if spaces:
 #         if len(spaces) > 1:
-#             await report.warning("More than 1 active space", {
+#             log.warning("More than 1 active space\n{}", {
 #                 'user': user_id,
 #                 'spaces': [space.id for space in spaces],
 #             })
 
 #         return spaces[0].id
 
+
 def _other_sessions(user_id, token=None):
-    """ Checking for open online sessions of the user """
+    """Checking for open online sessions of the user"""
 
     if not user_id:
         if not token:
@@ -43,17 +45,19 @@ def _other_sessions(user_id, token=None):
 
     return bool(sockets)
 
-def _online_count():
-    """ Counting the total number of online users """
 
-    sockets = Socket.get(fields={'user', 'token'})
+def _online_count():
+    """Counting the total number of online users"""
+
+    sockets = Socket.get(fields={"user", "token"})
     count = len({socket.user or socket.token for socket in sockets})
 
     return count
 
+
 # pylint: disable=too-many-branches
 async def online_start(token_id, socket_id=None):
-    """ Start / update online session of the user """
+    """Start / update online session of the user"""
 
     # TODO: save user data cache in db.sockets
 
@@ -63,8 +67,8 @@ async def online_start(token_id, socket_id=None):
     # TODO: Full info for all / auth / only for admins
 
     if socket_id:
-        sockets_auth = Socket.get(user={'$exists': True}, fields={'user'})
-        fields = {'id', 'login', 'image', 'name', 'surname', 'status'}
+        sockets_auth = Socket.get(user={"$exists": True}, fields={"user"})
+        fields = {"id", "login", "image", "name", "surname", "status"}
         users_uniq = [
             User.get(socket.user, fields=fields).json(fields=fields)
             for socket in sockets_auth
@@ -73,10 +77,14 @@ async def online_start(token_id, socket_id=None):
         count = _online_count()
 
         if count:
-            await sio.emit('online_add', {
-                'count': count,
-                'users': users_uniq,
-            }, room=socket_id)
+            await sio.emit(
+                "online_add",
+                {
+                    "count": count,
+                    "users": users_uniq,
+                },
+                room=socket_id,
+            )
 
     # Already online
     already = _other_sessions(user.id, token_id)
@@ -86,7 +94,7 @@ async def online_start(token_id, socket_id=None):
         changed = False
 
         try:
-            socket = Socket.get(socket_id, fields={'user', 'token'})
+            socket = Socket.get(socket_id, fields={"user", "token"})
         except ErrorWrong:
             socket = Socket(
                 id=socket_id,
@@ -97,18 +105,24 @@ async def online_start(token_id, socket_id=None):
 
         else:
             if socket.token != token_id:
-                await report.warning("Wrong socket.token", {
-                    'from': socket.token,
-                    'to': token_id,
-                })
+                log.warning(
+                    "Wrong socket.token\n{}",
+                    {
+                        "from": socket.token,
+                        "to": token_id,
+                    },
+                )
                 socket.token = token_id
                 changed = True
 
             if socket.user != user.id:
-                await report.warning("Wrong socket.user", {
-                    'from': socket.user,
-                    'to': user.id,
-                })
+                log.warning(
+                    "Wrong socket.user\n{}",
+                    {
+                        "from": socket.user,
+                        "to": user.id,
+                    },
+                )
                 socket.user = user.id
                 changed = True
 
@@ -117,7 +131,7 @@ async def online_start(token_id, socket_id=None):
 
     # Update other sockets by token
 
-    sockets = Socket.get(token=token_id, fields={'user'})
+    sockets = Socket.get(token=token_id, fields={"user"})
 
     for socket in sockets:
         socket.user = user.id
@@ -137,17 +151,18 @@ async def online_start(token_id, socket_id=None):
     count = _online_count()
 
     if user.id:
-        data = [user.json(
-            fields={'id', 'login', 'image', 'name', 'surname', 'status'}
-        )]
+        data = [user.json(fields={"id", "login", "image", "name", "surname", "status"})]
     else:
         data = []
 
     if sio is not None:
-        await sio.emit('online_add', {
-            'count': count,
-            'users': data,
-        })
+        await sio.emit(
+            "online_add",
+            {
+                "count": count,
+                "users": data,
+            },
+        )
 
     # # Redirect to active space
     # # TODO: cache
@@ -158,21 +173,22 @@ async def online_start(token_id, socket_id=None):
     #             'id': space,
     #         }, room=socket.id)
 
-@sio.on('online')
+
+@sio.on("online")
 async def online(sid, data):
-    """ Update online status """
+    """Update online status"""
 
     # TODO: Проверка, что токен не скомпрометирован - по ip?
     # TODO: Определить вкладку (tab - sid)
 
-    await report.debug('ON', sid)
+    log.debug("ON", sid)
 
-    if not data['token']:
-        await report.warning("Invalid token")
+    if not data["token"]:
+        log.warning("Invalid token")
         return
 
     # Send sockets
-    await online_start(data['token'], sid)
+    await online_start(data["token"], sid)
 
     # TODO: UTM parameters
     # TODO: Promos

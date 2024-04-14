@@ -2,39 +2,23 @@
 Request processing and response statuses formatting
 """
 
-from fastapi import Request, Response
+from fastapi import Request, HTTPException
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
-from consys.errors import BaseError
 
-from lib import report
+from lib import log
 
 
 class ErrorsMiddleware(BaseHTTPMiddleware):
-    """ Formatting errors middleware """
-
-    def __init__(self, app):
-        super().__init__(app)
-
     async def dispatch(self, request: Request, call_next):
-        # Whitelist
-        if request.method != 'POST':
-            return await call_next(request)
-
         try:
             response = await call_next(request)
-
-            # Report
-            if response.status_code not in {200, 401}:
-                await report.warning("Non-success response", {
-                    'url': request.state.url,
-                    'status': response.status_code,
-                })
-
             return response
-
-        except BaseError as e:
-            return Response(content=str(e.txt), status_code=400)
-
-        except Exception as e:  # pylint: disable=broad-except
-            await report.critical(str(e), error=e)
-            return Response(content=str(e), status_code=500)
+        except Exception as exc:
+            log.exception("An unhandled exception occurred:")
+            if isinstance(exc, HTTPException):
+                return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
+            else:
+                return JSONResponse(
+                    {"detail": "Internal Server Error"}, status_code=500
+                )

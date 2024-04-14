@@ -6,11 +6,11 @@ from fastapi import APIRouter, Body, Request, Depends
 from pydantic import BaseModel
 from consys.errors import ErrorAccess
 
+from lib import log
 from models.post import Post
 from models.comment import Comment
 from models.track import Track
 from services.auth import sign
-from lib import report
 
 
 router = APIRouter()
@@ -22,19 +22,20 @@ class Type(BaseModel):
     data: str = None
     status: int = None
 
+
 @router.post("/reply/")
 async def handler(
     request: Request,
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Save """
+    """Save"""
 
     # TODO: fix access to unblock yourself comment
 
     # No access
     if user.status < 2:
-        raise ErrorAccess('save')
+        raise ErrorAccess("save")
 
     # Check post
     Post.get(data.post, fields={})
@@ -49,7 +50,7 @@ async def handler(
             and (not comment.user or comment.user != user.id)
             and comment.token != request.state.token
         ):
-            raise ErrorAccess('save')
+            raise ErrorAccess("save")
 
     else:
         comment = Comment(
@@ -68,11 +69,11 @@ async def handler(
 
     # Track
     Track(
-        title='comment_add' if new else 'comment_edit',
+        title="comment_add" if new else "comment_edit",
         data={
-            'id': comment.id,
-            'data': comment.data,
-            'status': comment.status,
+            "id": comment.id,
+            "data": comment.data,
+            "status": comment.status,
         },
         user=user.id,
         token=request.state.token,
@@ -81,15 +82,18 @@ async def handler(
 
     # Report
     if new:
-        await report.important("Reply", {
-            'post': comment.post,
-            'comment': comment.data,
-            'user': user.id,
-        })
+        log.success(
+            "Reply",
+            {
+                "post": comment.post,
+                "comment": comment.data,
+                "user": user.id,
+            },
+        )
 
     # Response
     return {
-        'id': comment.id,
-        'new': new,
-        'comment': comment.json(),
+        "id": comment.id,
+        "new": new,
+        "comment": comment.json(),
     }

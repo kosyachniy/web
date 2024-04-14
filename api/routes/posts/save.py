@@ -7,10 +7,10 @@ from pydantic import BaseModel
 from libdev.lang import to_url
 from consys.errors import ErrorAccess
 
+from lib import log
 from models.post import Post
 from models.track import Track
 from services.auth import sign
-from lib import report
 
 
 router = APIRouter()
@@ -27,19 +27,20 @@ class Type(BaseModel):
     category: int = None
     status: int = None
 
+
 @router.post("/save/")
 async def handler(
     request: Request,
     data: Type = Body(...),
-    user = Depends(sign),
+    user=Depends(sign),
 ):
-    """ Save """
+    """Save"""
 
     # TODO: fix access to unblock yourself post
 
     # No access
     if user.status < 2:
-        raise ErrorAccess('save')
+        raise ErrorAccess("save")
 
     # Get
     new = False
@@ -51,7 +52,7 @@ async def handler(
             and (not post.user or post.user != user.id)
             and post.token != request.state.token
         ):
-            raise ErrorAccess('save')
+            raise ErrorAccess("save")
 
     else:
         post = Post(
@@ -78,14 +79,14 @@ async def handler(
 
     # Track
     Track(
-        title='post_add' if new else 'post_edit',
+        title="post_add" if new else "post_edit",
         data={
-            'id': post.id,
-            'title': post.title,
-            'data': post.data,
-            'image': post.image,
-            'tags': post.tags,
-            'status': post.status,
+            "id": post.id,
+            "title": post.title,
+            "data": post.data,
+            "image": post.image,
+            "tags": post.tags,
+            "status": post.status,
         },
         user=user.id,
         token=request.state.token,
@@ -94,24 +95,27 @@ async def handler(
 
     # Report
     if new:
-        await report.important("Save post", {
-            'post': post.id,
-            'title': post.title,
-            'locale': post.locale,
-            'user': user.id,
-        })
+        log.success(
+            "Save post\n{}",
+            {
+                "post": post.id,
+                "title": post.title,
+                "locale": post.locale,
+                "user": user.id,
+            },
+        )
 
     data = post.json()
 
     # URL
-    data['url'] = to_url(post.title) or ""
-    if data['url']:
-        data['url'] += "-"
-    data['url'] += f"{post.id}"
+    data["url"] = to_url(post.title) or ""
+    if data["url"]:
+        data["url"] += "-"
+    data["url"] += f"{post.id}"
 
     # Response
     return {
-        'id': post.id,
-        'new': new,
-        'post': data,
+        "id": post.id,
+        "new": new,
+        "post": data,
     }

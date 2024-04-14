@@ -3,20 +3,21 @@ Prepare message middleware
 """
 
 from middlewares.check_user import check_user
-from lib import report
+from lib import log
 from lib.tg import tg
 from lib.queue import get
 
 
 async def rm_last(chat, cache):
-    """ Remove last message """
-    if cache.get('m'):
-        await tg.rm(chat.id, cache['m'])
+    """Remove last message"""
+    if cache.get("m"):
+        await tg.rm(chat.id, cache["m"])
 
-async def prepare_message(data, action='typing'):
-    """ Prepare new message """
 
-    if 'message' in data:
+async def prepare_message(data, action="typing"):
+    """Prepare new message"""
+
+    if "message" in data:
         message = data.message
         callback = data
     else:
@@ -40,7 +41,7 @@ async def prepare_message(data, action='typing'):
         if callback:
             await tg.bot.answer_callback_query(callback.id)
     except Exception as e:  # pylint: disable=broad-except
-        await report.error("prepare_message", error=e)
+        log.error(e)
 
     locale = message.from_user.language_code
     image = message.from_user.get_profile_photos()
