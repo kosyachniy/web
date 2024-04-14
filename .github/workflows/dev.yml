@@ -1,0 +1,19 @@
+on:
+  push:
+    branches: [ "dev" ]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setting up environment variables
+        run: |
+          cp base.env .env
+          echo "MODE=TEST" >> .env
+          echo "DATA_PATH=./data" >> .env
+
+      - name: Running tests inside the container
+        run: make run-test
