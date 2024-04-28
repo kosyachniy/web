@@ -1,5 +1,5 @@
 from models.socket import Socket
-from routes.account.disconnect import online_stop
+from routes.users.disconnect import online_stop
 
 
 async def handle(_):

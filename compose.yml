@@ -40,41 +40,41 @@ services:
       - ${DATA_PATH}/load:/data/load
       - ${DATA_PATH}/backup:/backup
       - ./scripts:/app/scripts
-      # For logs
-      - ${DATA_PATH}/logs/api.err:/app/app.err
-      - ${DATA_PATH}/logs/api.log:/app/app.log
+      # # For logs
+      # - ${DATA_PATH}/logs/api.err:/app/app.err
+      # - ${DATA_PATH}/logs/api.log:/app/app.log
       # For hot reload
       - ./api:/app
     command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
-    healthcheck:
-      test: "curl --fail http://0.0.0.0:5000/"
-      interval: 1s
-      timeout: 1s
-      start_period: 180s
-      retries: 180
+    # healthcheck:
+    #   test: "curl --fail http://0.0.0.0:5000/"
+    #   interval: 1s
+    #   timeout: 1s
+    #   start_period: 180s
+    #   retries: 180
 
-  jobs:
-    image: ${PROJECT_NAME}/jobs
-    build: ./api
-    depends_on:
-      - db
-      - redis
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      API: http://api:5000/
-      WEB: http://localhost/
-    volumes:
-      # For logs
-      - ${DATA_PATH}/logs/jobs.err:/app/app.err
-      - ${DATA_PATH}/logs/jobs.log:/app/app.log
-      # For hot reload
-      - ./api:/app
-      # For sitemap
-      - ${DATA_PATH}/sitemaps:/data/sitemaps
-      - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
-      - ${DATA_PATH}/robots.txt:/data/robots.txt
-    command: bash -c "cd /app && python job.py"
+  # jobs:
+  #   image: ${PROJECT_NAME}/jobs
+  #   build: ./api
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   environment:
+  #     API: http://api:5000/
+  #     WEB: http://localhost/
+  #   volumes:
+  #     # For logs
+  #     - ${DATA_PATH}/logs/jobs.err:/app/app.err
+  #     - ${DATA_PATH}/logs/jobs.log:/app/app.log
+  #     # For hot reload
+  #     - ./api:/app
+  #     # For sitemap
+  #     - ${DATA_PATH}/sitemaps:/data/sitemaps
+  #     - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
+  #     - ${DATA_PATH}/robots.txt:/data/robots.txt
+  #   command: bash -c "cd /app && python job.py"
 
   web:
     image: ${PROJECT_NAME}/web
@@ -117,7 +117,6 @@ services:
       - ${DATA_PATH}/robots.txt:/data/robots.txt
     depends_on:
       - api
-      - jobs
       - web
     ports:
       - ${EXTERNAL_PORT}:80

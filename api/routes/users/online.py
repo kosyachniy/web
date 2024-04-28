@@ -1,12 +1,12 @@
 from consys.errors import ErrorWrong
 
 from lib import log
+from lib.sockets import sio
 from models.user import User
 from models.socket import Socket
 
 # from models.space import Space
 from services.auth import get_user
-from app import sio
 
 
 # async def _get_active_space(user_id):

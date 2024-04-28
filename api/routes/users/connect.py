@@ -1,5 +1,5 @@
 from lib import log
-from app import sio
+from lib.sockets import sio
 
 
 @sio.on("connect")

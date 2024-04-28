@@ -162,7 +162,7 @@ DATA_PATH=~/web/data # or change to global path, for example: ~/data/web
                 2. <code> make dev </code>
             </td>
             <td>
-                2. <code> make run </code>
+                2. <code> make base <br/> make run </code>
             </td>
         </tr>
         <tr>

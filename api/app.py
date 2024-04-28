@@ -1,4 +1,3 @@
-import socketio
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
@@ -7,7 +6,8 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
-from lib import cfg
+from lib import cfg, log
+from lib.sockets import asgi
 from services.parameters import ParametersMiddleware
 from services.monitoring import MonitoringMiddleware
 from services.errors import ErrorsMiddleware
@@ -88,8 +88,6 @@ app.add_middleware(
 )
 
 # Socket.IO
-sio = socketio.AsyncServer(async_mode="asgi", cors_allowed_origins="*")
-asgi = socketio.ASGIApp(sio)
 app.mount("/ws", asgi)
 
 
@@ -108,8 +106,11 @@ async def uploader(upload: bytes = File()):
     }
 
 
-app.include_router(categories.router)
-app.include_router(payments.router)
-app.include_router(posts.router)
-app.include_router(reviews.router)
-app.include_router(users.router)
+try:
+    app.include_router(categories.router)
+    app.include_router(payments.router)
+    app.include_router(posts.router)
+    app.include_router(reviews.router)
+    app.include_router(users.router)
+except Exception as e:
+    log.error(f"Error during import: {e}")

@@ -3,10 +3,10 @@ import time
 from consys.errors import ErrorWrong
 
 from lib import log
+from lib.sockets import sio
 from models.socket import Socket
 from models.track import Track
 from routes.users.online import _other_sessions, _online_count, get_user
-from app import sio
 
 
 async def online_stop(socket_id, close=True):

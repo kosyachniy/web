@@ -4,9 +4,6 @@ services:
     image: ${PROJECT_NAME}/api
     build: ./api
     restart: unless-stopped
-    depends_on:
-      - db
-      - redis
     env_file: .env
     environment:
       WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
@@ -33,9 +30,6 @@ services:
     image: ${PROJECT_NAME}/jobs
     build: ./api
     restart: unless-stopped
-    depends_on:
-      - db
-      - redis
     env_file: .env
     environment:
       API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
@@ -65,7 +59,6 @@ services:
       - ${DATA_PATH}/logs/tg.log:/app/app.log
     depends_on:
       - api
-      - redis
     ports:
       - ${TG_PORT}:80
 

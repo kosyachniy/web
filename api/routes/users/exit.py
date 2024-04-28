@@ -5,7 +5,7 @@ from lib import log
 from models.token import Token
 from models.socket import Socket
 from services.auth import sign
-from routes.account.disconnect import online_stop
+from routes.users.disconnect import online_stop
 
 
 router = APIRouter()
