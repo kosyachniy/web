@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from consys.errors import ErrorWrong, ErrorInvalid
 
 from services.auth import sign
-from routes.account.auth import auth
+from routes.users.auth import auth
 from lib import cfg, log
 
 

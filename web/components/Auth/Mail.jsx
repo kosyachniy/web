@@ -20,7 +20,7 @@ export default () => {
   const [password, setPassword] = useState('');
 
   const signIn = event => {
-    api(main, 'account.auth', {
+    api(main, 'users.auth', {
       login: mail,
       password,
       utm: main.utm,
@@ -67,18 +67,18 @@ export default () => {
           <div className={styles.pass_info}>
             <span style={password.length >= 6 ? { color: 'var(--bs-green)' } : { color: '#e74c3c' }}>
               <i className={password.length >= 6 ? 'bi bi-check-circle' : 'bi bi-x-circle'} />
-              { t('profile.passwordTip1') }
+              {t('profile.passwordTip1')}
             </span>
             <span style={checkPassword(password) ? { color: 'var(--bs-green)' } : { color: '#e74c3c' }}>
               <i className={checkPassword(password) ? 'bi bi-check-circle' : 'bi bi-x-circle'} />
-              { t('profile.passwordTip2') }
+              {t('profile.passwordTip2')}
             </span>
           </div>
           <button
             type="submit"
             className="btn btn-success"
           >
-            { t('system.sign_in') }
+            {t('system.sign_in')}
           </button>
         </form>
       </Popup>

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Body, Request
 from pydantic import BaseModel
 
-from routes.account.auth import auth
+from routes.users.auth import auth
 
 
 router = APIRouter()

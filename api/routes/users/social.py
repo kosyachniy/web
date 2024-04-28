@@ -13,7 +13,7 @@ from libdev.s3 import upload_file
 from consys.errors import ErrorAccess, ErrorWrong
 
 from lib import cfg, log
-from routes.account.auth import auth
+from routes.users.auth import auth
 
 
 router = APIRouter()

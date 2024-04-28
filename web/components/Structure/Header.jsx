@@ -34,20 +34,20 @@ const Navigation = () => {
     <>
       <li className="nav-item dropdown">
         <Link href="/posts/" className="nav-link">
-          { t('structure.posts') }
+          {t('structure.posts')}
         </Link>
         <ul className={`${styles.menu} dropdown-menu dropdown-menu-${main.theme}`}>
-          { categories && categories.map(category => (category.id && category.status ? (
+          {categories && categories.map(category => (category.id && category.status ? (
             <Link
               href={`/posts/${category.url}/`}
               className="dropdown-item"
               key={category.id}
             >
-              { category.title }
+              {category.title}
             </Link>
           ) : (
             <React.Fragment key={category.id} />
-          ))) }
+          )))}
         </ul>
       </li>
       {/* { categories && categories.map(category => (category.id && category.status ? (
@@ -116,7 +116,7 @@ const Profile = () => {
   const main = useSelector(state => state.main);
   const profile = useSelector(state => state.profile);
 
-  const signOut = () => api(main, 'account.exit', {}).then(
+  const signOut = () => api(main, 'users.exit', {}).then(
     res => dispatch(profileOut(res)),
   ).catch(err => dispatch(toastAdd({
     header: t('system.error'),
@@ -132,7 +132,7 @@ const Profile = () => {
         className="btn btn-success"
         onClick={() => dispatch(popupSet('auth'))}
       >
-        { t('system.sign_in') }
+        {t('system.sign_in')}
       </button>
     );
   }
@@ -156,7 +156,7 @@ const Profile = () => {
       >
         <Link href="/profile/" className="dropdown-item">
           <i className="bi bi-person-bounding-box me-2" />
-          { t('system.profile') }
+          {t('system.profile')}
         </Link>
         {/* <Link href="/settings/" className="dropdown-item me-2">
           <i className="fa-solid fa-gear" />
@@ -165,21 +165,21 @@ const Profile = () => {
         {/* <Link href="/billing/" className="dropdown-item me-2">
           { t('system.billing') }
         </Link> */}
-        { profile.status >= 6 && (
+        {profile.status >= 6 && (
           <>
             <Link href={`https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_ANALYTICS_SHEET}/`} className="dropdown-item">
               <i className="bi bi-funnel-fill me-2" />
-              { t('system.analytics') }
+              {t('system.analytics')}
             </Link>
             <Link href="/eye/" className="dropdown-item">
               <i className="bi bi-cone-striped me-2" />
-              { t('system.admin') }
+              {t('system.admin')}
             </Link>
           </>
-        ) }
+        )}
         <div className="dropdown-item" onClick={signOut}>
           <i className="bi bi-door-open-fill me-2" />
-          { t('system.sign_out') }
+          {t('system.sign_out')}
         </div>
       </ul>
     </>

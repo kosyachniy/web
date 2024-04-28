@@ -4,7 +4,7 @@ from pydantic import BaseModel
 # from consys.handlers import pre_process_phone
 
 # from models.user import User
-# from routes.account.auth import reg
+# from routes.users.auth import reg
 # from routes.promos.invite import get_promo
 # from lib.pay import create
 

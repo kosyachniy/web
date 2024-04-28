@@ -15,7 +15,7 @@ const Container = ({
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  const onSocial = (type, code) => api(main, 'account.social', {
+  const onSocial = (type, code) => api(main, 'users.social', {
     social: type,
     code,
     utm: main.utm,

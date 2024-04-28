@@ -106,7 +106,7 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
     # Get token
     error, data = await api(
         chat,
-        "account.token",
+        "users.token",
         {
             "token": f"tg{chat.id}",
             "network": "tg",
@@ -131,7 +131,7 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
     # Auth
     error, data = await api(
         chat,
-        "account.bot",
+        "users.bot",
         {
             "user": chat.id,
             "name": chat.first_name or chat.title or None,
@@ -178,7 +178,7 @@ async def auth(chat, utm=None, locale=None, image=None) -> bool:
             image = await upload(chat, file.read())
             await api(
                 chat,
-                "account.save",
+                "users.save",
                 {
                     "image": image,
                 },

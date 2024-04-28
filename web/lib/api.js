@@ -23,7 +23,7 @@ const api = (
     if (!response.ok) {
       if (response.status === 401 && !setted) {
         // TODO: auto request on token creation
-        await api(main, 'account.token', {
+        await api(main, 'users.token', {
           token: main.token,
           network: 'web',
           utm: main.utm,

@@ -79,7 +79,7 @@ const Container = ({
       data.image = image;
     }
 
-    api(main, 'account.save', data).then(() => {
+    api(main, 'users.save', data).then(() => {
       profileUpdate({
         login, image, name, surname, phone, mail,
       });
