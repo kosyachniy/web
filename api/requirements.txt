@@ -24,7 +24,6 @@ prometheus_fastapi_instrumentator==6.1.0
 
 # Telegram
 aiogram==2.25.1
-tgio==0.8
 
 # Google Docs
 gspread==5.10.0

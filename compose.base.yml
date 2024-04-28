@@ -1,0 +1,78 @@
+version: "3.9"
+services:
+  redis:
+    image: redis:7.0
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ${DATA_PATH}/redis:/data
+    ports:
+      - ${REDIS_PORT}:6379
+    command: bash -c "redis-server --requirepass ${REDIS_PASS}"
+
+  db:
+    image: mongo:6.0
+    ports:
+      - ${DB_PORT}:27017
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    volumes:
+      - ${DATA_PATH}/db:/data/db
+      - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
+      - ./configs/mongod.conf:/etc/mongod.conf
+    command: --config /etc/mongod.conf
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.5.0
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+    command:
+      - --path.rootfs=/host
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.1  # NOTE: google/cadvisor exit 255
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    command:
+      - '--housekeeping_interval=5s'
+      - '--docker_only=true'
+
+  prometheus:
+    image: prom/prometheus:v2.43.0
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    restart: unless-stopped
+    volumes:
+      - ./configs/prometheus.yml:/prometheus.yml
+      - ${DATA_PATH}/prometheus:/prometheus
+    command:
+      - --config.file=/prometheus.yml
+      - --web.external-url=${PROTOCOL}://${EXTERNAL_HOST}/prometheus/
+      - --web.route-prefix=/
+    depends_on:
+      - node_exporter
+      - cadvisor
+
+  grafana:
+    image: grafana/grafana:9.4.7
+    ports:
+      - ${GRAFANA_PORT}:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
+      - GF_SERVER_ROOT_URL=${PROTOCOL}://${EXTERNAL_HOST}/grafana/
+    volumes:
+      - ${DATA_PATH}/grafana:/var/lib/grafana
+    depends_on:
+      - prometheus

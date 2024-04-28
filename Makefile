@@ -3,6 +3,12 @@ include .env
 dev:
 	docker compose -p ${PROJECT_NAME} up --build
 
+base:
+	docker compose -f compose.base.yml -p ${PROJECT_NAME} up --build -d
+
+stop-base:
+	docker compose -f compose.base.yml -p ${PROJECT_NAME} stop
+
 run:
 	docker compose -f compose.prod.yml -p ${PROJECT_NAME} up --build -d
 
