@@ -7,13 +7,21 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
+from lib import cfg
 from services.parameters import ParametersMiddleware
 from services.monitoring import MonitoringMiddleware
 from services.errors import ErrorsMiddleware
 from services.access import AccessMiddleware
 from services.limiter import get_uniq
 from services.on_startup import on_startup
-from lib import cfg
+from routes import (
+    categories,
+    payments,
+    posts,
+    reviews,
+    users,
+)
+
 
 if cfg("s3.pass"):
     # pylint: disable=import-error
@@ -100,5 +108,8 @@ async def uploader(upload: bytes = File()):
     }
 
 
-# pylint: disable=wrong-import-order,wrong-import-position,unused-import
-import routes
+app.include_router(categories.router)
+app.include_router(payments.router)
+app.include_router(posts.router)
+app.include_router(reviews.router)
+app.include_router(users.router)
