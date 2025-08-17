@@ -18,7 +18,7 @@ help: ## Show this help message
 	@echo '  down-base   Stop base containers only'
 	@echo ''
 	@echo '  test        Run all tests (API + Web)'
-	@echo '  test-api    Run API tests only'
+	@echo '  test-backend    Run backend tests only'
 	@echo '  test-web    Run web tests only'
 	@echo ''
 	@echo '  lint        Run linter on all Python files'
@@ -79,7 +79,7 @@ test:
 	cd infra/compose && docker compose --env-file ../../.env -f docker-compose.test-api.yml -p ${PROJECT_NAME} up --build --exit-code-from test
 	cd infra/compose && docker compose --env-file ../../.env -f docker-compose.test-web.yml -p ${PROJECT_NAME} up --build --exit-code-from test
 
-test-api:
+test-backend:
 	cd infra/compose && docker compose --env-file ../../.env -f docker-compose.test-api.yml -p ${PROJECT_NAME} up --build --exit-code-from test
 
 test-web:

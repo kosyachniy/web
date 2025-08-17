@@ -9,8 +9,9 @@
 # Keys & sets
 *.env
 
-# Environments
-env/
-
 # Data
-/data/
+data/
+
+# Logs
+*.log
+*.err

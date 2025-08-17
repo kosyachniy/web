@@ -4,8 +4,8 @@ services:
       WEB: http://localhost/
     volumes:
       # For hot reload in development
-      - ../../api:/app
-    command: bash -c "cd /app && uv run uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
+      - ../../backend/app:/app
+    command: bash -c "cd /app && uv run uvicorn main:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   web:
     environment:

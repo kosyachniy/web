@@ -13,5 +13,5 @@ services:
       - mongo
     env_file: ../../.env
     volumes:
-      - ../../scripts:/app/scripts
+      - ../../backend/scripts:/app/scripts
     command: make test

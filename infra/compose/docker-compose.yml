@@ -1,13 +1,13 @@
 services:
   api:
     image: ${PROJECT_NAME}/api
-    build: ../../api
+    build: ../../backend
     restart: unless-stopped
     env_file: ../../.env
     volumes:
       - ${DATA_PATH}/load:/data/load
       - ${DATA_PATH}/backup:/backup
-      - ../../scripts:/app/scripts
+      - ../../backend/scripts:/app/scripts
 
   web:
     image: ${PROJECT_NAME}/web

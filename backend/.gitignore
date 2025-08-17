@@ -5,7 +5,4 @@ __pycache__/
 
 # Environments
 env/
-
-# Logs
-app.log
-app.err
+venv/

@@ -27,9 +27,9 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=never
 
 # Install dependencies for all components
-RUN cd api && uv sync --frozen --no-cache && \
+RUN cd backend && uv sync --frozen --no-cache && \
     cd ../tg && uv sync --frozen --no-cache && \
-    cd ../tests && uv sync --frozen --no-cache
+    cd ../backend/tests && uv sync --frozen --no-cache
 
 # ========================================
 # Final Stage - Runtime image
@@ -59,9 +59,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 WORKDIR /app
 
 # Copy virtual environments from builder
-COPY --from=builder --chown=tester:tester /app/api/.venv /app/api/.venv
+COPY --from=builder --chown=tester:tester /app/backend/.venv /app/backend/.venv
 COPY --from=builder --chown=tester:tester /app/tg/.venv /app/tg/.venv
-COPY --from=builder --chown=tester:tester /app/tests/.venv /app/tests/.venv
+COPY --from=builder --chown=tester:tester /app/backend/tests/.venv /app/backend/tests/.venv
 
 # Set environment variables for runtime
 ENV PYTHONDONTWRITEBYTECODE=1 \
