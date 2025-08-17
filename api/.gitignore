@@ -2,7 +2,6 @@
 ## Python
 __pycache__/
 *.pyc
-uv.lock
 
 # Environments
 env/

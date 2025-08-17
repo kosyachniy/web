@@ -68,6 +68,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
+      NODE_ENV: production
       NEXT_PUBLIC_API: ${PROTOCOL}://${EXTERNAL_HOST}/api/
       NEXT_PUBLIC_WEB: ${PROTOCOL}://${EXTERNAL_HOST}/
       NEXT_PUBLIC_NAME: ${NAME}

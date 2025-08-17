@@ -12,8 +12,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (generate lock file if needed)
-RUN npm install --omit=dev --no-audit --no-fund && \
+# Install production dependencies using lock file
+RUN npm ci --omit=dev --no-audit --no-fund && \
     npm cache clean --force
 
 # ========================================
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install ALL dependencies for building (including dev dependencies)
-RUN npm install --no-audit --no-fund && \
+RUN npm ci --no-audit --no-fund && \
     npm cache clean --force
 
 # Copy source code
@@ -63,7 +63,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 # Set working directory
 WORKDIR /app
 
-# Set environment variables for production
+# Set environment variables
 ENV NEXT_TELEMETRY_DISABLED=1 \
     PORT=3000
 
