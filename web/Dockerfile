@@ -1,7 +1,91 @@
-FROM node:19.8
+# ========================================
+# Dependencies Stage - Install packages
+# ========================================
+FROM node:18-alpine AS deps
 
-COPY package.json package.json
-RUN npm i --production --force
+# Install system dependencies for node-gyp
+RUN apk add --no-cache libc6-compat
 
+# Set working directory
 WORKDIR /app
-COPY . /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies (generate lock file if needed)
+RUN npm install --omit=dev --no-audit --no-fund && \
+    npm cache clean --force
+
+# ========================================
+# Builder Stage - Build the application
+# ========================================
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files for full install
+COPY package*.json ./
+
+# Install ALL dependencies for building (including dev dependencies)
+RUN npm install --no-audit --no-fund && \
+    npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Set build environment
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+
+# Build the application
+RUN npm run build
+
+# ========================================
+# Runner Stage - Production runtime
+# ========================================
+FROM node:18-alpine AS runner
+
+# Metadata
+LABEL maintainer="Alex Poloz <alexypoloz@gmail.com>"
+LABEL description="Next.js frontend application"
+LABEL version="1.0.0"
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    curl \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Set working directory
+WORKDIR /app
+
+# Set environment variables for production
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000
+
+# Copy production dependencies only
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Copy built application from builder
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./
+COPY --from=builder --chown=nextjs:nodejs /app/next-i18next.config.js ./
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./
+
+# Switch to non-root user
+USER nextjs
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]
