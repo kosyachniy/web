@@ -1,0 +1,48 @@
+services:
+  redis:
+    image: redis:7.0
+    restart: unless-stopped
+    env_file: ../../.env
+    volumes:
+      - ${DATA_PATH}/redis:/data
+    ports:
+      - 6379:6379
+    command: bash -c "redis-server --requirepass ${REDIS_PASS}"
+
+  db:
+    image: mongo:6.0
+    restart: unless-stopped
+    env_file: ../../.env
+    environment:
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    volumes:
+      - ${DATA_PATH}/db:/data/db
+      - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
+      - ../../configs/mongod.conf:/etc/mongod.conf
+    ports:
+      - 27017:27017
+    command: --config /etc/mongod.conf
+
+  api:
+    depends_on:
+      - db
+      - redis
+    environment:
+      WEB: http://localhost/
+    volumes:
+      # For hot reload in testing
+      - ../../api:/app
+    command: bash -c "cd /app && uv run uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers"
+
+  web:
+    environment:
+      NODE_ENV: test
+      NEXT_PUBLIC_API: http://localhost/api/
+      NEXT_PUBLIC_WEB: http://localhost/
+    command: bash -c "npm run build && npm start"
+
+  server:
+    ports:
+      - ${EXTERNAL_PORT}:80

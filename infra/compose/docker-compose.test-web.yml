@@ -1,9 +1,8 @@
-version: "3.9"
 services:
   test:
     image: node:19.8
-    build: ../web
+    build: ../../web
     volumes:
-      - ../web:/app
+      - ../../web:/app
     working_dir: /app
     command: bash -c "npm i && node_modules/.bin/eslint . --ext .js --ext .jsx"

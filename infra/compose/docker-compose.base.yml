@@ -1,10 +1,8 @@
-version: "3.9"
 services:
   redis:
     image: redis:7.0
     restart: unless-stopped
-    env_file:
-      - .env
+    env_file: ../../.env
     volumes:
       - ${DATA_PATH}/redis:/data
     ports:
@@ -16,7 +14,7 @@ services:
     ports:
       - ${DB_PORT}:27017
     restart: unless-stopped
-    env_file: .env
+    env_file: ../../.env
     environment:
       MONGO_INITDB_DATABASE: admin
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
@@ -24,7 +22,7 @@ services:
     volumes:
       - ${DATA_PATH}/db:/data/db
       - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
-      - ./configs/mongod.conf:/etc/mongod.conf
+      - ../../configs/mongod.conf:/etc/mongod.conf
     command: --config /etc/mongod.conf
 
   node_exporter:
@@ -36,7 +34,7 @@ services:
       - --path.rootfs=/host
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.1  # NOTE: google/cadvisor exit 255
+    image: gcr.io/cadvisor/cadvisor:v0.47.1 # NOTE: google/cadvisor exit 255
     restart: unless-stopped
     volumes:
       - /:/rootfs:ro
@@ -54,7 +52,7 @@ services:
       - ${PROMETHEUS_PORT}:9090
     restart: unless-stopped
     volumes:
-      - ./configs/prometheus.yml:/prometheus.yml
+      - ../../configs/prometheus.yml:/prometheus.yml
       - ${DATA_PATH}/prometheus:/prometheus
     command:
       - --config.file=/prometheus.yml

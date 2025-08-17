@@ -1,0 +1,42 @@
+services:
+  api:
+    image: ${PROJECT_NAME}/api
+    build: ../../api
+    restart: unless-stopped
+    env_file: ../../.env
+    volumes:
+      - ${DATA_PATH}/load:/data/load
+      - ${DATA_PATH}/backup:/backup
+      - ../../scripts:/app/scripts
+
+  web:
+    image: ${PROJECT_NAME}/web
+    build: ../../web
+    restart: unless-stopped
+    env_file: ../../.env
+    environment:
+      NEXT_PUBLIC_NAME: ${NAME}
+      NEXT_PUBLIC_LOCALE: ${LOCALE}
+      NEXT_PUBLIC_GOOGLE_ID: ${GOOGLE_ID}
+      NEXT_PUBLIC_VK_ID: ${VK_ID}
+      NEXT_PUBLIC_GOOGLE_MAPS_KEY: ${GOOGLE_MAPS_KEY}
+      NEXT_PUBLIC_GOOGLE_MAPS_LAT: ${GOOGLE_MAPS_LAT}
+      NEXT_PUBLIC_GOOGLE_MAPS_LNG: ${GOOGLE_MAPS_LNG}
+      NEXT_PUBLIC_GOOGLE_MAPS_ZOOM: ${GOOGLE_MAPS_ZOOM}
+      NEXT_PUBLIC_TG_BOT: ${TG_BOT}
+      NEXT_PUBLIC_ANALYTICS_SHEET: ${ANALYTICS_SHEET}
+
+  server:
+    image: nginx:1.23
+    restart: unless-stopped
+    env_file: ../../.env
+    volumes:
+      - ../../configs/nginx.conf:/etc/nginx/nginx.conf
+      - ${DATA_PATH}/load:/load
+      - ${DATA_PATH}/logs:/data/logs
+      - ${DATA_PATH}/sitemaps:/data/sitemaps
+      - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
+      - ${DATA_PATH}/robots.txt:/data/robots.txt
+    depends_on:
+      - api
+      - web

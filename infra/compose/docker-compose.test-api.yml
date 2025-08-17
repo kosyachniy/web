@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   db:
     image: mongo:6.0
@@ -8,11 +7,11 @@ services:
   test:
     image: test
     build:
-      context: ../
+      context: ../../
       dockerfile: ./tests/Dockerfile
     depends_on:
       - db
-    env_file: ../.env
+    env_file: ../../.env
     volumes:
-      - ../scripts:/app/scripts
+      - ../../scripts:/app/scripts
     command: make test
