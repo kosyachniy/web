@@ -32,6 +32,12 @@ if cfg("s3.pass"):
 app = FastAPI(title=cfg("NAME", "API"), root_path="/api")
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Docker health checks"""
+    return {"status": "healthy", "service": "api"}
+
+
 @app.on_event("startup")
 async def startup():
     """Application startup event"""
