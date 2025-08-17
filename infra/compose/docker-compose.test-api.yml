@@ -1,6 +1,6 @@
 services:
-  db:
-    image: mongo:6.0
+  mongo:
+    image: mongo:7.0
     ports:
       - 27017:27017
 
@@ -10,7 +10,7 @@ services:
       context: ../../
       dockerfile: ./tests/Dockerfile
     depends_on:
-      - db
+      - mongo
     env_file: ../../.env
     volumes:
       - ../../scripts:/app/scripts

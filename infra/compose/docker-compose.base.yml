@@ -1,16 +1,16 @@
 services:
   redis:
-    image: redis:7.0
+    image: redis:8.2-alpine
     restart: unless-stopped
     env_file: ../../.env
     volumes:
       - ${DATA_PATH}/redis:/data
     ports:
       - ${REDIS_PORT}:6379
-    command: bash -c "redis-server --requirepass ${REDIS_PASS}"
+    command: sh -c "redis-server --requirepass ${REDIS_PASS}"
 
-  db:
-    image: mongo:6.0
+  mongo:
+    image: mongo:7.0
     ports:
       - ${DB_PORT}:27017
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
     volumes:
       - ${DATA_PATH}/db:/data/db
       - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
-      - ../../configs/mongod.conf:/etc/mongod.conf
+      - ../mongo/mongod.conf:/etc/mongod.conf
     command: --config /etc/mongod.conf
 
   node_exporter:
@@ -52,7 +52,7 @@ services:
       - ${PROMETHEUS_PORT}:9090
     restart: unless-stopped
     volumes:
-      - ../../configs/prometheus.yml:/prometheus.yml
+      - ../prometheus/prometheus.yml:/prometheus.yml
       - ${DATA_PATH}/prometheus:/prometheus
     command:
       - --config.file=/prometheus.yml

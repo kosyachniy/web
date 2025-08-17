@@ -1,16 +1,16 @@
 services:
   redis:
-    image: redis:7.0
+    image: redis:8.2-alpine
     restart: unless-stopped
     env_file: ../../.env
     volumes:
       - ${DATA_PATH}/redis:/data
     ports:
       - 6379:6379
-    command: bash -c "redis-server --requirepass ${REDIS_PASS}"
+    command: sh -c "redis-server --requirepass ${REDIS_PASS}"
 
-  db:
-    image: mongo:6.0
+  mongo:
+    image: mongo:7.0
     restart: unless-stopped
     env_file: ../../.env
     environment:
@@ -20,14 +20,14 @@ services:
     volumes:
       - ${DATA_PATH}/db:/data/db
       - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
-      - ../../configs/mongod.conf:/etc/mongod.conf
+      - ../mongo/mongod.conf:/etc/mongod.conf
     ports:
       - 27017:27017
     command: --config /etc/mongod.conf
 
   api:
     depends_on:
-      - db
+      - mongo
       - redis
     environment:
       WEB: http://localhost/
@@ -52,5 +52,18 @@ services:
     command: npm run dev
 
   server:
+    image: nginx:1.29
+    restart: unless-stopped
+    env_file: ../../.env
+    volumes:
+      - ../nginx/local.conf:/etc/nginx/nginx.conf
+      - ${DATA_PATH}/load:/load
+      - ${DATA_PATH}/logs:/data/logs
+      - ${DATA_PATH}/sitemaps:/data/sitemaps
+      - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
+      - ${DATA_PATH}/robots.txt:/data/robots.txt
     ports:
       - ${EXTERNAL_PORT}:80
+    depends_on:
+      - api
+      - web

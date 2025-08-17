@@ -6,7 +6,7 @@ from libdev.cfg import cfg
 
 
 db = get_db(
-    cfg("mongo.host", "db"),
+    cfg("mongo.host", "mongo"),
     cfg("project_name"),
     cfg("mongo.user"),
     cfg("mongo.pass"),
