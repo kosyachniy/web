@@ -1,0 +1,14 @@
+[project]
+name = "tests"
+version = "1.0.0"
+description = "Test suite"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+    "pylint==2.17.5",
+    "pytest==7.4.0",
+    "pytest-asyncio==0.21.1",
+    "httpx==0.24.1",  # NOTE: for FastAPI + PyTest
+]
+
+[tool.uv]
+dev-dependencies = []

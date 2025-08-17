@@ -1,0 +1,17 @@
+[project]
+name = "tg"
+version = "1.0.0"
+description = "Telegram bot service"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+    "requests==2.31.0",
+    "aiogram==2.25.1",
+    "tgio==0.8",
+    "loguru==0.7.2",
+    "libdev==0.67",
+    "redis==4.6.0",
+    "PyJWT==2.8.0",
+]
+
+[tool.uv]
+dev-dependencies = []

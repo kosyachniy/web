@@ -1,12 +1,16 @@
-FROM python:3.10
+FROM python:3.11
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY requirements.txt requirements.txt
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install --prefer-binary -r requirements.txt
+# Copy dependency files
+COPY pyproject.toml pyproject.toml
+
+# Install dependencies
+RUN uv sync
 
 WORKDIR /app
 COPY . /app

@@ -1,11 +1,5 @@
 # Pull base image
-FROM python:3.10
-
-# Set work directory
-WORKDIR /app
-
-# Copy project
-COPY . /app
+FROM python:3.11
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -13,8 +7,20 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Output print to the Docker console
 ENV PYTHONUNBUFFERED 1
 
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Set work directory
+WORKDIR /app
+
+# Copy dependency files
+COPY pyproject.toml pyproject.toml
+
 # Install dependencies
-RUN pip install -r requirements.txt
+RUN uv sync
+
+# Copy project
+COPY . /app
 
 # Run
-CMD python app.py
+CMD uv run python app.py

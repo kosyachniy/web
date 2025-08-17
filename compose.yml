@@ -45,7 +45,7 @@ services:
       # - ${DATA_PATH}/logs/api.log:/app/app.log
       # For hot reload
       - ./api:/app
-    command: bash -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
+    command: bash -c "cd /app && uv run uvicorn app:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
     # healthcheck:
     #   test: "curl --fail http://0.0.0.0:5000/"
     #   interval: 1s
@@ -74,7 +74,7 @@ services:
   #     - ${DATA_PATH}/sitemaps:/data/sitemaps
   #     - ${DATA_PATH}/sitemap.xml:/data/sitemap.xml
   #     - ${DATA_PATH}/robots.txt:/data/robots.txt
-  #   command: bash -c "cd /app && python job.py"
+  #   command: bash -c "cd /app && uv run python job.py"
 
   web:
     image: ${PROJECT_NAME}/web
