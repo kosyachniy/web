@@ -14,10 +14,6 @@ services:
       NEXT_PUBLIC_WEB: http://localhost/
     volumes:
       # For hot reload in development
-      - ../../web/public:/app/public
-      - ../../web/styles:/app/styles
-      - ../../web/lib:/app/lib
-      - ../../web/redux:/app/redux
-      - ../../web/components:/app/components
-      - ../../web/pages:/app/pages
+      - ../../frontend/public:/app/public
+      - ../../frontend/src:/app/src
     command: npm run dev

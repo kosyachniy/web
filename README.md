@@ -6,8 +6,8 @@ Web-app on JS with Python JSON-RPC API
 
 Form | Side | Stack | Language | Path
 ---|---|---|---|---
-API | Back-end | FastAPI | Python | ``` api/ ```
-Web app | Front-end | React | JavaScript | ``` web/ ```
+API | Back-end | FastAPI | Python | ``` backend/ ```
+Web app | Front-end | React | JavaScript | ``` frontend/ ```
 Telegram bot | Back-end | AIOGram | Python | ``` tg/ ```
 iOS | Front-end | React Native | JavaScript | planned
 Android | Front-end | React Native | JavaScript | planned

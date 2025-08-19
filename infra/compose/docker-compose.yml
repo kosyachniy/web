@@ -11,7 +11,7 @@ services:
 
   web:
     image: ${PROJECT_NAME}/web
-    build: ../../web
+    build: ../../frontend
     restart: unless-stopped
     env_file: ../../.env
     environment:

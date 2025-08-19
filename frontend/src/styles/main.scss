@@ -7,7 +7,7 @@ $input-focus-box-shadow: 0;
 $dropdown-link-active-color: inherit;
 $dropdown-link-active-bg: var(--bs-btn-hover-bg);
 
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 :root {
     --bs-body-bg: #198754;
