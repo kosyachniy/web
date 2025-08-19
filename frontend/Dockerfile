@@ -71,8 +71,9 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # Copy built application from builder
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./
-COPY --from=builder --chown=nextjs:nodejs /app/next-i18next.config.js ./
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/postcss.config.mjs ./
+COPY --from=builder --chown=nextjs:nodejs /app/components.json ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./

@@ -43,8 +43,9 @@ services:
       NEXT_PUBLIC_WEB: http://localhost/
     volumes:
       # For hot reload in development
-      - ../../frontend/public:/app/public
-      - ../../frontend/src:/app/src
+      - ../../frontend:/app
+      # Exclude to avoid conflicts
+      - /app/node_modules
     command: npm run dev
 
   server:
