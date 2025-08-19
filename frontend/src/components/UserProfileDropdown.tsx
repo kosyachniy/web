@@ -15,12 +15,14 @@ interface UserProfileDropdownProps {
     userName?: string;
     userAvatar?: string;
     userEmail?: string;
+    className?: string;
 }
 
 export default function UserProfileDropdown({
     userName = "John Doe",
     userAvatar,
-    userEmail = "john@example.com"
+    userEmail = "john@example.com",
+    className
 }: UserProfileDropdownProps) {
     const t = useTranslations('system');
 
@@ -52,13 +54,17 @@ export default function UserProfileDropdown({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button
+                    variant="outline"
+                    className={className ? `justify-start gap-3 h-12 ${className}` : "relative h-8 w-8 rounded-full"}
+                >
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={userAvatar} alt={userName} />
                         <AvatarFallback className="bg-primary text-primary-foreground">
                             {getInitials(userName)}
                         </AvatarFallback>
                     </Avatar>
+                    {className && <span>{userName}</span>}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>

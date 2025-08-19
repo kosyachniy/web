@@ -21,7 +21,11 @@ const languages = [
     { code: 'ar' as Locale, name: 'العربية', flag: '🇸🇦' },
 ];
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+    className?: string;
+}
+
+export default function LanguageSwitcher({ className }: LanguageSwitcherProps = {}) {
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
@@ -43,9 +47,13 @@ export default function LanguageSwitcher() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Button
+                    variant="outline"
+                    size={className ? "default" : "sm"}
+                    className={className ? `justify-start gap-3 h-12 ${className}` : "flex items-center gap-2"}
+                >
                     <span className="text-lg">{currentLanguage?.flag}</span>
-                    <span className="hidden sm:inline">{currentLanguage?.name}</span>
+                    <span className={className ? "" : "hidden lg:inline"}>{currentLanguage?.name}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

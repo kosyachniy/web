@@ -131,7 +131,7 @@ export default async function LocaleLayout({
                         <ThemeProvider>
                             <UserSettingsInitializer />
                             <Header />
-                            <main className="min-h-screen pt-16">
+                            <main className="min-h-screen">
                                 {children}
                             </main>
                         </ThemeProvider>

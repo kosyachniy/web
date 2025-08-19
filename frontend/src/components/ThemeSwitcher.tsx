@@ -28,7 +28,11 @@ const themes = [
     },
 ] as const;
 
-export default function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+    className?: string;
+}
+
+export default function ThemeSwitcher({ className }: ThemeSwitcherProps = {}) {
     const { theme, resolvedTheme, setTheme } = useTheme();
     const t = useTranslations('theme');
 
@@ -45,10 +49,14 @@ export default function ThemeSwitcher() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Button
+                    variant="outline"
+                    size={className ? "default" : "sm"}
+                    className={className ? `justify-start gap-3 h-12 ${className}` : "flex items-center gap-2"}
+                >
                     <span className="text-lg">{getDisplayIcon()}</span>
-                    <span className="hidden sm:inline capitalize">
-                        {theme === 'system' ? `${theme} (${resolvedTheme})` : theme}
+                    <span className={className ? "" : "hidden lg:inline"}>
+                        {theme === 'system' ? `${t('system')} (${t(resolvedTheme || 'light')})` : t(theme)}
                     </span>
                 </Button>
             </DropdownMenuTrigger>
@@ -61,7 +69,7 @@ export default function ThemeSwitcher() {
                             }`}
                     >
                         <span className="text-lg">{themeOption.icon}</span>
-                        <span className="capitalize">{themeOption.value}</span>
+                        <span>{t(themeOption.labelKey)}</span>
                         {theme === themeOption.value && (
                             <span className="ml-auto text-xs text-muted-foreground">✓</span>
                         )}
