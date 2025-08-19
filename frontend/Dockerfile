@@ -1,7 +1,7 @@
 # ========================================
 # Dependencies Stage - Install packages
 # ========================================
-FROM node:18-alpine AS deps
+FROM node:24.6-alpine AS deps
 
 # Install system dependencies for node-gyp
 RUN apk add --no-cache libc6-compat
@@ -19,7 +19,7 @@ RUN npm ci --omit=dev --no-audit --no-fund && \
 # ========================================
 # Builder Stage - Build the application
 # ========================================
-FROM node:18-alpine AS builder
+FROM node:24.6-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -44,7 +44,7 @@ RUN npm run build
 # ========================================
 # Runner Stage - Production runtime
 # ========================================
-FROM node:18-alpine AS runner
+FROM node:24.6-alpine AS runner
 
 # Metadata
 LABEL maintainer="Alex Poloz <alexypoloz@gmail.com>"

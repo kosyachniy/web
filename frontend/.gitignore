@@ -2,10 +2,22 @@
 ## JS
 dist/
 build/
+coverage/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
 
 # Environments
 node_modules/
 .next/
+out/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # Copyright
 ## Fonts
