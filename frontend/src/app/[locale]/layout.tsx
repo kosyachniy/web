@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import "../../styles/sonner.css";
 import { ReduxProvider } from "@/lib/redux/provider";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -8,6 +9,8 @@ import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
 import UserSettingsInitializer from '@/components/UserSettingsInitializer';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { PopupProvider } from '@/components/PopupProvider';
+import { ToastProvider } from '@/components/ToastProvider';
 import Header from '@/components/Header';
 import StructuredData from '@/components/StructuredData';
 
@@ -129,11 +132,14 @@ export default async function LocaleLayout({
                 <NextIntlClientProvider messages={messages}>
                     <ReduxProvider>
                         <ThemeProvider>
-                            <UserSettingsInitializer />
-                            <Header />
-                            <main className="min-h-screen">
-                                {children}
-                            </main>
+                            <PopupProvider>
+                                <ToastProvider />
+                                <UserSettingsInitializer />
+                                <Header />
+                                <main className="min-h-screen">
+                                    {children}
+                                </main>
+                            </PopupProvider>
                         </ThemeProvider>
                     </ReduxProvider>
                 </NextIntlClientProvider>

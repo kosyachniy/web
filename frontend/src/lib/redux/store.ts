@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import counterSlice from './slices/counterSlice'
 import userSettingsSlice from './slices/userSettingsSlice'
+import toastSlice from './slices/toastSlice'
 
 export const store = configureStore({
     reducer: {
         counter: counterSlice,
         userSettings: userSettingsSlice,
+        toast: toastSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

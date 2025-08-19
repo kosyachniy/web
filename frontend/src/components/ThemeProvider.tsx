@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
-import { setTheme, loadSettings } from '@/lib/redux/slices/userSettingsSlice';
+import { setTheme } from '@/lib/redux/slices/userSettingsSlice';
 
 type Theme = 'light' | 'dark' | 'system';
 
