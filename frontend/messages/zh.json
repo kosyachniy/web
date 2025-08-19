@@ -1,4 +1,28 @@
 {
+    "common": {
+        "language": "语言"
+    },
+    "home": {
+        "title": "前端技术栈演示",
+        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
+        "setupComplete": "设置完成",
+        "nextjs": "Next.js 15",
+        "nextjsDesc": "App Router + React 19",
+        "shadcn": "shadcn/ui",
+        "shadcnDesc": "Radix + Tailwind CSS",
+        "redux": "Redux Toolkit",
+        "reduxDesc": "状态管理",
+        "typescript": "TypeScript",
+        "typescriptDesc": "类型安全"
+    },
+    "counter": {
+        "title": "Redux 计数器演示",
+        "description": "展示 Redux Toolkit 与 shadcn/ui 组件",
+        "increment": "+1",
+        "decrement": "-1",
+        "incrementBy5": "+5",
+        "reset": "重置"
+    },
     "months": {
         "january": "一月",
         "february": "二月",

@@ -1,4 +1,28 @@
 {
+    "common": {
+        "language": "Language"
+    },
+    "home": {
+        "title": "Frontend Stack Demo",
+        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
+        "setupComplete": "Setup Complete",
+        "nextjs": "Next.js 15",
+        "nextjsDesc": "App Router + React 19",
+        "shadcn": "shadcn/ui",
+        "shadcnDesc": "Radix + Tailwind CSS",
+        "redux": "Redux Toolkit",
+        "reduxDesc": "State Management",
+        "typescript": "TypeScript",
+        "typescriptDesc": "Type Safety"
+    },
+    "counter": {
+        "title": "Redux Counter Demo",
+        "description": "Showcasing Redux Toolkit with shadcn/ui components",
+        "increment": "+1",
+        "decrement": "-1",
+        "incrementBy5": "+5",
+        "reset": "Reset"
+    },
     "months": {
         "january": "January",
         "february": "February",

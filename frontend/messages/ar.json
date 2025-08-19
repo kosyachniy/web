@@ -1,4 +1,28 @@
 {
+    "common": {
+        "language": "اللغة"
+    },
+    "home": {
+        "title": "عرض حزمة الواجهة الأمامية",
+        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
+        "setupComplete": "اكتمل الإعداد",
+        "nextjs": "Next.js 15",
+        "nextjsDesc": "App Router + React 19",
+        "shadcn": "shadcn/ui",
+        "shadcnDesc": "Radix + Tailwind CSS",
+        "redux": "Redux Toolkit",
+        "reduxDesc": "إدارة الحالة",
+        "typescript": "TypeScript",
+        "typescriptDesc": "أمان الأنواع"
+    },
+    "counter": {
+        "title": "عرض عداد Redux",
+        "description": "عرض Redux Toolkit مع مكونات shadcn/ui",
+        "increment": "+1",
+        "decrement": "-1",
+        "incrementBy5": "+5",
+        "reset": "إعادة تعيين"
+    },
     "months": {
         "january": "يناير",
         "february": "فبراير",
