@@ -88,7 +88,9 @@
         "close": "Cerrar"
     },
     "brand": {
+        "name": "web",
         "description": "Aplicación web de plantilla",
+        "tagline": "Aplicación web de plantilla",
         "address": "San Petersburgo, Rusia"
     },
     "science": {

@@ -88,7 +88,9 @@
         "close": "关闭"
     },
     "brand": {
+        "name": "web",
         "description": "模板Web应用程序",
+        "tagline": "模板Web应用程序",
         "address": "俄罗斯圣彼得堡"
     },
     "science": {

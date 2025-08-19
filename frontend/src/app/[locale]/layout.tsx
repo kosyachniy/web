@@ -9,6 +9,7 @@ import { routing, type Locale } from '@/i18n/routing';
 import UserSettingsInitializer from '@/components/UserSettingsInitializer';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Header from '@/components/Header';
+import StructuredData from '@/components/StructuredData';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -21,8 +22,75 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Frontend Stack Demo",
-    description: "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
+    title: {
+        default: "web",
+        template: "%s | web"
+    },
+    description: "Template web app",
+    keywords: ["web development"],
+    authors: [{ name: "Alex Poloz <alexypoloz@gmail.com>" }],
+    creator: "Alex Poloz <alexypoloz@gmail.com>",
+    publisher: "Alex Poloz <alexypoloz@gmail.com>",
+    formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+    },
+    metadataBase: new URL(process.env.NEXT_PUBLIC_WEB || 'http://localhost:3000'),
+    alternates: {
+        canonical: '/',
+        languages: {
+            'en': '/en',
+            'ru': '/ru',
+            'zh': '/zh',
+            'es': '/es',
+            'ar': '/ar',
+        },
+    },
+    openGraph: {
+        title: "web",
+        description: "Template web app",
+        url: '/',
+        siteName: 'web',
+        images: [
+            {
+                url: '/logo.svg',
+                width: 1200,
+                height: 630,
+                alt: 'web Logo',
+            },
+        ],
+        locale: 'en_US',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: "web",
+        description: "Template web app",
+        images: ['/logo.svg'],
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    },
+    manifest: '/manifest.json',
+    icons: {
+        icon: '/logo.svg',
+        shortcut: '/logo.svg',
+        apple: '/logo.svg',
+    },
+    viewport: {
+        width: 'device-width',
+        initialScale: 1,
+        maximumScale: 1,
+    },
 };
 
 export default async function LocaleLayout({
@@ -45,6 +113,16 @@ export default async function LocaleLayout({
 
     return (
         <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <head>
+                <StructuredData />
+                <link rel="manifest" href="/manifest.json" />
+                <meta name="theme-color" content="#708E6C" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+                <meta name="apple-mobile-web-app-title" content="Web" />
+                <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+                <link rel="apple-touch-icon" href="/logo.svg" />
+            </head>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >

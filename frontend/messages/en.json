@@ -88,7 +88,9 @@
         "close": "Close"
     },
     "brand": {
+        "name": "web",
         "description": "Template web app",
+        "tagline": "Template web app",
         "address": "St. Petersburg, Russia"
     },
     "science": {

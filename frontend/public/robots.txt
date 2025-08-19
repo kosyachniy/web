@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: /sitemap.xml
+
+# Block admin and private areas
+Disallow: /admin
+Disallow: /api/
+Disallow: /_next/
+Disallow: /dashboard
+
+# Allow specific resources
+Allow: /logo.svg
+Allow: /logo-light.svg
+Allow: /manifest.json

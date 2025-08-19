@@ -88,7 +88,9 @@
         "close": "إغلاق"
     },
     "brand": {
+        "name": "web",
         "description": "تطبيق ويب نموذجي",
+        "tagline": "تطبيق ويب نموذجي",
         "address": "سانت بطرسبرغ، روسيا"
     },
     "science": {

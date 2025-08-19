@@ -6,6 +6,7 @@ import ThemeSwitcher from './ThemeSwitcher';
 import LanguageSwitcher from './LanguageSwitcher';
 import UserProfileDropdown from './UserProfileDropdown';
 import MobileNavigation from './MobileNavigation';
+import Logo from './Logo';
 import { useRouter } from '@/i18n/routing';
 
 export default function Header() {
@@ -35,12 +36,7 @@ export default function Header() {
                         onClick={handleLogoClick}
                         className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                     >
-                        <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                            <span className="text-primary-foreground font-bold text-lg">F</span>
-                        </div>
-                        <span className="hidden sm:inline-block font-bold text-lg">
-                            Frontend
-                        </span>
+                        <Logo />
                     </button>
                 </div>
 
