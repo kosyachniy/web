@@ -130,9 +130,3 @@
 [dir="rtl"] .space-x-reverse> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 1;
 }
-
-/* Switcher positioning for RTL */
-[dir="rtl"] .fixed.top-4.right-4 {
-  right: auto;
-  left: 1rem;
-}

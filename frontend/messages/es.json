@@ -83,7 +83,9 @@
         "permission": "Política de procesamiento de datos",
         "rates": "Tarifas",
         "refund": "Reembolso",
-        "main": "Principal"
+        "main": "Principal",
+        "menu": "Menú",
+        "close": "Cerrar"
     },
     "brand": {
         "description": "Aplicación web de plantilla",

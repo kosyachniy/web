@@ -83,7 +83,9 @@
         "permission": "数据处理政策",
         "rates": "费率",
         "refund": "退款",
-        "main": "主要"
+        "main": "主要",
+        "menu": "菜单",
+        "close": "关闭"
     },
     "brand": {
         "description": "模板Web应用程序",

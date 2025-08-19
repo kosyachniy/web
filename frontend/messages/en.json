@@ -83,7 +83,9 @@
         "permission": "Data Processing Policy",
         "rates": "Rates",
         "refund": "Refund",
-        "main": "Main"
+        "main": "Main",
+        "menu": "Menu",
+        "close": "Close"
     },
     "brand": {
         "description": "Template web app",

@@ -6,10 +6,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import UserSettingsInitializer from '@/components/UserSettingsInitializer';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import ThemeSwitcher from '@/components/ThemeSwitcher';
+import Header from '@/components/Header';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -53,11 +52,10 @@ export default async function LocaleLayout({
                     <ReduxProvider>
                         <ThemeProvider>
                             <UserSettingsInitializer />
-                            <div className="fixed top-4 right-4 z-50 flex gap-2">
-                                <ThemeSwitcher />
-                                <LanguageSwitcher />
-                            </div>
-                            {children}
+                            <Header />
+                            <main className="min-h-screen pt-16">
+                                {children}
+                            </main>
                         </ThemeProvider>
                     </ReduxProvider>
                 </NextIntlClientProvider>
