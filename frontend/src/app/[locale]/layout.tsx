@@ -7,6 +7,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import UserSettingsInitializer from '@/components/UserSettingsInitializer';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -48,6 +49,7 @@ export default async function LocaleLayout({
             >
                 <NextIntlClientProvider messages={messages}>
                     <ReduxProvider>
+                        <UserSettingsInitializer />
                         <div className="fixed top-4 right-4 z-50">
                             <LanguageSwitcher />
                         </div>

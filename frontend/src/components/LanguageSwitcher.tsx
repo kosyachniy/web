@@ -9,23 +9,34 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
+import { setLanguage } from '@/lib/redux/slices/userSettingsSlice';
+import type { Locale } from '@/i18n/routing';
 
 const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+    { code: 'en' as Locale, name: 'English', flag: '🇺🇸' },
+    { code: 'ru' as Locale, name: 'Русский', flag: '🇷🇺' },
+    { code: 'zh' as Locale, name: '中文', flag: '🇨🇳' },
+    { code: 'es' as Locale, name: 'Español', flag: '🇪🇸' },
+    { code: 'ar' as Locale, name: 'العربية', flag: '🇸🇦' },
 ];
 
 export default function LanguageSwitcher() {
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
+    const dispatch = useAppDispatch();
+
+    // Get current language from Redux store
+    const userLanguage = useAppSelector((state) => state.userSettings.language);
 
     const currentLanguage = languages.find(lang => lang.code === locale);
 
-    const handleLanguageChange = (newLocale: string) => {
+    const handleLanguageChange = (newLocale: Locale) => {
+        // Update Redux store
+        dispatch(setLanguage(newLocale));
+
+        // Update URL and next-intl routing
         router.replace(pathname, { locale: newLocale });
     };
 
@@ -47,6 +58,9 @@ export default function LanguageSwitcher() {
                     >
                         <span className="text-lg">{language.flag}</span>
                         <span>{language.name}</span>
+                        {userLanguage === language.code && (
+                            <span className="ml-auto text-xs text-muted-foreground">✓</span>
+                        )}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>

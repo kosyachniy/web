@@ -14,7 +14,10 @@ export const routing = defineRouting({
     pathnames: {
         '/': '/',
         // You can add more custom pathnames here if needed
-    }
+    },
+
+    // Enable locale detection from various sources
+    localeDetection: true
 });
 
 // Lightweight wrappers around Next.js' navigation APIs
