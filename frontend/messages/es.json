@@ -23,6 +23,11 @@
         "incrementBy5": "+5",
         "reset": "Reiniciar"
     },
+    "theme": {
+        "light": "Claro",
+        "dark": "Oscuro",
+        "system": "Sistema"
+    },
     "months": {
         "january": "Enero",
         "february": "Febrero",

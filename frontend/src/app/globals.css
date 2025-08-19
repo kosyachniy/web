@@ -131,7 +131,7 @@
   --tw-space-x-reverse: 1;
 }
 
-/* Language Switcher positioning for RTL */
+/* Switcher positioning for RTL */
 [dir="rtl"] .fixed.top-4.right-4 {
   right: auto;
   left: 1rem;

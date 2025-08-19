@@ -23,6 +23,11 @@
         "incrementBy5": "+5",
         "reset": "إعادة تعيين"
     },
+    "theme": {
+        "light": "فاتح",
+        "dark": "داكن",
+        "system": "النظام"
+    },
     "months": {
         "january": "يناير",
         "february": "فبراير",
