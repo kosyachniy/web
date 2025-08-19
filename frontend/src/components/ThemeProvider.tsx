@@ -10,6 +10,7 @@ interface ThemeContextType {
     theme: Theme;
     resolvedTheme: 'light' | 'dark';
     setTheme: (theme: Theme) => void;
+    isInitialized: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -17,6 +18,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const dispatch = useAppDispatch();
     const userTheme = useAppSelector((state) => state.userSettings.theme);
+    const isInitialized = useAppSelector((state) => state.userSettings.isInitialized);
     const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
 
     // Function to get system preference
@@ -42,6 +44,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Effect to apply theme to document
     useEffect(() => {
+        // Only apply theme after settings are initialized to prevent flickering
+        if (!isInitialized) return;
+
         const resolved = resolveTheme(userTheme);
         setResolvedTheme(resolved);
 
@@ -54,11 +59,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             // Also set data attribute for compatibility
             root.setAttribute('data-theme', resolved);
         }
-    }, [userTheme]);
+    }, [userTheme, isInitialized]);
 
     // Effect to listen for system theme changes
     useEffect(() => {
-        if (typeof window !== 'undefined' && userTheme === 'system') {
+        if (typeof window !== 'undefined' && userTheme === 'system' && isInitialized) {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
             const handleChange = () => {
@@ -74,7 +79,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             mediaQuery.addEventListener('change', handleChange);
             return () => mediaQuery.removeEventListener('change', handleChange);
         }
-    }, [userTheme]);
+    }, [userTheme, isInitialized]);
 
     return (
         <ThemeContext.Provider
@@ -82,6 +87,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
                 theme: userTheme,
                 resolvedTheme,
                 setTheme: handleSetTheme,
+                isInitialized,
             }}
         >
             {children}

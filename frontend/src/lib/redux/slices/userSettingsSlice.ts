@@ -4,12 +4,14 @@ import type { Locale } from '@/i18n/routing'
 export interface UserSettings {
     language: Locale
     theme: 'light' | 'dark' | 'system'
+    isInitialized: boolean
     // Add more user preferences here in the future
 }
 
 const initialState: UserSettings = {
     language: 'en', // Default language
     theme: 'system',
+    isInitialized: false,
 }
 
 export const userSettingsSlice = createSlice({
@@ -44,10 +46,13 @@ export const userSettingsSlice = createSlice({
                     state.theme = savedTheme
                 }
             }
+            // Mark as initialized regardless of whether we found saved settings
+            state.isInitialized = true
         },
         resetSettings: (state) => {
             state.language = 'en'
             state.theme = 'system'
+            state.isInitialized = true
             // Clear localStorage
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('userLanguage')

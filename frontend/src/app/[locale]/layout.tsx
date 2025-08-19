@@ -11,8 +11,8 @@ import UserSettingsInitializer from '@/components/UserSettingsInitializer';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { PopupProvider } from '@/components/PopupProvider';
 import { ToastProvider } from '@/components/ToastProvider';
-import Header from '@/components/Header';
 import StructuredData from '@/components/StructuredData';
+import ThemeAwareContent from '@/components/ThemeAwareContent';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -135,10 +135,9 @@ export default async function LocaleLayout({
                             <PopupProvider>
                                 <ToastProvider />
                                 <UserSettingsInitializer />
-                                <Header />
-                                <main className="min-h-screen">
+                                <ThemeAwareContent>
                                     {children}
-                                </main>
+                                </ThemeAwareContent>
                             </PopupProvider>
                         </ThemeProvider>
                     </ReduxProvider>
