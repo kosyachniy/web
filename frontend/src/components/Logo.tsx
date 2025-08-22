@@ -2,6 +2,7 @@
 
 import { useTheme } from './ThemeProvider';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 interface LogoProps {
     className?: string;
@@ -24,12 +25,13 @@ export default function Logo({
 
     return (
         <div className={`flex items-center space-x-2 ${className}`}>
-            <img
+            <Image
                 src={logoSrc}
                 alt={t('brand.name')}
                 width={width}
                 height={height}
                 className="h-8 w-auto"
+                priority
             />
             {showText && (
                 <span className="hidden sm:inline-block font-bold text-lg">

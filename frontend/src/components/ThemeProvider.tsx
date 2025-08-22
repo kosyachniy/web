@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { setTheme } from '@/lib/redux/slices/userSettingsSlice';
 
@@ -30,12 +30,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     // Function to resolve theme (system -> actual light/dark)
-    const resolveTheme = (theme: Theme): 'light' | 'dark' => {
+    const resolveTheme = useCallback((theme: Theme): 'light' | 'dark' => {
         if (theme === 'system') {
             return getSystemTheme();
         }
         return theme;
-    };
+    }, []);
 
     // Update theme handler
     const handleSetTheme = (newTheme: Theme) => {
@@ -59,7 +59,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             // Also set data attribute for compatibility
             root.setAttribute('data-theme', resolved);
         }
-    }, [userTheme, isInitialized]);
+    }, [userTheme, isInitialized, resolveTheme]);
 
     // Effect to listen for system theme changes
     useEffect(() => {
@@ -79,7 +79,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             mediaQuery.addEventListener('change', handleChange);
             return () => mediaQuery.removeEventListener('change', handleChange);
         }
-    }, [userTheme, isInitialized]);
+    }, [userTheme, isInitialized, resolveTheme]);
 
     return (
         <ThemeContext.Provider

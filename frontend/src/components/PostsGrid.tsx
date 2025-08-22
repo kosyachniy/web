@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { PostCard } from './PostCard';
 import { Post, PostsGetRequest } from '@/types/post';
 import { getPosts } from '@/lib/api/posts';
@@ -32,7 +32,7 @@ export function PostsGrid({
 
     const { error: showError } = useToastActions();
 
-    const loadPosts = async (params: PostsGetRequest = {}, append = false) => {
+    const loadPosts = useCallback(async (params: PostsGetRequest = {}, append = false) => {
         try {
             if (!append) {
                 setLoading(true);
@@ -72,7 +72,7 @@ export function PostsGrid({
             setLoading(false);
             setLoadingMore(false);
         }
-    };
+    }, [categoryId, limit, showError]);
 
     const handleSearch = (searchTerm: string) => {
         setSearch(searchTerm);
@@ -97,7 +97,7 @@ export function PostsGrid({
         if (initialPosts.length === 0) {
             loadPosts();
         }
-    }, [categoryId]);
+    }, [categoryId, initialPosts.length, loadPosts]);
 
     if (loading) {
         return (

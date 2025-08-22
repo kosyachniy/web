@@ -1,39 +1,10 @@
 import { Post, PostsGetRequest, PostsGetResponse } from '@/types/post';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API || 'http://api:5000/';
-
-class ApiError extends Error {
-    constructor(public status: number, message: string) {
-        super(message);
-        this.name = 'ApiError';
-    }
-}
-
-async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
-
-    const response = await fetch(url, {
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers,
-        },
-        ...options,
-    });
-
-    if (!response.ok) {
-        throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
-    }
-
-    return response.json();
-}
+import { api } from './client';
 
 export async function getPosts(params: PostsGetRequest = {}): Promise<PostsGetResponse> {
-    return fetchApi<PostsGetResponse>('/posts/get/', {
-        method: 'POST',
-        body: JSON.stringify({
-            limit: 12,
-            ...params,
-        }),
+    return api.post<PostsGetResponse>('/posts/get/', {
+        limit: 12,
+        ...params,
     });
 }
 
@@ -43,4 +14,16 @@ export async function getPost(id: number): Promise<Post> {
         throw new Error('Post not found');
     }
     return response.posts[0];
+}
+
+export async function createPost(postData: Partial<Post>): Promise<Post> {
+    return api.post<Post>('/posts/', postData);
+}
+
+export async function updatePost(id: number, postData: Partial<Post>): Promise<Post> {
+    return api.put<Post>(`/posts/${id}/`, postData);
+}
+
+export async function deletePost(id: number): Promise<void> {
+    return api.delete(`/posts/${id}/`);
 }
