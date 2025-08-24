@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import "../../styles/sonner.css";
-import { ReduxProvider } from "@/lib/redux/provider";
+import { ReduxProvider } from "@/providers";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, type Locale } from '@/i18n/routing';
-import UserSettingsInitializer from '@/components/UserSettingsInitializer';
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { PopupProvider } from '@/components/PopupProvider';
-import { ToastProvider } from '@/components/ToastProvider';
-import StructuredData from '@/components/StructuredData';
-import ThemeAwareContent from '@/components/ThemeAwareContent';
+import { UserSettingsInitializer } from '@/features/user';
+import { ThemeProvider } from '@/providers';
+import { PopupProvider } from '@/widgets/feedback-system';
+import { ToastProvider } from '@/widgets/feedback-system';
+import { StructuredData } from '@/shared/components/layout';
+import { ThemeAwareContent } from '@/shared/components/layout';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

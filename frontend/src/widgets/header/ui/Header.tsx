@@ -1,0 +1,136 @@
+'use client';
+
+import { useState } from 'react';
+import { Input } from '@/shared/ui/input';
+import { useTranslations } from 'next-intl';
+import { ThemeSwitcher } from '@/shared/components/layout';
+import LanguageSwitcher from '@/features/navigation/components/LanguageSwitcher';
+import { UserProfileDropdown } from '@/widgets/user-profile';
+import MobileNavigation from './MobileNavigation';
+import MobileMenuContent from './MobileMenuContent';
+import { Logo } from '@/shared/components/layout';
+import { useRouter } from '@/i18n/routing';
+
+export default function Header() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const t = useTranslations('system');
+    const router = useRouter();
+
+    const handleLogoClick = () => {
+        router.push('/');
+    };
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const query = formData.get('search') as string;
+        if (query.trim()) {
+            // Handle search logic
+            console.log('Search query:', query);
+        }
+    };
+
+    return (
+        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="w-full px-4 flex h-16 items-center">
+                {/* Logo */}
+                <div className="mr-6 flex items-center space-x-2">
+                    <button
+                        onClick={handleLogoClick}
+                        className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                    >
+                        <Logo />
+                    </button>
+                </div>
+
+                {/* Desktop Navigation */}
+                <div className="flex flex-1 items-center justify-end space-x-2 lg:justify-between">
+                    {/* Search - Hidden on mobile and medium, shown on large */}
+                    <div className="hidden lg:flex w-full max-w-sm items-center space-x-2">
+                        <form onSubmit={handleSearchSubmit} className="relative flex-1">
+                            <Input
+                                name="search"
+                                placeholder={`${t('search')}...`}
+                                className="pr-10"
+                            />
+                            <button
+                                type="submit"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            >
+                                <svg
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                    />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Condensed Search for Medium Screens - Hidden on small and large */}
+                    <div className="hidden sm:flex lg:hidden items-center space-x-2">
+                        <form onSubmit={handleSearchSubmit} className="relative">
+                            <Input
+                                name="search"
+                                placeholder={`${t('search')}...`}
+                                className="w-40 pr-8"
+                            />
+                            <button
+                                type="submit"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            >
+                                <svg
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                    />
+                                </svg>
+                            </button>
+                        </form>
+                        <ThemeSwitcher />
+                        <LanguageSwitcher />
+                        <UserProfileDropdown />
+                    </div>
+
+                    {/* Desktop Controls - Hidden on small and medium, shown on large */}
+                    <div className="hidden lg:flex items-center space-x-2">
+                        <ThemeSwitcher />
+                        <LanguageSwitcher />
+                        <UserProfileDropdown />
+                    </div>
+
+                    {/* Mobile Navigation - Hidden from small screens up */}
+                    <div className="sm:hidden">
+                        <MobileNavigation
+                            isOpen={isMobileMenuOpen}
+                            onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Menu Content - Only visible on small screens when open */}
+            <div className="sm:hidden">
+                <MobileMenuContent
+                    isOpen={isMobileMenuOpen}
+                    onSearchSubmit={handleSearchSubmit}
+                    onClose={() => setIsMobileMenuOpen(false)}
+                />
+            </div>
+        </header>
+    );
+}

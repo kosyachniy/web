@@ -9,8 +9,9 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 ---
 
 ## Golden Rules for Claude
-- **Minimal, focused diffs**: change only what’s necessary; keep PRs small (<300 LOC) and self-contained.
+- **Minimal, focused diffs**: change only what's necessary; keep PRs small (<300 LOC) and self-contained.
 - **Never hard-code secrets** or credentials; never read or write `.env`, `secrets/`, or CI secrets.
+- **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*).
 - **Always respect i18n**: all user-visible strings must go through the localization system (see *Frontend Guidelines*).
 - **Theme-aware UI**: every component must work in **light & dark** themes via tokens/CSS variables (no hardcoded colors).
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text.
@@ -77,14 +78,81 @@ make logs-tg       # View Telegram bot logs
 - **Services**: Middleware and utilities in `services/`
 - **Dependencies**: Uses `uv` for package management, defined in `pyproject.toml`
 
-### Frontend (Next.js + TypeScript)
-- **Location**: `frontend/src/`
-- **App Router**: Using Next.js 15 App Router in `app/[locale]/`
-- **Internationalization**: `next-intl` for multi-language support
-- **State Management**: Redux Toolkit with slices in `lib/redux/`
-- **API Client**: Centralized API client in `lib/api/client.ts` with auth handling
-- **Styling**: Using Shadcn/UI: Tailwind CSS + Radix UI components
-- **Path Alias**: `@/` maps to `src/`
+### Frontend Architecture (Feature-Sliced Design)
+
+#### **FSD Layer Structure**
+```
+frontend/src/
+├── app/                      # Next.js App Router (routes, global configs)
+├── page-layouts/             # Page compositions (combine widgets + features)
+├── widgets/                  # Complex UI compositions
+├── features/                 # User-facing functionality
+├── entities/                 # Business domain logic
+├── shared/                   # Reusable infrastructure
+├── providers/                # App-wide providers
+├── generated/                # Auto-generated code (OpenAPI schemas)
+└── i18n/                    # Internationalization config
+```
+
+#### **FSD Import Rules** ⚠️ **CRITICAL**
+1. **Higher layers can import from lower layers only**:
+   - `page-layouts/` → `widgets/`, `features/`, `entities/`, `shared/`
+   - `widgets/` → `features/`, `entities/`, `shared/`
+   - `features/` → `entities/`, `shared/`
+   - `entities/` → `shared/` only
+   - `shared/` → no internal dependencies
+
+2. **Cross-layer imports** (same level) are forbidden:
+   - ❌ `features/posts/` → `features/auth/`
+   - ❌ `widgets/header/` → `widgets/sidebar/`
+   - ✅ Use `entities/` or `shared/` for communication
+
+3. **Public API only**: Import through `index.ts` files, not direct paths:
+   - ✅ `import { PostCard } from '@/widgets/posts-list'`
+   - ❌ `import { PostCard } from '@/widgets/posts-list/ui/PostCard'`
+
+#### **Layer Responsibilities**
+
+**`page-layouts/`** - Page compositions
+- Combine widgets + features for complete pages
+- Page-specific logic and data fetching
+- SEO and metadata management
+
+**`widgets/`** - Complex UI blocks
+- `header/` - Navigation and user menu
+- `posts-list/` - Posts grid with filtering
+- `feedback-system/` - Toasts, popups, notifications
+- `user-profile/` - User profile components
+
+**`features/`** - User-facing functionality
+- `navigation/` - Language switching, routing
+- `demo/` - Demo components and state
+- `user/` - User settings and initialization
+
+**`entities/`** - Business domain models
+- `user/` - User types, API calls, utilities
+- `post/` - Post types, API calls, utilities
+- `category/` - Category types, API calls, utilities
+
+**`shared/`** - Infrastructure layer
+- `ui/` - Pure UI components (shadcn/ui)
+- `lib/` - Utilities and helpers
+- `services/api/` - HTTP client and auth
+- `stores/` - Global Redux state
+- `hooks/` - Reusable React hooks
+- `constants/` - App constants
+- `config/` - Configuration
+
+#### **File Organization**
+Each FSD slice follows this structure:
+```
+feature-name/
+├── ui/           # React components
+├── model/        # State, types, business logic
+├── lib/          # Utilities specific to this slice
+├── api/          # API calls (entities only)
+└── index.ts      # Public API exports
+```
 
 ### Key Technologies
 - **Frontend**: Next.js 15, React 19, TypeScript, Redux Toolkit, Tailwind CSS, Radix UI
@@ -92,10 +160,21 @@ make logs-tg       # View Telegram bot logs
 - **Infrastructure**: Docker, NGINX, Let's Encrypt, Grafana
 
 ### Frontend Guidelines
+
+#### **Path Aliases**
+```typescript
+@/              → src/
+@/entities/*    → src/entities/*
+@/features/*    → src/features/*
+@/widgets/*     → src/widgets/*
+@/shared/*      → src/shared/*
+@/page-layouts/* → src/page-layouts/*
+```
+
 #### Internationalization (i18n)
 - *All user-facing strings* must use `next-intl` (no hardcoded text).
 Use typed helpers: `t('namespace.key')`.
-- Keep messages under `frontend/src/messages/<locale>/*.json`.
+- Keep messages under `frontend/messages/<locale>/*.json`.
 - For server components, pass translated content via props; for client components, use the `useTranslations` hook.
 - Keys: `feature.scope.action` (e.g., `auth.login.error.invalidCredentials`).
 
@@ -105,22 +184,51 @@ Use typed helpers: `t('namespace.key')`.
 - Components must look correct in both themes. Add examples/stories for each.
 
 #### Feedback (Toasts/Popups)
-- Use the shared *Toaster Provider* (Radix Toast / shadcn toast) mounted at app root.
+- Use `widgets/feedback-system` components for all user feedback.
 - Map severities to variants: `success`, `error`, `warning`, `info`.
-Never use `window.alert()` for UX feedback.
+- Never use `window.alert()` for UX feedback.
+- Import: `import { ToastProvider, useToast } from '@/widgets/feedback-system'`
 
 #### Components / UI
+- **Pure UI**: Use `@/shared/ui` for basic components (buttons, inputs, cards)
+- **Complex UI**: Create widgets for compositions (header, lists, forms)
+- **Feature UI**: Components specific to one feature go in `features/*/ui/`
 - Prefer *Server Components* by default; mark clients with `"use client"`.
-- Use *shadcn/ui* patterns: `cn()` for class merge, `cva` for variants, avoid ad-hoc Tailwind overrides.
-- Accessibility: label form controls, provide `aria-label` for icon buttons, maintain focus order and visible focus.
+- Use *shadcn/ui* patterns: `cn()` for class merge, `cva` for variants.
+- Accessibility: label form controls, provide `aria-label` for icon buttons.
 
-#### State (Redux Toolkit)
-- Keep slices focused; colocate selectors; prefer RTK patterns (immutability via Immer, action creators, `createAsyncThunk` for async).
+#### State Management (Redux Toolkit)
+- **Global state**: `shared/stores/` (auth, theme, app-wide data)
+- **Feature state**: Each feature manages its own state in `stores/`
+- **Entity state**: Business logic state in `entities/*/model/`
+- Keep slices focused; prefer RTK patterns with `createAsyncThunk`.
 - Avoid duplicating server data; normalize when needed.
 
-#### API Client
-- Centralize fetch in `lib/api/client.ts`; handle auth (token), retries, timeouts, and typed errors.
-- UI surfaces errors via toasts/dialogs; never leak raw stack traces to users.
+#### API Integration
+- **API client**: Use `shared/services/api/client.ts` for HTTP requests
+- **Entity APIs**: Business domain APIs in `entities/*/api/`
+- **Feature APIs**: Feature-specific APIs in `features/*/api/`
+- Handle auth, retries, timeouts, and typed errors centrally
+- Surface errors via `widgets/feedback-system`, never raw stack traces
+
+#### **Component Creation Guidelines**
+1. **Determine the right layer**:
+   - Basic UI → `shared/ui/`
+   - Complex composition → `widgets/`
+   - Feature-specific → `features/*/ui/`
+   - Business entity → `entities/*/ui/`
+
+2. **Follow naming conventions**:
+   - Components: PascalCase (`UserProfile`, `PostCard`)
+   - Files: match component name (`UserProfile.tsx`)
+   - Folders: kebab-case (`user-profile/`, `posts-list/`)
+
+3. **Export through index.ts**:
+   ```typescript
+   // widgets/posts-list/index.ts
+   export { PostCard } from './ui/PostCard';
+   export { PostsGrid } from './ui/PostsGrid';
+   ```
 
 ### Backend Guidelines (FastAPI)
 - Use *async* endpoints; prefer `httpx.AsyncClient` for external calls.
@@ -131,9 +239,10 @@ Never use `window.alert()` for UX feedback.
 
 ### Testing & Quality Gates
 - Before committing, Claude should run:
-1. `make unit-test` (or narrower scope if touching backend only)
-2. `make test-web` when touching frontend logic
-3. `npm run lint` and Python `make lint`
+1. `npm run build` to ensure FSD import rules are followed
+2. `npm run lint` for code quality
+3. `make test-web` when touching frontend logic
+4. `make unit-test` for backend changes
 - Add/adjust tests for every behavior change.
 - Snapshot/UI tests: keep snapshots small and meaningful.
 
@@ -162,8 +271,25 @@ Never use `window.alert()` for UX feedback.
 - NGINX reverse proxy configuration in `infra/nginx/`
 
 ### How to Work in This Repo (Claude checklist)
-1. Explain the plan (brief) and show a *unified diff* preview before writing.
-2. Make *minimal* changes in relevant files only.
-3. Ensure i18n keys exist; make UI theme-aware; use toasts/popups for feedback.
-4. Run tests/linters; include fixes if failing.
-5. Propose commit message (Conventional Commits) and a short PR description.
+1. **Respect FSD architecture**: check import rules and layer responsibilities before coding.
+2. Explain the plan (brief) and show a *unified diff* preview before writing.
+3. Make *minimal* changes in relevant files only.
+4. Ensure i18n keys exist; make UI theme-aware; use feedback widgets.
+5. Run `npm run build` to validate FSD structure; fix any import violations.
+6. Run tests/linters; include fixes if failing.
+7. Propose commit message (Conventional Commits) and a short PR description.
+
+### **Quick Reference - Where to Put Code**
+
+| Type | Location | Example |
+|------|----------|---------|
+| Button, Input, Card | `shared/ui/` | `shared/ui/button.tsx` |
+| Header, Navigation | `widgets/header/` | `widgets/header/ui/Header.tsx` |
+| User auth logic | `features/auth/` | `features/auth/ui/LoginForm.tsx` |
+| User data types | `entities/user/` | `entities/user/model/user.ts` |
+| HTTP client | `shared/services/` | `shared/services/api/client.ts` |
+| App config | `shared/config/` | `shared/config/app.ts` |
+| Page composition | `page-layouts/` | `page-layouts/home/ui/HomePage.tsx` |
+| Auto-generated | `generated/` | `generated/api/schemas.ts` |
+
+⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.
