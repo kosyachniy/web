@@ -4,16 +4,7 @@
     },
     "home": {
         "title": "Демо Frontend Стека",
-        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
-        "setupComplete": "Настройка Завершена",
-        "nextjs": "Next.js 15",
-        "nextjsDesc": "App Router + React 19",
-        "shadcn": "shadcn/ui",
-        "shadcnDesc": "Radix + Tailwind CSS",
-        "redux": "Redux Toolkit",
-        "reduxDesc": "Управление Состоянием",
-        "typescript": "TypeScript",
-        "typescriptDesc": "Типобезопасность"
+        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit"
     },
     "counter": {
         "title": "Демо Redux Счетчика",
@@ -22,6 +13,10 @@
         "decrement": "-1",
         "incrementBy5": "+5",
         "reset": "Сброс"
+    },
+    "userSettings": {
+        "title": "Демо Настройки Пользователя",
+        "description": "Демонстрация управления состоянием Redux с пользовательскими предпочтениями"
     },
     "theme": {
         "light": "Светлая",

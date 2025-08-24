@@ -4,16 +4,7 @@
     },
     "home": {
         "title": "Demo del Stack Frontend",
-        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
-        "setupComplete": "Configuración Completa",
-        "nextjs": "Next.js 15",
-        "nextjsDesc": "App Router + React 19",
-        "shadcn": "shadcn/ui",
-        "shadcnDesc": "Radix + Tailwind CSS",
-        "redux": "Redux Toolkit",
-        "reduxDesc": "Gestión de Estado",
-        "typescript": "TypeScript",
-        "typescriptDesc": "Seguridad de Tipos"
+        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit"
     },
     "counter": {
         "title": "Demo Contador Redux",
@@ -22,6 +13,10 @@
         "decrement": "-1",
         "incrementBy5": "+5",
         "reset": "Reiniciar"
+    },
+    "userSettings": {
+        "title": "Demo de Configuraciones de Usuario",
+        "description": "Demostración de gestión de estado Redux con preferencias de usuario"
     },
     "theme": {
         "light": "Claro",

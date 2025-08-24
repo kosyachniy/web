@@ -83,8 +83,7 @@ make logs-tg       # View Telegram bot logs
 #### **FSD Layer Structure**
 ```
 frontend/src/
-├── app/                      # Next.js App Router (routes, global configs)
-├── page-layouts/             # Page compositions (combine widgets + features)
+├── app/                      # Next.js App Router (routes, page compositions)
 ├── widgets/                  # Complex UI compositions
 ├── features/                 # User-facing functionality
 ├── entities/                 # Business domain logic
@@ -96,7 +95,7 @@ frontend/src/
 
 #### **FSD Import Rules** ⚠️ **CRITICAL**
 1. **Higher layers can import from lower layers only**:
-   - `page-layouts/` → `widgets/`, `features/`, `entities/`, `shared/`
+   - `app/` → `widgets/`, `features/`, `entities/`, `shared/`
    - `widgets/` → `features/`, `entities/`, `shared/`
    - `features/` → `entities/`, `shared/`
    - `entities/` → `shared/` only
@@ -112,11 +111,6 @@ frontend/src/
    - ❌ `import { PostCard } from '@/widgets/posts-list/ui/PostCard'`
 
 #### **Layer Responsibilities**
-
-**`page-layouts/`** - Page compositions
-- Combine widgets + features for complete pages
-- Page-specific logic and data fetching
-- SEO and metadata management
 
 **`widgets/`** - Complex UI blocks
 - `header/` - Navigation and user menu
@@ -168,7 +162,6 @@ feature-name/
 @/features/*    → src/features/*
 @/widgets/*     → src/widgets/*
 @/shared/*      → src/shared/*
-@/page-layouts/* → src/page-layouts/*
 ```
 
 #### Internationalization (i18n)
@@ -289,7 +282,7 @@ Use typed helpers: `t('namespace.key')`.
 | User data types | `entities/user/` | `entities/user/model/user.ts` |
 | HTTP client | `shared/services/` | `shared/services/api/client.ts` |
 | App config | `shared/config/` | `shared/config/app.ts` |
-| Page composition | `page-layouts/` | `page-layouts/home/ui/HomePage.tsx` |
+| Page composition | `app/` | `app/[locale]/page.tsx` |
 | Auto-generated | `generated/` | `generated/api/schemas.ts` |
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.

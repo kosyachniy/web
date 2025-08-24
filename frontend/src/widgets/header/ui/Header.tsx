@@ -44,49 +44,20 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* Desktop Navigation */}
-                <div className="hidden md:flex mr-6">
+                {/* Desktop Navigation - Visible from small screens up */}
+                <div className="hidden sm:flex mr-6">
                     <DesktopNavigation />
                 </div>
 
-                {/* Rest of Header */}
-                <div className="flex flex-1 items-center justify-end space-x-2">
-                    {/* Search - Hidden on mobile and medium, shown on large */}
-                    <div className="hidden lg:flex items-center space-x-2">
-                        <form onSubmit={handleSearchSubmit} className="relative w-80">
-                            <Input
-                                name="search"
-                                placeholder={`${t('search')}...`}
-                                className="pr-10"
-                            />
-                            <button
-                                type="submit"
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                            >
-                                <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-
-                    {/* Condensed Search for Medium Screens - Hidden on small and large */}
-                    <div className="hidden sm:flex lg:hidden items-center space-x-2">
+                {/* Right Section - Full width distribution */}
+                <div className="flex flex-1 items-center justify-end space-x-4">
+                    {/* Adaptive Search - Hidden on mobile, responsive width */}
+                    <div className="hidden sm:flex items-center">
                         <form onSubmit={handleSearchSubmit} className="relative">
                             <Input
                                 name="search"
                                 placeholder={`${t('search')}...`}
-                                className="w-40 pr-8"
+                                className="w-40 lg:w-80 pr-10"
                             />
                             <button
                                 type="submit"
@@ -107,25 +78,22 @@ export default function Header() {
                                 </svg>
                             </button>
                         </form>
+                    </div>
+
+                    {/* Adaptive Controls - Hidden on mobile */}
+                    <div className="hidden sm:flex items-center space-x-2">
                         <ThemeSwitcher />
                         <LanguageSwitcher />
                         <UserProfileDropdown />
                     </div>
+                </div>
 
-                    {/* Desktop Controls - Hidden on small and medium, shown on large */}
-                    <div className="hidden lg:flex items-center space-x-2">
-                        <ThemeSwitcher />
-                        <LanguageSwitcher />
-                        <UserProfileDropdown />
-                    </div>
-
-                    {/* Mobile Navigation - Hidden from small screens up */}
-                    <div className="sm:hidden">
-                        <MobileNavigation
-                            isOpen={isMobileMenuOpen}
-                            onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        />
-                    </div>
+                {/* Mobile Navigation - Visible only on mobile */}
+                <div className="sm:hidden">
+                    <MobileNavigation
+                        isOpen={isMobileMenuOpen}
+                        onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    />
                 </div>
             </div>
 

@@ -1,0 +1,173 @@
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { usePopupActions } from './PopupProvider';
+
+export default function PopupDemo() {
+    const [customInput, setCustomInput] = useState('');
+    const { alert, confirm, confirmDelete, success, error, show, close } = usePopupActions();
+
+    const handleAlert = async () => {
+        await alert({
+            title: 'Information',
+            message: 'This is a simple alert popup with an OK button.'
+        });
+        console.log('Alert closed');
+    };
+
+    const handleConfirm = async () => {
+        const result = await confirm({
+            title: 'Confirmation Required',
+            message: 'Do you want to proceed with this action?',
+            confirmText: 'Yes, Proceed',
+            cancelText: 'Cancel'
+        });
+
+        if (result) {
+            success('Action confirmed successfully!');
+        } else {
+            console.log('Action cancelled');
+        }
+    };
+
+    const handleDelete = async () => {
+        const result = await confirmDelete('This action cannot be undone. Are you sure?');
+
+        if (result) {
+            success('Item deleted successfully!');
+        }
+    };
+
+    const handleCustomPopup = () => {
+        show({
+            title: 'Custom Popup',
+            size: 'lg',
+            children: (
+                <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                        This is a custom popup with interactive content.
+                    </p>
+                    <Input
+                        placeholder="Enter some text..."
+                        value={customInput}
+                        onChange={(e) => setCustomInput(e.target.value)}
+                    />
+                    <div className="flex gap-2">
+                        <Button
+                            onClick={() => {
+                                if (customInput.trim()) {
+                                    success(`You entered: "${customInput}"`);
+                                    setCustomInput('');
+                                    close();
+                                } else {
+                                    error('Please enter some text first!');
+                                }
+                            }}
+                        >
+                            Submit
+                        </Button>
+                        <Button variant="outline" onClick={close}>
+                            Cancel
+                        </Button>
+                    </div>
+                </div>
+            )
+        });
+    };
+
+    const handleTransparentPopup = () => {
+        show({
+            title: 'Transparent Background',
+            overlay: 'transparent',
+            children: (
+                <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                        This popup has a transparent background. Click outside to close.
+                    </p>
+                    <Button onClick={close} className="w-full">
+                        Close
+                    </Button>
+                </div>
+            )
+        });
+    };
+
+    const handleFullScreenPopup = () => {
+        show({
+            title: 'Full Screen Content',
+            size: 'full',
+            children: (
+                <div className="space-y-6">
+                    <p className="text-sm text-muted-foreground">
+                        This popup takes up most of the screen space, perfect for forms or detailed content.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input placeholder="Field 1" />
+                        <Input placeholder="Field 2" />
+                        <Input placeholder="Field 3" />
+                        <Input placeholder="Field 4" />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={close}>Cancel</Button>
+                        <Button onClick={() => { success('Form submitted!'); close(); }}>
+                            Save Changes
+                        </Button>
+                    </div>
+                </div>
+            )
+        });
+    };
+
+    return (
+        <div className="max-w-2xl mx-auto p-6">
+            <h2 className="text-2xl font-bold mb-6">Popup System Demo</h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Button onClick={handleAlert} variant="outline">
+                    Show Alert
+                </Button>
+
+                <Button onClick={handleConfirm} variant="outline">
+                    Show Confirmation
+                </Button>
+
+                <Button onClick={handleDelete} variant="destructive">
+                    Delete Confirmation
+                </Button>
+
+                <Button onClick={() => success('This is a success message!')} variant="outline">
+                    Success Message
+                </Button>
+
+                <Button onClick={() => error('This is an error message!')} variant="outline">
+                    Error Message
+                </Button>
+
+                <Button onClick={handleCustomPopup} variant="outline">
+                    Custom Popup
+                </Button>
+
+                <Button onClick={handleTransparentPopup} variant="outline">
+                    Transparent Background
+                </Button>
+
+                <Button onClick={handleFullScreenPopup} variant="outline">
+                    Full Screen Popup
+                </Button>
+            </div>
+
+            <div className="mt-8 p-4 bg-muted rounded-lg">
+                <h3 className="font-semibold mb-2">Usage Examples:</h3>
+                <div className="text-sm text-muted-foreground space-y-2">
+                    <p><code>await alert(&#123;message: &apos;Hello!&apos;&#125;)</code> - Simple alert</p>
+                    <p><code>const confirmed = await confirm(&#123;message: &apos;Sure?&apos;&#125;)</code> - Confirmation</p>
+                    <p><code>success(&apos;Done!&apos;)</code> - Success notification</p>
+                    <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
+                    <p><code>show(&#123;children: &lt;Custom/&gt;&#125;)</code> - Custom content</p>
+                </div>
+            </div>
+        </div>
+    );
+}

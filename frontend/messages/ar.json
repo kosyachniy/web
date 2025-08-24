@@ -4,16 +4,7 @@
     },
     "home": {
         "title": "عرض حزمة الواجهة الأمامية",
-        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit",
-        "setupComplete": "اكتمل الإعداد",
-        "nextjs": "Next.js 15",
-        "nextjsDesc": "App Router + React 19",
-        "shadcn": "shadcn/ui",
-        "shadcnDesc": "Radix + Tailwind CSS",
-        "redux": "Redux Toolkit",
-        "reduxDesc": "إدارة الحالة",
-        "typescript": "TypeScript",
-        "typescriptDesc": "أمان الأنواع"
+        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit"
     },
     "counter": {
         "title": "عرض عداد Redux",
@@ -22,6 +13,10 @@
         "decrement": "-1",
         "incrementBy5": "+5",
         "reset": "إعادة تعيين"
+    },
+    "userSettings": {
+        "title": "عرض إعدادات المستخدم",
+        "description": "عرض إدارة حالة Redux مع تفضيلات المستخدم"
     },
     "theme": {
         "light": "فاتح",

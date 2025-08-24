@@ -59,7 +59,6 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                 <div className="flex flex-col space-y-6">
                     {/* Search */}
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">{t('search')}</label>
                         <form onSubmit={onSearchSubmit} className="relative">
                             <Input
                                 name="search"
