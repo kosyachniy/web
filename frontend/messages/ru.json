@@ -50,6 +50,12 @@
         "events": "Мероприятия",
         "map": "Карта"
     },
+    "navigation": {
+        "posts": "Посты",
+        "space": "Пространство",
+        "hub": "Хаб",
+        "catalog": "Каталог"
+    },
     "system": {
         "locale": "Язык",
         "worldwide": "Международный",
@@ -65,7 +71,9 @@
         "profile": "Профиль",
         "settings": "Настройки",
         "admin": "Админка",
+        "admin_panel": "Панель Админа",
         "analytics": "Аналитика",
+        "billing": "Биллинг",
         "categories": "Категории",
         "success": "Успешно",
         "error": "Ошибка",

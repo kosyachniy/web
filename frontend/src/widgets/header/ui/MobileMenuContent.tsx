@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { ThemeSwitcher } from '@/shared/components/layout';
 import LanguageSwitcher from '@/features/navigation/components/LanguageSwitcher';
 import { UserProfileDropdown } from '@/widgets/user-profile';
+import { useRouter } from '@/i18n/routing';
 
 interface MobileMenuContentProps {
     isOpen: boolean;
@@ -15,6 +16,40 @@ interface MobileMenuContentProps {
 
 export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: MobileMenuContentProps) {
     const t = useTranslations('system');
+    const tNav = useTranslations('navigation');
+    const router = useRouter();
+
+    const navigationItems = [
+        {
+            key: 'posts',
+            label: tNav('posts'),
+            icon: '📝',
+            path: '/posts' as const
+        },
+        {
+            key: 'space',
+            label: tNav('space'),
+            icon: '🚀',
+            path: '/space' as const
+        },
+        {
+            key: 'hub',
+            label: tNav('hub'),
+            icon: '🏛️',
+            path: '/hub' as const
+        },
+        {
+            key: 'catalog',
+            label: tNav('catalog'),
+            icon: '🛍️',
+            path: '/catalog' as const
+        }
+    ] as const;
+
+    const handleNavigate = (path: "/" | "/posts" | "/space" | "/hub" | "/catalog") => {
+        router.push(path);
+        onClose?.();
+    };
 
     if (!isOpen) return null;
 
@@ -52,6 +87,22 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                         </form>
                     </div>
 
+                    {/* Navigation Sections */}
+                    <div className="space-y-3 pb-4 border-b">
+                        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Navigation</h3>
+                        {navigationItems.map((item) => (
+                            <Button
+                                key={item.key}
+                                variant="outline"
+                                className="w-full justify-start gap-3 h-12"
+                                onClick={() => handleNavigate(item.path)}
+                            >
+                                <span className="text-lg">{item.icon}</span>
+                                <span>{item.label}</span>
+                            </Button>
+                        ))}
+                    </div>
+
                     {/* User Profile */}
                     <UserProfileDropdown className="w-full" />
 
@@ -66,26 +117,10 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                         <Button
                             variant="outline"
                             className="w-full justify-start gap-3 h-12"
-                            onClick={onClose}
+                            onClick={() => handleNavigate('/')}
                         >
                             <span className="text-lg">🏠</span>
                             <span>{t('main')}</span>
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="w-full justify-start gap-3 h-12"
-                            onClick={onClose}
-                        >
-                            <span className="text-lg">📊</span>
-                            <span>{t('analytics')}</span>
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="w-full justify-start gap-3 h-12"
-                            onClick={onClose}
-                        >
-                            <span className="text-lg">📁</span>
-                            <span>{t('categories')}</span>
                         </Button>
                     </div>
                 </div>

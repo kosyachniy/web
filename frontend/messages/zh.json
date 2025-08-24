@@ -50,6 +50,12 @@
         "events": "活动",
         "map": "地图"
     },
+    "navigation": {
+        "posts": "帖子",
+        "space": "空间",
+        "hub": "中心",
+        "catalog": "目录"
+    },
     "system": {
         "locale": "区域设置",
         "worldwide": "全球",
@@ -65,7 +71,9 @@
         "profile": "个人资料",
         "settings": "设置",
         "admin": "管理员",
+        "admin_panel": "管理面板",
         "analytics": "分析",
+        "billing": "账单",
         "categories": "分类",
         "success": "成功",
         "error": "错误",

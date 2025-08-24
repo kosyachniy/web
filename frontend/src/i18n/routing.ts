@@ -13,6 +13,10 @@ export const routing = defineRouting({
     // The `pathnames` object maps the internal pathnames
     pathnames: {
         '/': '/',
+        '/posts': '/posts',
+        '/space': '/space', 
+        '/hub': '/hub',
+        '/catalog': '/catalog'
         // You can add more custom pathnames here if needed
     },
 

@@ -36,6 +36,21 @@ export default function UserProfileDropdown({
         console.log('Navigate to settings');
     };
 
+    const handleBillingClick = () => {
+        // Navigate to billing page
+        console.log('Navigate to billing');
+    };
+
+    const handleAnalyticsClick = () => {
+        // Navigate to analytics page
+        console.log('Navigate to analytics');
+    };
+
+    const handleAdminClick = () => {
+        // Navigate to admin panel
+        console.log('Navigate to admin panel');
+    };
+
     const handleSignOut = () => {
         // Handle sign out logic
         console.log('Sign out');
@@ -84,6 +99,18 @@ export default function UserProfileDropdown({
                 <DropdownMenuItem onClick={handleSettingsClick} className="cursor-pointer">
                     <span>⚙️</span>
                     <span className="ml-2">{t('settings')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleBillingClick} className="cursor-pointer">
+                    <span>💳</span>
+                    <span className="ml-2">{t('billing')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleAnalyticsClick} className="cursor-pointer">
+                    <span>📊</span>
+                    <span className="ml-2">{t('analytics')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleAdminClick} className="cursor-pointer">
+                    <span>🛡️</span>
+                    <span className="ml-2">{t('admin_panel')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600 dark:text-red-400">

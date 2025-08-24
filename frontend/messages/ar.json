@@ -50,6 +50,12 @@
         "events": "الفعاليات",
         "map": "الخريطة"
     },
+    "navigation": {
+        "posts": "المنشورات",
+        "space": "المساحة",
+        "hub": "المركز",
+        "catalog": "الفهرس"
+    },
     "system": {
         "locale": "اللغة المحلية",
         "worldwide": "حول العالم",
@@ -65,7 +71,9 @@
         "profile": "الملف الشخصي",
         "settings": "الإعدادات",
         "admin": "المشرف",
+        "admin_panel": "لوحة الإدارة",
         "analytics": "التحليلات",
+        "billing": "الفوترة",
         "categories": "الفئات",
         "success": "نجاح",
         "error": "خطأ",

@@ -8,6 +8,7 @@ import LanguageSwitcher from '@/features/navigation/components/LanguageSwitcher'
 import { UserProfileDropdown } from '@/widgets/user-profile';
 import MobileNavigation from './MobileNavigation';
 import MobileMenuContent from './MobileMenuContent';
+import DesktopNavigation from './DesktopNavigation';
 import { Logo } from '@/shared/components/layout';
 import { useRouter } from '@/i18n/routing';
 
@@ -34,7 +35,7 @@ export default function Header() {
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="w-full px-4 flex h-16 items-center">
                 {/* Logo */}
-                <div className="mr-6 flex items-center space-x-2">
+                <div className="mr-6 flex items-center space-x-2 flex-shrink-0 w-24">
                     <button
                         onClick={handleLogoClick}
                         className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
@@ -44,10 +45,15 @@ export default function Header() {
                 </div>
 
                 {/* Desktop Navigation */}
-                <div className="flex flex-1 items-center justify-end space-x-2 lg:justify-between">
+                <div className="hidden md:flex mr-6">
+                    <DesktopNavigation />
+                </div>
+
+                {/* Rest of Header */}
+                <div className="flex flex-1 items-center justify-end space-x-2">
                     {/* Search - Hidden on mobile and medium, shown on large */}
-                    <div className="hidden lg:flex w-full max-w-sm items-center space-x-2">
-                        <form onSubmit={handleSearchSubmit} className="relative flex-1">
+                    <div className="hidden lg:flex items-center space-x-2">
+                        <form onSubmit={handleSearchSubmit} className="relative w-80">
                             <Input
                                 name="search"
                                 placeholder={`${t('search')}...`}

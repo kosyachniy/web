@@ -50,6 +50,12 @@
         "events": "Eventos",
         "map": "Mapa"
     },
+    "navigation": {
+        "posts": "Publicaciones",
+        "space": "Espacio",
+        "hub": "Centro",
+        "catalog": "Catálogo"
+    },
     "system": {
         "locale": "Idioma",
         "worldwide": "En todo el mundo",
@@ -65,7 +71,9 @@
         "profile": "Perfil",
         "settings": "Configuraciones",
         "admin": "Administrador",
+        "admin_panel": "Panel de Administración",
         "analytics": "Analítica",
+        "billing": "Facturación",
         "categories": "Categorías",
         "success": "Éxito",
         "error": "Error",
