@@ -89,12 +89,17 @@ export const metadata: Metadata = {
         shortcut: '/logo.svg',
         apple: '/logo.svg',
     },
-    viewport: {
-        width: 'device-width',
-        initialScale: 1,
-        maximumScale: 1,
-    },
 };
+
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+};
+
+export function generateStaticParams() {
+    return routing.locales.map((locale) => ({locale}));
+}
 
 export default async function LocaleLayout({
     children,

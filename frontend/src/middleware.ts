@@ -19,6 +19,10 @@ export const config = {
 
         // Set a cookie to remember the previous locale for
         // all requests that have a locale prefix
-        '/(en|ru|zh|es|ar)/:path*'
+        '/(en|ru|zh|es|ar)/:path*',
+
+        // Match all paths that should be internationalized
+        // This will redirect /posts/articles to /en/posts/articles
+        '/((?!api|_next|_vercel|.*\\.).*)'
     ]
 };

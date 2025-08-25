@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/stores/store';
 import { setLanguage, setTheme } from '../../../features/user/stores/userSettingsSlice';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useTranslations } from 'next-intl';
+import { useRouter, usePathname } from '@/i18n/routing';
 import type { Locale } from '@/i18n/routing';
 
 export function UserDemo() {
@@ -13,6 +14,8 @@ export function UserDemo() {
     const userSettings = useAppSelector((state) => state.userSettings);
     const dispatch = useAppDispatch();
     const { resolvedTheme } = useTheme();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const languages: Array<{ code: Locale; name: string; flag: string }> = [
         { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -30,6 +33,14 @@ export function UserDemo() {
 
     const getCurrentLanguage = () => languages.find(lang => lang.code === userSettings.language);
     const getCurrentTheme = () => themes.find(theme => theme.value === userSettings.theme);
+
+    const handleLanguageChange = (newLocale: Locale) => {
+        // Update Redux store
+        dispatch(setLanguage(newLocale));
+
+        // Update URL and next-intl routing
+        router.replace(pathname, { locale: newLocale });
+    };
 
     return (
         <Card className="w-full max-w-md mx-auto">
@@ -70,7 +81,7 @@ export function UserDemo() {
                         {languages.map((lang) => (
                             <Button
                                 key={lang.code}
-                                onClick={() => dispatch(setLanguage(lang.code))}
+                                onClick={() => handleLanguageChange(lang.code)}
                                 variant={userSettings.language === lang.code ? "default" : "outline"}
                                 size="sm"
                                 className="text-xs"

@@ -12,6 +12,7 @@ interface PostsGridProps {
     initialPosts?: Post[];
     searchable?: boolean;
     categoryId?: number;
+    locale?: string;
     limit?: number;
 }
 
@@ -19,6 +20,7 @@ export function PostsGrid({
     initialPosts = [],
     searchable = true,
     categoryId,
+    locale,
     limit = 12
 }: PostsGridProps) {
     const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -45,6 +47,7 @@ export function PostsGrid({
             const response = await getPosts({
                 limit,
                 category: categoryId,
+                locale,
                 ...params,
             });
 
@@ -72,7 +75,7 @@ export function PostsGrid({
             setLoading(false);
             setLoadingMore(false);
         }
-    }, [categoryId, limit, showError]);
+    }, [categoryId, locale, limit, showError]);
 
     const handleSearch = (searchTerm: string) => {
         setSearch(searchTerm);
@@ -88,7 +91,7 @@ export function PostsGrid({
         }
     };
 
-    // Load initial posts if not provided and reset search when category changes
+    // Load initial posts if not provided and reset search when category or locale changes
     useEffect(() => {
         // Only reset search if categoryId is defined (not on initial render with undefined categoryId)
         if (categoryId !== undefined) {
@@ -97,7 +100,7 @@ export function PostsGrid({
         if (initialPosts.length === 0) {
             loadPosts();
         }
-    }, [categoryId, initialPosts.length, loadPosts]);
+    }, [categoryId, locale, initialPosts.length, loadPosts]);
 
     if (loading) {
         return (

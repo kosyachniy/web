@@ -3,7 +3,18 @@
  * Provides centralized error handling, authentication, and configuration
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API || 'http://api:5000/';
+// Use different base URLs for server-side vs client-side requests
+const getApiBaseUrl = () => {
+    // Server-side rendering (SSR) - use internal Docker network without /api/ prefix
+    // (nginx strips /api/ prefix when forwarding to backend)
+    if (typeof window === 'undefined') {
+        return process.env.API_BASE_URL || 'http://api:5000/';
+    }
+    // Client-side rendering (CSR) - use public URL through nginx proxy
+    return process.env.NEXT_PUBLIC_API || 'http://localhost/api/';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export class ApiError extends Error {
     constructor(
@@ -72,6 +83,9 @@ export async function apiClient<T = unknown>(
         if (token) {
             defaultHeaders.Authorization = `Bearer ${token}`;
         }
+    } else {
+        // For SSR requests, don't add auth headers for public endpoints
+        // This prevents 401 errors on public data fetching during SSR
     }
 
     // Prepare request body
