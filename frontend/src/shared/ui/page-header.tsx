@@ -27,25 +27,10 @@ const iconContainerVariants = cva(
         sm: "w-10 h-10 text-sm",
         default: "w-12 h-12 text-base", 
         lg: "w-14 h-14 text-lg"
-      },
-      variant: {
-        default: "bg-primary/10 text-primary",
-        posts: "bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400",
-        space: "bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400", 
-        hub: "bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400",
-        catalog: "bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400",
-        categories: "bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400",
-        demo: "bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400",
-        admin: "bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400",
-        success: "bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400",
-        warning: "bg-yellow-500/15 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400",
-        info: "bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400",
-        destructive: "bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400"
       }
     },
     defaultVariants: {
       size: "default",
-      variant: "default",
     },
   }
 )
@@ -54,9 +39,9 @@ interface PageHeaderProps
   extends React.ComponentProps<"div">, 
          VariantProps<typeof pageHeaderVariants> {
   icon?: React.ReactNode
-  iconVariant?: VariantProps<typeof iconContainerVariants>['variant']
+  iconClassName?: string
   title: string
-  description?: string
+  description?: React.ReactNode
   actions?: React.ReactNode
 }
 
@@ -64,7 +49,7 @@ function PageHeader({
   className,
   size,
   icon,
-  iconVariant = "default",
+  iconClassName,
   title,
   description,
   actions,
@@ -78,7 +63,7 @@ function PageHeader({
     >
       <div className="flex items-start gap-4 flex-1 min-w-0">
         {icon && (
-          <div className={cn(iconContainerVariants({ size, variant: iconVariant }))}>
+          <div className={cn(iconContainerVariants({ size }), iconClassName)}>
             {icon}
           </div>
         )}

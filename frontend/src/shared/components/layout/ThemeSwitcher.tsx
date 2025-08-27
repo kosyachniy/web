@@ -8,22 +8,23 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
+import { ComputerIcon, SunIcon, MoonIcon } from '@/shared/ui/icons';
 import { useTranslations } from 'next-intl';
 
 const themes = [
     {
         value: 'system' as const,
-        icon: '💻',
+        icon: ComputerIcon,
         labelKey: 'system'
     },
     {
         value: 'light' as const,
-        icon: '☀️',
+        icon: SunIcon,
         labelKey: 'light'
     },
     {
         value: 'dark' as const,
-        icon: '🌙',
+        icon: MoonIcon,
         labelKey: 'dark'
     },
 ] as const;
@@ -41,9 +42,11 @@ export default function ThemeSwitcher({ className }: ThemeSwitcherProps = {}) {
     // Get the right icon to display in the button
     const getDisplayIcon = () => {
         if (theme === 'system') {
-            return resolvedTheme === 'dark' ? '🌙' : '☀️';
+            const IconComponent = resolvedTheme === 'dark' ? MoonIcon : SunIcon;
+            return <IconComponent size={18} />;
         }
-        return currentTheme?.icon || '☀️';
+        const IconComponent = currentTheme?.icon || SunIcon;
+        return <IconComponent size={18} />;
     };
 
     return (
@@ -54,7 +57,7 @@ export default function ThemeSwitcher({ className }: ThemeSwitcherProps = {}) {
                     size={className ? "default" : "sm"}
                     className={className ? `justify-start gap-3 h-12 ${className}` : "flex items-center gap-2"}
                 >
-                    <span className="text-lg">{getDisplayIcon()}</span>
+                    <span>{getDisplayIcon()}</span>
                     <span className={className ? "" : "hidden lg:inline"}>
                         {theme === 'system' ? `${t('system')} (${t(resolvedTheme || 'light')})` : t(theme)}
                     </span>
@@ -68,7 +71,7 @@ export default function ThemeSwitcher({ className }: ThemeSwitcherProps = {}) {
                         className={`flex items-center gap-2 cursor-pointer ${theme === themeOption.value ? 'bg-accent' : ''
                             }`}
                     >
-                        <span className="text-lg">{themeOption.icon}</span>
+                        <span><themeOption.icon size={18} /></span>
                         <span>{t(themeOption.labelKey)}</span>
                         {theme === themeOption.value && (
                             <span className="ml-auto text-xs text-muted-foreground">✓</span>

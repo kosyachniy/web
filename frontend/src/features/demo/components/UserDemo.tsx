@@ -3,7 +3,7 @@
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { PageHeader } from '@/shared/ui/page-header';
-import { DemoIcon } from '@/shared/ui/icons';
+import { DemoIcon, ComputerIcon, SunIcon, MoonIcon, SaveIcon } from '@/shared/ui/icons';
 import { useAppDispatch, useAppSelector } from '@/shared/stores/store';
 import { setLanguage, setTheme } from '../../../features/user/stores/userSettingsSlice';
 import { useTheme } from '@/providers/ThemeProvider';
@@ -28,9 +28,9 @@ export function UserDemo() {
     ];
 
     const themes = [
-        { value: 'system', name: 'System', icon: '💻' },
-        { value: 'light', name: 'Light', icon: '☀️' },
-        { value: 'dark', name: 'Dark', icon: '🌙' }
+        { value: 'system', name: 'System', icon: ComputerIcon },
+        { value: 'light', name: 'Light', icon: SunIcon },
+        { value: 'dark', name: 'Dark', icon: MoonIcon }
     ];
 
     const getCurrentLanguage = () => languages.find(lang => lang.code === userSettings.language);
@@ -70,7 +70,11 @@ export function UserDemo() {
                     <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                         <span className="text-sm font-medium">Theme:</span>
                         <div className="flex items-center gap-2">
-                            <span className="text-lg">{getCurrentTheme()?.icon}</span>
+                            {(() => {
+                                const currentTheme = getCurrentTheme();
+                                const IconComponent = currentTheme?.icon;
+                                return IconComponent && <IconComponent size={18} />;
+                            })()}
                             <span className="text-sm font-medium">
                                 {getCurrentTheme()?.name}
                                 {userSettings.theme === 'system' && ` (${resolvedTheme})`}
@@ -109,7 +113,7 @@ export function UserDemo() {
                                 size="sm"
                                 className="text-xs"
                             >
-                                {theme.icon}
+                                {<theme.icon size={16} />}
                             </Button>
                         ))}
                     </div>
@@ -123,7 +127,7 @@ export function UserDemo() {
                         <p><code>dispatch(setLanguage(&apos;en&apos;))</code> - Update language</p>
                         <p><code>dispatch(setTheme(&apos;dark&apos;))</code> - Update theme</p>
                         <p className="mt-2 text-muted-foreground">
-                            💾 <strong>Persistent:</strong> Settings automatically save to localStorage
+                            <SaveIcon size={16} className="inline" /> <strong>Persistent:</strong> Settings automatically save to localStorage
                         </p>
                     </div>
                 </div>

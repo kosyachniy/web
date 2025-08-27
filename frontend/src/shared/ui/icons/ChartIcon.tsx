@@ -4,7 +4,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number
 }
 
-export function CatalogIcon({ size = 16, ...props }: IconProps) {
+export function ChartIcon({ size = 16, ...props }: IconProps) {
   return (
     <svg
       width={size}
@@ -13,7 +13,7 @@ export function CatalogIcon({ size = 16, ...props }: IconProps) {
       fill="currentColor"
       {...props}
     >
-      <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
+      <path d="M22 21H2l4-8 4 8 5-5 3 3 4-8z" />
     </svg>
   )
 }

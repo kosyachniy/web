@@ -9,6 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
+import { UserIcon, SettingsIcon, CreditCardIcon, ChartIcon, ShieldIcon, LogoutIcon } from '@/shared/ui/icons';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 
@@ -94,28 +95,28 @@ export default function UserProfileDropdown({
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
-                    <span>👤</span>
+                    <UserIcon size={16} />
                     <span className="ml-2">{t('profile')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSettingsClick} className="cursor-pointer">
-                    <span>⚙️</span>
+                    <SettingsIcon size={16} />
                     <span className="ml-2">{t('settings')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleBillingClick} className="cursor-pointer">
-                    <span>💳</span>
+                    <CreditCardIcon size={16} />
                     <span className="ml-2">{t('billing')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleAnalyticsClick} className="cursor-pointer">
-                    <span>📊</span>
+                    <ChartIcon size={16} />
                     <span className="ml-2">{t('analytics')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleAdminClick} className="cursor-pointer">
-                    <span>🛡️</span>
+                    <ShieldIcon size={16} />
                     <span className="ml-2">{t('admin_panel')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600 dark:text-red-400">
-                    <span>🚪</span>
+                    <LogoutIcon size={16} />
                     <span className="ml-2">{t('sign_out')}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>

@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
-import { SpaceIcon } from '@/shared/ui/icons';
+import { SpaceIcon, WhiteboardIcon, VideoIcon, MessageIcon, BuildingIcon, ConstructionIcon } from '@/shared/ui/icons';
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('navigation');
@@ -31,7 +31,7 @@ export default async function SpacePage() {
                         <div className="bg-card rounded-lg border p-6">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-                                    <span className="text-2xl">📋</span>
+                                    <WhiteboardIcon size={24} />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-semibold">Whiteboard</h3>
@@ -50,7 +50,7 @@ export default async function SpacePage() {
                         <div className="bg-card rounded-lg border p-6">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
-                                    <span className="text-2xl">📹</span>
+                                    <VideoIcon size={24} />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-semibold">Video Chat</h3>
@@ -69,7 +69,7 @@ export default async function SpacePage() {
                         <div className="bg-card rounded-lg border p-6">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                                    <span className="text-2xl">💬</span>
+                                    <MessageIcon size={24} />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-semibold">Messenger</h3>
@@ -88,7 +88,7 @@ export default async function SpacePage() {
                         <div className="bg-card rounded-lg border p-6">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mr-4">
-                                    <span className="text-2xl">🏢</span>
+                                    <BuildingIcon size={24} />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-semibold">Shared Workspace</h3>
@@ -106,7 +106,7 @@ export default async function SpacePage() {
 
                     <div className="mt-12">
                         <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 text-center">
-                            <h2 className="text-2xl font-semibold mb-4">🔨 Under Construction</h2>
+                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2"><ConstructionIcon size={24} /> Under Construction</h2>
                             <p className="text-muted-foreground mb-6">
                                 We are building amazing collaboration tools that will transform how teams work together. 
                                 Stay tuned for updates!

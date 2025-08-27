@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
-import { HubIcon } from '@/shared/ui/icons';
+import { HubIcon, MessageIcon, QuestionIcon, BookIcon, PaletteIcon, ConstructionIcon } from '@/shared/ui/icons';
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('navigation');
@@ -37,7 +37,7 @@ export default async function HubPage() {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                                                <span className="text-2xl">💬</span>
+                                                <MessageIcon size={24} />
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-semibold">General Discussion</h3>
@@ -56,7 +56,7 @@ export default async function HubPage() {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-                                                <span className="text-2xl">❓</span>
+                                                <QuestionIcon size={24} />
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-semibold">Questions & Answers</h3>
@@ -75,7 +75,7 @@ export default async function HubPage() {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
-                                                <span className="text-2xl">📚</span>
+                                                <BookIcon size={24} />
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-semibold">Tutorials & Guides</h3>
@@ -94,7 +94,7 @@ export default async function HubPage() {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
-                                                <span className="text-2xl">🎨</span>
+                                                <PaletteIcon size={24} />
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-semibold">Showcase</h3>
@@ -157,7 +157,7 @@ export default async function HubPage() {
 
                     <div className="mt-12 text-center">
                         <div className="bg-muted rounded-lg p-8">
-                            <h2 className="text-2xl font-semibold mb-4">🚧 Coming Soon</h2>
+                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2"><ConstructionIcon size={24} /> Coming Soon</h2>
                             <p className="text-muted-foreground">
                                 Advanced forum features including user profiles, reputation system, advanced moderation tools, 
                                 and real-time notifications are currently in development.

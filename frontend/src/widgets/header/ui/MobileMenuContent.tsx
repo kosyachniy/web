@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { ThemeSwitcher } from '@/shared/components/layout';
 import LanguageSwitcher from '@/features/navigation/components/LanguageSwitcher';
 import { UserProfileDropdown } from '@/widgets/user-profile';
+import { PostsIcon, SpaceIcon, HubIcon, CatalogIcon, HomeIcon } from '@/shared/ui/icons';
 import { useRouter } from '@/i18n/routing';
 
 interface MobileMenuContentProps {
@@ -23,25 +24,25 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
         {
             key: 'posts',
             label: tNav('posts'),
-            icon: '📝',
+            icon: PostsIcon,
             path: '/posts' as const
         },
         {
             key: 'space',
             label: tNav('space'),
-            icon: '🚀',
+            icon: SpaceIcon,
             path: '/space' as const
         },
         {
             key: 'hub',
             label: tNav('hub'),
-            icon: '🏛️',
+            icon: HubIcon,
             path: '/hub' as const
         },
         {
             key: 'catalog',
             label: tNav('catalog'),
-            icon: '🛍️',
+            icon: CatalogIcon,
             path: '/catalog' as const
         }
     ] as const;
@@ -96,7 +97,7 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                                 className="w-full justify-start gap-3 h-12"
                                 onClick={() => handleNavigate(item.path)}
                             >
-                                <span className="text-lg">{item.icon}</span>
+                                <item.icon size={18} />
                                 <span>{item.label}</span>
                             </Button>
                         ))}
@@ -118,7 +119,7 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                             className="w-full justify-start gap-3 h-12"
                             onClick={() => handleNavigate('/')}
                         >
-                            <span className="text-lg">🏠</span>
+                            <HomeIcon size={18} />
                             <span>{t('main')}</span>
                         </Button>
                     </div>

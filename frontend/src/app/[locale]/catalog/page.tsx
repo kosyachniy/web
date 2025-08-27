@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
-import { CatalogIcon } from '@/shared/ui/icons';
+import { CatalogIcon, BoxIcon, RefreshIcon } from '@/shared/ui/icons';
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('navigation');
@@ -133,7 +133,7 @@ export default async function CatalogPage() {
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
                                     <div key={item} className="bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow">
                                         <div className="h-48 bg-muted flex items-center justify-center">
-                                            <span className="text-4xl">📦</span>
+                                            <BoxIcon size={48} />
                                         </div>
                                         <div className="p-4">
                                             <h3 className="font-semibold mb-2">Sample Product {item}</h3>
@@ -173,7 +173,7 @@ export default async function CatalogPage() {
 
                     <div className="mt-12 text-center">
                         <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-8">
-                            <h2 className="text-2xl font-semibold mb-4">🔄 Coming Soon</h2>
+                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2"><RefreshIcon size={24} /> Coming Soon</h2>
                             <p className="text-muted-foreground mb-6">
                                 Enhanced product catalog with real inventory management, advanced search algorithms, 
                                 user reviews, and integrated payment processing.

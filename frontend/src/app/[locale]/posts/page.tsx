@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { PostsGrid } from '@/widgets/posts-list';
-import { CategoryBreadcrumbs, SubcategoryNavigation } from '@/widgets/category';
+import { SubcategoryNavigation } from '@/widgets/category';
 import { getSubcategories, getCategoryTitle, getCategoryUrl } from '@/entities/category';
 import { PageHeader } from '@/shared/ui/page-header';
 import { PostsIcon } from '@/shared/ui/icons';
@@ -31,6 +31,11 @@ export async function generateMetadata({ params }: PostsPageProps): Promise<Meta
       url: canonical,
       type: 'website'
     },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: 'Browse and discover posts organized by categories. Find content that interests you most.'
+    },
     alternates: {
       canonical
     }
@@ -48,12 +53,6 @@ export default async function PostsPage({ params }: PostsPageProps) {
         <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-6xl mx-auto">
-                    {/* Breadcrumbs */}
-                    <CategoryBreadcrumbs 
-                        category={null} 
-                        className="mb-6"
-                    />
-
                     <PageHeader
                         icon={<PostsIcon size={24} />}
                         iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
@@ -71,6 +70,25 @@ export default async function PostsPage({ params }: PostsPageProps) {
 
                     {/* All Posts */}
                     <PostsGrid locale={locale} />
+
+                    {/* SEO Structured Data */}
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify({
+                                '@context': 'http://schema.org/',
+                                '@type': 'CollectionPage',
+                                name: t('posts'),
+                                description: 'Browse and discover posts organized by categories. Find content that interests you most.',
+                                url: getCategoryUrl(null, locale),
+                                mainEntity: {
+                                    '@type': 'ItemList',
+                                    name: 'All Posts',
+                                    description: 'Complete collection of posts across all categories'
+                                }
+                            })
+                        }}
+                    />
                 </div>
             </div>
         </div>

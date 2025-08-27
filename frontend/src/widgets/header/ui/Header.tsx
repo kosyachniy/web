@@ -38,7 +38,7 @@ export default function Header() {
                 <div className="mr-6 flex items-center space-x-2 flex-shrink-0 w-24">
                     <button
                         onClick={handleLogoClick}
-                        className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                        className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer"
                     >
                         <Logo />
                     </button>
