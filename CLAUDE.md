@@ -14,6 +14,8 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*).
 - **Always respect i18n**: all user-visible strings must go through the localization system (see *Frontend Guidelines*).
 - **Theme-aware UI**: every component must work in **light & dark** themes via tokens/CSS variables (no hardcoded colors).
+- **Consistent border-radius**: use `rounded-[0.75rem]` for small/inside elements (buttons, inputs, dropdown items, avatars) and `rounded-[1rem]` for big/outside elements (cards, dialogs, containers). Never use `rounded-sm`, `rounded-md`, or `rounded-lg`.
+- **No borders, use backgrounds/shadows**: never use `border` classes. Small components (buttons, inputs, tags) use colored or gray backgrounds. Big components (cards, dialogs, containers) use shadows with white/background colors since they contain small components with colored backgrounds.
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text.
 - **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances.
 - **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.).
@@ -190,6 +192,95 @@ Use typed helpers: `t('namespace.key')`.
 - Use *shadcn/ui* patterns: `cn()` for class merge, `cva` for variants.
 - Accessibility: label form controls, provide `aria-label` for icon buttons.
 
+#### **Frontend Structure & Design Rules** ⚠️ **CRITICAL**
+
+**Button & Link Pattern:**
+- **Icon + Text Structure**: All buttons and links MUST start with an icon, followed by localized text (e.g., `+ Add Category`)
+- **Responsive Design**: Use `IconButton` with `responsive={true}` for adaptive behavior - show only icon on small screens, icon + text on larger screens
+- **Components**: Use `IconButton` from `@/shared/ui/icon-button` instead of plain `Button` for new implementations
+
+**Cursor & Interaction:**
+- **Pointer Cursor**: All pressable elements (buttons, links, clickable cards) MUST have `cursor-pointer` styling
+- **Interactive States**: Provide clear hover, focus, and active states for all interactive elements
+
+**Box & Container Styling:**
+- **Box Containers**: Every content block MUST be wrapped in a `Box` component from `@/shared/ui/box`
+- **Consistent Styling**: Use `Box` with appropriate size variants (`sm`, `default`, `lg`) for consistent padding and styling
+- **Background**: All boxes have white/card background, border, and shadow for clear visual hierarchy
+
+**Page Structure:**
+- **Page Headers**: Every page and component section MUST start with `PageHeader` component:
+  - **Universal Usage**: ALL pages, demo components, admin sections, and content areas must use PageHeader
+  - **Icon**: Square colored icon container (width = height) with rounded background, no border
+  - **Color System**: Section-based colors (posts=green, space=purple, hub=orange, catalog=blue, categories=indigo, demo=cyan, admin=red)
+  - **Title**: SEO-optimized page title positioned to the right of icon
+  - **Description**: Additional context or breadcrumbs under the title
+  - **Actions**: Action buttons or button groups on the right side of the header
+  - **No Custom Headers**: Never create custom `<header>` or `<h1>` elements when PageHeader should be used
+- **Import**: `import { PageHeader } from '@/shared/ui/page-header'`
+
+**Button Grouping:**
+- **Logical Groups**: Group related buttons using `ButtonGroup` component from `@/shared/ui/button-group`
+- **Shared Borders**: Grouped buttons share common border-radius and are visually connected
+- **Semantic Colors**: Use appropriate colors for actions (red for delete, green for add, etc.)
+- **Examples**: Edit + Delete, Upvote + Downvote, Save + Cancel
+
+**Border-Radius Standards:**
+- **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for buttons, inputs, small boxes
+- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for cards, page containers, major sections
+- **Consistency**: Never use other radius values without explicit design system approval
+
+**Sidebar & Layout Elements:**
+- **Box Wrapping**: Wrap sidebar elements (categories, filters, author info, etc.) in `Box` containers
+- **Logical Grouping**: Each functional group gets its own box (e.g., separate boxes for categories, filters, actions)
+- **Hierarchy**: Use box size variants to establish visual hierarchy (larger boxes for primary content)
+
+**When to Use PageHeader:**
+- **Always Required**: Every page (`/posts`, `/space`, `/hub`, `/catalog`, admin pages)
+- **Demo Components**: Replace `CardHeader` with `PageHeader` in demo components
+- **Content Sections**: Any section that has title + description should use PageHeader
+- **Never Use**: Custom `<header>`, standalone `<h1>`, `CardHeader` for main sections
+
+**Component Examples:**
+```typescript
+// Good: Icon + Text button with responsive behavior
+<IconButton
+  icon={<AddIcon size={16} />}
+  variant="success"
+  responsive
+>
+  Add Category
+</IconButton>
+
+// Good: Button group with semantic colors
+<ButtonGroup>
+  <IconButton variant="outline" icon={<EditIcon size={12} />} responsive>Edit</IconButton>
+  <IconButton variant="destructive" icon={<DeleteIcon size={12} />} responsive>Delete</IconButton>
+</ButtonGroup>
+
+// Good: Page header with all elements (pages)
+<PageHeader
+  icon={<PostsIcon size={24} />}
+  iconVariant="posts"
+  title={t('posts')}
+  description="Browse and discover posts organized by categories"
+  actions={<IconButton icon={<AddIcon size={16} />} variant="success" responsive>Add Post</IconButton>}
+/>
+
+// Good: Demo component header
+<PageHeader
+  icon={<DemoIcon size={24} />}
+  iconVariant="demo"
+  title={t('counter.title')}
+  description={t('counter.description')}
+/>
+
+// Good: Content wrapped in box
+<Box size="lg">
+  <div>Content goes here...</div>
+</Box>
+```
+
 #### State Management (Redux Toolkit)
 - **Global state**: `shared/stores/` (auth, theme, app-wide data)
 - **Feature state**: Each feature manages its own state in `stores/`
@@ -276,7 +367,8 @@ Use typed helpers: `t('namespace.key')`.
 
 | Type | Location | Example |
 |------|----------|---------|
-| Button, Input, Card | `shared/ui/` | `shared/ui/button.tsx` |
+| Basic UI (Button, Input, Card) | `shared/ui/` | `shared/ui/button.tsx` |
+| Enhanced UI (IconButton, Box, PageHeader) | `shared/ui/` | `shared/ui/icon-button.tsx` |
 | Header, Navigation | `widgets/header/` | `widgets/header/ui/Header.tsx` |
 | User auth logic | `features/auth/` | `features/auth/ui/LoginForm.tsx` |
 | User data types | `entities/user/` | `entities/user/model/user.ts` |
@@ -284,5 +376,12 @@ Use typed helpers: `t('namespace.key')`.
 | App config | `shared/config/` | `shared/config/app.ts` |
 | Page composition | `app/` | `app/[locale]/page.tsx` |
 | Auto-generated | `generated/` | `generated/api/schemas.ts` |
+
+**New Component Quick Reference:**
+- **IconButton**: `import { IconButton } from '@/shared/ui/icon-button'` - Icon + text buttons with responsive behavior
+- **ButtonGroup**: `import { ButtonGroup } from '@/shared/ui/button-group'` - Logical grouping of related buttons
+- **Box**: `import { Box } from '@/shared/ui/box'` - Container with consistent styling (border, background, shadow)
+- **PageHeader**: `import { PageHeader } from '@/shared/ui/page-header'` - Standard page header with square icon, title, description, actions
+- **Icons**: `import { PostsIcon, AddIcon, EditIcon } from '@/shared/ui/icons'` - Solid style icons with size prop
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.

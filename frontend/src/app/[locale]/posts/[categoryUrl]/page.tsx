@@ -110,7 +110,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
           {/* Category Image (if exists) */}
           {category.image && (
-            <div className="relative w-full h-48 md:h-64 rounded-lg overflow-hidden mb-8">
+            <div className="relative w-full h-48 md:h-64 rounded-[1rem] overflow-hidden mb-8">
               <Image
                 src={category.image}
                 alt={category.title}

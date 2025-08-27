@@ -73,7 +73,7 @@ export default function UserProfileDropdown({
             <DropdownMenuTrigger asChild>
                 <Button
                     variant="outline"
-                    className={className ? `justify-start gap-3 h-12 ${className}` : "relative h-8 w-8 rounded-full"}
+                    className={className ? `justify-start gap-3 h-12 ${className}` : "relative h-8 w-8 rounded-[0.75rem]"}
                 >
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={userAvatar} alt={userName} />

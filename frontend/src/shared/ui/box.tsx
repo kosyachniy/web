@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/lib/utils"
 
 const boxVariants = cva(
-  "bg-background border shadow-sm",
+  "bg-background shadow-md",
   {
     variants: {
       size: {
@@ -13,9 +13,9 @@ const boxVariants = cva(
         lg: "rounded-[1rem] p-6"
       },
       variant: {
-        default: "bg-card text-card-foreground border-border",
-        muted: "bg-muted/50 text-muted-foreground border-muted",
-        accent: "bg-accent/50 text-accent-foreground border-accent"
+        default: "bg-card text-card-foreground",
+        muted: "bg-muted/50 text-muted-foreground",
+        accent: "bg-accent/50 text-accent-foreground"
       }
     },
     defaultVariants: {
