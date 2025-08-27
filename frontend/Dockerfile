@@ -42,6 +42,33 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # ========================================
+# Development Stage - Development runtime with hot reload
+# ========================================
+FROM node:24.6-alpine AS development
+
+# Install system dependencies
+RUN apk add --no-cache libc6-compat
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies)
+RUN npm ci --no-audit --no-fund
+
+# Set development environment
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["npm", "run", "dev"]
+
+# ========================================
 # Runner Stage - Production runtime
 # ========================================
 FROM node:24.6-alpine AS runner

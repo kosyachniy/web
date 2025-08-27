@@ -155,6 +155,50 @@ feature-name/
 - **Backend**: FastAPI, MongoDB (via consys), Redis, Socket.IO, Prometheus monitoring
 - **Infrastructure**: Docker, NGINX, Let's Encrypt, Grafana
 
+### Docker & Deployment Architecture
+
+#### **Multi-Stage Dockerfile Strategy**
+- **Frontend Dockerfile**: Uses multi-stage build with `development` and `runner` (production) stages
+- **Development Stage**: Includes dev dependencies, hot reload support, file watching with polling
+- **Production Stage**: Optimized build with production dependencies only, pre-built app
+- **Best Practice**: Single Dockerfile with multiple stages ensures consistency across environments
+
+#### **Docker Compose File Structure**
+The project uses a base + override pattern for different environments:
+
+**Base Configuration:**
+- `docker-compose.yml` - Common service definitions, defaults to production (`runner` stage)
+
+**Environment Overrides:**
+- `docker-compose.local.yml` - Local development (databases + nginx + hot reload)
+  - Uses `development` stage for frontend
+  - Adds Redis, MongoDB, NGINX server
+  - Enables volume mounting for hot reload
+  - Usage: `make up` (base + local)
+
+- `docker-compose.dev.yml` - Remote development environment
+  - Same as local but for remote dev servers
+  - Uses `development` stage for frontend
+  - Usage: `make up-dev` (base + dev)
+
+- `docker-compose.prod.yml` - Production deployment
+  - Uses `runner` stage for optimized builds
+  - Adds production services (jobs, telegram bot)
+  - Production environment variables
+  - Usage: `make up-prod` (base + prod)
+
+- `docker-compose.base.yml` - Infrastructure only
+  - Just databases and monitoring (Redis, MongoDB, Prometheus, Grafana)
+  - Usage: `make up-base` (infrastructure only)
+
+#### **Makefile Integration**
+```bash
+make up          # Local: base + local.yml (full dev environment)
+make up-dev      # Remote dev: base + dev.yml
+make up-prod     # Production: base + prod.yml
+make up-base     # Infrastructure: base.yml only
+```
+
 ### Frontend Guidelines
 
 #### **Path Aliases**

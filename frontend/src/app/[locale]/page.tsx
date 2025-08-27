@@ -1,7 +1,6 @@
 'use client';
 
-import { CounterDemo, UserDemo } from '@/features/demo';
-import { PopupDemo, ToastDemo } from '@/widgets/feedback-system';
+import { CounterDemo, UserDemo, PopupDemo, ToastDemo } from '@/features/demo';
 
 export default function Home() {
     return (

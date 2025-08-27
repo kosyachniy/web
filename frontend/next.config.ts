@@ -18,7 +18,15 @@ const nextConfig: NextConfig = {
     ],
   },
   // Ensure proper bundle handling
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
+    // Enable polling for file watching in Docker environments
+    if (dev && process.env.NODE_ENV === 'development') {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    
     // Ensure proper client/server split
     if (!isServer) {
       config.resolve.fallback = {

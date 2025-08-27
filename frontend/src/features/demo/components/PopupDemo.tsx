@@ -6,7 +6,7 @@ import { Input } from '@/shared/ui/input';
 import { Box } from '@/shared/ui/box';
 import { PageHeader } from '@/shared/ui/page-header';
 import { DemoIcon } from '@/shared/ui/icons';
-import { usePopupActions } from './PopupProvider';
+import { usePopupActions } from '@/widgets/feedback-system';
 
 export default function PopupDemo() {
     const [customInput, setCustomInput] = useState('');
@@ -132,53 +132,53 @@ export default function PopupDemo() {
                     title="Popup System Demo"
                     description="Interactive modal dialogs and popup components"
                 />
-                
+
                 <div className="space-y-6">
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Button onClick={handleAlert} variant="outline">
-                        Show Alert
-                    </Button>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Button onClick={handleAlert} variant="outline">
+                            Show Alert
+                        </Button>
 
-                    <Button onClick={handleConfirm} variant="outline">
-                        Show Confirmation
-                    </Button>
+                        <Button onClick={handleConfirm} variant="outline">
+                            Show Confirmation
+                        </Button>
 
-                    <Button onClick={handleDelete} variant="destructive">
-                        Delete Confirmation
-                    </Button>
+                        <Button onClick={handleDelete} variant="destructive">
+                            Delete Confirmation
+                        </Button>
 
-                    <Button onClick={() => success('This is a success message!')} variant="outline">
-                        Success Message
-                    </Button>
+                        <Button onClick={() => success('This is a success message!')} variant="outline">
+                            Success Message
+                        </Button>
 
-                    <Button onClick={() => error('This is an error message!')} variant="outline">
-                        Error Message
-                    </Button>
+                        <Button onClick={() => error('This is an error message!')} variant="outline">
+                            Error Message
+                        </Button>
 
-                    <Button onClick={handleCustomPopup} variant="outline">
-                        Custom Popup
-                    </Button>
+                        <Button onClick={handleCustomPopup} variant="outline">
+                            Custom Popup
+                        </Button>
 
-                    <Button onClick={handleTransparentPopup} variant="outline">
-                        Transparent Background
-                    </Button>
+                        <Button onClick={handleTransparentPopup} variant="outline">
+                            Transparent Background
+                        </Button>
 
-                    <Button onClick={handleFullScreenPopup} variant="outline">
-                        Full Screen Popup
-                    </Button>
-                </div>
-
-                <Box variant="muted" size="default">
-                    <h3 className="font-semibold mb-2">Usage Examples:</h3>
-                    <div className="text-sm text-muted-foreground space-y-2">
-                        <p><code>await alert(&#123;message: &apos;Hello!&apos;&#125;)</code> - Simple alert</p>
-                        <p><code>const confirmed = await confirm(&#123;message: &apos;Sure?&apos;&#125;)</code> - Confirmation</p>
-                        <p><code>success(&apos;Done!&apos;)</code> - Success notification</p>
-                        <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
-                        <p><code>show(&#123;children: &lt;Custom/&gt;&#125;)</code> - Custom content</p>
+                        <Button onClick={handleFullScreenPopup} variant="outline">
+                            Full Screen Popup
+                        </Button>
                     </div>
-                </Box>
+
+                    <Box variant="muted" size="default">
+                        <h3 className="font-semibold mb-2">Usage Examples:</h3>
+                        <div className="text-sm text-muted-foreground space-y-2">
+                            <p><code>await alert(&#123;message: &apos;Hello!&apos;&#125;)</code> - Simple alert</p>
+                            <p><code>const confirmed = await confirm(&#123;message: &apos;Sure?&apos;&#125;)</code> - Confirmation</p>
+                            <p><code>success(&apos;Done!&apos;)</code> - Success notification</p>
+                            <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
+                            <p><code>show(&#123;children: &lt;Custom/&gt;&#125;)</code> - Custom content</p>
+                        </div>
+                    </Box>
                 </div>
             </Box>
         </div>

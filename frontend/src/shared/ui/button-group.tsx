@@ -8,8 +8,8 @@ const buttonGroupVariants = cva(
   {
     variants: {
       orientation: {
-        horizontal: "flex-row [&>*]:rounded-none [&>*:first-child]:rounded-l-[0.75rem] [&>*:last-child]:rounded-r-[0.75rem] [&>*:not(:first-child)]:border-l-0",
-        vertical: "flex-col [&>*]:rounded-none [&>*:first-child]:rounded-t-[0.75rem] [&>*:last-child]:rounded-b-[0.75rem] [&>*:not(:first-child)]:border-t-0"
+        horizontal: "flex-row [&>*]:rounded-none [&>*:first-child]:rounded-l-[0.75rem] [&>*:last-child]:rounded-r-[0.75rem]",
+        vertical: "flex-col [&>*]:rounded-none [&>*:first-child]:rounded-t-[0.75rem] [&>*:last-child]:rounded-b-[0.75rem]"
       },
       size: {
         sm: "[&>*]:h-8 [&>*]:px-3 [&>*]:text-xs",

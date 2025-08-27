@@ -1,3 +1,7 @@
+# Development environment overrides (remote development server)
+# Same as local but for remote development environments
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
 services:
   api:
     environment:
@@ -8,6 +12,9 @@ services:
     command: bash -c "cd /app && uv run uvicorn main:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   web:
+    build:
+      context: ../../frontend
+      target: development
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API: http://localhost/api/
@@ -17,4 +24,5 @@ services:
       - ../../frontend:/app
       # Exclude to avoid conflicts
       - /app/node_modules
+      - /app/.next
     command: npm run dev

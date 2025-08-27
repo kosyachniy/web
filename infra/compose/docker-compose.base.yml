@@ -1,3 +1,7 @@
+# Infrastructure services only (databases, monitoring)
+# Used for spinning up just the infrastructure without app services
+# Usage: docker compose -f docker-compose.base.yml up -d
+
 services:
   redis:
     image: redis:8.2-alpine

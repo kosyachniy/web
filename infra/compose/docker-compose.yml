@@ -1,7 +1,12 @@
+# Base compose file - defines common service structure
+# Use with environment-specific overrides (local.yml, dev.yml, prod.yml)
+
 services:
   api:
     image: ${PROJECT_NAME}/api
-    build: ../../backend
+    build:
+      context: ../../backend
+      target: final
     restart: unless-stopped
     env_file: ../../.env
     volumes:
@@ -11,7 +16,9 @@ services:
 
   web:
     image: ${PROJECT_NAME}/web
-    build: ../../frontend
+    build:
+      context: ../../frontend
+      target: runner
     restart: unless-stopped
     env_file: ../../.env
     environment:
