@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/routing';
 
 interface UserProfileDropdownProps {
     userName?: string;
@@ -25,6 +26,7 @@ export default function UserProfileDropdown({
     className
 }: UserProfileDropdownProps) {
     const t = useTranslations('system');
+    const router = useRouter();
 
     const handleProfileClick = () => {
         // Navigate to profile page
@@ -47,8 +49,7 @@ export default function UserProfileDropdown({
     };
 
     const handleAdminClick = () => {
-        // Navigate to admin panel
-        console.log('Navigate to admin panel');
+        router.push('/admin');
     };
 
     const handleSignOut = () => {

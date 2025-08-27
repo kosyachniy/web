@@ -16,7 +16,11 @@ export const routing = defineRouting({
         '/posts': '/posts',
         '/space': '/space', 
         '/hub': '/hub',
-        '/catalog': '/catalog'
+        '/catalog': '/catalog',
+        '/admin': '/admin',
+        '/admin/categories': '/admin/categories',
+        '/admin/posts': '/admin/posts',
+        '/admin/users': '/admin/users'
         // You can add more custom pathnames here if needed
     },
 
