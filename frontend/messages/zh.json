@@ -2,10 +2,6 @@
     "common": {
         "language": "语言"
     },
-    "home": {
-        "title": "前端技术栈演示",
-        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit"
-    },
     "counter": {
         "title": "Redux 计数器演示",
         "description": "展示 Redux Toolkit 与 shadcn/ui 组件",

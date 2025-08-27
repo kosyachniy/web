@@ -1,26 +1,30 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
+import { PageHeader } from '@/shared/ui/page-header';
+import { HubIcon } from '@/shared/ui/icons';
 
-export const metadata: Metadata = {
-    title: 'Hub - Community Forum',
-    description: 'Community forum for user-generated content and discussions',
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations('navigation');
+    
+    return {
+        title: `${t('hub')} - Community Forum`,
+        description: 'Community forum for user-generated content and discussions',
+    };
+}
 
-export default function HubPage() {
-    const t = useTranslations('navigation');
+export default async function HubPage() {
+    const t = await getTranslations('navigation');
 
     return (
         <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-6xl mx-auto">
-                    <header className="mb-8">
-                        <h1 className="text-4xl font-bold mb-4">
-                            🏛️ {t('hub')}
-                        </h1>
-                        <p className="text-lg text-muted-foreground">
-                            Community forum for user-generated content, discussions, and knowledge sharing.
-                        </p>
-                    </header>
+                    <PageHeader
+                        icon={<HubIcon size={24} />}
+                        iconClassName="bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
+                        title={t('hub')}
+                        description="Community forum for user-generated content, discussions, and knowledge sharing."
+                    />
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                         {/* Forum Categories */}

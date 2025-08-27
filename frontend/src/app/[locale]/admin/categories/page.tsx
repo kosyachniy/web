@@ -1,25 +1,35 @@
 import { AdminLayout } from '@/widgets/admin-layout';
 import { Card } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
+import { IconButton } from '@/shared/ui/icon-button';
+import { ButtonGroup } from '@/shared/ui/button-group';
+import { PageHeader } from '@/shared/ui/page-header';
+import { CategoriesIcon, AddIcon, EditIcon, DeleteIcon } from '@/shared/ui/icons';
 
 export default function AdminCategoriesPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Categories Management</h1>
-          <Button>Add Category</Button>
-        </div>
+        {/* Page Header */}
+        <PageHeader
+          icon={<CategoriesIcon size={24} />}
+          iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
+          title="Categories Management"
+          description="Manage and organize your website categories"
+          actions={
+            <IconButton
+              icon={<AddIcon size={16} />}
+              variant="success"
+              responsive
+            >
+              Add Category
+            </IconButton>
+          }
+        />
 
         {/* Categories List */}
-        <Card className="p-6">
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">All Categories</h2>
-            
-            {/* Sample Categories */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+        <Card>
+          <div className="space-y-2">
+              <div className="flex items-center justify-between p-3 border rounded-[0.75rem]">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <div>
@@ -27,13 +37,27 @@ export default function AdminCategoriesPage() {
                     <p className="text-sm text-muted-foreground">12 posts</p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">Edit</Button>
-                  <Button variant="destructive" size="sm">Delete</Button>
-                </div>
+                <ButtonGroup>
+                  <IconButton 
+                    variant="outline" 
+                    size="sm"
+                    icon={<EditIcon size={12} />}
+                    responsive
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton 
+                    variant="destructive" 
+                    size="sm"
+                    icon={<DeleteIcon size={12} />}
+                    responsive
+                  >
+                    Delete
+                  </IconButton>
+                </ButtonGroup>
               </div>
               
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between p-3 border rounded-[0.75rem]">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <div>
@@ -41,13 +65,27 @@ export default function AdminCategoriesPage() {
                     <p className="text-sm text-muted-foreground">8 posts</p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">Edit</Button>
-                  <Button variant="destructive" size="sm">Delete</Button>
-                </div>
+                <ButtonGroup>
+                  <IconButton 
+                    variant="outline" 
+                    size="sm"
+                    icon={<EditIcon size={12} />}
+                    responsive
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton 
+                    variant="destructive" 
+                    size="sm"
+                    icon={<DeleteIcon size={12} />}
+                    responsive
+                  >
+                    Delete
+                  </IconButton>
+                </ButtonGroup>
               </div>
 
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between p-3 border rounded-[0.75rem]">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                   <div>
@@ -55,12 +93,25 @@ export default function AdminCategoriesPage() {
                     <p className="text-sm text-muted-foreground">15 posts</p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">Edit</Button>
-                  <Button variant="destructive" size="sm">Delete</Button>
-                </div>
+                <ButtonGroup>
+                  <IconButton 
+                    variant="outline" 
+                    size="sm"
+                    icon={<EditIcon size={12} />}
+                    responsive
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton 
+                    variant="destructive" 
+                    size="sm"
+                    icon={<DeleteIcon size={12} />}
+                    responsive
+                  >
+                    Delete
+                  </IconButton>
+                </ButtonGroup>
               </div>
-            </div>
           </div>
         </Card>
       </div>

@@ -1,7 +1,9 @@
 'use client';
 
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent } from '@/shared/ui/card';
+import { PageHeader } from '@/shared/ui/page-header';
+import { DemoIcon } from '@/shared/ui/icons';
 import { useAppDispatch, useAppSelector } from '@/shared/stores/store';
 import { setLanguage, setTheme } from '../../../features/user/stores/userSettingsSlice';
 import { useTheme } from '@/providers/ThemeProvider';
@@ -43,14 +45,17 @@ export function UserDemo() {
     };
 
     return (
-        <Card className="w-full max-w-md mx-auto">
-            <CardHeader>
-                <CardTitle>{t('title')}</CardTitle>
-                <CardDescription>
-                    {t('description')}
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <div className="w-full max-w-md mx-auto">
+            <Card>
+                <CardContent>
+                    <PageHeader
+                        icon={<DemoIcon size={24} />}
+                        iconClassName="bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400"
+                        title={t('title')}
+                        description={t('description')}
+                    />
+                    
+                    <div className="space-y-6">
                 {/* Current Settings Display */}
                 <div className="space-y-3">
                     <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
@@ -122,7 +127,9 @@ export function UserDemo() {
                         </p>
                     </div>
                 </div>
-            </CardContent>
-        </Card>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     );
 }

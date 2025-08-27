@@ -3,6 +3,8 @@ import { getTranslations } from 'next-intl/server';
 import { PostsGrid } from '@/widgets/posts-list';
 import { CategoryBreadcrumbs, SubcategoryNavigation } from '@/widgets/category';
 import { getSubcategories, getCategoryTitle, getCategoryUrl } from '@/entities/category';
+import { PageHeader } from '@/shared/ui/page-header';
+import { PostsIcon } from '@/shared/ui/icons';
 
 interface PostsPageProps {
   params: Promise<{
@@ -37,6 +39,7 @@ export async function generateMetadata({ params }: PostsPageProps): Promise<Meta
 
 export default async function PostsPage({ params }: PostsPageProps) {
     const { locale } = await params;
+    const t = await getTranslations('navigation');
     
     // Get top-level categories (no parent)
     const topCategories = await getSubcategories(undefined, locale);
@@ -51,21 +54,19 @@ export default async function PostsPage({ params }: PostsPageProps) {
                         className="mb-6"
                     />
 
-                    <header className="mb-8">
-                        <p className="text-lg text-muted-foreground">
-                            Browse and discover posts organized by categories. Find content that interests you most.
-                        </p>
-                    </header>
+                    <PageHeader
+                        icon={<PostsIcon size={24} />}
+                        iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+                        title={t('posts')}
+                        description="Browse and discover posts organized by categories. Find content that interests you most."
+                    />
 
                     {/* Top-level Categories */}
                     {topCategories.length > 0 && (
-                        <div className="mb-8">
-                            <h2 className="text-xl font-semibold mb-4">Categories</h2>
-                            <SubcategoryNavigation 
-                                subcategories={topCategories}
-                                className="mb-6"
-                            />
-                        </div>
+                        <SubcategoryNavigation 
+                            subcategories={topCategories}
+                            className="mb-8"
+                        />
                     )}
 
                     {/* All Posts */}

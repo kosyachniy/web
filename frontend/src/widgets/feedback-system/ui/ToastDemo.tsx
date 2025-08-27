@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
+import { Box } from '@/shared/ui/box';
+import { PageHeader } from '@/shared/ui/page-header';
+import { DemoIcon } from '@/shared/ui/icons';
 import { useToast, useToastActions } from '@/shared/hooks/useToast';
 
 export default function ToastDemo() {
@@ -131,94 +134,104 @@ export default function ToastDemo() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-6">
-            <h2 className="text-2xl font-bold mb-6">Toast System Demo</h2>
+        <div className="max-w-2xl mx-auto">
+            <Box size="lg">
+                <PageHeader
+                    icon={<DemoIcon size={24} />}
+                    iconClassName="bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400"
+                    title="Toast System Demo"
+                    description="Notification system with multiple variants and positioning"
+                />
+                
+                <div className="space-y-6">
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <Button onClick={handleBasicToasts} variant="outline">
-                    Basic Toast
-                </Button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Button onClick={handleBasicToasts} variant="outline">
+                        Basic Toast
+                    </Button>
 
-                <Button onClick={handleSuccessToast} variant="outline">
-                    Success Toast
-                </Button>
+                    <Button onClick={handleSuccessToast} variant="outline">
+                        Success Toast
+                    </Button>
 
-                <Button onClick={handleErrorToast} variant="destructive">
-                    Error Toast
-                </Button>
+                    <Button onClick={handleErrorToast} variant="destructive">
+                        Error Toast
+                    </Button>
 
-                <Button onClick={handleWarningToast} variant="outline">
-                    Warning Toast
-                </Button>
+                    <Button onClick={handleWarningToast} variant="outline">
+                        Warning Toast
+                    </Button>
 
-                <Button onClick={handleInfoToast} variant="outline">
-                    Info Toast
-                </Button>
+                    <Button onClick={handleInfoToast} variant="outline">
+                        Info Toast
+                    </Button>
 
-                <Button onClick={handleLoadingToast} variant="outline" disabled={!!loadingToastId}>
-                    {loadingToastId ? 'Loading...' : 'Loading Toast'}
-                </Button>
+                    <Button onClick={handleLoadingToast} variant="outline" disabled={!!loadingToastId}>
+                        {loadingToastId ? 'Loading...' : 'Loading Toast'}
+                    </Button>
 
-                <Button onClick={handlePromiseToast} variant="outline">
-                    Promise Toast
-                </Button>
+                    <Button onClick={handlePromiseToast} variant="outline">
+                        Promise Toast
+                    </Button>
 
-                <Button onClick={handleMultipleToasts} variant="outline">
-                    Multiple Toasts
-                </Button>
+                    <Button onClick={handleMultipleToasts} variant="outline">
+                        Multiple Toasts
+                    </Button>
 
-                <Button onClick={handleConvenienceToasts} variant="outline">
-                    Convenience Toasts
-                </Button>
+                    <Button onClick={handleConvenienceToasts} variant="outline">
+                        Convenience Toasts
+                    </Button>
 
-                <Button onClick={handlePositionChange} variant="outline">
-                    Change Position
-                </Button>
+                    <Button onClick={handlePositionChange} variant="outline">
+                        Change Position
+                    </Button>
 
-                <Button onClick={handleDismissAll} variant="secondary">
-                    Dismiss All
-                </Button>
-            </div>
-
-            <div className="space-y-4">
-                <div className="flex gap-2">
-                    <Input
-                        placeholder="Enter custom message..."
-                        value={customMessage}
-                        onChange={(e) => setCustomMessage(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleCustomToast()}
-                    />
-                    <Button onClick={handleCustomToast}>
-                        Custom Toast
+                    <Button onClick={handleDismissAll} variant="secondary">
+                        Dismiss All
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="bg-muted p-3 rounded">
-                        <strong>Current Position:</strong> {toast.position}
+                <Box variant="muted" size="default" className="space-y-4">
+                    <div className="flex gap-2">
+                        <Input
+                            placeholder="Enter custom message..."
+                            value={customMessage}
+                            onChange={(e) => setCustomMessage(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleCustomToast()}
+                        />
+                        <Button onClick={handleCustomToast}>
+                            Custom Toast
+                        </Button>
                     </div>
-                    <div className="bg-muted p-3 rounded">
-                        <strong>Max Toasts:</strong> {toast.maxToasts}
-                    </div>
-                    <div className="bg-muted p-3 rounded">
-                        <strong>Default Duration:</strong> {toast.defaultDuration}ms
-                    </div>
-                    <div className="bg-muted p-3 rounded">
-                        <strong>Active Toasts:</strong> {toast.toasts.length}
-                    </div>
-                </div>
-            </div>
 
-            <div className="mt-8 p-4 bg-muted rounded-lg">
-                <h3 className="font-semibold mb-2">Usage Examples:</h3>
-                <div className="text-sm text-muted-foreground space-y-2">
-                    <p><code>success(&apos;Saved!&apos;)</code> - Success notification</p>
-                    <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
-                    <p><code>loading(&apos;Processing...&apos;)</code> - Loading state</p>
-                    <p><code>promise(apiCall, &#123;...&#125;)</code> - Promise-based</p>
-                    <p><code>toast(&apos;Message&apos;, &#123;action: &#123;...&#125;&#125;)</code> - With action</p>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="bg-background p-3 rounded-[0.75rem] border">
+                            <strong>Current Position:</strong> {toast.position}
+                        </div>
+                        <div className="bg-background p-3 rounded-[0.75rem] border">
+                            <strong>Max Toasts:</strong> {toast.maxToasts}
+                        </div>
+                        <div className="bg-background p-3 rounded-[0.75rem] border">
+                            <strong>Default Duration:</strong> {toast.defaultDuration}ms
+                        </div>
+                        <div className="bg-background p-3 rounded-[0.75rem] border">
+                            <strong>Active Toasts:</strong> {toast.toasts.length}
+                        </div>
+                    </div>
+                </Box>
+
+                <Box variant="muted" size="default">
+                    <h3 className="font-semibold mb-2">Usage Examples:</h3>
+                    <div className="text-sm text-muted-foreground space-y-2">
+                        <p><code>success(&apos;Saved!&apos;)</code> - Success notification</p>
+                        <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
+                        <p><code>loading(&apos;Processing...&apos;)</code> - Loading state</p>
+                        <p><code>promise(apiCall, &#123;...&#125;)</code> - Promise-based</p>
+                        <p><code>toast(&apos;Message&apos;, &#123;action: &#123;...&#125;&#125;)</code> - With action</p>
+                    </div>
+                </Box>
                 </div>
-            </div>
+            </Box>
         </div>
     );
 }

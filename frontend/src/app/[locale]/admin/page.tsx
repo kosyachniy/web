@@ -1,17 +1,18 @@
 import { AdminLayout } from '@/widgets/admin-layout';
 import { Card } from '@/shared/ui/card';
+import { PageHeader } from '@/shared/ui/page-header';
+import { AdminIcon } from '@/shared/ui/icons';
 
 export default function AdminPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Welcome Section */}
-        <Card className="p-6">
-          <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
-          <p className="text-muted-foreground">
-            Welcome to the admin panel. Use the sidebar to navigate between different sections.
-          </p>
-        </Card>
+        <PageHeader
+          icon={<AdminIcon size={24} />}
+          iconClassName="bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400"
+          title="Admin Dashboard"
+          description="Welcome to the admin panel. Use the sidebar to navigate between different sections."
+        />
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

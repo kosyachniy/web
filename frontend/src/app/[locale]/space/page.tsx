@@ -1,26 +1,30 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
+import { PageHeader } from '@/shared/ui/page-header';
+import { SpaceIcon } from '@/shared/ui/icons';
 
-export const metadata: Metadata = {
-    title: 'Space - Collaboration Tools',
-    description: 'Interactive spaces for collaboration and communication',
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations('navigation');
+    
+    return {
+        title: `${t('space')} - Collaboration Tools`,
+        description: 'Interactive spaces for collaboration and real-time communication',
+    };
+}
 
-export default function SpacePage() {
-    const t = useTranslations('navigation');
+export default async function SpacePage() {
+    const t = await getTranslations('navigation');
 
     return (
         <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-6xl mx-auto">
-                    <header className="mb-8">
-                        <h1 className="text-4xl font-bold mb-4">
-                            🚀 {t('space')}
-                        </h1>
-                        <p className="text-lg text-muted-foreground">
-                            Common spaces for user interaction, collaboration, and real-time communication.
-                        </p>
-                    </header>
+                    <PageHeader
+                        icon={<SpaceIcon size={24} />}
+                        iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
+                        title={t('space')}
+                        description="Common spaces for user interaction, collaboration, and real-time communication."
+                    />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Whiteboard */}

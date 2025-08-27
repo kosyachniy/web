@@ -2,10 +2,6 @@
     "common": {
         "language": "اللغة"
     },
-    "home": {
-        "title": "عرض حزمة الواجهة الأمامية",
-        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit"
-    },
     "counter": {
         "title": "عرض عداد Redux",
         "description": "عرض Redux Toolkit مع مكونات shadcn/ui",

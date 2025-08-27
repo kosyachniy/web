@@ -2,10 +2,6 @@
     "common": {
         "language": "Язык"
     },
-    "home": {
-        "title": "Демо Frontend Стека",
-        "subtitle": "Next.js 15 + React 19 + shadcn/ui + Redux Toolkit"
-    },
     "counter": {
         "title": "Демо Redux Счетчика",
         "description": "Демонстрация Redux Toolkit с компонентами shadcn/ui",

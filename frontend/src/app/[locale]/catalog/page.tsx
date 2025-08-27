@@ -1,26 +1,30 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
+import { PageHeader } from '@/shared/ui/page-header';
+import { CatalogIcon } from '@/shared/ui/icons';
 
-export const metadata: Metadata = {
-    title: 'Catalog - Products & Services',
-    description: 'Browse our catalog of products and services with filters and search',
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations('navigation');
+    
+    return {
+        title: `${t('catalog')} - Products & Services`,
+        description: 'Browse our catalog of products and services with filters and search',
+    };
+}
 
-export default function CatalogPage() {
-    const t = useTranslations('navigation');
+export default async function CatalogPage() {
+    const t = await getTranslations('navigation');
 
     return (
         <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-7xl mx-auto">
-                    <header className="mb-8">
-                        <h1 className="text-4xl font-bold mb-4">
-                            🛍️ {t('catalog')}
-                        </h1>
-                        <p className="text-lg text-muted-foreground">
-                            Discover our curated collection of products and services with advanced filtering and search capabilities.
-                        </p>
-                    </header>
+                    <PageHeader
+                        icon={<CatalogIcon size={24} />}
+                        iconClassName="bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400"
+                        title={t('catalog')}
+                        description="Discover our curated collection of products and services with advanced filtering and search capabilities."
+                    />
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                         {/* Filters Sidebar */}

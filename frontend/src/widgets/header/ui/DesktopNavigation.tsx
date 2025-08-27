@@ -1,8 +1,9 @@
 'use client';
 
-import { Button } from '@/shared/ui/button';
+import { IconButton } from '@/shared/ui/icon-button';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
+import { PostsIcon, SpaceIcon, HubIcon, CatalogIcon } from '@/shared/ui/icons';
 
 export default function DesktopNavigation() {
     const t = useTranslations('navigation');
@@ -12,25 +13,25 @@ export default function DesktopNavigation() {
         {
             key: 'posts',
             label: t('posts'),
-            icon: '📝',
+            icon: <PostsIcon size={16} />,
             path: '/posts' as const
         },
         {
             key: 'space',
             label: t('space'),
-            icon: '🚀',
+            icon: <SpaceIcon size={16} />,
             path: '/space' as const
         },
         {
             key: 'hub',
             label: t('hub'),
-            icon: '🏛️',
+            icon: <HubIcon size={16} />,
             path: '/hub' as const
         },
         {
             key: 'catalog',
             label: t('catalog'),
-            icon: '🛍️',
+            icon: <CatalogIcon size={16} />,
             path: '/catalog' as const
         }
     ] as const;
@@ -42,16 +43,17 @@ export default function DesktopNavigation() {
     return (
         <nav className="flex items-center space-x-1">
             {navigationItems.map((item) => (
-                <Button
+                <IconButton
                     key={item.key}
                     variant="ghost"
                     size="sm"
+                    icon={item.icon}
                     onClick={() => handleNavigate(item.path)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    responsive
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                    <span className="text-base">{item.icon}</span>
-                    <span className="hidden lg:inline">{item.label}</span>
-                </Button>
+                    {item.label}
+                </IconButton>
             ))}
         </nav>
     );

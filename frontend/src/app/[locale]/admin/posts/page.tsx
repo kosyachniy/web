@@ -1,21 +1,34 @@
 import { AdminLayout } from '@/widgets/admin-layout';
 import { Card } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
+import { IconButton } from '@/shared/ui/icon-button';
+import { ButtonGroup } from '@/shared/ui/button-group';
+import { PageHeader } from '@/shared/ui/page-header';
+import { PostsIcon, AddIcon, EditIcon, DeleteIcon } from '@/shared/ui/icons';
 
 export default function AdminPostsPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Posts Management</h1>
-          <Button>Add Post</Button>
-        </div>
+        {/* Page Header */}
+        <PageHeader
+          icon={<PostsIcon size={24} />}
+          iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+          title="Posts Management"
+          description="Create, edit and manage all website posts"
+          actions={
+            <IconButton
+              icon={<AddIcon size={16} />}
+              variant="success"
+              responsive
+            >
+              Add Post
+            </IconButton>
+          }
+        />
 
         {/* Posts List */}
-        <Card className="p-6">
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">All Posts</h2>
+        <Card>
+          <div className="space-y-2">
             
             {/* Sample Posts */}
             <div className="space-y-2">
@@ -27,10 +40,24 @@ export default function AdminPostsPage() {
                     <p className="text-sm text-muted-foreground">Technology • Published 2 days ago</p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">Edit</Button>
-                  <Button variant="destructive" size="sm">Delete</Button>
-                </div>
+                <ButtonGroup>
+                  <IconButton 
+                    variant="outline" 
+                    size="sm"
+                    icon={<EditIcon size={12} />}
+                    responsive
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton 
+                    variant="destructive" 
+                    size="sm"
+                    icon={<DeleteIcon size={12} />}
+                    responsive
+                  >
+                    Delete
+                  </IconButton>
+                </ButtonGroup>
               </div>
               
               <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -41,10 +68,24 @@ export default function AdminPostsPage() {
                     <p className="text-sm text-muted-foreground">Science • Draft</p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">Edit</Button>
-                  <Button variant="destructive" size="sm">Delete</Button>
-                </div>
+                <ButtonGroup>
+                  <IconButton 
+                    variant="outline" 
+                    size="sm"
+                    icon={<EditIcon size={12} />}
+                    responsive
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton 
+                    variant="destructive" 
+                    size="sm"
+                    icon={<DeleteIcon size={12} />}
+                    responsive
+                  >
+                    Delete
+                  </IconButton>
+                </ButtonGroup>
               </div>
 
               <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -55,10 +96,24 @@ export default function AdminPostsPage() {
                     <p className="text-sm text-muted-foreground">Business • Published 1 week ago</p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">Edit</Button>
-                  <Button variant="destructive" size="sm">Delete</Button>
-                </div>
+                <ButtonGroup>
+                  <IconButton 
+                    variant="outline" 
+                    size="sm"
+                    icon={<EditIcon size={12} />}
+                    responsive
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton 
+                    variant="destructive" 
+                    size="sm"
+                    icon={<DeleteIcon size={12} />}
+                    responsive
+                  >
+                    Delete
+                  </IconButton>
+                </ButtonGroup>
               </div>
             </div>
           </div>

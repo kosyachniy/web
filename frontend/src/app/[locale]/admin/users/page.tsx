@@ -2,16 +2,29 @@ import { AdminLayout } from '@/widgets/admin-layout';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
+import { PageHeader } from '@/shared/ui/page-header';
+import { IconButton } from '@/shared/ui/icon-button';
+import { AdminIcon, AddIcon } from '@/shared/ui/icons';
 
 export default function AdminUsersPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Users Management</h1>
-          <Button>Add User</Button>
-        </div>
+        <PageHeader
+          icon={<AdminIcon size={24} />}
+          iconClassName="bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400"
+          title="Users Management"
+          description="Manage user accounts, permissions and access control"
+          actions={
+            <IconButton
+              icon={<AddIcon size={16} />}
+              variant="success"
+              responsive
+            >
+              Add User
+            </IconButton>
+          }
+        />
 
         {/* Users List */}
         <Card className="p-6">
