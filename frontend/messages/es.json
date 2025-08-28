@@ -45,7 +45,9 @@
         "posts": "Publicaciones",
         "space": "Espacio",
         "hub": "Centro",
-        "catalog": "Catálogo"
+        "catalog": "Catálogo",
+        "home": "Inicio",
+        "sections": "Secciones"
     },
     "system": {
         "locale": "Idioma",
@@ -151,5 +153,71 @@
         "title": "Título",
         "parent": "Padre",
         "top": "Nivel superior"
+    },
+    "businessSections": {
+        "companies": "Empresas",
+        "products": "Productos",
+        "contacts": "Contactos",
+        "customers": "Clientes",
+        "calendar": "Calendario",
+        "sales": "Ventas",
+        "analytics": "Análisis",
+        "promos": "Promociones",
+        "pays": "Pagos",
+        "support": "Soporte"
+    },
+    "filters": {
+        "filters": "Filtros",
+        "timeRange": "Rango de tiempo",
+        "sortBy": "Ordenar por",
+        "today": "Hoy",
+        "thisWeek": "Esta semana",
+        "thisMonth": "Este mes",
+        "allTime": "Todo el tiempo",
+        "mostRecent": "Más recientes",
+        "mostPopular": "Más populares",
+        "trending": "Tendencia",
+        "clearFilters": "Limpiar filtros"
+    },
+    "actions": {
+        "fastActions": "Acciones rápidas",
+        "quickAccess": "Acceso rápido",
+        "createPost": "Crear publicación",
+        "search": "Buscar",
+        "bookmarks": "Marcadores",
+        "share": "Compartir",
+        "settings": "Configuración",
+        "saved": "Guardado",
+        "shared": "Compartido"
+    },
+    "contact": {
+        "contactUs": "Contáctanos",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "tu.correo@ejemplo.com",
+        "message": "Mensaje",
+        "messagePlaceholder": "¿Cómo podemos ayudarte?",
+        "sendMessage": "Enviar mensaje",
+        "quickContact": "Contacto rápido",
+        "emailUs": "Escríbenos",
+        "callUs": "Llámanos"
+    },
+    "questionnaire": {
+        "feedback": "Comentarios",
+        "question": "Pregunta",
+        "howSatisfied": "¿Qué tan satisfecho estás con nuestra plataforma?",
+        "wouldRecommend": "¿Nos recomendarías a otros?",
+        "whatImprove": "¿Qué deberíamos mejorar?",
+        "performance": "Rendimiento",
+        "design": "Diseño",
+        "features": "Características",
+        "content": "Contenido",
+        "yes": "Sí",
+        "no": "No",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "submit": "Enviar",
+        "thankYou": "¡Gracias!",
+        "feedbackReceived": "Tu comentario ha sido recibido.",
+        "takeAgain": "Tomar de nuevo"
     }
 }

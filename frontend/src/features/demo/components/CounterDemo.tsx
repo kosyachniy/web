@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '@/shared/ui/button'
-import { Card, CardContent } from '@/shared/ui/card'
+import { Box } from '@/shared/ui/box'
 import { PageHeader } from '@/shared/ui/page-header'
-import { DemoIcon } from '@/shared/ui/icons'
+import { CalculatorIcon } from '@/shared/ui/icons'
 import { useAppDispatch, useAppSelector } from '@/shared/stores/store'
 import { increment, decrement, incrementByAmount, reset } from '../stores/counterSlice'
 import { useTranslations } from 'next-intl'
@@ -14,27 +14,27 @@ export function CounterDemo() {
     const dispatch = useAppDispatch()
 
     return (
-        <div className="w-full max-w-md mx-auto">
-            <Card>
-                <CardContent>
-                    <PageHeader
-                        icon={<DemoIcon size={24} />}
-                        iconClassName="bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400"
-                        title={t('title')}
-                        description={t('description')}
-                    />
-                    
-                    <div className="space-y-4">
+        <div className="max-w-2xl mx-auto">
+            <Box size="lg">
+                <PageHeader
+                    icon={<CalculatorIcon size={24} />}
+                    iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
+                    title={t('title')}
+                    description={t('description')}
+                />
+                
+                <div className="space-y-6">
                     <div className="text-center">
-                        <div className="text-4xl font-bold text-blue-600 mb-4">
+                        <div className="text-6xl font-bold text-primary mb-6">
                             {count}
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 justify-center">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <Button
                             onClick={() => dispatch(increment())}
                             variant="default"
+                            className="w-full"
                         >
                             {t('increment')}
                         </Button>
@@ -42,6 +42,7 @@ export function CounterDemo() {
                         <Button
                             onClick={() => dispatch(decrement())}
                             variant="outline"
+                            className="w-full"
                         >
                             {t('decrement')}
                         </Button>
@@ -49,6 +50,7 @@ export function CounterDemo() {
                         <Button
                             onClick={() => dispatch(incrementByAmount(5))}
                             variant="secondary"
+                            className="w-full"
                         >
                             {t('incrementBy5')}
                         </Button>
@@ -56,13 +58,23 @@ export function CounterDemo() {
                         <Button
                             onClick={() => dispatch(reset())}
                             variant="destructive"
+                            className="w-full"
                         >
                             {t('reset')}
                         </Button>
                     </div>
-                    </div>
-                </CardContent>
-            </Card>
+
+                    <Box variant="muted" size="default">
+                        <h3 className="font-semibold mb-2">Redux Integration:</h3>
+                        <div className="text-sm text-muted-foreground space-y-2">
+                            <p><code>useAppSelector(state =&gt; state.counter.value)</code> - Read counter state</p>
+                            <p><code>dispatch(increment())</code> - Increase by 1</p>
+                            <p><code>dispatch(incrementByAmount(5))</code> - Increase by specific amount</p>
+                            <p><code>dispatch(reset())</code> - Reset to 0</p>
+                        </div>
+                    </Box>
+                </div>
+            </Box>
         </div>
     )
 }

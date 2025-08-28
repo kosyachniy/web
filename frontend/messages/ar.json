@@ -45,7 +45,9 @@
         "posts": "المنشورات",
         "space": "المساحة",
         "hub": "المركز",
-        "catalog": "الفهرس"
+        "catalog": "الفهرس",
+        "home": "الرئيسية",
+        "sections": "الأقسام"
     },
     "system": {
         "locale": "اللغة المحلية",
@@ -151,5 +153,71 @@
         "title": "العنوان",
         "parent": "الفئة الرئيسية",
         "top": "المستوى الأعلى"
+    },
+    "businessSections": {
+        "companies": "الشركات",
+        "products": "المنتجات",
+        "contacts": "جهات الاتصال",
+        "customers": "العملاء",
+        "calendar": "التقويم",
+        "sales": "المبيعات",
+        "analytics": "التحليلات",
+        "promos": "العروض الترويجية",
+        "pays": "المدفوعات",
+        "support": "الدعم"
+    },
+    "filters": {
+        "filters": "المرشحات",
+        "timeRange": "النطاق الزمني",
+        "sortBy": "ترتيب حسب",
+        "today": "اليوم",
+        "thisWeek": "هذا الأسبوع",
+        "thisMonth": "هذا الشهر",
+        "allTime": "كل الوقت",
+        "mostRecent": "الأحدث",
+        "mostPopular": "الأكثر شعبية",
+        "trending": "الرائج",
+        "clearFilters": "مسح المرشحات"
+    },
+    "actions": {
+        "fastActions": "الإجراءات السريعة",
+        "quickAccess": "الوصول السريع",
+        "createPost": "إنشاء منشور",
+        "search": "بحث",
+        "bookmarks": "الإشارات المرجعية",
+        "share": "مشاركة",
+        "settings": "الإعدادات",
+        "saved": "محفوظ",
+        "shared": "مشارك"
+    },
+    "contact": {
+        "contactUs": "اتصل بنا",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "your.email@example.com",
+        "message": "الرسالة",
+        "messagePlaceholder": "كيف يمكننا مساعدتك؟",
+        "sendMessage": "إرسال الرسالة",
+        "quickContact": "اتصال سريع",
+        "emailUs": "راسلنا",
+        "callUs": "اتصل بنا"
+    },
+    "questionnaire": {
+        "feedback": "التعليقات",
+        "question": "سؤال",
+        "howSatisfied": "ما مدى رضاك عن منصتنا؟",
+        "wouldRecommend": "هل تنصح بنا للآخرين؟",
+        "whatImprove": "ما الذي يجب أن نحسنه؟",
+        "performance": "الأداء",
+        "design": "التصميم",
+        "features": "المميزات",
+        "content": "المحتوى",
+        "yes": "نعم",
+        "no": "لا",
+        "previous": "السابق",
+        "next": "التالي",
+        "submit": "إرسال",
+        "thankYou": "شكراً لك!",
+        "feedbackReceived": "تم استلام تعليقك.",
+        "takeAgain": "أخذ مرة أخرى"
     }
 }

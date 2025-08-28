@@ -45,7 +45,9 @@
         "posts": "Posts",
         "space": "Space",
         "hub": "Hub",
-        "catalog": "Catalog"
+        "catalog": "Catalog",
+        "home": "Home",
+        "sections": "Sections"
     },
     "system": {
         "locale": "Locale",
@@ -151,5 +153,71 @@
         "title": "Title",
         "parent": "Parent",
         "top": "Top level"
+    },
+    "businessSections": {
+        "companies": "Companies",
+        "products": "Products",
+        "contacts": "Contacts",
+        "customers": "Customers",
+        "calendar": "Calendar",
+        "sales": "Sales",
+        "analytics": "Analytics",
+        "promos": "Promos",
+        "pays": "Pays",
+        "support": "Support"
+    },
+    "filters": {
+        "filters": "Filters",
+        "timeRange": "Time Range",
+        "sortBy": "Sort By",
+        "today": "Today",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month",
+        "allTime": "All Time",
+        "mostRecent": "Most Recent",
+        "mostPopular": "Most Popular",
+        "trending": "Trending",
+        "clearFilters": "Clear Filters"
+    },
+    "actions": {
+        "fastActions": "Fast Actions",
+        "quickAccess": "Quick Access",
+        "createPost": "Create Post",
+        "search": "Search",
+        "bookmarks": "Bookmarks",
+        "share": "Share",
+        "settings": "Settings",
+        "saved": "Saved",
+        "shared": "Shared"
+    },
+    "contact": {
+        "contactUs": "Contact Us",
+        "email": "Email",
+        "emailPlaceholder": "your.email@example.com",
+        "message": "Message",
+        "messagePlaceholder": "How can we help you?",
+        "sendMessage": "Send Message",
+        "quickContact": "Quick Contact",
+        "emailUs": "Email us",
+        "callUs": "Call us"
+    },
+    "questionnaire": {
+        "feedback": "Feedback",
+        "question": "Question",
+        "howSatisfied": "How satisfied are you with our platform?",
+        "wouldRecommend": "Would you recommend us to others?",
+        "whatImprove": "What should we improve?",
+        "performance": "Performance",
+        "design": "Design",
+        "features": "Features",
+        "content": "Content",
+        "yes": "Yes",
+        "no": "No",
+        "previous": "Previous",
+        "next": "Next",
+        "submit": "Submit",
+        "thankYou": "Thank You!",
+        "feedbackReceived": "Your feedback has been received.",
+        "takeAgain": "Take Again"
     }
 }

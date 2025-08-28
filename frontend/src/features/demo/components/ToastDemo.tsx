@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Box } from '@/shared/ui/box';
 import { PageHeader } from '@/shared/ui/page-header';
-import { DemoIcon } from '@/shared/ui/icons';
+import { BellIcon } from '@/shared/ui/icons';
 import { useToast, useToastActions } from '@/shared/hooks/useToast';
 
 export default function ToastDemo() {
@@ -137,8 +137,8 @@ export default function ToastDemo() {
         <div className="max-w-2xl mx-auto">
             <Box size="lg">
                 <PageHeader
-                    icon={<DemoIcon size={24} />}
-                    iconClassName="bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400"
+                    icon={<BellIcon size={24} />}
+                    iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
                     title="Toast System Demo"
                     description="Notification system with multiple variants and positioning"
                 />

@@ -42,7 +42,26 @@ import {
   FaExclamationTriangle,
   FaCheck,
   FaChevronRight,
-  FaCircle
+  FaCircle,
+  FaFilter,
+  FaCalendarAlt,
+  FaTags,
+  FaFire,
+  FaClock,
+  FaBookmark,
+  FaShare,
+  FaEnvelope,
+  FaPaperPlane,
+  FaThumbsUp,
+  FaThumbsDown,
+  FaCheckCircle,
+  FaPhone,
+  FaHandshake,
+  FaBullhorn,
+  FaDollarSign,
+  FaCalculator,
+  FaBell,
+  FaWindowMaximize
 } from "react-icons/fa"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -229,4 +248,90 @@ export function ChevronRightIcon({ size = 16, ...props }: IconProps) {
 
 export function CircleIcon({ size = 16, ...props }: IconProps) {
   return <FaCircle size={size} {...props} />
+}
+
+// Filter and sort icons
+export function FilterIcon({ size = 16, ...props }: IconProps) {
+  return <FaFilter size={size} {...props} />
+}
+
+export function CalendarIcon({ size = 16, ...props }: IconProps) {
+  return <FaCalendarAlt size={size} {...props} />
+}
+
+export function TagIcon({ size = 16, ...props }: IconProps) {
+  return <FaTags size={size} {...props} />
+}
+
+export function TrendingIcon({ size = 16, ...props }: IconProps) {
+  return <FaFire size={size} {...props} />
+}
+
+export function ClockIcon({ size = 16, ...props }: IconProps) {
+  return <FaClock size={size} {...props} />
+}
+
+// Action icons
+export function BookmarkIcon({ size = 16, ...props }: IconProps) {
+  return <FaBookmark size={size} {...props} />
+}
+
+export function ShareIcon({ size = 16, ...props }: IconProps) {
+  return <FaShare size={size} {...props} />
+}
+
+export function LightningIcon({ size = 16, ...props }: IconProps) {
+  return <FaBolt size={size} {...props} />
+}
+
+// Communication icons
+export function MailIcon({ size = 16, ...props }: IconProps) {
+  return <FaEnvelope size={size} {...props} />
+}
+
+export function SendIcon({ size = 16, ...props }: IconProps) {
+  return <FaPaperPlane size={size} {...props} />
+}
+
+// Feedback icons
+export function ThumbsUpIcon({ size = 16, ...props }: IconProps) {
+  return <FaThumbsUp size={size} {...props} />
+}
+
+export function ThumbsDownIcon({ size = 16, ...props }: IconProps) {
+  return <FaThumbsDown size={size} {...props} />
+}
+
+export function CheckCircleIcon({ size = 16, ...props }: IconProps) {
+  return <FaCheckCircle size={size} {...props} />
+}
+
+// Business icons
+export function PhoneIcon({ size = 16, ...props }: IconProps) {
+  return <FaPhone size={size} {...props} />
+}
+
+export function HandshakeIcon({ size = 16, ...props }: IconProps) {
+  return <FaHandshake size={size} {...props} />
+}
+
+export function BullhornIcon({ size = 16, ...props }: IconProps) {
+  return <FaBullhorn size={size} {...props} />
+}
+
+export function DollarIcon({ size = 16, ...props }: IconProps) {
+  return <FaDollarSign size={size} {...props} />
+}
+
+// Demo-specific icons
+export function CalculatorIcon({ size = 16, ...props }: IconProps) {
+  return <FaCalculator size={size} {...props} />
+}
+
+export function BellIcon({ size = 16, ...props }: IconProps) {
+  return <FaBell size={size} {...props} />
+}
+
+export function WindowIcon({ size = 16, ...props }: IconProps) {
+  return <FaWindowMaximize size={size} {...props} />
 }

@@ -45,7 +45,9 @@
         "posts": "帖子",
         "space": "空间",
         "hub": "中心",
-        "catalog": "目录"
+        "catalog": "目录",
+        "home": "首页",
+        "sections": "版块"
     },
     "system": {
         "locale": "区域设置",
@@ -151,5 +153,71 @@
         "title": "标题",
         "parent": "父类",
         "top": "顶级"
+    },
+    "businessSections": {
+        "companies": "公司",
+        "products": "产品",
+        "contacts": "联系人",
+        "customers": "客户",
+        "calendar": "日历",
+        "sales": "销售",
+        "analytics": "分析",
+        "promos": "促销",
+        "pays": "付款",
+        "support": "支持"
+    },
+    "filters": {
+        "filters": "过滤器",
+        "timeRange": "时间范围",
+        "sortBy": "排序方式",
+        "today": "今天",
+        "thisWeek": "本周",
+        "thisMonth": "本月",
+        "allTime": "所有时间",
+        "mostRecent": "最新",
+        "mostPopular": "最受欢迎",
+        "trending": "热门",
+        "clearFilters": "清除过滤器"
+    },
+    "actions": {
+        "fastActions": "快速操作",
+        "quickAccess": "快速访问",
+        "createPost": "创建帖子",
+        "search": "搜索",
+        "bookmarks": "书签",
+        "share": "分享",
+        "settings": "设置",
+        "saved": "已保存",
+        "shared": "已分享"
+    },
+    "contact": {
+        "contactUs": "联系我们",
+        "email": "电子邮件",
+        "emailPlaceholder": "your.email@example.com",
+        "message": "消息",
+        "messagePlaceholder": "我们如何为您提供帮助？",
+        "sendMessage": "发送消息",
+        "quickContact": "快速联系",
+        "emailUs": "给我们发邮件",
+        "callUs": "给我们打电话"
+    },
+    "questionnaire": {
+        "feedback": "反馈",
+        "question": "问题",
+        "howSatisfied": "您对我们的平台有多满意？",
+        "wouldRecommend": "您会向其他人推荐我们吗？",
+        "whatImprove": "我们应该改进什么？",
+        "performance": "性能",
+        "design": "设计",
+        "features": "功能",
+        "content": "内容",
+        "yes": "是",
+        "no": "否",
+        "previous": "上一步",
+        "next": "下一步",
+        "submit": "提交",
+        "thankYou": "谢谢！",
+        "feedbackReceived": "您的反馈已收到。",
+        "takeAgain": "重新开始"
     }
 }

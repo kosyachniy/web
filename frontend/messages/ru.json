@@ -45,7 +45,9 @@
         "posts": "Посты",
         "space": "Пространство",
         "hub": "Хаб",
-        "catalog": "Каталог"
+        "catalog": "Каталог",
+        "home": "Главная",
+        "sections": "Разделы"
     },
     "system": {
         "locale": "Язык",
@@ -151,5 +153,71 @@
         "title": "Название",
         "parent": "Родитель",
         "top": "Верхний уровень"
+    },
+    "businessSections": {
+        "companies": "Компании",
+        "products": "Продукты",
+        "contacts": "Контакты",
+        "customers": "Клиенты",
+        "calendar": "Календарь",
+        "sales": "Продажи",
+        "analytics": "Аналитика",
+        "promos": "Акции",
+        "pays": "Платежи",
+        "support": "Поддержка"
+    },
+    "filters": {
+        "filters": "Фильтры",
+        "timeRange": "Временной диапазон",
+        "sortBy": "Сортировать по",
+        "today": "Сегодня",
+        "thisWeek": "На этой неделе",
+        "thisMonth": "В этом месяце",
+        "allTime": "Все время",
+        "mostRecent": "Самые свежие",
+        "mostPopular": "Самые популярные",
+        "trending": "В тренде",
+        "clearFilters": "Очистить фильтры"
+    },
+    "actions": {
+        "fastActions": "Быстрые действия",
+        "quickAccess": "Быстрый доступ",
+        "createPost": "Создать пост",
+        "search": "Поиск",
+        "bookmarks": "Закладки",
+        "share": "Поделиться",
+        "settings": "Настройки",
+        "saved": "Сохранено",
+        "shared": "Отправлено"
+    },
+    "contact": {
+        "contactUs": "Свяжитесь с нами",
+        "email": "Электронная почта",
+        "emailPlaceholder": "your.email@example.com",
+        "message": "Сообщение",
+        "messagePlaceholder": "Как мы можем вам помочь?",
+        "sendMessage": "Отправить сообщение",
+        "quickContact": "Быстрая связь",
+        "emailUs": "Напишите нам",
+        "callUs": "Позвоните нам"
+    },
+    "questionnaire": {
+        "feedback": "Обратная связь",
+        "question": "Вопрос",
+        "howSatisfied": "Насколько вы удовлетворены нашей платформой?",
+        "wouldRecommend": "Порекомендуете ли вы нас другим?",
+        "whatImprove": "Что нам следует улучшить?",
+        "performance": "Производительность",
+        "design": "Дизайн",
+        "features": "Функции",
+        "content": "Содержание",
+        "yes": "Да",
+        "no": "Нет",
+        "previous": "Назад",
+        "next": "Далее",
+        "submit": "Отправить",
+        "thankYou": "Спасибо!",
+        "feedbackReceived": "Ваш отзыв получен.",
+        "takeAgain": "Пройти снова"
     }
 }

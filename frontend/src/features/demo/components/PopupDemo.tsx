@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Box } from '@/shared/ui/box';
 import { PageHeader } from '@/shared/ui/page-header';
-import { DemoIcon } from '@/shared/ui/icons';
+import { WindowIcon } from '@/shared/ui/icons';
 import { usePopupActions } from '@/widgets/feedback-system';
 
 export default function PopupDemo() {
@@ -127,8 +127,8 @@ export default function PopupDemo() {
         <div className="max-w-2xl mx-auto">
             <Box size="lg">
                 <PageHeader
-                    icon={<DemoIcon size={24} />}
-                    iconClassName="bg-cyan-500/15 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400"
+                    icon={<WindowIcon size={24} />}
+                    iconClassName="bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
                     title="Popup System Demo"
                     description="Interactive modal dialogs and popup components"
                 />

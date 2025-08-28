@@ -250,14 +250,29 @@ Use typed helpers: `t('namespace.key')`.
 
 **Box & Container Styling:**
 - **Box Containers**: Every content block MUST be wrapped in a `Box` component from `@/shared/ui/box`
-- **Consistent Styling**: Use `Box` with appropriate size variants (`sm`, `default`, `lg`) for consistent padding and styling
-- **Background**: All boxes have white/card background, border, and shadow for clear visual hierarchy
+- **Box vs Card**: Use `Box` for main content containers; `Card` only for specific card-like content (post cards, admin lists)
+- **Size Variants**:
+  - `size="sm"` - Small containers with minimal padding (`p-3`)
+  - `size="default"` - Standard containers with normal padding (`p-4`)
+  - `size="lg"` - Large containers for main content areas (`p-6`)
+- **Background Variants**:
+  - `variant="default"` - Standard white/card background with shadow
+  - `variant="muted"` - Subtle muted background for secondary content
+  - `variant="accent"` - Accent background for highlighted content
+- **Consistent Styling**: All boxes have consistent border-radius, shadow, and theme-aware backgrounds
 
 **Page Structure:**
 - **Page Headers**: Every page and component section MUST start with `PageHeader` component:
   - **Universal Usage**: ALL pages, demo components, admin sections, and content areas must use PageHeader
   - **Icon**: Square colored icon container (width = height) with rounded background, no border
-  - **Color System**: Section-based colors (posts=green, space=purple, hub=orange, catalog=blue, categories=indigo, demo=cyan, admin=red)
+  - **Color System**: Section-based colors with background/text variants:
+    - **Posts**: `bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400`
+    - **Space**: `bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400`
+    - **Hub**: `bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400`
+    - **Catalog**: `bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400`
+    - **Categories**: `bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400`
+    - **Admin**: `bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400`
+    - **Demo Components**: Use specific colors per component type (Calculator=indigo, User=purple, Popup=orange, Toast=green)
   - **Title**: SEO-optimized page title positioned to the right of icon
   - **Description**: Additional context or breadcrumbs under the title
   - **Actions**: Action buttons or button groups on the right side of the header
@@ -274,6 +289,33 @@ Use typed helpers: `t('namespace.key')`.
 - **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for buttons, inputs, small boxes
 - **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for cards, page containers, major sections
 - **Consistency**: Never use other radius values without explicit design system approval
+
+**Three-Column Layout System:**
+- **ThreeColumnLayout**: Use `@/widgets/three-column-layout` for flexible 3-column layouts
+- **Adaptive Columns**: Layout automatically adjusts based on which sidebars are provided
+- **Sidebar Widgets**: Reusable sidebar components in `@/widgets/*-sidebar/` for consistent functionality
+- **Sticky Positioning**: Sidebars use `sticky top-20` (80px) to account for header height (`h-16` = 64px + spacing)
+- **Examples**:
+  ```typescript
+  // Full 3-column layout
+  <ThreeColumnLayout
+    leftSidebar={<><SectionsSidebar /><FiltersSidebar /></>}
+    rightSidebar={<><FastActionsSidebar /><ContactFormSidebar /></>}
+  >
+    <YourContent />
+  </ThreeColumnLayout>
+
+  // Left sidebar only
+  <ThreeColumnLayout leftSidebar={<SectionsSidebar />}>
+    <YourContent />
+  </ThreeColumnLayout>
+  ```
+
+**Available Sidebar Widgets:**
+- **Left Sidebar**: `SectionsSidebar` (navigation), `FiltersSidebar` (time/sort filters)
+- **Right Sidebar**: `FastActionsSidebar` (quick actions), `ContactFormSidebar`, `QuestionnaireSidebar`
+- **Admin Sidebar**: `AdminSidebar` (admin navigation) in `AdminLayout`
+- **All Sidebars**: Use `Box` containers with `sticky top-20` positioning to avoid header overlap
 
 **Sidebar & Layout Elements:**
 - **Box Wrapping**: Wrap sidebar elements (categories, filters, author info, etc.) in `Box` containers
@@ -303,27 +345,66 @@ Use typed helpers: `t('namespace.key')`.
   <IconButton variant="destructive" icon={<DeleteIcon size={12} />} responsive>Delete</IconButton>
 </ButtonGroup>
 
-// Good: Page header with all elements (pages)
+// Good: Page header with proper color system (pages)
 <PageHeader
   icon={<PostsIcon size={24} />}
-  iconVariant="posts"
+  iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
   title={t('posts')}
   description="Browse and discover posts organized by categories"
   actions={<IconButton icon={<AddIcon size={16} />} variant="success" responsive>Add Post</IconButton>}
 />
 
-// Good: Demo component header
+// Good: Demo component headers with specific icons/colors
 <PageHeader
-  icon={<DemoIcon size={24} />}
-  iconVariant="demo"
+  icon={<CalculatorIcon size={24} />}
+  iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
   title={t('counter.title')}
   description={t('counter.description')}
 />
 
-// Good: Content wrapped in box
+<PageHeader
+  icon={<UserIcon size={24} />}
+  iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
+  title={t('userSettings.title')}
+  description={t('userSettings.description')}
+/>
+
+// Good: Content wrapped in Box with nested structure
 <Box size="lg">
-  <div>Content goes here...</div>
+  <PageHeader {...headerProps} />
+  <div className="space-y-6">
+    <div>Main content...</div>
+
+    {/* Nested box for code examples or secondary content */}
+    <Box variant="muted" size="default">
+      <h3 className="font-semibold mb-2">Usage Examples:</h3>
+      <div className="text-sm text-muted-foreground space-y-2">
+        <p><code>example()</code> - Description</p>
+      </div>
+    </Box>
+  </div>
 </Box>
+
+// Good: Three-column layout with multiple sidebar blocks
+<ThreeColumnLayout
+  leftSidebar={
+    <>
+      <SectionsSidebar />
+      <FiltersSidebar />
+    </>
+  }
+  rightSidebar={
+    <>
+      <FastActionsSidebar />
+      <ContactFormSidebar />
+      <QuestionnaireSidebar />
+    </>
+  }
+>
+  <div className="space-y-8">
+    <YourMainContent />
+  </div>
+</ThreeColumnLayout>
 ```
 
 #### State Management (Redux Toolkit)
@@ -414,6 +495,8 @@ Use typed helpers: `t('namespace.key')`.
 |------|----------|---------|
 | Basic UI (Button, Input, Card) | `shared/ui/` | `shared/ui/button.tsx` |
 | Enhanced UI (IconButton, Box, PageHeader) | `shared/ui/` | `shared/ui/icon-button.tsx` |
+| Layout Systems (Three-Column) | `widgets/three-column-layout/` | `widgets/three-column-layout/ui/ThreeColumnLayout.tsx` |
+| Sidebar Widgets (Sections, Filters, Actions) | `widgets/*-sidebar/` | `widgets/sections-sidebar/ui/SectionsSidebar.tsx` |
 | Header, Navigation | `widgets/header/` | `widgets/header/ui/Header.tsx` |
 | User auth logic | `features/auth/` | `features/auth/ui/LoginForm.tsx` |
 | User data types | `entities/user/` | `entities/user/model/user.ts` |
@@ -427,6 +510,18 @@ Use typed helpers: `t('namespace.key')`.
 - **ButtonGroup**: `import { ButtonGroup } from '@/shared/ui/button-group'` - Logical grouping of related buttons
 - **Box**: `import { Box } from '@/shared/ui/box'` - Container with consistent styling (border, background, shadow)
 - **PageHeader**: `import { PageHeader } from '@/shared/ui/page-header'` - Standard page header with square icon, title, description, actions
-- **Icons**: `import { PostsIcon, AddIcon, EditIcon } from '@/shared/ui/icons'` - Solid style icons with size prop
+- **ThreeColumnLayout**: `import { ThreeColumnLayout } from '@/widgets/three-column-layout'` - Flexible 3-column layout with adaptive sidebars
+- **Sidebar Widgets**:
+  - `import { SectionsSidebar } from '@/widgets/sections-sidebar'` - Business navigation sections
+  - `import { FiltersSidebar } from '@/widgets/filters-sidebar'` - Time/sort filters
+  - `import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar'` - Quick action buttons
+  - `import { ContactFormSidebar } from '@/widgets/contact-form-sidebar'` - Contact form widget
+  - `import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar'` - Interactive feedback survey
+- **Demo Component Icons**:
+  - Counter Demo: `CalculatorIcon` with indigo colors (`bg-indigo-500/15 text-indigo-600`)
+  - User Demo: `UserIcon` with purple colors (`bg-purple-500/15 text-purple-600`)
+  - Popup Demo: `WindowIcon` with orange colors (`bg-orange-500/15 text-orange-600`)
+  - Toast Demo: `BellIcon` with green colors (`bg-green-500/15 text-green-600`)
+- **Icons**: `import { PostsIcon, AddIcon, EditIcon, CalculatorIcon, UserIcon, WindowIcon, BellIcon } from '@/shared/ui/icons'` - Solid style icons with size prop
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.

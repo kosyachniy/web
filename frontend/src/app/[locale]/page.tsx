@@ -1,18 +1,85 @@
 'use client';
 
 import { CounterDemo, UserDemo, PopupDemo, ToastDemo } from '@/features/demo';
+import { ThreeColumnLayout } from '@/widgets/three-column-layout';
+import { SectionsSidebar } from '@/widgets/sections-sidebar';
+import { FiltersSidebar } from '@/widgets/filters-sidebar';
+import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
+import { ContactFormSidebar } from '@/widgets/contact-form-sidebar';
+import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar';
+import { PageHeader } from '@/shared/ui/page-header';
+import { Card } from '@/shared/ui/card';
+import { PostsIcon } from '@/shared/ui/icons';
 
 export default function Home() {
+    const leftSidebar = (
+        <>
+            <SectionsSidebar />
+            <FiltersSidebar />
+        </>
+    );
+
+    const rightSidebar = (
+        <>
+            <FastActionsSidebar />
+            <ContactFormSidebar />
+            <QuestionnaireSidebar />
+        </>
+    );
+
+    const mockPosts = [
+        { id: 1, title: "Introduction to React 19", category: "Technology", date: "2 days ago" },
+        { id: 2, title: "Machine Learning Basics", category: "Science", date: "1 week ago" },
+        { id: 3, title: "Business Strategies 2024", category: "Business", date: "3 days ago" },
+        { id: 4, title: "Design Systems Guide", category: "Design", date: "5 days ago" },
+        { id: 5, title: "Web Performance Tips", category: "Technology", date: "1 day ago" },
+        { id: 6, title: "Data Analysis Methods", category: "Science", date: "4 days ago" }
+    ];
+
     return (
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 max-w-2xl mx-auto">
+        <ThreeColumnLayout 
+            leftSidebar={leftSidebar} 
+            rightSidebar={rightSidebar}
+        >
+            <div className="space-y-12">
+                {/* Demo Components */}
+                <div className="space-y-8 max-w-2xl mx-auto">
                     <CounterDemo />
                     <UserDemo />
                     <PopupDemo />
                     <ToastDemo />
                 </div>
+
+                {/* Posts Section */}
+                <div className="space-y-6">
+                    <PageHeader
+                        icon={<PostsIcon size={24} />}
+                        iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+                        title="Posts (3-Column Demo)"
+                        description="Example of how the posts page would look with sidebar blocks"
+                    />
+
+                    {/* Mock Posts Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {mockPosts.map((post) => (
+                            <Card key={post.id} className="cursor-pointer hover:shadow-lg transition-all duration-200">
+                                <div className="space-y-3">
+                                    <h3 className="font-semibold text-lg">{post.title}</h3>
+                                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                                        <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs">
+                                            {post.category}
+                                        </span>
+                                        <span>{post.date}</span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt...
+                                    </p>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
             </div>
-        </div>
+        </ThreeColumnLayout>
     );
 }
