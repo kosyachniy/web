@@ -85,8 +85,8 @@ export const metadata: Metadata = {
     },
     manifest: '/manifest.json',
     icons: {
-        icon: '/logo.svg',
-        shortcut: '/logo.svg',
+        icon: '/icon.svg',
+        shortcut: '/icon.svg',
         apple: '/logo.svg',
     },
 };
@@ -128,7 +128,7 @@ export default async function LocaleLayout({
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                 <meta name="apple-mobile-web-app-title" content="Web" />
-                <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+                <link rel="icon" type="image/svg+xml" href="/icon.svg" />
                 <link rel="apple-touch-icon" href="/logo.svg" />
             </head>
             <body
