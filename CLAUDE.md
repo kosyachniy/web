@@ -17,6 +17,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - **Consistent border-radius**: use `rounded-[0.75rem]` for small/inside elements (buttons, inputs, dropdown items, avatars) and `rounded-[1rem]` for big/outside elements (cards, dialogs, containers). Never use `rounded-sm`, `rounded-md`, or `rounded-lg`.
 - **No borders, use backgrounds/shadows**: never use `border` classes. Small components (buttons, inputs, tags) use colored or gray backgrounds. Big components (cards, dialogs, containers) use shadows with white/background colors since they contain small components with colored backgrounds.
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text.
+- **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG. All icons must be solid/filled style (no outlined icons).
 - **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances.
 - **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.).
 

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { FaTimes } from "react-icons/fa"
+import { CloseIcon } from "./icons"
 
 import { cn } from "@/shared/lib/utils"
 
@@ -62,7 +62,7 @@ function DialogContent({
             >
                 {children}
                 <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-4 top-4 rounded-[0.75rem] opacity-70 hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none">
-                    <FaTimes className="size-4" />
+                    <CloseIcon size={16} />
                     <span className="sr-only">Close</span>
                 </DialogPrimitive.Close>
             </DialogPrimitive.Content>

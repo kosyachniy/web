@@ -91,15 +91,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             description={<BreadcrumbDescription breadcrumbs={breadcrumbs} />}
           />
 
-          {/* Category Description (if exists) */}
-          {category.description && (
-            <div className="mb-8">
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {category.description}
-              </p>
-            </div>
-          )}
-
           {/* Subcategory Navigation */}
           {subcategories.length > 0 && (
             <SubcategoryNavigation 
@@ -118,6 +109,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 className="object-cover"
                 priority
               />
+            </div>
+          )}
+
+          {/* Category Description (if exists) */}
+          {category.description && (
+            <div className="mb-8">
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {category.description}
+              </p>
             </div>
           )}
 

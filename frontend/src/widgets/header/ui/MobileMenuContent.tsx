@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { ThemeSwitcher } from '@/shared/components/layout';
 import LanguageSwitcher from '@/features/navigation/components/LanguageSwitcher';
 import { UserProfileDropdown } from '@/widgets/user-profile';
-import { PostsIcon, SpaceIcon, HubIcon, CatalogIcon, HomeIcon } from '@/shared/ui/icons';
+import { PostsIcon, SpaceIcon, HubIcon, CatalogIcon, HomeIcon, SearchIcon } from '@/shared/ui/icons';
 import { useRouter } from '@/i18n/routing';
 
 interface MobileMenuContentProps {
@@ -70,19 +70,7 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                                 type="submit"
                                 className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                             >
-                                <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
-                                </svg>
+                                <SearchIcon size={16} />
                             </button>
                         </form>
                     </div>

@@ -4,6 +4,7 @@ import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
 import { cn } from "@/shared/lib/utils"
+import { UserIcon } from "./icons"
 
 function Avatar({
   className,
@@ -42,11 +43,13 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-[0.75rem]",
+        "bg-muted flex size-full items-center justify-center rounded-[0.75rem] text-muted-foreground",
         className
       )}
       {...props}
-    />
+    >
+      <UserIcon size={16} />
+    </AvatarPrimitive.Fallback>
   )
 }
 

@@ -7,6 +7,7 @@ import { getPosts } from '@/entities/post';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { useToastActions } from '@/shared/hooks/useToast';
+import { AlertIcon, SearchIcon, LoadingIcon } from '@/shared/ui/icons';
 
 interface PostsGridProps {
     initialPosts?: Post[];
@@ -130,11 +131,7 @@ export function PostsGrid({
         return (
             <div className="text-center py-12">
                 <div className="text-red-500 mb-4">
-                    <svg className="w-12 h-12 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
+                    <AlertIcon size={48} className="mx-auto mb-4" />
                     <p className="text-lg font-medium">Failed to load posts</p>
                     <p className="text-sm text-muted-foreground mt-2">{error}</p>
                 </div>
@@ -161,10 +158,7 @@ export function PostsGrid({
             {posts.length === 0 ? (
                 <div className="text-center py-12">
                     <div className="text-muted-foreground">
-                        <svg className="w-12 h-12 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.35-4.35" />
-                        </svg>
+                        <SearchIcon size={48} className="mx-auto mb-4" />
                         <p className="text-lg">No posts found</p>
                         {search && (
                             <p className="text-sm mt-2">
@@ -197,10 +191,7 @@ export function PostsGrid({
                             >
                                 {loadingMore ? (
                                     <>
-                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4" viewBox="0 0 24 24">
-                                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" className="opacity-25" />
-                                            <path fill="currentColor" className="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                        </svg>
+                                        <LoadingIcon size={16} className="animate-spin -ml-1 mr-2" />
                                         Loading...
                                     </>
                                 ) : (

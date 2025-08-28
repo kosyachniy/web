@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Post } from '@/entities/post';
 import Image from 'next/image';
 import Link from 'next/link';
+import { EyeIcon } from '@/shared/ui/icons';
 
 interface PostCardProps {
     post: Post;
@@ -78,10 +79,7 @@ export function PostCard({ post }: PostCardProps) {
 
                         {post.views && (
                             <span className="flex items-center gap-1">
-                                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                    <circle cx="12" cy="12" r="3" />
-                                </svg>
+                                <EyeIcon size={12} />
                                 {post.views}
                             </span>
                         )}

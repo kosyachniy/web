@@ -32,7 +32,17 @@ import {
   FaQuoteRight,
   FaPaperclip,
   FaSun,
-  FaFolderOpen
+  FaFolderOpen,
+  FaSearch,
+  FaBars,
+  FaTimes,
+  FaSpinner,
+  FaEye,
+  FaUsers,
+  FaExclamationTriangle,
+  FaCheck,
+  FaChevronRight,
+  FaCircle
 } from "react-icons/fa"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -178,4 +188,45 @@ export function ShieldIcon({ size = 16, ...props }: IconProps) {
 
 export function RocketIcon({ size = 16, ...props }: IconProps) {
   return <FaRocket size={size} {...props} />
+}
+
+// Search and navigation icons
+export function SearchIcon({ size = 16, ...props }: IconProps) {
+  return <FaSearch size={size} {...props} />
+}
+
+export function MenuIcon({ size = 16, ...props }: IconProps) {
+  return <FaBars size={size} {...props} />
+}
+
+export function CloseIcon({ size = 16, ...props }: IconProps) {
+  return <FaTimes size={size} {...props} />
+}
+
+export function LoadingIcon({ size = 16, ...props }: IconProps) {
+  return <FaSpinner size={size} {...props} />
+}
+
+export function EyeIcon({ size = 16, ...props }: IconProps) {
+  return <FaEye size={size} {...props} />
+}
+
+export function UsersIcon({ size = 16, ...props }: IconProps) {
+  return <FaUsers size={size} {...props} />
+}
+
+export function AlertIcon({ size = 16, ...props }: IconProps) {
+  return <FaExclamationTriangle size={size} {...props} />
+}
+
+export function CheckIcon({ size = 16, ...props }: IconProps) {
+  return <FaCheck size={size} {...props} />
+}
+
+export function ChevronRightIcon({ size = 16, ...props }: IconProps) {
+  return <FaChevronRight size={size} {...props} />
+}
+
+export function CircleIcon({ size = 16, ...props }: IconProps) {
+  return <FaCircle size={size} {...props} />
 }

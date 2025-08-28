@@ -1,7 +1,7 @@
 import { AdminLayout } from '@/widgets/admin-layout';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
-import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { PageHeader } from '@/shared/ui/page-header';
 import { IconButton } from '@/shared/ui/icon-button';
 import { AdminIcon, AddIcon } from '@/shared/ui/icons';
@@ -36,7 +36,8 @@ export default function AdminUsersPage() {
               <div className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarImage src="" alt="John Doe" />
+                    <AvatarFallback />
                   </Avatar>
                   <div>
                     <h3 className="font-medium">John Doe</h3>
@@ -52,7 +53,8 @@ export default function AdminUsersPage() {
               <div className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback>JS</AvatarFallback>
+                    <AvatarImage src="" alt="Jane Smith" />
+                    <AvatarFallback />
                   </Avatar>
                   <div>
                     <h3 className="font-medium">Jane Smith</h3>
@@ -68,7 +70,8 @@ export default function AdminUsersPage() {
               <div className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback>MW</AvatarFallback>
+                    <AvatarImage src="" alt="Mike Wilson" />
+                    <AvatarFallback />
                   </Avatar>
                   <div>
                     <h3 className="font-medium">Mike Wilson</h3>

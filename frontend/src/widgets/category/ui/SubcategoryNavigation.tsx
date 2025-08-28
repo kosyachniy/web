@@ -31,7 +31,7 @@ export function SubcategoryNavigation({
               variant="outline"
               size="sm"
               asChild
-              className="hover:bg-primary hover:text-primary-foreground transition-colors"
+              className="hover:bg-primary hover:text-white dark:hover:text-white transition-colors"
             >
               <Link href={`/posts/${subcategory.url}`}>
                 {subcategory.title}
