@@ -22,7 +22,7 @@ export function CounterDemo() {
                     title={t('title')}
                     description={t('description')}
                 />
-                
+
                 <div className="space-y-6">
                     <div className="text-center">
                         <div className="text-6xl font-bold text-primary mb-6">
@@ -63,16 +63,6 @@ export function CounterDemo() {
                             {t('reset')}
                         </Button>
                     </div>
-
-                    <Box variant="muted" size="default">
-                        <h3 className="font-semibold mb-2">Redux Integration:</h3>
-                        <div className="text-sm text-muted-foreground space-y-2">
-                            <p><code>useAppSelector(state =&gt; state.counter.value)</code> - Read counter state</p>
-                            <p><code>dispatch(increment())</code> - Increase by 1</p>
-                            <p><code>dispatch(incrementByAmount(5))</code> - Increase by specific amount</p>
-                            <p><code>dispatch(reset())</code> - Reset to 0</p>
-                        </div>
-                    </Box>
                 </div>
             </Box>
         </div>

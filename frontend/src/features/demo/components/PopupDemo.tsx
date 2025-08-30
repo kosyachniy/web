@@ -168,17 +168,6 @@ export default function PopupDemo() {
                             Full Screen Popup
                         </Button>
                     </div>
-
-                    <Box variant="muted" size="default">
-                        <h3 className="font-semibold mb-2">Usage Examples:</h3>
-                        <div className="text-sm text-muted-foreground space-y-2">
-                            <p><code>await alert(&#123;message: &apos;Hello!&apos;&#125;)</code> - Simple alert</p>
-                            <p><code>const confirmed = await confirm(&#123;message: &apos;Sure?&apos;&#125;)</code> - Confirmation</p>
-                            <p><code>success(&apos;Done!&apos;)</code> - Success notification</p>
-                            <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
-                            <p><code>show(&#123;children: &lt;Custom/&gt;&#125;)</code> - Custom content</p>
-                        </div>
-                    </Box>
                 </div>
             </Box>
         </div>

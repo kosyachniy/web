@@ -1,7 +1,8 @@
 'use client'
 
 import { Provider } from 'react-redux'
-import { store } from '@/shared/stores/store'
+import { PersistGate } from 'redux-persist/integration/react'
+import { store, persistor } from '@/shared/stores/store'
 
 export function ReduxProvider({
     children,
@@ -10,7 +11,9 @@ export function ReduxProvider({
 }) {
     return (
         <Provider store={store}>
-            {children}
+            <PersistGate loading={null} persistor={persistor}>
+                {children}
+            </PersistGate>
         </Provider>
     )
 }

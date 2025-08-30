@@ -53,7 +53,7 @@ export function UserDemo() {
                     title={t('title')}
                     description={t('description')}
                 />
-                
+
                 <div className="space-y-6">
                     {/* Current Settings Display */}
                     <Box variant="muted" size="default">
@@ -120,20 +120,6 @@ export function UserDemo() {
                             ))}
                         </div>
                     </div>
-
-                    {/* Usage Examples */}
-                    <Box variant="muted" size="default">
-                        <h3 className="font-semibold mb-2">Redux Integration:</h3>
-                        <div className="text-sm text-muted-foreground space-y-2">
-                            <p><code>useAppSelector(state =&gt; state.userSettings)</code> - Read state</p>
-                            <p><code>dispatch(setLanguage(&apos;en&apos;))</code> - Update language</p>
-                            <p><code>dispatch(setTheme(&apos;dark&apos;))</code> - Update theme</p>
-                            <p className="flex items-center gap-2 mt-3 text-muted-foreground">
-                                <SaveIcon size={16} />
-                                <strong>Persistent:</strong> Settings automatically save to localStorage
-                            </p>
-                        </div>
-                    </Box>
                 </div>
             </Box>
         </div>

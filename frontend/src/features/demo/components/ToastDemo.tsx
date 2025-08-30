@@ -219,17 +219,6 @@ export default function ToastDemo() {
                             </div>
                         </div>
                     </Box>
-
-                    <Box variant="muted" size="default">
-                        <h3 className="font-semibold mb-2">Usage Examples:</h3>
-                        <div className="text-sm text-muted-foreground space-y-2">
-                            <p><code>success(&apos;Saved!&apos;)</code> - Success notification</p>
-                            <p><code>error(&apos;Failed!&apos;)</code> - Error notification</p>
-                            <p><code>loading(&apos;Processing...&apos;)</code> - Loading state</p>
-                            <p><code>promise(apiCall, &#123;...&#125;)</code> - Promise-based</p>
-                            <p><code>toast(&apos;Message&apos;, &#123;action: &#123;...&#125;&#125;)</code> - With action</p>
-                        </div>
-                    </Box>
                 </div>
             </Box>
         </div>

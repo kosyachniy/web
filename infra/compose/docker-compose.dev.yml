@@ -19,10 +19,13 @@ services:
       NODE_ENV: development
       NEXT_PUBLIC_API: http://localhost/api/
       NEXT_PUBLIC_WEB: http://localhost/
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
     volumes:
       # For hot reload in development
       - ../../frontend:/app
-      # Exclude to avoid conflicts
+      # Exclude to avoid conflicts and cache issues
       - /app/node_modules
       - /app/.next
+      - /app/.swc
     command: npm run dev

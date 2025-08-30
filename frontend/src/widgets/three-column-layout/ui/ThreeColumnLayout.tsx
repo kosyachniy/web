@@ -17,7 +17,7 @@ export default function ThreeColumnLayout({
 }: ThreeColumnLayoutProps) {
   return (
     <div className={`min-h-screen bg-background ${className}`}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Sidebar */}
           {leftSidebar && (
