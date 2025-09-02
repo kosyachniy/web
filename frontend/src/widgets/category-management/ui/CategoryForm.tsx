@@ -59,10 +59,6 @@ const DEFAULT_COLORS = [
   '#6b7280', // gray
 ];
 
-const COMMON_ICONS = [
-  '📰', '💼', '🔬', '🎯', '💡', '🏠', '🚀', '⚽', '🎵', '🎨',
-  '📱', '💻', '🌍', '🏥', '🎓', '🍕', '🚗', '✈️', '📚', '🎬'
-];
 
 export function CategoryForm({ 
   category, 
@@ -102,7 +98,7 @@ export function CategoryForm({
       status: category?.status ?? 1,
       locale: category?.locale || 'en',
       icon: existingMetadata.icon || '',
-      color: existingMetadata.color || DEFAULT_COLORS[0],
+      color: existingMetadata.color || '',
     },
   });
 
@@ -357,6 +353,17 @@ export function CategoryForm({
           <div className="space-y-2">
             <Label>Category Color</Label>
             <div className="flex flex-wrap gap-2">
+              {/* No Color Option */}
+              <button
+                type="button"
+                className={`w-8 h-8 rounded-full border-2 bg-muted flex items-center justify-center ${
+                  !watchedColor ? 'border-foreground' : 'border-border'
+                }`}
+                onClick={() => setValue('color', '')}
+                title="No color"
+              >
+                <span className="text-xs text-muted-foreground">×</span>
+              </button>
               {DEFAULT_COLORS.map((color) => (
                 <button
                   key={color}
@@ -371,33 +378,31 @@ export function CategoryForm({
             </div>
             <Input 
               {...register('color')}
-              placeholder="#3b82f6"
+              placeholder="Optional: #3b82f6"
               className="w-32"
             />
           </div>
 
           {/* Icon Selection */}
           <div className="space-y-2">
-            <Label>Icon (Emoji or Text)</Label>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {COMMON_ICONS.map((icon) => (
-                <button
-                  key={icon}
-                  type="button"
-                  className={`p-2 rounded-[0.75rem] border ${
-                    watchedIcon === icon ? 'border-primary bg-primary/10' : 'border-border'
-                  }`}
-                  onClick={() => setValue('icon', icon)}
-                >
-                  {icon}
-                </button>
-              ))}
-            </div>
+            <Label>Icon (FontAwesome Key)</Label>
             <Input 
               {...register('icon')}
-              placeholder="📰 or any emoji/text"
+              placeholder="e.g: user, home, star"
               className="w-48"
             />
+            <p className="text-xs text-muted-foreground">
+              Enter a FontAwesome icon key (without 'fa-' prefix). Leave empty for no icon.
+              <br />
+              <a 
+                href="https://fontawesome.com/search?s=solid&ic=free&o=r" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Browse FontAwesome icons →
+              </a>
+            </p>
           </div>
 
           {/* Image Upload */}
@@ -448,11 +453,16 @@ export function CategoryForm({
         <Card className="p-4">
           <h3 className="font-semibold mb-4">Preview</h3>
           <div className="flex items-center space-x-3 p-3 border rounded-[0.75rem]">
-            <div 
-              className="w-4 h-4 rounded-full"
-              style={{ backgroundColor: watchedColor || DEFAULT_COLORS[0] }}
-            />
-            {watchedIcon && <span className="text-lg">{watchedIcon}</span>}
+            {watchedIcon ? (
+              <div className="w-6 h-6 flex items-center justify-center text-sm">
+                <i className={`fas fa-${watchedIcon}`} style={{ color: watchedColor || '#6b7280' }}></i>
+              </div>
+            ) : watchedColor ? (
+              <div 
+                className="w-4 h-4 rounded-full"
+                style={{ backgroundColor: watchedColor }}
+              />
+            ) : null}
             <div>
               <h4 className="font-medium">{watchedTitle || 'Category Title'}</h4>
               <p className="text-sm text-muted-foreground">

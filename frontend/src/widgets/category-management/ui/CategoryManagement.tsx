@@ -1,22 +1,31 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { Box } from '@/shared/ui/box';
-import { IconButton } from '@/shared/ui/icon-button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
-import { AddIcon, RefreshIcon } from '@/shared/ui/icons';
 import { useToast } from '@/widgets/feedback-system';
 import { getCategories, deleteCategory } from '@/entities/category/api/categoryApi';
 import type { Category } from '@/entities/category/model/category';
 import { CategoryForm } from './CategoryForm';
 import { CategoryTreeItem } from './CategoryTreeItem';
 
-export function CategoryManagement() {
+interface CategoryManagementProps {
+  isCreateModalOpen?: boolean;
+  onCreateModalChange?: (open: boolean) => void;
+  triggerRefresh?: number; // Used to trigger refresh from parent
+}
+
+export function CategoryManagement({ 
+  isCreateModalOpen = false, 
+  onCreateModalChange,
+  triggerRefresh 
+}: CategoryManagementProps = {}) {
+  const t = useTranslations('admin.categories');
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const { toast } = useToast();
 
@@ -44,8 +53,15 @@ export function CategoryManagement() {
     loadCategories();
   }, [loadCategories]);
 
+  // Trigger refresh from parent
+  useEffect(() => {
+    if (triggerRefresh) {
+      loadCategories();
+    }
+  }, [triggerRefresh, loadCategories]);
+
   const handleDeleteCategory = async (category: Category) => {
-    if (!confirm(`Are you sure you want to delete "${category.title}"? This will also delete all subcategories.`)) {
+    if (!confirm(t('deleteConfirm', { title: category.title }))) {
       return;
     }
 
@@ -54,7 +70,7 @@ export function CategoryManagement() {
       await loadCategories(); // Refresh the list
       toast({
         title: 'Success',
-        description: `Category "${category.title}" deleted successfully`,
+        description: t('deleteSuccess', { title: category.title }),
         variant: 'default',
       });
     } catch (err) {
@@ -72,13 +88,13 @@ export function CategoryManagement() {
   };
 
   const handleFormSuccess = async () => {
-    setIsCreateModalOpen(false);
+    if (onCreateModalChange) onCreateModalChange(false);
     setEditingCategory(null);
     await loadCategories();
   };
 
   const handleFormCancel = () => {
-    setIsCreateModalOpen(false);
+    if (onCreateModalChange) onCreateModalChange(false);
     setEditingCategory(null);
   };
 
@@ -87,7 +103,7 @@ export function CategoryManagement() {
       <Box>
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          <span className="ml-2">Loading categories...</span>
+          <span className="ml-2">{t('loading')}</span>
         </div>
       </Box>
     );
@@ -105,32 +121,36 @@ export function CategoryManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Action Bar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <IconButton
-            icon={<RefreshIcon size={16} />}
-            variant="outline"
-            onClick={loadCategories}
-            disabled={loading}
-          >
-            Refresh
-          </IconButton>
-        </div>
 
-        <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-          <DialogTrigger asChild>
-            <IconButton
-              icon={<AddIcon size={16} />}
-              variant="success"
-              responsive
-            >
-              Add Category
-            </IconButton>
-          </DialogTrigger>
+      {/* Categories Tree */}
+      <Box>
+        {categories.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <p>{t('noCategories')}</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {categories.map((category, index) => (
+              <CategoryTreeItem
+                key={category.id}
+                category={category}
+                level={0}
+                onEdit={handleEditCategory}
+                onDelete={handleDeleteCategory}
+                allCategories={categories}
+                isLast={index === categories.length - 1}
+              />
+            ))}
+          </div>
+        )}
+      </Box>
+
+      {/* Create Category Modal - controlled by parent */}
+      {onCreateModalChange && (
+        <Dialog open={isCreateModalOpen} onOpenChange={onCreateModalChange}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Create New Category</DialogTitle>
+              <DialogTitle>{t('createTitle')}</DialogTitle>
             </DialogHeader>
             <CategoryForm
               onSuccess={handleFormSuccess}
@@ -139,36 +159,14 @@ export function CategoryManagement() {
             />
           </DialogContent>
         </Dialog>
-      </div>
-
-      {/* Categories Tree */}
-      <Box>
-        {categories.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <p>No categories found. Create your first category to get started.</p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {categories.map((category) => (
-              <CategoryTreeItem
-                key={category.id}
-                category={category}
-                level={0}
-                onEdit={handleEditCategory}
-                onDelete={handleDeleteCategory}
-                allCategories={categories}
-              />
-            ))}
-          </div>
-        )}
-      </Box>
+      )}
 
       {/* Edit Category Modal */}
       {editingCategory && (
         <Dialog open={!!editingCategory} onOpenChange={() => setEditingCategory(null)}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Edit Category: {editingCategory.title}</DialogTitle>
+              <DialogTitle>{t('editTitle', { title: editingCategory.title })}</DialogTitle>
             </DialogHeader>
             <CategoryForm
               category={editingCategory}
