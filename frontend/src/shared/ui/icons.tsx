@@ -36,12 +36,15 @@ import {
   FaSearch,
   FaBars,
   FaTimes,
+  FaImage,
+  FaUpload,
   FaSpinner,
   FaEye,
   FaUsers,
   FaExclamationTriangle,
   FaCheck,
   FaChevronRight,
+  FaChevronDown,
   FaCircle,
   FaFilter,
   FaCalendarAlt,
@@ -246,6 +249,10 @@ export function ChevronRightIcon({ size = 16, ...props }: IconProps) {
   return <FaChevronRight size={size} {...props} />
 }
 
+export function ChevronDownIcon({ size = 16, ...props }: IconProps) {
+  return <FaChevronDown size={size} {...props} />
+}
+
 export function CircleIcon({ size = 16, ...props }: IconProps) {
   return <FaCircle size={size} {...props} />
 }
@@ -334,4 +341,21 @@ export function BellIcon({ size = 16, ...props }: IconProps) {
 
 export function WindowIcon({ size = 16, ...props }: IconProps) {
   return <FaWindowMaximize size={size} {...props} />
+}
+
+// Additional icons for category management
+export function ImageIcon({ size = 16, ...props }: IconProps) {
+  return <FaImage size={size} {...props} />
+}
+
+export function UploadIcon({ size = 16, ...props }: IconProps) {
+  return <FaUpload size={size} {...props} />
+}
+
+export function XIcon({ size = 16, ...props }: IconProps) {
+  return <FaTimes size={size} {...props} />
+}
+
+export function CancelIcon({ size = 16, ...props }: IconProps) {
+  return <FaTimes size={size} {...props} />
 }
