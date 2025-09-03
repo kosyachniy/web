@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { IconButton } from '@/shared/ui/icon-button';
 import { ButtonGroup } from '@/shared/ui/button-group';
@@ -122,10 +123,7 @@ export function CategoryTreeItem({
 
   return (
     <div>
-      <div className={cn(
-        "hover:bg-muted/30 transition-colors duration-200",
-        !(isLast && level === 0) && "border-b border-border/50"
-      )}>
+      <div className="hover:bg-muted/30 transition-colors duration-200">
         <div className="flex items-center justify-between p-2 py-3" style={{ marginLeft: `${paddingLeft}px` }}>
           <div className="flex items-center space-x-3 flex-1">
             {/* Expand/Collapse Button - Fixed Width Container */}
@@ -186,7 +184,12 @@ export function CategoryTreeItem({
               <div className="flex items-center space-x-2">
                 <span className="font-bold text-muted-foreground">#{category.id}</span>
                 <h3 className="font-medium truncate">{category.title}</h3>
-                <span className="text-xs text-muted-foreground">/{category.url}</span>
+                <Link 
+                  href={`/posts/${category.url}`}
+                  className="text-xs text-muted-foreground hover:text-primary transition-colors underline decoration-dashed underline-offset-2"
+                >
+                  /{category.url}
+                </Link>
                 {getStatusBadge(category.status || 1)}
               </div>
 
@@ -235,6 +238,14 @@ export function CategoryTreeItem({
             </IconButton>
           </ButtonGroup>
         </div>
+        
+        {/* Nested Separator Line */}
+        {!(isLast && level === 0) && (
+          <div 
+            className="h-px bg-border/50" 
+            style={{ marginLeft: `${paddingLeft + 8}px` }}
+          />
+        )}
       </div>
 
       {/* Subcategories */}
