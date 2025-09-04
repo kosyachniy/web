@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Box } from '@/shared/ui/box';
+import { SidebarCard } from '@/shared/ui/sidebar-card';
 import { IconButton } from '@/shared/ui/icon-button';
 import { ButtonGroup } from '@/shared/ui/button-group';
 import { 
@@ -36,13 +36,12 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
   ];
 
   return (
-    <Box size="default" className={className}>
+    <SidebarCard 
+      title={t('filters')}
+      icon={<FilterIcon size={20} />}
+      className={className}
+    >
       <div className="space-y-6">
-        <div className="flex items-center gap-2 mb-4">
-          <FilterIcon size={20} />
-          <h3 className="font-semibold text-lg">{t('filters')}</h3>
-        </div>
-
         {/* Time Filters */}
         <div className="space-y-3">
           <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
@@ -102,6 +101,6 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
           </ButtonGroup>
         </div>
       </div>
-    </Box>
+    </SidebarCard>
   );
 }

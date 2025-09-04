@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Card } from '@/shared/ui/card';
+import { SidebarCard } from '@/shared/ui/sidebar-card';
 import { Button } from '@/shared/ui/button';
 import { 
   BuildingIcon,
@@ -18,10 +18,11 @@ import {
 
 interface SectionsSidebarProps {
   className?: string;
+  title?: string;
+  icon?: React.ReactNode;
 }
 
-export default function SectionsSidebar({ className }: SectionsSidebarProps) {
-  const t = useTranslations('navigation');
+export default function SectionsSidebar({ className, title, icon }: SectionsSidebarProps) {
   const tBusiness = useTranslations('businessSections');
 
   const sections = [
@@ -78,9 +79,13 @@ export default function SectionsSidebar({ className }: SectionsSidebarProps) {
   ];
 
   return (
-    <Card className={`p-4 h-fit ${className}`}>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg mb-4">{t('sections')}</h3>
+    <SidebarCard 
+      title={title}
+      icon={icon}
+      className={className}
+      contentSpacing="sm"
+    >
+      <div className="space-y-1">
         {sections.map((section) => (
           <Button
             key={section.key}
@@ -92,6 +97,6 @@ export default function SectionsSidebar({ className }: SectionsSidebarProps) {
           </Button>
         ))}
       </div>
-    </Card>
+    </SidebarCard>
   );
 }

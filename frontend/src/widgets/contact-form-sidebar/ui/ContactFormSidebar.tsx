@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Box } from '@/shared/ui/box';
+import { SidebarCard } from '@/shared/ui/sidebar-card';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
 import { IconButton } from '@/shared/ui/icon-button';
@@ -30,12 +30,13 @@ export default function ContactFormSidebar({ className }: ContactFormSidebarProp
   };
 
   return (
-    <Box size="default" className={className}>
+    <SidebarCard
+      title={t('contactUs')}
+      icon={<MailIcon size={20} />}
+      className={className}
+      contentSpacing="sm"
+    >
       <div className="space-y-4">
-        <div className="flex items-center gap-2 mb-4">
-          <MailIcon size={20} />
-          <h3 className="font-semibold text-lg">{t('contactUs')}</h3>
-        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -89,6 +90,6 @@ export default function ContactFormSidebar({ className }: ContactFormSidebarProp
           </div>
         </div>
       </div>
-    </Box>
+    </SidebarCard>
   );
 }

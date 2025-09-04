@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Box } from '@/shared/ui/box';
+import { SidebarCard } from '@/shared/ui/sidebar-card';
 import { IconButton } from '@/shared/ui/icon-button';
 import { ButtonGroup } from '@/shared/ui/button-group';
 import { 
@@ -57,12 +57,12 @@ export default function FastActionsSidebar({ className }: FastActionsSidebarProp
   ];
 
   return (
-    <Box size="default" className={className}>
+    <SidebarCard
+      title={t('fastActions')}
+      icon={<LightningIcon size={20} />}
+      className={className}
+    >
       <div className="space-y-6">
-        <div className="flex items-center gap-2 mb-4">
-          <LightningIcon size={20} />
-          <h3 className="font-semibold text-lg">{t('fastActions')}</h3>
-        </div>
 
         {/* Primary Actions */}
         <div className="space-y-2">
@@ -122,6 +122,6 @@ export default function FastActionsSidebar({ className }: FastActionsSidebarProp
           </ButtonGroup>
         </div>
       </div>
-    </Box>
+    </SidebarCard>
   );
 }

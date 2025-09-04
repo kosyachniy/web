@@ -14,7 +14,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*).
 - **Always respect i18n**: all user-visible strings must go through the localization system (see *Frontend Guidelines*).
 - **Theme-aware UI**: every component must work in **light & dark** themes via tokens/CSS variables (no hardcoded colors).
-- **Consistent border-radius**: use `rounded-[0.75rem]` for small/inside elements (buttons, inputs, dropdown items, avatars) and `rounded-[1rem]` for big/outside elements (cards, dialogs, containers). Never use `rounded-sm`, `rounded-md`, or `rounded-lg`.
+- **Consistent border-radius**: use `rounded-[0.75rem]` for small/inside elements (buttons, inputs, dropdown items, avatars, standalone icon containers) and `rounded-[1rem]` for big/outside elements (cards, dialogs, containers, content boxes, major sections). Never use `rounded-sm`, `rounded-md`, or `rounded-lg`.
 - **No borders, use backgrounds/shadows**: never use `border` classes. Small components (buttons, inputs, tags) use colored or gray backgrounds. Big components (cards, dialogs, containers) use shadows with white/background colors since they contain small components with colored backgrounds.
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text.
 - **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG. All icons must be solid/filled style (no outlined icons).
@@ -309,14 +309,14 @@ Use typed helpers: `t('namespace.key')`.
 - **Opacity Standards**: Background opacity 15% (light) / 20% (dark), icon/text at full opacity for proper contrast.
 
 **Border-Radius Standards:**
-- **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for buttons, inputs, small boxes
-- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for cards, page containers, major sections
+- **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for inner and small elements: buttons, inputs, dropdown items, avatars, standalone icon containers, ...
+- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for outer and big elements: cards, page containers, major sections, content boxes, containers
 - **Consistency**: Never use other radius values without explicit design system approval
 
 **Three-Column Layout System:**
 - **ThreeColumnLayout**: Use `@/widgets/three-column-layout` for flexible 3-column layouts
 - **Adaptive Columns**: Layout automatically adjusts based on which sidebars are provided
-- **Sidebar Widgets**: Reusable sidebar components in `@/widgets/*-sidebar/` for consistent functionality
+- **Sidebar Widgets**: Reusable sidebar components in `@/widgets/*-sidebar/` using `SidebarCard` for consistent functionality
 - **Sticky Positioning**: Sidebars use `sticky top-20` (80px) to account for header height (`h-16` = 64px + spacing)
 - **Examples**:
   ```typescript
@@ -338,7 +338,15 @@ Use typed helpers: `t('namespace.key')`.
 - **Left Sidebar**: `SectionsSidebar` (navigation), `FiltersSidebar` (time/sort filters)
 - **Right Sidebar**: `FastActionsSidebar` (quick actions), `ContactFormSidebar`, `QuestionnaireSidebar`
 - **Admin Sidebar**: `AdminSidebar` (admin navigation) in `AdminLayout`
-- **All Sidebars**: Use `Box` containers with `sticky top-20` positioning to avoid header overlap
+- **All Sidebars**: Use `SidebarCard` component with `sticky top-20` positioning to avoid header overlap
+
+**SidebarCard Component:**
+- **Unified Sidebar Interface**: All sidebar widgets MUST use `SidebarCard` from `@/shared/ui/sidebar-card` for consistent styling and behavior
+- **Optional Header**: Title displays only when specified via `title` prop; when provided, shows with optional `icon` prop (icon size 20px)
+- **Header Pattern**: Use `<IconComponent size={20} />` with semantic icons for each sidebar type
+- **Content Spacing**: Control internal spacing with `contentSpacing` prop - `"sm"` (space-y-4), `"default"` (space-y-6), `"lg"` (space-y-8)
+- **No Manual Headers**: Never manually implement `<div className="flex items-center gap-2">` headers - use SidebarCard props
+- **Import**: `import { SidebarCard } from '@/shared/ui/sidebar-card'`
 
 **Sidebar & Layout Elements:**
 - **Box Wrapping**: Wrap sidebar elements (categories, filters, author info, etc.) in `Box` containers
@@ -442,6 +450,38 @@ Use typed helpers: `t('namespace.key')`.
     <YourMainContent />
   </div>
 </ThreeColumnLayout>
+
+// Good: SidebarCard with title and icon
+<SidebarCard
+  title={t('filters')}
+  icon={<FilterIcon size={20} />}
+  contentSpacing="default"
+>
+  <div className="space-y-6">
+    {/* Your sidebar content */}
+  </div>
+</SidebarCard>
+
+// Good: SidebarCard without header (admin navigation)
+<SidebarCard contentSpacing="sm">
+  <div className="space-y-1">
+    {menuItems.map((item) => (
+      <Button key={item.key} variant="ghost" className="w-full justify-start">
+        {item.icon}
+        {item.label}
+      </Button>
+    ))}
+  </div>
+</SidebarCard>
+
+// Good: SectionsSidebar with optional title and icon
+<SectionsSidebar
+  title={t('businessSections')}
+  icon={<BuildingIcon size={20} />}
+/>
+
+// Good: SectionsSidebar without title (clean navigation)
+<SectionsSidebar />
 ```
 
 #### State Management (Redux Toolkit)
@@ -546,6 +586,7 @@ Use typed helpers: `t('namespace.key')`.
 - **IconButton**: `import { IconButton } from '@/shared/ui/icon-button'` - Icon + text buttons with responsive behavior
 - **ButtonGroup**: `import { ButtonGroup } from '@/shared/ui/button-group'` - Logical grouping of related buttons
 - **Box**: `import { Box } from '@/shared/ui/box'` - Container with consistent styling (border, background, shadow)
+- **SidebarCard**: `import { SidebarCard } from '@/shared/ui/sidebar-card'` - Unified sidebar component with optional header (icon + title) and content spacing control
 - **PageHeader**: `import { PageHeader } from '@/shared/ui/page-header'` - Standard page header with square icon, title, description, actions
 - **ThreeColumnLayout**: `import { ThreeColumnLayout } from '@/widgets/three-column-layout'` - Flexible 3-column layout with adaptive sidebars
 - **Sidebar Widgets**:

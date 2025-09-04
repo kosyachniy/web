@@ -2,9 +2,9 @@
 
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
-import { Card } from '@/shared/ui/card';
+import { SidebarCard } from '@/shared/ui/sidebar-card';
 import { Button } from '@/shared/ui/button';
-import { CategoriesIcon, PostsIcon, UsersIcon } from '@/shared/ui/icons';
+import { EyeIcon, CategoriesIcon, PostsIcon, UsersIcon } from '@/shared/ui/icons';
 
 interface AdminSidebarProps {
   className?: string;
@@ -17,6 +17,12 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
   const pathname = usePathname();
 
   const menuItems = [
+    {
+      key: 'dashboard',
+      label: t('dashboard'),
+      href: '/admin' as const,
+      icon: <EyeIcon size={20} />
+    },
     {
       key: 'categories',
       label: t('categories'),
@@ -37,7 +43,7 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
     }
   ] as const;
 
-  const handleNavigation = (href: '/admin/categories' | '/admin/posts' | '/admin/users') => {
+  const handleNavigation = (href: '/admin' | '/admin/categories' | '/admin/posts' | '/admin/users') => {
     router.push(href);
   };
 
@@ -46,9 +52,8 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
   };
 
   return (
-    <Card className={`p-4 h-fit ${className}`}>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg mb-4">{t('admin_panel')}</h3>
+    <SidebarCard className={className} contentSpacing="sm">
+      <div className="space-y-1">
         {menuItems.map((item) => (
           <Button
             key={item.key}
@@ -65,6 +70,6 @@ export default function AdminSidebar({ className }: AdminSidebarProps) {
           </Button>
         ))}
       </div>
-    </Card>
+    </SidebarCard>
   );
 }

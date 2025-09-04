@@ -8,8 +8,8 @@ const boxVariants = cva(
   {
     variants: {
       size: {
-        sm: "rounded-[0.75rem] p-3",
-        default: "rounded-[0.75rem] p-4", 
+        sm: "rounded-[1rem] p-3",
+        default: "rounded-[1rem] p-4", 
         lg: "rounded-[1rem] p-6"
       },
       variant: {
