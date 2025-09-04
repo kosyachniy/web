@@ -8,6 +8,7 @@ import { IconButton } from '@/shared/ui/icon-button';
 import { ButtonGroup } from '@/shared/ui/button-group';
 import { Badge } from '@/shared/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui/collapsible';
+import { formatDate } from '@/shared/lib/date';
 import { iconContainerVariants } from '@/shared/ui/page-header';
 import { cn } from '@/shared/lib/utils';
 import {
@@ -119,9 +120,6 @@ export function CategoryTreeItem({
     return { className: colorClasses[level % colorClasses.length] };
   };
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleDateString();
-  };
 
   return (
     <div>

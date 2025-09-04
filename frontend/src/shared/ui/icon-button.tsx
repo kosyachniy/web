@@ -34,7 +34,7 @@ const iconButtonVariants = cva(
         icon: "size-9 rounded-[0.75rem]",
       },
       responsive: {
-        true: "sm:gap-2 gap-0 [&_.button-text]:hidden sm:[&_.button-text]:inline",
+        true: "xl:gap-2 gap-0 [&_.button-text]:hidden xl:[&_.button-text]:inline",
         false: ""
       }
     },

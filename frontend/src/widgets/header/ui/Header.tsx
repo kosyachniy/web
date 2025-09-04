@@ -58,7 +58,7 @@ export default function Header() {
                             <Input
                                 name="search"
                                 placeholder={`${t('search')}...`}
-                                className="w-40 lg:w-80 pr-10"
+                                className="w-40 xl:w-80 pr-10"
                             />
                             <button
                                 type="submit"

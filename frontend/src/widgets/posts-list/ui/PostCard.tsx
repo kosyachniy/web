@@ -5,19 +5,13 @@ import { Post } from '@/entities/post';
 import Image from 'next/image';
 import Link from 'next/link';
 import { EyeIcon } from '@/shared/ui/icons';
+import { formatDate } from '@/shared/lib/date';
 
 interface PostCardProps {
     post: Post;
 }
 
 export function PostCard({ post }: PostCardProps) {
-    const formatDate = (timestamp: number) => {
-        return new Date(timestamp * 1000).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
-    };
 
     const stripHtml = (html: string) => {
         return html.replace(/<[^>]*>/g, '').substring(0, 150);

@@ -79,7 +79,7 @@ function PageHeader({
         </div>
       </div>
       {actions && (
-        <div className="flex items-start gap-2 shrink-0 mt-1">
+        <div className="flex items-center gap-2 shrink-0 mt-2.5">
           {actions}
         </div>
       )}

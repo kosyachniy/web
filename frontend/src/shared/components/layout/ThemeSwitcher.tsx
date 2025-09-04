@@ -59,7 +59,7 @@ export default function ThemeSwitcher({ className }: ThemeSwitcherProps = {}) {
                 >
                     <span>{getDisplayIcon()}</span>
                     <span className={className ? "" : "hidden lg:inline"}>
-                        {theme === 'system' ? `${t('system')} (${t(resolvedTheme || 'light')})` : t(theme)}
+                        {t(theme)}
                     </span>
                 </Button>
             </DropdownMenuTrigger>

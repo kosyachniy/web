@@ -18,7 +18,10 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - **No borders, use backgrounds/shadows**: never use `border` classes. Small components (buttons, inputs, tags) use colored or gray backgrounds. Big components (cards, dialogs, containers) use shadows with white/background colors since they contain small components with colored backgrounds.
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text.
 - **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG. All icons must be solid/filled style (no outlined icons).
+- **Icon + text pattern for interactive elements**: all buttons and interactive sections must start with icon, then localized title. Use `IconButton` with `responsive={true}` to hide text on screens below 1280px while keeping icon visible, preventing header overflow. Icon color matches text color (no separate icon coloring for buttons).
+- **Rounded square containers for standalone icons**: independent icons (avatars, PageHeader icons, category icons) must be displayed in rounded square containers (`rounded-[0.75rem]`). Icon is full opacity, background is low opacity (15%/20%). Default: `bg-muted text-muted-foreground`. Colored: use pattern `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400`.
 - **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances.
+- **Standardized date format**: all dates must use the format "%dd.%mm.%YYYY" (e.g., "01.01.2024") across frontend display, backend responses, and Telegram bot. No other date formats allowed.
 - **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.).
 
 ---
@@ -80,6 +83,13 @@ make logs-tg       # View Telegram bot logs
 - **Models**: MongoDB models in `models/` using `consys` library
 - **Services**: Middleware and utilities in `services/`
 - **Dependencies**: Uses `uv` for package management, defined in `pyproject.toml`
+
+#### **Request/Response Patterns**
+- **Categories Request**: `{"parent": 0, "status": 1, "locale": "en"}`
+- **Categories Response**: `{"categories": [{"id": 1, "title": "News", "url": "news", "categories": [...]}]}`
+- **Posts Request**: `{"category": 1, "limit": 12, "offset": 0, "search": "keyword"}`
+- **Posts Response**: `{"posts": [...], "count": 42}`
+- **Error Response**: `{"detail": "Error message"}` with appropriate HTTP status
 
 ### Frontend Architecture (Feature-Sliced Design)
 
@@ -200,6 +210,12 @@ make up-prod     # Production: base + prod.yml
 make up-base     # Infrastructure: base.yml only
 ```
 
+#### **Hot Reload Configuration**
+- **Local Development**: Volume mounting + Next.js file watching with polling
+- **Frontend**: `development` stage with `npm run dev`
+- **Backend**: Volume mounting + uvicorn `--reload` flag
+- **File Watching**: Next.js configured with webpack polling for Docker compatibility
+
 ### Frontend Guidelines
 
 #### **Path Aliases**
@@ -241,7 +257,7 @@ Use typed helpers: `t('namespace.key')`.
 
 **Button & Link Pattern:**
 - **Icon + Text Structure**: All buttons and links MUST start with an icon, followed by localized text (e.g., `+ Add Category`)
-- **Responsive Design**: Use `IconButton` with `responsive={true}` for adaptive behavior - show only icon on small screens, icon + text on larger screens
+- **Responsive Design**: Use `IconButton` with `responsive={true}` for adaptive behavior - show only icon below 1280px, icon + text at 1280px and above
 - **Components**: Use `IconButton` from `@/shared/ui/icon-button` instead of plain `Button` for new implementations
 
 **Cursor & Interaction:**
@@ -284,6 +300,13 @@ Use typed helpers: `t('namespace.key')`.
 - **Shared Borders**: Grouped buttons share common border-radius and are visually connected
 - **Semantic Colors**: Use appropriate colors for actions (red for delete, green for add, etc.)
 - **Examples**: Edit + Delete, Upvote + Downvote, Save + Cancel
+
+**Icon & Color Styling:**
+- **Interactive Elements (Buttons/Links)**: Icon color MUST match text color - no separate icon coloring. Use `IconButton` with `responsive={true}` for adaptive text hiding (below 1280px shows icons only, 1280px+ shows icons + text).
+- **Standalone Icon Containers**: Independent icons (avatars, PageHeader, category icons) MUST use rounded square containers (`rounded-[0.75rem]`). Icon at full opacity, background at low opacity.
+- **Default Icon Styling**: `bg-muted text-muted-foreground` for neutral/default standalone icons.
+- **Colored Icon Pattern**: `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400` for themed icons.
+- **Opacity Standards**: Background opacity 15% (light) / 20% (dark), icon/text at full opacity for proper contrast.
 
 **Border-Radius Standards:**
 - **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for buttons, inputs, small boxes
@@ -368,6 +391,20 @@ Use typed helpers: `t('namespace.key')`.
   title={t('userSettings.title')}
   description={t('userSettings.description')}
 />
+
+// Good: Default muted icon container for neutral elements
+<div className="bg-muted text-muted-foreground w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
+  <UserIcon size={20} />
+</div>
+
+// Good: Interactive button - icon color matches text, responsive text hiding
+<IconButton
+  icon={<AddIcon size={16} />}
+  variant="success"
+  responsive={true}
+>
+  Add
+</IconButton>
 
 // Good: Content wrapped in Box with nested structure
 <Box size="lg">
