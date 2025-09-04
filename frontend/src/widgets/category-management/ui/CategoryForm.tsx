@@ -392,7 +392,7 @@ export function CategoryForm({
               className="w-48"
             />
             <p className="text-xs text-muted-foreground">
-              Enter a FontAwesome icon key (without 'fa-' prefix). Leave empty for no icon.
+              Enter a FontAwesome icon key (without &apos;fa-&apos; prefix). Leave empty for no icon.
               <br />
               <a 
                 href="https://fontawesome.com/search?s=solid&ic=free&o=r" 

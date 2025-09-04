@@ -28,6 +28,7 @@ interface CategoryTreeItemProps {
   onAddSubcategory?: (parentCategory: Category) => void;
   allCategories: Category[];
   isLast?: boolean;
+  isFirst?: boolean;
 }
 
 interface CategoryMetadata {
@@ -43,7 +44,8 @@ export function CategoryTreeItem({
   onDelete,
   onAddSubcategory,
   allCategories,
-  isLast = false
+  isLast = false, // eslint-disable-line @typescript-eslint/no-unused-vars
+  isFirst = false
 }: CategoryTreeItemProps) {
   const t = useTranslations('admin.categories');
   const [isExpanded, setIsExpanded] = useState(true); // Expand all categories by default
@@ -123,9 +125,20 @@ export function CategoryTreeItem({
 
   return (
     <div>
+      {/* Separator Line BEFORE category - shorter for deeper levels */}
+      {!(level === 0 && isFirst) && (
+        <div 
+          className="h-px bg-border/50" 
+          style={{ 
+            marginLeft: `${level * 24 + 8}px`,
+            width: `calc(100% - ${level * 32 + 16}px)`
+          }}
+        />
+      )}
+      
       <div className="hover:bg-muted/30 transition-colors duration-200">
-        <div className="flex items-center justify-between p-2 py-3" style={{ marginLeft: `${paddingLeft}px` }}>
-          <div className="flex items-center space-x-3 flex-1">
+        <div className="flex items-center justify-between p-2 py-3 min-w-0" style={{ marginLeft: `${paddingLeft}px` }}>
+          <div className="flex items-center space-x-3 flex-1 min-w-0">
             {/* Expand/Collapse Button - Fixed Width Container */}
             <div className="w-8 flex items-center justify-center">
               {hasSubcategories && (
@@ -162,9 +175,9 @@ export function CategoryTreeItem({
               />
             ) : null}
 
-            {/* Category Image */}
+            {/* Category Image - Hidden on mobile */}
             {category.image ? (
-              <div className="w-10 h-10 rounded-[0.75rem] overflow-hidden bg-muted">
+              <div className="w-10 h-10 rounded-[0.75rem] overflow-hidden bg-muted hidden md:flex">
                 <Image
                   src={category.image}
                   alt={category.title}
@@ -174,15 +187,15 @@ export function CategoryTreeItem({
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 rounded-[0.75rem] bg-muted flex items-center justify-center">
+              <div className="w-10 h-10 rounded-[0.75rem] bg-muted flex items-center justify-center hidden md:flex">
                 <ImageIcon size={16} className="text-muted-foreground" />
               </div>
             )}
 
             {/* Category Info */}
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 overflow-hidden">
               <div className="flex items-center space-x-2">
-                <span className="font-bold text-muted-foreground">#{category.id}</span>
+                <span className="font-bold text-muted-foreground hidden md:inline">#{category.id}</span>
                 <h3 className="font-medium truncate">{category.title}</h3>
                 <Link 
                   href={`/posts/${category.url}`}
@@ -190,10 +203,12 @@ export function CategoryTreeItem({
                 >
                   /{category.url}
                 </Link>
-                {getStatusBadge(category.status || 1)}
+                <div className="hidden md:block">
+                  {getStatusBadge(category.status || 1)}
+                </div>
               </div>
 
-              <div className="flex items-center text-sm text-muted-foreground mt-1">
+              <div className="flex items-center text-sm text-muted-foreground mt-1 hidden md:flex">
                 <span>{t('created')}: {formatDate(category.created || 0)}</span>
                 {hasSubcategories && (
                   <>
@@ -206,17 +221,20 @@ export function CategoryTreeItem({
           </div>
 
           {/* Actions */}
-          <ButtonGroup>
+          <div className="flex-shrink-0">
+            <ButtonGroup>
             {onAddSubcategory && (
-              <IconButton
-                variant="outline"
-                size="sm"
-                icon={<AddIcon size={12} />}
-                onClick={() => onAddSubcategory(category)}
-                responsive
-              >
-                {t('addSub')}
-              </IconButton>
+              <div className="hidden md:block">
+                <IconButton
+                  variant="outline"
+                  size="sm"
+                  icon={<AddIcon size={12} />}
+                  onClick={() => onAddSubcategory(category)}
+                  responsive
+                >
+                  {t('addSub')}
+                </IconButton>
+              </div>
             )}
             <IconButton
               variant="outline"
@@ -236,22 +254,15 @@ export function CategoryTreeItem({
             >
               {t('delete')}
             </IconButton>
-          </ButtonGroup>
+            </ButtonGroup>
+          </div>
         </div>
-        
-        {/* Nested Separator Line */}
-        {!(isLast && level === 0) && (
-          <div 
-            className="h-px bg-border/50" 
-            style={{ marginLeft: `${paddingLeft + 8}px` }}
-          />
-        )}
       </div>
 
       {/* Subcategories */}
       {hasSubcategories && (
         <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
-          <CollapsibleContent className="space-y-2">
+          <CollapsibleContent>
             {category.categories!.map((subcategory, index) => (
               <CategoryTreeItem
                 key={subcategory.id}
@@ -262,6 +273,7 @@ export function CategoryTreeItem({
                 onAddSubcategory={onAddSubcategory}
                 allCategories={allCategories}
                 isLast={index === category.categories!.length - 1}
+                isFirst={false}
               />
             ))}
           </CollapsibleContent>

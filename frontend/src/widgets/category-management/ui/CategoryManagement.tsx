@@ -129,7 +129,7 @@ export function CategoryManagement({
             <p>{t('noCategories')}</p>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div>
             {categories.map((category, index) => (
               <CategoryTreeItem
                 key={category.id}
@@ -139,6 +139,7 @@ export function CategoryManagement({
                 onDelete={handleDeleteCategory}
                 allCategories={categories}
                 isLast={index === categories.length - 1}
+                isFirst={index === 0}
               />
             ))}
           </div>
