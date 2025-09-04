@@ -129,7 +129,12 @@
         "ig": "Instagram",
         "twi": "Twitter",
         "yt": "YouTube",
-        "in": "LinkedIn"
+        "in": "LinkedIn",
+        "followUs": "关注我们",
+        "jobs": "工作机会",
+        "partners": "合作伙伴",
+        "faqSupport": "常见问题与支持",
+        "faq": "常见问题"
     },
     "profile": {
         "login": "登录",

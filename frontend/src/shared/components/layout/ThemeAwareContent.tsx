@@ -3,6 +3,7 @@
 import { useTheme } from '@/providers/ThemeProvider';
 import LoadingScreen from './LoadingScreen';
 import { Header } from '@/widgets/header';
+import { Footer } from '@/widgets/footer';
 
 interface ThemeAwareContentProps {
     children: React.ReactNode;
@@ -17,6 +18,7 @@ export default function ThemeAwareContent({ children }: ThemeAwareContentProps) 
             <main className="min-h-screen">
                 {children}
             </main>
+            <Footer />
         </LoadingScreen>
     );
 }

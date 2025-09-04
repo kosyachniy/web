@@ -129,7 +129,12 @@
         "ig": "Instagram",
         "twi": "Twitter",
         "yt": "YouTube",
-        "in": "LinkedIn"
+        "in": "LinkedIn",
+        "followUs": "Подпишись на нас",
+        "jobs": "Вакансии",
+        "partners": "Партнёры",
+        "faqSupport": "Вопросы и поддержка",
+        "faq": "Вопросы"
     },
     "profile": {
         "login": "Логин",

@@ -129,7 +129,12 @@
         "ig": "Instagram",
         "twi": "Twitter",
         "yt": "YouTube",
-        "in": "LinkedIn"
+        "in": "LinkedIn",
+        "followUs": "Síguenos",
+        "jobs": "Empleos",
+        "partners": "Socios",
+        "faqSupport": "FAQ y Soporte",
+        "faq": "Preguntas Frecuentes"
     },
     "profile": {
         "login": "Inicio de sesión",

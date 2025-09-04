@@ -64,7 +64,19 @@ import {
   FaDollarSign,
   FaCalculator,
   FaBell,
-  FaWindowMaximize
+  FaWindowMaximize,
+  FaTelegramPlane,
+  FaYoutube,
+  FaInstagram,
+  FaFacebookF,
+  FaLinkedinIn,
+  FaTwitter,
+  FaVk,
+  FaTiktok,
+  FaCopyright,
+  FaGavel,
+  FaQuestionCircle as FaFaqIcon,
+  FaBriefcase
 } from "react-icons/fa"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -358,4 +370,58 @@ export function XIcon({ size = 16, ...props }: IconProps) {
 
 export function CancelIcon({ size = 16, ...props }: IconProps) {
   return <FaTimes size={size} {...props} />
+}
+
+// Social Media Icons
+export function TelegramIcon({ size = 16, ...props }: IconProps) {
+  return <FaTelegramPlane size={size} {...props} />
+}
+
+export function YoutubeIcon({ size = 16, ...props }: IconProps) {
+  return <FaYoutube size={size} {...props} />
+}
+
+export function InstagramIcon({ size = 16, ...props }: IconProps) {
+  return <FaInstagram size={size} {...props} />
+}
+
+export function FacebookIcon({ size = 16, ...props }: IconProps) {
+  return <FaFacebookF size={size} {...props} />
+}
+
+export function LinkedinIcon({ size = 16, ...props }: IconProps) {
+  return <FaLinkedinIn size={size} {...props} />
+}
+
+export function TwitterIcon({ size = 16, ...props }: IconProps) {
+  return <FaTwitter size={size} {...props} />
+}
+
+export function TwitterXIcon({ size = 16, ...props }: IconProps) {
+  return <FaTwitter size={size} {...props} />
+}
+
+export function VkIcon({ size = 16, ...props }: IconProps) {
+  return <FaVk size={size} {...props} />
+}
+
+export function TiktokIcon({ size = 16, ...props }: IconProps) {
+  return <FaTiktok size={size} {...props} />
+}
+
+// Footer Related Icons
+export function CopyrightIcon({ size = 16, ...props }: IconProps) {
+  return <FaCopyright size={size} {...props} />
+}
+
+export function LegalIcon({ size = 16, ...props }: IconProps) {
+  return <FaGavel size={size} {...props} />
+}
+
+export function FaqIcon({ size = 16, ...props }: IconProps) {
+  return <FaFaqIcon size={size} {...props} />
+}
+
+export function CompanyIcon({ size = 16, ...props }: IconProps) {
+  return <FaBriefcase size={size} {...props} />
 }
