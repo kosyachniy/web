@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
+import { Box } from '@/shared/ui/box';
 import { HubIcon, MessageIcon, QuestionIcon, BookIcon, PaletteIcon, ConstructionIcon } from '@/shared/ui/icons';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,7 +34,7 @@ export default async function HubPage() {
                             
                             <div className="space-y-4">
                                 {/* General Discussion */}
-                                <div className="bg-card rounded-lg border p-6">
+                                <Box size="lg">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
@@ -49,10 +50,10 @@ export default async function HubPage() {
                                             <div className="text-xs text-muted-foreground">Last: 2h ago</div>
                                         </div>
                                     </div>
-                                </div>
+                                </Box>
 
                                 {/* Q&A */}
-                                <div className="bg-card rounded-lg border p-6">
+                                <Box size="lg">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
@@ -68,10 +69,10 @@ export default async function HubPage() {
                                             <div className="text-xs text-muted-foreground">Last: 1h ago</div>
                                         </div>
                                     </div>
-                                </div>
+                                </Box>
 
                                 {/* Tutorials */}
-                                <div className="bg-card rounded-lg border p-6">
+                                <Box size="lg">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
@@ -87,10 +88,10 @@ export default async function HubPage() {
                                             <div className="text-xs text-muted-foreground">Last: 3h ago</div>
                                         </div>
                                     </div>
-                                </div>
+                                </Box>
 
                                 {/* Showcase */}
-                                <div className="bg-card rounded-lg border p-6">
+                                <Box size="lg">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -106,7 +107,7 @@ export default async function HubPage() {
                                             <div className="text-xs text-muted-foreground">Last: 5h ago</div>
                                         </div>
                                     </div>
-                                </div>
+                                </Box>
                             </div>
                         </div>
 
@@ -114,7 +115,7 @@ export default async function HubPage() {
                         <div className="lg:col-span-1">
                             <div className="space-y-6">
                                 {/* Community Stats */}
-                                <div className="bg-card rounded-lg border p-6">
+                                <Box size="lg">
                                     <h3 className="font-semibold mb-4">Community Stats</h3>
                                     <div className="space-y-3">
                                         <div className="flex justify-between">
@@ -134,10 +135,10 @@ export default async function HubPage() {
                                             <span className="font-medium text-green-600">234</span>
                                         </div>
                                     </div>
-                                </div>
+                                </Box>
 
                                 {/* Recent Activity */}
-                                <div className="bg-card rounded-lg border p-6">
+                                <Box size="lg">
                                     <h3 className="font-semibold mb-4">Recent Activity</h3>
                                     <div className="space-y-3 text-sm">
                                         <div className="text-muted-foreground">
@@ -150,7 +151,7 @@ export default async function HubPage() {
                                             <span className="font-medium">Designer</span> shared a new tutorial
                                         </div>
                                     </div>
-                                </div>
+                                </Box>
                             </div>
                         </div>
                     </div>

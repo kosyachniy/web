@@ -20,6 +20,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG. All icons must be solid/filled style (no outlined icons).
 - **Icon + text pattern for interactive elements**: all buttons and interactive sections must start with icon, then localized title. Use `IconButton` with `responsive={true}` to hide text on screens below 1280px while keeping icon visible, preventing header overflow. Icon color matches text color (no separate icon coloring for buttons).
 - **Rounded square containers for standalone icons**: independent icons (avatars, PageHeader icons, category icons) must be displayed in rounded square containers (`rounded-[0.75rem]`). Icon is full opacity, background is low opacity (15%/20%). Default: `bg-muted text-muted-foreground`. Colored: use pattern `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400`.
+- **Special symbols vs icons**: use Unicode symbols (like ©, ®, ™) directly as text characters, not as icons with backgrounds. Only use icon components for interactive or decorative visual elements. Copyright symbols, trademark symbols, and similar special characters should be rendered as plain text without icon styling or containers.
 - **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances.
 - **Standardized date format**: all dates must use the format "%dd.%mm.%YYYY" (e.g., "01.01.2024") across frontend display, backend responses, and Telegram bot. No other date formats allowed.
 - **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.).
@@ -246,7 +247,7 @@ Use typed helpers: `t('namespace.key')`.
 - Import: `import { ToastProvider, useToast } from '@/widgets/feedback-system'`
 
 #### Components / UI
-- **Pure UI**: Use `@/shared/ui` for basic components (buttons, inputs, cards)
+- **Pure UI**: Use `@/shared/ui` for basic components (buttons, inputs, boxes)
 - **Complex UI**: Create widgets for compositions (header, lists, forms)
 - **Feature UI**: Components specific to one feature go in `features/*/ui/`
 - Prefer *Server Components* by default; mark clients with `"use client"`.
@@ -266,7 +267,7 @@ Use typed helpers: `t('namespace.key')`.
 
 **Box & Container Styling:**
 - **Box Containers**: Every content block MUST be wrapped in a `Box` component from `@/shared/ui/box`
-- **Box vs Card**: Use `Box` for main content containers; `Card` only for specific card-like content (post cards, admin lists)
+- **Universal Container**: Use `Box` for ALL content containers - it's the single standard for all content blocks, sections, and containers
 - **Size Variants**:
   - `size="sm"` - Small containers with minimal padding (`p-3`)
   - `size="default"` - Standard containers with normal padding (`p-4`)
@@ -275,7 +276,7 @@ Use typed helpers: `t('namespace.key')`.
   - `variant="default"` - Standard white/card background with shadow
   - `variant="muted"` - Subtle muted background for secondary content
   - `variant="accent"` - Accent background for highlighted content
-- **Consistent Styling**: All boxes have consistent border-radius, shadow, and theme-aware backgrounds
+- **Consistent Styling**: All boxes have consistent border-radius (`rounded-[1rem]`), unified shadow system (`0 0.25rem 1.5rem rgba(0,0,0,0.12)` with theme adaptation), and theme-aware backgrounds
 
 **Page Structure:**
 - **Page Headers**: Every page and component section MUST start with `PageHeader` component:
@@ -310,7 +311,7 @@ Use typed helpers: `t('namespace.key')`.
 
 **Border-Radius Standards:**
 - **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for inner and small elements: buttons, inputs, dropdown items, avatars, standalone icon containers, ...
-- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for outer and big elements: cards, page containers, major sections, content boxes, containers
+- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for outer and big elements: boxes, page containers, major sections, content boxes, containers
 - **Consistency**: Never use other radius values without explicit design system approval
 
 **Three-Column Layout System:**
@@ -355,9 +356,9 @@ Use typed helpers: `t('namespace.key')`.
 
 **When to Use PageHeader:**
 - **Always Required**: Every page (`/posts`, `/space`, `/hub`, `/catalog`, admin pages)
-- **Demo Components**: Replace `CardHeader` with `PageHeader` in demo components
+- **Demo Components**: Use `PageHeader` for all demo component headers
 - **Content Sections**: Any section that has title + description should use PageHeader
-- **Never Use**: Custom `<header>`, standalone `<h1>`, `CardHeader` for main sections
+- **Never Use**: Custom `<header>`, standalone `<h1>` when PageHeader should be used
 
 **Component Examples:**
 ```typescript
@@ -570,7 +571,7 @@ Use typed helpers: `t('namespace.key')`.
 
 | Type | Location | Example |
 |------|----------|---------|
-| Basic UI (Button, Input, Card) | `shared/ui/` | `shared/ui/button.tsx` |
+| Basic UI (Button, Input, Box) | `shared/ui/` | `shared/ui/button.tsx` |
 | Enhanced UI (IconButton, Box, PageHeader) | `shared/ui/` | `shared/ui/icon-button.tsx` |
 | Layout Systems (Three-Column) | `widgets/three-column-layout/` | `widgets/three-column-layout/ui/ThreeColumnLayout.tsx` |
 | Sidebar Widgets (Sections, Filters, Actions) | `widgets/*-sidebar/` | `widgets/sections-sidebar/ui/SectionsSidebar.tsx` |

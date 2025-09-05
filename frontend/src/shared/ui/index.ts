@@ -3,7 +3,6 @@ export * from './avatar';
 export * from './box';
 export * from './button';
 export * from './button-group';
-export * from './card';
 export * from './dialog';
 export * from './dropdown-menu';
 export * from './icon-button';

@@ -131,6 +131,16 @@
   --tw-space-x-reverse: 1;
 }
 
+/* Custom shadow utilities */
+.shadow-box {
+  box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.dark .shadow-box {
+  box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.25);
+}
+
 /* Line clamp utilities */
 .line-clamp-2 {
   overflow: hidden;

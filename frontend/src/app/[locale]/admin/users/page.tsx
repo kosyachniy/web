@@ -1,5 +1,5 @@
 import { AdminLayout } from '@/widgets/admin-layout';
-import { Card } from '@/shared/ui/card';
+import { Box } from '@/shared/ui/box';
 import { Button } from '@/shared/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { PageHeader } from '@/shared/ui/page-header';
@@ -27,7 +27,7 @@ export default function AdminUsersPage() {
         />
 
         {/* Users List */}
-        <Card className="p-6">
+        <Box size="lg">
           <div className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">All Users</h2>
             
@@ -85,7 +85,7 @@ export default function AdminUsersPage() {
               </div>
             </div>
           </div>
-        </Card>
+        </Box>
       </div>
     </AdminLayout>
   );

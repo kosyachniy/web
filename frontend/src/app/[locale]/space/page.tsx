@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
+import { Box } from '@/shared/ui/box';
 import { SpaceIcon, WhiteboardIcon, VideoIcon, MessageIcon, BuildingIcon, ConstructionIcon } from '@/shared/ui/icons';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,7 +29,7 @@ export default async function SpacePage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Whiteboard */}
-                        <div className="bg-card rounded-lg border p-6">
+                        <Box size="lg">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
                                     <WhiteboardIcon size={24} />
@@ -44,10 +45,10 @@ export default async function SpacePage() {
                             <div className="bg-muted rounded p-3 text-sm text-muted-foreground">
                                 Coming soon: Real-time collaboration tools
                             </div>
-                        </div>
+                        </Box>
 
                         {/* Video Chat */}
-                        <div className="bg-card rounded-lg border p-6">
+                        <Box size="lg">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
                                     <VideoIcon size={24} />
@@ -63,10 +64,10 @@ export default async function SpacePage() {
                             <div className="bg-muted rounded p-3 text-sm text-muted-foreground">
                                 Coming soon: Video conferencing integration
                             </div>
-                        </div>
+                        </Box>
 
                         {/* Messenger */}
-                        <div className="bg-card rounded-lg border p-6">
+                        <Box size="lg">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
                                     <MessageIcon size={24} />
@@ -82,10 +83,10 @@ export default async function SpacePage() {
                             <div className="bg-muted rounded p-3 text-sm text-muted-foreground">
                                 Coming soon: Real-time messaging system
                             </div>
-                        </div>
+                        </Box>
 
                         {/* Shared Workspace */}
-                        <div className="bg-card rounded-lg border p-6">
+                        <Box size="lg">
                             <div className="flex items-center mb-4">
                                 <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mr-4">
                                     <BuildingIcon size={24} />
@@ -101,7 +102,7 @@ export default async function SpacePage() {
                             <div className="bg-muted rounded p-3 text-sm text-muted-foreground">
                                 Coming soon: Project management tools
                             </div>
-                        </div>
+                        </Box>
                     </div>
 
                     <div className="mt-12">

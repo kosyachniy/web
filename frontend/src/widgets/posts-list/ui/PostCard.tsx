@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Box } from '@/shared/ui/box';
 import { Post } from '@/entities/post';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ export function PostCard({ post }: PostCardProps) {
 
     return (
         <Link href={`/posts/${post.url}`} className="block group">
-            <Card className="h-full overflow-hidden hover:shadow-lg transition-all duration-200 group-hover:scale-[1.02]">
+            <Box className="h-full overflow-hidden hover:scale-[1.02] transition-all duration-200">
                 {post.image && (
                     <div className="relative w-full h-48 overflow-hidden">
                         <Image
@@ -32,21 +32,21 @@ export function PostCard({ post }: PostCardProps) {
                     </div>
                 )}
 
-                <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors">
+                <div className="p-4 pb-2">
+                    <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors mb-2">
                         {post.title}
-                    </CardTitle>
+                    </h3>
 
                     {post.category_data && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                             <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs">
                                 {post.category_data.title}
                             </span>
                         </div>
                     )}
-                </CardHeader>
+                </div>
 
-                <CardContent className="pt-0">
+                <div className="px-4 pb-4 pt-0">
                     <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
                         {post.description || stripHtml(post.data)}
                     </p>
@@ -78,8 +78,8 @@ export function PostCard({ post }: PostCardProps) {
                             </span>
                         )}
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </Box>
         </Link>
     );
 }

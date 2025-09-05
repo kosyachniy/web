@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/lib/utils"
 
 const boxVariants = cva(
-  "bg-background shadow-md",
+  "bg-background shadow-box",
   {
     variants: {
       size: {

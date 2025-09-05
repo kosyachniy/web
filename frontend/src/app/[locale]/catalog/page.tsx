@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
+import { Box } from '@/shared/ui/box';
 import { CatalogIcon, BoxIcon, RefreshIcon } from '@/shared/ui/icons';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +30,7 @@ export default async function CatalogPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                         {/* Filters Sidebar */}
                         <div className="lg:col-span-1">
-                            <div className="bg-card rounded-lg border p-6 sticky top-4">
+                            <Box size="lg" className="sticky top-4">
                                 <h3 className="font-semibold mb-4">Filters</h3>
                                 
                                 {/* Categories */}
@@ -104,7 +105,7 @@ export default async function CatalogPage() {
                                 <div className="bg-muted rounded p-3 text-sm text-muted-foreground">
                                     Advanced filters coming soon
                                 </div>
-                            </div>
+                            </Box>
                         </div>
 
                         {/* Products Grid */}
@@ -131,7 +132,7 @@ export default async function CatalogPage() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {/* Sample Product Cards */}
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                                    <div key={item} className="bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow">
+                                    <Box key={item} className="overflow-hidden hover:scale-[1.02] transition-all duration-200">
                                         <div className="h-48 bg-muted flex items-center justify-center">
                                             <BoxIcon size={48} />
                                         </div>
@@ -152,7 +153,7 @@ export default async function CatalogPage() {
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Box>
                                 ))}
                             </div>
 

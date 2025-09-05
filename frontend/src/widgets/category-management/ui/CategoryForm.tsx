@@ -10,7 +10,7 @@ import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { Card } from '@/shared/ui/card';
+import { Box } from '@/shared/ui/box';
 import { SaveIcon, CancelIcon, UploadIcon, XIcon } from '@/shared/ui/icons';
 import { useToast } from '@/widgets/feedback-system';
 import { createCategory, updateCategory } from '@/entities/category/api/categoryApi';
@@ -243,7 +243,7 @@ export function CategoryForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Basic Information */}
-      <Card className="p-4">
+      <Box size="default">
         <h3 className="font-semibold mb-4">Basic Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -283,10 +283,10 @@ export function CategoryForm({
             )}
           </div>
         </div>
-      </Card>
+      </Box>
 
       {/* Hierarchy & Settings */}
-      <Card className="p-4">
+      <Box size="default">
         <h3 className="font-semibold mb-4">Hierarchy & Settings</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
@@ -343,10 +343,10 @@ export function CategoryForm({
             </Select>
           </div>
         </div>
-      </Card>
+      </Box>
 
       {/* Visual Customization */}
-      <Card className="p-4">
+      <Box size="default">
         <h3 className="font-semibold mb-4">Visual Customization</h3>
         <div className="space-y-4">
           {/* Color Selection */}
@@ -446,11 +446,11 @@ export function CategoryForm({
             )}
           </div>
         </div>
-      </Card>
+      </Box>
 
       {/* Preview */}
       {(watchedTitle || watchedIcon || watchedColor) && (
-        <Card className="p-4">
+        <Box size="default">
           <h3 className="font-semibold mb-4">Preview</h3>
           <div className="flex items-center space-x-3 p-3 border rounded-[0.75rem]">
             {watchedIcon ? (
@@ -470,7 +470,7 @@ export function CategoryForm({
               </p>
             </div>
           </div>
-        </Card>
+        </Box>
       )}
 
       {/* Form Actions */}

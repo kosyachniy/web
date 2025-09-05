@@ -1,5 +1,5 @@
 import { AdminLayout } from '@/widgets/admin-layout';
-import { Card } from '@/shared/ui/card';
+import { Box } from '@/shared/ui/box';
 import { IconButton } from '@/shared/ui/icon-button';
 import { ButtonGroup } from '@/shared/ui/button-group';
 import { PageHeader } from '@/shared/ui/page-header';
@@ -27,7 +27,7 @@ export default function AdminPostsPage() {
         />
 
         {/* Posts List */}
-        <Card>
+        <Box>
           <div className="space-y-2">
             
             {/* Sample Posts */}
@@ -117,7 +117,7 @@ export default function AdminPostsPage() {
               </div>
             </div>
           </div>
-        </Card>
+        </Box>
       </div>
     </AdminLayout>
   );

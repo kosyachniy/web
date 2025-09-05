@@ -1,5 +1,5 @@
 import { AdminLayout } from '@/widgets/admin-layout';
-import { Card } from '@/shared/ui/card';
+import { Box } from '@/shared/ui/box';
 import { PageHeader } from '@/shared/ui/page-header';
 import { AdminIcon } from '@/shared/ui/icons';
 
@@ -16,27 +16,27 @@ export default function AdminPage() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="p-4">
+          <Box size="default">
             <h3 className="font-semibold text-lg mb-2">Categories</h3>
             <p className="text-2xl font-bold text-primary">12</p>
             <p className="text-sm text-muted-foreground">Total categories</p>
-          </Card>
+          </Box>
           
-          <Card className="p-4">
+          <Box size="default">
             <h3 className="font-semibold text-lg mb-2">Posts</h3>
             <p className="text-2xl font-bold text-primary">847</p>
             <p className="text-sm text-muted-foreground">Published posts</p>
-          </Card>
+          </Box>
           
-          <Card className="p-4">
+          <Box size="default">
             <h3 className="font-semibold text-lg mb-2">Users</h3>
             <p className="text-2xl font-bold text-primary">1,234</p>
             <p className="text-sm text-muted-foreground">Registered users</p>
-          </Card>
+          </Box>
         </div>
 
         {/* Recent Activity */}
-        <Card className="p-6">
+        <Box size="lg">
           <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b">
@@ -61,7 +61,7 @@ export default function AdminPage() {
               <span className="text-sm text-muted-foreground">1 day ago</span>
             </div>
           </div>
-        </Card>
+        </Box>
       </div>
     </AdminLayout>
   );

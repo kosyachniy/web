@@ -8,7 +8,7 @@ import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
 import { ContactFormSidebar } from '@/widgets/contact-form-sidebar';
 import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar';
 import { PageHeader } from '@/shared/ui/page-header';
-import { Card } from '@/shared/ui/card';
+import { Box } from '@/shared/ui/box';
 import { PostsIcon } from '@/shared/ui/icons';
 
 export default function Home() {
@@ -62,7 +62,7 @@ export default function Home() {
                     {/* Mock Posts Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {mockPosts.map((post) => (
-                            <Card key={post.id} className="cursor-pointer hover:shadow-lg transition-all duration-200">
+                            <Box key={post.id} className="cursor-pointer hover:scale-[1.02] transition-all duration-200">
                                 <div className="space-y-3">
                                     <h3 className="font-semibold text-lg">{post.title}</h3>
                                     <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -75,7 +75,7 @@ export default function Home() {
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt...
                                     </p>
                                 </div>
-                            </Card>
+                            </Box>
                         ))}
                     </div>
                 </div>
