@@ -127,14 +127,17 @@
         "vk": "VKontakte",
         "fb": "Facebook",
         "ig": "Instagram",
-        "twi": "Twitter",
+        "twi": "X",
         "yt": "YouTube",
         "in": "LinkedIn",
         "followUs": "关注我们",
         "jobs": "工作机会",
         "partners": "合作伙伴",
         "faqSupport": "常见问题与支持",
-        "faq": "常见问题"
+        "faq": "常见问题",
+        "social": "社交媒体",
+        "location": "位置",
+        "settings": "设置"
     },
     "profile": {
         "login": "登录",

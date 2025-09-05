@@ -127,14 +127,17 @@
         "vk": "VKontakte",
         "fb": "Facebook",
         "ig": "Instagram",
-        "twi": "Twitter",
+        "twi": "X",
         "yt": "YouTube",
         "in": "LinkedIn",
         "followUs": "Síguenos",
         "jobs": "Empleos",
         "partners": "Socios",
         "faqSupport": "FAQ y Soporte",
-        "faq": "Preguntas Frecuentes"
+        "faq": "Preguntas Frecuentes",
+        "social": "Redes Sociales",
+        "location": "Ubicación",
+        "settings": "Configuración"
     },
     "profile": {
         "login": "Inicio de sesión",

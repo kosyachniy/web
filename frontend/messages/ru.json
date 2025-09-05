@@ -127,14 +127,17 @@
         "vk": "ВКонтакте",
         "fb": "Facebook",
         "ig": "Instagram",
-        "twi": "Twitter",
+        "twi": "X",
         "yt": "YouTube",
         "in": "LinkedIn",
         "followUs": "Подпишись на нас",
         "jobs": "Вакансии",
         "partners": "Партнёры",
         "faqSupport": "Вопросы и поддержка",
-        "faq": "Вопросы"
+        "faq": "Вопросы",
+        "social": "Социальные сети",
+        "location": "Местоположение",
+        "settings": "Настройки"
     },
     "profile": {
         "login": "Логин",

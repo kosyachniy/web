@@ -13,7 +13,6 @@ import {
   TwitterXIcon,
   FacebookIcon,
   LinkedinIcon,
-  CopyrightIcon,
   LegalIcon,
   FaqIcon,
   CompanyIcon,
@@ -24,14 +23,14 @@ import {
 const currentYear = new Date().getFullYear();
 
 const socialLinks = [
-  { name: 'Telegram', icon: TelegramIcon, url: '#', color: 'bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' },
-  { name: 'TikTok', icon: TiktokIcon, url: '#', color: 'bg-pink-500/15 text-pink-600 dark:bg-pink-500/20 dark:text-pink-400' },
-  { name: 'YouTube', icon: YoutubeIcon, url: '#', color: 'bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400' },
-  { name: 'Instagram', icon: InstagramIcon, url: '#', color: 'bg-gradient-to-br from-purple-600 via-pink-600 to-orange-600 text-white' },
-  { name: 'VK', icon: VkIcon, url: '#', color: 'bg-blue-600/15 text-blue-700 dark:bg-blue-600/20 dark:text-blue-300' },
-  { name: 'X', icon: TwitterXIcon, url: '#', color: 'bg-gray-500/15 text-gray-600 dark:bg-gray-500/20 dark:text-gray-400' },
-  { name: 'Facebook', icon: FacebookIcon, url: '#', color: 'bg-blue-700/15 text-blue-700 dark:bg-blue-700/20 dark:text-blue-300' },
-  { name: 'LinkedIn', icon: LinkedinIcon, url: '#', color: 'bg-blue-800/15 text-blue-800 dark:bg-blue-800/20 dark:text-blue-200' },
+  { name: 'Telegram', icon: TelegramIcon, url: '#', hoverColor: 'hover:bg-blue-500/15 hover:text-blue-600 dark:hover:bg-blue-500/20 dark:hover:text-blue-400' },
+  { name: 'TikTok', icon: TiktokIcon, url: '#', hoverColor: 'hover:bg-pink-500/15 hover:text-pink-600 dark:hover:bg-pink-500/20 dark:hover:text-pink-400' },
+  { name: 'YouTube', icon: YoutubeIcon, url: '#', hoverColor: 'hover:bg-red-500/15 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400' },
+  { name: 'Instagram', icon: InstagramIcon, url: '#', hoverColor: 'hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:text-white' },
+  { name: 'VK', icon: VkIcon, url: '#', hoverColor: 'hover:bg-blue-600/15 hover:text-blue-700 dark:hover:bg-blue-600/20 dark:hover:text-blue-300' },
+  { name: 'X', icon: TwitterXIcon, url: '#', hoverColor: 'hover:bg-gray-900/15 hover:text-gray-900 dark:hover:bg-gray-100/20 dark:hover:text-gray-100' },
+  { name: 'Facebook', icon: FacebookIcon, url: '#', hoverColor: 'hover:bg-blue-700/15 hover:text-blue-700 dark:hover:bg-blue-700/20 dark:hover:text-blue-300' },
+  { name: 'LinkedIn', icon: LinkedinIcon, url: '#', hoverColor: 'hover:bg-blue-800/15 hover:text-blue-800 dark:hover:bg-blue-800/20 dark:hover:text-blue-200' },
 ];
 
 export function Footer() {
@@ -42,8 +41,8 @@ export function Footer() {
   return (
     <footer className="bg-background border-t">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        {/* Main Footer Content - All integrated */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           
           {/* Brand & Rights Column */}
           <div className="space-y-4">
@@ -53,11 +52,13 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               {tBrand('description')}
             </p>
-            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-              <div className="bg-muted text-muted-foreground w-5 h-5 rounded-[0.75rem] flex items-center justify-center">
-                <CopyrightIcon size={12} />
-              </div>
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <span>©</span>
               <span>{currentYear} {t('rights')}</span>
+            </div>
+            <div className="pt-2 border-t border-border/40">
+              <h4 className="font-medium text-sm mb-2">{t('location')}</h4>
+              <p className="text-sm text-muted-foreground">{tBrand('address')}</p>
             </div>
           </div>
 
@@ -145,37 +146,27 @@ export function Footer() {
               </a>
             </nav>
           </div>
-        </div>
 
-        {/* Social Media Section */}
-        <div className="border-t pt-8 mb-8">
-          <h4 className="font-medium mb-4 text-center">{t('followUs')}</h4>
-          <div className="flex justify-center items-center gap-3 flex-wrap">
-            {socialLinks.map(({ name, icon: IconComponent, url, color }) => (
-              <a
-                key={name}
-                href={url}
-                className={`w-10 h-10 rounded-[0.75rem] flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer ${color}`}
-                title={name}
-              >
-                <IconComponent size={18} />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom Section with Controls */}
-        <div className="border-t pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            {/* Left: Brand Address */}
-            <div className="text-sm text-muted-foreground">
-              <span>{tBrand('address')}</span>
+          {/* Social & Controls Column */}
+          <div className="space-y-6 xl:col-span-1 lg:col-span-4 md:col-span-2">
+            {/* Social Icons */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {socialLinks.map(({ name, icon: IconComponent, url, hoverColor }) => (
+                <a
+                  key={name}
+                  href={url}
+                  className={`bg-muted text-muted-foreground w-9 h-9 rounded-[0.75rem] flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer ${hoverColor}`}
+                  title={name}
+                >
+                  <IconComponent size={16} />
+                </a>
+              ))}
             </div>
 
-            {/* Right: Theme & Language Switchers */}
-            <div className="flex items-center gap-3">
-              <ThemeSwitcher />
-              <LanguageSwitcher />
+            {/* Controls */}
+            <div className="flex flex-col gap-2">
+              <ThemeSwitcher className="w-full" />
+              <LanguageSwitcher className="w-full" />
             </div>
           </div>
         </div>
