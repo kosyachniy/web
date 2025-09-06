@@ -66,6 +66,7 @@ async def handler(
         "created",
         "updated",
         "status",
+        'category',
     }
     if extend:
         fields |= {

@@ -137,7 +137,16 @@
         "faq": "常见问题",
         "social": "社交媒体",
         "location": "位置",
-        "settings": "设置"
+        "settings": "设置",
+        "legal": "法律",
+        "company": "公司",
+        "support": "支持",
+        "privacy": "隐私政策",
+        "cookies": "Cookie 政策",
+        "offer": "服务条款",
+        "userAgreement": "用户协议",
+        "refund": "退款政策",
+        "rates": "价格"
     },
     "profile": {
         "login": "登录",

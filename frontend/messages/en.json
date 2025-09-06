@@ -137,7 +137,16 @@
         "faq": "FAQ",
         "social": "Social",
         "location": "Location",
-        "settings": "Settings"
+        "settings": "Settings",
+        "legal": "Legal",
+        "company": "Company",
+        "support": "Support",
+        "privacy": "Privacy Policy",
+        "cookies": "Cookie Policy",
+        "offer": "Terms of Service",
+        "userAgreement": "User Agreement",
+        "refund": "Refund Policy",
+        "rates": "Pricing"
     },
     "profile": {
         "login": "Login",

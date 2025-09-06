@@ -1,9 +1,8 @@
 import * as React from "react"
 import {
-  FaFileAlt,
   FaFolder,
   FaPlus,
-  FaPencilAlt,
+  FaPenToSquare,
   FaTrash,
   FaBolt,
   FaCrown,
@@ -12,42 +11,42 @@ import {
   FaUser,
   FaCreditCard,
   FaChartBar,
-  FaSignOutAlt,
-  FaShieldAlt,
+  FaRightFromBracket,
+  FaShield,
   FaChalkboard,
   FaVideo,
   FaComment,
   FaBuilding,
   FaBox,
-  FaHome,
+  FaHouse,
   FaRocket,
   FaBook,
   FaPalette,
   FaHammer,
-  FaSync,
-  FaShoppingCart,
-  FaCog,
-  FaQuestionCircle,
-  FaSave,
+  FaRotate,
+  FaCartShopping,
+  FaGear,
+  FaCircleQuestion,
+  FaFloppyDisk,
   FaQuoteRight,
   FaPaperclip,
   FaSun,
   FaFolderOpen,
-  FaSearch,
+  FaMagnifyingGlass,
   FaBars,
-  FaTimes,
+  FaXmark,
   FaImage,
-  FaUpload,
+  FaFileArrowUp,
   FaSpinner,
   FaEye,
   FaUsers,
-  FaExclamationTriangle,
+  FaTriangleExclamation,
   FaCheck,
   FaChevronRight,
   FaChevronDown,
   FaCircle,
   FaFilter,
-  FaCalendarAlt,
+  FaCalendarDays,
   FaTags,
   FaFire,
   FaClock,
@@ -57,7 +56,7 @@ import {
   FaPaperPlane,
   FaThumbsUp,
   FaThumbsDown,
-  FaCheckCircle,
+  FaCircleCheck,
   FaPhone,
   FaHandshake,
   FaBullhorn,
@@ -65,7 +64,7 @@ import {
   FaCalculator,
   FaBell,
   FaWindowMaximize,
-  FaTelegramPlane,
+  FaTelegram,
   FaYoutube,
   FaInstagram,
   FaFacebookF,
@@ -75,11 +74,20 @@ import {
   FaTiktok,
   FaCopyright,
   FaGavel,
-  FaQuestionCircle as FaFaqIcon,
+  FaCircleQuestion as FaFaqIcon,
   FaBriefcase,
   FaStar,
-  FaChevronLeft
-} from "react-icons/fa"
+  FaChevronLeft,
+  FaNewspaper,
+  FaXTwitter,
+  FaReddit,
+  FaCookie,
+  FaCircleInfo,
+  FaComments,
+  FaDollarSign as FaMoneyIcon,
+  FaRotateLeft,
+  FaLocationDot
+} from "react-icons/fa6"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number
@@ -87,7 +95,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 
 // Posts and content icons
 export function PostsIcon({ size = 16, ...props }: IconProps) {
-  return <FaFileAlt size={size} {...props} />
+  return <FaNewspaper size={size} {...props} />
 }
 
 export function CategoriesIcon({ size = 16, ...props }: IconProps) {
@@ -100,7 +108,7 @@ export function AddIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function EditIcon({ size = 16, ...props }: IconProps) {
-  return <FaPencilAlt size={size} {...props} />
+  return <FaPenToSquare size={size} {...props} />
 }
 
 export function DeleteIcon({ size = 16, ...props }: IconProps) {
@@ -108,16 +116,16 @@ export function DeleteIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function SaveIcon({ size = 16, ...props }: IconProps) {
-  return <FaSave size={size} {...props} />
+  return <FaFloppyDisk size={size} {...props} />
 }
 
 export function RefreshIcon({ size = 16, ...props }: IconProps) {
-  return <FaSync size={size} {...props} />
+  return <FaRotate size={size} {...props} />
 }
 
 // Navigation icons
 export function HomeIcon({ size = 16, ...props }: IconProps) {
-  return <FaHome size={size} {...props} />
+  return <FaHouse size={size} {...props} />
 }
 
 export function HubIcon({ size = 16, ...props }: IconProps) {
@@ -142,16 +150,16 @@ export function AdminIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function LogoutIcon({ size = 16, ...props }: IconProps) {
-  return <FaSignOutAlt size={size} {...props} />
+  return <FaRightFromBracket size={size} {...props} />
 }
 
 // UI and system icons
 export function SettingsIcon({ size = 16, ...props }: IconProps) {
-  return <FaCog size={size} {...props} />
+  return <FaGear size={size} {...props} />
 }
 
 export function QuestionIcon({ size = 16, ...props }: IconProps) {
-  return <FaQuestionCircle size={size} {...props} />
+  return <FaCircleQuestion size={size} {...props} />
 }
 
 export function DemoIcon({ size = 16, ...props }: IconProps) {
@@ -177,7 +185,7 @@ export function CreditCardIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function ShoppingIcon({ size = 16, ...props }: IconProps) {
-  return <FaShoppingCart size={size} {...props} />
+  return <FaCartShopping size={size} {...props} />
 }
 
 export function ChartIcon({ size = 16, ...props }: IconProps) {
@@ -219,7 +227,7 @@ export function BoxIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function ShieldIcon({ size = 16, ...props }: IconProps) {
-  return <FaShieldAlt size={size} {...props} />
+  return <FaShield size={size} {...props} />
 }
 
 export function RocketIcon({ size = 16, ...props }: IconProps) {
@@ -228,7 +236,7 @@ export function RocketIcon({ size = 16, ...props }: IconProps) {
 
 // Search and navigation icons
 export function SearchIcon({ size = 16, ...props }: IconProps) {
-  return <FaSearch size={size} {...props} />
+  return <FaMagnifyingGlass size={size} {...props} />
 }
 
 export function MenuIcon({ size = 16, ...props }: IconProps) {
@@ -236,7 +244,7 @@ export function MenuIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function CloseIcon({ size = 16, ...props }: IconProps) {
-  return <FaTimes size={size} {...props} />
+  return <FaXmark size={size} {...props} />
 }
 
 export function LoadingIcon({ size = 16, ...props }: IconProps) {
@@ -252,7 +260,7 @@ export function UsersIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function AlertIcon({ size = 16, ...props }: IconProps) {
-  return <FaExclamationTriangle size={size} {...props} />
+  return <FaTriangleExclamation size={size} {...props} />
 }
 
 export function CheckIcon({ size = 16, ...props }: IconProps) {
@@ -277,7 +285,7 @@ export function FilterIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function CalendarIcon({ size = 16, ...props }: IconProps) {
-  return <FaCalendarAlt size={size} {...props} />
+  return <FaCalendarDays size={size} {...props} />
 }
 
 export function TagIcon({ size = 16, ...props }: IconProps) {
@@ -324,7 +332,7 @@ export function ThumbsDownIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function CheckCircleIcon({ size = 16, ...props }: IconProps) {
-  return <FaCheckCircle size={size} {...props} />
+  return <FaCircleCheck size={size} {...props} />
 }
 
 // Business icons
@@ -363,20 +371,20 @@ export function ImageIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function UploadIcon({ size = 16, ...props }: IconProps) {
-  return <FaUpload size={size} {...props} />
+  return <FaFileArrowUp size={size} {...props} />
 }
 
 export function XIcon({ size = 16, ...props }: IconProps) {
-  return <FaTimes size={size} {...props} />
+  return <FaXmark size={size} {...props} />
 }
 
 export function CancelIcon({ size = 16, ...props }: IconProps) {
-  return <FaTimes size={size} {...props} />
+  return <FaXmark size={size} {...props} />
 }
 
 // Social Media Icons
 export function TelegramIcon({ size = 16, ...props }: IconProps) {
-  return <FaTelegramPlane size={size} {...props} />
+  return <FaTelegram size={size} {...props} />
 }
 
 export function YoutubeIcon({ size = 16, ...props }: IconProps) {
@@ -400,7 +408,7 @@ export function TwitterIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function TwitterXIcon({ size = 16, ...props }: IconProps) {
-  return <FaTwitter size={size} {...props} />
+  return <FaXTwitter size={size} {...props} />
 }
 
 export function VkIcon({ size = 16, ...props }: IconProps) {
@@ -409,6 +417,10 @@ export function VkIcon({ size = 16, ...props }: IconProps) {
 
 export function TiktokIcon({ size = 16, ...props }: IconProps) {
   return <FaTiktok size={size} {...props} />
+}
+
+export function RedditIcon({ size = 16, ...props }: IconProps) {
+  return <FaReddit size={size} {...props} />
 }
 
 // Footer Related Icons
@@ -438,4 +450,33 @@ export function ChevronLeftIcon({ size = 16, ...props }: IconProps) {
 
 export function ReviewsIcon({ size = 16, ...props }: IconProps) {
   return <FaComment size={size} {...props} />
+}
+
+// Additional footer icons
+export function CookieIcon({ size = 16, ...props }: IconProps) {
+  return <FaCookie size={size} {...props} />
+}
+
+export function AboutIcon({ size = 16, ...props }: IconProps) {
+  return <FaCircleInfo size={size} {...props} />
+}
+
+export function FeedbackIcon({ size = 16, ...props }: IconProps) {
+  return <FaComments size={size} {...props} />
+}
+
+export function NewsIcon({ size = 16, ...props }: IconProps) {
+  return <FaNewspaper size={size} {...props} />
+}
+
+export function RefundIcon({ size = 16, ...props }: IconProps) {
+  return <FaRotateLeft size={size} {...props} />
+}
+
+export function RatesIcon({ size = 16, ...props }: IconProps) {
+  return <FaMoneyIcon size={size} {...props} />
+}
+
+export function LocationIcon({ size = 16, ...props }: IconProps) {
+  return <FaLocationDot size={size} {...props} />
 }

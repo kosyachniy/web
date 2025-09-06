@@ -17,12 +17,7 @@ export function PostCard({ post }: PostCardProps) {
     };
 
     // Prepare filters for above title
-    const filters = [
-        {
-            icon: <CalendarIcon size={12} />,
-            value: formatDate(post.created)
-        }
-    ];
+    const filters = [];
 
     // Add category to filters if available
     if (post.category_data) {
@@ -39,6 +34,11 @@ export function PostCard({ post }: PostCardProps) {
             value: post.views.toString()
         });
     }
+
+    filters.push({
+        icon: <CalendarIcon size={12} />,
+        value: formatDate(post.created)
+    });
 
     // Prepare metadata for bottom (author only)
     const metadata: Array<{

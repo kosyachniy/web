@@ -137,7 +137,16 @@
         "faq": "Preguntas Frecuentes",
         "social": "Redes Sociales",
         "location": "Ubicación",
-        "settings": "Configuración"
+        "settings": "Configuración",
+        "legal": "Legal",
+        "company": "Empresa",
+        "support": "Soporte",
+        "privacy": "Política de Privacidad",
+        "cookies": "Política de Cookies",
+        "offer": "Términos de Servicio",
+        "userAgreement": "Acuerdo de Usuario",
+        "refund": "Política de Reembolso",
+        "rates": "Precios"
     },
     "profile": {
         "login": "Inicio de sesión",
