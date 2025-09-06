@@ -76,7 +76,9 @@ import {
   FaCopyright,
   FaGavel,
   FaQuestionCircle as FaFaqIcon,
-  FaBriefcase
+  FaBriefcase,
+  FaStar,
+  FaChevronLeft
 } from "react-icons/fa"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -424,4 +426,16 @@ export function FaqIcon({ size = 16, ...props }: IconProps) {
 
 export function CompanyIcon({ size = 16, ...props }: IconProps) {
   return <FaBriefcase size={size} {...props} />
+}
+
+export function StarIcon({ size = 16, ...props }: IconProps) {
+  return <FaStar size={size} {...props} />
+}
+
+export function ChevronLeftIcon({ size = 16, ...props }: IconProps) {
+  return <FaChevronLeft size={size} {...props} />
+}
+
+export function ReviewsIcon({ size = 16, ...props }: IconProps) {
+  return <FaComment size={size} {...props} />
 }

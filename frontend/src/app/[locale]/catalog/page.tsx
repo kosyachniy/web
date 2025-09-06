@@ -2,7 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { PageHeader } from '@/shared/ui/page-header';
 import { Box } from '@/shared/ui/box';
-import { CatalogIcon, BoxIcon, RefreshIcon } from '@/shared/ui/icons';
+import { CatalogIcon, RefreshIcon } from '@/shared/ui/icons';
+import { ProductsGrid } from '@/widgets/products-grid';
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('navigation');
@@ -129,33 +130,7 @@ export default async function CatalogPage() {
                             </div>
 
                             {/* Products Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {/* Sample Product Cards */}
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                                    <Box key={item} className="overflow-hidden hover:scale-[1.02] transition-all duration-200">
-                                        <div className="h-48 bg-muted flex items-center justify-center">
-                                            <BoxIcon size={48} />
-                                        </div>
-                                        <div className="p-4">
-                                            <h3 className="font-semibold mb-2">Sample Product {item}</h3>
-                                            <p className="text-muted-foreground text-sm mb-3">
-                                                High-quality product with excellent features and great value for money.
-                                            </p>
-                                            <div className="flex items-center justify-between">
-                                                <div>
-                                                    <span className="text-lg font-bold">${(Math.random() * 100 + 20).toFixed(2)}</span>
-                                                    <div className="flex items-center text-sm text-muted-foreground">
-                                                        ⭐⭐⭐⭐⭐ (4.{Math.floor(Math.random() * 9)})
-                                                    </div>
-                                                </div>
-                                                <button className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm">
-                                                    Add to Cart
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </Box>
-                                ))}
-                            </div>
+                            <ProductsGrid />
 
                             {/* Pagination */}
                             <div className="flex justify-center mt-8">

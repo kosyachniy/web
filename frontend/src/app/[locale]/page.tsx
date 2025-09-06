@@ -8,8 +8,8 @@ import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
 import { ContactFormSidebar } from '@/widgets/contact-form-sidebar';
 import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar';
 import { PageHeader } from '@/shared/ui/page-header';
-import { Box } from '@/shared/ui/box';
-import { PostsIcon } from '@/shared/ui/icons';
+import { Card } from '@/shared/ui/card';
+import { PostsIcon, TagIcon, CalendarIcon } from '@/shared/ui/icons';
 
 export default function Home() {
     const leftSidebar = (
@@ -62,20 +62,26 @@ export default function Home() {
                     {/* Mock Posts Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {mockPosts.map((post) => (
-                            <Box key={post.id} className="cursor-pointer hover:scale-[1.02] transition-all duration-200">
-                                <div className="space-y-3">
-                                    <h3 className="font-semibold text-lg">{post.title}</h3>
-                                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                                        <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs">
-                                            {post.category}
-                                        </span>
-                                        <span>{post.date}</span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt...
-                                    </p>
-                                </div>
-                            </Box>
+                            <Card 
+                                key={post.id}
+                                title={post.title}
+                                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt..."
+                                images={[]}
+                                filters={[
+                                    {
+                                        icon: <TagIcon size={12} />,
+                                        value: post.category
+                                    },
+                                    {
+                                        icon: <CalendarIcon size={12} />,
+                                        value: post.date
+                                    }
+                                ]}
+                                variant="default"
+                                onClick={() => {
+                                    console.log('Post clicked:', post.title);
+                                }}
+                            />
                         ))}
                     </div>
                 </div>
