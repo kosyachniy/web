@@ -1,21 +1,13 @@
-import { getTranslations } from 'next-intl/server';
-import { Metadata } from 'next';
+'use client';
+
+import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/shared/ui/page-header';
-import { Box } from '@/shared/ui/box';
 import { CatalogIcon, RefreshIcon } from '@/shared/ui/icons';
 import { ProductsGrid } from '@/widgets/products-grid';
+import { FiltersSidebar } from '@/widgets/filters-sidebar';
 
-export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations('navigation');
-    
-    return {
-        title: `${t('catalog')} - Products & Services`,
-        description: 'Browse our catalog of products and services with filters and search',
-    };
-}
-
-export default async function CatalogPage() {
-    const t = await getTranslations('navigation');
+export default function CatalogPage() {
+    const t = useTranslations('navigation');
 
     return (
         <div className="min-h-screen bg-background">
@@ -29,84 +21,9 @@ export default async function CatalogPage() {
                     />
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                        {/* Filters Sidebar */}
+                        {/* Advanced Filters Sidebar */}
                         <div className="lg:col-span-1">
-                            <Box size="lg" className="sticky top-4">
-                                <h3 className="font-semibold mb-4">Filters</h3>
-                                
-                                {/* Categories */}
-                                <div className="mb-6">
-                                    <h4 className="font-medium mb-2">Categories</h4>
-                                    <div className="space-y-2 text-sm">
-                                        <label className="flex items-center">
-                                            <input type="checkbox" className="mr-2" />
-                                            Electronics (45)
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="checkbox" className="mr-2" />
-                                            Clothing (32)
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="checkbox" className="mr-2" />
-                                            Home & Garden (28)
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="checkbox" className="mr-2" />
-                                            Books (19)
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="checkbox" className="mr-2" />
-                                            Sports (15)
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {/* Price Range */}
-                                <div className="mb-6">
-                                    <h4 className="font-medium mb-2">Price Range</h4>
-                                    <div className="space-y-2 text-sm">
-                                        <label className="flex items-center">
-                                            <input type="radio" name="price" className="mr-2" />
-                                            Under $25
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="radio" name="price" className="mr-2" />
-                                            $25 - $50
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="radio" name="price" className="mr-2" />
-                                            $50 - $100
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="radio" name="price" className="mr-2" />
-                                            Over $100
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {/* Rating */}
-                                <div className="mb-6">
-                                    <h4 className="font-medium mb-2">Rating</h4>
-                                    <div className="space-y-2 text-sm">
-                                        <label className="flex items-center">
-                                            <input type="radio" name="rating" className="mr-2" />
-                                            ⭐⭐⭐⭐⭐ (5 stars)
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="radio" name="rating" className="mr-2" />
-                                            ⭐⭐⭐⭐ (4+ stars)
-                                        </label>
-                                        <label className="flex items-center">
-                                            <input type="radio" name="rating" className="mr-2" />
-                                            ⭐⭐⭐ (3+ stars)
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div className="bg-muted rounded p-3 text-sm text-muted-foreground">
-                                    Advanced filters coming soon
-                                </div>
-                            </Box>
+                            <FiltersSidebar className="sticky top-20" />
                         </div>
 
                         {/* Products Grid */}

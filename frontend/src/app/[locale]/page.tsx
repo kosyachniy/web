@@ -3,7 +3,6 @@
 import { CounterDemo, UserDemo, PopupDemo, ToastDemo } from '@/features/demo';
 import { ThreeColumnLayout } from '@/widgets/three-column-layout';
 import { SectionsSidebar } from '@/widgets/sections-sidebar';
-import { FiltersSidebar } from '@/widgets/filters-sidebar';
 import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
 import { ContactFormSidebar } from '@/widgets/contact-form-sidebar';
 import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar';
@@ -15,7 +14,6 @@ export default function Home() {
     const leftSidebar = (
         <>
             <SectionsSidebar />
-            <FiltersSidebar />
         </>
     );
 

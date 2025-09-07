@@ -235,6 +235,135 @@ Use typed helpers: `t('namespace.key')`.
 - For server components, pass translated content via props; for client components, use the `useTranslations` hook.
 - Keys: `feature.scope.action` (e.g., `auth.login.error.invalidCredentials`).
 
+#### **Frontend Localization Workflow** ⚠️ **CRITICAL**
+
+**Supported Languages:** The project supports 5 languages with message files in `frontend/messages/`:
+- `en.json` (English - primary/source language)
+- `ar.json` (Arabic)
+- `es.json` (Spanish)
+- `ru.json` (Russian)
+- `zh.json` (Chinese)
+
+**Complete Localization Process:**
+1. **NEVER hardcode text strings** - All user-visible text MUST go through i18n system
+2. **Check ALL language files** - Before writing frontend code, check what keys already exist across all 5 language files
+3. **Add missing keys to ALL languages** - When adding new text, you MUST add the localization key to all 5 language files simultaneously
+4. **Maintain key consistency** - Use the same key structure across all language files
+5. **Meaningful translations** - Provide appropriate translations for each language, not just English text copied
+
+**Key Naming Convention:**
+```
+feature.component.element[.state]
+```
+Examples:
+- `posts.card.title` - Post card title
+- `auth.login.button.submit` - Login submit button
+- `navigation.menu.items.posts` - Posts menu item
+- `demo.counter.button.increment` - Counter increment button
+- `errors.validation.required` - Required field validation error
+
+**Localization Code Flow:**
+1. **Plan the text content** - Identify all user-visible strings needed
+2. **Check existing keys** - Search across all 5 language files for existing similar keys
+3. **Add new keys** - Add to ALL 5 language files with appropriate translations:
+   ```json
+   // en.json
+   {
+     "posts": {
+       "card": {
+         "readMore": "Read More"
+       }
+     }
+   }
+
+   // es.json
+   {
+     "posts": {
+       "card": {
+         "readMore": "Leer Más"
+       }
+     }
+   }
+
+   // ru.json
+   {
+     "posts": {
+       "card": {
+         "readMore": "Читать далее"
+       }
+     }
+   }
+
+   // ar.json
+   {
+     "posts": {
+       "card": {
+         "readMore": "اقرأ المزيد"
+       }
+     }
+   }
+
+   // zh.json
+   {
+     "posts": {
+       "card": {
+         "readMore": "阅读更多"
+       }
+     }
+   }
+   ```
+4. **Use keys in components** - Reference the i18n keys in React components:
+   ```typescript
+   import { useTranslations } from 'next-intl';
+
+   const PostCard = () => {
+     const t = useTranslations('posts.card');
+
+     return (
+       <IconButton icon={<ReadIcon size={16} />} responsive>
+         {t('readMore')}
+       </IconButton>
+     );
+   };
+   ```
+
+**Translation Quality Standards:**
+- **Contextual accuracy** - Translations should fit the UI context and component purpose
+- **Consistent terminology** - Use the same terms across the app for identical concepts
+- **Cultural appropriateness** - Consider cultural context for each target language
+- **Length considerations** - Account for text expansion/contraction in different languages
+- **RTL support** - Arabic text requires right-to-left layout considerations
+
+**Before Writing Any Frontend Code:**
+1. ✅ Check existing keys in ALL 5 language files (`en.json`, `es.json`, `ru.json`, `ar.json`, `zh.json`)
+2. ✅ Plan the i18n key structure for new text content
+3. ✅ Add translation keys to ALL 5 language files before writing component code
+4. ✅ Use `useTranslations()` hook or `t()` function in components
+5. ✅ Test that all text renders correctly in different languages
+6. ❌ Never commit components with hardcoded text strings
+
+**Common Localization Patterns:**
+```typescript
+// Page headers with localized title/description
+<PageHeader
+  title={t('posts.header.title')}
+  description={t('posts.header.description')}
+  // ... other props
+/>
+
+// Button text localization
+<IconButton icon={<AddIcon size={16} />} variant="success" responsive>
+  {t('posts.actions.add')}
+</IconButton>
+
+// Form validation messages
+{errors.title && <span className="text-red-500">{t('validation.required')}</span>}
+
+// Toast/notification messages
+toast.success(t('posts.actions.deleteSuccess'));
+toast.error(t('posts.actions.deleteError'));
+```
+
 #### Theming (Light + Dark)
 - Implement styles with *CSS variables/Tailwind tokens* only; *no hex values* inline.
 - Provide theme-aware colors via design tokens; respect system preference when applicable.

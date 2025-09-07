@@ -87,7 +87,13 @@ import {
   FaDollarSign as FaMoneyIcon,
   FaRotateLeft,
   FaLocationDot,
-  FaHeart
+  FaHeart,
+  // Category icons
+  FaMobile,
+  FaShirt,
+  FaFootball,
+  FaCouch,
+  FaBookOpen
 } from "react-icons/fa6"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -484,4 +490,25 @@ export function RatesIcon({ size = 16, ...props }: IconProps) {
 
 export function LocationIcon({ size = 16, ...props }: IconProps) {
   return <FaLocationDot size={size} {...props} />
+}
+
+// Category icons
+export function ClothingIcon({ size = 16, ...props }: IconProps) {
+  return <FaShirt size={size} {...props} />
+}
+
+export function ElectronicsIcon({ size = 16, ...props }: IconProps) {
+  return <FaMobile size={size} {...props} />
+}
+
+export function SportsIcon({ size = 16, ...props }: IconProps) {
+  return <FaFootball size={size} {...props} />
+}
+
+export function HomeGardenIcon({ size = 16, ...props }: IconProps) {
+  return <FaCouch size={size} {...props} />
+}
+
+export function BooksIcon({ size = 16, ...props }: IconProps) {
+  return <FaBookOpen size={size} {...props} />
 }
