@@ -8,7 +8,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/shared/lib/utils';
 import { Box } from './box';
-import { ChevronRightIcon } from './icons';
+import { ChevronRightIcon, HeartIcon } from './icons';
 
 // Card variants for different use cases
 const cardVariants = cva(
@@ -40,9 +40,12 @@ interface ImageSliderProps {
   className?: string;
   showDiscount?: boolean;
   discountPercent?: number;
+  showLikeButton?: boolean;
+  isLiked?: boolean;
+  onLikeClick?: (e: React.MouseEvent) => void;
 }
 
-function ImageSlider({ images, alt, className, showDiscount, discountPercent }: ImageSliderProps) {
+function ImageSlider({ images, alt, className, showDiscount, discountPercent, showLikeButton, isLiked, onLikeClick }: ImageSliderProps) {
   const [currentImage, setCurrentImage] = useState(0);
   const hasMultipleImages = images.length > 1;
 
@@ -73,6 +76,28 @@ function ImageSlider({ images, alt, className, showDiscount, discountPercent }: 
         <div className="absolute bottom-2 left-2 bg-black text-white text-xs font-semibold px-2 py-1 rounded-[0.75rem] shadow-sm">
           -{discountPercent}%
         </div>
+      )}
+
+      {/* Like Button */}
+      {showLikeButton && onLikeClick && (
+        <button
+          onClick={onLikeClick}
+          className={cn(
+            'absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm cursor-pointer',
+            'opacity-80 hover:opacity-100 hover:scale-110',
+            isLiked
+              ? 'bg-red-500 text-white'
+              : 'bg-white/80 text-gray-600 hover:bg-white'
+          )}
+        >
+          <HeartIcon
+            size={16}
+            className={cn(
+              'transition-all',
+              isLiked && 'scale-110'
+            )}
+          />
+        </button>
       )}
 
       {/* Image Navigation */}
@@ -206,6 +231,12 @@ interface CardProps extends VariantProps<typeof cardVariants> {
   // Actions (for products - add to cart, etc.)
   actions?: React.ReactNode;
 
+  // Like functionality
+  showLikeButton?: boolean;
+  isLiked?: boolean;
+  onLikeClick?: (id?: string | number) => void;
+  id?: string | number;
+
   // Additional props
   className?: string;
   children?: React.ReactNode;
@@ -224,6 +255,10 @@ function Card({
   currency = '$',
   metadata = [],
   actions,
+  showLikeButton = false,
+  isLiked = false,
+  onLikeClick,
+  id,
   variant,
   size,
   className,
@@ -234,6 +269,14 @@ function Card({
   const hasPricing = typeof price === 'number';
   const discountPercent = originalPrice && price ? Math.round(((originalPrice - price) / originalPrice) * 100) : undefined;
 
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onLikeClick) {
+      onLikeClick(id);
+    }
+  };
+
   const CardContent = () => (
     <Box className={cn('overflow-hidden p-0', className)} {...props}>
       {/* Image Section */}
@@ -243,6 +286,9 @@ function Card({
           alt={title}
           showDiscount={hasPricing && !!discountPercent}
           discountPercent={discountPercent}
+          showLikeButton={showLikeButton}
+          isLiked={isLiked}
+          onLikeClick={handleLikeClick}
         />
       )}
 
@@ -266,14 +312,14 @@ function Card({
 
         {/* Description */}
         {description && (
-          <p className="text-sm text-muted-foreground line-clamp-3 mb-2">
+          <p className="text-sm text-muted-foreground line-clamp-3">
             {description}
           </p>
         )}
 
         {/* Tags Row (below description) */}
         {tags.length > 0 && (
-          <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
             {tags.map((tag, index) => (
               <InfoBadge key={index} {...tag} />
             ))}
@@ -282,7 +328,7 @@ function Card({
 
         {/* Pricing */}
         {hasPricing && (
-          <div className="mb-2">
+          <div className="mt-2">
             <Pricing
               price={price}
               originalPrice={originalPrice}
@@ -292,7 +338,7 @@ function Card({
         )}
 
         {/* Custom Content */}
-        {children}
+        {children && <div className="mt-2">{children}</div>}
 
         {/* Metadata */}
         {metadata.length > 0 && (

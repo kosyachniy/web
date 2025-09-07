@@ -86,7 +86,8 @@ import {
   FaComments,
   FaDollarSign as FaMoneyIcon,
   FaRotateLeft,
-  FaLocationDot
+  FaLocationDot,
+  FaHeart
 } from "react-icons/fa6"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -307,6 +308,10 @@ export function BookmarkIcon({ size = 16, ...props }: IconProps) {
 
 export function ShareIcon({ size = 16, ...props }: IconProps) {
   return <FaShare size={size} {...props} />
+}
+
+export function HeartIcon({ size = 16, ...props }: IconProps) {
+  return <FaHeart size={size} {...props} />
 }
 
 export function LightningIcon({ size = 16, ...props }: IconProps) {

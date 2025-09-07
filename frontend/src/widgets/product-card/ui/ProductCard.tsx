@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { ShoppingIcon, TagIcon, TrendingIcon, StarIcon, ReviewsIcon } from '@/shared/ui/icons';
@@ -27,6 +28,19 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+    // Like functionality - in production this would come from props or global state
+    const [isLiked, setIsLiked] = useState(false);
+
+    const handleLikeClick = (id?: string | number) => {
+        // In production, this would call an API to like/unlike the product
+        console.log('Like clicked for product:', id);
+        setIsLiked(prev => !prev);
+        
+        // TODO: Integrate with API
+        // Example:
+        // await toggleProductLike(product.id);
+    };
+
     // Prepare filters (category, rating and reviews in filters row)
     const filters = [];
     
@@ -108,6 +122,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             currency={product.currency}
             actions={actions}
             variant="product"
+            showLikeButton={true}
+            isLiked={isLiked}
+            onLikeClick={handleLikeClick}
+            id={product.id}
             onClick={() => {
                 // Handle product click - could navigate to product detail page
                 console.log('Product clicked:', product.title);
