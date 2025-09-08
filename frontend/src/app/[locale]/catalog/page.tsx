@@ -63,21 +63,6 @@ export default function CatalogPage() {
                             </div>
                         </div>
                     </div>
-
-                    <div className="mt-12 text-center">
-                        <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-8">
-                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2"><RefreshIcon size={24} /> Coming Soon</h2>
-                            <p className="text-muted-foreground mb-6">
-                                Enhanced product catalog with real inventory management, advanced search algorithms, 
-                                user reviews, and integrated payment processing.
-                            </p>
-                            <div className="flex justify-center space-x-4 text-sm">
-                                <span className="bg-background px-3 py-1 rounded-full">Real-time Inventory</span>
-                                <span className="bg-background px-3 py-1 rounded-full">AI-powered Search</span>
-                                <span className="bg-background px-3 py-1 rounded-full">Payment Integration</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

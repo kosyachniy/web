@@ -9,21 +9,84 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 ---
 
 ## Golden Rules for Claude
-- **Minimal, focused diffs**: change only what's necessary; keep PRs small (<300 LOC) and self-contained.
-- **Never hard-code secrets** or credentials; never read or write `.env`, `secrets/`, or CI secrets.
-- **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*).
-- **Always respect i18n**: all user-visible strings must go through the localization system (see *Frontend Guidelines*).
-- **Theme-aware UI**: every component must work in **light & dark** themes via tokens/CSS variables (no hardcoded colors).
-- **Consistent border-radius**: use `rounded-[0.75rem]` for small/inside elements (buttons, inputs, dropdown items, avatars, standalone icon containers) and `rounded-[1rem]` for big/outside elements (cards, dialogs, containers, content boxes, major sections). Never use `rounded-sm`, `rounded-md`, or `rounded-lg`.
-- **No borders, use backgrounds/shadows**: never use `border` classes. Small components (buttons, inputs, tags) use colored or gray backgrounds. Big components (cards, dialogs, containers) use shadows with white/background colors since they contain small components with colored backgrounds.
-- **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text.
-- **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG. All icons must be solid/filled style (no outlined icons).
-- **Icon + text pattern for interactive elements**: all buttons and interactive sections must start with icon, then localized title. Use `IconButton` with `responsive={true}` to hide text on screens below 1280px while keeping icon visible, preventing header overflow. Icon color matches text color (no separate icon coloring for buttons).
-- **Rounded square containers for standalone icons**: independent icons (avatars, PageHeader icons, category icons) must be displayed in rounded square containers (`rounded-[0.75rem]`). Icon is full opacity, background is low opacity (15%/20%). Default: `bg-muted text-muted-foreground`. Colored: use pattern `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400`.
-- **Special symbols vs icons**: use Unicode symbols (like ©, ®, ™) directly as text characters, not as icons with backgrounds. Only use icon components for interactive or decorative visual elements. Copyright symbols, trademark symbols, and similar special characters should be rendered as plain text without icon styling or containers.
-- **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances.
-- **Standardized date format**: all dates must use the format "%dd.%mm.%YYYY" (e.g., "01.01.2024") across frontend display, backend responses, and Telegram bot. No other date formats allowed.
-- **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.).
+- **Frontend Development**: Follow the **Frontend Development Flow (UltraThink)** below for ALL frontend code changes
+- **Minimal, focused diffs**: change only what's necessary; keep PRs small (<300 LOC) and self-contained
+- **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*)
+- **Never hard-code secrets** or credentials; never read or write `.env`, `secrets/`, or CI secrets
+- **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text
+- **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG
+- **Special symbols vs icons**: use Unicode symbols (©, ®, ™) as text characters, not icons with backgrounds
+- **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances
+- **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.)
+
+---
+
+## Frontend Development Flow (UltraThink) ⚠️ **CRITICAL**
+
+**Every time you write/modify frontend code, follow this systematic flow:**
+
+### 1. **Text Content** → **Localization (i18n)**
+- ✅ **Check existing keys** in ALL 5 language files (`en.json`, `es.json`, `ru.json`, `ar.json`, `zh.json`)
+- ✅ **Plan i18n key structure** for new text content (`feature.component.element[.state]`)
+- ✅ **Add translation keys to ALL 5 language files** before writing component code
+- ✅ **Use `useTranslations()` hook** or `t()` function in components
+- ❌ **NEVER hardcode text strings** in components
+
+### 2. **Interactive Elements** (Links, Buttons, Sections) → **Icon + Cursor Pattern**
+- ✅ **Add icon first**: All buttons/links MUST start with icon, then localized text
+- ✅ **Use IconButton**: `responsive={true}` for adaptive behavior (icon-only below 1280px)
+- ✅ **Cursor pointer**: All pressable elements MUST have `cursor-pointer` styling
+- ✅ **Interactive states**: Provide clear hover, focus, and active states
+
+### 3. **Time/Date Values** → **Standardized Format**
+- ✅ **Use format**: `%dd.%mm.%YYYY` (e.g., "01.01.2024") everywhere
+- ✅ **Consistency**: Frontend display, backend responses, Telegram bot - same format
+- ❌ **No other date formats** allowed
+
+### 4. **Component Creation** → **Theme + Border + Radius System**
+- ✅ **Theme-aware**: Support both light & dark themes via CSS variables/tokens
+- ✅ **No borders**: Use shadows for big/outer elements, backgrounds for small/inner elements
+- ✅ **Border-radius consistency**:
+  - Small/inner elements: `rounded-[0.75rem]` (buttons, inputs, avatars, icons)
+  - Big/outer elements: `rounded-[1rem]` (boxes, containers, cards, sections)
+- ✅ **Box containers**: Wrap ALL content in `Box` component from `@/shared/ui/box`
+- ✅ **PageHeader**: Use for ALL pages/sections with proper icon color system
+
+### 5. **Validation Checklist Before Commit**
+- ✅ All text uses i18n keys (no hardcoded strings)
+- ✅ Interactive elements have icons + cursor-pointer + hover states
+- ✅ Dates use standardized format (%dd.%mm.%YYYY)
+- ✅ Components work in light & dark themes
+- ✅ Consistent border-radius (.75rem vs 1rem)
+- ✅ No border classes used (shadows/backgrounds only)
+- ✅ Run `npm run build` to validate FSD structure
+- ✅ Run `npm run lint` for code quality
+
+**Quick Pattern Examples:**
+```typescript
+// ✅ Good: Complete pattern implementation
+<IconButton
+  icon={<AddIcon size={16} />}
+  variant="success"
+  responsive={true}
+  className="cursor-pointer"
+>
+  {t('posts.actions.add')}
+</IconButton>
+
+// ✅ Good: Date formatting
+const formattedDate = date.toLocaleDateString('en-GB'); // "01.01.2024"
+
+// ✅ Good: Component structure
+<Box size="lg" className="rounded-[1rem]"> {/* Big/outer */}
+  <PageHeader
+    icon={<PostsIcon size={24} />}
+    iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 rounded-[0.75rem]" {/* Small/inner */}
+    title={t('posts.header.title')}
+    description={t('posts.header.description')}
+  />
+</Box>
+```
 
 ---
 
@@ -228,14 +291,15 @@ make up-base     # Infrastructure: base.yml only
 @/shared/*      → src/shared/*
 ```
 
-#### Internationalization (i18n)
-- *All user-facing strings* must use `next-intl` (no hardcoded text).
-Use typed helpers: `t('namespace.key')`.
-- Keep messages under `frontend/messages/<locale>/*.json`.
-- For server components, pass translated content via props; for client components, use the `useTranslations` hook.
-- Keys: `feature.scope.action` (e.g., `auth.login.error.invalidCredentials`).
+#### **Internationalization (i18n) - Implementation Details**
+> **Main Rule**: Follow **Frontend Development Flow (UltraThink) Step 1** for all text content
 
-#### **Frontend Localization Workflow** ⚠️ **CRITICAL**
+**Technical Implementation:**
+- Use `next-intl` with typed helpers: `t('namespace.key')`
+- Keep messages under `frontend/messages/<locale>/*.json`
+- Server components: pass translated content via props
+- Client components: use `useTranslations` hook
+- Key naming: `feature.component.element[.state]`
 
 **Supported Languages:** The project supports 5 languages with message files in `frontend/messages/`:
 - `en.json` (English - primary/source language)
@@ -334,12 +398,15 @@ Examples:
 - **Length considerations** - Account for text expansion/contraction in different languages
 - **RTL support** - Arabic text requires right-to-left layout considerations
 
-**Before Writing Any Frontend Code:**
-1. ✅ Check existing keys in ALL 5 language files (`en.json`, `es.json`, `ru.json`, `ar.json`, `zh.json`)
-2. ✅ Plan the i18n key structure for new text content
-3. ✅ Add translation keys to ALL 5 language files before writing component code
+**Quick Reference - Follow UltraThink Flow:**
+> **See "Frontend Development Flow (UltraThink)" section above for complete workflow**
+
+**Localization Checklist (from UltraThink Step 1):**
+1. ✅ Check existing keys in ALL 5 language files
+2. ✅ Plan i18n key structure for new text content
+3. ✅ Add translation keys to ALL 5 language files before coding
 4. ✅ Use `useTranslations()` hook or `t()` function in components
-5. ✅ Test that all text renders correctly in different languages
+5. ✅ Test text renders correctly in different languages
 6. ❌ Never commit components with hardcoded text strings
 
 **Common Localization Patterns:**
@@ -384,15 +451,18 @@ toast.error(t('posts.actions.deleteError'));
 - Accessibility: label form controls, provide `aria-label` for icon buttons.
 
 #### **Frontend Structure & Design Rules** ⚠️ **CRITICAL**
+> **Main Rule**: Follow **Frontend Development Flow (UltraThink) Steps 2-4** for all UI elements
 
-**Button & Link Pattern:**
-- **Icon + Text Structure**: All buttons and links MUST start with an icon, followed by localized text (e.g., `+ Add Category`)
-- **Responsive Design**: Use `IconButton` with `responsive={true}` for adaptive behavior - show only icon below 1280px, icon + text at 1280px and above
-- **Components**: Use `IconButton` from `@/shared/ui/icon-button` instead of plain `Button` for new implementations
+**Interactive Elements (UltraThink Step 2):**
+- Icon + Text Structure: All buttons/links start with icon, then localized text
+- Use `IconButton` with `responsive={true}` for adaptive behavior
+- `cursor-pointer` styling for all pressable elements
+- Clear hover, focus, and active states
 
-**Cursor & Interaction:**
-- **Pointer Cursor**: All pressable elements (buttons, links, clickable cards) MUST have `cursor-pointer` styling
-- **Interactive States**: Provide clear hover, focus, and active states for all interactive elements
+**Component Styling (UltraThink Step 4):**
+- Theme-aware: light & dark mode support via CSS variables
+- No borders: shadows for big/outer, backgrounds for small/inner
+- Border-radius: `.75rem` (small/inner) vs `1rem` (big/outer)
 
 **Box & Container Styling:**
 - **Box Containers**: Every content block MUST be wrapped in a `Box` component from `@/shared/ui/box`
@@ -688,13 +758,13 @@ toast.error(t('posts.actions.deleteError'));
 - NGINX reverse proxy configuration in `infra/nginx/`
 
 ### How to Work in This Repo (Claude checklist)
-1. **Respect FSD architecture**: check import rules and layer responsibilities before coding.
-2. Explain the plan (brief) and show a *unified diff* preview before writing.
-3. Make *minimal* changes in relevant files only.
-4. Ensure i18n keys exist; make UI theme-aware; use feedback widgets.
-5. Run `npm run build` to validate FSD structure; fix any import violations.
-6. Run tests/linters; include fixes if failing.
-7. Propose commit message (Conventional Commits) and a short PR description.
+1. **Follow Frontend Development Flow (UltraThink)**: Use the 5-step systematic flow for ALL frontend code
+2. **Respect FSD architecture**: check import rules and layer responsibilities before coding
+3. **Explain the plan** (brief) and show a *unified diff* preview before writing
+4. **Make minimal changes** in relevant files only
+5. **Run validation**: `npm run build` (FSD structure) + `npm run lint` (code quality)
+6. **Run tests**: `make test-web` (frontend) + `make unit-test` (backend) when applicable
+7. **Propose commit**: Conventional Commits format + short PR description
 
 ### **Quick Reference - Where to Put Code**
 
