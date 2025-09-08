@@ -320,6 +320,54 @@ make logs-jobs     # View background jobs logs
 make logs-tg       # View Telegram bot logs
 ```
 
+### API Testing & Development
+```bash
+# Test backend API endpoints (when containers are running)
+# Categories API - get all categories with nested structure
+curl -X POST http://localhost/api/categories/get/ \
+  -H "Content-Type: application/json" \
+  -d '{}' | jq
+
+# Categories API - filter by parent (0 = top-level)
+curl -X POST http://localhost/api/categories/get/ \
+  -H "Content-Type: application/json" \
+  -d '{"parent": 0, "status": 1}' | jq
+
+# Posts API - get posts with pagination
+curl -X POST http://localhost/api/posts/get/ \
+  -H "Content-Type: application/json" \
+  -d '{"limit": 5, "offset": 0}' | jq
+
+# Posts API - filter by category
+curl -X POST http://localhost/api/posts/get/ \
+  -H "Content-Type: application/json" \
+  -d '{"category": 1, "limit": 3}' | jq
+
+# Posts API - search posts
+curl -X POST http://localhost/api/posts/get/ \
+  -H "Content-Type: application/json" \
+  -d '{"search": "news", "limit": 10}' | jq
+
+# Check API health and response times
+curl -w "@- time_total: %{time_total}s\n" \
+  -X POST http://localhost/api/categories/get/ \
+  -H "Content-Type: application/json" \
+  -d '{}'
+
+# Frontend API integration testing
+cd frontend && node scripts/test-api-integration.js
+
+# Common API Response Examples:
+# Categories: {"categories": [{"id": 1, "title": "News", "url": "news", "categories": [...]}]}
+# Posts: {"posts": [{"id": 1, "title": "Sample", "url": "sample", "category": 1}], "count": 10}
+
+# Check what containers are running
+docker ps
+
+# View API logs in real-time
+docker logs -f web-api-1
+```
+
 ## Architecture
 
 ### Backend (FastAPI + Python)
@@ -329,6 +377,16 @@ make logs-tg       # View Telegram bot logs
 - **Models**: MongoDB models in `models/` using `consys` library
 - **Services**: Middleware and utilities in `services/`
 - **Dependencies**: Uses `uv` for package management, defined in `pyproject.toml`
+
+#### **API Endpoints Structure**
+```
+POST /api/categories/get/    # Get categories with filtering
+POST /api/posts/get/         # Get posts with filtering/pagination
+GET  /api/categories/{id}/   # Get single category
+POST /api/posts/            # Create new post
+PUT  /api/posts/{id}/       # Update post
+DELETE /api/posts/{id}/     # Delete post
+```
 
 #### **Request/Response Patterns**
 - **Categories Request**: `{"parent": 0, "status": 1, "locale": "en"}`
@@ -1030,8 +1088,11 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
 - **API client**: Use `shared/services/api/client.ts` for HTTP requests
 - **Entity APIs**: Business domain APIs in `entities/*/api/`
 - **Feature APIs**: Feature-specific APIs in `features/*/api/`
+- **Base URL**: API routes via nginx proxy at `http://localhost/api/`
+- **Response Format**: Backend returns `{"categories": [...]}`, `{"posts": [...], "count": N}`
 - Handle auth, retries, timeouts, and typed errors centrally
 - Surface errors via `widgets/feedback-system`, never raw stack traces
+- **Mock Fallback**: Set `NEXT_PUBLIC_USE_MOCK_FALLBACK=true` to enable mock data during development
 
 #### **Component Creation Guidelines**
 1. **Determine the right layer**:
@@ -1087,10 +1148,13 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
 ### Files & Paths Not To Touch
 - `.env*`, `secrets/**`, `infra/**/prod/**`, `infra/nginx/**`, `infra/compose/**` (production variants), CI config unless explicitly asked.
 
-### Deployment
+### Deployment & API Access
 - Environment configuration via `.env` file (see `base.env` template)
 - Docker Compose configurations for different environments in `infra/compose/`
 - NGINX reverse proxy configuration in `infra/nginx/`
+- **API Access**: Backend API available at `http://localhost/api/` when containers are running
+- **Port Mapping**: Frontend (Next.js) → nginx:80 → api:5000 (internal Docker network)
+- **Direct API Testing**: Use curl commands in "API Testing & Development" section
 
 ### How to Work in This Repo (Claude checklist)
 1. **Follow Frontend Development Flow**: Use the 5-step systematic flow for ALL frontend code
