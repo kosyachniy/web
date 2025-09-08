@@ -1,8 +1,8 @@
-# Template full stack application
+# Template Full-Stack Web Application
 [![.github/workflows/deploy.yml](https://github.com/kosyachniy/web/actions/workflows/deploy.yml/badge.svg)](https://github.com/kosyachniy/web/actions/workflows/deploy.yml)
 
-## Description
-Web-app on JS with Python JSON-RPC API
+## Overview
+Modern full-stack web application with Python FastAPI backend, Next.js frontend, Telegram bot, and comprehensive monitoring. Built with Docker containers and featuring multilingual support (5 languages), Feature-Sliced Design architecture, and production-ready monitoring.
 
 Form | Side | Stack | Language | Path
 ---|---|---|---|---
@@ -11,6 +11,8 @@ Web app | Front-end | React | JavaScript | ``` frontend/ ```
 Telegram bot | Back-end | AIOGram | Python | ``` tg/ ```
 iOS | Front-end | React Native | JavaScript | planned
 Android | Front-end | React Native | JavaScript | planned
+
+## Architecture
 
 ### Stack
 <table>
@@ -109,7 +111,64 @@ Android | Front-end | React Native | JavaScript | planned
     </tbody>
 </table>
 
-## Run
+#### Backend
+- **Framework**: FastAPI (async Python web framework)
+- **Language**: Python 3.11+ with type hints
+- **Database**: MongoDB with custom ConSys ODM library
+- **Caching**: Redis for sessions and background tasks
+- **Validation**: Pydantic v2 models
+- **Logging**: loguru for structured JSON logging
+- **Testing**: pytest with async support
+- **Package Management**: uv (fast Python installer)
+- **Monitoring**: Prometheus metrics collection
+
+#### Frontend
+- **Framework**: Next.js 15 (App Router) with React 19
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS + Radix UI (shadcn/ui)
+- **State Management**: Redux Toolkit (RTK)
+- **Icons**: react-icons (fa6 → bi → hi priority)
+- **Internationalization**: next-intl (5 languages: en, es, ru, ar, zh)
+- **Architecture**: Feature-Sliced Design (FSD)
+- **Quality Tools**: ESLint + TypeScript + Prettier
+
+### Infrastructure
+- **Containerization**: Docker with multi-stage builds
+- **Web Server**: NGINX reverse proxy
+- **SSL**: Let's Encrypt certificates
+- **Monitoring**: Prometheus + Grafana dashboards
+- **Background Jobs**: Celery with Redis broker
+
+## Key Features
+- **Multilingual Support**: 5 languages (English, Spanish, Russian, Arabic, Chinese)
+- **Modern UI/UX**: Responsive design with light/dark theme support
+- **Feature-Sliced Design**: Scalable frontend architecture with strict import rules
+- **API-First**: RESTful API with OpenAPI documentation
+- **Real-time Updates**: Socket.IO integration for live data
+- **Comprehensive Monitoring**: Prometheus metrics and Grafana dashboards
+- **Production Ready**: Docker containers with CI/CD pipeline
+
+## Project Structure
+```
+web/
+├── backend/           # FastAPI Python backend
+│   ├── app/          # Main application code
+│   ├── models/       # MongoDB models (ConSys ODM)
+│   └── routes/       # API endpoints
+├── frontend/         # Next.js TypeScript frontend
+│   ├── src/app/      # Next.js App Router
+│   ├── src/entities/ # Business domain models
+│   ├── src/features/ # User-facing functionality
+│   ├── src/widgets/  # Complex UI compositions
+│   └── src/shared/   # Reusable infrastructure
+├── tg/               # Telegram bot (Python)
+├── infra/            # Docker configurations
+└── data/             # Application data
+```
+
+## Quick Start
+
+### Run
 [Before starting, you can learn how to configure the server →](https://github.com/kosyachniy/dev/blob/main/server/SERVER.md)
 
 <table>
@@ -175,3 +234,108 @@ DATA_PATH=~/web/data # or change to global path, for example: ~/data/web
         </tr>
     </tbody>
 </table>
+
+### Prerequisites
+- Docker and Docker Compose
+- Make (for development commands)
+
+### Local Development
+
+1. **Configure environment**:
+   ```bash
+   # Copy base configuration
+   cp base.env .env
+
+   # Add local development settings
+   echo "MODE=LOCAL" >> .env
+   echo "PROTOCOL=http" >> .env
+   echo "EXTERNAL_HOST=localhost" >> .env
+   echo "EXTERNAL_PORT=80" >> .env
+   echo "DATA_PATH=./data" >> .env
+   ```
+
+2. **Start development environment**:
+   ```bash
+   make up          # Full local development (databases + API + frontend)
+   # OR
+   make up-base     # Just databases (Redis, MongoDB)
+   ```
+
+3. **Frontend development** (optional, for hot reload):
+   ```bash
+   cd frontend/
+   npm install
+   npm run dev      # Next.js dev server on http://localhost:3000
+   ```
+
+4. **Access the application**:
+   - **Frontend**: http://localhost (via nginx proxy)
+   - **API**: http://localhost/api/ (backend API)
+   - **Direct Frontend**: http://localhost:3000 (if running npm run dev)
+
+### Development Commands
+
+```bash
+# Environment Management
+make up          # Local: full development environment
+make up-dev      # Remote development environment
+make up-prod     # Production environment
+make up-base     # Infrastructure only (Redis, MongoDB)
+make down        # Stop all services
+make status      # Check container status
+
+# Testing & Quality
+make test          # Run all tests (API + Web)
+make test-backend  # Backend tests only
+make test-web      # Frontend tests only
+make unit-test     # Run pytest unit tests
+make lint          # Lint Python code
+
+# Debugging & Monitoring
+make shell         # Connect to API container
+make db-shell      # Connect to MongoDB
+make logs-api      # View API logs
+make logs-jobs     # View background jobs logs
+make logs-tg       # View Telegram bot logs
+```
+
+### Frontend Development
+
+```bash
+cd frontend/
+
+npm run dev        # Start Next.js dev server
+npm run build      # Build for production
+npm run lint       # Run ESLint
+```
+
+### API Testing
+
+Test backend endpoints when containers are running:
+
+```bash
+# Get categories
+curl -X POST http://localhost/api/categories/get/ \
+  -H "Content-Type: application/json" \
+  -d '{}'
+
+# Get posts with pagination
+curl -X POST http://localhost/api/posts/get/ \
+  -H "Content-Type: application/json" \
+  -d '{"limit": 5, "offset": 0}'
+```
+
+## Production Deployment
+
+1. **Configure production environment**:
+   ```bash
+   cp base.env .env
+   # Edit .env with production settings (HTTPS, domain, ports, etc.)
+   ```
+
+2. **Deploy**:
+   ```bash
+   make up-prod
+   ```
+
+For detailed configuration and deployment instructions, see [CLAUDE.md](./CLAUDE.md).

@@ -237,6 +237,328 @@ feature-name/
 └── index.ts      # Public API exports
 ```
 
+---
+
+## Backend Technology Stack & Coding Flow ⚠️ **CRITICAL**
+
+### **Current Backend Stack**
+- **Core Framework**: FastAPI (async Python web framework)
+- **Language**: Python 3.11+ with type hints and async/await
+- **Database**: MongoDB with custom ConSys library for ODM
+- **Package Management**: uv (fast Python package installer)
+- **Logging**: loguru for structured JSON logging
+- **Authentication**: JWT tokens with FastAPI security
+- **Background Tasks**: Celery with Redis broker
+- **API Documentation**: OpenAPI/Swagger auto-generated
+- **Testing**: pytest with async test support
+- **Validation**: Pydantic v2 for request/response models
+- **HTTP Client**: httpx for async external API calls
+- **Monitoring**: Prometheus metrics collection
+- **Caching**: Redis for session storage and caching
+
+### **Backend Development Flow** ⚠️ **CRITICAL**
+
+**Every time you write/modify backend code, follow this systematic flow:**
+
+#### 1. **Models & Schema** → **Pydantic + ConSys**
+- ✅ **Define Pydantic models** for request/response validation
+- ✅ **Use ConSys models** for MongoDB document structure
+- ✅ **Type annotations** required for all functions and variables
+- ✅ **Field validation** with Pydantic validators when needed
+- ❌ **NEVER skip type hints** or input validation
+
+#### 2. **API Endpoints** → **Async FastAPI Pattern**
+- ✅ **Async route handlers** for all endpoints (`async def`)
+- ✅ **Dependency injection** for database, auth, logging
+- ✅ **HTTP method mapping** (POST for data queries, GET for simple retrieval)
+- ✅ **Response models** defined with Pydantic
+- ✅ **Error handling** with FastAPI HTTPException
+- ❌ **NEVER use sync operations** in async contexts
+
+#### 3. **Database Operations** → **ConSys ODM**
+- ✅ **ConSys models** for MongoDB document structure
+- ✅ **Async database operations** using ConSys async methods
+- ✅ **Query optimization** with proper indexing
+- ✅ **Transaction support** for critical operations
+- ❌ **NEVER direct MongoDB queries** without ConSys
+
+#### 4. **Logging & Monitoring** → **Structured Logging**
+- ✅ **loguru logger** for all logging operations
+- ✅ **JSON structured logs** for production parsing
+- ✅ **Request/response logging** with correlation IDs
+- ✅ **Error tracking** with stack traces
+- ❌ **NEVER log sensitive data** (passwords, tokens, PII)
+
+#### 5. **Testing & Quality**
+- ✅ **pytest async tests** for all endpoints
+- ✅ **Test fixtures** for database setup/teardown
+- ✅ **Mock external dependencies** with httpx_mock
+- ✅ **Run `make unit-test`** before commit
+- ✅ **Coverage reporting** with minimum 80% threshold
+
+**Backend Code Pattern Examples:**
+```python
+# ✅ Good: Complete FastAPI endpoint with all patterns
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+from loguru import logger
+from typing import List, Optional
+import httpx
+
+# Pydantic models for validation
+class PostCreateRequest(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    content: str = Field(..., min_length=1)
+    category_id: int = Field(..., gt=0)
+
+class PostResponse(BaseModel):
+    id: int
+    title: str
+    content: str
+    created_at: str
+    category: Optional[str] = None
+
+# ConSys model for MongoDB
+class PostDocument(ConsysModel):
+    title: str
+    content: str
+    category_id: int
+    created_at: datetime
+    status: int = 1
+
+# Async endpoint with proper error handling
+@router.post("/posts/", response_model=PostResponse)
+async def create_post(
+    request: PostCreateRequest,
+    db: Database = Depends(get_database),
+    current_user: User = Depends(get_current_user)
+) -> PostResponse:
+    try:
+        logger.info(f"Creating post for user {current_user.id}",
+                   extra={"user_id": current_user.id, "action": "create_post"})
+
+        # ConSys database operation
+        post_doc = PostDocument(
+            title=request.title,
+            content=request.content,
+            category_id=request.category_id,
+            created_at=datetime.utcnow()
+        )
+
+        result = await db.posts.insert_one(post_doc.dict())
+
+        logger.info(f"Post created successfully",
+                   extra={"post_id": result.inserted_id})
+
+        return PostResponse(
+            id=result.inserted_id,
+            title=post_doc.title,
+            content=post_doc.content,
+            created_at=post_doc.created_at.strftime('%d.%m.%Y')
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to create post: {str(e)}",
+                    extra={"error": str(e), "user_id": current_user.id})
+        raise HTTPException(status_code=500, detail="Failed to create post")
+
+# ✅ Good: Async external API call
+async def fetch_external_data(url: str) -> dict:
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, timeout=10.0)
+            response.raise_for_status()
+            return response.json()
+        except httpx.RequestError as e:
+            logger.error(f"External API request failed: {e}")
+            raise HTTPException(status_code=503, detail="External service unavailable")
+```
+
+**Backend Validation Checklist:**
+1. ✅ All endpoints use async/await patterns
+2. ✅ Pydantic models for request/response validation
+3. ✅ ConSys models for MongoDB operations
+4. ✅ Structured logging with loguru
+5. ✅ Type hints on all functions and variables
+6. ✅ Error handling with proper HTTP status codes
+7. ✅ Tests cover all critical paths
+8. ✅ No sensitive data in logs
+
+---
+
+## Frontend Technology Stack & Coding Flow ⚠️ **CRITICAL**
+
+### **Current Frontend Stack**
+- **Core Framework**: Next.js 15 (App Router) with React 19
+- **Language**: TypeScript (strict mode enabled)
+- **Styling System**: Tailwind CSS + Radix UI (shadcn/ui components)
+- **State Management**: Redux Toolkit (RTK) with async thunks
+- **Icons**: react-icons library (fa6 → bi → hi priority system)
+- **Internationalization**: next-intl for 5-language support
+- **Architecture**: Feature-Sliced Design (FSD) with strict import rules
+- **HTTP Client**: Custom API client with auth + error handling
+- **Package Management**: npm with package-lock.json
+- **Build System**: Next.js built-in webpack + SWC compiler
+- **Development**: Hot reload with file watching via polling
+- **Quality Tools**: ESLint + TypeScript compiler + Prettier
+
+### **Frontend Development Flow** ⚠️ **CRITICAL**
+> **This flow is already documented above - follow the 5-step systematic process**
+
+**Key Frontend Architectural Patterns:**
+
+#### **Component Architecture**
+```typescript
+// ✅ Good: Feature-Sliced Design component structure
+// File: features/posts/ui/PostCard.tsx
+import { FaNewspaper, FaCalendar } from 'react-icons/fa6';
+import { useTranslations } from 'next-intl';
+import { IconButton } from '@/shared/ui/icon-button';
+import { Box } from '@/shared/ui/box';
+import type { Post } from '@/entities/post';
+
+interface PostCardProps {
+  post: Post;
+  onEdit?: (id: number) => void;
+}
+
+export const PostCard = ({ post, onEdit }: PostCardProps) => {
+  const t = useTranslations('posts.card');
+
+  return (
+    <Box size="default" className="rounded-[1rem]">
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <div className="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
+            <FaNewspaper size={20} />
+          </div>
+          <div>
+            <h3 className="font-semibold">{post.title}</h3>
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <FaCalendar size={12} />
+              {post.created_at}
+            </div>
+          </div>
+        </div>
+        {onEdit && (
+          <IconButton
+            variant="outline"
+            icon={<FaEdit size={12} />}
+            responsive
+            onClick={() => onEdit(post.id)}
+          >
+            {t('actions.edit')}
+          </IconButton>
+        )}
+      </div>
+    </Box>
+  );
+};
+```
+
+#### **State Management Pattern**
+```typescript
+// ✅ Good: Redux Toolkit slice with async thunks
+// File: entities/post/model/postSlice.ts
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import type { Post } from './types';
+import { postsApi } from '../api';
+
+interface PostsState {
+  posts: Post[];
+  loading: boolean;
+  error: string | null;
+  total: number;
+}
+
+export const fetchPosts = createAsyncThunk(
+  'posts/fetchPosts',
+  async (params: { category?: number; limit?: number; offset?: number }) => {
+    const response = await postsApi.getPosts(params);
+    return response;
+  }
+);
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState: {
+    posts: [],
+    loading: false,
+    error: null,
+    total: 0,
+  } as PostsState,
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload.posts;
+        state.total = action.payload.count;
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch posts';
+      });
+  },
+});
+
+export const { clearError } = postsSlice.actions;
+export default postsSlice.reducer;
+```
+
+#### **API Integration Pattern**
+```typescript
+// ✅ Good: Typed API client with error handling
+// File: entities/post/api/postsApi.ts
+import { apiClient } from '@/shared/services/api';
+import type { Post, PostsResponse, CreatePostRequest } from './types';
+
+export const postsApi = {
+  async getPosts(params: {
+    category?: number;
+    limit?: number;
+    offset?: number;
+    search?: string;
+  }): Promise<PostsResponse> {
+    try {
+      const response = await apiClient.post('/posts/get/', params);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch posts');
+    }
+  },
+
+  async createPost(data: CreatePostRequest): Promise<Post> {
+    try {
+      const response = await apiClient.post('/posts/', data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to create post');
+    }
+  },
+};
+```
+
+**Frontend Validation Checklist:**
+1. ✅ FSD architecture with correct import layers
+2. ✅ All text through i18n system (5 languages)
+3. ✅ react-icons priority system (fa6 → bi → hi)
+4. ✅ TypeScript strict mode compliance
+5. ✅ Theme-aware components (light/dark)
+6. ✅ Responsive design with Tailwind CSS
+7. ✅ Redux Toolkit for state management
+8. ✅ Error handling with toast notifications
+9. ✅ `npm run build` passes FSD validation
+10. ✅ `npm run lint` passes code quality
+
 ### Key Technologies
 - **Frontend**: Next.js 15, React 19, TypeScript, Redux Toolkit, Tailwind CSS, Radix UI
 - **Backend**: FastAPI, MongoDB (via consys), Redis, Socket.IO, Prometheus monitoring
