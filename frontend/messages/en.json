@@ -215,13 +215,20 @@
         "description": "Description",
         "empty": "Empty",
         "comments": "Comments",
-        "reply": "Reply"
+        "reply": "Reply",
+        "add": "Add"
     },
     "categories": {
         "category": "Category",
         "title": "Title",
         "parent": "Parent",
-        "top": "Top level"
+        "top": "Top level",
+        "popup": {
+            "title": "Categories",
+            "loading": "Loading...",
+            "empty": "No categories available",
+            "viewAll": "View all {count} categories"
+        }
     },
     "businessSections": {
         "companies": "Companies",

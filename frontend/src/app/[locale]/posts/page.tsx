@@ -5,6 +5,9 @@ import { SubcategoryNavigation } from '@/widgets/category';
 import { getSubcategories, getCategoryTitle, getCategoryUrl } from '@/entities/category';
 import { PageHeader } from '@/shared/ui/page-header';
 import { PostsIcon } from '@/shared/ui/icons';
+import { IconButton } from '@/shared/ui/icon-button';
+import { ButtonGroup } from '@/shared/ui/button-group';
+import { FaPlus } from 'react-icons/fa6';
 
 interface PostsPageProps {
   params: Promise<{
@@ -45,6 +48,7 @@ export async function generateMetadata({ params }: PostsPageProps): Promise<Meta
 export default async function PostsPage({ params }: PostsPageProps) {
     const { locale } = await params;
     const t = await getTranslations('navigation');
+    const tPosts = await getTranslations('posts');
     
     // Get top-level categories (no parent)
     const topCategories = await getSubcategories(undefined, locale);
@@ -58,6 +62,17 @@ export default async function PostsPage({ params }: PostsPageProps) {
                         iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
                         title={t('posts')}
                         description="Browse and discover posts organized by categories. Find content that interests you most."
+                        actions={
+                            <ButtonGroup>
+                                <IconButton 
+                                    icon={<FaPlus size={16} />} 
+                                    variant="success" 
+                                    responsive
+                                >
+                                    {tPosts('add')}
+                                </IconButton>
+                            </ButtonGroup>
+                        }
                     />
 
                     {/* Top-level Categories */}

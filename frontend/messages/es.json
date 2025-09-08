@@ -215,13 +215,20 @@
         "description": "Descripción",
         "empty": "Vacío",
         "comments": "Comentarios",
-        "reply": "Responder"
+        "reply": "Responder",
+        "add": "Añadir"
     },
     "categories": {
         "category": "Categoría",
         "title": "Título",
         "parent": "Padre",
-        "top": "Nivel superior"
+        "top": "Nivel superior",
+        "popup": {
+            "title": "Categorías",
+            "loading": "Cargando...",
+            "empty": "No hay categorías disponibles",
+            "viewAll": "Ver todas las {count} categorías"
+        }
     },
     "businessSections": {
         "companies": "Empresas",

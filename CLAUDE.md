@@ -9,19 +9,19 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 ---
 
 ## Golden Rules for Claude
-- **Frontend Development**: Follow the **Frontend Development Flow (UltraThink)** below for ALL frontend code changes
+- **Frontend Development**: Follow the **Frontend Development Flow** below for ALL frontend code changes
 - **Minimal, focused diffs**: change only what's necessary; keep PRs small (<300 LOC) and self-contained
 - **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*)
 - **Never hard-code secrets** or credentials; never read or write `.env`, `secrets/`, or CI secrets
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text
-- **Centralized icon system**: use only icons from `@/shared/ui/icons` - never import from `react-icons` directly or use inline SVG
+- **React-icons priority system**: use `react-icons` with priority order: 1. `fa6` (Font Awesome 6), 2. `bi` (Bootstrap Icons), 3. `hi` (Heroicons). Never use inline SVG
 - **Special symbols vs icons**: use Unicode symbols (©, ®, ™) as text characters, not icons with backgrounds
 - **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances
 - **Ask before destructive or external actions** (network, DB migrations, Docker, `git push`, etc.)
 
 ---
 
-## Frontend Development Flow (UltraThink) ⚠️ **CRITICAL**
+## Frontend Development Flow ⚠️ **CRITICAL**
 
 **Every time you write/modify frontend code, follow this systematic flow:**
 
@@ -34,6 +34,11 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 
 ### 2. **Interactive Elements** (Links, Buttons, Sections) → **Icon + Cursor Pattern**
 - ✅ **Add icon first**: All buttons/links MUST start with icon, then localized text
+- ✅ **React-Icons Priority System**:
+  1. **First Priority**: `import { Fa* } from 'react-icons/fa6'` (Font Awesome 6 - preferred)
+  2. **Second Priority**: `import { Bi* } from 'react-icons/bi'` (Bootstrap Icons - if fa6 doesn't have it)
+  3. **Third Priority**: `import { Hi* } from 'react-icons/hi'` (Heroicons - last resort)
+  4. **Never use**: inline SVG or other icon libraries
 - ✅ **Use IconButton**: `responsive={true}` for adaptive behavior (icon-only below 1280px)
 - ✅ **Cursor pointer**: All pressable elements MUST have `cursor-pointer` styling
 - ✅ **Interactive states**: Provide clear hover, focus, and active states
@@ -55,6 +60,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 ### 5. **Validation Checklist Before Commit**
 - ✅ All text uses i18n keys (no hardcoded strings)
 - ✅ Interactive elements have icons + cursor-pointer + hover states
+- ✅ Icons follow priority: fa6 → bi → hi (no inline SVG and Emoji)
 - ✅ Dates use standardized format (%dd.%mm.%YYYY)
 - ✅ Components work in light & dark themes
 - ✅ Consistent border-radius (.75rem vs 1rem)
@@ -64,9 +70,13 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 
 **Quick Pattern Examples:**
 ```typescript
-// ✅ Good: Complete pattern implementation
+// ✅ Good: Complete pattern implementation with react-icons priority
+import { FaPlus } from 'react-icons/fa6'; // 1st priority: fa6
+import { BiPlus } from 'react-icons/bi';   // 2nd priority: bi
+import { HiPlus } from 'react-icons/hi';   // 3rd priority: hi
+
 <IconButton
-  icon={<AddIcon size={16} />}
+  icon={<FaPlus size={16} />}
   variant="success"
   responsive={true}
   className="cursor-pointer"
@@ -78,9 +88,11 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 const formattedDate = date.toLocaleDateString('en-GB'); // "01.01.2024"
 
 // ✅ Good: Component structure
+import { FaNewspaper } from 'react-icons/fa6';
+
 <Box size="lg" className="rounded-[1rem]"> {/* Big/outer */}
   <PageHeader
-    icon={<PostsIcon size={24} />}
+    icon={<FaNewspaper size={24} />}
     iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 rounded-[0.75rem]" {/* Small/inner */}
     title={t('posts.header.title')}
     description={t('posts.header.description')}
@@ -292,7 +304,7 @@ make up-base     # Infrastructure: base.yml only
 ```
 
 #### **Internationalization (i18n) - Implementation Details**
-> **Main Rule**: Follow **Frontend Development Flow (UltraThink) Step 1** for all text content
+> **Main Rule**: Follow **Frontend Development Flow Step 1** for all text content
 
 **Technical Implementation:**
 - Use `next-intl` with typed helpers: `t('namespace.key')`
@@ -398,10 +410,10 @@ Examples:
 - **Length considerations** - Account for text expansion/contraction in different languages
 - **RTL support** - Arabic text requires right-to-left layout considerations
 
-**Quick Reference - Follow UltraThink Flow:**
-> **See "Frontend Development Flow (UltraThink)" section above for complete workflow**
+**Quick Reference - Follow Frontend Development Flow:**
+> **See "Frontend Development Flow" section above for complete workflow**
 
-**Localization Checklist (from UltraThink Step 1):**
+**Localization Checklist (from Frontend Development Flow Step 1):**
 1. ✅ Check existing keys in ALL 5 language files
 2. ✅ Plan i18n key structure for new text content
 3. ✅ Add translation keys to ALL 5 language files before coding
@@ -411,15 +423,18 @@ Examples:
 
 **Common Localization Patterns:**
 ```typescript
+import { FaPlus, FaNewspaper } from 'react-icons/fa6';
+
 // Page headers with localized title/description
 <PageHeader
+  icon={<FaNewspaper size={24} />}
   title={t('posts.header.title')}
   description={t('posts.header.description')}
   // ... other props
 />
 
 // Button text localization
-<IconButton icon={<AddIcon size={16} />} variant="success" responsive>
+<IconButton icon={<FaPlus size={16} />} variant="success" responsive>
   {t('posts.actions.add')}
 </IconButton>
 
@@ -451,15 +466,15 @@ toast.error(t('posts.actions.deleteError'));
 - Accessibility: label form controls, provide `aria-label` for icon buttons.
 
 #### **Frontend Structure & Design Rules** ⚠️ **CRITICAL**
-> **Main Rule**: Follow **Frontend Development Flow (UltraThink) Steps 2-4** for all UI elements
+> **Main Rule**: Follow **Frontend Development Flow Steps 2-4** for all UI elements
 
-**Interactive Elements (UltraThink Step 2):**
+**Interactive Elements (Frontend Development Flow Step 2):**
 - Icon + Text Structure: All buttons/links start with icon, then localized text
 - Use `IconButton` with `responsive={true}` for adaptive behavior
 - `cursor-pointer` styling for all pressable elements
 - Clear hover, focus, and active states
 
-**Component Styling (UltraThink Step 4):**
+**Component Styling (Frontend Development Flow Step 4):**
 - Theme-aware: light & dark mode support via CSS variables
 - No borders: shadows for big/outer, backgrounds for small/inner
 - Border-radius: `.75rem` (small/inner) vs `1rem` (big/outer)
@@ -561,9 +576,11 @@ toast.error(t('posts.actions.deleteError'));
 
 **Component Examples:**
 ```typescript
+import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'react-icons/fa6';
+
 // Good: Icon + Text button with responsive behavior
 <IconButton
-  icon={<AddIcon size={16} />}
+  icon={<FaPlus size={16} />}
   variant="success"
   responsive
 >
@@ -572,29 +589,29 @@ toast.error(t('posts.actions.deleteError'));
 
 // Good: Button group with semantic colors
 <ButtonGroup>
-  <IconButton variant="outline" icon={<EditIcon size={12} />} responsive>Edit</IconButton>
-  <IconButton variant="destructive" icon={<DeleteIcon size={12} />} responsive>Delete</IconButton>
+  <IconButton variant="outline" icon={<FaEdit size={12} />} responsive>Edit</IconButton>
+  <IconButton variant="destructive" icon={<FaTrash size={12} />} responsive>Delete</IconButton>
 </ButtonGroup>
 
 // Good: Page header with proper color system (pages)
 <PageHeader
-  icon={<PostsIcon size={24} />}
+  icon={<FaNewspaper size={24} />}
   iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
   title={t('posts')}
   description="Browse and discover posts organized by categories"
-  actions={<IconButton icon={<AddIcon size={16} />} variant="success" responsive>Add Post</IconButton>}
+  actions={<IconButton icon={<FaPlus size={16} />} variant="success" responsive>Add Post</IconButton>}
 />
 
 // Good: Demo component headers with specific icons/colors
 <PageHeader
-  icon={<CalculatorIcon size={24} />}
+  icon={<FaCalculator size={24} />}
   iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
   title={t('counter.title')}
   description={t('counter.description')}
 />
 
 <PageHeader
-  icon={<UserIcon size={24} />}
+  icon={<FaUser size={24} />}
   iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
   title={t('userSettings.title')}
   description={t('userSettings.description')}
@@ -602,12 +619,12 @@ toast.error(t('posts.actions.deleteError'));
 
 // Good: Default muted icon container for neutral elements
 <div className="bg-muted text-muted-foreground w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
-  <UserIcon size={20} />
+  <FaUser size={20} />
 </div>
 
 // Good: Interactive button - icon color matches text, responsive text hiding
 <IconButton
-  icon={<AddIcon size={16} />}
+  icon={<FaPlus size={16} />}
   variant="success"
   responsive={true}
 >
@@ -758,7 +775,7 @@ toast.error(t('posts.actions.deleteError'));
 - NGINX reverse proxy configuration in `infra/nginx/`
 
 ### How to Work in This Repo (Claude checklist)
-1. **Follow Frontend Development Flow (UltraThink)**: Use the 5-step systematic flow for ALL frontend code
+1. **Follow Frontend Development Flow**: Use the 5-step systematic flow for ALL frontend code
 2. **Respect FSD architecture**: check import rules and layer responsibilities before coding
 3. **Explain the plan** (brief) and show a *unified diff* preview before writing
 4. **Make minimal changes** in relevant files only
@@ -796,10 +813,10 @@ toast.error(t('posts.actions.deleteError'));
   - `import { ContactFormSidebar } from '@/widgets/contact-form-sidebar'` - Contact form widget
   - `import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar'` - Interactive feedback survey
 - **Demo Component Icons**:
-  - Counter Demo: `CalculatorIcon` with indigo colors (`bg-indigo-500/15 text-indigo-600`)
-  - User Demo: `UserIcon` with purple colors (`bg-purple-500/15 text-purple-600`)
-  - Popup Demo: `WindowIcon` with orange colors (`bg-orange-500/15 text-orange-600`)
-  - Toast Demo: `BellIcon` with green colors (`bg-green-500/15 text-green-600`)
-- **Icons**: `import { PostsIcon, AddIcon, EditIcon, CalculatorIcon, UserIcon, WindowIcon, BellIcon } from '@/shared/ui/icons'` - Solid style icons with size prop
+  - Counter Demo: `FaCalculator` with indigo colors (`bg-indigo-500/15 text-indigo-600`)
+  - User Demo: `FaUser` with purple colors (`bg-purple-500/15 text-purple-600`)
+  - Popup Demo: `FaWindow` with orange colors (`bg-orange-500/15 text-orange-600`)
+  - Toast Demo: `FaBell` with green colors (`bg-green-500/15 text-green-600`)
+- **React-Icons Priority**: `import { Fa* } from 'react-icons/fa6'` (1st), `import { Bi* } from 'react-icons/bi'` (2nd), `import { Hi* } from 'react-icons/hi'` (3rd)
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.

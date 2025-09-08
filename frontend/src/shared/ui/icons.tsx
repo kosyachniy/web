@@ -10,7 +10,7 @@ import {
   FaMoon,
   FaUser,
   FaCreditCard,
-  FaChartBar,
+  FaChartSimple,
   FaRightFromBracket,
   FaShield,
   FaChalkboard,
@@ -199,7 +199,7 @@ export function ShoppingIcon({ size = 16, ...props }: IconProps) {
 }
 
 export function ChartIcon({ size = 16, ...props }: IconProps) {
-  return <FaChartBar size={size} {...props} />
+  return <FaChartSimple size={size} {...props} />
 }
 
 export function BuildingIcon({ size = 16, ...props }: IconProps) {

@@ -215,13 +215,20 @@
         "description": "描述",
         "empty": "空",
         "comments": "评论",
-        "reply": "回复"
+        "reply": "回复",
+        "add": "添加"
     },
     "categories": {
         "category": "类别",
         "title": "标题",
         "parent": "父类",
-        "top": "顶级"
+        "top": "顶级",
+        "popup": {
+            "title": "分类",
+            "loading": "加载中...",
+            "empty": "暂无可用分类",
+            "viewAll": "查看全部 {count} 个分类"
+        }
     },
     "businessSections": {
         "companies": "公司",

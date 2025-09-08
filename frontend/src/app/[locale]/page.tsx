@@ -38,6 +38,7 @@ export default function Home() {
         <ThreeColumnLayout 
             leftSidebar={leftSidebar} 
             rightSidebar={rightSidebar}
+            rightSidebarSticky={false}
         >
             <div className="space-y-12">
                 {/* Demo Components */}

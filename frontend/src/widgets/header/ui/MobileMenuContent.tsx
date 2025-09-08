@@ -2,12 +2,13 @@
 
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { ThemeSwitcher } from '@/shared/components/layout';
 import LanguageSwitcher from '@/features/navigation/components/LanguageSwitcher';
 import { UserProfileDropdown } from '@/widgets/user-profile';
 import { PostsIcon, SpaceIcon, HubIcon, CatalogIcon, HomeIcon, SearchIcon } from '@/shared/ui/icons';
 import { useRouter } from '@/i18n/routing';
+import { CategoriesHoverPopup } from '@/widgets/category';
 
 interface MobileMenuContentProps {
     isOpen: boolean;
@@ -18,6 +19,7 @@ interface MobileMenuContentProps {
 export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: MobileMenuContentProps) {
     const t = useTranslations('system');
     const tNav = useTranslations('navigation');
+    const locale = useLocale();
     const router = useRouter();
 
     const navigationItems = [
@@ -65,6 +67,8 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                                 name="search"
                                 placeholder={`${t('search')}...`}
                                 className="w-full pr-10"
+                                title=""
+                                autoComplete="off"
                             />
                             <button
                                 type="submit"
@@ -78,17 +82,30 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
                     {/* Navigation Sections */}
                     <div className="space-y-3 pb-4 border-b">
                         <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Navigation</h3>
-                        {navigationItems.map((item) => (
-                            <Button
-                                key={item.key}
-                                variant="outline"
-                                className="w-full justify-start gap-3 h-12"
-                                onClick={() => handleNavigate(item.path)}
-                            >
-                                <item.icon size={18} />
-                                <span>{item.label}</span>
-                            </Button>
-                        ))}
+                        {navigationItems.map((item) => {
+                            const button = (
+                                <Button
+                                    key={item.key}
+                                    variant="outline"
+                                    className="w-full justify-start gap-3 h-12"
+                                    onClick={() => handleNavigate(item.path)}
+                                >
+                                    <item.icon size={18} />
+                                    <span>{item.label}</span>
+                                </Button>
+                            );
+
+                            // Wrap Posts navigation item with CategoriesHoverPopup
+                            if (item.key === 'posts') {
+                                return (
+                                    <CategoriesHoverPopup key={item.key} locale={locale}>
+                                        {button}
+                                    </CategoriesHoverPopup>
+                                );
+                            }
+
+                            return button;
+                        })}
                     </div>
 
                     {/* User Profile */}

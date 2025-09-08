@@ -9,5 +9,6 @@ export * from './icon-button';
 export * from './icons';
 export * from './input';
 export * from './page-header';
+export * from './popover';
 export * from './sheet';
 export * from './sidebar-card';

@@ -7,13 +7,17 @@ interface ThreeColumnLayoutProps {
   rightSidebar?: ReactNode;
   children: ReactNode;
   className?: string;
+  leftSidebarSticky?: boolean;
+  rightSidebarSticky?: boolean;
 }
 
 export default function ThreeColumnLayout({
   leftSidebar,
   rightSidebar,
   children,
-  className
+  className,
+  leftSidebarSticky = true,
+  rightSidebarSticky = true
 }: ThreeColumnLayoutProps) {
   return (
     <div className={`min-h-screen bg-background ${className}`}>
@@ -22,7 +26,7 @@ export default function ThreeColumnLayout({
           {/* Left Sidebar */}
           {leftSidebar && (
             <div className="lg:col-span-3">
-              <div className="sticky top-20 space-y-6">
+              <div className={`${leftSidebarSticky ? 'sticky top-20' : ''} space-y-6`}>
                 {leftSidebar}
               </div>
             </div>
@@ -42,7 +46,7 @@ export default function ThreeColumnLayout({
           {/* Right Sidebar */}
           {rightSidebar && (
             <div className="lg:col-span-3">
-              <div className="sticky top-20 space-y-6">
+              <div className={`${rightSidebarSticky ? 'sticky top-20' : ''} space-y-6`}>
                 {rightSidebar}
               </div>
             </div>

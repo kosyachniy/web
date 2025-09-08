@@ -215,13 +215,20 @@
         "description": "الوصف",
         "empty": "فارغ",
         "comments": "التعليقات",
-        "reply": "الرد"
+        "reply": "الرد",
+        "add": "إضافة"
     },
     "categories": {
         "category": "الفئة",
         "title": "العنوان",
         "parent": "الفئة الرئيسية",
-        "top": "المستوى الأعلى"
+        "top": "المستوى الأعلى",
+        "popup": {
+            "title": "الفئات",
+            "loading": "جاري التحميل...",
+            "empty": "لا توجد فئات متاحة",
+            "viewAll": "عرض جميع الفئات الـ {count}"
+        }
     },
     "businessSections": {
         "companies": "الشركات",

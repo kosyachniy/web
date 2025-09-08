@@ -59,6 +59,8 @@ export default function Header() {
                                 name="search"
                                 placeholder={`${t('search')}...`}
                                 className="w-40 xl:w-80 pr-10"
+                                title=""
+                                autoComplete="off"
                             />
                             <button
                                 type="submit"

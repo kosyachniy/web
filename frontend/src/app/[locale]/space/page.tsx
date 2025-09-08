@@ -6,7 +6,7 @@ import { SpaceIcon, WhiteboardIcon, VideoIcon, MessageIcon, BuildingIcon, Constr
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('navigation');
-    
+
     return {
         title: `${t('space')} - Collaboration Tools`,
         description: 'Interactive spaces for collaboration and real-time communication',
@@ -103,21 +103,6 @@ export default async function SpacePage() {
                                 Coming soon: Project management tools
                             </div>
                         </Box>
-                    </div>
-
-                    <div className="mt-12">
-                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 text-center">
-                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2"><ConstructionIcon size={24} /> Under Construction</h2>
-                            <p className="text-muted-foreground mb-6">
-                                We are building amazing collaboration tools that will transform how teams work together. 
-                                Stay tuned for updates!
-                            </p>
-                            <div className="flex justify-center space-x-4 text-sm">
-                                <span className="bg-background px-3 py-1 rounded-full">Real-time Sync</span>
-                                <span className="bg-background px-3 py-1 rounded-full">Multi-platform</span>
-                                <span className="bg-background px-3 py-1 rounded-full">Secure</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

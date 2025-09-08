@@ -6,7 +6,7 @@ import { HubIcon, MessageIcon, QuestionIcon, BookIcon, PaletteIcon, Construction
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('navigation');
-    
+
     return {
         title: `${t('hub')} - Community Forum`,
         description: 'Community forum for user-generated content and discussions',
@@ -31,7 +31,7 @@ export default async function HubPage() {
                         {/* Forum Categories */}
                         <div className="lg:col-span-3">
                             <h2 className="text-2xl font-semibold mb-6">Forum Categories</h2>
-                            
+
                             <div className="space-y-4">
                                 {/* General Discussion */}
                                 <Box size="lg">
@@ -153,16 +153,6 @@ export default async function HubPage() {
                                     </div>
                                 </Box>
                             </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-12 text-center">
-                        <div className="bg-muted rounded-lg p-8">
-                            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2"><ConstructionIcon size={24} /> Coming Soon</h2>
-                            <p className="text-muted-foreground">
-                                Advanced forum features including user profiles, reputation system, advanced moderation tools, 
-                                and real-time notifications are currently in development.
-                            </p>
                         </div>
                     </div>
                 </div>
