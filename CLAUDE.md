@@ -76,9 +76,11 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 #### 5. **Architecture & Patterns** → **FSD + Redux + API Integration**
 - ✅ **Follow FSD layers**: Higher layers → Lower layers only (app → widgets → features → entities → shared)
 - ✅ **Redux Toolkit patterns**: Use `createSlice` and `createAsyncThunk` for state management
-- ✅ **API integration**: Typed API clients with error handling in `entities/*/api/`
+- ✅ **API integration**: Import types from `@/generated/api/schemas` for all API calls
+- ✅ **Schema generation**: Run `npm run generate-schemas` after backend API changes
 - ✅ **Component exports**: Always use public APIs via `index.ts` files
 - ❌ **Cross-layer imports**: Never import between same-level layers
+- ❌ **Manual API types**: Never create manual types - use generated schemas only
 
 #### 6. **Validation Checklist Before Commit**
 - ✅ All text uses i18n keys (no hardcoded strings)
@@ -90,6 +92,8 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - ✅ No border classes used (shadows/backgrounds only)
 - ✅ FSD architecture with correct import layers
 - ✅ TypeScript strict mode compliance
+- ✅ Use generated TypeScript schemas from `@/generated/api/schemas`
+- ✅ No hardcoded API types - import from generated schemas
 - ✅ Responsive design with Tailwind CSS
 - ✅ Redux Toolkit for state management
 - ✅ Error handling with toast notifications
@@ -207,18 +211,20 @@ export default postsSlice.reducer;
 
 #### **API Integration Pattern**
 ```typescript
-// ✅ Good: Typed API client with error handling
+// ✅ Good: Typed API client with auto-generated schemas
 // File: entities/post/api/postsApi.ts
 import { apiClient } from '@/shared/services/api';
-import type { Post, PostsResponse, CreatePostRequest } from './types';
+// Import types from auto-generated OpenAPI schemas
+import type {
+  PostCreateRequest,
+  PostResponse,
+  PostsResponse,
+  CategoriesGetRequest,
+  CategoriesResponse
+} from '@/generated/api/schemas';
 
 export const postsApi = {
-  async getPosts(params: {
-    category?: number;
-    limit?: number;
-    offset?: number;
-    search?: string;
-  }): Promise<PostsResponse> {
+  async getPosts(params: CategoriesGetRequest): Promise<PostsResponse> {
     try {
       const response = await apiClient.post('/posts/get/', params);
       return response.data;
@@ -227,7 +233,7 @@ export const postsApi = {
     }
   },
 
-  async createPost(data: CreatePostRequest): Promise<Post> {
+  async createPost(data: PostCreateRequest): Promise<PostResponse> {
     try {
       const response = await apiClient.post('/posts/', data);
       return response.data;
@@ -235,6 +241,14 @@ export const postsApi = {
       throw new Error('Failed to create post');
     }
   },
+};
+
+// ✅ Good: Use generated schemas in components
+// File: features/posts/ui/CreatePostForm.tsx
+import type { PostCreateRequest } from '@/generated/api/schemas';
+
+const handleSubmit = async (data: PostCreateRequest) => {
+  await postsApi.createPost(data); // Fully typed with auto-completion
 };
 ```
 
@@ -320,53 +334,30 @@ make logs-jobs     # View background jobs logs
 make logs-tg       # View Telegram bot logs
 ```
 
-### API Testing & Development
+### API Development & Schema Generation
+
+#### **Schema-First Development Workflow**
+1. **Backend**: Write FastAPI endpoints with proper Pydantic models (descriptions, examples)
+2. **Generate**: Run `cd frontend && npm run generate-schemas` after API changes
+3. **Frontend**: Import types from `@/generated/api/schemas` in all API-related code
+4. **Validate**: Check http://localhost/docs for API documentation accuracy
+
 ```bash
-# Test backend API endpoints (when containers are running)
-# Categories API - get all categories with nested structure
-curl -X POST http://localhost/api/categories/get/ \
-  -H "Content-Type: application/json" \
-  -d '{}' | jq
-
-# Categories API - filter by parent (0 = top-level)
-curl -X POST http://localhost/api/categories/get/ \
-  -H "Content-Type: application/json" \
-  -d '{"parent": 0, "status": 1}' | jq
-
-# Posts API - get posts with pagination
-curl -X POST http://localhost/api/posts/get/ \
-  -H "Content-Type: application/json" \
-  -d '{"limit": 5, "offset": 0}' | jq
-
-# Posts API - filter by category
-curl -X POST http://localhost/api/posts/get/ \
-  -H "Content-Type: application/json" \
-  -d '{"category": 1, "limit": 3}' | jq
-
-# Posts API - search posts
-curl -X POST http://localhost/api/posts/get/ \
-  -H "Content-Type: application/json" \
-  -d '{"search": "news", "limit": 10}' | jq
-
-# Check API health and response times
-curl -w "@- time_total: %{time_total}s\n" \
-  -X POST http://localhost/api/categories/get/ \
-  -H "Content-Type: application/json" \
-  -d '{}'
-
-# Frontend API integration testing
-cd frontend && node scripts/test-api-integration.js
-
-# Common API Response Examples:
-# Categories: {"categories": [{"id": 1, "title": "News", "url": "news", "categories": [...]}]}
-# Posts: {"posts": [{"id": 1, "title": "Sample", "url": "sample", "category": 1}], "count": 10}
+# Generate TypeScript schemas from OpenAPI (after backend changes)
+cd frontend && npm run generate-schemas
 
 # Check what containers are running
 docker ps
 
 # View API logs in real-time
 docker logs -f web-api-1
+
+# API Documentation (when containers are running)
+# OpenAPI/Swagger UI: http://localhost/docs
+# OpenAPI JSON: http://localhost/openapi.json
 ```
+
+**Important**: Never create manual API types. Always use generated schemas for type safety and consistency.
 
 ## Architecture
 
@@ -378,22 +369,18 @@ docker logs -f web-api-1
 - **Services**: Middleware and utilities in `services/`
 - **Dependencies**: Uses `uv` for package management, defined in `pyproject.toml`
 
-#### **API Endpoints Structure**
-```
-POST /api/categories/get/    # Get categories with filtering
-POST /api/posts/get/         # Get posts with filtering/pagination
-GET  /api/categories/{id}/   # Get single category
-POST /api/posts/            # Create new post
-PUT  /api/posts/{id}/       # Update post
-DELETE /api/posts/{id}/     # Delete post
-```
+#### **API Schema Generation Rules**
+- **Clean Pydantic Models**: All request/response models MUST use proper Pydantic field descriptions and examples
+- **OpenAPI Tags**: Organize endpoints with proper tags for clean schema generation
+- **Response Models**: Always specify `response_model` in FastAPI decorators for accurate schemas
+- **Documentation**: Use docstrings and Pydantic field descriptions for auto-generated API docs
+- **Schema Location**: Generated TypeScript schemas available in `frontend/src/generated/api/`
 
-#### **Request/Response Patterns**
-- **Categories Request**: `{"parent": 0, "status": 1, "locale": "en"}`
-- **Categories Response**: `{"categories": [{"id": 1, "title": "News", "url": "news", "categories": [...]}]}`
-- **Posts Request**: `{"category": 1, "limit": 12, "offset": 0, "search": "keyword"}`
-- **Posts Response**: `{"posts": [...], "count": 42}`
-- **Error Response**: `{"detail": "Error message"}` with appropriate HTTP status
+#### **API Documentation**
+- **Live Documentation**: http://localhost/docs (Swagger UI)
+- **OpenAPI Spec**: http://localhost/openapi.json
+- **Generated Types**: `frontend/src/generated/api/schemas.ts`
+- **Usage**: Import types from generated schemas in frontend code
 
 ### Frontend Architecture (Feature-Sliced Design)
 
@@ -517,7 +504,14 @@ feature-name/
 - ✅ **Error tracking** with stack traces
 - ❌ **NEVER log sensitive data** (passwords, tokens, PII)
 
-#### 5. **Testing & Quality**
+#### 5. **Schema Generation** → **Clean OpenAPI Generation**
+- ✅ **Pydantic field descriptions** for all model fields to generate clear API docs
+- ✅ **Response models** specified in all FastAPI decorators (`response_model=`)
+- ✅ **OpenAPI tags** for logical endpoint grouping
+- ✅ **Field examples** in Pydantic models for better generated documentation
+- ✅ **Generate schemas** after API changes: `cd frontend && npm run generate-schemas`
+
+#### 6. **Testing & Quality**
 - ✅ **pytest async tests** for all endpoints
 - ✅ **Test fixtures** for database setup/teardown
 - ✅ **Mock external dependencies** with httpx_mock
@@ -533,18 +527,26 @@ from loguru import logger
 from typing import List, Optional
 import httpx
 
-# Pydantic models for validation
+# Pydantic models for validation & schema generation
 class PostCreateRequest(BaseModel):
-    title: str = Field(..., min_length=1, max_length=200)
-    content: str = Field(..., min_length=1)
-    category_id: int = Field(..., gt=0)
+    """Request model for creating a new post"""
+    title: str = Field(..., min_length=1, max_length=200,
+                      description="Post title", example="My Awesome Post")
+    content: str = Field(..., min_length=1,
+                        description="Post content in markdown",
+                        example="This is the post content...")
+    category_id: int = Field(..., gt=0,
+                            description="Category ID", example=1)
 
 class PostResponse(BaseModel):
-    id: int
-    title: str
-    content: str
-    created_at: str
-    category: Optional[str] = None
+    """Response model for post data"""
+    id: int = Field(description="Post ID", example=1)
+    title: str = Field(description="Post title", example="My Awesome Post")
+    content: str = Field(description="Post content", example="Content...")
+    created_at: str = Field(description="Creation date (DD.MM.YYYY)",
+                           example="01.01.2024")
+    category: Optional[str] = Field(None, description="Category name",
+                                   example="Technology")
 
 # ConSys model for MongoDB
 class PostDocument(ConsysModel):
@@ -554,8 +556,8 @@ class PostDocument(ConsysModel):
     created_at: datetime
     status: int = 1
 
-# Async endpoint with proper error handling
-@router.post("/posts/", response_model=PostResponse)
+# Async endpoint with proper error handling & schema generation
+@router.post("/posts/", response_model=PostResponse, tags=["Posts"])
 async def create_post(
     request: PostCreateRequest,
     db: Database = Depends(get_database),
@@ -604,13 +606,16 @@ async def fetch_external_data(url: str) -> dict:
 
 **Backend Validation Checklist:**
 1. ✅ All endpoints use async/await patterns
-2. ✅ Pydantic models for request/response validation
-3. ✅ ConSys models for MongoDB operations
-4. ✅ Structured logging with loguru
-5. ✅ Type hints on all functions and variables
-6. ✅ Error handling with proper HTTP status codes
-7. ✅ Tests cover all critical paths
-8. ✅ No sensitive data in logs
+2. ✅ Pydantic models with field descriptions and examples for schema generation
+3. ✅ Response models specified in FastAPI decorators (`response_model=`)
+4. ✅ OpenAPI tags for endpoint organization
+5. ✅ ConSys models for MongoDB operations
+6. ✅ Structured logging with loguru
+7. ✅ Type hints on all functions and variables
+8. ✅ Error handling with proper HTTP status codes
+9. ✅ Tests cover all critical paths
+10. ✅ No sensitive data in logs
+11. ✅ Generate TypeScript schemas after API changes (`npm run generate-schemas`)
 
 
 ### Key Technologies
@@ -1090,6 +1095,8 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
 - **Feature APIs**: Feature-specific APIs in `features/*/api/`
 - **Base URL**: API routes via nginx proxy at `http://localhost/api/`
 - **Response Format**: Backend returns `{"categories": [...]}`, `{"posts": [...], "count": N}`
+- **Response Types**: Import all types from `@/generated/api/schemas` - never create manual types
+- **Schema Generation**: Run `npm run generate-schemas` after backend API changes
 - Handle auth, retries, timeouts, and typed errors centrally
 - Surface errors via `widgets/feedback-system`, never raw stack traces
 - **Mock Fallback**: Set `NEXT_PUBLIC_USE_MOCK_FALLBACK=true` to enable mock data during development
