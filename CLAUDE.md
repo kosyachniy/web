@@ -21,18 +21,34 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 
 ---
 
-## Frontend Development Flow ⚠️ **CRITICAL**
+## Frontend Technology Stack & Development Flow ⚠️ **CRITICAL**
+
+### **Current Frontend Stack**
+- **Core Framework**: Next.js 15 (App Router) with React 19
+- **Language**: TypeScript (strict mode enabled)
+- **Styling System**: Tailwind CSS + Radix UI (shadcn/ui components)
+- **State Management**: Redux Toolkit (RTK) with async thunks
+- **Icons**: react-icons library (fa6 → bi → hi priority system)
+- **Internationalization**: next-intl for 5-language support
+- **Architecture**: Feature-Sliced Design (FSD) with strict import rules
+- **HTTP Client**: Custom API client with auth + error handling
+- **Package Management**: npm with package-lock.json
+- **Build System**: Next.js built-in webpack + SWC compiler
+- **Development**: Hot reload with file watching via polling
+- **Quality Tools**: ESLint + TypeScript compiler + Prettier
+
+### **Frontend Development Flow** ⚠️ **CRITICAL**
 
 **Every time you write/modify frontend code, follow this systematic flow:**
 
-### 1. **Text Content** → **Localization (i18n)**
+#### 1. **Text Content** → **Localization (i18n)**
 - ✅ **Check existing keys** in ALL 5 language files (`en.json`, `es.json`, `ru.json`, `ar.json`, `zh.json`)
 - ✅ **Plan i18n key structure** for new text content (`feature.component.element[.state]`)
 - ✅ **Add translation keys to ALL 5 language files** before writing component code
 - ✅ **Use `useTranslations()` hook** or `t()` function in components
 - ❌ **NEVER hardcode text strings** in components
 
-### 2. **Interactive Elements** (Links, Buttons, Sections) → **Icon + Cursor Pattern**
+#### 2. **Interactive Elements** (Links, Buttons, Sections) → **Icon + Cursor Pattern**
 - ✅ **Add icon first**: All buttons/links MUST start with icon, then localized text
 - ✅ **React-Icons Priority System**:
   1. **First Priority**: `import { Fa* } from 'react-icons/fa6'` (Font Awesome 6 - preferred)
@@ -43,12 +59,12 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - ✅ **Cursor pointer**: All pressable elements MUST have `cursor-pointer` styling
 - ✅ **Interactive states**: Provide clear hover, focus, and active states
 
-### 3. **Time/Date Values** → **Standardized Format**
+#### 3. **Time/Date Values** → **Standardized Format**
 - ✅ **Use format**: `%dd.%mm.%YYYY` (e.g., "01.01.2024") everywhere
 - ✅ **Consistency**: Frontend display, backend responses, Telegram bot - same format
 - ❌ **No other date formats** allowed
 
-### 4. **Component Creation** → **Theme + Border + Radius System**
+#### 4. **Component Creation** → **Theme + Border + Radius System**
 - ✅ **Theme-aware**: Support both light & dark themes via CSS variables/tokens
 - ✅ **No borders**: Use shadows for big/outer elements, backgrounds for small/inner elements
 - ✅ **Border-radius consistency**:
@@ -57,7 +73,14 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - ✅ **Box containers**: Wrap ALL content in `Box` component from `@/shared/ui/box`
 - ✅ **PageHeader**: Use for ALL pages/sections with proper icon color system
 
-### 5. **Validation Checklist Before Commit**
+#### 5. **Architecture & Patterns** → **FSD + Redux + API Integration**
+- ✅ **Follow FSD layers**: Higher layers → Lower layers only (app → widgets → features → entities → shared)
+- ✅ **Redux Toolkit patterns**: Use `createSlice` and `createAsyncThunk` for state management
+- ✅ **API integration**: Typed API clients with error handling in `entities/*/api/`
+- ✅ **Component exports**: Always use public APIs via `index.ts` files
+- ❌ **Cross-layer imports**: Never import between same-level layers
+
+#### 6. **Validation Checklist Before Commit**
 - ✅ All text uses i18n keys (no hardcoded strings)
 - ✅ Interactive elements have icons + cursor-pointer + hover states
 - ✅ Icons follow priority: fa6 → bi → hi (no inline SVG and Emoji)
@@ -65,10 +88,157 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - ✅ Components work in light & dark themes
 - ✅ Consistent border-radius (.75rem vs 1rem)
 - ✅ No border classes used (shadows/backgrounds only)
+- ✅ FSD architecture with correct import layers
+- ✅ TypeScript strict mode compliance
+- ✅ Responsive design with Tailwind CSS
+- ✅ Redux Toolkit for state management
+- ✅ Error handling with toast notifications
 - ✅ Run `npm run build` to validate FSD structure
 - ✅ Run `npm run lint` for code quality
 
-**Quick Pattern Examples:**
+### **Key Frontend Architectural Patterns**
+
+#### **Component Architecture Pattern**
+```typescript
+// ✅ Good: Feature-Sliced Design component structure
+// File: features/posts/ui/PostCard.tsx
+import { FaNewspaper, FaCalendar, FaEdit } from 'react-icons/fa6';
+import { useTranslations } from 'next-intl';
+import { IconButton } from '@/shared/ui/icon-button';
+import { Box } from '@/shared/ui/box';
+import type { Post } from '@/entities/post';
+
+interface PostCardProps {
+  post: Post;
+  onEdit?: (id: number) => void;
+}
+
+export const PostCard = ({ post, onEdit }: PostCardProps) => {
+  const t = useTranslations('posts.card');
+
+  return (
+    <Box size="default" className="rounded-[1rem]">
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <div className="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
+            <FaNewspaper size={20} />
+          </div>
+          <div>
+            <h3 className="font-semibold">{post.title}</h3>
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <FaCalendar size={12} />
+              {post.created_at}
+            </div>
+          </div>
+        </div>
+        {onEdit && (
+          <IconButton
+            variant="outline"
+            icon={<FaEdit size={12} />}
+            responsive
+            onClick={() => onEdit(post.id)}
+          >
+            {t('actions.edit')}
+          </IconButton>
+        )}
+      </div>
+    </Box>
+  );
+};
+```
+
+#### **State Management Pattern**
+```typescript
+// ✅ Good: Redux Toolkit slice with async thunks
+// File: entities/post/model/postSlice.ts
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import type { Post } from './types';
+import { postsApi } from '../api';
+
+interface PostsState {
+  posts: Post[];
+  loading: boolean;
+  error: string | null;
+  total: number;
+}
+
+export const fetchPosts = createAsyncThunk(
+  'posts/fetchPosts',
+  async (params: { category?: number; limit?: number; offset?: number }) => {
+    const response = await postsApi.getPosts(params);
+    return response;
+  }
+);
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState: {
+    posts: [],
+    loading: false,
+    error: null,
+    total: 0,
+  } as PostsState,
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload.posts;
+        state.total = action.payload.count;
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch posts';
+      });
+  },
+});
+
+export const { clearError } = postsSlice.actions;
+export default postsSlice.reducer;
+```
+
+#### **API Integration Pattern**
+```typescript
+// ✅ Good: Typed API client with error handling
+// File: entities/post/api/postsApi.ts
+import { apiClient } from '@/shared/services/api';
+import type { Post, PostsResponse, CreatePostRequest } from './types';
+
+export const postsApi = {
+  async getPosts(params: {
+    category?: number;
+    limit?: number;
+    offset?: number;
+    search?: string;
+  }): Promise<PostsResponse> {
+    try {
+      const response = await apiClient.post('/posts/get/', params);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch posts');
+    }
+  },
+
+  async createPost(data: CreatePostRequest): Promise<Post> {
+    try {
+      const response = await apiClient.post('/posts/', data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to create post');
+    }
+  },
+};
+```
+
+### **Quick Pattern Examples**
 ```typescript
 // ✅ Good: Complete pattern implementation with react-icons priority
 import { FaPlus } from 'react-icons/fa6'; // 1st priority: fa6
@@ -384,180 +554,6 @@ async def fetch_external_data(url: str) -> dict:
 7. ✅ Tests cover all critical paths
 8. ✅ No sensitive data in logs
 
----
-
-## Frontend Technology Stack & Coding Flow ⚠️ **CRITICAL**
-
-### **Current Frontend Stack**
-- **Core Framework**: Next.js 15 (App Router) with React 19
-- **Language**: TypeScript (strict mode enabled)
-- **Styling System**: Tailwind CSS + Radix UI (shadcn/ui components)
-- **State Management**: Redux Toolkit (RTK) with async thunks
-- **Icons**: react-icons library (fa6 → bi → hi priority system)
-- **Internationalization**: next-intl for 5-language support
-- **Architecture**: Feature-Sliced Design (FSD) with strict import rules
-- **HTTP Client**: Custom API client with auth + error handling
-- **Package Management**: npm with package-lock.json
-- **Build System**: Next.js built-in webpack + SWC compiler
-- **Development**: Hot reload with file watching via polling
-- **Quality Tools**: ESLint + TypeScript compiler + Prettier
-
-### **Frontend Development Flow** ⚠️ **CRITICAL**
-> **This flow is already documented above - follow the 5-step systematic process**
-
-**Key Frontend Architectural Patterns:**
-
-#### **Component Architecture**
-```typescript
-// ✅ Good: Feature-Sliced Design component structure
-// File: features/posts/ui/PostCard.tsx
-import { FaNewspaper, FaCalendar } from 'react-icons/fa6';
-import { useTranslations } from 'next-intl';
-import { IconButton } from '@/shared/ui/icon-button';
-import { Box } from '@/shared/ui/box';
-import type { Post } from '@/entities/post';
-
-interface PostCardProps {
-  post: Post;
-  onEdit?: (id: number) => void;
-}
-
-export const PostCard = ({ post, onEdit }: PostCardProps) => {
-  const t = useTranslations('posts.card');
-
-  return (
-    <Box size="default" className="rounded-[1rem]">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
-            <FaNewspaper size={20} />
-          </div>
-          <div>
-            <h3 className="font-semibold">{post.title}</h3>
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <FaCalendar size={12} />
-              {post.created_at}
-            </div>
-          </div>
-        </div>
-        {onEdit && (
-          <IconButton
-            variant="outline"
-            icon={<FaEdit size={12} />}
-            responsive
-            onClick={() => onEdit(post.id)}
-          >
-            {t('actions.edit')}
-          </IconButton>
-        )}
-      </div>
-    </Box>
-  );
-};
-```
-
-#### **State Management Pattern**
-```typescript
-// ✅ Good: Redux Toolkit slice with async thunks
-// File: entities/post/model/postSlice.ts
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { Post } from './types';
-import { postsApi } from '../api';
-
-interface PostsState {
-  posts: Post[];
-  loading: boolean;
-  error: string | null;
-  total: number;
-}
-
-export const fetchPosts = createAsyncThunk(
-  'posts/fetchPosts',
-  async (params: { category?: number; limit?: number; offset?: number }) => {
-    const response = await postsApi.getPosts(params);
-    return response;
-  }
-);
-
-const postsSlice = createSlice({
-  name: 'posts',
-  initialState: {
-    posts: [],
-    loading: false,
-    error: null,
-    total: 0,
-  } as PostsState,
-  reducers: {
-    clearError: (state) => {
-      state.error = null;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchPosts.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.posts = action.payload.posts;
-        state.total = action.payload.count;
-      })
-      .addCase(fetchPosts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch posts';
-      });
-  },
-});
-
-export const { clearError } = postsSlice.actions;
-export default postsSlice.reducer;
-```
-
-#### **API Integration Pattern**
-```typescript
-// ✅ Good: Typed API client with error handling
-// File: entities/post/api/postsApi.ts
-import { apiClient } from '@/shared/services/api';
-import type { Post, PostsResponse, CreatePostRequest } from './types';
-
-export const postsApi = {
-  async getPosts(params: {
-    category?: number;
-    limit?: number;
-    offset?: number;
-    search?: string;
-  }): Promise<PostsResponse> {
-    try {
-      const response = await apiClient.post('/posts/get/', params);
-      return response.data;
-    } catch (error) {
-      throw new Error('Failed to fetch posts');
-    }
-  },
-
-  async createPost(data: CreatePostRequest): Promise<Post> {
-    try {
-      const response = await apiClient.post('/posts/', data);
-      return response.data;
-    } catch (error) {
-      throw new Error('Failed to create post');
-    }
-  },
-};
-```
-
-**Frontend Validation Checklist:**
-1. ✅ FSD architecture with correct import layers
-2. ✅ All text through i18n system (5 languages)
-3. ✅ react-icons priority system (fa6 → bi → hi)
-4. ✅ TypeScript strict mode compliance
-5. ✅ Theme-aware components (light/dark)
-6. ✅ Responsive design with Tailwind CSS
-7. ✅ Redux Toolkit for state management
-8. ✅ Error handling with toast notifications
-9. ✅ `npm run build` passes FSD validation
-10. ✅ `npm run lint` passes code quality
 
 ### Key Technologies
 - **Frontend**: Next.js 15, React 19, TypeScript, Redux Toolkit, Tailwind CSS, Radix UI
