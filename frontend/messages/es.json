@@ -1,7 +1,4 @@
 {
-    "common": {
-        "language": "Idioma"
-    },
     "counter": {
         "title": "Demo Contador Redux",
         "description": "Mostrando Redux Toolkit con componentes shadcn/ui",
@@ -18,28 +15,6 @@
         "light": "Claro",
         "dark": "Oscuro",
         "system": "Sistema"
-    },
-    "months": {
-        "january": "Enero",
-        "february": "Febrero",
-        "march": "Marzo",
-        "april": "Abril",
-        "may": "Mayo",
-        "june": "Junio",
-        "july": "Julio",
-        "august": "Agosto",
-        "september": "Septiembre",
-        "october": "Octubre",
-        "november": "Noviembre",
-        "december": "Diciembre"
-    },
-    "structure": {
-        "space": "Espacio",
-        "feed": "Alimentación",
-        "posts": "Publicaciones",
-        "room": "Sala",
-        "events": "Eventos",
-        "map": "Mapa"
     },
     "navigation": {
         "posts": "Publicaciones",
@@ -96,21 +71,6 @@
         "tagline": "Aplicación web de plantilla",
         "address": "San Petersburgo, Rusia"
     },
-    "science": {
-        "math": "Matemáticas",
-        "prog": "Programación",
-        "bis": "Negocios y Economía",
-        "manag": "Administración",
-        "lead": "Carisma y Liderazgo",
-        "marketing": "Marketing",
-        "life_safety": "Seguridad en la vida"
-    },
-    "events": {
-        "hack": "Competiciones",
-        "meet": "Encuentros",
-        "lect": "Conferencias",
-        "pres": "Presentaciones"
-    },
     "footer": {
         "rights": "Todos los derechos reservados",
         "contacts": "Contactos",
@@ -148,17 +108,6 @@
         "refund": "Política de Reembolso",
         "rates": "Precios"
     },
-    "profile": {
-        "login": "Inicio de sesión",
-        "avatar": "Avatar",
-        "name": "Nombre",
-        "surname": "Apellido",
-        "phone": "Número de teléfono",
-        "mail": "Correo electrónico",
-        "password": "Contraseña",
-        "passwordTip1": "debe tener una longitud de 6 o más",
-        "passwordTip2": "debe incluir dígitos y letras"
-    },
     "admin": {
         "categories": {
             "title": "Categorías",
@@ -177,7 +126,7 @@
             "loading": "Cargando categorías...",
             "deleteConfirm": "¿Estás seguro de que quieres eliminar \"{title}\"? Esto también eliminará todas las subcategorías.",
             "createSuccess": "Categoría \"{title}\" creada exitosamente",
-            "updateSuccess": "Categoría \"{title}\" actualizada exitosamente", 
+            "updateSuccess": "Categoría \"{title}\" actualizada exitosamente",
             "deleteSuccess": "Categoría \"{title}\" eliminada exitosamente",
             "createTitle": "Crear nueva categoría",
             "editTitle": "Editar categoría: {title}",
@@ -219,10 +168,6 @@
         "add": "Añadir"
     },
     "categories": {
-        "category": "Categoría",
-        "title": "Título",
-        "parent": "Padre",
-        "top": "Nivel superior",
         "popup": {
             "title": "Categorías",
             "loading": "Cargando...",

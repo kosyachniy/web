@@ -1,7 +1,4 @@
 {
-    "common": {
-        "language": "语言"
-    },
     "counter": {
         "title": "Redux 计数器演示",
         "description": "展示 Redux Toolkit 与 shadcn/ui 组件",
@@ -18,28 +15,6 @@
         "light": "浅色",
         "dark": "深色",
         "system": "系统"
-    },
-    "months": {
-        "january": "一月",
-        "february": "二月",
-        "march": "三月",
-        "april": "四月",
-        "may": "五月",
-        "june": "六月",
-        "july": "七月",
-        "august": "八月",
-        "september": "九月",
-        "october": "十月",
-        "november": "十一月",
-        "december": "十二月"
-    },
-    "structure": {
-        "space": "空间",
-        "feed": "动态",
-        "posts": "帖子",
-        "room": "房间",
-        "events": "活动",
-        "map": "地图"
     },
     "navigation": {
         "posts": "帖子",
@@ -96,21 +71,6 @@
         "tagline": "模板Web应用程序",
         "address": "俄罗斯圣彼得堡"
     },
-    "science": {
-        "math": "数学",
-        "prog": "编程",
-        "bis": "商业和经济",
-        "manag": "管理",
-        "lead": "魅力和领导力",
-        "marketing": "市场营销",
-        "life_safety": "生命安全"
-    },
-    "events": {
-        "hack": "比赛",
-        "meet": "聚会",
-        "lect": "讲座",
-        "pres": "演示文稿"
-    },
     "footer": {
         "rights": "版权所有",
         "contacts": "联系方式",
@@ -147,17 +107,6 @@
         "userAgreement": "用户协议",
         "refund": "退款政策",
         "rates": "价格"
-    },
-    "profile": {
-        "login": "登录",
-        "avatar": "头像",
-        "name": "名字",
-        "surname": "姓氏",
-        "phone": "电话号码",
-        "mail": "电子邮件",
-        "password": "密码",
-        "passwordTip1": "长度应为6个或更多",
-        "passwordTip2": "包括数字和字母"
     },
     "admin": {
         "categories": {
@@ -219,10 +168,6 @@
         "add": "添加"
     },
     "categories": {
-        "category": "类别",
-        "title": "标题",
-        "parent": "父类",
-        "top": "顶级",
         "popup": {
             "title": "分类",
             "loading": "加载中...",

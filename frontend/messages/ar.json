@@ -1,7 +1,4 @@
 {
-    "common": {
-        "language": "اللغة"
-    },
     "counter": {
         "title": "عرض عداد Redux",
         "description": "عرض Redux Toolkit مع مكونات shadcn/ui",
@@ -18,28 +15,6 @@
         "light": "فاتح",
         "dark": "داكن",
         "system": "النظام"
-    },
-    "months": {
-        "january": "يناير",
-        "february": "فبراير",
-        "march": "مارس",
-        "april": "أبريل",
-        "may": "مايو",
-        "june": "يونيو",
-        "july": "يوليو",
-        "august": "أغسطس",
-        "september": "سبتمبر",
-        "october": "أكتوبر",
-        "november": "نوفمبر",
-        "december": "ديسمبر"
-    },
-    "structure": {
-        "space": "المساحة",
-        "feed": "التغذية",
-        "posts": "المنشورات",
-        "room": "الغرفة",
-        "events": "الفعاليات",
-        "map": "الخريطة"
     },
     "navigation": {
         "posts": "المنشورات",
@@ -96,21 +71,6 @@
         "tagline": "تطبيق ويب نموذجي",
         "address": "سانت بطرسبرغ، روسيا"
     },
-    "science": {
-        "math": "الرياضيات",
-        "prog": "البرمجة",
-        "bis": "الأعمال والاقتصاد",
-        "manag": "الإدارة",
-        "lead": "الكاريزما والقيادة",
-        "marketing": "التسويق",
-        "life_safety": "السلامة الحياتية"
-    },
-    "events": {
-        "hack": "المسابقات",
-        "meet": "التجمعات",
-        "lect": "المحاضرات",
-        "pres": "العروض التقديمية"
-    },
     "footer": {
         "rights": "جميع الحقوق محفوظة",
         "contacts": "جهات الاتصال",
@@ -147,17 +107,6 @@
         "userAgreement": "اتفاقية المستخدم",
         "refund": "سياسة الاسترداد",
         "rates": "الأسعار"
-    },
-    "profile": {
-        "login": "تسجيل الدخول",
-        "avatar": "الصورة الرمزية",
-        "name": "الاسم",
-        "surname": "اللقب",
-        "phone": "رقم الهاتف",
-        "mail": "البريد الإلكتروني",
-        "password": "كلمة المرور",
-        "passwordTip1": "يجب أن يكون طولها 6 أو أكثر",
-        "passwordTip2": "تتضمن الأرقام والحروف"
     },
     "admin": {
         "categories": {
@@ -219,10 +168,6 @@
         "add": "إضافة"
     },
     "categories": {
-        "category": "الفئة",
-        "title": "العنوان",
-        "parent": "الفئة الرئيسية",
-        "top": "المستوى الأعلى",
         "popup": {
             "title": "الفئات",
             "loading": "جاري التحميل...",

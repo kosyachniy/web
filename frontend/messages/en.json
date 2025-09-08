@@ -1,7 +1,4 @@
 {
-    "common": {
-        "language": "Language"
-    },
     "counter": {
         "title": "Redux Counter Demo",
         "description": "Showcasing Redux Toolkit with shadcn/ui components",
@@ -18,28 +15,6 @@
         "light": "Light",
         "dark": "Dark",
         "system": "System"
-    },
-    "months": {
-        "january": "January",
-        "february": "February",
-        "march": "March",
-        "april": "April",
-        "may": "May",
-        "june": "June",
-        "july": "July",
-        "august": "August",
-        "september": "September",
-        "october": "October",
-        "november": "November",
-        "december": "December"
-    },
-    "structure": {
-        "space": "Space",
-        "feed": "Feed",
-        "posts": "Posts",
-        "room": "Room",
-        "events": "Events",
-        "map": "Map"
     },
     "navigation": {
         "posts": "Posts",
@@ -96,21 +71,6 @@
         "tagline": "Template web app",
         "address": "St. Petersburg, Russia"
     },
-    "science": {
-        "math": "Mathematics",
-        "prog": "Programming",
-        "bis": "Business and Economics",
-        "manag": "Management",
-        "lead": "Charisma and Leadership",
-        "marketing": "Marketing",
-        "life_safety": "Life safety"
-    },
-    "events": {
-        "hack": "Competitions",
-        "meet": "Meetups",
-        "lect": "Lectures",
-        "pres": "Presentations"
-    },
     "footer": {
         "rights": "All rights reserved",
         "contacts": "Contacts",
@@ -147,17 +107,6 @@
         "userAgreement": "User Agreement",
         "refund": "Refund Policy",
         "rates": "Pricing"
-    },
-    "profile": {
-        "login": "Login",
-        "avatar": "Avatar",
-        "name": "Name",
-        "surname": "Surname",
-        "phone": "Phone number",
-        "mail": "E-mail",
-        "password": "Password",
-        "passwordTip1": "length should be 6 or more",
-        "passwordTip2": "include digits and letters"
     },
     "admin": {
         "categories": {
@@ -219,10 +168,6 @@
         "add": "Add"
     },
     "categories": {
-        "category": "Category",
-        "title": "Title",
-        "parent": "Parent",
-        "top": "Top level",
         "popup": {
             "title": "Categories",
             "loading": "Loading...",
@@ -322,12 +267,12 @@
         "clearFilters": "Clear Filters",
         "quickSelect": "Quick Select",
         "lastPeriods": "Last",
-        "currentPeriods": "Current", 
+        "currentPeriods": "Current",
         "previousPeriods": "Previous",
         "lastDay": "Day (24h)",
         "currentWeekFromMonday": "This Week (from Mon)",
         "previousWeek": "Previous Week",
-        "previousMonth": "Previous Month", 
+        "previousMonth": "Previous Month",
         "previousYear": "Previous Year",
         "allPeriod": "All Period",
         "resetSelected": "Reset Selected",
