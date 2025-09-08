@@ -93,7 +93,10 @@ import {
   FaShirt,
   FaFootball,
   FaCouch,
-  FaBookOpen
+  FaBookOpen,
+  FaCar,
+  FaUtensils,
+  FaSprayCanSparkles
 } from "react-icons/fa6"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -511,4 +514,24 @@ export function HomeGardenIcon({ size = 16, ...props }: IconProps) {
 
 export function BooksIcon({ size = 16, ...props }: IconProps) {
   return <FaBookOpen size={size} {...props} />
+}
+
+export function AutoMotoIcon({ size = 16, ...props }: IconProps) {
+  return <FaCar size={size} {...props} />
+}
+
+export function FoodBeverageIcon({ size = 16, ...props }: IconProps) {
+  return <FaUtensils size={size} {...props} />
+}
+
+export function BeautyHealthIcon({ size = 16, ...props }: IconProps) {
+  return <FaSprayCanSparkles size={size} {...props} />
+}
+
+export function BagsAccessoriesIcon({ size = 16, ...props }: IconProps) {
+  return <FaBox size={size} {...props} />
+}
+
+export function HobbiesCreativityIcon({ size = 16, ...props }: IconProps) {
+  return <FaPalette size={size} {...props} />
 }

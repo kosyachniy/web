@@ -7,18 +7,17 @@ import Link from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/shared/lib/utils';
-import { Box } from './box';
 import { ChevronRightIcon, HeartIcon } from './icons';
 
 // Card variants for different use cases
 const cardVariants = cva(
-  'group cursor-pointer block card-hover',
+  'group cursor-pointer block card-hover shadow-box rounded-[1rem] overflow-hidden',
   {
     variants: {
       variant: {
-        default: '',
-        minimal: '',
-        product: 'hover:shadow-lg',
+        default: 'hover:shadow-lg transition-shadow',
+        minimal: 'shadow-sm hover:shadow-md transition-shadow',
+        product: 'hover:shadow-xl transition-shadow',
       },
       size: {
         sm: 'max-w-sm',
@@ -278,7 +277,7 @@ function Card({
   };
 
   const CardContent = () => (
-    <Box className={cn('overflow-hidden p-0', className)} {...props}>
+    <div className={cn('bg-card text-card-foreground', className)} {...props}>
       {/* Image Section */}
       {hasImages && (
         <ImageSlider
@@ -359,7 +358,7 @@ function Card({
           </div>
         )}
       </div>
-    </Box>
+    </div>
   );
 
   // Wrap with Link if href provided
@@ -393,7 +392,7 @@ function Card({
 
   // Static card
   return (
-    <div className={cn(cardVariants({ variant, size }), 'cursor-default card-static', className)}>
+    <div className={cn(cardVariants({ variant, size }), 'cursor-default')}>
       <CardContent />
     </div>
   );

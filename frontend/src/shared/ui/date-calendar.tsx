@@ -29,9 +29,11 @@ const getDaysInMonth = (year: number, month: number) => {
   return new Date(year, month + 1, 0).getDate()
 }
 
-// Helper to get first day of month (0 = Sunday, 1 = Monday, etc.)
+// Helper to get first day of month (0 = Monday, 1 = Tuesday, etc.)
 const getFirstDayOfMonth = (year: number, month: number) => {
-  return new Date(year, month, 1).getDay()
+  const jsDay = new Date(year, month, 1).getDay()
+  // Convert JS day (0=Sunday, 1=Monday...) to Monday-first (0=Monday, 1=Tuesday...)
+  return (jsDay + 6) % 7
 }
 
 // Helper to check if date is same day
@@ -54,7 +56,6 @@ export function DateCalendar({
   onSelect,
 }: DateCalendarProps) {
   const [currentDate, setCurrentDate] = React.useState(new Date())
-  const [selectingFrom, setSelectingFrom] = React.useState(true)
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -66,7 +67,7 @@ export function DateCalendar({
     'July', 'August', 'September', 'October', 'November', 'December'
   ]
 
-  const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  const weekDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(year, month - 1))
@@ -85,7 +86,6 @@ export function DateCalendar({
         from: clickedDate,
         to: undefined
       })
-      setSelectingFrom(false)
     } else if (selected.from && !selected.to) {
       // Complete the range
       if (clickedDate >= selected.from) {
@@ -99,7 +99,6 @@ export function DateCalendar({
           to: selected.from
         })
       }
-      setSelectingFrom(true)
     }
   }
 

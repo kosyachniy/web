@@ -16,9 +16,12 @@ import {
   XIcon,
   ClothingIcon,
   ElectronicsIcon,
-  SportsIcon,
   HomeGardenIcon,
-  BooksIcon,
+  AutoMotoIcon,
+  FoodBeverageIcon,
+  BeautyHealthIcon,
+  BagsAccessoriesIcon,
+  HobbiesCreativityIcon,
   StarIcon
 } from '@/shared/ui/icons';
 
@@ -47,6 +50,7 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
 
   // Date range states
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [tempDateRange, setTempDateRange] = useState<DateRange | undefined>();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   // Price range states
@@ -92,39 +96,104 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
     }
   ];
 
-  // Categories with icons and nested structure
+  // Categories with icons and nested structure based on user's catalog
   const categories: Category[] = [
     {
       id: 1,
-      title: t('electronics'),
-      icon: <ElectronicsIcon size={16} />,
+      title: t('clothingFootwear'),
+      icon: <ClothingIcon size={16} />,
       categories: [
-        { id: 11, title: t('smartphones'), parent: 1, icon: <ElectronicsIcon size={14} /> },
-        { id: 12, title: t('laptops'), parent: 1, icon: <ElectronicsIcon size={14} /> },
-        { id: 13, title: t('accessories'), parent: 1, icon: <ElectronicsIcon size={14} /> }
+        { id: 11, title: t('mensClothing'), parent: 1, icon: <ClothingIcon size={14} /> },
+        { id: 12, title: t('womensClothing'), parent: 1, icon: <ClothingIcon size={14} /> },
+        { id: 13, title: t('childrensClothing'), parent: 1, icon: <ClothingIcon size={14} /> },
+        { id: 14, title: t('shoes'), parent: 1, icon: <ClothingIcon size={14} /> },
+        { id: 15, title: t('sportswear'), parent: 1, icon: <ClothingIcon size={14} /> }
       ]
     },
     {
       id: 2,
-      title: t('clothing'),
-      icon: <ClothingIcon size={16} />,
+      title: t('bagsAccessories'),
+      icon: <BagsAccessoriesIcon size={16} />,
       categories: [
-        { id: 21, title: t('mensClothing'), parent: 2, icon: <ClothingIcon size={14} /> },
-        { id: 22, title: t('womensClothing'), parent: 2, icon: <ClothingIcon size={14} /> },
-        { id: 23, title: t('childrensClothing'), parent: 2, icon: <ClothingIcon size={14} /> }
+        { id: 21, title: t('handbags'), parent: 2, icon: <BagsAccessoriesIcon size={14} /> },
+        { id: 22, title: t('backpacks'), parent: 2, icon: <BagsAccessoriesIcon size={14} /> },
+        { id: 23, title: t('jewelry'), parent: 2, icon: <BagsAccessoriesIcon size={14} /> },
+        { id: 24, title: t('watches'), parent: 2, icon: <BagsAccessoriesIcon size={14} /> },
+        { id: 25, title: t('sunglasses'), parent: 2, icon: <BagsAccessoriesIcon size={14} /> }
       ]
     },
     {
       id: 3,
+      title: t('electronics'),
+      icon: <ElectronicsIcon size={16} />,
+      categories: [
+        { id: 31, title: t('smartphones'), parent: 3, icon: <ElectronicsIcon size={14} /> },
+        { id: 32, title: t('laptops'), parent: 3, icon: <ElectronicsIcon size={14} /> },
+        { id: 33, title: t('tablets'), parent: 3, icon: <ElectronicsIcon size={14} /> },
+        { id: 34, title: t('headphones'), parent: 3, icon: <ElectronicsIcon size={14} /> },
+        { id: 35, title: t('cameras'), parent: 3, icon: <ElectronicsIcon size={14} /> }
+      ]
+    },
+    {
+      id: 4,
+      title: t('healthBeauty'),
+      icon: <BeautyHealthIcon size={16} />,
+      categories: [
+        { id: 41, title: t('skincare'), parent: 4, icon: <BeautyHealthIcon size={14} /> },
+        { id: 42, title: t('makeup'), parent: 4, icon: <BeautyHealthIcon size={14} /> },
+        { id: 43, title: t('perfumes'), parent: 4, icon: <BeautyHealthIcon size={14} /> },
+        { id: 44, title: t('haircare'), parent: 4, icon: <BeautyHealthIcon size={14} /> },
+        { id: 45, title: t('supplements'), parent: 4, icon: <BeautyHealthIcon size={14} /> }
+      ]
+    },
+    {
+      id: 5,
       title: t('homeGarden'),
       icon: <HomeGardenIcon size={16} />,
       categories: [
-        { id: 31, title: t('furniture'), parent: 3, icon: <HomeGardenIcon size={14} /> },
-        { id: 32, title: t('gardenTools'), parent: 3, icon: <HomeGardenIcon size={14} /> }
+        { id: 51, title: t('furniture'), parent: 5, icon: <HomeGardenIcon size={14} /> },
+        { id: 52, title: t('decor'), parent: 5, icon: <HomeGardenIcon size={14} /> },
+        { id: 53, title: t('kitchenware'), parent: 5, icon: <HomeGardenIcon size={14} /> },
+        { id: 54, title: t('gardenTools'), parent: 5, icon: <HomeGardenIcon size={14} /> },
+        { id: 55, title: t('lighting'), parent: 5, icon: <HomeGardenIcon size={14} /> }
       ]
     },
-    { id: 4, title: t('books'), icon: <BooksIcon size={16} /> },
-    { id: 5, title: t('sports'), icon: <SportsIcon size={16} /> }
+    {
+      id: 6,
+      title: t('autoMoto'),
+      icon: <AutoMotoIcon size={16} />,
+      categories: [
+        { id: 61, title: t('carAccessories'), parent: 6, icon: <AutoMotoIcon size={14} /> },
+        { id: 62, title: t('carParts'), parent: 6, icon: <AutoMotoIcon size={14} /> },
+        { id: 63, title: t('motorcycle'), parent: 6, icon: <AutoMotoIcon size={14} /> },
+        { id: 64, title: t('tools'), parent: 6, icon: <AutoMotoIcon size={14} /> },
+        { id: 65, title: t('oils'), parent: 6, icon: <AutoMotoIcon size={14} /> }
+      ]
+    },
+    {
+      id: 7,
+      title: t('hobbiesCreativity'),
+      icon: <HobbiesCreativityIcon size={16} />,
+      categories: [
+        { id: 71, title: t('artSupplies'), parent: 7, icon: <HobbiesCreativityIcon size={14} /> },
+        { id: 72, title: t('crafts'), parent: 7, icon: <HobbiesCreativityIcon size={14} /> },
+        { id: 73, title: t('musicalInstruments'), parent: 7, icon: <HobbiesCreativityIcon size={14} /> },
+        { id: 74, title: t('collectibles'), parent: 7, icon: <HobbiesCreativityIcon size={14} /> },
+        { id: 75, title: t('books'), parent: 7, icon: <HobbiesCreativityIcon size={14} /> }
+      ]
+    },
+    {
+      id: 8,
+      title: t('foodBeverage'),
+      icon: <FoodBeverageIcon size={16} />,
+      categories: [
+        { id: 81, title: t('beverages'), parent: 8, icon: <FoodBeverageIcon size={14} /> },
+        { id: 82, title: t('snacks'), parent: 8, icon: <FoodBeverageIcon size={14} /> },
+        { id: 83, title: t('organic'), parent: 8, icon: <FoodBeverageIcon size={14} /> },
+        { id: 84, title: t('spices'), parent: 8, icon: <FoodBeverageIcon size={14} /> },
+        { id: 85, title: t('gourmet'), parent: 8, icon: <FoodBeverageIcon size={14} /> }
+      ]
+    }
   ];
 
   // Control points for price slider
@@ -176,7 +245,8 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
     }
   };
 
-  const handleTimeFilterClick = (key: string) => {
+
+  const handleTempTimeFilterClick = (key: string) => {
     const now = new Date();
     let from: Date | undefined;
     let to: Date | undefined = now;
@@ -205,15 +275,15 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
         from = new Date(now.getFullYear(), now.getMonth(), 1);
         break;
       case 'lastMonth':
-        from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        to = new Date(now.getFullYear(), now.getMonth(), 0);
+        // Last 30 days (rolling period)
+        from = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
         break;
       case 'thisYear':
         from = new Date(now.getFullYear(), 0, 1);
         break;
       case 'lastYear':
-        from = new Date(now.getFullYear() - 1, 0, 1);
-        to = new Date(now.getFullYear() - 1, 11, 31);
+        // Last 365 days (rolling period)
+        from = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
         break;
       case 'lastDay':
         // Last 24 hours
@@ -243,13 +313,11 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
         to = undefined;
         break;
       case 'reset':
-        setDateRange(undefined);
-        setIsDatePickerOpen(false);
+        setTempDateRange(undefined);
         return;
     }
 
-    setDateRange({ from, to });
-    setIsDatePickerOpen(false);
+    setTempDateRange({ from, to });
   };
 
   const handlePriceInputChange = (type: 'min' | 'max', value: string) => {
@@ -350,7 +418,10 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
             size="sm"
             className="w-full justify-start"
             icon={<CalendarIcon size={16} />}
-            onClick={() => setIsDatePickerOpen(true)}
+            onClick={() => {
+              setTempDateRange(dateRange);
+              setIsDatePickerOpen(true);
+            }}
           >
             {dateRange?.from ? (
               dateRange.to ? (
@@ -372,8 +443,8 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
           >
             <div className="space-y-4">
               <DateCalendar
-                selected={dateRange}
-                onSelect={setDateRange}
+                selected={tempDateRange}
+                onSelect={setTempDateRange}
               />
 
               {/* Quick Date Buttons */}
@@ -389,7 +460,7 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
                         {group.filters.map((filter) => (
                           <button
                             key={filter.key}
-                            onClick={() => handleTimeFilterClick(filter.key)}
+                            onClick={() => handleTempTimeFilterClick(filter.key)}
                             className="text-xs p-2 bg-muted/50 hover:bg-muted rounded-[0.75rem] transition-colors cursor-pointer"
                           >
                             {filter.label}
@@ -401,18 +472,27 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
 
                   {/* Action Buttons */}
                   <div className="pt-2 border-t">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       <button
-                        onClick={() => handleTimeFilterClick('all')}
-                        className="text-xs p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-[0.75rem] transition-colors cursor-pointer font-medium"
-                      >
-                        {t('allPeriod')}
-                      </button>
-                      <button
-                        onClick={() => handleTimeFilterClick('reset')}
+                        onClick={() => setIsDatePickerOpen(false)}
                         className="text-xs p-2 bg-muted/50 hover:bg-muted text-muted-foreground rounded-[0.75rem] transition-colors cursor-pointer font-medium"
                       >
-                        {t('resetSelected')}
+                        {t('cancel')}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setDateRange(tempDateRange);
+                          setIsDatePickerOpen(false);
+                        }}
+                        className="text-xs p-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-[0.75rem] transition-colors cursor-pointer font-medium"
+                      >
+                        {t('apply')}
+                      </button>
+                      <button
+                        onClick={() => handleTempTimeFilterClick('reset')}
+                        className="text-xs p-2 bg-destructive/10 hover:bg-destructive/20 text-destructive rounded-[0.75rem] transition-colors cursor-pointer font-medium"
+                      >
+                        {t('reset')}
                       </button>
                     </div>
                   </div>
