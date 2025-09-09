@@ -64,6 +64,8 @@ import {
   FaCalculator,
   FaBell,
   FaWindowMaximize,
+  FaArrowUp,
+  FaArrowDown,
   FaTelegram,
   FaYoutube,
   FaInstagram,
@@ -379,6 +381,14 @@ export function WindowIcon({ size = 16, ...props }: IconProps) {
   return <FaWindowMaximize size={size} {...props} />
 }
 
+export function ArrowUpIcon({ size = 16, ...props }: IconProps) {
+  return <FaArrowUp size={size} {...props} />
+}
+
+export function ArrowDownIcon({ size = 16, ...props }: IconProps) {
+  return <FaArrowDown size={size} {...props} />
+}
+
 // Additional icons for category management
 export function ImageIcon({ size = 16, ...props }: IconProps) {
   return <FaImage size={size} {...props} />
@@ -535,3 +545,8 @@ export function BagsAccessoriesIcon({ size = 16, ...props }: IconProps) {
 export function HobbiesCreativityIcon({ size = 16, ...props }: IconProps) {
   return <FaPalette size={size} {...props} />
 }
+
+// Aliases for consistency with CLAUDE.md examples
+export const PlusIcon = AddIcon
+export const TrashIcon = DeleteIcon
+export const NewspaperIcon = PostsIcon

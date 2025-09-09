@@ -14,6 +14,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 - **Follow FSD Architecture**: respect Feature-Sliced Design layers and import rules (see *Frontend Architecture*)
 - **Never hard-code secrets** or credentials; never read or write `.env`, `secrets/`, or CI secrets
 - **Use toasts/popups for feedback**: errors/warnings/success/info should use app toasts/dialogs, not `alert()` or raw text
+- **Centralized icon management**: ALL icons MUST be imported from `shared/ui/icons.tsx` file, never directly from `react-icons`
 - **React-icons priority system**: use `react-icons` with priority order: 1. `fa6` (Font Awesome 6), 2. `bi` (Bootstrap Icons), 3. `hi` (Heroicons). Never use inline SVG
 - **Special symbols vs icons**: use Unicode symbols (©, ®, ™) as text characters, not icons with backgrounds
 - **Accessibility first**: proper aria labels/roles, focus states, keyboard nav; no color-only affordances
@@ -50,7 +51,8 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 
 #### 2. **Interactive Elements** (Links, Buttons, Sections) → **Icon + Cursor Pattern**
 - ✅ **Add icon first**: All buttons/links MUST start with icon, then localized text
-- ✅ **React-Icons Priority System**:
+- ✅ **Centralized Icon Import**: ALL icons MUST be imported from `@/shared/ui/icons` - NEVER directly from react-icons
+- ✅ **React-Icons Priority System** (for icons.tsx only):
   1. **First Priority**: `import { Fa* } from 'react-icons/fa6'` (Font Awesome 6 - preferred)
   2. **Second Priority**: `import { Bi* } from 'react-icons/bi'` (Bootstrap Icons - if fa6 doesn't have it)
   3. **Third Priority**: `import { Hi* } from 'react-icons/hi'` (Heroicons - last resort)
@@ -85,6 +87,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 #### 6. **Validation Checklist Before Commit**
 - ✅ All text uses i18n keys (no hardcoded strings)
 - ✅ Interactive elements have icons + cursor-pointer + hover states
+- ✅ ALL icons imported from `@/shared/ui/icons` - no direct react-icons imports
 - ✅ Icons follow priority: fa6 → bi → hi (no inline SVG and Emoji)
 - ✅ Dates use standardized format (%dd.%mm.%YYYY)
 - ✅ Components work in light & dark themes
@@ -106,7 +109,7 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 ```typescript
 // ✅ Good: Feature-Sliced Design component structure
 // File: features/posts/ui/PostCard.tsx
-import { FaNewspaper, FaCalendar, FaEdit } from 'react-icons/fa6';
+import { NewspaperIcon, CalendarIcon, EditIcon } from '@/shared/ui/icons';
 import { useTranslations } from 'next-intl';
 import { IconButton } from '@/shared/ui/icon-button';
 import { Box } from '@/shared/ui/box';
@@ -125,12 +128,12 @@ export const PostCard = ({ post, onEdit }: PostCardProps) => {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div className="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
-            <FaNewspaper size={20} />
+            <NewspaperIcon size={20} />
           </div>
           <div>
             <h3 className="font-semibold">{post.title}</h3>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <FaCalendar size={12} />
+              <CalendarIcon size={12} />
               {post.created_at}
             </div>
           </div>
@@ -138,7 +141,7 @@ export const PostCard = ({ post, onEdit }: PostCardProps) => {
         {onEdit && (
           <IconButton
             variant="outline"
-            icon={<FaEdit size={12} />}
+            icon={<EditIcon size={12} />}
             responsive
             onClick={() => onEdit(post.id)}
           >
@@ -254,13 +257,11 @@ const handleSubmit = async (data: PostCreateRequest) => {
 
 ### **Quick Pattern Examples**
 ```typescript
-// ✅ Good: Complete pattern implementation with react-icons priority
-import { FaPlus } from 'react-icons/fa6'; // 1st priority: fa6
-import { BiPlus } from 'react-icons/bi';   // 2nd priority: bi
-import { HiPlus } from 'react-icons/hi';   // 3rd priority: hi
+// ✅ Good: Complete pattern implementation with centralized icons
+import { PlusIcon, NewspaperIcon } from '@/shared/ui/icons';
 
 <IconButton
-  icon={<FaPlus size={16} />}
+  icon={<PlusIcon size={16} />}
   variant="success"
   responsive={true}
   className="cursor-pointer"
@@ -271,12 +272,12 @@ import { HiPlus } from 'react-icons/hi';   // 3rd priority: hi
 // ✅ Good: Date formatting
 const formattedDate = date.toLocaleDateString('en-GB'); // "01.01.2024"
 
-// ✅ Good: Component structure
-import { FaNewspaper } from 'react-icons/fa6';
+// ✅ Good: Component structure with centralized icons
+import { NewspaperIcon } from '@/shared/ui/icons';
 
 <Box size="lg" className="rounded-[1rem]"> {/* Big/outer */}
   <PageHeader
-    icon={<FaNewspaper size={24} />}
+    icon={<NewspaperIcon size={24} />}
     iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400 rounded-[0.75rem]" {/* Small/inner */}
     title={t('posts.header.title')}
     description={t('posts.header.description')}
@@ -804,18 +805,18 @@ Examples:
 
 **Common Localization Patterns:**
 ```typescript
-import { FaPlus, FaNewspaper } from 'react-icons/fa6';
+import { PlusIcon, NewspaperIcon } from '@/shared/ui/icons';
 
 // Page headers with localized title/description
 <PageHeader
-  icon={<FaNewspaper size={24} />}
+  icon={<NewspaperIcon size={24} />}
   title={t('posts.header.title')}
   description={t('posts.header.description')}
   // ... other props
 />
 
 // Button text localization
-<IconButton icon={<FaPlus size={16} />} variant="success" responsive>
+<IconButton icon={<PlusIcon size={16} />} variant="success" responsive>
   {t('posts.actions.add')}
 </IconButton>
 
@@ -961,11 +962,13 @@ toast.error(t('posts.actions.deleteError'));
 
 **Component Examples:**
 ```typescript
-import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'react-icons/fa6';
+import { 
+  PlusIcon, EditIcon, TrashIcon, NewspaperIcon, CalculatorIcon, UserIcon 
+} from '@/shared/ui/icons';
 
 // Good: Icon + Text button with responsive behavior
 <IconButton
-  icon={<FaPlus size={16} />}
+  icon={<PlusIcon size={16} />}
   variant="success"
   responsive
 >
@@ -974,29 +977,29 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
 
 // Good: Button group with semantic colors
 <ButtonGroup>
-  <IconButton variant="outline" icon={<FaEdit size={12} />} responsive>Edit</IconButton>
-  <IconButton variant="destructive" icon={<FaTrash size={12} />} responsive>Delete</IconButton>
+  <IconButton variant="outline" icon={<EditIcon size={12} />} responsive>Edit</IconButton>
+  <IconButton variant="destructive" icon={<TrashIcon size={12} />} responsive>Delete</IconButton>
 </ButtonGroup>
 
 // Good: Page header with proper color system (pages)
 <PageHeader
-  icon={<FaNewspaper size={24} />}
+  icon={<NewspaperIcon size={24} />}
   iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
   title={t('posts')}
   description="Browse and discover posts organized by categories"
-  actions={<IconButton icon={<FaPlus size={16} />} variant="success" responsive>Add Post</IconButton>}
+  actions={<IconButton icon={<PlusIcon size={16} />} variant="success" responsive>Add Post</IconButton>}
 />
 
 // Good: Demo component headers with specific icons/colors
 <PageHeader
-  icon={<FaCalculator size={24} />}
+  icon={<CalculatorIcon size={24} />}
   iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
   title={t('counter.title')}
   description={t('counter.description')}
 />
 
 <PageHeader
-  icon={<FaUser size={24} />}
+  icon={<UserIcon size={24} />}
   iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
   title={t('userSettings.title')}
   description={t('userSettings.description')}
@@ -1004,12 +1007,12 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
 
 // Good: Default muted icon container for neutral elements
 <div className="bg-muted text-muted-foreground w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
-  <FaUser size={20} />
+  <UserIcon size={20} />
 </div>
 
 // Good: Interactive button - icon color matches text, responsive text hiding
 <IconButton
-  icon={<FaPlus size={16} />}
+  icon={<PlusIcon size={16} />}
   variant="success"
   responsive={true}
 >
@@ -1216,11 +1219,12 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
   - `import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar'` - Quick action buttons
   - `import { ContactFormSidebar } from '@/widgets/contact-form-sidebar'` - Contact form widget
   - `import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar'` - Interactive feedback survey
-- **Demo Component Icons**:
-  - Counter Demo: `FaCalculator` with indigo colors (`bg-indigo-500/15 text-indigo-600`)
-  - User Demo: `FaUser` with purple colors (`bg-purple-500/15 text-purple-600`)
-  - Popup Demo: `FaWindow` with orange colors (`bg-orange-500/15 text-orange-600`)
-  - Toast Demo: `FaBell` with green colors (`bg-green-500/15 text-green-600`)
-- **React-Icons Priority**: `import { Fa* } from 'react-icons/fa6'` (1st), `import { Bi* } from 'react-icons/bi'` (2nd), `import { Hi* } from 'react-icons/hi'` (3rd)
+- **Demo Component Icons** (from `@/shared/ui/icons`):
+  - Counter Demo: `CalculatorIcon` with indigo colors (`bg-indigo-500/15 text-indigo-600`)
+  - User Demo: `UserIcon` with purple colors (`bg-purple-500/15 text-purple-600`)
+  - Popup Demo: `WindowIcon` with orange colors (`bg-orange-500/15 text-orange-600`)
+  - Toast Demo: `BellIcon` with green colors (`bg-green-500/15 text-green-600`)
+- **Centralized Icons**: ALL icons imported from `@/shared/ui/icons` - never directly from react-icons
+- **React-Icons Priority** (for icons.tsx only): fa6 → bi → hi priority system
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.

@@ -6,25 +6,24 @@ import { Button } from './button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { cn } from '@/shared/lib/utils';
-import { SearchIcon, FilterIcon, CloseIcon, MenuIcon } from './icons';
+import { SearchIcon, FilterIcon, CloseIcon, MenuIcon, StarIcon, ArrowUpIcon, ArrowDownIcon, ClockIcon, TrendingIcon } from './icons';
 import { useTranslations } from 'next-intl';
-import { FaStar, FaArrowUp, FaArrowDown, FaClock, FaFire } from 'react-icons/fa6';
 
 // Helper function to get sort option icons
 function getSortIcon(sortValue: string) {
   switch (sortValue) {
     case 'featured':
-      return <FaStar size={12} className="text-amber-500" />;
+      return <StarIcon size={12} className="text-amber-500" />;
     case 'priceAsc':
-      return <FaArrowUp size={12} className="text-green-500" />;
+      return <ArrowUpIcon size={12} className="text-green-500" />;
     case 'priceDesc':
-      return <FaArrowDown size={12} className="text-red-500" />;
+      return <ArrowDownIcon size={12} className="text-red-500" />;
     case 'newest':
-      return <FaClock size={12} className="text-blue-500" />;
+      return <ClockIcon size={12} className="text-blue-500" />;
     case 'popular':
-      return <FaFire size={12} className="text-orange-500" />;
+      return <TrendingIcon size={12} className="text-orange-500" />;
     default:
-      return <FaStar size={12} className="text-muted-foreground" />;
+      return <StarIcon size={12} className="text-muted-foreground" />;
   }
 }
 

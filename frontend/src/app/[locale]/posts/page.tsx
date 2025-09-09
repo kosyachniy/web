@@ -4,10 +4,9 @@ import { PostsWithSearch } from '@/widgets/posts-list';
 import { SubcategoryNavigation } from '@/widgets/category';
 import { getSubcategories, getCategoryTitle, getCategoryUrl } from '@/entities/category';
 import { PageHeader } from '@/shared/ui/page-header';
-import { PostsIcon } from '@/shared/ui/icons';
+import { PostsIcon, PlusIcon } from '@/shared/ui/icons';
 import { IconButton } from '@/shared/ui/icon-button';
 import { ButtonGroup } from '@/shared/ui/button-group';
-import { FaPlus } from 'react-icons/fa6';
 
 interface PostsPageProps {
   params: Promise<{
@@ -65,7 +64,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
                         actions={
                             <ButtonGroup>
                                 <IconButton 
-                                    icon={<FaPlus size={16} />} 
+                                    icon={<PlusIcon size={16} />} 
                                     variant="success" 
                                     responsive
                                 >
