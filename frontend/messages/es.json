@@ -321,6 +321,15 @@
         "feedbackReceived": "Tu comentario ha sido recibido.",
         "takeAgain": "Tomar de nuevo"
     },
+    "catalog": {
+        "product": {
+            "addToCart": "Agregar al Carrito",
+            "favorite": "Favoritos",
+            "cart": "Carrito",
+            "unavailable": "No Disponible",
+            "inCart": "En el Carrito"
+        }
+    },
     "search": {
         "searchArea": "Área de búsqueda",
         "placeholder": "Buscar...",

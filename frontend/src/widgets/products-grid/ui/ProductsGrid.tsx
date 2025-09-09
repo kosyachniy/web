@@ -2,6 +2,9 @@
 
 import { ProductCard } from '@/widgets/product-card';
 import { useToastActions } from '@/shared/hooks/useToast';
+import { useAppSelector, useAppDispatch } from '@/shared/stores/store';
+import { toggleCartItem, selectCartItemsAsSet } from '@/features/cart';
+import { toggleFavorite, selectFavoriteItemsAsSet } from '@/features/favorites';
 
 interface Product {
     id: number;
@@ -175,12 +178,47 @@ const sampleProducts = [
     }
 ];
 
-export function ProductsGrid() {
+interface ProductsGridProps {
+    // Props are optional now since we use Redux directly
+    onProductAddToCart?: (productId: number) => void;
+    onProductToggleFavorite?: (productId: number) => void;
+    cartItems?: Set<number>;
+    favoriteItems?: Set<number>;
+}
+
+export function ProductsGrid({ onProductAddToCart, onProductToggleFavorite, cartItems, favoriteItems }: ProductsGridProps) {
     const { success } = useToastActions();
+    const dispatch = useAppDispatch();
+    
+    // Use Redux state if props are not provided
+    const reduxCartItems = useAppSelector(selectCartItemsAsSet);
+    const reduxFavoriteItems = useAppSelector(selectFavoriteItemsAsSet);
+    
+    const finalCartItems = cartItems || reduxCartItems;
+    const finalFavoriteItems = favoriteItems || reduxFavoriteItems;
 
     const handleAddToCart = (product: Product) => {
         success(`${product.title} added to cart!`);
         console.log('Adding to cart:', product);
+        
+        // Use Redux action if no callback provided
+        if (onProductAddToCart) {
+            onProductAddToCart(product.id);
+        } else {
+            dispatch(toggleCartItem(product.id));
+        }
+    };
+
+    const handleToggleFavorite = (product: Product) => {
+        success(`${product.title} favorite status toggled!`);
+        console.log('Toggle favorite:', product);
+        
+        // Use Redux action if no callback provided
+        if (onProductToggleFavorite) {
+            onProductToggleFavorite(product.id);
+        } else {
+            dispatch(toggleFavorite(product.id));
+        }
     };
 
     return (
@@ -190,6 +228,9 @@ export function ProductsGrid() {
                     key={product.id}
                     product={product}
                     onAddToCart={handleAddToCart}
+                    onToggleFavorite={handleToggleFavorite}
+                    isInCart={finalCartItems.has(product.id)}
+                    isInFavorites={finalFavoriteItems.has(product.id)}
                 />
             ))}
         </div>

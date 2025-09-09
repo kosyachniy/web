@@ -6,6 +6,8 @@ import { combineReducers } from '@reduxjs/toolkit'
 import { counterSlice } from '@/features/demo/stores/counterSlice'
 import { userSettingsSlice } from '@/features/user/stores/userSettingsSlice'
 import { toastSlice } from '@/shared/stores/toastSlice'
+import { cartSlice } from '@/features/cart/stores/cartSlice'
+import { favoritesSlice } from '@/features/favorites/stores/favoritesSlice'
 
 // Persist configuration for counter
 const counterPersistConfig = {
@@ -19,14 +21,30 @@ const userSettingsPersistConfig = {
     storage,
 }
 
+// Persist configuration for cart
+const cartPersistConfig = {
+    key: 'cart',
+    storage,
+}
+
+// Persist configuration for favorites
+const favoritesPersistConfig = {
+    key: 'favorites',
+    storage,
+}
+
 // Create persisted reducers
 const persistedCounterReducer = persistReducer(counterPersistConfig, counterSlice.reducer)
 const persistedUserSettingsReducer = persistReducer(userSettingsPersistConfig, userSettingsSlice.reducer)
+const persistedCartReducer = persistReducer(cartPersistConfig, cartSlice.reducer)
+const persistedFavoritesReducer = persistReducer(favoritesPersistConfig, favoritesSlice.reducer)
 
 // Root reducer
 const rootReducer = combineReducers({
     counter: persistedCounterReducer,
     userSettings: persistedUserSettingsReducer,
+    cart: persistedCartReducer,
+    favorites: persistedFavoritesReducer,
     toast: toastSlice.reducer, // Toast doesn't need persistence
 })
 

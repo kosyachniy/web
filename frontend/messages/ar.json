@@ -321,6 +321,15 @@
         "feedbackReceived": "تم استلام تعليقك.",
         "takeAgain": "أخذ مرة أخرى"
     },
+    "catalog": {
+        "product": {
+            "addToCart": "إضافة إلى السلة",
+            "favorite": "مفضلة",
+            "cart": "سلة التسوق",
+            "unavailable": "غير متوفر",
+            "inCart": "في السلة"
+        }
+    },
     "search": {
         "searchArea": "منطقة البحث",
         "placeholder": "بحث...",

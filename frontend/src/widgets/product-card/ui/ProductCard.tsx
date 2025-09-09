@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { ShoppingIcon, TagIcon, TrendingIcon, StarIcon, ReviewsIcon } from '@/shared/ui/icons';
@@ -25,16 +26,26 @@ interface Product {
 interface ProductCardProps {
     product: Product;
     onAddToCart?: (product: Product) => void;
+    onToggleFavorite?: (product: Product) => void;
+    isInCart?: boolean;
+    isInFavorites?: boolean;
 }
 
-export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+export function ProductCard({ product, onAddToCart, onToggleFavorite, isInCart = false, isInFavorites = false }: ProductCardProps) {
+    const t = useTranslations('catalog.product');
+    
     // Like functionality - in production this would come from props or global state
-    const [isLiked, setIsLiked] = useState(false);
+    const [isLiked, setIsLiked] = useState(isInFavorites);
 
     const handleLikeClick = (id?: string | number) => {
         // In production, this would call an API to like/unlike the product
         console.log('Like clicked for product:', id);
         setIsLiked(prev => !prev);
+        
+        // Call the prop callback if provided
+        if (onToggleFavorite) {
+            onToggleFavorite(product);
+        }
         
         // TODO: Integrate with API
         // Example:
@@ -95,7 +106,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
     // Prepare actions - single button only
     const actions = onAddToCart ? (
         <Button
-            variant={product.inStock ? "default" : "outline"}
+            variant={!product.inStock ? "outline" : isInCart ? "secondary" : "default"}
             size="sm"
             disabled={!product.inStock}
             onClick={(e) => {
@@ -106,7 +117,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             className="w-full"
         >
             <ShoppingIcon size={12} />
-            {product.inStock ? 'Add to Cart' : 'Unavailable'}
+            {!product.inStock ? t('unavailable') : isInCart ? t('inCart') : t('addToCart')}
         </Button>
     ) : null;
 

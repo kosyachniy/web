@@ -321,6 +321,15 @@
         "feedbackReceived": "Your feedback has been received.",
         "takeAgain": "Take Again"
     },
+    "catalog": {
+        "product": {
+            "addToCart": "Add to Cart",
+            "favorite": "Favorites",
+            "cart": "Cart",
+            "unavailable": "Unavailable",
+            "inCart": "In Cart"
+        }
+    },
     "search": {
         "searchArea": "Search area",
         "placeholder": "Search...",

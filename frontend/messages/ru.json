@@ -321,6 +321,15 @@
         "feedbackReceived": "Ваш отзыв получен.",
         "takeAgain": "Пройти снова"
     },
+    "catalog": {
+        "product": {
+            "addToCart": "Добавить в Корзину",
+            "favorite": "Избранное",
+            "cart": "Корзина",
+            "unavailable": "Недоступно",
+            "inCart": "В Корзине"
+        }
+    },
     "search": {
         "searchArea": "Область поиска",
         "placeholder": "Поиск...",

@@ -321,6 +321,15 @@
         "feedbackReceived": "您的反馈已收到。",
         "takeAgain": "重新开始"
     },
+    "catalog": {
+        "product": {
+            "addToCart": "加入购物车",
+            "favorite": "收藏夹",
+            "cart": "购物车",
+            "unavailable": "不可用",
+            "inCart": "已在购物车中"
+        }
+    },
     "search": {
         "searchArea": "搜索区域",
         "placeholder": "搜索...",
