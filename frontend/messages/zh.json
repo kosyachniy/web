@@ -320,5 +320,35 @@
         "thankYou": "谢谢！",
         "feedbackReceived": "您的反馈已收到。",
         "takeAgain": "重新开始"
+    },
+    "search": {
+        "searchArea": "搜索区域",
+        "placeholder": "搜索...",
+        "searchInput": "搜索输入框",
+        "clearSearch": "清除搜索",
+        "search": "搜索",
+        "searchButton": "搜索按钮",
+        "filters": "筛选器",
+        "openFilters": "打开筛选器",
+        "moreFilters": "更多筛选器",
+        "advancedFilters": "高级筛选器",
+        "activeFilters": "活跃筛选器",
+        "apply": "应用",
+        "priceFrom": "从",
+        "priceTo": "到",
+        "promoCode": "优惠码",
+        "sortBy": "排序依据",
+        "category": "类别",
+        "priceRange": "价格范围",
+        "sortOptions": {
+            "newest": "最新先",
+            "oldest": "最旧先",
+            "priceAsc": "价格：从低到高",
+            "priceDesc": "价格：从高到低",
+            "titleAsc": "标题 A-Z",
+            "titleDesc": "标题 Z-A",
+            "popular": "最受欢迎",
+            "featured": "精选"
+        }
     }
 }

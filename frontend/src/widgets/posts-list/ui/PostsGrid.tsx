@@ -1,36 +1,36 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PostCard } from './PostCard';
 import { Post, PostsGetRequest } from '@/entities/post';
 import { getPosts } from '@/entities/post';
 import { Button } from '@/shared/ui/button';
-import { Input } from '@/shared/ui/input';
 import { useToastActions } from '@/shared/hooks/useToast';
 import { AlertIcon, SearchIcon, LoadingIcon } from '@/shared/ui/icons';
 
 interface PostsGridProps {
     initialPosts?: Post[];
-    searchable?: boolean;
+    searchQuery?: string;
     categoryId?: number;
     locale?: string;
     limit?: number;
+    onLoadMore?: () => void;
+    hasMore?: boolean;
+    loadingMore?: boolean;
 }
 
 export function PostsGrid({
     initialPosts = [],
-    searchable = true,
+    searchQuery = '',
     categoryId,
     locale,
-    limit = 12
+    limit = 12,
+    onLoadMore,
+    hasMore = false,
+    loadingMore = false
 }: PostsGridProps) {
     const [posts, setPosts] = useState<Post[]>(initialPosts);
     const [loading, setLoading] = useState(false);
-    const [loadingMore, setLoadingMore] = useState(false);
-    const [search, setSearch] = useState('');
-    
-    const searchValue = useMemo(() => search || '', [search]);
-    const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const { error: showError } = useToastActions();
@@ -39,8 +39,6 @@ export function PostsGrid({
         try {
             if (!append) {
                 setLoading(true);
-            } else {
-                setLoadingMore(true);
             }
 
             setError(null);
@@ -49,6 +47,7 @@ export function PostsGrid({
                 limit,
                 category: categoryId,
                 locale,
+                search: searchQuery || '',
                 ...params,
             });
 
@@ -58,15 +57,6 @@ export function PostsGrid({
                 setPosts(response.posts);
             }
 
-            // Check if there are more posts to load
-            if (response.count !== undefined) {
-                const currentOffset = params.offset || 0;
-                setHasMore(currentOffset + response.posts.length < response.count);
-            } else {
-                // If no count provided, assume no more if we got less than requested
-                setHasMore(response.posts.length === limit);
-            }
-
         } catch (err) {
             console.error('Error loading posts:', err);
             const errorMessage = err instanceof Error ? err.message : 'Failed to load posts';
@@ -74,55 +64,29 @@ export function PostsGrid({
             showError(errorMessage);
         } finally {
             setLoading(false);
-            setLoadingMore(false);
         }
-    }, [categoryId, locale, limit, showError]);
+    }, [categoryId, locale, limit, searchQuery, showError]);
 
-    const handleSearch = (searchTerm: string) => {
-        setSearch(searchTerm);
-        loadPosts({ search: searchTerm, offset: 0 });
-    };
+    // Load more posts handler - delegates to parent
+    const handleLoadMore = useCallback(() => {
+        onLoadMore?.();
+    }, [onLoadMore]);
 
-    const loadMore = () => {
-        if (!loadingMore && hasMore) {
-            loadPosts({
-                search: search || '',
-                offset: posts.length
-            }, true);
-        }
-    };
-
-    // Load initial posts if not provided and reset search when category or locale changes
+    // Load posts when dependencies change
     useEffect(() => {
-        // Only reset search if categoryId is defined (not on initial render with undefined categoryId)
-        if (categoryId !== undefined) {
-            setSearch('');
-        }
         if (initialPosts.length === 0) {
             loadPosts();
         }
-    }, [categoryId, locale, initialPosts.length, loadPosts]);
+    }, [categoryId, locale, searchQuery, initialPosts.length, loadPosts]);
 
     if (loading) {
         return (
-            <div className="space-y-6">
-                {searchable && (
-                    <div className="max-w-md">
-                        <Input
-                            placeholder="Search posts..."
-                            disabled
-                            className="w-full"
-                        />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+                {Array.from({ length: limit }).map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                        <div className="bg-gray-200 dark:bg-gray-700 rounded-[1rem] h-64"></div>
                     </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-                    {Array.from({ length: limit }).map((_, i) => (
-                        <div key={i} className="animate-pulse">
-                            <div className="bg-gray-200 dark:bg-gray-700 rounded-[1rem] h-64"></div>
-                        </div>
-                    ))}
-                </div>
+                ))}
             </div>
         );
     }
@@ -142,65 +106,48 @@ export function PostsGrid({
         );
     }
 
+    if (posts.length === 0) {
+        return (
+            <div className="text-center py-12">
+                <div className="text-muted-foreground">
+                    <SearchIcon size={48} className="mx-auto mb-4" />
+                    <p className="text-lg">No posts found</p>
+                    {searchQuery && (
+                        <p className="text-sm mt-2">
+                            Try adjusting your search terms
+                        </p>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
-            {searchable && (
-                <div className="max-w-md">
-                    <Input
-                        placeholder="Search posts..."
-                        value={searchValue}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        className="w-full"
-                    />
-                </div>
-            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+                {posts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                ))}
+            </div>
 
-            {posts.length === 0 ? (
-                <div className="text-center py-12">
-                    <div className="text-muted-foreground">
-                        <SearchIcon size={48} className="mx-auto mb-4" />
-                        <p className="text-lg">No posts found</p>
-                        {search && (
-                            <p className="text-sm mt-2">
-                                Try adjusting your search terms or{' '}
-                                <button
-                                    onClick={() => handleSearch('')}
-                                    className="text-primary hover:underline"
-                                >
-                                    clear the search
-                                </button>
-                            </p>
+            {hasMore && (
+                <div className="text-center pt-8">
+                    <Button
+                        onClick={handleLoadMore}
+                        disabled={loadingMore}
+                        variant="outline"
+                        className="min-w-32"
+                    >
+                        {loadingMore ? (
+                            <>
+                                <LoadingIcon size={16} className="animate-spin -ml-1 mr-2" />
+                                Loading...
+                            </>
+                        ) : (
+                            'Load More'
                         )}
-                    </div>
+                    </Button>
                 </div>
-            ) : (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-                        {posts.map((post) => (
-                            <PostCard key={post.id} post={post} />
-                        ))}
-                    </div>
-
-                    {hasMore && (
-                        <div className="text-center pt-8">
-                            <Button
-                                onClick={loadMore}
-                                disabled={loadingMore}
-                                variant="outline"
-                                className="min-w-32"
-                            >
-                                {loadingMore ? (
-                                    <>
-                                        <LoadingIcon size={16} className="animate-spin -ml-1 mr-2" />
-                                        Loading...
-                                    </>
-                                ) : (
-                                    'Load More'
-                                )}
-                            </Button>
-                        </div>
-                    )}
-                </>
             )}
         </div>
     );

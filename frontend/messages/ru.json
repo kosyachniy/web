@@ -320,5 +320,35 @@
         "thankYou": "Спасибо!",
         "feedbackReceived": "Ваш отзыв получен.",
         "takeAgain": "Пройти снова"
+    },
+    "search": {
+        "searchArea": "Область поиска",
+        "placeholder": "Поиск...",
+        "searchInput": "Поле поиска",
+        "clearSearch": "Очистить поиск",
+        "search": "Поиск",
+        "searchButton": "Кнопка поиска",
+        "filters": "Фильтры",
+        "openFilters": "Открыть фильтры",
+        "moreFilters": "Больше фильтров",
+        "advancedFilters": "Расширенные Фильтры",
+        "activeFilters": "Активные фильтры",
+        "apply": "Применить",
+        "priceFrom": "От",
+        "priceTo": "До",
+        "promoCode": "Промокод",
+        "sortBy": "Сортировать по",
+        "category": "Категория",
+        "priceRange": "Диапазон Цен",
+        "sortOptions": {
+            "newest": "Сначала Новые",
+            "oldest": "Сначала Старые",
+            "priceAsc": "Цена: По Возрастанию",
+            "priceDesc": "Цена: По Убыванию",
+            "titleAsc": "Заголовок А-Я",
+            "titleDesc": "Заголовок Я-А",
+            "popular": "Самые Популярные",
+            "featured": "Рекомендуемые"
+        }
     }
 }

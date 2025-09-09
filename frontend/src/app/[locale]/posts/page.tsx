@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { PostsGrid } from '@/widgets/posts-list';
+import { PostsWithSearch } from '@/widgets/posts-list';
 import { SubcategoryNavigation } from '@/widgets/category';
 import { getSubcategories, getCategoryTitle, getCategoryUrl } from '@/entities/category';
 import { PageHeader } from '@/shared/ui/page-header';
@@ -83,8 +83,8 @@ export default async function PostsPage({ params }: PostsPageProps) {
                         />
                     )}
 
-                    {/* All Posts */}
-                    <PostsGrid locale={locale} />
+                    {/* All Posts with Search */}
+                    <PostsWithSearch locale={locale} />
 
                     {/* SEO Structured Data */}
                     <script

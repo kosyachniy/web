@@ -859,6 +859,10 @@ toast.error(t('posts.actions.deleteError'));
 - Theme-aware: light & dark mode support via CSS variables
 - No borders: shadows for big/outer, backgrounds for small/inner
 - Border-radius: `.75rem` (small/inner) vs `1rem` (big/outer)
+- Interactive shadows: Big/outer components use Card-style shadow with hover effects:
+  - Shadow: `shadow-[0_0.25rem_1.5rem_rgba(0,0,0,0.12)]`
+  - Transition: `transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)]`
+  - Hover effect: `hover:scale-[1.01]` (subtle scale animation)
 
 **Box & Container Styling:**
 - **Box Containers**: Every content block MUST be wrapped in a `Box` component from `@/shared/ui/box`
@@ -1011,6 +1015,17 @@ import { FaPlus, FaEdit, FaTrash, FaNewspaper, FaCalculator, FaUser } from 'reac
 >
   Add
 </IconButton>
+
+// Good: Big/outer component with Card-style shadow and hover effects
+<div className={cn(
+  'bg-background rounded-[1rem]',
+  'shadow-[0_0.25rem_1.5rem_rgba(0,0,0,0.12)]',
+  'transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)]',
+  'hover:scale-[1.01]',
+  'p-6'
+)}>
+  <div>Interactive container with shadow and hover animation</div>
+</div>
 
 // Good: Content wrapped in Box with nested structure
 <Box size="lg">

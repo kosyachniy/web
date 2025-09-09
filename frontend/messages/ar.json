@@ -320,5 +320,35 @@
         "thankYou": "شكراً لك!",
         "feedbackReceived": "تم استلام تعليقك.",
         "takeAgain": "أخذ مرة أخرى"
+    },
+    "search": {
+        "searchArea": "منطقة البحث",
+        "placeholder": "بحث...",
+        "searchInput": "حقل البحث",
+        "clearSearch": "مسح البحث",
+        "search": "بحث",
+        "searchButton": "زر البحث",
+        "filters": "الفلاتر",
+        "openFilters": "فتح الفلاتر",
+        "moreFilters": "مزيد من الفلاتر",
+        "advancedFilters": "الفلاتر المتقدمة",
+        "activeFilters": "الفلاتر النشطة",
+        "apply": "تطبيق",
+        "priceFrom": "من",
+        "priceTo": "إلى",
+        "promoCode": "رمز ترويجي",
+        "sortBy": "ترتيب حسب",
+        "category": "الفئة",
+        "priceRange": "نطاق السعر",
+        "sortOptions": {
+            "newest": "الأحدث أولاً",
+            "oldest": "الأقدم أولاً",
+            "priceAsc": "السعر: من الأقل إلى الأعلى",
+            "priceDesc": "السعر: من الأعلى إلى الأقل",
+            "titleAsc": "العنوان أ-ي",
+            "titleDesc": "العنوان ي-أ",
+            "popular": "الأكثر شعبية",
+            "featured": "المميزة"
+        }
     }
 }

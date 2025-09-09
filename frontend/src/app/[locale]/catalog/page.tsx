@@ -1,13 +1,56 @@
 'use client';
 
+import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/shared/ui/page-header';
-import { CatalogIcon, RefreshIcon } from '@/shared/ui/icons';
+import { CatalogIcon } from '@/shared/ui/icons';
 import { ProductsGrid } from '@/widgets/products-grid';
 import { FiltersSidebar } from '@/widgets/filters-sidebar';
+import { Search, SearchFilters, SearchFilterConfig } from '@/shared/ui/search';
 
 export default function CatalogPage() {
     const t = useTranslations('navigation');
+    const tSearch = useTranslations('search');
+    
+    const [query, setQuery] = useState('');
+    const [filters, setFilters] = useState<SearchFilters>({});
+
+    // Configure inline filters (sort)
+    const inlineFilters: SearchFilterConfig[] = [
+        {
+            type: 'sort',
+            label: tSearch('sortBy'),
+            key: 'sort',
+            options: [
+                { value: 'featured', label: tSearch('sortOptions.featured') },
+                { value: 'priceAsc', label: tSearch('sortOptions.priceAsc') },
+                { value: 'priceDesc', label: tSearch('sortOptions.priceDesc') },
+                { value: 'newest', label: tSearch('sortOptions.newest') },
+                { value: 'popular', label: tSearch('sortOptions.popular') }
+            ]
+        }
+    ];
+
+    // Configure popup filters (price range, promo code)
+    const popupFilters: SearchFilterConfig[] = [
+        {
+            type: 'price-range',
+            label: tSearch('priceRange'),
+            key: 'priceRange'
+        },
+        {
+            type: 'promo-code',
+            label: tSearch('promoCode'),
+            key: 'promoCode',
+            placeholder: 'SAVE20, DISCOUNT10, etc.'
+        }
+    ];
+
+    // Handle search
+    const handleSearch = useCallback((searchQuery: string, searchFilters: SearchFilters) => {
+        console.log('Catalog search:', { searchQuery, searchFilters });
+        // TODO: Integrate with actual product search API
+    }, []);
 
     return (
         <div className="min-h-screen bg-background">
@@ -28,23 +71,20 @@ export default function CatalogPage() {
 
                         {/* Products Grid */}
                         <div className="lg:col-span-3">
-                            {/* Search and Sort */}
-                            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                                <div className="flex-1">
-                                    <input
-                                        type="text"
-                                        placeholder="Search products..."
-                                        className="w-full px-4 py-2 border rounded-lg bg-background"
-                                    />
-                                </div>
-                                <select className="px-4 py-2 border rounded-lg bg-background">
-                                    <option>Sort by: Featured</option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
-                                    <option>Newest First</option>
-                                    <option>Best Rating</option>
-                                </select>
-                            </div>
+                            {/* Advanced Search with Filters */}
+                            <Search
+                                value={query}
+                                onChange={setQuery}
+                                onSearch={handleSearch}
+                                placeholder={tSearch('placeholder')}
+                                filters={filters}
+                                onFiltersChange={setFilters}
+                                mode="inline-filters"
+                                inlineFilters={inlineFilters}
+                                popupFilters={popupFilters}
+                                size="default"
+                                className="mb-8"
+                            />
 
                             {/* Products Grid */}
                             <ProductsGrid />

@@ -320,5 +320,35 @@
         "thankYou": "Thank You!",
         "feedbackReceived": "Your feedback has been received.",
         "takeAgain": "Take Again"
+    },
+    "search": {
+        "searchArea": "Search area",
+        "placeholder": "Search...",
+        "searchInput": "Search input",
+        "clearSearch": "Clear search",
+        "search": "Search",
+        "searchButton": "Search button",
+        "filters": "Filters",
+        "openFilters": "Open filters",
+        "moreFilters": "More filters",
+        "advancedFilters": "Advanced Filters",
+        "activeFilters": "Active filters",
+        "apply": "Apply",
+        "priceFrom": "From",
+        "priceTo": "To",
+        "promoCode": "Promo Code",
+        "sortBy": "Sort by",
+        "category": "Category",
+        "priceRange": "Price Range",
+        "sortOptions": {
+            "newest": "Newest First",
+            "oldest": "Oldest First",
+            "priceAsc": "Price: Low to High",
+            "priceDesc": "Price: High to Low",
+            "titleAsc": "Title A-Z",
+            "titleDesc": "Title Z-A",
+            "popular": "Most Popular",
+            "featured": "Featured"
+        }
     }
 }

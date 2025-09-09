@@ -320,5 +320,35 @@
         "thankYou": "¡Gracias!",
         "feedbackReceived": "Tu comentario ha sido recibido.",
         "takeAgain": "Tomar de nuevo"
+    },
+    "search": {
+        "searchArea": "Área de búsqueda",
+        "placeholder": "Buscar...",
+        "searchInput": "Campo de búsqueda",
+        "clearSearch": "Limpiar búsqueda",
+        "search": "Buscar",
+        "searchButton": "Botón de búsqueda",
+        "filters": "Filtros",
+        "openFilters": "Abrir filtros",
+        "moreFilters": "Más filtros",
+        "advancedFilters": "Filtros Avanzados",
+        "activeFilters": "Filtros activos",
+        "apply": "Aplicar",
+        "priceFrom": "Desde",
+        "priceTo": "Hasta",
+        "promoCode": "Código Promocional",
+        "sortBy": "Ordenar por",
+        "category": "Categoría",
+        "priceRange": "Rango de Precio",
+        "sortOptions": {
+            "newest": "Más Recientes",
+            "oldest": "Más Antiguos",
+            "priceAsc": "Precio: Menor a Mayor",
+            "priceDesc": "Precio: Mayor a Menor",
+            "titleAsc": "Título A-Z",
+            "titleDesc": "Título Z-A",
+            "popular": "Más Populares",
+            "featured": "Destacados"
+        }
     }
 }
