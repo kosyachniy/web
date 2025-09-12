@@ -960,10 +960,16 @@ toast.error(t('posts.actions.deleteError'));
 - **Content Sections**: Any section that has title + description should use PageHeader
 - **Never Use**: Custom `<header>`, standalone `<h1>` when PageHeader should be used
 
+**PageHeader Placement Rule** ⚠️ **CRITICAL**:
+- **Page Body Only**: PageHeader MUST be placed in the page body, NEVER inside Box components
+- **Structure**: Always use: `<div>...</div>` → `<PageHeader />` → `<Box>...content...</Box>`
+- **Hierarchy**: PageHeader sits at the page/section level, content goes inside separate Box containers
+- **Never Nest**: ❌ `<Box><PageHeader /></Box>` - PageHeader should be outside and above Box containers
+
 **Component Examples:**
 ```typescript
-import { 
-  PlusIcon, EditIcon, TrashIcon, NewspaperIcon, CalculatorIcon, UserIcon 
+import {
+  PlusIcon, EditIcon, TrashIcon, NewspaperIcon, CalculatorIcon, UserIcon
 } from '@/shared/ui/icons';
 
 // Good: Icon + Text button with responsive behavior
@@ -1228,3 +1234,19 @@ import {
 - **React-Icons Priority** (for icons.tsx only): fa6 → bi → hi priority system
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.
+
+## Documentation Guidelines
+
+**IMPORTANT: Do not create new files for documentation or examples** including:
+- ❌ No new .md files to describe logic, usage, or implementation details
+- ❌ No example .json files to show data structures or logging formats
+- ❌ No separate documentation files of any format
+
+Instead:
+- ✅ Write documentation directly in code files as comments and docstrings
+- ✅ Add relevant information to this CLAUDE.md file
+- ✅ Update the main README.md if necessary
+- ✅ Use inline code documentation for complex logic
+- ✅ Include data structure examples directly in docstrings
+
+This keeps documentation consolidated and prevents proliferation of scattered files throughout the codebase. All documentation should be embedded within the actual code that uses it.

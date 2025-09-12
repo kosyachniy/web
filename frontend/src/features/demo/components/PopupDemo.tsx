@@ -125,14 +125,14 @@ export default function PopupDemo() {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <Box size="lg">
-                <PageHeader
-                    icon={<WindowIcon size={24} />}
-                    iconClassName="bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
-                    title="Popup System Demo"
-                    description="Interactive modal dialogs and popup components"
-                />
+            <PageHeader
+                icon={<WindowIcon size={24} />}
+                iconClassName="bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
+                title="Popup System Demo"
+                description="Interactive modal dialogs and popup components"
+            />
 
+            <Box size="lg">
                 <div className="space-y-6">
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -46,14 +46,14 @@ export function UserDemo() {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <Box size="lg">
-                <PageHeader
-                    icon={<UserIcon size={24} />}
-                    iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
-                    title={t('title')}
-                    description={t('description')}
-                />
+            <PageHeader
+                icon={<UserIcon size={24} />}
+                iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
+                title={t('title')}
+                description={t('description')}
+            />
 
+            <Box size="lg">
                 <div className="space-y-6">
                     {/* Current Settings Display */}
                     <Box variant="muted" size="default">

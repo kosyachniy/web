@@ -15,14 +15,14 @@ export function CounterDemo() {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <Box size="lg">
-                <PageHeader
-                    icon={<CalculatorIcon size={24} />}
-                    iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
-                    title={t('title')}
-                    description={t('description')}
-                />
+            <PageHeader
+                icon={<CalculatorIcon size={24} />}
+                iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
+                title={t('title')}
+                description={t('description')}
+            />
 
+            <Box size="lg">
                 <div className="space-y-6">
                     <div className="text-center">
                         <div className="text-6xl font-bold text-primary mb-6">

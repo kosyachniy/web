@@ -135,14 +135,14 @@ export default function ToastDemo() {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <Box size="lg">
-                <PageHeader
-                    icon={<BellIcon size={24} />}
-                    iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
-                    title="Toast System Demo"
-                    description="Notification system with multiple variants and positioning"
-                />
+            <PageHeader
+                icon={<BellIcon size={24} />}
+                iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+                title="Toast System Demo"
+                description="Notification system with multiple variants and positioning"
+            />
 
+            <Box size="lg">
                 <div className="space-y-6">
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
