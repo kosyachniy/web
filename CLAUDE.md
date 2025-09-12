@@ -287,6 +287,208 @@ import { NewspaperIcon } from '@/shared/ui/icons';
 
 ---
 
+## Components & UI System ⚠️ **CRITICAL**
+
+> **Documentation Rule**: ALL component information MUST be documented in this section. Never create separate scattered blocks for component usage throughout CLAUDE.md. This consolidated section serves as the single source of truth for all component documentation.
+
+### **Core UI Components**
+
+#### **Box** - Universal Container
+- **Import**: `import { Box } from '@/shared/ui/box'`
+- **Purpose**: Single standard for ALL content containers, blocks, sections, and wrappers
+- **Usage Rule**: EVERY content block MUST be wrapped in Box - no bare divs for containers
+- **Sizes**: `sm` (p-3), `default` (p-4), `lg` (p-6)
+- **Variants**: `default` (white/card), `muted` (subtle secondary), `accent` (highlighted)
+- **Styling**: `rounded-[1rem]`, shadow system, theme-aware backgrounds
+
+#### **Button & IconButton** - Interactive Elements
+- **Import**: `import { Button } from '@/shared/ui/button'`, `import { IconButton } from '@/shared/ui/icon-button'`
+- **IconButton Rule**: ALL buttons/links MUST start with icon, then localized text
+- **Responsive Pattern**: Use `responsive={true}` for adaptive behavior (icon-only <1280px, icon+text ≥1280px)
+- **Required**: `cursor-pointer` styling, clear hover/focus/active states
+- **Icon Color**: Icon color MUST match text color - no separate icon coloring
+
+#### **ButtonGroup** - Logical Grouping
+- **Import**: `import { ButtonGroup } from '@/shared/ui/button-group'`
+- **Purpose**: Group related buttons with shared borders and visual connection
+- **Use Cases**: Edit+Delete, Save+Cancel, Upvote+Downvote, action clusters
+- **Colors**: Use semantic colors (red=delete, green=add, etc.)
+
+### **Layout Components**
+
+#### **PageHeader** - Universal Page Headers ⚠️ **CRITICAL**
+- **Import**: `import { PageHeader } from '@/shared/ui/page-header'`
+- **Universal Usage**: EVERY page, demo component, admin section, content area MUST use PageHeader
+- **Placement Rule**: PageHeader MUST be in page body, NEVER inside Box components
+- **Structure**: `<div>` → `<PageHeader />` → `<Box>content</Box>`
+- **Never Nest**: ❌ `<Box><PageHeader /></Box>` - PageHeader should be outside and above Box
+
+**PageHeader Props**:
+- **Icon**: Square colored container, `size={24}`, no border, `rounded-[0.75rem]`
+- **Icon Colors**: Section-based system:
+  - Posts: `bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400`
+  - Space: `bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400`
+  - Hub: `bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400`
+  - Catalog: `bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400`
+  - Admin: `bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400`
+  - Demo Components: Calculator=indigo, User=purple, Popup=orange, Toast=green
+- **Title**: SEO-optimized page title
+- **Description**: Additional context/breadcrumbs
+- **Actions**: Button groups on right side
+
+#### **ThreeColumnLayout** - Flexible Grid System
+- **Import**: `import { ThreeColumnLayout } from '@/widgets/three-column-layout'`
+- **Adaptive**: Auto-adjusts based on provided sidebars
+- **Sticky**: Sidebars use `sticky top-20` (80px offset for header)
+- **Usage**: `leftSidebar={<>multiple widgets</>}` `rightSidebar={<>widgets</>}`
+
+#### **SidebarCard** - Unified Sidebar Interface
+- **Import**: `import { SidebarCard } from '@/shared/ui/sidebar-card'`
+- **Rule**: ALL sidebar widgets MUST use SidebarCard for consistent styling
+- **Header**: Optional `title` + `icon` props (icon size 20px)
+- **Content Spacing**: `sm` (space-y-4), `default` (space-y-6), `lg` (space-y-8)
+- **Never**: Manual `<div className="flex items-center gap-2">` headers
+
+### **Widget Components**
+
+#### **Available Sidebar Widgets**
+- **SectionsSidebar**: `import { SectionsSidebar } from '@/widgets/sections-sidebar'` - Business navigation sections
+- **FiltersSidebar**: `import { FiltersSidebar } from '@/widgets/filters-sidebar'` - Time/sort filters
+- **FastActionsSidebar**: `import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar'` - Quick action buttons
+- **ContactFormSidebar**: `import { ContactFormSidebar } from '@/widgets/contact-form-sidebar'` - Contact form widget
+- **QuestionnaireSidebar**: `import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar'` - Interactive surveys
+- **AdminSidebar**: `import { AdminSidebar } from '@/widgets/admin-sidebar'` - Admin navigation
+
+### **Icon System** ⚠️ **CRITICAL**
+
+#### **Centralized Icon Management**
+- **Rule**: ALL icons MUST be imported from `@/shared/ui/icons` - NEVER directly from react-icons
+- **React-Icons Priority** (for icons.tsx file only): 1. `fa6` (Font Awesome 6), 2. `bi` (Bootstrap Icons), 3. `hi` (Heroicons)
+- **Never Use**: Inline SVG, other icon libraries, direct react-icons imports in components
+
+#### **Icon Usage Patterns**
+- **Interactive Elements**: Icon color matches text color, no separate coloring
+- **Standalone Icons**: Square containers `rounded-[0.75rem]`, icon full opacity, background low opacity
+- **Default Styling**: `bg-muted text-muted-foreground` for neutral icons
+- **Themed Pattern**: `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400`
+
+### **Styling System**
+
+#### **Interactive Elements (Frontend Development Flow Step 2):**
+- Icon + Text Structure: All buttons/links start with icon, then localized text
+- Use `IconButton` with `responsive={true}` for adaptive behavior
+- `cursor-pointer` styling for all pressable elements
+- Clear hover, focus, and active states
+
+#### **Component Styling (Frontend Development Flow Step 4):**
+- Theme-aware: light & dark mode support via CSS variables
+- No borders: shadows for big/outer, backgrounds for small/inner
+- Border-radius: `.75rem` (small/inner) vs `1rem` (big/outer)
+- Interactive shadows: Big/outer components use Card-style shadow with hover effects:
+  - Shadow: `shadow-[0_0.25rem_1.5rem_rgba(0,0,0,0.12)]`
+  - Transition: `transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)]`
+  - Hover effect: `hover:scale-[1.01]` (subtle scale animation)
+
+#### **Icon & Color Styling:**
+- **Interactive Elements (Buttons/Links)**: Icon color MUST match text color - no separate icon coloring. Use `IconButton` with `responsive={true}` for adaptive text hiding (below 1280px shows icons only, 1280px+ shows icons + text).
+- **Standalone Icon Containers**: Independent icons (avatars, PageHeader, category icons) MUST use rounded square containers (`rounded-[0.75rem]`). Icon at full opacity, background at low opacity.
+- **Default Icon Styling**: `bg-muted text-muted-foreground` for neutral/default standalone icons.
+- **Colored Icon Pattern**: `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400` for themed icons.
+- **Opacity Standards**: Background opacity 15% (light) / 20% (dark), icon/text at full opacity for proper contrast.
+
+#### **Border-Radius Standards:**
+- **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for inner and small elements: buttons, inputs, dropdown items, avatars, standalone icon containers, ...
+- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for outer and big elements: boxes, page containers, major sections, content boxes, containers
+
+#### **Theme System**
+- **Theme-Aware**: All components support light & dark themes via CSS variables
+- **No Borders**: Use shadows for big/outer elements, backgrounds for small/inner elements
+- **Interactive Shadows**: `shadow-[0_0.25rem_1.5rem_rgba(0,0,0,0.12)]` with `hover:scale-[1.01]` animation
+
+### **Usage Examples**
+
+```typescript
+// ✅ Complete Component Pattern
+import { PlusIcon, NewspaperIcon, EditIcon, TrashIcon } from '@/shared/ui/icons';
+
+// Page structure with proper hierarchy
+<div className="max-w-2xl mx-auto">
+  <PageHeader
+    icon={<NewspaperIcon size={24} />}
+    iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+    title={t('posts.title')}
+    description={t('posts.description')}
+    actions={
+      <ButtonGroup>
+        <IconButton icon={<PlusIcon size={16} />} variant="success" responsive>
+          {t('add')}
+        </IconButton>
+      </ButtonGroup>
+    }
+  />
+
+  <Box size="lg">
+    <div className="space-y-6">
+      {/* Content inside Box */}
+
+      <ButtonGroup>
+        <IconButton variant="outline" icon={<EditIcon size={12} />} responsive>
+          Edit
+        </IconButton>
+        <IconButton variant="destructive" icon={<TrashIcon size={12} />} responsive>
+          Delete
+        </IconButton>
+      </ButtonGroup>
+
+      {/* Nested box for secondary content */}
+      <Box variant="muted" size="default">
+        <h3>Usage Examples</h3>
+        <p>Secondary content...</p>
+      </Box>
+    </div>
+  </Box>
+</div>
+
+// ✅ Three-column layout with sidebars
+<ThreeColumnLayout
+  leftSidebar={
+    <>
+      <SectionsSidebar />
+      <FiltersSidebar />
+    </>
+  }
+  rightSidebar={
+    <>
+      <FastActionsSidebar />
+      <ContactFormSidebar />
+    </>
+  }
+>
+  <div className="space-y-8">
+    {/* Main content */}
+  </div>
+</ThreeColumnLayout>
+
+// ✅ Sidebar with proper SidebarCard usage
+<SidebarCard
+  title={t('filters')}
+  icon={<FilterIcon size={20} />}
+  contentSpacing="default"
+>
+  <div className="space-y-6">
+    {/* Sidebar content */}
+  </div>
+</SidebarCard>
+```
+
+### **Component Creation Rules**
+1. **Layer Placement**: Basic UI → `shared/ui/`, Complex compositions → `widgets/`, Feature-specific → `features/*/ui/`
+2. **Naming**: PascalCase components, kebab-case folders, match file names
+3. **Public APIs**: Export through `index.ts`, never direct imports
+4. **FSD Rules**: Higher layers → Lower layers only, no cross-layer imports
+
+---
+
 ## Development Commands
 
 ### Local Development
@@ -847,264 +1049,6 @@ toast.error(t('posts.actions.deleteError'));
 - Use *shadcn/ui* patterns: `cn()` for class merge, `cva` for variants.
 - Accessibility: label form controls, provide `aria-label` for icon buttons.
 
-#### **Frontend Structure & Design Rules** ⚠️ **CRITICAL**
-> **Main Rule**: Follow **Frontend Development Flow Steps 2-4** for all UI elements
-
-**Interactive Elements (Frontend Development Flow Step 2):**
-- Icon + Text Structure: All buttons/links start with icon, then localized text
-- Use `IconButton` with `responsive={true}` for adaptive behavior
-- `cursor-pointer` styling for all pressable elements
-- Clear hover, focus, and active states
-
-**Component Styling (Frontend Development Flow Step 4):**
-- Theme-aware: light & dark mode support via CSS variables
-- No borders: shadows for big/outer, backgrounds for small/inner
-- Border-radius: `.75rem` (small/inner) vs `1rem` (big/outer)
-- Interactive shadows: Big/outer components use Card-style shadow with hover effects:
-  - Shadow: `shadow-[0_0.25rem_1.5rem_rgba(0,0,0,0.12)]`
-  - Transition: `transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)]`
-  - Hover effect: `hover:scale-[1.01]` (subtle scale animation)
-
-**Box & Container Styling:**
-- **Box Containers**: Every content block MUST be wrapped in a `Box` component from `@/shared/ui/box`
-- **Universal Container**: Use `Box` for ALL content containers - it's the single standard for all content blocks, sections, and containers
-- **Size Variants**:
-  - `size="sm"` - Small containers with minimal padding (`p-3`)
-  - `size="default"` - Standard containers with normal padding (`p-4`)
-  - `size="lg"` - Large containers for main content areas (`p-6`)
-- **Background Variants**:
-  - `variant="default"` - Standard white/card background with shadow
-  - `variant="muted"` - Subtle muted background for secondary content
-  - `variant="accent"` - Accent background for highlighted content
-- **Consistent Styling**: All boxes have consistent border-radius (`rounded-[1rem]`), unified shadow system (`0 0.25rem 1.5rem rgba(0,0,0,0.12)` with theme adaptation), and theme-aware backgrounds
-
-**Page Structure:**
-- **Page Headers**: Every page and component section MUST start with `PageHeader` component:
-  - **Universal Usage**: ALL pages, demo components, admin sections, and content areas must use PageHeader
-  - **Icon**: Square colored icon container (width = height) with rounded background, no border
-  - **Color System**: Section-based colors with background/text variants:
-    - **Posts**: `bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400`
-    - **Space**: `bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400`
-    - **Hub**: `bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400`
-    - **Catalog**: `bg-blue-500/15 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400`
-    - **Categories**: `bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400`
-    - **Admin**: `bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400`
-    - **Demo Components**: Use specific colors per component type (Calculator=indigo, User=purple, Popup=orange, Toast=green)
-  - **Title**: SEO-optimized page title positioned to the right of icon
-  - **Description**: Additional context or breadcrumbs under the title
-  - **Actions**: Action buttons or button groups on the right side of the header
-  - **No Custom Headers**: Never create custom `<header>` or `<h1>` elements when PageHeader should be used
-- **Import**: `import { PageHeader } from '@/shared/ui/page-header'`
-
-**Button Grouping:**
-- **Logical Groups**: Group related buttons using `ButtonGroup` component from `@/shared/ui/button-group`
-- **Shared Borders**: Grouped buttons share common border-radius and are visually connected
-- **Semantic Colors**: Use appropriate colors for actions (red for delete, green for add, etc.)
-- **Examples**: Edit + Delete, Upvote + Downvote, Save + Cancel
-
-**Icon & Color Styling:**
-- **Interactive Elements (Buttons/Links)**: Icon color MUST match text color - no separate icon coloring. Use `IconButton` with `responsive={true}` for adaptive text hiding (below 1280px shows icons only, 1280px+ shows icons + text).
-- **Standalone Icon Containers**: Independent icons (avatars, PageHeader, category icons) MUST use rounded square containers (`rounded-[0.75rem]`). Icon at full opacity, background at low opacity.
-- **Default Icon Styling**: `bg-muted text-muted-foreground` for neutral/default standalone icons.
-- **Colored Icon Pattern**: `bg-{color}-500/15 text-{color}-600 dark:bg-{color}-500/20 dark:text-{color}-400` for themed icons.
-- **Opacity Standards**: Background opacity 15% (light) / 20% (dark), icon/text at full opacity for proper contrast.
-
-**Border-Radius Standards:**
-- **Small/Inside Elements**: Use `rounded-[0.75rem]` (0.75rem) for inner and small elements: buttons, inputs, dropdown items, avatars, standalone icon containers, ...
-- **Large/Outside Elements**: Use `rounded-[1rem]` (1rem) for outer and big elements: boxes, page containers, major sections, content boxes, containers
-- **Consistency**: Never use other radius values without explicit design system approval
-
-**Three-Column Layout System:**
-- **ThreeColumnLayout**: Use `@/widgets/three-column-layout` for flexible 3-column layouts
-- **Adaptive Columns**: Layout automatically adjusts based on which sidebars are provided
-- **Sidebar Widgets**: Reusable sidebar components in `@/widgets/*-sidebar/` using `SidebarCard` for consistent functionality
-- **Sticky Positioning**: Sidebars use `sticky top-20` (80px) to account for header height (`h-16` = 64px + spacing)
-- **Examples**:
-  ```typescript
-  // Full 3-column layout
-  <ThreeColumnLayout
-    leftSidebar={<><SectionsSidebar /><FiltersSidebar /></>}
-    rightSidebar={<><FastActionsSidebar /><ContactFormSidebar /></>}
-  >
-    <YourContent />
-  </ThreeColumnLayout>
-
-  // Left sidebar only
-  <ThreeColumnLayout leftSidebar={<SectionsSidebar />}>
-    <YourContent />
-  </ThreeColumnLayout>
-  ```
-
-**Available Sidebar Widgets:**
-- **Left Sidebar**: `SectionsSidebar` (navigation), `FiltersSidebar` (time/sort filters)
-- **Right Sidebar**: `FastActionsSidebar` (quick actions), `ContactFormSidebar`, `QuestionnaireSidebar`
-- **Admin Sidebar**: `AdminSidebar` (admin navigation) in `AdminLayout`
-- **All Sidebars**: Use `SidebarCard` component with `sticky top-20` positioning to avoid header overlap
-
-**SidebarCard Component:**
-- **Unified Sidebar Interface**: All sidebar widgets MUST use `SidebarCard` from `@/shared/ui/sidebar-card` for consistent styling and behavior
-- **Optional Header**: Title displays only when specified via `title` prop; when provided, shows with optional `icon` prop (icon size 20px)
-- **Header Pattern**: Use `<IconComponent size={20} />` with semantic icons for each sidebar type
-- **Content Spacing**: Control internal spacing with `contentSpacing` prop - `"sm"` (space-y-4), `"default"` (space-y-6), `"lg"` (space-y-8)
-- **No Manual Headers**: Never manually implement `<div className="flex items-center gap-2">` headers - use SidebarCard props
-- **Import**: `import { SidebarCard } from '@/shared/ui/sidebar-card'`
-
-**Sidebar & Layout Elements:**
-- **Box Wrapping**: Wrap sidebar elements (categories, filters, author info, etc.) in `Box` containers
-- **Logical Grouping**: Each functional group gets its own box (e.g., separate boxes for categories, filters, actions)
-- **Hierarchy**: Use box size variants to establish visual hierarchy (larger boxes for primary content)
-
-**When to Use PageHeader:**
-- **Always Required**: Every page (`/posts`, `/space`, `/hub`, `/catalog`, admin pages)
-- **Demo Components**: Use `PageHeader` for all demo component headers
-- **Content Sections**: Any section that has title + description should use PageHeader
-- **Never Use**: Custom `<header>`, standalone `<h1>` when PageHeader should be used
-
-**PageHeader Placement Rule** ⚠️ **CRITICAL**:
-- **Page Body Only**: PageHeader MUST be placed in the page body, NEVER inside Box components
-- **Structure**: Always use: `<div>...</div>` → `<PageHeader />` → `<Box>...content...</Box>`
-- **Hierarchy**: PageHeader sits at the page/section level, content goes inside separate Box containers
-- **Never Nest**: ❌ `<Box><PageHeader /></Box>` - PageHeader should be outside and above Box containers
-
-**Component Examples:**
-```typescript
-import {
-  PlusIcon, EditIcon, TrashIcon, NewspaperIcon, CalculatorIcon, UserIcon
-} from '@/shared/ui/icons';
-
-// Good: Icon + Text button with responsive behavior
-<IconButton
-  icon={<PlusIcon size={16} />}
-  variant="success"
-  responsive
->
-  Add Category
-</IconButton>
-
-// Good: Button group with semantic colors
-<ButtonGroup>
-  <IconButton variant="outline" icon={<EditIcon size={12} />} responsive>Edit</IconButton>
-  <IconButton variant="destructive" icon={<TrashIcon size={12} />} responsive>Delete</IconButton>
-</ButtonGroup>
-
-// Good: Page header with proper color system (pages)
-<PageHeader
-  icon={<NewspaperIcon size={24} />}
-  iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
-  title={t('posts')}
-  description="Browse and discover posts organized by categories"
-  actions={<IconButton icon={<PlusIcon size={16} />} variant="success" responsive>Add Post</IconButton>}
-/>
-
-// Good: Demo component headers with specific icons/colors
-<PageHeader
-  icon={<CalculatorIcon size={24} />}
-  iconClassName="bg-indigo-500/15 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400"
-  title={t('counter.title')}
-  description={t('counter.description')}
-/>
-
-<PageHeader
-  icon={<UserIcon size={24} />}
-  iconClassName="bg-purple-500/15 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400"
-  title={t('userSettings.title')}
-  description={t('userSettings.description')}
-/>
-
-// Good: Default muted icon container for neutral elements
-<div className="bg-muted text-muted-foreground w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
-  <UserIcon size={20} />
-</div>
-
-// Good: Interactive button - icon color matches text, responsive text hiding
-<IconButton
-  icon={<PlusIcon size={16} />}
-  variant="success"
-  responsive={true}
->
-  Add
-</IconButton>
-
-// Good: Big/outer component with Card-style shadow and hover effects
-<div className={cn(
-  'bg-background rounded-[1rem]',
-  'shadow-[0_0.25rem_1.5rem_rgba(0,0,0,0.12)]',
-  'transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)]',
-  'hover:scale-[1.01]',
-  'p-6'
-)}>
-  <div>Interactive container with shadow and hover animation</div>
-</div>
-
-// Good: Content wrapped in Box with nested structure
-<Box size="lg">
-  <PageHeader {...headerProps} />
-  <div className="space-y-6">
-    <div>Main content...</div>
-
-    {/* Nested box for code examples or secondary content */}
-    <Box variant="muted" size="default">
-      <h3 className="font-semibold mb-2">Usage Examples:</h3>
-      <div className="text-sm text-muted-foreground space-y-2">
-        <p><code>example()</code> - Description</p>
-      </div>
-    </Box>
-  </div>
-</Box>
-
-// Good: Three-column layout with multiple sidebar blocks
-<ThreeColumnLayout
-  leftSidebar={
-    <>
-      <SectionsSidebar />
-      <FiltersSidebar />
-    </>
-  }
-  rightSidebar={
-    <>
-      <FastActionsSidebar />
-      <ContactFormSidebar />
-      <QuestionnaireSidebar />
-    </>
-  }
->
-  <div className="space-y-8">
-    <YourMainContent />
-  </div>
-</ThreeColumnLayout>
-
-// Good: SidebarCard with title and icon
-<SidebarCard
-  title={t('filters')}
-  icon={<FilterIcon size={20} />}
-  contentSpacing="default"
->
-  <div className="space-y-6">
-    {/* Your sidebar content */}
-  </div>
-</SidebarCard>
-
-// Good: SidebarCard without header (admin navigation)
-<SidebarCard contentSpacing="sm">
-  <div className="space-y-1">
-    {menuItems.map((item) => (
-      <Button key={item.key} variant="ghost" className="w-full justify-start">
-        {item.icon}
-        {item.label}
-      </Button>
-    ))}
-  </div>
-</SidebarCard>
-
-// Good: SectionsSidebar with optional title and icon
-<SectionsSidebar
-  title={t('businessSections')}
-  icon={<BuildingIcon size={20} />}
-/>
-
-// Good: SectionsSidebar without title (clean navigation)
-<SectionsSidebar />
-```
 
 #### State Management (Redux Toolkit)
 - **Global state**: `shared/stores/` (auth, theme, app-wide data)
@@ -1212,26 +1156,7 @@ import {
 | Page composition | `app/` | `app/[locale]/page.tsx` |
 | Auto-generated | `generated/` | `generated/api/schemas.ts` |
 
-**New Component Quick Reference:**
-- **IconButton**: `import { IconButton } from '@/shared/ui/icon-button'` - Icon + text buttons with responsive behavior
-- **ButtonGroup**: `import { ButtonGroup } from '@/shared/ui/button-group'` - Logical grouping of related buttons
-- **Box**: `import { Box } from '@/shared/ui/box'` - Container with consistent styling (border, background, shadow)
-- **SidebarCard**: `import { SidebarCard } from '@/shared/ui/sidebar-card'` - Unified sidebar component with optional header (icon + title) and content spacing control
-- **PageHeader**: `import { PageHeader } from '@/shared/ui/page-header'` - Standard page header with square icon, title, description, actions
-- **ThreeColumnLayout**: `import { ThreeColumnLayout } from '@/widgets/three-column-layout'` - Flexible 3-column layout with adaptive sidebars
-- **Sidebar Widgets**:
-  - `import { SectionsSidebar } from '@/widgets/sections-sidebar'` - Business navigation sections
-  - `import { FiltersSidebar } from '@/widgets/filters-sidebar'` - Time/sort filters
-  - `import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar'` - Quick action buttons
-  - `import { ContactFormSidebar } from '@/widgets/contact-form-sidebar'` - Contact form widget
-  - `import { QuestionnaireSidebar } from '@/widgets/questionnaire-sidebar'` - Interactive feedback survey
-- **Demo Component Icons** (from `@/shared/ui/icons`):
-  - Counter Demo: `CalculatorIcon` with indigo colors (`bg-indigo-500/15 text-indigo-600`)
-  - User Demo: `UserIcon` with purple colors (`bg-purple-500/15 text-purple-600`)
-  - Popup Demo: `WindowIcon` with orange colors (`bg-orange-500/15 text-orange-600`)
-  - Toast Demo: `BellIcon` with green colors (`bg-green-500/15 text-green-600`)
-- **Centralized Icons**: ALL icons imported from `@/shared/ui/icons` - never directly from react-icons
-- **React-Icons Priority** (for icons.tsx only): fa6 → bi → hi priority system
+**Component Documentation**: All component usage, patterns, and examples are documented in the **Components & UI System** section above. Refer to that section for detailed component information.
 
 ⚠️ **Remember**: Higher layers → Lower layers only. No cross-layer imports. Use public APIs via `index.ts`.
 
@@ -1250,3 +1175,10 @@ Instead:
 - ✅ Include data structure examples directly in docstrings
 
 This keeps documentation consolidated and prevents proliferation of scattered files throughout the codebase. All documentation should be embedded within the actual code that uses it.
+
+**CLAUDE.md Component Documentation Rule** ⚠️ **CRITICAL**:
+- ✅ ALL component information MUST be documented in the **Components & UI System** section only
+- ✅ Component usage patterns, examples, and best practices belong in that consolidated section
+- ❌ NEVER create separate scattered blocks for component documentation throughout CLAUDE.md
+- ❌ NEVER duplicate component information in multiple sections
+- 🔄 When adding new components: update the **Components & UI System** section with usage patterns and examples
