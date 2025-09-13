@@ -24,6 +24,8 @@ class CategoryResponse(BaseModel):
     created: Optional[int] = Field(None, description="Creation timestamp")
     updated: Optional[int] = Field(None, description="Last update timestamp")
     user: Optional[int] = Field(None, description="Creator user ID")
+    icon: Optional[str] = Field(None, description="FontAwesome icon key", example="house")
+    color: Optional[str] = Field(None, description="Category color in hex format", example="#10b981")
     post_count: Optional[int] = Field(None, description="Number of posts in this category", example=42)
     categories: Optional[List["CategoryResponse"]] = Field(None, description="Subcategories")
     parents: Optional[List[dict]] = Field(None, description="Parent hierarchy")
@@ -41,32 +43,33 @@ async def get_categories(
     user=Depends(sign),
 ):
     """Get categories list with optional filtering"""
-    
+
     # Categories are generally public, only require basic authentication
     # Removed restrictive permission check - categories should be accessible to all authenticated users
-    
+
     # Build query filters
     filters = {}
     if locale:
         filters["locale"] = {"$in": [None, locale]}
     if status is not None:
-        # FIXME: Status filtering seems to have issues with ConsYS
-        # For now, only apply the filter for non-standard status values
-        if status != 1:
+        if status == 1:
+            # Filter for active categories (exclude status 0, -1, etc.)
+            filters["status"] = {"$ne": 0}
+        else:
+            # Filter for specific status value
             filters["status"] = status
-        # If status == 1, don't filter since most categories should have status=1
     if parent is not None:
         if parent == 0:
             filters["parent"] = {"$in": [None, 0]}  # Top-level categories
         else:
             filters["parent"] = parent
-    
+
     # Fields to retrieve
     fields = {
-        "id", "title", "description", "data", "image", "parent", 
-        "locale", "url", "status", "created", "updated", "user"
+        "id", "title", "description", "data", "image", "parent",
+        "locale", "url", "status", "created", "updated", "user", "icon", "color"
     }
-    
+
     if include_tree and (parent is None or parent == 0):
         # Get tree structure - start from root level (parent 0 or None)
         # Remove parent filter for tree structure since get_tree handles hierarchy internally
@@ -76,12 +79,12 @@ async def get_categories(
         # Get flat list
         categories = Category.get(fields=fields, **filters)
         categories_data = [cat.json() for cat in categories]
-    
+
     # Convert to response format
     def convert_category(cat_data):
         # Count posts in this category (only active posts with status=1)
         post_count = Post.count(category=cat_data["id"], status=1)
-        
+
         cat_response = CategoryResponse(
             id=cat_data["id"],
             title=cat_data["title"],
@@ -95,17 +98,19 @@ async def get_categories(
             created=cat_data.get("created"),
             updated=cat_data.get("updated"),
             user=cat_data.get("user"),
+            icon=cat_data.get("icon"),
+            color=cat_data.get("color"),
             post_count=post_count,
         )
-        
+
         # Handle nested subcategories
         if "categories" in cat_data and cat_data["categories"]:
             cat_response.categories = [convert_category(sub) for sub in cat_data["categories"]]
-            
+
         return cat_response
-    
+
     response_categories = [convert_category(cat) for cat in categories_data]
-    
+
     return CategoriesListResponse(categories=response_categories)
 
 @router.get("/tree/", response_model=CategoriesListResponse, tags=["Categories"])
@@ -115,34 +120,35 @@ async def get_categories_tree(
     user=Depends(sign),
 ):
     """Get categories as a hierarchical tree structure"""
-    
+
     # Categories are generally public, only require basic authentication
-    
+
     # Build query filters
     filters = {}
     if locale:
         filters["locale"] = {"$in": [None, locale]}
     if status is not None:
-        # FIXME: Status filtering seems to have issues with ConsYS
-        # For now, only apply the filter for non-standard status values
-        if status != 1:
+        if status == 1:
+            # Filter for active categories (exclude status 0, -1, etc.)
+            filters["status"] = {"$ne": 0}
+        else:
+            # Filter for specific status value
             filters["status"] = status
-        # If status == 1, don't filter since most categories should have status=1
-    
+
     # Fields to retrieve
     fields = {
-        "id", "title", "description", "data", "image", "parent", 
-        "locale", "url", "status", "created", "updated", "user"
+        "id", "title", "description", "data", "image", "parent",
+        "locale", "url", "status", "created", "updated", "user", "icon", "color"
     }
-    
+
     # Get tree structure
     categories_data = Category.get_tree(fields=fields, **filters)
-    
+
     # Convert to response format
     def convert_category(cat_data):
         # Count posts in this category (only active posts with status=1)
         post_count = Post.count(category=cat_data["id"], status=1)
-        
+
         cat_response = CategoryResponse(
             id=cat_data["id"],
             title=cat_data["title"],
@@ -156,17 +162,19 @@ async def get_categories_tree(
             created=cat_data.get("created"),
             updated=cat_data.get("updated"),
             user=cat_data.get("user"),
+            icon=cat_data.get("icon"),
+            color=cat_data.get("color"),
             post_count=post_count,
         )
-        
+
         # Handle nested subcategories
         if "categories" in cat_data and cat_data["categories"]:
             cat_response.categories = [convert_category(sub) for sub in cat_data["categories"]]
-            
+
         return cat_response
-    
+
     response_categories = [convert_category(cat) for cat in categories_data]
-    
+
     return CategoriesListResponse(categories=response_categories)
 
 @router.get("/{category_id}/", response_model=CategoryResponse, tags=["Categories"])
@@ -175,18 +183,18 @@ async def get_category(
     user=Depends(sign),
 ):
     """Get a single category by ID"""
-    
+
     # Categories are generally public, only require basic authentication
-    
+
     # Get category
     category = Category.get(category_id)
     if not category:
         from consys.errors import ErrorWrong
         raise ErrorWrong("Category not found")
-    
+
     # Add parent hierarchy if available
     category_data = category.json()
-    
+
     # Get parents hierarchy
     category_ids = get("category_ids", {})
     category_parents = get("category_parents", {})
@@ -196,10 +204,10 @@ async def get_category(
             for parent in category_parents[category.id]
             if parent in category_ids
         ]
-    
+
     # Count posts in this category (only active posts with status=1)
     post_count = Post.count(category=category.id, status=1)
-    
+
     return CategoryResponse(
         id=category_data["id"],
         title=category_data["title"],
@@ -213,6 +221,8 @@ async def get_category(
         created=category_data.get("created"),
         updated=category_data.get("updated"),
         user=category_data.get("user"),
+        icon=category_data.get("icon"),
+        color=category_data.get("color"),
         post_count=post_count,
         parents=category_data.get("parents")
     )

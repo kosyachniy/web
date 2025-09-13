@@ -53,8 +53,17 @@ export function CategoriesHoverPopup({
     return {};
   };
 
-  // Parse category metadata
+  // Get category metadata from direct fields or parse from data field
   const parseMetadata = (category: Category): CategoryMetadata => {
+    // Use new direct fields if available
+    if (category.icon || category.color) {
+      return {
+        icon: category.icon,
+        color: category.color
+      };
+    }
+    
+    // Fallback to parsing data field for backward compatibility
     try {
       if (category.data) {
         return JSON.parse(category.data);
@@ -69,7 +78,7 @@ export function CategoriesHoverPopup({
   useEffect(() => {
     if (isOpen && categories.length === 0) {
       setIsLoading(true);
-      getCategories({ parent: 0, locale, status: 1 })
+      getCategories({ parent: 0, locale, status: 1, include_tree: true })
         .then(setCategories)
         .catch((error) => {
           console.warn('Failed to load categories for hover popup:', error);
@@ -116,22 +125,9 @@ export function CategoriesHoverPopup({
                     href={`/posts/${category.url}`}
                     className="flex items-center gap-2 p-2 rounded-[0.75rem] hover:bg-muted/50 transition-colors cursor-pointer group"
                   >
-                    {/* Category Icon/Color - Following admin panel logic */}
+                    {/* Category Icon - Just the icon without colored background */}
                     {metadata.icon ? (
-                      <div
-                        className={cn(
-                          iconContainerVariants({ size: 'sm' }),
-                          metadata.color ? "" : "bg-muted text-muted-foreground"
-                        )}
-                        style={getCategoryColorStyle(metadata)}
-                      >
-                        <i className={`fas fa-${metadata.icon}`}></i>
-                      </div>
-                    ) : metadata.color ? (
-                      <div
-                        className="w-4 h-4 rounded-full border border-border flex-shrink-0"
-                        style={{ backgroundColor: metadata.color }}
-                      />
+                      <i className={`fas fa-${metadata.icon} text-muted-foreground text-sm flex-shrink-0`}></i>
                     ) : null}
 
                     <span className="text-sm truncate flex-1">
@@ -139,6 +135,13 @@ export function CategoriesHoverPopup({
                     </span>
 
                     <div className="flex items-center gap-1 flex-shrink-0">
+                      {/* Post count */}
+                      {category.post_count !== undefined && category.post_count > 0 && (
+                        <Badge variant="outline" className="text-xs">
+                          {category.post_count}
+                        </Badge>
+                      )}
+                      
                       {/* Subcategory count - only show when greater than 0 */}
                       {category.categories && category.categories.length > 0 && (
                         <Badge variant="secondary" className="text-xs">

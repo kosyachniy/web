@@ -19,6 +19,12 @@ export default function DesktopNavigation() {
             path: '/posts' as const
         },
         {
+            key: 'catalog',
+            label: t('catalog'),
+            icon: <CatalogIcon size={16} />,
+            path: '/catalog' as const
+        },
+        {
             key: 'space',
             label: t('space'),
             icon: <SpaceIcon size={16} />,
@@ -30,12 +36,6 @@ export default function DesktopNavigation() {
             icon: <HubIcon size={16} />,
             path: '/hub' as const
         },
-        {
-            key: 'catalog',
-            label: t('catalog'),
-            icon: <CatalogIcon size={16} />,
-            path: '/catalog' as const
-        }
     ] as const;
 
     const handleNavigate = (path: "/" | "/posts" | "/space" | "/hub" | "/catalog") => {

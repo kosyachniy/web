@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { IconButton } from '@/shared/ui/icon-button';
 import { Input } from '@/shared/ui/input';
@@ -15,6 +16,7 @@ import { SaveIcon, CancelIcon, UploadIcon, XIcon } from '@/shared/ui/icons';
 import { useToast } from '@/widgets/feedback-system';
 import { createCategory, updateCategory } from '@/entities/category/api/categoryApi';
 import type { Category } from '@/entities/category/model/category';
+import { CategoryPreview } from './CategoryPreview';
 import Image from 'next/image';
 
 const categorySchema = z.object({
@@ -60,27 +62,40 @@ const DEFAULT_COLORS = [
 ];
 
 
-export function CategoryForm({ 
-  category, 
-  parentCategory, 
-  onSuccess, 
-  onCancel, 
-  allCategories 
+export function CategoryForm({
+  category,
+  parentCategory,
+  onSuccess,
+  onCancel,
+  allCategories
 }: CategoryFormProps) {
+  const t = useTranslations('admin.categories');
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const { toast } = useToast();
 
-  // Parse existing metadata
-  const existingMetadata: CategoryMetadata = category?.data ? 
-    (() => {
+  // Get icon and color from direct fields or fallback to parsing data field
+  const getIconAndColor = () => {
+    if (category?.icon || category?.color) {
+      // Use new direct fields if available
+      return { icon: category.icon || '', color: category.color || '' };
+    }
+    
+    // Fallback to parsing data field for backward compatibility
+    if (category?.data) {
       try {
-        return JSON.parse(category.data);
+        const parsed = JSON.parse(category.data);
+        return { icon: parsed.icon || '', color: parsed.color || '' };
       } catch {
-        return {};
+        return { icon: '', color: '' };
       }
-    })() : {};
+    }
+    
+    return { icon: '', color: '' };
+  };
+
+  const { icon: initialIcon, color: initialColor } = getIconAndColor();
 
   const {
     register,
@@ -88,23 +103,66 @@ export function CategoryForm({
     formState: { errors },
     watch,
     setValue,
+    reset,
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
       title: category?.title || '',
       url: category?.url || '',
       description: category?.description || '',
-      parent: category?.parent || parentCategory?.id || 0,
+      parent: category?.parent ?? parentCategory?.id ?? 0,
       status: category?.status ?? 1,
-      locale: category?.locale || 'en',
-      icon: existingMetadata.icon || '',
-      color: existingMetadata.color || '',
+      locale: category?.locale || 'none',
+      icon: initialIcon,
+      color: initialColor,
     },
   });
+
+  // Reset form values when category changes (for editing)
+  useEffect(() => {
+    if (category) {
+      // Get icon and color using the same logic
+      const getResetIconAndColor = () => {
+        if (category.icon || category.color) {
+          return { icon: category.icon || '', color: category.color || '' };
+        }
+        
+        if (category.data) {
+          try {
+            const parsed = JSON.parse(category.data);
+            return { icon: parsed.icon || '', color: parsed.color || '' };
+          } catch {
+            return { icon: '', color: '' };
+          }
+        }
+        
+        return { icon: '', color: '' };
+      };
+
+      const { icon, color } = getResetIconAndColor();
+
+      reset({
+        title: category.title || '',
+        url: category.url || '',
+        description: category.description || '',
+        parent: category.parent ?? 0,
+        status: category.status ?? 1,
+        locale: category.locale || 'none',
+        icon: icon,
+        color: color,
+      });
+    } else if (parentCategory) {
+      // When creating a subcategory
+      setValue('parent', parentCategory.id);
+    }
+  }, [category, parentCategory, reset, setValue]);
 
   const watchedTitle = watch('title');
   const watchedIcon = watch('icon');
   const watchedColor = watch('color');
+  const watchedUrl = watch('url');
+  const watchedDescription = watch('description');
+  const watchedStatus = watch('status');
 
   // Auto-generate URL from title
   useEffect(() => {
@@ -130,7 +188,7 @@ export function CategoryForm({
     const file = event.target.files?.[0];
     if (file) {
       setSelectedImageFile(file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -159,18 +217,40 @@ export function CategoryForm({
     };
 
     const allFlat = flatten(allCategories);
-    
+
     // If editing, exclude current category and its descendants
     if (category) {
-      const isDescendant = (cat: Category, ancestorId: number): boolean => {
-        if (cat.id === ancestorId) return true;
-        if (cat.categories) {
-          return cat.categories.some(subcat => isDescendant(subcat, ancestorId));
+      // Find all descendants of the current category
+      const findDescendants = (parentCat: Category): number[] => {
+        const descendants: number[] = [parentCat.id]; // Include the category itself
+        if (parentCat.categories) {
+          for (const child of parentCat.categories) {
+            descendants.push(...findDescendants(child));
+          }
         }
-        return false;
+        return descendants;
       };
 
-      return allFlat.filter(cat => !isDescendant(cat, category.id));
+      // Get current category from the tree to find its descendants
+      const findCategoryInTree = (cats: Category[], targetId: number): Category | null => {
+        for (const cat of cats) {
+          if (cat.id === targetId) return cat;
+          if (cat.categories) {
+            const found = findCategoryInTree(cat.categories, targetId);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+
+      const currentCategoryInTree = findCategoryInTree(allCategories, category.id);
+      if (currentCategoryInTree) {
+        const excludeIds = findDescendants(currentCategoryInTree);
+        return allFlat.filter(cat => !excludeIds.includes(cat.id));
+      }
+
+      // Fallback: at least exclude the current category itself
+      return allFlat.filter(cat => cat.id !== category.id);
     }
 
     return allFlat;
@@ -185,15 +265,17 @@ export function CategoryForm({
       if (data.icon) metadata.icon = data.icon;
       if (data.color) metadata.color = data.color;
 
-      // Prepare request data
+      // Prepare request data with separate icon and color fields
       const requestData = {
         title: data.title,
         url: data.url,
         description: data.description || '',
         parent: data.parent || 0,
         status: data.status,
-        locale: data.locale || 'en',
-        data: Object.keys(metadata).length > 0 ? JSON.stringify(metadata) : '',
+        locale: data.locale === 'none' ? undefined : data.locale,
+        icon: data.icon || undefined,
+        color: data.color || undefined,
+        data: '', // Keep data field empty or for other metadata
       };
 
       // TODO: Handle image upload
@@ -244,14 +326,14 @@ export function CategoryForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Basic Information */}
       <Box size="default">
-        <h3 className="font-semibold mb-4">Basic Information</h3>
+        <h3 className="font-semibold mb-4">{t('form.basicInfo')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
-            <Input 
+            <Label htmlFor="title">{t('form.title')} *</Label>
+            <Input
               id="title"
               {...register('title')}
-              placeholder="Enter category title"
+              placeholder={t('form.titlePlaceholder')}
             />
             {errors.title && (
               <p className="text-sm text-destructive">{errors.title.message}</p>
@@ -259,11 +341,11 @@ export function CategoryForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="url">URL Slug *</Label>
-            <Input 
+            <Label htmlFor="url">{t('form.url')} *</Label>
+            <Input
               id="url"
               {...register('url')}
-              placeholder="category-url-slug"
+              placeholder={t('form.urlPlaceholder')}
             />
             {errors.url && (
               <p className="text-sm text-destructive">{errors.url.message}</p>
@@ -271,11 +353,11 @@ export function CategoryForm({
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea 
+            <Label htmlFor="description">{t('form.description')}</Label>
+            <Textarea
               id="description"
               {...register('description')}
-              placeholder="Enter category description (optional)"
+              placeholder={t('form.descriptionPlaceholder')}
               rows={3}
             />
             {errors.description && (
@@ -287,19 +369,19 @@ export function CategoryForm({
 
       {/* Hierarchy & Settings */}
       <Box size="default">
-        <h3 className="font-semibold mb-4">Hierarchy & Settings</h3>
+        <h3 className="font-semibold mb-4">{t('form.hierarchy')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="parent">Parent Category</Label>
+            <Label htmlFor="parent">{t('form.parent')}</Label>
             <Select
-              value={watch('parent')?.toString() || '0'}
+              value={(watch('parent') ?? 0).toString()}
               onValueChange={(value) => setValue('parent', parseInt(value) || 0)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select parent category" />
+                <SelectValue placeholder={t('form.parentPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="0">Top Level (No Parent)</SelectItem>
+                <SelectItem value="0">{t('form.topLevel')}</SelectItem>
                 {availableParents.map((cat) => (
                   <SelectItem key={cat.id} value={cat.id.toString()}>
                     {cat.title} (ID: {cat.id})
@@ -310,7 +392,7 @@ export function CategoryForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">{t('form.status')}</Label>
             <Select
               value={watch('status')?.toString() || '1'}
               onValueChange={(value) => setValue('status', parseInt(value))}
@@ -319,26 +401,28 @@ export function CategoryForm({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">Active</SelectItem>
-                <SelectItem value="0">Inactive</SelectItem>
+                <SelectItem value="1">{t('active')}</SelectItem>
+                <SelectItem value="0">{t('inactive')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="locale">Locale</Label>
+            <Label htmlFor="locale">{t('form.locale')}</Label>
             <Select
-              value={watch('locale') || 'en'}
+              value={watch('locale') || 'none'}
               onValueChange={(value) => setValue('locale', value)}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-                <SelectItem value="fr">French</SelectItem>
-                <SelectItem value="de">German</SelectItem>
+                <SelectItem value="none">🌍 Worldwide (No Locale)</SelectItem>
+                <SelectItem value="en">🇺🇸 English</SelectItem>
+                <SelectItem value="ru">🇷🇺 Russian</SelectItem>
+                <SelectItem value="zh">🇨🇳 Chinese</SelectItem>
+                <SelectItem value="es">🇪🇸 Spanish</SelectItem>
+                <SelectItem value="ar">🇸🇦 Arabic</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -347,20 +431,19 @@ export function CategoryForm({
 
       {/* Visual Customization */}
       <Box size="default">
-        <h3 className="font-semibold mb-4">Visual Customization</h3>
+        <h3 className="font-semibold mb-4">{t('form.customization')}</h3>
         <div className="space-y-4">
           {/* Color Selection */}
           <div className="space-y-2">
-            <Label>Category Color</Label>
+            <Label>{t('form.color')}</Label>
             <div className="flex flex-wrap gap-2">
               {/* No Color Option */}
               <button
                 type="button"
-                className={`w-8 h-8 rounded-full border-2 bg-muted flex items-center justify-center ${
-                  !watchedColor ? 'border-foreground' : 'border-border'
-                }`}
+                className={`w-8 h-8 rounded-full border-2 bg-muted flex items-center justify-center ${!watchedColor ? 'border-foreground' : 'border-border'
+                  }`}
                 onClick={() => setValue('color', '')}
-                title="No color"
+                title={t('form.noColor')}
               >
                 <span className="text-xs text-muted-foreground">×</span>
               </button>
@@ -368,121 +451,127 @@ export function CategoryForm({
                 <button
                   key={color}
                   type="button"
-                  className={`w-8 h-8 rounded-full border-2 ${
-                    watchedColor === color ? 'border-foreground' : 'border-border'
-                  }`}
+                  className={`w-8 h-8 rounded-full border-2 ${watchedColor === color ? 'border-foreground' : 'border-border'
+                    }`}
                   style={{ backgroundColor: color }}
                   onClick={() => setValue('color', color)}
                 />
               ))}
             </div>
-            <Input 
+            <Input
               {...register('color')}
-              placeholder="Optional: #3b82f6"
+              placeholder={t('form.colorPlaceholder')}
               className="w-32"
             />
           </div>
 
           {/* Icon Selection */}
           <div className="space-y-2">
-            <Label>Icon (FontAwesome Key)</Label>
-            <Input 
+            <Label>{t('form.icon')}</Label>
+            <Input
               {...register('icon')}
-              placeholder="e.g: user, home, star"
+              placeholder={t('form.iconPlaceholder')}
               className="w-48"
             />
             <p className="text-xs text-muted-foreground">
-              Enter a FontAwesome icon key (without &apos;fa-&apos; prefix). Leave empty for no icon.
+              {t('form.iconDescription')}
               <br />
-              <a 
-                href="https://fontawesome.com/search?s=solid&ic=free&o=r" 
-                target="_blank" 
+              <a
+                href="https://fontawesome.com/search?s=solid&ic=free&o=r"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:underline"
               >
-                Browse FontAwesome icons →
+                {t('form.browseIcons')} →
               </a>
             </p>
           </div>
 
           {/* Image Upload */}
           <div className="space-y-2">
-            <Label>Category Image</Label>
-            {imagePreview ? (
-              <div className="relative inline-block">
-                <Image 
-                  src={imagePreview} 
-                  alt="Category preview"
-                  width={120}
-                  height={120}
-                  className="rounded-[0.75rem] object-cover border"
-                />
+            <Label>{t('form.image')}</Label>
+            <div className={`rounded-[0.75rem] relative overflow-hidden w-full h-[120px] ${!imagePreview ? 'border-2 border-dashed border-border' : ''}`}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                id="imageUpload"
+              />
+              <Label htmlFor="imageUpload" className="cursor-pointer block w-full h-full">
+                {imagePreview ? (
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={imagePreview}
+                      alt="Category preview"
+                      width={400}
+                      height={120}
+                      className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="text-white text-sm text-center">
+                        <UploadIcon size={20} className="mx-auto mb-1" />
+                        <div>{t('form.imageUpload')}</div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-center">
+                    <UploadIcon size={24} className="text-muted-foreground mb-2" />
+                    <span className="text-sm text-muted-foreground">{t('form.imageUpload')}</span>
+                  </div>
+                )}
+              </Label>
+              {imagePreview && (
                 <IconButton
                   type="button"
                   variant="destructive"
                   size="sm"
-                  className="absolute -top-2 -right-2"
+                  className="absolute -top-2 -right-2 z-10"
                   onClick={removeImage}
                   icon={<XIcon size={12} />}
                 >
                 </IconButton>
-              </div>
-            ) : (
-              <div className="border-2 border-dashed border-border rounded-[0.75rem] p-4 text-center">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="imageUpload"
-                />
-                <Label htmlFor="imageUpload" className="cursor-pointer">
-                  <div className="flex flex-col items-center space-y-2">
-                    <UploadIcon size={24} className="text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Click to upload image</span>
-                  </div>
-                </Label>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </Box>
 
       {/* Preview */}
-      {(watchedTitle || watchedIcon || watchedColor) && (
+      {watchedTitle && (
         <Box size="default">
-          <h3 className="font-semibold mb-4">Preview</h3>
-          <div className="flex items-center space-x-3 p-3 border rounded-[0.75rem]">
-            {watchedIcon ? (
-              <div className="w-6 h-6 flex items-center justify-center text-sm">
-                <i className={`fas fa-${watchedIcon}`} style={{ color: watchedColor || '#6b7280' }}></i>
-              </div>
-            ) : watchedColor ? (
-              <div 
-                className="w-4 h-4 rounded-full"
-                style={{ backgroundColor: watchedColor }}
-              />
-            ) : null}
-            <div>
-              <h4 className="font-medium">{watchedTitle || 'Category Title'}</h4>
-              <p className="text-sm text-muted-foreground">
-                /{watch('url') || 'category-url'}
-              </p>
-            </div>
+          <h3 className="font-semibold mb-4">{t('form.preview')}</h3>
+          <div className="border rounded-[0.75rem] bg-background">
+            <CategoryPreview
+              category={{
+                id: category?.id,
+                title: watchedTitle || 'Category Title',
+                url: watchedUrl || 'category-url',
+                description: watchedDescription,
+                image: imagePreview || category?.image,
+                status: watchedStatus,
+                icon: watchedIcon,
+                color: watchedColor,
+              }}
+              showDescription={false}
+              showCreated={false}
+              showSubcategoriesCount={false}
+            />
           </div>
         </Box>
       )}
 
       {/* Form Actions */}
       <div className="flex items-center justify-end space-x-2 pt-4 border-t">
-        <Button 
-          type="button" 
+        <Button
+          type="button"
           variant="outline"
           onClick={onCancel}
           disabled={isLoading}
         >
           <CancelIcon size={16} className="mr-2" />
-          Cancel
+          {t('form.cancel')}
         </Button>
         <IconButton
           type="submit"
@@ -491,7 +580,7 @@ export function CategoryForm({
           icon={<SaveIcon size={16} />}
           responsive
         >
-          {isLoading ? 'Saving...' : category ? 'Update Category' : 'Create Category'}
+          {isLoading ? t('form.saving') : category ? t('form.updateCategory') : t('form.createCategory')}
         </IconButton>
       </div>
     </form>

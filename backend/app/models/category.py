@@ -20,6 +20,8 @@ class Category(Base):
     url = Attribute(types=str)
     status = Attribute(types=int, default=1)
     token = Attribute(types=str)
+    icon = Attribute(types=str)
+    color = Attribute(types=str)
 
     @classmethod
     def get_tree(cls, categories=None, parent=None, ids=None, **kwargs):

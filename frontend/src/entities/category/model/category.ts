@@ -6,6 +6,8 @@ export interface Category {
   description?: string;
   image?: string;
   data?: string;
+  icon?: string; // FontAwesome icon key
+  color?: string; // Hex color code
   locale?: string;
   created?: number;
   updated?: number;
@@ -35,6 +37,8 @@ export interface CreateCategoryRequest {
   parent?: number;
   locale?: string;
   status?: number;
+  icon?: string; // FontAwesome icon key
+  color?: string; // Hex color code
 }
 
 export interface UpdateCategoryRequest {
@@ -46,12 +50,15 @@ export interface UpdateCategoryRequest {
   parent?: number;
   locale?: string;
   status?: number;
+  icon?: string; // FontAwesome icon key
+  color?: string; // Hex color code
 }
 
 export interface GetCategoriesRequest {
   locale?: string;
   parent?: number;
   status?: number;
+  include_tree?: boolean;
 }
 
 export interface CategoryWithSubcategories extends Category {

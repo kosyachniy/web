@@ -22,6 +22,8 @@ class CategoryUpdateRequest(BaseModel):
     parent: Optional[int] = Field(None, description="Parent category ID")
     locale: Optional[str] = Field(None, description="Category locale")
     status: Optional[int] = Field(None, description="Category status (1=active, 0=inactive)")
+    icon: Optional[str] = Field(None, description="FontAwesome icon key", example="house")
+    color: Optional[str] = Field(None, description="Category color in hex format", example="#10b981")
 
 class CategoryResponse(BaseModel):
     """Response model for category data"""
@@ -37,6 +39,8 @@ class CategoryResponse(BaseModel):
     created: Optional[int] = Field(None, description="Creation timestamp")
     updated: Optional[int] = Field(None, description="Last update timestamp")
     user: Optional[int] = Field(None, description="Creator user ID")
+    icon: Optional[str] = Field(None, description="FontAwesome icon key", example="house")
+    color: Optional[str] = Field(None, description="Category color in hex format", example="#10b981")
 
 @router.put("/{category_id}/", response_model=CategoryResponse, tags=["Categories"])
 async def update_category(
@@ -74,6 +78,10 @@ async def update_category(
         category.parent = data.parent
     if data.status is not None:
         category.status = data.status
+    if data.icon is not None:
+        category.icon = data.icon
+    if data.color is not None:
+        category.color = data.color
     
     # Handle URL update
     if data.url is not None:
@@ -143,4 +151,6 @@ async def update_category(
         created=category.created,
         updated=category.updated,
         user=category.user,
+        icon=category.icon,
+        color=category.color,
     )

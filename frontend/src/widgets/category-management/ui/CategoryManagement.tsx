@@ -33,8 +33,8 @@ export function CategoryManagement({
     try {
       setLoading(true);
       setError(null);
-      // Get all categories including nested structure
-      const data = await getCategories({ parent: 0 });
+      // Get all categories including nested structure for parent selector
+      const data = await getCategories({ parent: 0, include_tree: true });
       setCategories(data);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load categories';
@@ -138,7 +138,6 @@ export function CategoryManagement({
                 onEdit={handleEditCategory}
                 onDelete={handleDeleteCategory}
                 allCategories={categories}
-                isLast={index === categories.length - 1}
                 isFirst={index === 0}
               />
             ))}

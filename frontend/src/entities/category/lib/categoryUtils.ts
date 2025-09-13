@@ -112,7 +112,8 @@ export function generateCategoryImageStructuredData(category: Category) {
 
 /**
  * Filter active subcategories (includes categories without URLs)
+ * Note: API already filters by status=1, so we just return all subcategories
  */
 export function getActiveSubcategories(subcategories: Category[]): Category[] {
-  return subcategories.filter(subcategory => subcategory.status);
+  return subcategories;
 }

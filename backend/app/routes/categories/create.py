@@ -17,11 +17,13 @@ class CategoryCreateRequest(BaseModel):
     title: str = Field(..., min_length=1, max_length=100, description="Category title", example="Technology")
     url: Optional[str] = Field(None, max_length=100, description="URL slug (auto-generated if not provided)", example="technology")
     description: Optional[str] = Field(None, max_length=500, description="Category description", example="Latest technology news and trends")
-    data: Optional[str] = Field(None, description="Additional metadata as JSON string", example='{"icon": "laptop", "color": "#3b82f6"}')
+    data: Optional[str] = Field(None, description="Additional metadata as JSON string", example='{"extra": "data"}')
     image: Optional[str] = Field(None, description="Category image URL", example="https://example.com/tech.jpg")
     parent: Optional[int] = Field(0, description="Parent category ID (0 for top-level)", example=0)
     locale: Optional[str] = Field("en", description="Category locale", example="en")
     status: Optional[int] = Field(1, description="Category status (1=active, 0=inactive)", example=1)
+    icon: Optional[str] = Field(None, description="FontAwesome icon key", example="house")
+    color: Optional[str] = Field(None, description="Category color in hex format", example="#10b981")
 
 class CategoryResponse(BaseModel):
     """Response model for category data"""
@@ -37,6 +39,8 @@ class CategoryResponse(BaseModel):
     created: Optional[int] = Field(None, description="Creation timestamp")
     updated: Optional[int] = Field(None, description="Last update timestamp")
     user: Optional[int] = Field(None, description="Creator user ID")
+    icon: Optional[str] = Field(None, description="FontAwesome icon key", example="house")
+    color: Optional[str] = Field(None, description="Category color in hex format", example="#10b981")
 
 @router.post("/", response_model=CategoryResponse, tags=["Categories"])
 async def create_category(
@@ -60,6 +64,8 @@ async def create_category(
         image=data.image,
         parent=data.parent or 0,
         status=data.status if data.status is not None else 1,
+        icon=data.icon,
+        color=data.color,
     )
     
     # Generate URL if not provided
@@ -126,4 +132,6 @@ async def create_category(
         created=category.created,
         updated=category.updated,
         user=category.user,
+        icon=category.icon,
+        color=category.color,
     )

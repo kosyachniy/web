@@ -205,7 +205,7 @@ function findCategoryByIdRecursive(categories: Category[], id: number): Category
 export async function getCategoryByUrl(url: string, locale?: string): Promise<Category | null> {
   try {
     // Get the full category structure with nested categories
-    const categories = await getCategories({ parent: 0, locale, status: 1 });
+    const categories = await getCategories({ parent: 0, locale, status: 1, include_tree: true });
     return findCategoryByUrlRecursive(categories, url);
   } catch (error) {
     logApiWarning('Category lookup failed', error);
@@ -215,12 +215,12 @@ export async function getCategoryByUrl(url: string, locale?: string): Promise<Ca
 
 export async function getSubcategories(parentId?: number, locale?: string): Promise<Category[]> {
   if (parentId === undefined) {
-    // Get top-level categories (parent: 0 in backend)
-    const allCategories = await getCategories({ parent: 0, locale, status: 1 });
+    // Get top-level categories (parent: 0 in backend) with full tree structure
+    const allCategories = await getCategories({ parent: 0, locale, status: 1, include_tree: true });
     return allCategories;
   } else {
     // Get subcategories from the nested structure using recursive search
-    const allCategories = await getCategories({ locale });
+    const allCategories = await getCategories({ locale, include_tree: true });
     const parentCategory = findCategoryByIdRecursive(allCategories, parentId);
     return parentCategory?.categories?.filter(cat => cat.status === 1) || [];
   }

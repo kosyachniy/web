@@ -30,6 +30,12 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
             path: '/posts' as const
         },
         {
+            key: 'catalog',
+            label: tNav('catalog'),
+            icon: CatalogIcon,
+            path: '/catalog' as const
+        },
+        {
             key: 'space',
             label: tNav('space'),
             icon: SpaceIcon,
@@ -41,12 +47,6 @@ export default function MobileMenuContent({ isOpen, onSearchSubmit, onClose }: M
             icon: HubIcon,
             path: '/hub' as const
         },
-        {
-            key: 'catalog',
-            label: tNav('catalog'),
-            icon: CatalogIcon,
-            path: '/catalog' as const
-        }
     ] as const;
 
     const handleNavigate = (path: "/" | "/posts" | "/space" | "/hub" | "/catalog") => {

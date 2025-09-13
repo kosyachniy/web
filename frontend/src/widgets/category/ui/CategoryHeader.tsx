@@ -34,14 +34,6 @@ export function CategoryHeader({ category, className = '' }: CategoryHeaderProps
         </p>
       )}
 
-      {/* Category Content (HTML) */}
-      {category.data && (
-        <div 
-          className="prose prose-sm max-w-none dark:prose-invert"
-          dangerouslySetInnerHTML={{ __html: category.data }}
-        />
-      )}
-
       {/* Structured Data for Category Image */}
       {imageStructuredData && (
         <script
