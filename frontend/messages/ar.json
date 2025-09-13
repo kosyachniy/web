@@ -7,12 +7,16 @@
         "incrementBy5": "+5",
         "reset": "إعادة تعيين"
     },
-    "multiImageUploadDemo": {
-        "title": "عرض توضيحي لتحميل صور متعددة",
-        "description": "عرض مكون MultiImageUpload مع دعم السحب والإفلات",
-        "selectedImages": "تم تحديد {count} صور{plural}",
+    "multiFileUploadDemo": {
+        "title": "عرض توضيحي لتحميل ملفات متعددة",
+        "description": "عرض مكون MultiFileUpload مع دعم السحب والإفلات لأي نوع من الملفات",
+        "selectedFiles": "تم تحديد {count} ملفات{plural}",
         "clearAll": "مسح الكل",
-        "debugTitle": "تصحيح الأخطاء: بيانات الصورة"
+        "debugTitle": "تصحيح الأخطاء: بيانات الملف",
+        "imagesOnly": "الصور فقط",
+        "documentsOnly": "الوثائق فقط",
+        "anyFileType": "أي نوع من الملفات",
+        "currentFilter": "المرشح الحالي"
     },
     "userSettings": {
         "title": "عرض إعدادات المستخدم",
@@ -371,25 +375,27 @@
             "featured": "المميزة"
         }
     },
-    "imageUpload": {
-        "clickToUpload": "انقر لتحميل الصورة",
+    "fileUpload": {
+        "clickToUpload": "انقر لتحميل الملف",
         "dragAndDrop": "أو اسحب وأفلت",
         "supportedFormats": "التنسيقات المدعومة: JPG، PNG، WEBP، GIF",
         "maxSize": "الحد الأقصى للحجم: 5 ميجابايت",
         "uploading": "جاري التحميل...",
-        "removeImage": "إزالة الصورة",
-        "changeImage": "تغيير الصورة",
-        "preview": "معاينة الصورة"
+        "removeFile": "إزالة الملف",
+        "changeFile": "تغيير الملف",
+        "preview": "معاينة الملف",
+        "fileName": "اسم الملف",
+        "fileSize": "حجم الملف"
     },
-    "multiImageUpload": {
-        "title": "معرض الصور",
-        "addMore": "إضافة المزيد من الصور",
-        "addMoreRemaining": "إضافة المزيد من الصور ({remaining} متبقية)",
+    "multiFileUpload": {
+        "title": "معرض الملفات",
+        "addMore": "إضافة المزيد من الملفات",
+        "addMoreRemaining": "إضافة المزيد من الملفات ({remaining} متبقية)",
         "selectMultiple": "حدد ملفات متعددة",
-        "maxImagesReached": "الحد الأقصى {max} صور مسموح",
-        "removeAll": "إزالة جميع الصور",
-        "imagesSelected": "{count} صور محددة",
-        "dropMultipleImages": "اسقط عدة صور هنا",
-        "clickToAddMore": "انقر لإضافة المزيد من الصور"
+        "maxFilesReached": "الحد الأقصى {max} ملفات مسموح",
+        "removeAll": "إزالة جميع الملفات",
+        "filesSelected": "{count} ملفات محددة",
+        "dropMultipleFiles": "اسقط عدة ملفات هنا",
+        "clickToAddMore": "انقر لإضافة المزيد من الملفات"
     }
 }

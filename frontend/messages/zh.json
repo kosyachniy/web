@@ -7,12 +7,16 @@
         "incrementBy5": "+5",
         "reset": "重置"
     },
-    "multiImageUploadDemo": {
-        "title": "多图片上传演示",
-        "description": "展示支持拖放功能的 MultiImageUpload 组件",
-        "selectedImages": "已选择 {count} 张图片",
+    "multiFileUploadDemo": {
+        "title": "多文件上传演示",
+        "description": "展示支持任何文件类型拖放功能的 MultiFileUpload 组件",
+        "selectedFiles": "已选择 {count} 个文件",
         "clearAll": "清除全部",
-        "debugTitle": "调试：图片数据"
+        "debugTitle": "调试：文件数据",
+        "imagesOnly": "仅图片",
+        "documentsOnly": "仅文档",
+        "anyFileType": "任何文件类型",
+        "currentFilter": "当前筛选器"
     },
     "userSettings": {
         "title": "用户设置演示",
@@ -371,25 +375,27 @@
             "featured": "精选"
         }
     },
-    "imageUpload": {
-        "clickToUpload": "点击上传图片",
+    "fileUpload": {
+        "clickToUpload": "点击上传文件",
         "dragAndDrop": "或拖拽上传",
         "supportedFormats": "支持格式：JPG、PNG、WEBP、GIF",
         "maxSize": "最大大小：5MB",
         "uploading": "上传中...",
-        "removeImage": "删除图片",
-        "changeImage": "更换图片",
-        "preview": "图片预览"
+        "removeFile": "删除文件",
+        "changeFile": "更换文件",
+        "preview": "文件预览",
+        "fileName": "文件名",
+        "fileSize": "文件大小"
     },
-    "multiImageUpload": {
-        "title": "图片画廊",
-        "addMore": "添加更多图片",
-        "addMoreRemaining": "添加更多图片（还可添加 {remaining} 张）",
+    "multiFileUpload": {
+        "title": "文件画廊",
+        "addMore": "添加更多文件",
+        "addMoreRemaining": "添加更多文件（还可添加 {remaining} 个）",
         "selectMultiple": "选择多个文件",
-        "maxImagesReached": "最多允许 {max} 张图片",
-        "removeAll": "删除所有图片",
-        "imagesSelected": "已选择 {count} 张图片",
-        "dropMultipleImages": "在此处拖放多张图片",
-        "clickToAddMore": "点击添加更多图片"
+        "maxFilesReached": "最多允许 {max} 个文件",
+        "removeAll": "删除所有文件",
+        "filesSelected": "已选择 {count} 个文件",
+        "dropMultipleFiles": "在此处拖放多个文件",
+        "clickToAddMore": "点击添加更多文件"
     }
 }

@@ -7,12 +7,16 @@
         "incrementBy5": "+5",
         "reset": "Reiniciar"
     },
-    "multiImageUploadDemo": {
-        "title": "Demo de Carga de Múltiples Imágenes",
-        "description": "Demostrar el componente MultiImageUpload con soporte de arrastrar y soltar",
-        "selectedImages": "Seleccionado{plural} {count} imagen{plural}",
+    "multiFileUploadDemo": {
+        "title": "Demo de Carga de Múltiples Archivos",
+        "description": "Demostrar el componente MultiFileUpload con soporte de arrastrar y soltar para cualquier tipo de archivo",
+        "selectedFiles": "Seleccionado{plural} {count} archivo{plural}",
         "clearAll": "Limpiar Todo",
-        "debugTitle": "Debug: Datos de Imagen"
+        "debugTitle": "Debug: Datos de Archivo",
+        "imagesOnly": "Solo Imágenes",
+        "documentsOnly": "Solo Documentos",
+        "anyFileType": "Cualquier Tipo de Archivo",
+        "currentFilter": "Filtro actual"
     },
     "userSettings": {
         "title": "Demo de Configuraciones de Usuario",
@@ -371,25 +375,27 @@
             "featured": "Destacados"
         }
     },
-    "imageUpload": {
-        "clickToUpload": "Haga clic para cargar imagen",
+    "fileUpload": {
+        "clickToUpload": "Haga clic para cargar archivo",
         "dragAndDrop": "o arrastre y suelte",
         "supportedFormats": "Formatos admitidos: JPG, PNG, WEBP, GIF",
         "maxSize": "Tamaño máximo: 5MB",
         "uploading": "Cargando...",
-        "removeImage": "Eliminar imagen",
-        "changeImage": "Cambiar imagen",
-        "preview": "Vista previa de imagen"
+        "removeFile": "Eliminar archivo",
+        "changeFile": "Cambiar archivo",
+        "preview": "Vista previa del archivo",
+        "fileName": "Nombre del archivo",
+        "fileSize": "Tamaño del archivo"
     },
-    "multiImageUpload": {
-        "title": "Galería de Imágenes",
-        "addMore": "Agregar más imágenes",
-        "addMoreRemaining": "Agregar más imágenes ({remaining} restantes)",
+    "multiFileUpload": {
+        "title": "Galería de Archivos",
+        "addMore": "Agregar más archivos",
+        "addMoreRemaining": "Agregar más archivos ({remaining} restantes)",
         "selectMultiple": "Seleccionar varios archivos",
-        "maxImagesReached": "Máximo {max} imágenes permitidas",
-        "removeAll": "Eliminar todas las imágenes",
-        "imagesSelected": "{count} imágenes seleccionadas",
-        "dropMultipleImages": "Soltar varias imágenes aquí",
-        "clickToAddMore": "Haga clic para agregar más imágenes"
+        "maxFilesReached": "Máximo {max} archivos permitidos",
+        "removeAll": "Eliminar todos los archivos",
+        "filesSelected": "{count} archivos seleccionados",
+        "dropMultipleFiles": "Soltar varios archivos aquí",
+        "clickToAddMore": "Haga clic para agregar más archivos"
     }
 }

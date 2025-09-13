@@ -7,12 +7,16 @@
         "incrementBy5": "+5",
         "reset": "Reset"
     },
-    "multiImageUploadDemo": {
-        "title": "Multi Image Upload Demo",
-        "description": "Showcase the MultiImageUpload component with drag & drop support",
-        "selectedImages": "Selected {count} image{plural}",
+    "multiFileUploadDemo": {
+        "title": "Multi File Upload Demo",
+        "description": "Showcase the MultiFileUpload component with drag & drop support for any file type",
+        "selectedFiles": "Selected {count} file{plural}",
         "clearAll": "Clear All",
-        "debugTitle": "Debug: Image Data"
+        "debugTitle": "Debug: File Data",
+        "imagesOnly": "Images Only",
+        "documentsOnly": "Documents Only",
+        "anyFileType": "Any File Type",
+        "currentFilter": "Current filter"
     },
     "userSettings": {
         "title": "User Settings Demo",
@@ -371,25 +375,27 @@
             "featured": "Featured"
         }
     },
-    "imageUpload": {
-        "clickToUpload": "Click to upload image",
+    "fileUpload": {
+        "clickToUpload": "Click to upload file",
         "dragAndDrop": "or drag and drop",
         "supportedFormats": "Supported formats: JPG, PNG, WEBP, GIF",
         "maxSize": "Max size: 5MB",
         "uploading": "Uploading...",
-        "removeImage": "Remove image",
-        "changeImage": "Change image",
-        "preview": "Image preview"
+        "removeFile": "Remove file",
+        "changeFile": "Change file",
+        "preview": "File preview",
+        "fileName": "File name",
+        "fileSize": "File size"
     },
-    "multiImageUpload": {
-        "title": "Image Gallery",
-        "addMore": "Add more images",
-        "addMoreRemaining": "Add more images ({remaining} remaining)",
+    "multiFileUpload": {
+        "title": "File Gallery",
+        "addMore": "Add more files",
+        "addMoreRemaining": "Add more files ({remaining} remaining)",
         "selectMultiple": "Select multiple files",
-        "maxImagesReached": "Maximum {max} images allowed",
-        "removeAll": "Remove all images",
-        "imagesSelected": "{count} images selected",
-        "dropMultipleImages": "Drop multiple images here",
-        "clickToAddMore": "Click to add more images"
+        "maxFilesReached": "Maximum {max} files allowed",
+        "removeAll": "Remove all files",
+        "filesSelected": "{count} files selected",
+        "dropMultipleFiles": "Drop multiple files here",
+        "clickToAddMore": "Click to add more files"
     }
 }

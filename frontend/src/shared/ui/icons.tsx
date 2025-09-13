@@ -37,6 +37,14 @@ import {
   FaXmark,
   FaImage,
   FaFileArrowUp,
+  FaFilePdf,
+  FaFileWord,
+  FaFileExcel,
+  FaFilePowerpoint,
+  FaFileCode,
+  FaFileVideo,
+  FaFileAudio,
+  FaFile,
   FaSpinner,
   FaEye,
   FaUsers,
@@ -401,6 +409,43 @@ export function ImageIcon({ size = 16, ...props }: IconProps) {
 
 export function UploadIcon({ size = 16, ...props }: IconProps) {
   return <FaFileArrowUp size={size} {...props} />
+}
+
+// File type icons
+export function PdfIcon({ size = 16, ...props }: IconProps) {
+  return <FaFilePdf size={size} {...props} />
+}
+
+export function WordIcon({ size = 16, ...props }: IconProps) {
+  return <FaFileWord size={size} {...props} />
+}
+
+export function ExcelIcon({ size = 16, ...props }: IconProps) {
+  return <FaFileExcel size={size} {...props} />
+}
+
+export function PowerpointIcon({ size = 16, ...props }: IconProps) {
+  return <FaFilePowerpoint size={size} {...props} />
+}
+
+export function CodeIcon({ size = 16, ...props }: IconProps) {
+  return <FaFileCode size={size} {...props} />
+}
+
+export function FileVideoIcon({ size = 16, ...props }: IconProps) {
+  return <FaFileVideo size={size} {...props} />
+}
+
+export function FileAudioIcon({ size = 16, ...props }: IconProps) {
+  return <FaFileAudio size={size} {...props} />
+}
+
+export function FileIcon({ size = 16, ...props }: IconProps) {
+  return <FaFile size={size} {...props} />
+}
+
+export function ArchiveIcon({ size = 16, ...props }: IconProps) {
+  return <FaBox size={size} {...props} />
 }
 
 export function XIcon({ size = 16, ...props }: IconProps) {

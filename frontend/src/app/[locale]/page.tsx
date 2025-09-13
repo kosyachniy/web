@@ -1,6 +1,6 @@
 'use client';
 
-import { CounterDemo, UserDemo, PopupDemo, ToastDemo, MultiImageUploadDemo } from '@/features/demo';
+import { CounterDemo, UserDemo, PopupDemo, ToastDemo, MultiFileUploadDemo } from '@/features/demo';
 import { ThreeColumnLayout } from '@/widgets/three-column-layout';
 import { SectionsSidebar } from '@/widgets/sections-sidebar';
 import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
@@ -49,7 +49,7 @@ export default function Home() {
                         <PopupDemo />
                         <ToastDemo />
                     </div>
-                    <MultiImageUploadDemo />
+                    <MultiFileUploadDemo />
                 </div>
 
                 {/* Posts Section */}

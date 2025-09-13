@@ -12,7 +12,7 @@ import { Textarea } from '@/shared/ui/textarea';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Box } from '@/shared/ui/box';
-import { ImageUpload } from '@/shared/ui/image-upload';
+import { FileUpload, FileData } from '@/shared/ui/file-upload';
 import { SaveIcon, CancelIcon } from '@/shared/ui/icons';
 import { useToast } from '@/widgets/feedback-system';
 import { createCategory, updateCategory } from '@/entities/category/api/categoryApi';
@@ -71,8 +71,8 @@ export function CategoryForm({
 }: CategoryFormProps) {
   const t = useTranslations('admin.categories');
   const [isLoading, setIsLoading] = useState(false);
+  const [categoryFileData, setCategoryFileData] = useState<FileData | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   // Get icon and color from direct fields only
@@ -152,13 +152,13 @@ export function CategoryForm({
     }
   }, [category]);
 
-  const handleImageChange = (file: File | null, preview: string | null) => {
-    setSelectedImageFile(file);
+  const handleFileChange = (file: File | null, preview: string | null, fileData: FileData | null) => {
+    setCategoryFileData(fileData);
     setImagePreview(preview);
   };
 
-  const handleImageRemove = () => {
-    setSelectedImageFile(null);
+  const handleFileRemove = () => {
+    setCategoryFileData(null);
     setImagePreview(null);
   };
 
@@ -233,7 +233,7 @@ export function CategoryForm({
 
       // TODO: Handle image upload
       // For now, we'll skip image upload as it requires a separate endpoint
-      if (selectedImageFile) {
+      if (categoryFileData?.file) {
         console.warn('Image upload not yet implemented');
         toast({
           title: 'Note',
@@ -441,11 +441,13 @@ export function CategoryForm({
           </div>
 
           {/* Image Upload */}
-          <ImageUpload
+          <FileUpload
             label={t('form.image')}
             value={imagePreview}
-            onImageChange={handleImageChange}
-            onImageRemove={handleImageRemove}
+            fileData={categoryFileData}
+            onFileChange={handleFileChange}
+            onFileRemove={handleFileRemove}
+            fileTypes="images"
             id="categoryImageUpload"
             height={120}
             maxSize={5}

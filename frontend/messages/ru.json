@@ -7,12 +7,16 @@
         "incrementBy5": "+5",
         "reset": "Сброс"
     },
-    "multiImageUploadDemo": {
-        "title": "Демо Загрузки Нескольких Изображений",
-        "description": "Демонстрация компонента MultiImageUpload с поддержкой перетаскивания",
-        "selectedImages": "Выбрано {count} изображени{plural}",
+    "multiFileUploadDemo": {
+        "title": "Демо Загрузки Нескольких Файлов",
+        "description": "Демонстрация компонента MultiFileUpload с поддержкой перетаскивания для любого типа файлов",
+        "selectedFiles": "Выбрано {count} файлов{plural}",
         "clearAll": "Очистить Всё",
-        "debugTitle": "Отладка: Данные Изображений"
+        "debugTitle": "Отладка: Данные Файлов",
+        "imagesOnly": "Только Изображения",
+        "documentsOnly": "Только Документы",
+        "anyFileType": "Любой Тип Файла",
+        "currentFilter": "Текущий фильтр"
     },
     "userSettings": {
         "title": "Демо Настройки Пользователя",
@@ -371,25 +375,27 @@
             "featured": "Рекомендуемые"
         }
     },
-    "imageUpload": {
-        "clickToUpload": "Нажмите для загрузки изображения",
+    "fileUpload": {
+        "clickToUpload": "Нажмите для загрузки файла",
         "dragAndDrop": "или перетащите файл",
         "supportedFormats": "Поддерживаемые форматы: JPG, PNG, WEBP, GIF",
         "maxSize": "Максимальный размер: 5MB",
         "uploading": "Загрузка...",
-        "removeImage": "Удалить изображение",
-        "changeImage": "Изменить изображение",
-        "preview": "Предварительный просмотр изображения"
+        "removeFile": "Удалить файл",
+        "changeFile": "Изменить файл",
+        "preview": "Предварительный просмотр файла",
+        "fileName": "Имя файла",
+        "fileSize": "Размер файла"
     },
-    "multiImageUpload": {
-        "title": "Галерея Изображений",
-        "addMore": "Добавить больше изображений",
-        "addMoreRemaining": "Добавить больше изображений ({remaining} осталось)",
+    "multiFileUpload": {
+        "title": "Галерея Файлов",
+        "addMore": "Добавить больше файлов",
+        "addMoreRemaining": "Добавить больше файлов ({remaining} осталось)",
         "selectMultiple": "Выбрать несколько файлов",
-        "maxImagesReached": "Максимум {max} изображений разрешено",
-        "removeAll": "Удалить все изображения",
-        "imagesSelected": "{count} изображений выбрано",
-        "dropMultipleImages": "Перетащите несколько изображений сюда",
-        "clickToAddMore": "Нажмите, чтобы добавить больше изображений"
+        "maxFilesReached": "Максимум {max} файлов разрешено",
+        "removeAll": "Удалить все файлы",
+        "filesSelected": "{count} файлов выбрано",
+        "dropMultipleFiles": "Перетащите несколько файлов сюда",
+        "clickToAddMore": "Нажмите, чтобы добавить больше файлов"
     }
 }
