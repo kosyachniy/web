@@ -356,7 +356,7 @@ export default function FiltersSidebar({ className }: FiltersSidebarProps) {
             <div className="w-6 h-6" />
           )}
 
-          <label className="flex items-center space-x-1.5 flex-1 cursor-pointer group">
+          <label className="flex items-center space-x-2.5 flex-1 cursor-pointer group">
             <input
               type="checkbox"
               checked={selectedCategories.includes(category.id)}

@@ -12,6 +12,7 @@ export interface Category {
   status?: number;
   parent?: number;
   user?: number;
+  post_count?: number; // Number of posts in this category
   parents?: Array<{
     id: number;
     url: string;
@@ -27,14 +28,24 @@ export interface CategoryTree extends Category {
 
 export interface CreateCategoryRequest {
   title: string;
+  url?: string;
   description?: string;
+  data?: string; // JSON metadata
+  image?: string;
   parent?: number;
+  locale?: string;
+  status?: number;
 }
 
 export interface UpdateCategoryRequest {
   title?: string;
+  url?: string;
   description?: string;
+  data?: string; // JSON metadata
+  image?: string;
   parent?: number;
+  locale?: string;
+  status?: number;
 }
 
 export interface GetCategoriesRequest {

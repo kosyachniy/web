@@ -23,10 +23,11 @@ interface CategoriesHoverPopupProps {
   className?: string;
 }
 
-export function CategoriesHoverPopup({ 
-  children, 
-  locale, 
-  className = '' 
+
+export function CategoriesHoverPopup({
+  children,
+  locale,
+  className = ''
 }: CategoriesHoverPopupProps) {
   const t = useTranslations('categories.popup');
   const [categories, setCategories] = useState<Category[]>([]);
@@ -79,11 +80,11 @@ export function CategoriesHoverPopup({
   }, [isOpen, locale, categories.length]);
 
   return (
-    <Popover 
-      open={isOpen} 
+    <Popover
+      open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <PopoverTrigger 
+      <PopoverTrigger
         asChild
         className={className}
         onMouseEnter={() => setIsOpen(true)}
@@ -91,7 +92,7 @@ export function CategoriesHoverPopup({
       >
         {children}
       </PopoverTrigger>
-      <PopoverContent 
+      <PopoverContent
         className="w-[calc(100vw-2rem)] sm:w-80 max-w-80 p-0"
         side="bottom"
         align="start"
@@ -108,7 +109,7 @@ export function CategoriesHoverPopup({
             <div className="space-y-2">
               {categories.slice(0, 8).map((category) => {
                 const metadata = parseMetadata(category);
-                
+
                 return (
                   <Link
                     key={category.id}
@@ -132,20 +133,23 @@ export function CategoriesHoverPopup({
                         style={{ backgroundColor: metadata.color }}
                       />
                     ) : null}
-                    
+
                     <span className="text-sm truncate flex-1">
                       {category.title}
                     </span>
-                    
-                    {category.categories && category.categories.length > 0 && (
-                      <Badge variant="secondary" className="text-xs flex-shrink-0">
-                        {category.categories.length}
-                      </Badge>
-                    )}
+
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {/* Subcategory count - only show when greater than 0 */}
+                      {category.categories && category.categories.length > 0 && (
+                        <Badge variant="secondary" className="text-xs">
+                          {category.categories.length}
+                        </Badge>
+                      )}
+                    </div>
                   </Link>
                 );
               })}
-              
+
               {categories.length > 8 && (
                 <Link
                   href="/posts"

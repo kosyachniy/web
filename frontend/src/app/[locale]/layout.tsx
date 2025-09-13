@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import "../../styles/sonner.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 import { ReduxProvider } from "@/providers";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';

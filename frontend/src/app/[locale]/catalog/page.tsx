@@ -94,7 +94,7 @@ export default function CatalogPage() {
                         title={t('catalog')}
                         description="Discover our curated collection of products and services with advanced filtering and search capabilities."
                         actions={
-                            <ButtonGroup className="relative">
+                            <ButtonGroup>
                                 <IconButton
                                     variant="outline"
                                     icon={<HeartIcon size={16} />}
@@ -106,7 +106,7 @@ export default function CatalogPage() {
                                     {favoriteItems.size > 0 && (
                                         <Badge
                                             variant="destructive"
-                                            className="absolute -top-1 -right-1 min-w-[1rem] h-4 flex items-center justify-center p-0 text-[10px] text-white bg-red-500 border-red-500 pointer-events-none z-50"
+                                            className="absolute -top-1 -right-1 min-w-[1rem] h-4 flex items-center justify-center p-0 text-[10px] text-white bg-red-500 border-red-500 pointer-events-none z-10"
                                         >
                                             {favoriteItems.size}
                                         </Badge>
@@ -124,7 +124,7 @@ export default function CatalogPage() {
                                     {cartItems.size > 0 && (
                                         <Badge
                                             variant="destructive"
-                                            className="absolute -top-1 -right-1 min-w-[1rem] h-4 flex items-center justify-center p-0 text-[10px] text-white bg-red-500 border-red-500 pointer-events-none z-50"
+                                            className="absolute -top-1 -right-1 min-w-[1rem] h-4 flex items-center justify-center p-0 text-[10px] text-white bg-red-500 border-red-500 pointer-events-none z-10"
                                         >
                                             {cartItems.size}
                                         </Badge>
