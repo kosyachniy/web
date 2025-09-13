@@ -204,9 +204,18 @@ function findCategoryByIdRecursive(categories: Category[], id: number): Category
 
 export async function getCategoryByUrl(url: string, locale?: string): Promise<Category | null> {
   try {
-    // Get the full category structure with nested categories
-    const categories = await getCategories({ parent: 0, locale, status: 1, include_tree: true });
-    return findCategoryByUrlRecursive(categories, url);
+    // First try with the specified locale
+    if (locale) {
+      const categoriesWithLocale = await getCategories({ parent: 0, locale, status: 1, include_tree: true });
+      const result = findCategoryByUrlRecursive(categoriesWithLocale, url);
+      if (result) {
+        return result;
+      }
+    }
+    
+    // Fallback: search without locale filter to find categories with different locales
+    const allCategories = await getCategories({ parent: 0, status: 1, include_tree: true });
+    return findCategoryByUrlRecursive(allCategories, url);
   } catch (error) {
     logApiWarning('Category lookup failed', error);
     return null;
@@ -216,13 +225,26 @@ export async function getCategoryByUrl(url: string, locale?: string): Promise<Ca
 export async function getSubcategories(parentId?: number, locale?: string): Promise<Category[]> {
   if (parentId === undefined) {
     // Get top-level categories (parent: 0 in backend) with full tree structure
-    const allCategories = await getCategories({ parent: 0, locale, status: 1, include_tree: true });
-    return allCategories;
+    // Try with locale first, then fallback to all categories
+    if (locale) {
+      const categoriesWithLocale = await getCategories({ parent: 0, locale, status: 1, include_tree: true });
+      if (categoriesWithLocale.length > 0) {
+        return categoriesWithLocale;
+      }
+    }
+    // Fallback to all categories without locale filter
+    return await getCategories({ parent: 0, status: 1, include_tree: true });
   } else {
-    // Get subcategories from the nested structure using recursive search
-    const allCategories = await getCategories({ locale, include_tree: true });
-    const parentCategory = findCategoryByIdRecursive(allCategories, parentId);
-    return parentCategory?.categories?.filter(cat => cat.status === 1) || [];
+    // Get direct subcategories using parent filter
+    // Try with locale first, then fallback to all subcategories of this parent
+    if (locale) {
+      const subcategoriesWithLocale = await getCategories({ parent: parentId, locale, status: 1, include_tree: true });
+      if (subcategoriesWithLocale.length > 0) {
+        return subcategoriesWithLocale;
+      }
+    }
+    // Fallback to all subcategories without locale filter
+    return await getCategories({ parent: parentId, status: 1, include_tree: true });
   }
 }
 

@@ -75,24 +75,12 @@ export function CategoryForm({
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const { toast } = useToast();
 
-  // Get icon and color from direct fields or fallback to parsing data field
+  // Get icon and color from direct fields only
   const getIconAndColor = () => {
-    if (category?.icon || category?.color) {
-      // Use new direct fields if available
-      return { icon: category.icon || '', color: category.color || '' };
-    }
-    
-    // Fallback to parsing data field for backward compatibility
-    if (category?.data) {
-      try {
-        const parsed = JSON.parse(category.data);
-        return { icon: parsed.icon || '', color: parsed.color || '' };
-      } catch {
-        return { icon: '', color: '' };
-      }
-    }
-    
-    return { icon: '', color: '' };
+    return { 
+      icon: category?.icon || '', 
+      color: category?.color || '' 
+    };
   };
 
   const { icon: initialIcon, color: initialColor } = getIconAndColor();
@@ -121,26 +109,6 @@ export function CategoryForm({
   // Reset form values when category changes (for editing)
   useEffect(() => {
     if (category) {
-      // Get icon and color using the same logic
-      const getResetIconAndColor = () => {
-        if (category.icon || category.color) {
-          return { icon: category.icon || '', color: category.color || '' };
-        }
-        
-        if (category.data) {
-          try {
-            const parsed = JSON.parse(category.data);
-            return { icon: parsed.icon || '', color: parsed.color || '' };
-          } catch {
-            return { icon: '', color: '' };
-          }
-        }
-        
-        return { icon: '', color: '' };
-      };
-
-      const { icon, color } = getResetIconAndColor();
-
       reset({
         title: category.title || '',
         url: category.url || '',
@@ -148,8 +116,8 @@ export function CategoryForm({
         parent: category.parent ?? 0,
         status: category.status ?? 1,
         locale: category.locale || 'none',
-        icon: icon,
-        color: color,
+        icon: category.icon || '',
+        color: category.color || '',
       });
     } else if (parentCategory) {
       // When creating a subcategory
@@ -260,12 +228,7 @@ export function CategoryForm({
     setIsLoading(true);
 
     try {
-      // Prepare metadata
-      const metadata: CategoryMetadata = {};
-      if (data.icon) metadata.icon = data.icon;
-      if (data.color) metadata.color = data.color;
-
-      // Prepare request data with separate icon and color fields
+      // Prepare request data with direct icon and color fields
       const requestData = {
         title: data.title,
         url: data.url,
@@ -275,7 +238,6 @@ export function CategoryForm({
         locale: data.locale === 'none' ? undefined : data.locale,
         icon: data.icon || undefined,
         color: data.color || undefined,
-        data: '', // Keep data field empty or for other metadata
       };
 
       // TODO: Handle image upload

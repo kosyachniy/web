@@ -48,7 +48,9 @@ export function CategoryTreeItem({
     image: category.image,
     status: category.status,
     created: category.created,
-    data: category.data,
+    locale: category.locale,
+    icon: category.icon,
+    color: category.color,
     categories: category.categories
   };
 

@@ -98,7 +98,8 @@ import {
   FaBookOpen,
   FaCar,
   FaUtensils,
-  FaSprayCanSparkles
+  FaSprayCanSparkles,
+  FaGlobe
 } from "react-icons/fa6"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -150,6 +151,10 @@ export function SpaceIcon({ size = 16, ...props }: IconProps) {
 
 export function CatalogIcon({ size = 16, ...props }: IconProps) {
   return <FaFolderOpen size={size} {...props} />
+}
+
+export function GlobeIcon({ size = 16, ...props }: IconProps) {
+  return <FaGlobe size={size} {...props} />
 }
 
 // User and account icons

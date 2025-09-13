@@ -5,7 +5,6 @@ export interface Category {
   title: string;
   description?: string;
   image?: string;
-  data?: string;
   icon?: string; // FontAwesome icon key
   color?: string; // Hex color code
   locale?: string;
@@ -32,7 +31,6 @@ export interface CreateCategoryRequest {
   title: string;
   url?: string;
   description?: string;
-  data?: string; // JSON metadata
   image?: string;
   parent?: number;
   locale?: string;
@@ -45,7 +43,6 @@ export interface UpdateCategoryRequest {
   title?: string;
   url?: string;
   description?: string;
-  data?: string; // JSON metadata
   image?: string;
   parent?: number;
   locale?: string;

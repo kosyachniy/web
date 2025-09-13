@@ -24,7 +24,7 @@ interface CategoryPreviewData {
   image?: string;
   status?: number;
   created?: number;
-  data?: string;
+  locale?: string;
   categories?: CategoryPreviewData[];
   icon?: string;
   color?: string;
@@ -54,29 +54,17 @@ export function CategoryPreview({
   containerClassName = ''
 }: CategoryPreviewProps) {
   const t = useTranslations('admin.categories');
+  const tSystem = useTranslations('system');
 
-  // Parse metadata from the data field or direct icon/color props
-  const parseMetadata = (category: CategoryPreviewData): CategoryMetadata => {
-    // If direct icon/color props are provided (for preview mode)
-    if (category.icon || category.color) {
-      return {
-        icon: category.icon,
-        color: category.color
-      };
-    }
-    
-    // Otherwise parse from data field (for admin list mode)
-    try {
-      if (category.data) {
-        return JSON.parse(category.data);
-      }
-    } catch {
-      // Invalid JSON, use empty object
-    }
-    return {};
+  // Get icon and color from direct fields only
+  const getIconAndColor = (category: CategoryPreviewData): CategoryMetadata => {
+    return {
+      icon: category.icon,
+      color: category.color,
+    };
   };
 
-  const metadata = parseMetadata(category);
+  const metadata = getIconAndColor(category);
 
   // Helper function to convert hex to rgba
   const hexToRgba = (hex: string, opacity: number) => {
@@ -192,6 +180,21 @@ export function CategoryPreview({
           {(() => {
             // Build array of content items that will actually be displayed in 2nd row
             const contentItems = [];
+            
+            // Add locale flag if it exists
+            if (category.locale) {
+              const getLocaleFlag = (locale: string) => {
+                switch (locale) {
+                  case 'en': return '🇺🇸';
+                  case 'ru': return '🇷🇺';
+                  case 'es': return '🇪🇸';
+                  case 'ar': return '🇸🇦';
+                  case 'zh': return '🇨🇳';
+                  default: return '🌐';
+                }
+              };
+              contentItems.push(`${tSystem('locale')}: ${getLocaleFlag(category.locale)}`);
+            }
             
             if (showCreated && category.created) {
               contentItems.push(`${t('created')}: ${formatDate(category.created)}`);

@@ -79,17 +79,75 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const imageStructuredData = generateCategoryImageStructuredData(category);
   const breadcrumbStructuredData = generateBreadcrumbStructuredData(breadcrumbs);
 
+  // Helper function to convert hex to rgba
+  const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
+  // Generate custom icon component with category styling
+  const CategoryIcon = () => {
+    if (category.icon && category.color) {
+      return (
+        <div 
+          className="w-12 h-12 flex items-center justify-center rounded-[0.75rem] mt-1"
+          style={{
+            backgroundColor: hexToRgba(category.color, 0.15),
+            color: category.color,
+          }}
+        >
+          <i className={`fas fa-${category.icon}`} style={{ fontSize: '24px' }} />
+        </div>
+      );
+    } else if (category.icon) {
+      return (
+        <div className="w-12 h-12 flex items-center justify-center rounded-[0.75rem] mt-1 bg-muted text-muted-foreground">
+          <i className={`fas fa-${category.icon}`} style={{ fontSize: '24px' }} />
+        </div>
+      );
+    } else if (category.color) {
+      return (
+        <div 
+          className="w-12 h-12 flex items-center justify-center rounded-[0.75rem] mt-1"
+          style={{
+            backgroundColor: hexToRgba(category.color, 0.15),
+            color: category.color,
+          }}
+        >
+          <PostsIcon size={24} />
+        </div>
+      );
+    } else {
+      return (
+        <div className="w-12 h-12 flex items-center justify-center rounded-[0.75rem] mt-1 bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400">
+          <PostsIcon size={24} />
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          {/* Dynamic PageHeader with Breadcrumb Description */}
-          <PageHeader
-            icon={<PostsIcon size={24} />}
-            iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
-            title={category.title}
-            description={<BreadcrumbDescription breadcrumbs={breadcrumbs} />}
-          />
+          {/* Dynamic PageHeader with Category Icon and Color */}
+          <div className="mb-6">
+            <div className="w-full flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4 flex-1 min-w-0">
+                <CategoryIcon />
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-2xl font-bold text-foreground mb-0.5 truncate">
+                    {category.title}
+                  </h1>
+                  <div className="text-muted-foreground text-sm leading-relaxed">
+                    <BreadcrumbDescription breadcrumbs={breadcrumbs} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Subcategory Navigation */}
           {subcategories.length > 0 && (
@@ -121,15 +179,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           )}
 
-          {/* Category Content (HTML) */}
-          {category.data && (
-            <div className="mb-8">
-              <div 
-                className="prose prose-sm max-w-none dark:prose-invert"
-                dangerouslySetInnerHTML={{ __html: category.data }}
-              />
-            </div>
-          )}
 
           {/* Posts Grid */}
           <PostsGrid 

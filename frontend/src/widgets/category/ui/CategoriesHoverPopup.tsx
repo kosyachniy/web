@@ -53,25 +53,12 @@ export function CategoriesHoverPopup({
     return {};
   };
 
-  // Get category metadata from direct fields or parse from data field
-  const parseMetadata = (category: Category): CategoryMetadata => {
-    // Use new direct fields if available
-    if (category.icon || category.color) {
-      return {
-        icon: category.icon,
-        color: category.color
-      };
-    }
-    
-    // Fallback to parsing data field for backward compatibility
-    try {
-      if (category.data) {
-        return JSON.parse(category.data);
-      }
-    } catch {
-      // Invalid JSON, use empty object
-    }
-    return {};
+  // Get category icon and color from direct fields
+  const getCategoryIconAndColor = (category: Category): CategoryMetadata => {
+    return {
+      icon: category.icon,
+      color: category.color
+    };
   };
 
   // Load categories when popup opens
@@ -117,7 +104,7 @@ export function CategoriesHoverPopup({
           ) : categories.length > 0 ? (
             <div className="space-y-2">
               {categories.slice(0, 8).map((category) => {
-                const metadata = parseMetadata(category);
+                const metadata = getCategoryIconAndColor(category);
 
                 return (
                   <Link
