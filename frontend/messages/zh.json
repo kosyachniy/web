@@ -7,6 +7,13 @@
         "incrementBy5": "+5",
         "reset": "重置"
     },
+    "multiImageUploadDemo": {
+        "title": "多图片上传演示",
+        "description": "展示支持拖放功能的 MultiImageUpload 组件",
+        "selectedImages": "已选择 {count} 张图片",
+        "clearAll": "清除全部",
+        "debugTitle": "调试：图片数据"
+    },
     "userSettings": {
         "title": "用户设置演示",
         "description": "展示 Redux 状态管理与用户偏好"
@@ -363,5 +370,26 @@
             "popular": "最受欢迎",
             "featured": "精选"
         }
+    },
+    "imageUpload": {
+        "clickToUpload": "点击上传图片",
+        "dragAndDrop": "或拖拽上传",
+        "supportedFormats": "支持格式：JPG、PNG、WEBP、GIF",
+        "maxSize": "最大大小：5MB",
+        "uploading": "上传中...",
+        "removeImage": "删除图片",
+        "changeImage": "更换图片",
+        "preview": "图片预览"
+    },
+    "multiImageUpload": {
+        "title": "图片画廊",
+        "addMore": "添加更多图片",
+        "addMoreRemaining": "添加更多图片（还可添加 {remaining} 张）",
+        "selectMultiple": "选择多个文件",
+        "maxImagesReached": "最多允许 {max} 张图片",
+        "removeAll": "删除所有图片",
+        "imagesSelected": "已选择 {count} 张图片",
+        "dropMultipleImages": "在此处拖放多张图片",
+        "clickToAddMore": "点击添加更多图片"
     }
 }

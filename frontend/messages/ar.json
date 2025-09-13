@@ -7,6 +7,13 @@
         "incrementBy5": "+5",
         "reset": "إعادة تعيين"
     },
+    "multiImageUploadDemo": {
+        "title": "عرض توضيحي لتحميل صور متعددة",
+        "description": "عرض مكون MultiImageUpload مع دعم السحب والإفلات",
+        "selectedImages": "تم تحديد {count} صور{plural}",
+        "clearAll": "مسح الكل",
+        "debugTitle": "تصحيح الأخطاء: بيانات الصورة"
+    },
     "userSettings": {
         "title": "عرض إعدادات المستخدم",
         "description": "عرض إدارة حالة Redux مع تفضيلات المستخدم"
@@ -363,5 +370,26 @@
             "popular": "الأكثر شعبية",
             "featured": "المميزة"
         }
+    },
+    "imageUpload": {
+        "clickToUpload": "انقر لتحميل الصورة",
+        "dragAndDrop": "أو اسحب وأفلت",
+        "supportedFormats": "التنسيقات المدعومة: JPG، PNG، WEBP، GIF",
+        "maxSize": "الحد الأقصى للحجم: 5 ميجابايت",
+        "uploading": "جاري التحميل...",
+        "removeImage": "إزالة الصورة",
+        "changeImage": "تغيير الصورة",
+        "preview": "معاينة الصورة"
+    },
+    "multiImageUpload": {
+        "title": "معرض الصور",
+        "addMore": "إضافة المزيد من الصور",
+        "addMoreRemaining": "إضافة المزيد من الصور ({remaining} متبقية)",
+        "selectMultiple": "حدد ملفات متعددة",
+        "maxImagesReached": "الحد الأقصى {max} صور مسموح",
+        "removeAll": "إزالة جميع الصور",
+        "imagesSelected": "{count} صور محددة",
+        "dropMultipleImages": "اسقط عدة صور هنا",
+        "clickToAddMore": "انقر لإضافة المزيد من الصور"
     }
 }

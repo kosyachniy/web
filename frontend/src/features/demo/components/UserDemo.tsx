@@ -55,36 +55,6 @@ export function UserDemo() {
 
             <Box size="lg">
                 <div className="space-y-6">
-                    {/* Current Settings Display */}
-                    <Box variant="muted" size="default">
-                        <h3 className="font-semibold mb-4">Current Settings:</h3>
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center p-3 bg-background rounded-[0.75rem] border">
-                                <span className="font-medium">Language:</span>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-lg">{getCurrentLanguage()?.flag}</span>
-                                    <span className="font-medium">
-                                        {getCurrentLanguage()?.name}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex justify-between items-center p-3 bg-background rounded-[0.75rem] border">
-                                <span className="font-medium">Theme:</span>
-                                <div className="flex items-center gap-2">
-                                    {(() => {
-                                        const currentTheme = getCurrentTheme();
-                                        const IconComponent = currentTheme?.icon;
-                                        return IconComponent && <IconComponent size={18} />;
-                                    })()}
-                                    <span className="font-medium">
-                                        {getCurrentTheme()?.name}
-                                        {userSettings.theme === 'system' && ` (${resolvedTheme})`}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-
                     {/* Language Controls */}
                     <div className="space-y-4">
                         <h4 className="font-semibold">Change Language:</h4>

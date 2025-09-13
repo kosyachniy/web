@@ -7,6 +7,13 @@
         "incrementBy5": "+5",
         "reset": "Reset"
     },
+    "multiImageUploadDemo": {
+        "title": "Multi Image Upload Demo",
+        "description": "Showcase the MultiImageUpload component with drag & drop support",
+        "selectedImages": "Selected {count} image{plural}",
+        "clearAll": "Clear All",
+        "debugTitle": "Debug: Image Data"
+    },
     "userSettings": {
         "title": "User Settings Demo",
         "description": "Demonstrating Redux state management with user preferences"
@@ -363,5 +370,26 @@
             "popular": "Most Popular",
             "featured": "Featured"
         }
+    },
+    "imageUpload": {
+        "clickToUpload": "Click to upload image",
+        "dragAndDrop": "or drag and drop",
+        "supportedFormats": "Supported formats: JPG, PNG, WEBP, GIF",
+        "maxSize": "Max size: 5MB",
+        "uploading": "Uploading...",
+        "removeImage": "Remove image",
+        "changeImage": "Change image",
+        "preview": "Image preview"
+    },
+    "multiImageUpload": {
+        "title": "Image Gallery",
+        "addMore": "Add more images",
+        "addMoreRemaining": "Add more images ({remaining} remaining)",
+        "selectMultiple": "Select multiple files",
+        "maxImagesReached": "Maximum {max} images allowed",
+        "removeAll": "Remove all images",
+        "imagesSelected": "{count} images selected",
+        "dropMultipleImages": "Drop multiple images here",
+        "clickToAddMore": "Click to add more images"
     }
 }

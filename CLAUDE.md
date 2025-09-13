@@ -486,6 +486,7 @@ import { PlusIcon, NewspaperIcon, EditIcon, TrashIcon } from '@/shared/ui/icons'
 2. **Naming**: PascalCase components, kebab-case folders, match file names
 3. **Public APIs**: Export through `index.ts`, never direct imports
 4. **FSD Rules**: Higher layers → Lower layers only, no cross-layer imports
+5. **❌ NEVER CREATE DEMO COMPONENTS IN `shared/ui/`**: Demo components (like `CounterDemo`, `UserDemo`, `MultiImageUploadDemo`) belong in `features/demo/components/`, NOT in `shared/ui/`. The `shared/ui/` layer is exclusively for reusable base components (Button, Input, ImageUpload, etc.) that have no business logic or state.
 
 ---
 
@@ -636,7 +637,7 @@ frontend/src/
 - `category/` - Category types, API calls, utilities
 
 **`shared/`** - Infrastructure layer
-- `ui/` - Pure UI components (shadcn/ui)
+- `ui/` - **Pure UI components ONLY** (Button, Input, ImageUpload, etc.) - **❌ NO demo components, NO business logic, NO state**
 - `lib/` - Utilities and helpers
 - `services/api/` - HTTP client and auth
 - `stores/` - Global Redux state
@@ -1146,6 +1147,7 @@ toast.error(t('posts.actions.deleteError'));
 |------|----------|---------|
 | Basic UI (Button, Input, Box) | `shared/ui/` | `shared/ui/button.tsx` |
 | Enhanced UI (IconButton, Box, PageHeader) | `shared/ui/` | `shared/ui/icon-button.tsx` |
+| **❌ Demo Components (CounterDemo, UserDemo)** | **❌ NEVER `shared/ui/`** → **✅ `features/demo/components/`** | **✅ `features/demo/components/CounterDemo.tsx`** |
 | Layout Systems (Three-Column) | `widgets/three-column-layout/` | `widgets/three-column-layout/ui/ThreeColumnLayout.tsx` |
 | Sidebar Widgets (Sections, Filters, Actions) | `widgets/*-sidebar/` | `widgets/sections-sidebar/ui/SectionsSidebar.tsx` |
 | Header, Navigation | `widgets/header/` | `widgets/header/ui/Header.tsx` |

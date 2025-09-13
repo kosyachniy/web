@@ -1,6 +1,6 @@
 'use client';
 
-import { CounterDemo, UserDemo, PopupDemo, ToastDemo } from '@/features/demo';
+import { CounterDemo, UserDemo, PopupDemo, ToastDemo, MultiImageUploadDemo } from '@/features/demo';
 import { ThreeColumnLayout } from '@/widgets/three-column-layout';
 import { SectionsSidebar } from '@/widgets/sections-sidebar';
 import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
@@ -42,11 +42,14 @@ export default function Home() {
         >
             <div className="space-y-12">
                 {/* Demo Components */}
-                <div className="space-y-8 max-w-2xl mx-auto">
-                    <CounterDemo />
-                    <UserDemo />
-                    <PopupDemo />
-                    <ToastDemo />
+                <div className="space-y-8">
+                    <div className="max-w-2xl mx-auto space-y-8">
+                        <CounterDemo />
+                        <UserDemo />
+                        <PopupDemo />
+                        <ToastDemo />
+                    </div>
+                    <MultiImageUploadDemo />
                 </div>
 
                 {/* Posts Section */}

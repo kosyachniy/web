@@ -7,6 +7,13 @@
         "incrementBy5": "+5",
         "reset": "Сброс"
     },
+    "multiImageUploadDemo": {
+        "title": "Демо Загрузки Нескольких Изображений",
+        "description": "Демонстрация компонента MultiImageUpload с поддержкой перетаскивания",
+        "selectedImages": "Выбрано {count} изображени{plural}",
+        "clearAll": "Очистить Всё",
+        "debugTitle": "Отладка: Данные Изображений"
+    },
     "userSettings": {
         "title": "Демо Настройки Пользователя",
         "description": "Демонстрация управления состоянием Redux с пользовательскими предпочтениями"
@@ -363,5 +370,26 @@
             "popular": "Самые Популярные",
             "featured": "Рекомендуемые"
         }
+    },
+    "imageUpload": {
+        "clickToUpload": "Нажмите для загрузки изображения",
+        "dragAndDrop": "или перетащите файл",
+        "supportedFormats": "Поддерживаемые форматы: JPG, PNG, WEBP, GIF",
+        "maxSize": "Максимальный размер: 5MB",
+        "uploading": "Загрузка...",
+        "removeImage": "Удалить изображение",
+        "changeImage": "Изменить изображение",
+        "preview": "Предварительный просмотр изображения"
+    },
+    "multiImageUpload": {
+        "title": "Галерея Изображений",
+        "addMore": "Добавить больше изображений",
+        "addMoreRemaining": "Добавить больше изображений ({remaining} осталось)",
+        "selectMultiple": "Выбрать несколько файлов",
+        "maxImagesReached": "Максимум {max} изображений разрешено",
+        "removeAll": "Удалить все изображения",
+        "imagesSelected": "{count} изображений выбрано",
+        "dropMultipleImages": "Перетащите несколько изображений сюда",
+        "clickToAddMore": "Нажмите, чтобы добавить больше изображений"
     }
 }

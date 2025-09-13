@@ -12,12 +12,12 @@ import { Textarea } from '@/shared/ui/textarea';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Box } from '@/shared/ui/box';
-import { SaveIcon, CancelIcon, UploadIcon, XIcon } from '@/shared/ui/icons';
+import { ImageUpload } from '@/shared/ui/image-upload';
+import { SaveIcon, CancelIcon } from '@/shared/ui/icons';
 import { useToast } from '@/widgets/feedback-system';
 import { createCategory, updateCategory } from '@/entities/category/api/categoryApi';
 import type { Category } from '@/entities/category/model/category';
 import { CategoryPreview } from './CategoryPreview';
-import Image from 'next/image';
 
 const categorySchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title must be less than 100 characters'),
@@ -152,21 +152,12 @@ export function CategoryForm({
     }
   }, [category]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedImageFile(file);
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = (file: File | null, preview: string | null) => {
+    setSelectedImageFile(file);
+    setImagePreview(preview);
   };
 
-  const removeImage = () => {
+  const handleImageRemove = () => {
     setSelectedImageFile(null);
     setImagePreview(null);
   };
@@ -450,53 +441,15 @@ export function CategoryForm({
           </div>
 
           {/* Image Upload */}
-          <div className="space-y-2">
-            <Label>{t('form.image')}</Label>
-            <div className={`rounded-[0.75rem] relative overflow-hidden w-full h-[120px] ${!imagePreview ? 'border-2 border-dashed border-border' : ''}`}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-                id="imageUpload"
-              />
-              <Label htmlFor="imageUpload" className="cursor-pointer block w-full h-full">
-                {imagePreview ? (
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={imagePreview}
-                      alt="Category preview"
-                      width={400}
-                      height={120}
-                      className="w-full h-full object-cover object-center"
-                    />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="text-white text-sm text-center">
-                        <UploadIcon size={20} className="mx-auto mb-1" />
-                        <div>{t('form.imageUpload')}</div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-center">
-                    <UploadIcon size={24} className="text-muted-foreground mb-2" />
-                    <span className="text-sm text-muted-foreground">{t('form.imageUpload')}</span>
-                  </div>
-                )}
-              </Label>
-              {imagePreview && (
-                <IconButton
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  className="absolute -top-2 -right-2 z-10"
-                  onClick={removeImage}
-                  icon={<XIcon size={12} />}
-                >
-                </IconButton>
-              )}
-            </div>
-          </div>
+          <ImageUpload
+            label={t('form.image')}
+            value={imagePreview}
+            onImageChange={handleImageChange}
+            onImageRemove={handleImageRemove}
+            id="categoryImageUpload"
+            height={120}
+            maxSize={5}
+          />
         </div>
       </Box>
 

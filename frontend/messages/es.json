@@ -7,6 +7,13 @@
         "incrementBy5": "+5",
         "reset": "Reiniciar"
     },
+    "multiImageUploadDemo": {
+        "title": "Demo de Carga de Múltiples Imágenes",
+        "description": "Demostrar el componente MultiImageUpload con soporte de arrastrar y soltar",
+        "selectedImages": "Seleccionado{plural} {count} imagen{plural}",
+        "clearAll": "Limpiar Todo",
+        "debugTitle": "Debug: Datos de Imagen"
+    },
     "userSettings": {
         "title": "Demo de Configuraciones de Usuario",
         "description": "Demostración de gestión de estado Redux con preferencias de usuario"
@@ -363,5 +370,26 @@
             "popular": "Más Populares",
             "featured": "Destacados"
         }
+    },
+    "imageUpload": {
+        "clickToUpload": "Haga clic para cargar imagen",
+        "dragAndDrop": "o arrastre y suelte",
+        "supportedFormats": "Formatos admitidos: JPG, PNG, WEBP, GIF",
+        "maxSize": "Tamaño máximo: 5MB",
+        "uploading": "Cargando...",
+        "removeImage": "Eliminar imagen",
+        "changeImage": "Cambiar imagen",
+        "preview": "Vista previa de imagen"
+    },
+    "multiImageUpload": {
+        "title": "Galería de Imágenes",
+        "addMore": "Agregar más imágenes",
+        "addMoreRemaining": "Agregar más imágenes ({remaining} restantes)",
+        "selectMultiple": "Seleccionar varios archivos",
+        "maxImagesReached": "Máximo {max} imágenes permitidas",
+        "removeAll": "Eliminar todas las imágenes",
+        "imagesSelected": "{count} imágenes seleccionadas",
+        "dropMultipleImages": "Soltar varias imágenes aquí",
+        "clickToAddMore": "Haga clic para agregar más imágenes"
     }
 }
