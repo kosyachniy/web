@@ -8,7 +8,7 @@ import { FileUpload, FileData, FileTypeFilter } from './file-upload';
 export type { FileData, FileTypeFilter };
 import { Label } from './label';
 import { IconButton } from './icon-button';
-import { TrashIcon, PlusIcon } from './icons';
+import { TrashIcon, PlusIcon, ImageIcon, PdfIcon, WordIcon, ExcelIcon, PowerpointIcon, FileVideoIcon, FileAudioIcon, ArchiveIcon, CodeIcon, FileIcon } from './icons';
 import { cn } from '@/shared/lib/utils';
 
 export interface MultiFileUploadProps {
@@ -127,21 +127,18 @@ export function MultiFileUpload({
       };
 
       const getFileIcon = (fileType: FileData['type']): React.ReactNode => {
-        // Import icons dynamically or use a mapping
-        // For now, using a simple mapping
-        const iconMap = {
-          image: '🖼️',
-          pdf: '📄',
-          document: '📝',
-          excel: '📊',
-          powerpoint: '📋',
-          video: '🎥',
-          audio: '🎵',
-          archive: '📦',
-          code: '💻',
-          other: '📁'
-        };
-        return iconMap[fileType] || iconMap.other;
+        switch (fileType) {
+          case 'image': return <ImageIcon size={24} />;
+          case 'pdf': return <PdfIcon size={24} />;
+          case 'document': return <WordIcon size={24} />;
+          case 'excel': return <ExcelIcon size={24} />;
+          case 'powerpoint': return <PowerpointIcon size={24} />;
+          case 'video': return <FileVideoIcon size={24} />;
+          case 'audio': return <FileAudioIcon size={24} />;
+          case 'archive': return <ArchiveIcon size={24} />;
+          case 'code': return <CodeIcon size={24} />;
+          default: return <FileIcon size={24} />;
+        }
       };
 
       const fileType = getFileType(file);

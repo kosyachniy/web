@@ -27,7 +27,7 @@ export function CategoryManagement({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const { toast } = useToast();
+  const { success, error: showError } = useToast();
 
   const loadCategories = useCallback(async () => {
     try {
@@ -39,15 +39,11 @@ export function CategoryManagement({
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load categories';
       setError(errorMessage);
-      toast({
-        title: 'Error',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      showError(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [showError]);
 
   useEffect(() => {
     loadCategories();
@@ -68,18 +64,10 @@ export function CategoryManagement({
     try {
       await deleteCategory(category.id);
       await loadCategories(); // Refresh the list
-      toast({
-        title: 'Success',
-        description: t('deleteSuccess', { title: category.title }),
-        variant: 'default',
-      });
+      success(t('deleteSuccess', { title: category.title }));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete category';
-      toast({
-        title: 'Error',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      showError(errorMessage);
     }
   };
 

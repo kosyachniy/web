@@ -73,7 +73,7 @@ export function CategoryForm({
   const [isLoading, setIsLoading] = useState(false);
   const [categoryFileData, setCategoryFileData] = useState<FileData | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const { toast } = useToast();
+  const { success, error: showError, info } = useToast();
 
   // Get icon and color from direct fields only
   const getIconAndColor = () => {
@@ -235,39 +235,25 @@ export function CategoryForm({
       // For now, we'll skip image upload as it requires a separate endpoint
       if (categoryFileData?.file) {
         console.warn('Image upload not yet implemented');
-        toast({
-          title: 'Note',
-          description: 'Image upload will be implemented in the next step',
-          variant: 'default',
+        info('Image upload will be implemented in the next step', {
+          title: 'Note'
         });
       }
 
       if (category) {
         // Update existing category
         await updateCategory(category.id, requestData);
-        toast({
-          title: 'Success',
-          description: `Category "${data.title}" updated successfully`,
-          variant: 'default',
-        });
+        success(`Category "${data.title}" updated successfully`);
       } else {
         // Create new category
         await createCategory(requestData);
-        toast({
-          title: 'Success',
-          description: `Category "${data.title}" created successfully`,
-          variant: 'default',
-        });
+        success(`Category "${data.title}" created successfully`);
       }
 
       onSuccess();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      toast({
-        title: 'Error',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+      showError(errorMessage);
     } finally {
       setIsLoading(false);
     }
