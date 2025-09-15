@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Крутите колесо — акции и призы</title>
+  <style>
+    :root{
+      --bg1:#ffe1e7; /* светло-розовый фон */
+      --bg2:#ffc1d2;
+      --accent:#6a4df1; /* фиолетовый бордюр */
+      --accent-2:#f065c8; /* розовая кнопка */
+      --text:#2a2240;
+      --muted:#6b6680;
+      --wheel-light:#ffe7a6; /* светло-жёлтые сектора */
+      --wheel-pink:#ffd1f0;  /* розовые сектора */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+      background:
+        radial-gradient(circle at 25% 25%, #fff6, transparent 50%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+    }
+    /* мягкое «солнышко» под колесом */
+    .sunburst{
+      position:absolute; inset:0;
+      background:
+        repeating-radial-gradient(circle at 22% 44%, rgba(255,255,255,.28) 0 6px, transparent 6px 30px);
+      mask: radial-gradient(circle at 22% 44%, #000 0 42%, transparent 43%);
+      pointer-events:none;
+    }
+    .wrap{
+      max-width:1160px; margin:0 auto; padding:48px 20px 72px;
+      display:grid; grid-template-columns: 560px 1fr; gap:48px; align-items:center;
+      position:relative;
+    }
+    @media (max-width: 1000px){
+      .wrap{grid-template-columns:1fr; gap:32px; padding:28px 16px 56px}
+      .cta{align-items:center; text-align:center}
+    }
+    .wheel-card{
+      position:relative; aspect-ratio:1/1; max-width:560px; width:100%;
+      display:grid; place-items:center;
+      filter: drop-shadow(0 24px 40px rgba(106,77,241,.25));
+    }
+    canvas#wheel{
+      width:100%; height:100%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 50% 50%, #fff 0 4%, transparent 5%),
+        radial-gradient(circle at 50% 50%, #fff2 0 63%, transparent 64%);
+    }
+    /* статический указатель */
+    .pointer{
+      position:absolute; top:6%; left:50%; transform:translate(-50%,-50%);
+      width:0; height:0;
+      border-left:18px solid transparent;
+      border-right:18px solid transparent;
+      border-top:26px solid #ff6bbd;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.15));
+    }
+    .rim{
+      position:absolute; inset:0; border-radius:50%;
+      padding:12px; /* внешний фиолетовый обод */
+      background:
+        radial-gradient(circle,#fff0 68%, #fff 68% 70%, #fff0 71%),
+        conic-gradient(from 0deg, #ffffff30, #ffffff10 25%, #ffffff30 50%, #ffffff10 75%, #ffffff30 100%),
+        var(--accent);
+      -webkit-mask: radial-gradient(circle at 50% 50%, transparent 0 78%, #000 78% 100%);
+              mask: radial-gradient(circle at 50% 50%, transparent 0 78%, #000 78% 100%);
+      pointer-events:none;
+    }
+    .cta h1{
+      margin:0 0 12px; line-height:1.05;
+      font-size:44px; font-weight:800; letter-spacing:.2px;
+    }
+    .cta p{margin:12px 0; color:var(--muted); font-size:16.5px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      height:56px; padding:0 28px; border-radius:28px;
+      background: linear-gradient(180deg,#ff87d2,#e64cb5);
+      color:#fff; font-weight:700; font-size:16.5px; border:none; cursor:pointer;
+      box-shadow: 0 10px 18px rgba(230,76,181,.35), inset 0 2px 0 #fff3;
+      transition: transform .06s ease, filter .2s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99) }
+    .stub{
+      display:flex; align-items:center; gap:8px; color:#5d73ff; font-weight:600;
+      margin-top:18px; font-size:15px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px; background:#ffffffb8; backdrop-filter: blur(8px);
+      border:1px solid #ffffffd0; color:#7a6fd6; font-weight:700; font-size:13px;
+    }
+    .result{
+      margin-top:14px; min-height:26px; font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="sunburst" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <!-- Левый блок: колесо -->
+    <section class="wheel-card" aria-label="Колесо удачи">
+      <div class="rim" aria-hidden="true"></div>
+      <div class="pointer" aria-hidden="true"></div>
+      <canvas id="wheel" width="900" height="900" aria-hidden="true"></canvas>
+    </section>
+
+    <!-- Правый блок: текст + кнопка -->
+    <section class="cta">
+      <h1>Крутите колесо,<br/>выигрывайте билеты<br/>национальной лотереи<br/>и другие призы!</h1>
+
+      <div class="pill">Первые 2 прокрутки — без условий</div>
+      <p>Авторизуйтесь на сайте или в приложении Ozon и нажмите кнопку «Крутить колесо».</p>
+
+      <button class="btn" id="spin">КРУТИТЬ КОЛЕСО</button>
+      <div class="result" id="result"></div>
+
+      <p class="stub">
+        Скопируйте адрес этой страницы и возвращайтесь за новыми призами из колеса —
+        <a href="#" onclick="return false;">ozon.ru/sp/nlbigwheel</a>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    // ---------- данные секторов (можешь править под свои призы) ----------
+    const sectors = [
+      { label: "SHIK", sub: "15%",  color: "pink" },
+      { label: "500 ₽", sub: "",     color: "yellow" },
+      { label: "Pu:sy", sub: "20%",  color: "pink" },
+      { label: "БИЛЕТЫ НЛ", sub: "на лотерею", color: "yellow" },
+      { label: "GELETEK", sub: "15%", color: "pink" },
+      { label: "likato", sub: "15%", color: "yellow" },
+      { label: "püsy", sub: "15%",   color: "pink" },
+      { label: "LIMONI", sub: "15%", color: "yellow" },
+      { label: "SHIK", sub: "20%",   color: "pink" },
+      { label: "М", sub: "",         color: "yellow" },
+      { label: "ARAVIA", sub: "10%", color: "pink" },
+      { label: "1000 ₽", sub: "",    color: "yellow" },
+      { label: "ARTEFACT", sub: "15%", color: "pink" },
+      { label: "LIBREDERM", sub: "20%", color: "yellow" },
+      { label: "OZON premium", sub: "15%", color: "pink" },
+      { label: "ECODERM", sub: "15%", color: "yellow" },
+    ];
+
+    // ---------- рисуем колесо ----------
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;              // 900
+    const R = size/2;                       // 450
+    const AR = sectors.length ? (Math.PI*2 / sectors.length) : 0; // радиан на сектор
+    const colors = {
+      yellow: getComputedStyle(document.documentElement).getPropertyValue('--wheel-light').trim() || '#ffe7a6',
+      pink:   getComputedStyle(document.documentElement).getPropertyValue('--wheel-pink').trim()  || '#ffd1f0'
+    };
+
+    function drawWheel(){
+      ctx.clearRect(0,0,size,size);
+      ctx.save();
+      ctx.translate(R,R);
+
+      // внутренний белый круг/фон
+      ctx.beginPath();
+      ctx.arc(0,0,R*0.94,0,Math.PI*2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+
+      // сектора
+      for(let i=0;i<sectors.length;i++){
+        const start = i*AR - Math.PI/2;     // начало сектора (0° вверху)
+        const end   = start + AR;
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.arc(0,0,R*0.90,start,end);
+        ctx.closePath();
+        ctx.fillStyle = sectors[i].color === 'yellow' ? colors.yellow : colors.pink;
+        ctx.fill();
+
+        // разделители
+        ctx.strokeStyle = 'rgba(255,255,255,.9)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // текст
+        const mid = start + AR/2;
+        ctx.save();
+        ctx.rotate(mid);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#3a2a53';
+        ctx.font = "bold 32px system-ui, -apple-system, Segoe UI, Roboto";
+        ctx.translate(R*0.62, 10);
+        ctx.rotate(Math.PI/2);
+        ctx.fillText(sectors[i].label, 0, 0);
+
+        if(sectors[i].sub){
+          ctx.font = "600 18px system-ui";
+          ctx.fillStyle = '#6b6680';
+          ctx.fillText(sectors[i].sub, 0, 22);
+        }
+        ctx.restore();
+      }
+
+      // центральная плашка
+      ctx.beginPath();
+      ctx.arc(0,0, R*0.18, 0, Math.PI*2);
+      const grad = ctx.createRadialGradient(0,0, R*0.04, 0,0, R*0.18);
+      grad.addColorStop(0, '#ffd7f0');
+      grad.addColorStop(1, '#ff8bd8');
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // тонкий фиолетовый обод
+      ctx.beginPath();
+      ctx.arc(0,0,R*0.92,0,Math.PI*2);
+      ctx.lineWidth = 18;
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#6a4df1';
+      ctx.stroke();
+
+      ctx.restore();
+    }
+    drawWheel();
+
+    // ---------- логика вращения ----------
+    const btn = document.getElementById('spin');
+    const out = document.getElementById('result');
+
+    let spinning = false;
+    let rotation = 0; // текущее вращение (deg)
+    let spinsLeft = 2;
+
+    function pickWinner(){
+      // случайный индекс; можешь подменить алгоритмом «с заранее заданными шансами»
+      return Math.floor(Math.random()*sectors.length);
+    }
+
+    function spin(){
+      if (spinning) return;
+      if (spinsLeft <= 0){
+        out.textContent = "Лимит бесплатных прокруток исчерпан.";
+        return;
+      }
+      spinning = true;
+      btn.disabled = true;
+      const winner = pickWinner();
+      const arcDeg = 360 / sectors.length;
+
+      // целевой угол: установить так, чтобы "winner" оказался под указателем (вверху)
+      const stopAt = (360 - (winner * arcDeg) - arcDeg/2); // центр сектора на 90°
+      const extraTurns = 5 + Math.floor(Math.random()*3);  // 5–7 полных оборотов
+      const final = extraTurns*360 + stopAt;
+
+      const duration = 4800; // мс
+      const start = performance.now();
+      const startRot = rotation;
+
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+      function tick(now){
+        const p = Math.min(1, (now-start)/duration);
+        const eased = easeOutCubic(p);
+        rotation = startRot + (final - startRot) * eased;
+        canvas.style.transform = `rotate(${rotation}deg)`;
+        if (p < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          spinning = false;
+          btn.disabled = false;
+          spinsLeft -= 1;
+          const prize = sectors[winner];
+          out.textContent = `Вы выиграли: ${prize.label}${prize.sub ? " — " + prize.sub : ""}. Осталось прокруток: ${spinsLeft}`;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    btn.addEventListener('click', spin);
+
+    // доступ с клавиатуры
+    btn.addEventListener('keyup', (e)=>{ if(e.key==='Enter' || e.key===' '){ spin(); }});
+  </script>
+</body>
+</html>

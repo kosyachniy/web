@@ -1,56 +1,304 @@
-from libdev.lang import get_pure
+"""
+Category model for hierarchical content organization.
 
-from models import Base, Attribute
-from lib.queue import get
+Represents categories and subcategories for organizing posts and other content.
+Supports hierarchical structure with parent-child relationships and tree operations.
+"""
+from typing import List, Optional
+from sqlalchemy import String, Integer, Boolean, Text, ForeignKey, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.models.base import BaseModel
 
 
-def default_description(instance):
-    """Default description"""
-    return get_pure(instance.data).split("\n")[0]
+class Category(BaseModel):
+    """
+    Category model with hierarchical structure support.
 
+    Provides content organization with:
+    - Hierarchical parent-child relationships
+    - Customizable appearance (icon, color)
+    - URL-friendly slugs
+    - Post count tracking
+    - Status management
+    """
 
-class Category(Base):
-    """Category"""
+    __tablename__ = "categories"
 
-    _name = "categories"
-    _search_fields = {"title", "data"}
+    # Primary identification
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-    description = Attribute(types=str, default=default_description)
-    parent = Attribute(types=int, default=0)
-    url = Attribute(types=str)
-    status = Attribute(types=int, default=1)
-    token = Attribute(types=str)
-    icon = Attribute(types=str)
-    color = Attribute(types=str)
+    # Category Information
+    name: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+        doc="Category display name"
+    )
+
+    slug: Mapped[str] = mapped_column(
+        String(100),
+        unique=True,
+        nullable=False,
+        index=True,
+        doc="URL-friendly category identifier"
+    )
+
+    description: Mapped[Optional[str]] = mapped_column(
+        Text,
+        nullable=True,
+        doc="Category description"
+    )
+
+    # Hierarchical Structure
+    parent_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey("categories.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+        doc="Parent category ID for hierarchical structure"
+    )
+
+    # Appearance and UI
+    icon: Mapped[Optional[str]] = mapped_column(
+        String(50),
+        nullable=True,
+        doc="Icon name or CSS class for category display"
+    )
+
+    color: Mapped[Optional[str]] = mapped_column(
+        String(7),  # Hex color format #RRGGBB
+        nullable=True,
+        doc="Category color in hex format (#RRGGBB)"
+    )
+
+    # Status and Visibility
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=False,
+        index=True,
+        doc="Whether category is active and visible"
+    )
+
+    # Content Statistics (denormalized for performance)
+    posts_count: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
+        nullable=False,
+        doc="Number of posts in this category"
+    )
+
+    # Display Order
+    sort_order: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
+        nullable=False,
+        doc="Sort order for category display"
+    )
+
+    # SEO and Metadata
+    meta_title: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+        doc="SEO meta title"
+    )
+
+    meta_description: Mapped[Optional[str]] = mapped_column(
+        String(500),
+        nullable=True,
+        doc="SEO meta description"
+    )
+
+    # Relationships
+    parent: Mapped[Optional["Category"]] = relationship(
+        "Category",
+        remote_side=[id],
+        back_populates="children",
+        lazy="select"
+    )
+
+    children: Mapped[List["Category"]] = relationship(
+        "Category",
+        back_populates="parent",
+        lazy="select",
+        cascade="all, delete-orphan"
+    )
+
+    posts: Mapped[List["Post"]] = relationship(
+        "Post",
+        back_populates="category",
+        lazy="select"
+    )
+
+    # Indexes for performance
+    __table_args__ = (
+        Index("idx_categories_parent_active", "parent_id", "is_active"),
+        Index("idx_categories_slug_active", "slug", "is_active"),
+        Index("idx_categories_sort_order", "sort_order"),
+    )
+
+    def get_full_path(self, separator: str = " > ") -> str:
+        """
+        Get full category path from root to current category.
+
+        Args:
+            separator: String to separate category names in path
+
+        Returns:
+            Full category path string
+        """
+        path_parts = [self.name]
+        current = self.parent
+
+        while current is not None:
+            path_parts.insert(0, current.name)
+            current = current.parent
+
+        return separator.join(path_parts)
+
+    def get_depth(self) -> int:
+        """
+        Get category depth level (0 for root categories).
+
+        Returns:
+            Depth level of this category
+        """
+        depth = 0
+        current = self.parent
+
+        while current is not None:
+            depth += 1
+            current = current.parent
+
+        return depth
+
+    def is_root(self) -> bool:
+        """Check if this is a root category (no parent)."""
+        return self.parent_id is None
+
+    def is_child_of(self, category: "Category") -> bool:
+        """
+        Check if this category is a child of given category.
+
+        Args:
+            category: Category to check against
+
+        Returns:
+            True if this category is a child of given category
+        """
+        current = self.parent
+        while current is not None:
+            if current.id == category.id:
+                return True
+            current = current.parent
+        return False
+
+    def get_all_children_ids(self) -> List[int]:
+        """
+        Get IDs of all descendant categories recursively.
+
+        Returns:
+            List of all child category IDs
+        """
+        child_ids = []
+
+        def collect_children(category: "Category") -> None:
+            for child in category.children:
+                child_ids.append(child.id)
+                collect_children(child)
+
+        collect_children(self)
+        return child_ids
+
+    def increment_posts_count(self) -> None:
+        """Increment the posts count for this category."""
+        self.posts_count += 1
+
+    def decrement_posts_count(self) -> None:
+        """Decrement the posts count for this category."""
+        if self.posts_count > 0:
+            self.posts_count -= 1
+
+    def generate_slug_from_name(self) -> str:
+        """
+        Generate URL-friendly slug from category name.
+
+        Returns:
+            Generated slug
+        """
+        import re
+
+        # Convert to lowercase and replace spaces with hyphens
+        slug = self.name.lower().replace(" ", "-")
+        # Remove special characters
+        slug = re.sub(r'[^a-z0-9\-]', '', slug)
+        # Remove multiple hyphens
+        slug = re.sub(r'-+', '-', slug)
+        # Strip hyphens from ends
+        slug = slug.strip('-')
+
+        return slug or "category"
 
     @classmethod
-    def get_tree(cls, categories=None, parent=None, ids=None, **kwargs):
-        """Get tree of categories"""
+    def build_tree_from_list(cls, categories: List["Category"]) -> List["Category"]:
+        """
+        Build hierarchical tree from flat list of categories.
 
-        if categories is None:
-            categories = cls.get(**kwargs)
+        Args:
+            categories: Flat list of categories
 
-        if ids is None and parent is None:
-            parent = 0
+        Returns:
+            List of root categories with populated children
+        """
+        # Create lookup dictionary
+        category_dict = {cat.id: cat for cat in categories}
 
-        tree = []
-
+        # Initialize children lists
         for category in categories:
-            if ids and ids != category.id:
-                continue
-            if category.parent is None:
-                category.parent = 0
-            if parent is not None and category.parent != parent:
-                continue
+            category.children = []
 
-            data = category.json()
-            data["categories"] = cls.get_tree(categories, category.id)
+        # Build tree structure
+        root_categories = []
+        for category in categories:
+            if category.parent_id and category.parent_id in category_dict:
+                parent = category_dict[category.parent_id]
+                parent.children.append(category)
+                category.parent = parent
+            else:
+                root_categories.append(category)
 
-            tree.append(data)
+        return root_categories
 
-        return tree
+    def to_tree_dict(self, include_children: bool = True) -> dict:
+        """
+        Convert category to dictionary with tree structure.
 
-    @classmethod
-    def get_childs(cls, parent):
-        """Get childs of category"""
-        return get("category_childs").get(parent, []) + [parent]
+        Args:
+            include_children: Whether to include children in output
+
+        Returns:
+            Dictionary representation with children
+        """
+        result = {
+            "id": self.id,
+            "name": self.name,
+            "slug": self.slug,
+            "description": self.description,
+            "icon": self.icon,
+            "color": self.color,
+            "posts_count": self.posts_count,
+            "is_active": self.is_active,
+            "depth": self.get_depth(),
+            "full_path": self.get_full_path()
+        }
+
+        if include_children:
+            result["children"] = [
+                child.to_tree_dict(include_children=True)
+                for child in sorted(self.children, key=lambda c: c.sort_order)
+            ]
+
+        return result
+
+    def __str__(self) -> str:
+        return f"Category(id={self.id}, name={self.name}, parent_id={self.parent_id})"
