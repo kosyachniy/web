@@ -1,6 +1,6 @@
 'use client';
 
-import { CounterDemo, UserDemo, PopupDemo, ToastDemo, MultiFileUploadDemo } from '@/features/demo';
+import { CounterDemo, UserDemo, PopupDemo, ToastDemo, MultiFileUploadDemo, WheelDemo } from '@/features/demo';
 import { ThreeColumnLayout } from '@/widgets/three-column-layout';
 import { SectionsSidebar } from '@/widgets/sections-sidebar';
 import { FastActionsSidebar } from '@/widgets/fast-actions-sidebar';
@@ -35,8 +35,8 @@ export default function Home() {
     ];
 
     return (
-        <ThreeColumnLayout 
-            leftSidebar={leftSidebar} 
+        <ThreeColumnLayout
+            leftSidebar={leftSidebar}
             rightSidebar={rightSidebar}
             rightSidebarSticky={false}
         >
@@ -50,6 +50,7 @@ export default function Home() {
                         <ToastDemo />
                     </div>
                     <MultiFileUploadDemo />
+                    <WheelDemo />
                 </div>
 
                 {/* Posts Section */}
@@ -57,14 +58,14 @@ export default function Home() {
                     <PageHeader
                         icon={<PostsIcon size={24} />}
                         iconClassName="bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
-                        title="Posts (3-Column Demo)"
+                        title="Posts Demo"
                         description="Example of how the posts page would look with sidebar blocks"
                     />
 
                     {/* Mock Posts Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {mockPosts.map((post) => (
-                            <Card 
+                            <Card
                                 key={post.id}
                                 title={post.title}
                                 description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt..."

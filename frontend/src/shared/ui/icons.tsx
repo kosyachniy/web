@@ -107,7 +107,15 @@ import {
   FaCar,
   FaUtensils,
   FaSprayCanSparkles,
-  FaGlobe
+  FaGlobe,
+  FaCirclePlay,
+  FaGift,
+  FaCoins,
+  FaTrophy,
+  FaGem,
+  FaReceipt,
+  FaBitcoin,
+  FaEthereum
 } from "react-icons/fa6"
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
@@ -594,6 +602,43 @@ export function BagsAccessoriesIcon({ size = 16, ...props }: IconProps) {
 
 export function HobbiesCreativityIcon({ size = 16, ...props }: IconProps) {
   return <FaPalette size={size} {...props} />
+}
+
+// Wheel and lottery icons
+export function WheelIcon({ size = 16, ...props }: IconProps) {
+  return <FaCircle size={size} {...props} />
+}
+
+export function SpinIcon({ size = 16, ...props }: IconProps) {
+  return <FaCirclePlay size={size} {...props} />
+}
+
+export function PrizeIcon({ size = 16, ...props }: IconProps) {
+  return <FaGift size={size} {...props} />
+}
+
+export function CoinsIcon({ size = 16, ...props }: IconProps) {
+  return <FaCoins size={size} {...props} />
+}
+
+export function TrophyIcon({ size = 16, ...props }: IconProps) {
+  return <FaTrophy size={size} {...props} />
+}
+
+export function GemIcon({ size = 16, ...props }: IconProps) {
+  return <FaGem size={size} {...props} />
+}
+
+export function ReceiptIcon({ size = 16, ...props }: IconProps) {
+  return <FaReceipt size={size} {...props} />
+}
+
+export function BitcoinIcon({ size = 16, ...props }: IconProps) {
+  return <FaBitcoin size={size} {...props} />
+}
+
+export function EthereumIcon({ size = 16, ...props }: IconProps) {
+  return <FaEthereum size={size} {...props} />
 }
 
 // Aliases for consistency with CLAUDE.md examples

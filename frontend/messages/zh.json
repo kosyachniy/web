@@ -387,6 +387,37 @@
         "fileName": "文件名",
         "fileSize": "文件大小"
     },
+    "wheelDemo": {
+        "title": "转动转盘",
+        "subtitle": "赢取国家彩票和其他奖品！",
+        "description": "交互式幸运转盘演示，带有动画效果和随机奖品选择",
+        "firstSpinsText": "前2次旋转无附加条件！",
+        "instructions": "在网站或Ozon应用中登录，然后点击\"转动转盘\"按钮",
+        "spinButton": "转动转盘",
+        "spinning": "转动中...",
+        "reset": "重置",
+        "congratulations": "恭喜！",
+        "youWon": "您获得了：",
+        "footerText": "复制此页面地址，回来获取转盘的新奖品",
+        "footerUrl": "ozon.ru/sp/nlbigwheel",
+        "segments": {
+            "bitcoin": "比特币",
+            "ethereum": "以太坊",
+            "shik": "SHIK",
+            "limoni": "LIMONI",
+            "dizzy": "Dizzy",
+            "ruble1000": "1000₽",
+            "aravia": "ARAVIA",
+            "send": "Send",
+            "desy": "Desy",
+            "ruble500": "500₽",
+            "shik2": "SHIK",
+            "desy2": "Desy"
+        },
+        "spinsLeft": "剩余次数：{count}",
+        "noSpinsLeft": "没有剩余次数了！明天再来。",
+        "tryAgain": "重新尝试"
+    },
     "multiFileUpload": {
         "title": "文件画廊",
         "addMore": "添加更多文件",

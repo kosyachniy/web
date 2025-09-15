@@ -387,6 +387,37 @@
         "fileName": "File name",
         "fileSize": "File size"
     },
+    "wheelDemo": {
+        "title": "Spin the Wheel",
+        "subtitle": "Win National Lottery Tickets and Other Prizes!",
+        "description": "Interactive spinning wheel demo showcasing animation and random prize selection",
+        "firstSpinsText": "First 2 spins without additional conditions!",
+        "instructions": "Authorize on the site or in the Ozon app and click the 'Spin the wheel' button",
+        "spinButton": "Spin the Wheel",
+        "spinning": "Spinning...",
+        "reset": "Reset",
+        "congratulations": "Congratulations!",
+        "youWon": "You won:",
+        "footerText": "Copy this page address and return for new prizes from the wheel",
+        "footerUrl": "ozon.ru/sp/nlbigwheel",
+        "segments": {
+            "bitcoin": "Bitcoin",
+            "ethereum": "Ethereum",
+            "shik": "SHIK",
+            "limoni": "LIMONI",
+            "dizzy": "Dizzy",
+            "ruble1000": "1000₽",
+            "aravia": "ARAVIA",
+            "send": "Send",
+            "desy": "Desy",
+            "ruble500": "500₽",
+            "shik2": "SHIK",
+            "desy2": "Desy"
+        },
+        "spinsLeft": "Spins left: {count}",
+        "noSpinsLeft": "No spins left! Come back tomorrow.",
+        "tryAgain": "Try Again"
+    },
     "multiFileUpload": {
         "title": "File Gallery",
         "addMore": "Add more files",

@@ -387,6 +387,37 @@
         "fileName": "Nombre del archivo",
         "fileSize": "Tamaño del archivo"
     },
+    "wheelDemo": {
+        "title": "Gira la Rueda",
+        "subtitle": "¡Gana Billetes de Lotería Nacional y Otros Premios!",
+        "description": "Demostración interactiva de ruleta de la fortuna con animación y selección aleatoria de premios",
+        "firstSpinsText": "¡Los primeros 2 giros sin condiciones adicionales!",
+        "instructions": "Autorízate en el sitio o en la aplicación Ozon y haz clic en el botón 'Girar la rueda'",
+        "spinButton": "Girar la Rueda",
+        "spinning": "Girando...",
+        "reset": "Reiniciar",
+        "congratulations": "¡Felicidades!",
+        "youWon": "Has ganado:",
+        "footerText": "Copia la dirección de esta página y regresa por nuevos premios de la rueda",
+        "footerUrl": "ozon.ru/sp/nlbigwheel",
+        "segments": {
+            "bitcoin": "Bitcoin",
+            "ethereum": "Ethereum",
+            "shik": "SHIK",
+            "limoni": "LIMONI",
+            "dizzy": "Dizzy",
+            "ruble1000": "1000₽",
+            "aravia": "ARAVIA",
+            "send": "Send",
+            "desy": "Desy",
+            "ruble500": "500₽",
+            "shik2": "SHIK",
+            "desy2": "Desy"
+        },
+        "spinsLeft": "Giros restantes: {count}",
+        "noSpinsLeft": "¡No quedan giros! Regresa mañana.",
+        "tryAgain": "Intentar de Nuevo"
+    },
     "multiFileUpload": {
         "title": "Galería de Archivos",
         "addMore": "Agregar más archivos",

@@ -387,6 +387,37 @@
         "fileName": "Имя файла",
         "fileSize": "Размер файла"
     },
+    "wheelDemo": {
+        "title": "Крутите Колесо",
+        "subtitle": "Выигрывайте Билеты Национальной Лотереи и Другие Призы!",
+        "description": "Интерактивная демонстрация колеса фортуны с анимацией и случайным выбором призов",
+        "firstSpinsText": "Первые 2 прокрутки без дополнительных условий!",
+        "instructions": "Авторизуйтесь на сайте или в приложении Ozon и нажимайте на кнопку «Крутить колесо»",
+        "spinButton": "Крутить Колесо",
+        "spinning": "Крутится...",
+        "reset": "Сброс",
+        "congratulations": "Поздравляем!",
+        "youWon": "Вы выиграли:",
+        "footerText": "Скопируйте адрес этой страницы, и возвращайтесь за новыми призами из колеса",
+        "footerUrl": "ozon.ru/sp/nlbigwheel",
+        "segments": {
+            "bitcoin": "Bitcoin",
+            "ethereum": "Ethereum",
+            "shik": "SHIK",
+            "limoni": "LIMONI",
+            "dizzy": "Dizzy",
+            "ruble1000": "1000₽",
+            "aravia": "ARAVIA",
+            "send": "Send",
+            "desy": "Desy",
+            "ruble500": "500₽",
+            "shik2": "SHIK",
+            "desy2": "Desy"
+        },
+        "spinsLeft": "Осталось попыток: {count}",
+        "noSpinsLeft": "Попытки закончились! Возвращайтесь завтра.",
+        "tryAgain": "Попробовать Снова"
+    },
     "multiFileUpload": {
         "title": "Галерея Файлов",
         "addMore": "Добавить больше файлов",

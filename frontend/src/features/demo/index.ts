@@ -4,4 +4,5 @@ export { UserDemo } from './components/UserDemo';
 export { default as ToastDemo } from './components/ToastDemo';
 export { default as PopupDemo } from './components/PopupDemo';
 export { MultiFileUploadDemo } from './components/MultiFileUploadDemo';
+export { WheelDemo } from './components/WheelDemo';
 export { counterSlice } from './stores/counterSlice';
