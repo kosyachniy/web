@@ -22,6 +22,599 @@ Full-stack web application with Python FastAPI backend, Next.js frontend, and Te
 
 ---
 
+## Test-Driven Development Workflow ⚠️ **MANDATORY**
+
+**Every feature implementation MUST follow this exact sequence:**
+
+### **1. API Tests First** → **Define Contracts & Edge Cases**
+- ✅ **Write comprehensive API tests** covering ALL endpoints, methods, and data flows
+- ✅ **Cover ALL edge cases**: invalid data, auth failures, rate limits, database errors, network timeouts
+- ✅ **Test request/response models** with boundary values, missing fields, type mismatches
+- ✅ **Mock external dependencies** (database, Redis, external APIs) in tests
+- ✅ **Use pytest with async support** for FastAPI endpoint testing
+- ✅ **Test authentication & authorization** for all protected endpoints
+- ✅ **Test pagination, filtering, sorting** for list endpoints
+- ✅ **Test error responses** match RFC 7807 Problem Details format
+- ❌ **NEVER start backend implementation** without comprehensive API tests
+
+### **2. Backend Implementation** → **Satisfy Tests & Generate Clean OpenAPI**
+- ✅ **Implement backend logic** to make ALL tests pass
+- ✅ **Follow FastAPI 2025 best practices** with async/await, Pydantic v2, structured logging
+- ✅ **Use proper Pydantic field descriptions** and examples for clean OpenAPI generation
+- ✅ **Specify response_model** in all FastAPI decorators for accurate schema generation
+- ✅ **Add OpenAPI tags** for logical endpoint grouping
+- ✅ **Handle ALL error cases** tested in step 1 with proper HTTP status codes
+- ✅ **Run `make unit-test`** to ensure all API tests pass before proceeding
+- ❌ **NEVER proceed to schema generation** until ALL backend tests are green
+
+### **3. TypeScript Schema Generation** → **Type-Safe Frontend Integration**
+- ✅ **Generate TypeScript schemas**: `cd frontend && npm run generate-schemas`
+- ✅ **Verify schema generation** produces clean, accurate types from OpenAPI spec
+- ✅ **Check generated schemas** in `frontend/src/generated/api/schemas.ts`
+- ✅ **Validate field descriptions** and examples appear correctly in generated types
+- ✅ **Ensure request/response types** match exactly with backend Pydantic models
+- ❌ **NEVER write manual API types** - always use generated schemas
+
+### **4. Frontend Implementation** → **Type-Safe UI Components**
+- ✅ **Import ALL types** from `@/generated/api/schemas` - never create manual types
+- ✅ **Follow Frontend Development Flow** (6-step systematic process above)
+- ✅ **Use generated schemas** for API calls, form validation, Redux state
+- ✅ **Implement error handling** with toast notifications using generated error types
+- ✅ **Test type safety** - TypeScript compiler should catch any API contract mismatches
+- ✅ **Handle loading states** and edge cases from backend API behavior
+- ❌ **NEVER hardcode API types** or request/response structures
+
+### **5. Frontend Tests** → **UI & Integration Testing**
+- ✅ **Write component tests** for all UI components using generated types
+- ✅ **Test ALL user interactions**: clicks, form submissions, navigation, state changes
+- ✅ **Test error handling**: network errors, validation failures, auth timeouts
+- ✅ **Test edge cases**: empty states, loading states, pagination boundaries
+- ✅ **Test responsive behavior**: desktop, tablet, mobile viewports
+- ✅ **Test accessibility**: keyboard navigation, screen readers, focus management
+- ✅ **Test i18n**: all supported languages, text overflow, RTL layouts
+- ✅ **Mock API calls** using generated schemas for predictable test data
+- ✅ **Run `make test-web`** to ensure all frontend tests pass
+- ❌ **NEVER skip edge case testing** - they're caught in API tests, so UI must handle them
+
+### **TDD Workflow Validation Checklist**
+Before considering any feature complete, verify:
+1. ✅ API tests cover 100% of endpoints and edge cases (`make unit-test` passes)
+2. ✅ Backend implementation satisfies all API tests (all tests green)
+3. ✅ OpenAPI spec generates clean, accurate TypeScript schemas
+4. ✅ Frontend uses ONLY generated types (no manual API types)
+5. ✅ Frontend handles ALL error cases tested in API tests
+6. ✅ Frontend tests cover ALL user interactions and edge cases (`make test-web` passes)
+7. ✅ Full integration test: API → Schema Generation → Frontend → UI Tests
+
+### **Benefits of This Workflow:**
+- **Contract-First Development**: API contracts defined upfront prevent integration issues
+- **Comprehensive Coverage**: Edge cases identified early, tested throughout stack
+- **Type Safety**: Generated schemas ensure frontend/backend always stay in sync
+- **Quality Assurance**: No feature ships without thorough testing at every layer
+- **Maintainability**: Changes to API automatically update frontend types and tests
+- **Team Coordination**: Clear contracts enable parallel frontend/backend development
+
+**⚠️ CRITICAL: This workflow is MANDATORY for ALL feature development. Never skip steps or proceed to next step with failing tests.**
+
+---
+
+## Backend
+### Coding Flow Rules
+#### 0) Core Principles (do not violate)
+
+1. **Ports & Adapters.**
+   Domain knows **only** interfaces in `app/domain/ports/*`. All IO (DB, HTTP, broker, cache) lives in `app/adapters/*`.
+2. **Three data shapes (strict):**
+   **API DTOs** → `app/api/schemas/*` (Pydantic request/response).
+   **Domain Entities** → `app/domain/entities/*` (business state & invariants, no IO).
+   **Persistence Models** → `app/adapters/db/*/models/*` (ORM/collections, physical storage).
+3. **Async‑first.** `async def` everywhere (FastAPI, SQLAlchemy 2.0 async, Motor, httpx, redis.asyncio).
+4. **Transactions via UoW.** Services use `UnitOfWorkPort`. **Commit first, then side‑effects** (enqueue job / publish event) — never before.
+5. **HTTP layer is thin.** Routes validate DTOs and call domain services. No business logic or SQL in endpoints.
+6. **Background work is decoupled.**
+   Jobs → `app/workers/jobs/*`; Consumers → `app/workers/consumers/*`; Schedules → `app/workers/schedules.py`.
+7. **Events are optional.**
+   One light reaction → enqueue job right after commit.
+   Multiple/independent reactions → publish a typed event (`app/events/*`).
+
+---
+
+#### 1) Repository Map (what goes where)
+
+```
+backend/
+│
+├── .gitignore                     # Git ignore rules
+├── pyproject.toml                 # Single source of truth for deps/tools, UV package manager, async deps; scripts; Ruff config can live here
+├── uv.lock                        # Dependency lock file
+├── Dockerfile                     # Containerization: Multi-stage container
+├── .dockerignore                  # Containerization: Docker ignore rules
+│
+├── app/                           # Main application code
+│   ├── main.py                    # FastAPI application factory; mounts routers/middlewares; lifespan wiring
+│   │
+│   ├── core/                      # Core application configuration; App-level bootstrapping & cross-cutting concerns
+│   │   ├── config.py              # Pydantic Settings (centralized configuration); feature flags select adapters (DB/Broker/Tasks)
+│   │   ├── lifespan.py            # Application startup/shutdown events: DB clients, Redis, broker conn, httpx client, limiter
+│   │   ├── security.py            # JWT issue/verify, password hashing, authentication
+│   │   ├── logging.py             # Loguru configuration + std logging intercept + correlation ID; JSON-friendly; request-id field
+│   │   ├── rate_limit.py          # Rate limiting setup
+│   │   ├── cors.py                # CORSMiddleware config (env-based allowlist)
+│   │   └── di.py                  # Dependency providers: bind domain Ports → concrete Adapters by env
+│   │
+│   ├── middleware/
+│   │   └── request_id.py          # Global request-id; attach in main.py
+│   │
+│   ├── domain/                    # Pure business layer (no FastAPI/DB specifics)
+│   │   ├── entities/              # Layer 3: Domain entities (dataclass/Pydantic for domain)
+│   │   │   └── audit_log.py
+│   │   ├── ports/                 # Layer 4: Domain Ports; Interfaces (hexagonal ports)
+│   │   │   ├── user_repo.py       # UserRepository: user-specific queries
+│   │   │   ├── session.py         # SessionRepository: session management
+│   │   │   ├── audit.py           # AuditRepository: audit trail operations
+│   │   │   ├── uow.py             # Unit of Work pattern for transactions: begin/commit/rollback + repo accessors
+│   │   │   ├── cache.py           # CachePort
+│   │   │   └── message_broker.py  # MessageBrokerPort: publish/subscribe
+│   │   └── services/              # Layer 5: Business Logic Services; Business use-cases; orchestrate via Ports/UoW
+│   │       ├── auth_service.py    # Authentication logic (register, login, refresh)
+│   │       ├── user_service.py    # User management logic
+│   │       ├── session_service.py # Session management logic
+│   │       ├── audit_service.py   # Audit trail logic
+│   │       ├── notification_service.py # Notification sending logic
+│   │       └── integration_service.py # External API integration logic
+│   │
+│   ├── api/                       # Layer 6: HTTP Interface (kept flat for fast dev; can be moved under presentation/ later)
+│   │   ├── router.py              # Main router that includes all sub-routers
+│   │   ├── errors.py              # Global exception handlers (Problem+JSON)
+│   │   ├── health.py              # Liveness/readiness; DB/broker checks (usually unversioned)
+│   │   │
+│   │   ├── schemas/               # Layer 2: API Schemas (Pydantic DTOs (API contracts)) — NOT ORM, NOT domain entities
+│   │   │   ├── base.py            # Base schemas with common patterns
+│   │   │   ├── auth.py            # LoginRequest, TokenResponse, RefreshToken
+│   │   │   │── user.py            # UserCreate, UserRead, UserUpdate
+│   │   │   │── responses.py       # Standard API response schemas
+│   │   │   │── pagination.py      # Pagination schemas
+│   │   │   └── filters.py         # Filter and search schemas
+│   │   │
+│   │   ├── deps/                  # API dependencies; Request-scoped DI helpers
+│   │   │   ├── uow.py             # get_uow(): UnitOfWorkPort per request
+│   │   │   ├── broker.py          # get_broker(): MessageBrokerPort
+│   │   │   ├── cache.py           # get_cache(): CachePort
+│   │   │   ├── http.py            # get_http_client(): shared httpx.AsyncClient
+│   │   │   └── auth.py            # Authentication dependencies
+│   │   │
+│   │   ├── middleware/            # HTTP middleware
+│   │   │   ├── auth.py            # Authentication middleware
+│   │   │   ├── cors.py            # CORS middleware setup
+│   │   │   ├── rate_limit.py      # Rate limiting middleware
+│   │   │   ├── request_id.py      # Request ID correlation middleware
+│   │   │   └── logging.py         # Request/response logging middleware
+│   │   │
+│   │   └── v1/                    # API version 1
+│   │       ├── router.py          # Versioned API root
+│   │       ├── base.py
+│   │       ├── auth.py            # Authentication endpoints (/auth/*)
+│   │       ├── users.py           # User management endpoints (/users/*)
+│   │       └── health.py          # Health check endpoints (/health/*)
+│   │
+│   ├── websocket/                 # WS interface (separate transport, same domain services)
+│   │   ├── connection_manager.py  # WebSocket connection management
+│   │   ├── handlers.py            # WebSocket message handlers
+│   │   └── auth.py                # WebSocket authentication
+│   │
+│   ├── adapters/                  # Infrastructure Adapters; Tech-specific implementations of ports (replaceable)
+│   │   ├── database/              # Database implementations
+│   │   │   ├── postgres/          # PostgreSQL implementation; SQLAlchemy 2.0 asyncio + asyncpg
+│   │   │   │   ├── engine.py      # create_async_engine + sessionmaker
+│   │   │   │   ├── models/        # Layer 1: Database Models; Physical storage models (ORM); NOT API schemas
+│   │   │   │   │   ├── base.py    # Base model with common fields (id, created_at, updated_at)
+│   │   │   │   │   ├── user.py    # User model (Beanie Document / SQLAlchemy)
+│   │   │   │   │   ├── session.py # User sessions model
+│   │   │   │   │   ├── audit.py   # Audit trail model
+│   │   │   │   │   └── tenant.py  # Multi-tenancy model (if needed)
+│   │   │   │   ├── repositories/
+│   │   │   │   │   └── user_repo.py # implements UserRepoPort using AsyncSession
+│   │   │   │   └── uow.py         # PostgresUnitOfWork wrapping AsyncSession transactions
+│   │   │   └── mongo/             # MongoDB implementation; Motor (async MongoDB)
+│   │   │       ├── client.py      # Motor client/db init; indexes
+│   │   │       ├── repositories/
+│   │   │       │   └── user_repo.py # implements UserRepoPort via collections
+│   │   │       └── uow.py         # MongoUnitOfWork (client session/transactions or no-op fallback)
+│   │   ├── cache/                 # Caching implementations
+│   │   │   ├── redis.py           # RedisCache implements CachePort (redis.asyncio)
+│   │   │   └── memory.py          # In-memory cache for testing
+│   │   ├── broker/                # Message brokers (callbacks/events), not task runners
+│   │   │   ├── redis_broker.py    # Simple Redis pub/sub
+│   │   │   └── rabbitmq/
+│   │   │       ├── connection.py  # aio-pika robust connection/channel; declare exchanges/queues
+│   │   │       └── broker.py      # implements MessageBrokerPort (publish/consume with ack/retry)
+│   │   ├── storage/               # File storage implementations
+│   │   │   ├── __init__.py
+│   │   │   ├── local.py           # Local file storage
+│   │   │   └── s3.py              # AWS S3 storage
+│   │   │
+│   │   └── external/              # External API clients
+│   │       ├── __init__.py
+│   │       ├── base_client.py     # Base HTTP client with retry/circuit breaker
+│   │       ├── payment/           # Payment gateway clients
+│   │       │   ├── __init__.py
+│   │       │   ├── stripe.py      # Stripe API client
+│   │       │   ├── paypal.py      # PayPal API client
+│   │       │   └── models.py      # Payment models
+│   │       └── notification/      # Notification service clients
+│   │           ├── __init__.py
+│   │           ├── email.py       # Email service (SendGrid, SES)
+│   │           ├── sms.py         # SMS service (Twilio)
+│   │           └── push.py        # Push notifications
+│   │
+│   ├── jobs/                      # Background Job Processing; Tool-agnostic background execution & consumers
+│   │   ├── scheduled/             # Scheduled jobs (cron-like)
+│   │   └── callbacks/             # Event-driven jobs
+│   │
+│   ├── events/                         # Typed contracts for cross-process communication
+│   │   ├── schemas.py                  # Pydantic models for event payloads (e.g., UserCreated)
+│   │   └── topics.py                   # Topic/route-key constants
+│   │
+│   ├── utils/                     # Utility Functions; Small, generic helpers (keep tidy; feature-specific utils live with features)
+│   │   ├── __init__.py
+│   │   ├── validators.py          # Custom validation functions
+│   │   ├── formatting.py          # Data formatting utilities
+│   │   ├── crypto.py              # Cryptographic utilities
+│   │   ├── time.py                # Date/time utilities
+│   │   ├── pagination.py          # Pagination helpers
+│   │   └── decorators.py          # Utility decorators (retry, cache, etc.)
+│   │
+│   └── monitoring/                # Observability (optional for advanced setups)
+│       ├── __init__.py
+│       ├── metrics.py             # Custom metrics collection; Prometheus instrumentation (/metrics)
+│       ├── tracing.py             # Distributed tracing setup; OpenTelemetry setup; httpx/broker instrumentation
+│       └── health.py              # Health check implementations
+│
+├── tests/                         # Test Suite
+│   ├── __init__.py
+│   ├── conftest.py                # Pytest configuration and fixtures
+│   │
+│   ├── fixtures/                  # Test data fixtures
+│   │   ├── __init__.py
+│   │   ├── database.py            # Database fixtures
+│   │   ├── auth.py                # Authentication fixtures
+│   │   └── external_services.py   # External service mocks
+│   │
+│   ├── unit/                      # Unit tests (services, repositories)
+│   │   ├── __init__.py
+│   │   ├── services/
+│   │   │   ├── test_auth_service.py
+│   │   │   ├── test_user_service.py
+│   │   │   └── test_notification_service.py
+│   │   │
+│   │   ├── repositories/
+│   │   │   ├── test_user_repository.py
+│   │   │   └── test_session_repository.py
+│   │   │
+│   │   └── utils/
+│   │       ├── test_validators.py
+│   │       └── test_crypto.py
+│   │
+│   ├── integration/               # Integration tests (database, external APIs)
+│   │   ├── __init__.py
+│   │   ├── test_database.py       # Database integration tests
+│   │   ├── test_cache.py          # Cache integration tests
+│   │   ├── test_message_broker.py # Message broker tests
+│   │   └── test_external_apis.py  # External API tests
+│   │
+│   ├── api/                       # API endpoint tests
+│   │   ├── __init__.py
+│   │   ├── test_auth.py           # Authentication endpoint tests
+│   │   ├── test_users.py          # User endpoint tests
+│   │   ├── test_health.py         # Health check tests
+│   │   └── test_webhooks.py       # Webhook tests
+│   │
+│   ├── e2e/                       # End-to-end tests
+│   │   ├── __init__.py
+│   │   ├── test_user_journey.py   # Complete user workflows
+│   │   ├── test_payment_flow.py   # Payment processing flow
+│   │   └── test_notification_flow.py # Notification delivery
+│   │
+│   └── performance/               # Performance tests (optional)
+│       ├── __init__.py
+│       ├── test_load.py           # Load testing
+│       └── test_concurrency.py    # Concurrency testing
+│
+├── scripts/                       # Utility Scripts
+│   ├── migrate.py                 # Run database migrations
+│   ├── seed_data.py               # Seed initial data
+│   ├── backup_db.py               # Database backup script
+│   ├── restore_db.py              # Database restore script
+│   └── health_check.py            # Health check script for monitoring
+│
+├── docs/                          # Documentation
+│   ├── README.md                  # Main documentation
+│   ├── CONTRIBUTING.md            # Contribution guidelines
+│   ├── DEPLOYMENT.md              # Deployment instructions
+│   │
+│   ├── api/                       # API documentation
+│   │   ├── openapi.json           # Generated OpenAPI specification
+│   │   └── examples/              # API usage examples
+│   │
+│   ├── architecture/              # Architecture documentation
+│   │   ├── overview.md            # System overview
+│   │   ├── database_design.md     # Database schema documentation
+│   │   ├── api_design.md          # API design principles
+│   │   └── security.md            # Security implementation
+│   │
+│   ├── operations/                # Runbooks: worker, consumers, migrations, scaling
+│   │
+│   └── guides/                    # Developer guides
+│       ├── getting_started.md     # Quick start guide
+│       ├── testing.md             # Testing guide
+│       ├── deployment.md          # Deployment guide
+│       └── troubleshooting.md     # Common issues and solutions
+│
+└── migrations/                    # Database Migrations (optional, can be in infra/)
+    ├── postgresql/                # PostgreSQL migrations (Alembic)
+    └── mongodb/                   # MongoDB migration scripts
+```
+
+---
+
+#### 2) Naming & Style
+
+* **Modules**: `snake_case.py`. **Classes**: `CamelCase`. **Functions/vars**: `snake_case`.
+* Mandatory **type hints**; `from __future__ import annotations` allowed.
+* **Imports**: stdlib → third‑party → internal (absolute imports).
+* **Pydantic v2** (`ConfigDict`, `from_attributes=True` for read models).
+* **SQLAlchemy 2.0**: `AsyncSession` only, one per request/UoW.
+* **Logging**: Loguru via `core/logging.py`; every log line should include request‑id.
+* **HTTPX**: use the shared client from DI; set sensible `Timeout` & `Limits`.
+* **Redis**: `redis.asyncio` only.
+* **Security**: JWT in `core/security.py`, bcrypt for passwords.
+* **Forbidden**: business logic inside adapters/routes/jobs — it belongs in domain services.
+
+---
+
+#### 3) Recipes — how to code (for AI & humans)
+
+##### A) New entity (example: **Post**)
+
+**1. Domain**
+
+* `app/domain/entities/post.py` — fields & methods (`publish`, `edit`, `archive`) with no IO.
+* `app/domain/ports/post_repo.py` — repository interface:
+
+```python
+class PostRepoPort(Protocol):
+    async def get(self, post_id: UUID) -> Post | None: ...
+    async def create(self, post: Post) -> Post: ...
+    async def update(self, post: Post) -> None: ...
+    async def list_by_author(self, author_id: UUID, limit: int, cursor: str | None): ...
+```
+
+* `app/domain/services/post_service.py` — use‑cases:
+
+```python
+async def create_post(dto: PostCreateDTO, uow: UnitOfWorkPort) -> Post:
+    post = Post(...)
+    await uow.posts.create(post)
+    await uow.commit()
+    return post
+
+async def publish_post(post_id: UUID, uow: UnitOfWorkPort, jobs: AsyncJobsPort):
+    post = await uow.posts.get(post_id)
+    post.publish()
+    await uow.posts.update(post)
+    await uow.commit()                    # 1) commit
+    await jobs.post_published(post.id)    # 2) side-effect (or publish event)
+```
+
+**2. API (DTO + routes)**
+
+* `app/api/schemas/post.py` → `PostCreate`, `PostUpdate`, `PostRead`.
+* `app/api/v1/posts.py` → routes call services; no SQL here.
+
+**3. Persistence**
+
+* **Postgres**:
+  `app/adapters/db/postgres/models/post.py` (ORM + indexes),
+  `app/adapters/db/postgres/repositories/post_repo.py` (implements `PostRepoPort`),
+  migration in `migrations/alembic/versions/*_add_post.py`.
+* **Mongo**:
+  `app/adapters/db/mongo/repositories/post_repo.py` (collections + indexes).
+
+**4. Background & Events (if needed)**
+
+* `app/workers/jobs/posts.py` (e.g., `send_post_published_email`).
+* `app/workers/consumers/post_events.py` — if publishing `PostPublished`.
+* `app/events/schemas.py` — add `PostPublished` (optional).
+
+**5. Tests**
+
+* Unit: `test_post_service.py` (ports mocked).
+* Integration: repo tests (PG/Mongo).
+* E2E: `POST /posts` → `POST /posts/{id}/publish`.
+
+**Checklist DoR/DoD**
+
+* [ ] Domain does **not** import adapters/FastAPI.
+* [ ] Repo implemented for selected DB and bound in DI.
+* [ ] Migrations exist & apply cleanly.
+* [ ] DTOs match OpenAPI; proper 4xx/5xx responses.
+* [ ] Jobs/events added only if needed.
+* [ ] Tests: unit + integration + e2e green.
+
+---
+
+##### B) New external service (example: **YooKassa**)
+
+**1. Domain**
+
+* `app/domain/entities/payment.py` — state & transitions (`mark_paid`, `mark_failed`, `require_capture`).
+* `app/domain/ports/payments.py` — provider contract:
+
+```python
+class PaymentProviderPort(Protocol):
+    async def create_payment(...)->ProviderCreateResult: ...
+    async def capture_payment(external_id: str, amount: Money): ...
+    async def cancel_payment(external_id: str): ...
+    async def refund_payment(external_id: str, ...): ...
+    async def get_payment(external_id: str)->ProviderPayment: ...
+    async def parse_webhook(headers: dict[str, str], body: bytes)->ProviderEvent: ...
+```
+
+* `app/domain/services/payments_service.py` — start/capture/cancel/webhook via provider port + UoW; after commit → event or job.
+
+**2. Adapter (YooKassa)**
+
+* `app/adapters/payments/yookassa/client.py` — httpx calls, webhook signature validation, retries.
+* `app/adapters/payments/yookassa/schemas.py` — map API JSON ↔ internal provider types.
+* `app/adapters/payments/yookassa/provider.py` — implements `PaymentProviderPort` (thin mapping).
+
+**3. API & webhooks**
+
+* `app/api/schemas/payments.py` — DTOs.
+* `app/api/v1/payments.py` — start/capture/get.
+* `app/api/v1/webhooks.py` — `POST /webhooks/yookassa` → `parse_webhook()` → `payments_service.handle_webhook()` → commit → event/job.
+
+**4. DI**
+
+* `app/core/di.py` binds `PaymentProviderPort` → `YooKassaProvider()` via `APP_PAYMENTS_PROVIDER=yookassa`.
+
+**5. Workers**
+
+* `app/workers/jobs/payments.py` — receipts, reconciliation, nightly capture.
+* `app/workers/schedules.py` — reconciliation cron.
+* `app/workers/consumers/payment_events.py` — react to `PaymentStatusChanged`.
+
+**6. Tests**
+
+* Unit: service with mocked provider.
+* Integration: provider with YooKassa fixtures.
+* E2E: start → webhook → status converges.
+
+---
+
+#### 4) Feature development flow (AI checklist)
+
+1. **Domain first**: entities/ports/services — no IO.
+2. **API**: DTOs & endpoints; use deps from `api/deps/*`.
+3. **Adapters**: implement repo for chosen DB + migrations; bind in `core/di.py`.
+4. **Background/Events**: simple → job after commit; complex/multi‑consumers → event + consumers.
+5. **Observability**: metrics & tracing for critical paths.
+6. **Security/Rate‑limit**: scopes, throttling for hot routes.
+7. **Tests**: unit → integration → e2e.
+8. **Docs/ADR**: update when architectural decisions change.
+
+---
+
+#### 5) Don’t forget (checklists)
+
+**Universal**
+
+* [ ] Types everywhere; avoid `Any` unless justified.
+* [ ] IO only behind ports; no SQL/HTTP in domain/services.
+* [ ] One `AsyncSession` per request/UoW; do not share across awaits.
+* [ ] httpx: timeouts/limits; retries only where safe.
+* [ ] Redis keys namespaced; TTL for caches.
+* [ ] JWT secrets via env; never hardcode.
+* [ ] Proper 4xx/5xx mapping and error bodies.
+* [ ] Webhook idempotency (dedupe by provider event id).
+* [ ] Side‑effects only after `commit()`.
+
+**DB**
+
+* [ ] PG migrations created & applied; indexes on hot paths.
+* [ ] Mongo indexes created at client init.
+* [ ] Use cursor‑pagination for large lists.
+
+**Workers/Events**
+
+* [ ] Consumers are idempotent (store processed ids).
+* [ ] Retry policy + DLQ for poison messages.
+* [ ] Version topics (`*.v1`) for schema evolution.
+
+**Performance**
+
+* [ ] Check N+1; prefetch/joins where needed.
+* [ ] Cache hot reads; invalidate on write via jobs/events.
+
+---
+
+#### 6) Minimal templates (copy‑paste)
+
+**Endpoint** — `app/api/v1/posts.py`
+
+```python
+router = APIRouter(prefix="/posts", tags=["posts"])
+
+@router.post("", response_model=PostRead, status_code=201)
+async def create_post(payload: PostCreate, uow: Annotated[UnitOfWorkPort, Depends(get_uow)]):
+    post = await post_service.create_post(payload, uow)
+    return PostRead.model_validate(post)
+```
+
+**Service** — `app/domain/services/post_service.py`
+
+```python
+async def create_post(dto: PostCreateDTO, uow: UnitOfWorkPort) -> Post:
+    post = Post.from_dto(dto)
+    await uow.posts.create(post)
+    await uow.commit()
+    return post
+```
+
+**Repository (PG)** — `app/adapters/db/postgres/repositories/post_repo.py`
+
+```python
+class PgPostRepo(PostRepoPort):
+    def __init__(self, session: AsyncSession):
+        self.s = session
+    async def get(self, post_id: UUID) -> Post | None: ...
+    async def create(self, post: Post) -> Post: ...
+    async def update(self, post: Post) -> None: ...
+```
+
+**Job** — `app/workers/jobs/posts.py`
+
+```python
+async def post_published(post_id: UUID):
+    # idempotent side-effect
+    ...
+```
+
+**Consumer** — `app/workers/consumers/post_events.py`
+
+```python
+@consumer(topic=TOPIC_POSTS)
+async def on_post_published(msg: Message[PostPublished], jobs=posts_jobs):
+    await jobs.post_published(UUID(msg.payload.post_id))
+```
+
+---
+
+#### 7) PR & Review rules
+
+* **Branch naming:** `feat/posts-publish` | `fix/payments-retry`.
+* **PR template includes:** scope, files touched, migrations, tests, ops impact, feature flags, rollback plan.
+* **Definition of Done:**
+
+  * [ ] Matches file map & patterns.
+  * [ ] Tests: unit + required integration + e2e.
+  * [ ] Metrics/logs for critical path are updated.
+  * [ ] Security & rate‑limits considered.
+  * [ ] Docs/ADR updated if architecture changed.
+
+---
+
+##### TL;DR
+
+1. Write the **domain first**, with no IO.
+2. Endpoints are **thin**: DTO ↔ service.
+3. All IO sits **behind ports** in **adapters**.
+4. Side‑effects **only after commit**.
+5. Prefer **jobs** by default; introduce **events** when reactions multiply or reliability is required.
+6. Tests on three levels: unit → integration → e2e.
+
+---
+
 ## Frontend Technology Stack & Development Flow ⚠️ **CRITICAL**
 
 ### **Current Frontend Stack**
