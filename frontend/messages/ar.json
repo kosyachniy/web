@@ -387,6 +387,37 @@
         "fileName": "اسم الملف",
         "fileSize": "حجم الملف"
     },
+    "wheelDemo": {
+        "title": "أدر العجلة",
+        "subtitle": "اربح تذاكر اليانصيب الوطني والجوائز الأخرى!",
+        "description": "عرض تفاعلي لعجلة الحظ مع الرسوم المتحركة واختيار الجوائز العشوائية",
+        "firstSpinsText": "أول دورتين بدون شروط إضافية!",
+        "instructions": "قم بتسجيل الدخول على الموقع أو في تطبيق Ozon واضغط على زر 'أدر العجلة'",
+        "spinButton": "أدر العجلة",
+        "spinning": "تدور...",
+        "reset": "إعادة تعيين",
+        "congratulations": "تهانينا!",
+        "youWon": "لقد فزت بـ:",
+        "footerText": "انسخ عنوان هذه الصفحة وعد للحصول على جوائز جديدة من العجلة",
+        "footerUrl": "ozon.ru/sp/nlbigwheel",
+        "segments": {
+            "bitcoin": "بيتكوين",
+            "ethereum": "إيثريوم",
+            "shik": "SHIK",
+            "limoni": "LIMONI",
+            "dizzy": "Dizzy",
+            "ruble1000": "1000₽",
+            "aravia": "ARAVIA",
+            "send": "Send",
+            "desy": "Desy",
+            "ruble500": "500₽",
+            "shik2": "SHIK",
+            "desy2": "Desy"
+        },
+        "spinsLeft": "المحاولات المتبقية: {count}",
+        "noSpinsLeft": "لا توجد محاولات متبقية! عد غدًا.",
+        "tryAgain": "حاول مرة أخرى"
+    },
     "multiFileUpload": {
         "title": "معرض الملفات",
         "addMore": "إضافة المزيد من الملفات",
