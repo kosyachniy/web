@@ -551,7 +551,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/token/",
+							"raw": "{{url}}/api/users/token/",
 							"host": [
 								"{{url}}"
 							],
@@ -580,7 +580,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/auth/",
+							"raw": "{{url}}/api/users/auth/",
 							"host": [
 								"{{url}}"
 							],
@@ -609,7 +609,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/auth/",
+							"raw": "{{url}}/api/users/auth/",
 							"host": [
 								"{{url}}"
 							],
@@ -638,7 +638,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/auth/",
+							"raw": "{{url}}/api/users/auth/",
 							"host": [
 								"{{url}}"
 							],
@@ -667,7 +667,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/exit/",
+							"raw": "{{url}}/api/users/exit/",
 							"host": [
 								"{{url}}"
 							],
@@ -696,7 +696,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/social/",
+							"raw": "{{url}}/api/users/social/",
 							"host": [
 								"{{url}}"
 							],
@@ -725,7 +725,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -754,7 +754,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -783,7 +783,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -812,7 +812,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -841,7 +841,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -870,7 +870,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -899,7 +899,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -928,7 +928,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -957,7 +957,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/save/",
+							"raw": "{{url}}/api/users/save/",
 							"host": [
 								"{{url}}"
 							],
@@ -986,7 +986,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/recover/",
+							"raw": "{{url}}/api/users/recover/",
 							"host": [
 								"{{url}}"
 							],
@@ -1015,7 +1015,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/recover/",
+							"raw": "{{url}}/api/users/recover/",
 							"host": [
 								"{{url}}"
 							],
@@ -1044,7 +1044,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/account/recover/",
+							"raw": "{{url}}/api/users/recover/",
 							"host": [
 								"{{url}}"
 							],

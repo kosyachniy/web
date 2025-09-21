@@ -17,7 +17,7 @@ class Type(BaseModel):
     image: str = None
     name: str = None
     surname: str = None
-    phone: str = None
+    phone: int | str | None = None
     mail: str = None
     social: list[dict] = None
     description: str = None

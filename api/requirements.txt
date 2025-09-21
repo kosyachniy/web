@@ -10,7 +10,7 @@ slowapi==0.1.8
 loguru==0.7.2
 
 # DB
-consys==0.30
+consys==0.32
 
 # MQ
 redis==4.6.0

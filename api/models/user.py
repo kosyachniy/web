@@ -3,8 +3,8 @@ from consys.handlers import (
     check_login_uniq,
     check_password,
     process_password,
+    pre_process_name,
     check_name,
-    check_surname,
     check_phone_uniq,
     pre_process_phone,
     check_mail_uniq,
@@ -57,12 +57,14 @@ class User(Base):
     # Personal
     name = Attribute(
         types=str,
+        pre_processing=pre_process_name,
         checking=check_name,
         processing=process_title,
     )
     surname = Attribute(
         types=str,
-        checking=check_surname,
+        pre_processing=pre_process_name,
+        checking=check_name,
         processing=process_title,
     )
     title = Attribute(
@@ -96,15 +98,18 @@ class User(Base):
     subscription = Attribute(types=int, default=0)
     utm = Attribute(types=str)  # Source
     pay = Attribute(types=list)  # Saved data for payment
+    # Locale
+    locale = Attribute(types=str)
+    currency = Attribute(types=str)
     # Permissions
     mailing = Attribute(types=dict)
+    permissions = Attribute(types=dict)
+    # Referral
+    referrer = Attribute(types=int)
+    referral = Attribute(types=str)
     # Cache
     last_online = Attribute(types=int)
 
-    # TODO: UTM / promo
-    # TODO: referal_parent
-    # TODO: referal_code
-    # TODO: attempts (password)
     # TODO: middle name
 
     # TODO: del Base.user

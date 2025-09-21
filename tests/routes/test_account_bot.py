@@ -10,7 +10,7 @@ def test_repeated_login(client):
 
     # Get token
     res = client.post(
-        "/account/token/",
+        "/users/token/",
         json={
             "token": "test",
             "network": "",
@@ -22,7 +22,7 @@ def test_repeated_login(client):
 
     # Request
     res = client.post(
-        "/account/bot/",
+        "/users/bot/",
         json={
             "user": generate_id(),
             "login": login.upper(),

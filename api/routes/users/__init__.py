@@ -1,6 +1,6 @@
 from fastapi import routing
 
-from .app import router as app_router
+from .app.vk import router as app_router
 from .auth import router as auth_router
 from .block import router as block_router
 from .bot import router as bot_router
