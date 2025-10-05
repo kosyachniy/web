@@ -1,17 +1,12 @@
-from consys import make_base, Attribute
+from .user import User, UserLoginActivity, UserRole, UserStatus
+from .post import Post, PostStatus, PostVisibility
 
-from lib import cfg
-
-
-Base = make_base(
-    host=cfg("mongo.host", "mongo"),
-    name=cfg("PROJECT_NAME"),
-    login=cfg("mongo.user"),
-    password=cfg("mongo.pass"),
-)
-
-
-__all__ = (
-    "Base",
-    "Attribute",
-)
+__all__ = [
+    'User',
+    'UserLoginActivity',
+    'UserRole',
+    'UserStatus',
+    'Post',
+    'PostStatus',
+    'PostVisibility'
+]
