@@ -26,6 +26,9 @@ from app.core.middleware import (
     MetricsMiddleware,
     RateLimitMiddleware,
 )
+# Import individual routers for legacy API compatibility
+from app.api.v1.categories import router as categories_router
+from app.api.v1.posts import router as posts_router
 
 
 def create_app() -> FastAPI:
@@ -58,6 +61,14 @@ def create_app() -> FastAPI:
                 "description": "User management operations",
             },
             {
+                "name": "categories",
+                "description": "Category management and browsing operations",
+            },
+            {
+                "name": "posts",
+                "description": "Post management and content operations",
+            },
+            {
                 "name": "health",
                 "description": "System health and monitoring endpoints",
             },
@@ -76,6 +87,12 @@ def create_app() -> FastAPI:
 
     # Include API routers
     app.include_router(api_router, prefix=settings.api_v1_prefix)
+
+    # Include legacy routes at root level for backward compatibility with frontend
+    # nginx strips /api/ prefix, so backend receives /posts/get/ not /api/posts/get/
+    # Frontend expects /api/posts/get/ which nginx forwards as /posts/get/ to backend
+    app.include_router(categories_router, tags=["categories-legacy"])
+    app.include_router(posts_router, tags=["posts-legacy"])
 
     return app
 
@@ -121,7 +138,6 @@ def setup_middleware(app: FastAPI, settings: any) -> None:
         max_age=settings.security.session_expire_seconds,
         same_site=settings.security.session_cookie_samesite,
         https_only=settings.security.session_cookie_secure,
-        httponly=settings.security.session_cookie_httponly,
     )
 
     # 5. Compression middleware

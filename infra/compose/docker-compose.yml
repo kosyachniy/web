@@ -6,7 +6,7 @@ services:
     image: ${PROJECT_NAME}/api
     build:
       context: ../../backend
-      target: final
+      target: production
     restart: unless-stopped
     env_file: ../../.env
     volumes:

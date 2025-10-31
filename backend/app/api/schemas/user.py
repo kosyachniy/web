@@ -137,7 +137,7 @@ class UserRead(BaseModel):
     username: str = Field(description="Username")
     full_name: Optional[str] = Field(None, description="User full name")
     status: str = Field(description="User status")
-    role: str = Field(description="User role")
+    roles: list[str] = Field(description="User roles (multiple roles supported)")
     is_email_verified: bool = Field(description="Email verification status")
     last_login_at: Optional[datetime] = Field(None, description="Last login timestamp")
     login_count: int = Field(description="Total login count")
@@ -160,7 +160,7 @@ class UserRead(BaseModel):
                 "username": "johndoe",
                 "full_name": "John Doe",
                 "status": "active",
-                "role": "user",
+                "roles": ["user"],
                 "is_email_verified": True,
                 "last_login_at": "2023-01-15T10:30:00Z",
                 "login_count": 42,
@@ -193,7 +193,7 @@ class UserResponse(BaseResponse):
                     "username": "johndoe",
                     "full_name": "John Doe",
                     "status": "active",
-                    "role": "user",
+                    "roles": ["user"],
                     "is_email_verified": True,
                     "last_login_at": "2023-01-15T10:30:00Z",
                     "login_count": 42,
@@ -229,7 +229,7 @@ class UserListResponse(BaseResponse):
                         "username": "johndoe",
                         "full_name": "John Doe",
                         "status": "active",
-                        "role": "user",
+                        "roles": ["user"],
                         "is_email_verified": True,
                         "last_login_at": "2023-01-15T10:30:00Z",
                         "login_count": 42,

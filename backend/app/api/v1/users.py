@@ -118,9 +118,9 @@ async def get_user(
     description="Retrieve a list of all users with optional filtering."
 )
 async def list_users(
+    uow: UOWDep,
     limit: int = 100,
     active_only: bool = False,
-    uow: UOWDep
 ) -> UserListResponse:
     """
     Layer 6: List users with optional filtering.

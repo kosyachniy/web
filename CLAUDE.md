@@ -1655,7 +1655,9 @@ toast.error(t('posts.actions.deleteError'));
 - **API client**: Use `shared/services/api/client.ts` for HTTP requests
 - **Entity APIs**: Business domain APIs in `entities/*/api/`
 - **Feature APIs**: Feature-specific APIs in `features/*/api/`
-- **Base URL**: API routes via nginx proxy at `http://localhost/api/`
+- **Base URL**:
+  - Frontend (local): `http://localhost/` (via nginx proxy)
+  - Backend (local): `http://localhost/api/` (via nginx proxy)
 - **Response Format**: Backend returns `{"categories": [...]}`, `{"posts": [...], "count": N}`
 - **Response Types**: Import all types from `@/generated/api/schemas` - never create manual types
 - **Schema Generation**: Run `npm run generate-schemas` after backend API changes
@@ -1721,9 +1723,14 @@ toast.error(t('posts.actions.deleteError'));
 - Environment configuration via `.env` file (see `base.env` template)
 - Docker Compose configurations for different environments in `infra/compose/`
 - NGINX reverse proxy configuration in `infra/nginx/`
-- **API Access**: Backend API available at `http://localhost/api/` when containers are running
-- **Port Mapping**: Frontend (Next.js) → nginx:80 → api:5000 (internal Docker network)
-- **Direct API Testing**: Use curl commands in "API Testing & Development" section
+- **API Access**:
+  - **Via Nginx Proxy**: `http://localhost/api/` (recommended for frontend integration)
+  - **Direct Access**: `http://api:5000/` (exposed port for direct backend testing)
+- **Port Mapping**:
+  - Frontend: `http://localhost/` (nginx:80 → web:3000)
+  - API (proxied): `http://localhost/api/` (nginx:80 → api:5000)
+  - API (direct): `http://api:5000/` (host:5000 → api:5000)
+- **Direct API Testing**: Use curl commands with either proxy URL or direct port 5000
 
 ### How to Work in This Repo (Claude checklist)
 1. **Follow Frontend Development Flow**: Use the 5-step systematic flow for ALL frontend code

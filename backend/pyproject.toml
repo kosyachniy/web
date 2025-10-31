@@ -104,6 +104,9 @@ security = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
 [tool.ruff]
 target-version = "py311"
 line-length = 88
@@ -204,32 +207,14 @@ exclude_lines = [
     "@(abc\\.)?abstractmethod",
 ]
 
-[project.scripts]
-# Development
-dev = "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
-prod = "uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4"
-
-# Background Services
-worker = "celery -A app.workers.celery_app worker --loglevel=info"
-scheduler = "python -m app.workers.scheduler"
-
-# Database
-migrate = "alembic upgrade head"
-create-migration = "alembic revision --autogenerate"
-
-# Testing & Quality (TDD Workflow)
-test = "pytest"
-test-api = "pytest tests/api/ -v"
-test-unit = "pytest tests/unit/ -v"
-test-integration = "pytest tests/integration/ -v"
-test-all = "python scripts/run_tests.py"
-test-coverage = "pytest --cov=app --cov-report=html --cov-report=term-missing"
-
-# Code Quality
-lint = "ruff check ."
-format = "ruff format ."
-typecheck = "mypy ."
-
-# TDD Workflow Scripts
-generate-openapi = "python scripts/generate_openapi.py"
-verify-tdd = "python scripts/verify_tdd_compliance.py"
+# Note: The following commands should be run with uv:
+# - Dev: uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# - Prod: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+# - Worker: uv run celery -A app.workers.celery_app worker --loglevel=info
+# - Scheduler: uv run python -m app.workers.scheduler
+# - Migrate: uv run alembic upgrade head
+# - Create migration: uv run alembic revision --autogenerate
+# - Test: uv run pytest
+# - Lint: uv run ruff check .
+# - Format: uv run ruff format .
+# - Typecheck: uv run mypy .
