@@ -19,32 +19,8 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # Create ENUM types for posts and content
-    op.execute("""
-        CREATE TYPE poststatus AS ENUM (
-            'DRAFT',
-            'PUBLISHED',
-            'ARCHIVED'
-        )
-    """)
-
-    op.execute("""
-        CREATE TYPE postvisibility AS ENUM (
-            'PUBLIC',
-            'PRIVATE',
-            'UNLISTED'
-        )
-    """)
-
-    op.execute("""
-        CREATE TYPE reactiontype AS ENUM (
-            'LIKE',
-            'LOVE',
-            'DISLIKE',
-            'FIRE',
-            'STAR'
-        )
-    """)
+    # NOTE: ENUM types are created automatically by SQLAlchemy when using sa.Enum()
+    # with name parameter. Manual creation removed to prevent duplicate creation errors.
 
     # Create categories table
     op.create_table(

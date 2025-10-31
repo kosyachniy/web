@@ -19,37 +19,8 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # Create ENUM types for users
-    op.execute("""
-        CREATE TYPE userrole AS ENUM (
-            'SUPERADMIN',
-            'ADMIN',
-            'EDITOR',
-            'CREATOR',
-            'USER',
-            'RESTRICTED'
-        )
-    """)
-
-    op.execute("""
-        CREATE TYPE userstatus AS ENUM (
-            'ACTIVE',
-            'PENDING',
-            'BLOCKED',
-            'DELETED'
-        )
-    """)
-
-    op.execute("""
-        CREATE TYPE authprovider AS ENUM (
-            'PASSWORD',
-            'GOOGLE',
-            'GITHUB',
-            'APPLE',
-            'TELEGRAM',
-            'PHONE'
-        )
-    """)
+    # NOTE: ENUM types are created automatically by SQLAlchemy when using sa.Enum()
+    # with name parameter. Manual creation removed to prevent duplicate creation errors.
 
     # Create users table with roles (plural, array)
     op.create_table(

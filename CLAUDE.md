@@ -350,9 +350,16 @@ backend/
 │       ├── deployment.md          # Deployment guide
 │       └── troubleshooting.md     # Common issues and solutions
 │
-└── migrations/                    # Database Migrations (optional, can be in infra/)
-    ├── postgresql/                # PostgreSQL migrations (Alembic)
-    └── mongodb/                   # MongoDB migration scripts
+└── db/                            # Database tooling and migrations
+    ├── alembic.ini                # Alembic configuration for PostgreSQL migrations
+    └── migrations/                # Database migrations
+        ├── env.py                 # Alembic environment configuration
+        ├── versions/              # Migration version files
+        │   ├── 001_*.py           # Migration scripts
+        │   └── 002_*.py
+        ├── CHEATSHEET.md          # Migration command reference
+        ├── MIGRATION_SUMMARY.md   # Migration documentation
+        └── RESET_GUIDE.md         # Database reset instructions
 ```
 
 ---
@@ -416,7 +423,7 @@ async def publish_post(post_id: UUID, uow: UnitOfWorkPort, jobs: AsyncJobsPort):
 * **Postgres**:
   `app/adapters/db/postgres/models/post.py` (ORM + indexes),
   `app/adapters/db/postgres/repositories/post_repo.py` (implements `PostRepoPort`),
-  migration in `migrations/alembic/versions/*_add_post.py`.
+  migration in `db/migrations/versions/*_add_post.py`.
 * **Mongo**:
   `app/adapters/db/mongo/repositories/post_repo.py` (collections + indexes).
 

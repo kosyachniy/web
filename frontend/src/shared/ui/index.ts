@@ -5,6 +5,7 @@ export * from './button';
 export * from './button-group';
 export * from './dialog';
 export * from './dropdown-menu';
+export * from './error-boundary';
 export * from './icon-button';
 export * from './icons';
 export * from './file-upload';
