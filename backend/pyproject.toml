@@ -1,43 +1,220 @@
 [project]
-name = "api"
+name = "backend"
 version = "1.0.0"
-description = "API backend service"
-requires-python = ">=3.10,<3.12"
+description = "Backend"
+authors = [{name = "Alex Poloz", email = "alexypoloz@gmail.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.11"
+
 dependencies = [
-    # App
-    "requests==2.31.0",
-    "libdev==0.67",
-    "fastapi==0.90.1",  # FIXME: higher version not working
-    "httptools==0.6.0",  # NOTE: for routing
-    "uvicorn==0.20.0",  # FIXME: higher version not working
-    "PyJWT==2.8.0",
-    "python-multipart==0.0.6",  # NOTE: for file upload
-    "slowapi==0.1.8",
-    "loguru==0.7.2",
+    # Core Framework
+    "fastapi[all]>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
 
-    # DB
-    "consys==0.30",
+    # Database & ORM
+    "sqlalchemy[asyncio]>=2.0.23",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
 
-    # MQ
-    "redis==4.6.0",
+    # MongoDB Alternative
+    "motor>=3.3.2",
+    "beanie>=1.24.0",
 
-    # Sockets
-    "python-socketio==5.8.0",
-    "websockets==11.0.3",  # NOTE: for Socket.IO
+    # Cache & Session
+    "redis[hiredis]>=5.0.1",
 
-    # Monitoring
-    "prometheus_fastapi_instrumentator==6.1.0",
+    # Message Broker
+    "aio-pika>=9.4.0",
+    "celery>=5.3.4",
 
-    # Telegram
-    "aiogram==2.25.1",
+    # Configuration & Validation
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
 
-    # Google Docs
-    "gspread==5.10.0",
-    "oauth2client==4.1.3",
+    # Security
+    "passlib[bcrypt]>=1.7.4",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart>=0.0.6",
 
-    # # SMS
-    # "smsc==0.1.1",
+    # HTTP Client
+    "httpx>=0.25.2",
+
+    # Logging & Monitoring
+    "loguru>=0.7.2",
+    "prometheus-client>=0.19.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-instrumentation-fastapi>=0.42b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.42b0",
+    "opentelemetry-instrumentation-redis>=0.42b0",
+
+    # Dependency Injection
+    "dependency-injector>=4.41.0",
+
+    # Background Tasks
+    "apscheduler>=3.10.4",
+
+    # Utilities
+    "python-slugify>=8.0.1",
+    "email-validator>=2.1.0",
+    "phonenumbers>=8.13.27",
+    "python-dateutil>=2.8.2",
+
+    # Rate Limiting
+    "slowapi>=0.1.9",
 ]
 
-[tool.uv]
-dev-dependencies = []
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.6.0",  # Parallel test execution
+    "httpx>=0.25.2",
+    "factory-boy>=3.3.0",
+    "aiosqlite>=0.20.0",  # In-memory SQLite for tests
+
+    # Code Quality
+    "ruff>=0.1.6",
+    "mypy>=1.7.1",
+    "pre-commit>=3.6.0",
+
+    # Development Tools
+    "watchfiles>=0.21.0",
+    "rich>=13.7.0",
+
+    # Database Tools
+    "alembic>=1.13.0",
+]
+
+performance = [
+    "locust>=2.17.0",
+    "memory-profiler>=0.61.0",
+    "py-spy>=0.3.14",
+]
+
+security = [
+    "bandit>=1.7.5",
+    "safety>=2.3.5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PL",  # pylint
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long
+    "B008",   # do not perform function calls in argument defaults
+    "B006",   # do not use mutable default arguments
+    "PLR0913", # too many arguments
+]
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["ARG", "PLR2004"]
+"migrations/*" = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "uvicorn.*",
+    "motor.*",
+    "beanie.*",
+    "aio_pika.*",
+    "celery.*",
+    "prometheus_client.*",
+    "dependency_injector.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--disable-warnings",
+    "--cov=app",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=80",
+    "-v"
+]
+markers = [
+    "unit: Unit tests (fast, isolated)",
+    "integration: Integration tests (database, external services)",
+    "api: API endpoint tests",
+    "performance: Performance and load tests",
+    "security: Security-focused tests",
+]
+
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# Note: The following commands should be run with uv:
+# - Dev: uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# - Prod: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+# - Worker: uv run celery -A app.workers.celery_app worker --loglevel=info
+# - Scheduler: uv run python -m app.workers.scheduler
+# - Migrate: uv run alembic upgrade head
+# - Create migration: uv run alembic revision --autogenerate
+# - Test: uv run pytest
+# - Lint: uv run ruff check .
+# - Format: uv run ruff format .
+# - Typecheck: uv run mypy .

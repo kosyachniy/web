@@ -10,13 +10,6 @@ CHANGELOG*
 LICENSE*
 docs/
 
-# Development files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
 # OS files
 .DS_Store
 Thumbs.db
@@ -39,6 +32,8 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -53,6 +48,15 @@ ENV/
 env.bak/
 venv.bak/
 
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
 # Testing
 .pytest_cache/
 .coverage
@@ -63,6 +67,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
+*.py,cover
 .hypothesis/
 
 # Jupyter
@@ -77,10 +82,6 @@ tmp/
 temp/
 .tmp/
 
-# IDE
-*.sublime-project
-*.sublime-workspace
-
 # Database
 *.db
 *.sqlite
@@ -94,3 +95,12 @@ config.local.*
 Dockerfile*
 .dockerignore
 docker-compose*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

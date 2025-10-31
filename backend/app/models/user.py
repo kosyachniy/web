@@ -1,121 +1,85 @@
-from consys.handlers import (
-    default_login,
-    check_login_uniq,
-    check_password,
-    process_password,
-    check_name,
-    check_surname,
-    check_phone_uniq,
-    pre_process_phone,
-    check_mail_uniq,
-    process_title,
-    process_lower,
-    default_status,
-    default_title,
-)
+"""User domain model and related database tables."""
 
-from models import Base, Attribute
-from lib import cfg
+from __future__ import annotations
+
+import enum
+from datetime import UTC, datetime
+
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Index, LargeBinary, String, Text
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.base import Base
+
+
+class AuthProvider(enum.StrEnum):
+    PASSWORD = "password"
+    GOOGLE = "google"
+    GITHUB = "github"
+    APPLE = "apple"
+    TELEGRAM = "telegram"
+    PHONE = "phone"
+
+
+class UserRole(enum.StrEnum):
+    SUPERADMIN = "superadmin"
+    ADMIN = "admin"
+    EDITOR = "editor"
+    CREATOR = "creator"
+    USER = "user"
+    RESTRICTED = "restricted"
+
+
+class UserStatus(enum.StrEnum):
+    ACTIVE = "active"
+    PENDING = "pending"
+    BLOCKED = "blocked"
+    DELETED = "deleted"
 
 
 class User(Base):
-    """User"""
+    __tablename__ = "users"
 
-    _name = "users"
-    _search_fields = {
-        "login",
-        "name",
-        "surname",
-        "title",
-        "phone",
-        "mail",
-        "description",
-    }
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    email: Mapped[str | None] = mapped_column(String(320), unique=True, index=True)
+    phone: Mapped[str | None] = mapped_column(String(32), unique=True, index=True)
+    username: Mapped[str | None] = mapped_column(String(64), unique=True, index=True)
 
-    # status:
-    # 0 - deleted
-    # 1 - blocked
-    # 2 - unauthorized
-    # 3 - authorized
-    # 4 - has access to platform resources
-    # 5 - supervisor
-    # 6 - moderator
-    # 7 - admin
-    # 8 - owner
+    hashed_password: Mapped[str | None] = mapped_column(Text, nullable=True)
+    password_salt: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True)
 
-    login = Attribute(
-        types=str,
-        default=default_login,
-        checking=check_login_uniq,
-        pre_processing=process_lower,
-    )
-    password = Attribute(
-        types=str,
-        checking=check_password,
-        processing=process_password,
-    )
-    # Personal
-    name = Attribute(
-        types=str,
-        checking=check_name,
-        processing=process_title,
-    )
-    surname = Attribute(
-        types=str,
-        checking=check_surname,
-        processing=process_title,
-    )
-    title = Attribute(
-        types=str,
-        default=default_title,
-    )
-    birth = Attribute(types=int)  # TODO: datetime
-    sex = Attribute(types=str)  # TODO: enum: male / female
-    # Contacts
-    phone = Attribute(
-        types=int,
-        checking=check_phone_uniq,
-        pre_processing=pre_process_phone,
-    )
-    phone_verified = Attribute(types=bool, default=True)
-    mail = Attribute(
-        types=str,
-        checking=check_mail_uniq,
-        pre_processing=process_lower,
-    )
-    mail_verified = Attribute(types=bool, default=True)
-    social = Attribute(types=list)  # TODO: list[{}] # TODO: checking
-    #
-    description = Attribute(types=str)
-    status = Attribute(types=int, default=default_status)
-    rating = Attribute(types=float)
-    # global_channel = Attribute(types=int, default=1)
-    # channels = Attribute(types=list)
-    discount = Attribute(types=float)
-    balance = Attribute(types=int, default=0)
-    subscription = Attribute(types=int, default=0)
-    utm = Attribute(types=str)  # Source
-    pay = Attribute(types=list)  # Saved data for payment
-    # Permissions
-    mailing = Attribute(types=dict)
-    # Cache
-    last_online = Attribute(types=int)
+    role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.USER, nullable=False)
+    status: Mapped[UserStatus] = mapped_column(Enum(UserStatus), default=UserStatus.PENDING, nullable=False)
 
-    # TODO: UTM / promo
-    # TODO: referal_parent
-    # TODO: referal_code
-    # TODO: attempts (password)
-    # TODO: middle name
+    is_email_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    is_phone_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    # TODO: del Base.user
+    profile: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    settings: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
-    def get_social(self, social):
-        """Get user social info by social ID"""
-        for i in self.social:
-            if i["id"] == social:
-                return {
-                    "id": i["user"],
-                    "login": i.get("login"),
-                    "locale": i.get("locale") or cfg("locale"),
-                }
-        return None
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC), nullable=False)
+
+    # relationships
+    posts: Mapped[list["Post"]] = relationship(back_populates="author", cascade="all,delete-orphan")
+
+    __table_args__ = (
+        Index("ix_users_email_phone", "email", "phone"),
+    )
+
+
+class UserLoginActivity(Base):
+    __tablename__ = "user_login_activities"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    provider: Mapped[AuthProvider] = mapped_column(Enum(AuthProvider), nullable=False)
+    ip_address: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    user_agent: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    metadata: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False)
+
+    user: Mapped["User"] = relationship(backref="login_activities")
+
+
+from app.models.post import Post  # noqa: E402  circular dependency fix

@@ -1,47 +1,53 @@
-import time
+"""Post content domain model."""
 
-from libdev.time import get_time
-from libdev.lang import get_pure, to_url
+from __future__ import annotations
 
-from models import Base, Attribute
-from lib import cfg
+import enum
+from datetime import UTC, datetime
 
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Index, String, Text
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-def default_title(instance):
-    """Default title"""
-    text_time = get_time(
-        instance.created or time.time(),
-        "%d.%m.%Y",
-        cfg("timezone"),
-    )
-    return f"Черновик от {text_time}"
+from app.db.base import Base
 
 
-def default_description(instance):
-    """Default description"""
-    return get_pure(instance.data).split("\n")[0]
+class PostVisibility(enum.StrEnum):
+    PUBLIC = "public"
+    PRIVATE = "private"
+    UNLISTED = "unlisted"
 
 
-def default_url(instance):
-    """Default url"""
-    url = to_url(instance.title) or ""
-    if url:
-        url += "-"
-    return url + f"{instance.id}"
+class PostStatus(enum.StrEnum):
+    DRAFT = "draft"
+    PUBLISHED = "published"
+    ARCHIVED = "archived"
 
 
 class Post(Base):
-    """Post"""
+    __tablename__ = "posts"
 
-    _name = "posts"
-    _search_fields = {"title", "data", "tags"}
+    id: Mapped[int] = mapped_column(primary_key=True)
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    summary: Mapped[str | None] = mapped_column(String(512))
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[PostStatus] = mapped_column(Enum(PostStatus), default=PostStatus.DRAFT, nullable=False)
+    visibility: Mapped[PostVisibility] = mapped_column(Enum(PostVisibility), default=PostVisibility.PUBLIC, nullable=False)
+    locale: Mapped[str] = mapped_column(String(10), nullable=False, default="en")
+    seo: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    extra: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    is_featured: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC), nullable=False)
 
-    title = Attribute(types=str, default=default_title)
-    description = Attribute(types=str, default=default_description)
-    data = Attribute(types=str, default="")
-    category = Attribute(types=int, default=0)
-    tags = Attribute(types=list)
-    source = Attribute(types=str)
-    url = Attribute(types=str, default=default_url)
-    status = Attribute(types=int, default=1)
-    token = Attribute(types=str)
+    author: Mapped["User"] = relationship(back_populates="posts")
+
+    __table_args__ = (
+        Index("ix_posts_visibility_status", "visibility", "status"),
+    )
+
+
+from app.models.user import User  # noqa: E402

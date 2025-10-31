@@ -13,32 +13,35 @@ services:
       - 6379:6379
     command: sh -c "redis-server --requirepass ${REDIS_PASS}"
 
-  mongo:
-    image: mongo:7.0
+  postgres:
+    image: postgres:16-alpine
     restart: unless-stopped
     env_file: ../../.env
     environment:
-      MONGO_INITDB_DATABASE: admin
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ${DATA_PATH}/db:/data/db
-      - ${DATA_PATH}/logs/mongodb.log:/data/logs/mongodb.log
-      - ../mongo/mongod.conf:/etc/mongod.conf
+      - ${DATA_PATH}/postgres:/var/lib/postgresql/data
     ports:
-      - 27017:27017
-    command: --config /etc/mongod.conf
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   api:
     depends_on:
-      - mongo
+      - postgres
       - redis
     environment:
       WEB: http://localhost/
     volumes:
       # For hot reload in development
-      - ../../backend/app:/app
-    command: bash -c "cd /app && uv run uvicorn main:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
+      - ../../backend:/app
+    command: bash -c "uv run uvicorn app.main:app --host 0.0.0.0 --port 5000 --proxy-headers --reload"
 
   web:
     build:

@@ -3,6 +3,8 @@
  * Provides centralized error handling, authentication, and configuration
  */
 
+import { handleGlobalApiError } from './globalErrorHandler';
+
 // Use different base URLs for server-side vs client-side requests
 const getApiBaseUrl = () => {
     // Server-side rendering (SSR) - use internal Docker network without /api/ prefix
@@ -31,6 +33,7 @@ export interface ApiRequestOptions extends Omit<RequestInit, 'body'> {
     body?: unknown;
     params?: Record<string, unknown>;
     timeout?: number;
+    suppressGlobalErrorHandler?: boolean;
 }
 
 export interface ApiResponse<T = unknown> {
@@ -55,6 +58,7 @@ export async function apiClient<T = unknown>(
         timeout = 10000,
         headers = {},
         method = 'GET',
+        suppressGlobalErrorHandler = false,
         ...restOptions
     } = options;
 
@@ -131,33 +135,45 @@ export async function apiClient<T = unknown>(
         }
 
         if (!response.ok) {
-            const errorMessage = (responseData && typeof responseData === 'object' && 'message' in responseData) 
-                ? String((responseData as { message: unknown }).message) 
+            const errorMessage = (responseData && typeof responseData === 'object' && 'message' in responseData)
+                ? String((responseData as { message: unknown }).message)
                 : `HTTP error! status: ${response.status}`;
-            throw new ApiError(
+            const apiError = new ApiError(
                 response.status,
                 errorMessage,
                 responseData
             );
+
+            // Use global error handler unless suppressed
+            if (!suppressGlobalErrorHandler) {
+                handleGlobalApiError(apiError, endpoint);
+            } else {
+                throw apiError;
+            }
         }
 
         return responseData as T;
     } catch (error) {
         clearTimeout(timeoutId);
 
+        let finalError: ApiError;
+
         if (error instanceof ApiError) {
-            throw error;
+            finalError = error;
+        } else if (error instanceof DOMException && error.name === 'AbortError') {
+            finalError = new ApiError(408, 'Request timeout');
+        } else if (error instanceof TypeError && error.message === 'Failed to fetch') {
+            finalError = new ApiError(0, 'Network error - please check your internet connection');
+        } else {
+            finalError = new ApiError(0, error instanceof Error ? error.message : 'Unknown error occurred');
         }
 
-        if (error instanceof DOMException && error.name === 'AbortError') {
-            throw new ApiError(408, 'Request timeout');
+        // Use global error handler unless suppressed
+        if (!suppressGlobalErrorHandler) {
+            handleGlobalApiError(finalError, endpoint);
+        } else {
+            throw finalError;
         }
-
-        if (error instanceof TypeError && error.message === 'Failed to fetch') {
-            throw new ApiError(0, 'Network error - please check your internet connection');
-        }
-
-        throw new ApiError(0, error instanceof Error ? error.message : 'Unknown error occurred');
     }
 }
 
@@ -179,6 +195,25 @@ export const api = {
 
     delete: <T = unknown>(endpoint: string, options?: Omit<ApiRequestOptions, 'method'>) =>
         apiClient<T>(endpoint, { ...options, method: 'DELETE' }),
+};
+
+// Version of the API client that suppresses global error handling
+// Use this when you want to handle errors manually
+export const apiWithoutGlobalErrors = {
+    get: <T = unknown>(endpoint: string, params?: Record<string, unknown>, options?: Omit<ApiRequestOptions, 'method' | 'params'>) =>
+        apiClient<T>(endpoint, { ...options, method: 'GET', params, suppressGlobalErrorHandler: true }),
+
+    post: <T = unknown>(endpoint: string, body?: unknown, options?: Omit<ApiRequestOptions, 'method' | 'body'>) =>
+        apiClient<T>(endpoint, { ...options, method: 'POST', body, suppressGlobalErrorHandler: true }),
+
+    put: <T = unknown>(endpoint: string, body?: unknown, options?: Omit<ApiRequestOptions, 'method' | 'body'>) =>
+        apiClient<T>(endpoint, { ...options, method: 'PUT', body, suppressGlobalErrorHandler: true }),
+
+    patch: <T = unknown>(endpoint: string, body?: unknown, options?: Omit<ApiRequestOptions, 'method' | 'body'>) =>
+        apiClient<T>(endpoint, { ...options, method: 'PATCH', body, suppressGlobalErrorHandler: true }),
+
+    delete: <T = unknown>(endpoint: string, options?: Omit<ApiRequestOptions, 'method'>) =>
+        apiClient<T>(endpoint, { ...options, method: 'DELETE', suppressGlobalErrorHandler: true }),
 };
 
 /**
